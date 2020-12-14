@@ -93,7 +93,7 @@
     "webpack-cli": "3.3.11"
   },
   "insights": {
-    "appname": "starter"
+    "appname": "edge"
   },
   "routes": {
     "prefix": "insights",
