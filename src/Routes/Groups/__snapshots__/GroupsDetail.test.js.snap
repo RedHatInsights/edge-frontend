@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Groups should render correctly 1`] = `
+<div>
+  Here will be group detail of - 
+  some-id
+  !
+</div>
+`;

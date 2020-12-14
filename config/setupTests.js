@@ -1,10 +1,7 @@
-import { configure, mount, render, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import React from 'react';
+global.fetch = require('jest-fetch-mock');
+global.window = Object.create(window);
 
-configure({ adapter: new Adapter() });
-
-global.shallow = shallow;
-global.render = render;
-global.mount = mount;
-global.React = React;
+global.window.insights = {
+  ...(window.insights || {}),
+  chrome: {},
+};
