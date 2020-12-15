@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { init } from './store';
 import App from './App';
-import { getBaseName } from '@redhat-cloud-services/frontend-components-utilities/files/helpers';
+import { getBaseName } from '@redhat-cloud-services/frontend-components-utilities/files/esm/helpers';
 
 const AppEntry = ({ logger }) => (
   <Provider store={(logger ? init(logger) : init()).getStore()}>
