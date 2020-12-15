@@ -6,10 +6,12 @@ import { routes as paths } from '../package.json';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 
 const Groups = React.lazy(() =>
-  import(/* webpackChunkName: "SamplePage" */ './Routes/Groups/Groups')
+  import(/* webpackChunkName: "GroupsPage" */ './Routes/Groups/Groups')
 );
 const GroupsDetail = React.lazy(() =>
-  import(/* webpackChunkName: "SamplePage" */ './Routes/Groups/GroupsDetail')
+  import(
+    /* webpackChunkName: "GroupsDetailPage" */ './Routes/Groups/GroupsDetail'
+  )
 );
 
 const InsightsRoute = ({ rootClass, ...rest }) => {
@@ -26,14 +28,6 @@ InsightsRoute.propTypes = {
   rootClass: PropTypes.string,
 };
 
-/**
- * the Switch component changes routes depending on the path.
- *
- * Route properties:
- *      exact - path must match exactly,
- *      path - https://prod.foo.redhat.com:1337/insights/advisor/rules
- *      component - component to be rendered when a route has been chosen.
- */
 export const Routes = () => {
   return (
     <Suspense
@@ -45,6 +39,7 @@ export const Routes = () => {
     >
       <Switch>
         <InsightsRoute
+          exact
           path={paths.groups}
           component={Groups}
           rootClass="groupsPage"
