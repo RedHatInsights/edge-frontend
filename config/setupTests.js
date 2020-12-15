@@ -3,5 +3,9 @@ global.window = Object.create(window);
 
 global.window.insights = {
   ...(window.insights || {}),
-  chrome: {},
+  chrome: {
+    auth: {
+      getUser: () => Promise.resolve({}),
+    },
+  },
 };

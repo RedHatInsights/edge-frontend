@@ -23,6 +23,9 @@
       "src/**/*.js",
       "!src/**/stories/*"
     ],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!(@patternfly/react-core/|@patternfly/react-icons/|@redhat-cloud-services)).*$"
+    ],
     "coverageDirectory": "./coverage/",
     "moduleNameMapper": {
       "\\.(css|scss)$": "identity-obj-proxy"
@@ -39,10 +42,10 @@
   ],
   "dependencies": {
     "@babel/runtime": "7.10.0",
-    "@patternfly/patternfly": "4.10.31",
-    "@patternfly/react-core": "4.18.5",
-    "@patternfly/react-table": "4.5.7",
-    "@redhat-cloud-services/frontend-components": "2.0.6",
+    "@patternfly/patternfly": "4.70.2",
+    "@patternfly/react-core": "4.84.3",
+    "@patternfly/react-table": "4.19.44",
+    "@redhat-cloud-services/frontend-components": "2.5.2",
     "@redhat-cloud-services/frontend-components-notifications": "^2.0.4",
     "@redhat-cloud-services/frontend-components-utilities": "2.0.4",
     "babel-plugin-transform-imports": "^2.0.0",
@@ -80,12 +83,13 @@
     "eslint-plugin-react": "7.20.0",
     "eslint-plugin-react-hooks": "4.0.4",
     "identity-obj-proxy": "3.0.0",
-    "jest": "26.0.1",
+    "jest": "^26.0.1",
     "jest-fetch-mock": "^3.0.3",
     "node-sass": "4.14.1",
     "npm-run-all": "4.1.5",
     "postcss": "7.0.31",
     "prop-types": "15.7.2",
+    "redux-mock-store": "^1.5.4",
     "stylelint": "13.5.0",
     "stylelint-config-recommended-scss": "4.2.0",
     "stylelint-scss": "3.17.2",

@@ -1,21 +1,15 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Routes } from './Routes';
+import { Bullseye, Spinner } from '@patternfly/react-core';
 import './App.scss';
 
-import { Provider } from 'react-redux';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/Registry';
-import {
-  NotificationsPortal,
-  notifications,
-} from '@redhat-cloud-services/frontend-components-notifications/';
-
-const registry = getRegistry();
-registry.register({ notifications });
+import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications/';
 
 const App = (props) => {
+  const [isLogged, setIsLogged] = useState(false);
   useEffect(() => {
     insights.chrome.init();
     // TODO change this to your appname
@@ -24,13 +18,23 @@ const App = (props) => {
     insights.chrome.on('APP_NAVIGATION', (event) =>
       this.props.history.push(`/${event.navId}`)
     );
+    (async () => {
+      await insights.chrome.auth.getUser();
+      setIsLogged(true);
+    })();
   }, []);
 
   return (
-    <Provider store={registry.getStore()}>
+    <Fragment>
       <NotificationsPortal />
-      <Routes childProps={props} />
-    </Provider>
+      {isLogged ? (
+        <Routes childProps={props} />
+      ) : (
+        <Bullseye>
+          <Spinner size="xl" />
+        </Bullseye>
+      )}
+    </Fragment>
   );
 };
 

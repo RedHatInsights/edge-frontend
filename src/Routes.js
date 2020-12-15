@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import React, { Suspense } from 'react';
 import { routes as paths } from '../package.json';
 import { Bullseye, Spinner } from '@patternfly/react-core';
-
 const Groups = React.lazy(() =>
   import(/* webpackChunkName: "GroupsPage" */ './Routes/Groups/Groups')
 );
