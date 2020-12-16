@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadGroups } from '../../store/actions';
 import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
 import { groupsReducer } from '../../store/reducers';
-import { statusMapper } from '../../api';
+import { statusMapper } from '../../constants';
 import {
   PageHeader,
   PageHeaderTitle,
