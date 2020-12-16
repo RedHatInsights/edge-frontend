@@ -1,5 +1,7 @@
 // Importing Global Variables
 @import "~@redhat-cloud-services/frontend-components-utilities/files/Utilities/_all";
 @import '~@redhat-cloud-services/frontend-components-notifications/index.css';
+@import '~@redhat-cloud-services/frontend-components/components/PrimaryToolbar.css';
+@import '~@redhat-cloud-services/frontend-components/components/ConditionalFilter.css';
 
 .edge-groups .edge-groups__info .pf-c-card { height: 100%; }
