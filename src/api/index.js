@@ -1,11 +1,4 @@
-export const statusMapper = [
-  'done',
-  'error',
-  'pending',
-  'unknown',
-  'warning',
-  'notification',
-];
+import { statusMapper } from '../constants';
 
 const randomNumber = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
@@ -68,4 +61,25 @@ export const devicesInfo = () => {
   });
 };
 
-export const canariesInfo = () => {};
+export const canariesInfo = () => {
+  return Promise.resolve({
+    results: {
+      sensors: {
+        time: randomDate(),
+        status: randomStatus(),
+      },
+      scanners: {
+        time: randomDate(),
+        status: randomStatus(),
+      },
+      kiosks: {
+        time: randomDate(),
+        status: randomStatus(),
+      },
+      antenna: {
+        time: randomDate(),
+        status: randomStatus(),
+      },
+    },
+  });
+};

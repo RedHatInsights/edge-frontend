@@ -16,12 +16,24 @@ import {
   Skeleton,
   Text,
   TextVariants,
+  Level,
+  LevelItem,
 } from '@patternfly/react-core';
+import { DateFormat } from '@redhat-cloud-services/frontend-components';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadThreshold, loadDevicesInfo } from '../../store/actions';
+import {
+  loadThreshold,
+  loadDevicesInfo,
+  loadCanariesInfo,
+} from '../../store/actions';
 import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
-import { thresholdReducer, devicesInfoReducer } from '../../store/reducers';
+import {
+  thresholdReducer,
+  devicesInfoReducer,
+  canariesInfoReducer,
+} from '../../store/reducers';
+import { StatusIcon } from '../../components';
 import { ChartPie, ChartThemeColor } from '@patternfly/react-charts';
 
 const GroupsInfo = () => {
@@ -38,13 +50,21 @@ const GroupsInfo = () => {
   const devicesInfo = useSelector(
     ({ devicesInfoReducer }) => devicesInfoReducer?.devicesInfo || {}
   );
+  const canariesInfo = useSelector(
+    ({ canariesInfoReducer }) => canariesInfoReducer?.canariesInfo || {}
+  );
+  const isCanariesInfoLoading = useSelector(
+    ({ canariesInfoReducer }) => canariesInfoReducer?.isLoading
+  );
   useEffect(() => {
     const registered = getRegistry().register({
       thresholdReducer,
       devicesInfoReducer,
+      canariesInfoReducer,
     });
     dispatch(loadThreshold());
     dispatch(loadDevicesInfo());
+    dispatch(loadCanariesInfo());
     () => registered();
   }, []);
 
@@ -142,8 +162,83 @@ const GroupsInfo = () => {
       </GridItem>
       <GridItem span={3}>
         <Card>
-          <CardHeader>Last Canaries</CardHeader>
-          <CardBody></CardBody>
+          <CardHeader>
+            <Title headingLevel="h3">Last Canaries</Title>
+          </CardHeader>
+          <CardBody>
+            <TextContent>
+              <TextList component={TextListVariants.dl}>
+                <TextListItem component={TextListItemVariants.dt}>
+                  <Link to="/groups">Sensors</Link>
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>
+                  {isCanariesInfoLoading === false ? (
+                    <Level>
+                      <LevelItem>
+                        <DateFormat date={canariesInfo?.sensors?.time} />
+                      </LevelItem>
+                      <LevelItem>
+                        <StatusIcon status={canariesInfo?.sensors?.status} />
+                      </LevelItem>
+                    </Level>
+                  ) : (
+                    <Skeleton />
+                  )}
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>
+                  <Link to="/groups">Scanners</Link>
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>
+                  {isCanariesInfoLoading === false ? (
+                    <Level>
+                      <LevelItem>
+                        <DateFormat date={canariesInfo?.scanners?.time} />
+                      </LevelItem>
+                      <LevelItem>
+                        <StatusIcon status={canariesInfo?.scanners?.status} />
+                      </LevelItem>
+                    </Level>
+                  ) : (
+                    <Skeleton />
+                  )}
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>
+                  <Link to="/groups">Kiosks</Link>
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>
+                  {isCanariesInfoLoading === false ? (
+                    <Level>
+                      <LevelItem>
+                        <DateFormat date={canariesInfo?.kiosks?.time} />
+                      </LevelItem>
+                      <LevelItem>
+                        <StatusIcon status={canariesInfo?.kiosks?.status} />
+                      </LevelItem>
+                    </Level>
+                  ) : (
+                    <Skeleton />
+                  )}
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>
+                  <Link to="/groups">Antenna</Link>
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>
+                  {isCanariesInfoLoading === false ? (
+                    <Level>
+                      <LevelItem>
+                        <DateFormat date={canariesInfo?.antenna?.time} />
+                      </LevelItem>
+                      <LevelItem>
+                        <StatusIcon status={canariesInfo?.antenna?.status} />
+                      </LevelItem>
+                    </Level>
+                  ) : (
+                    <Skeleton />
+                  )}
+                </TextListItem>
+              </TextList>
+            </TextContent>
+          </CardBody>
         </Card>
       </GridItem>
     </Grid>

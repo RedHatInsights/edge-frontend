@@ -5,13 +5,16 @@ import {
   TableHeader,
   TableBody,
   sortable,
+  cellWidth,
 } from '@patternfly/react-table';
+import { DateFormat } from '@redhat-cloud-services/frontend-components';
+import { StatusIcon, SecureIcon } from '../../components';
 import { Link } from 'react-router-dom';
 
 const columns = [
   {
     title: 'Name of group',
-    transforms: [sortable],
+    transforms: [sortable, cellWidth('max')],
   },
   {
     title: 'Number of devices',
@@ -19,15 +22,15 @@ const columns = [
   },
   {
     title: 'Secure',
-    transforms: [sortable],
+    transforms: [sortable, cellWidth(10)],
   },
   {
     title: 'Last seen',
-    transforms: [sortable],
+    transforms: [sortable, cellWidth(15)],
   },
   {
     title: 'Status',
-    transforms: [sortable],
+    transforms: [sortable, cellWidth(10)],
   },
 ];
 
@@ -37,6 +40,16 @@ const GroupsTable = () => {
   return (
     <Table
       aria-label="Groups table"
+      actions={[
+        {
+          title: 'Adopt',
+          onClick: console.log,
+        },
+        {
+          title: 'Reject',
+          onClick: console.log,
+        },
+      ]}
       cells={columns}
       sortBy={sortBy}
       onSort={(_e, index, direction) =>
@@ -52,12 +65,14 @@ const GroupsTable = () => {
           },
           group?.sensors,
           {
-            title: group?.is_secure ? 'secure' : 'non secure',
+            title: <SecureIcon isSecure={group?.is_secure} />,
           },
           {
-            title: new Date(group?.last_seen).toDateString(),
+            title: <DateFormat date={group?.last_seen} />,
           },
-          group?.status,
+          {
+            title: <StatusIcon status={group?.status} />,
+          },
         ],
       }))}
     >
