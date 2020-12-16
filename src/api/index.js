@@ -1,4 +1,4 @@
-const statusMapper = [
+export const statusMapper = [
   'done',
   'error',
   'pending',
@@ -7,7 +7,8 @@ const statusMapper = [
   'notification',
 ];
 
-const randomNumber = (min, max) => Math.floor(Math.random() * (max - min));
+const randomNumber = (min, max) =>
+  Math.round(Math.random() * (max - min) + min);
 const randomString = () => Math.random().toString(36).substr(2, 10);
 const randomBool = () => Boolean(Math.round(Math.random() * 10) % 2);
 const randomDate = (offset = 10000000000) =>
@@ -42,3 +43,29 @@ export const fetchGroups = ({ perPage, page }) => {
     },
   }));
 };
+
+export const threshold = () => {
+  const sections = randomNumber(2, 5);
+  let rest = 100;
+  return Promise.resolve({
+    results: [...new Array(sections)].map(() => {
+      const currPercent = randomNumber(0, rest);
+      rest = rest - currPercent;
+      return {
+        [randomString()]: currPercent,
+      };
+    }),
+  });
+};
+
+export const devicesInfo = () => {
+  return Promise.resolve({
+    results: {
+      requiredApproval: randomNumber(0, 100),
+      orphaned: randomNumber(0, 100),
+      delivering: randomNumber(0, 100),
+    },
+  });
+};
+
+export const canariesInfo = () => {};

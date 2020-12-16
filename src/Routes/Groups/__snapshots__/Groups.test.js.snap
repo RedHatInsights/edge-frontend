@@ -23,11 +23,35 @@ exports[`Groups should render correctly 1`] = `
           <div
             class="pf-c-card__header"
           >
-            Health threshold Visualization
+            <h3
+              class="pf-c-title pf-m-lg"
+            >
+              Health threshold
+            </h3>
           </div>
           <div
             class="pf-c-card__body"
-          />
+          >
+            <div
+              class="pf-l-bullseye"
+            >
+              <span
+                aria-valuetext="Loading..."
+                class="pf-c-spinner pf-m-xl"
+                role="progressbar"
+              >
+                <span
+                  class="pf-c-spinner__clipper"
+                />
+                <span
+                  class="pf-c-spinner__lead-ball"
+                />
+                <span
+                  class="pf-c-spinner__tail-ball"
+                />
+              </span>
+            </div>
+          </div>
         </article>
       </div>
       <div
@@ -43,11 +67,79 @@ exports[`Groups should render correctly 1`] = `
           <div
             class="pf-c-card__header"
           >
-            Devices info
+            <h3
+              class="pf-c-title pf-m-lg"
+            >
+              Devices info
+            </h3>
           </div>
           <div
             class="pf-c-card__body"
-          />
+          >
+            <div
+              class="pf-c-content"
+            >
+              <dl
+                class=""
+                data-pf-content="true"
+              >
+                <dt
+                  class=""
+                  data-pf-content="true"
+                >
+                  <div
+                    class="pf-c-skeleton"
+                  >
+                    <span
+                      class="pf-u-screen-reader"
+                    />
+                  </div>
+                </dt>
+                <dd
+                  class=""
+                  data-pf-content="true"
+                >
+                  Required approvals
+                </dd>
+                <dt
+                  class=""
+                  data-pf-content="true"
+                >
+                  <div
+                    class="pf-c-skeleton"
+                  >
+                    <span
+                      class="pf-u-screen-reader"
+                    />
+                  </div>
+                </dt>
+                <dd
+                  class=""
+                  data-pf-content="true"
+                >
+                  Orphaned devices
+                </dd>
+                <dt
+                  class=""
+                  data-pf-content="true"
+                >
+                  <div
+                    class="pf-c-skeleton"
+                  >
+                    <span
+                      class="pf-u-screen-reader"
+                    />
+                  </div>
+                </dt>
+                <dd
+                  class=""
+                  data-pf-content="true"
+                >
+                  Devices on the way
+                </dd>
+              </dl>
+            </div>
+          </div>
         </article>
       </div>
       <div
