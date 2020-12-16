@@ -9,7 +9,7 @@ const Groups = React.lazy(() =>
 );
 const GroupsDetail = React.lazy(() =>
   import(
-    /* webpackChunkName: "GroupsDetailPage" */ './Routes/Groups/GroupsDetail'
+    /* webpackChunkName: "GroupsDetailPage" */ './Routes/GroupsDetail/GroupsDetail'
   )
 );
 

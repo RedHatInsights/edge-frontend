@@ -15,7 +15,7 @@ const randomwUUID = () =>
 
 const randomStatus = () => statusMapper[randomNumber(0, statusMapper.length)];
 
-const rowCreator = () => ({
+const rowGroupCreator = () => ({
   uuid: randomwUUID(),
   name: randomString(),
   sensors: randomNumber(0, 5000),
@@ -24,11 +24,21 @@ const rowCreator = () => ({
   status: randomStatus(),
 });
 
+const rowGroupDetailCreator = (status) => {
+  return {
+    uuid: randomwUUID(),
+    name: randomString(),
+    version: `${randomNumber(0, 10)}.${randomNumber(0, 10)}`,
+    last_seen: randomDate(),
+    status,
+  };
+};
+
 export const fetchGroups = ({ perPage, page }) => {
   const currPage = page || 1;
   const currPerPage = perPage || 20;
   return insights.chrome.auth.getUser().then(() => ({
-    results: [...new Array(perPage)].map(rowCreator),
+    results: [...new Array(currPerPage)].map(rowGroupCreator),
     meta: {
       count: 200,
       limit: currPerPage * currPage,
@@ -81,5 +91,33 @@ export const canariesInfo = () => {
         status: randomStatus(),
       },
     },
+  });
+};
+
+export const groupsDetail = (uuid, { page, perPage }) => {
+  const currPage = page || 1;
+  const currPerPage = perPage || 20;
+  const status = randomStatus();
+  return Promise.resolve({
+    uuid,
+    name: randomString(),
+    results: [...new Array(currPerPage)].map(() =>
+      rowGroupDetailCreator(status)
+    ),
+    meta: {
+      count: 200,
+      limit: currPerPage * currPage,
+      offset: currPerPage * (currPage - 1),
+    },
+  });
+};
+
+export const groupDevicesInfo = (uuid) => {
+  return Promise.resolve({
+    uuid,
+    total: 200,
+    newDevices: randomNumber(0, 50),
+    offlineDevices: randomNumber(0, 50),
+    deliveringDevices: randomNumber(0, 50),
   });
 };

@@ -18,6 +18,9 @@ import {
   TextVariants,
   Level,
   LevelItem,
+  CardFooter,
+  Split,
+  SplitItem,
 } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components';
 import { Link } from 'react-router-dom';
@@ -35,6 +38,7 @@ import {
 } from '../../store/reducers';
 import { StatusIcon } from '../../components';
 import { ChartPie, ChartThemeColor } from '@patternfly/react-charts';
+import { ArrowRightIcon } from '@patternfly/react-icons';
 
 const GroupsInfo = () => {
   const dispatch = useDispatch();
@@ -239,6 +243,16 @@ const GroupsInfo = () => {
               </TextList>
             </TextContent>
           </CardBody>
+          <CardFooter>
+            <Split>
+              <SplitItem isFilled />
+              <SplitItem>
+                <Link to="/groups">
+                  See canaries <ArrowRightIcon />
+                </Link>
+              </SplitItem>
+            </Split>
+          </CardFooter>
         </Card>
       </GridItem>
     </Grid>

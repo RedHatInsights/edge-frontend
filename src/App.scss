@@ -4,4 +4,17 @@
 @import '~@redhat-cloud-services/frontend-components/components/PrimaryToolbar.css';
 @import '~@redhat-cloud-services/frontend-components/components/ConditionalFilter.css';
 
-.edge-groups .edge-groups__info .pf-c-card { height: 100%; }
+.edge-groups, .edge-groups--detail {
+  .edge-groups__info .pf-c-card, .edge-groups--detail__info .pf-c-card {
+    height: 100%;
+  }
+}
+
+.edge-groups--detail .edge-groups--detail__info {
+  .pf-c-card.edge-groups--detail__complex {
+    .pf-c-card__header .pf-l-grid { width: 100%; }
+    .pf-c-card__body .pf-l-grid__item:first-of-type {
+      border-right: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
+    }
+  }
+}
