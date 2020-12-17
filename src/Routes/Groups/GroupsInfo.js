@@ -30,12 +30,6 @@ import {
   loadDevicesInfo,
   loadCanariesInfo,
 } from '../../store/actions';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
-import {
-  thresholdReducer,
-  devicesInfoReducer,
-  canariesInfoReducer,
-} from '../../store/reducers';
 import { StatusIcon } from '../../components';
 import { ChartPie, ChartThemeColor } from '@patternfly/react-charts';
 import { ArrowRightIcon } from '@patternfly/react-icons';
@@ -61,15 +55,9 @@ const GroupsInfo = () => {
     ({ canariesInfoReducer }) => canariesInfoReducer?.isLoading
   );
   useEffect(() => {
-    const registered = getRegistry().register({
-      thresholdReducer,
-      devicesInfoReducer,
-      canariesInfoReducer,
-    });
     dispatch(loadThreshold());
     dispatch(loadDevicesInfo());
     dispatch(loadCanariesInfo());
-    () => registered();
   }, []);
 
   return (
