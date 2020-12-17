@@ -21,7 +21,10 @@ import { statusMapper } from '../../constants';
 import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
 import { routes } from '../../../package.json';
 import { loadGroupsDetail } from '../../store/actions';
-import { groupsDetailReducer } from '../../store/reducers';
+import {
+  groupsDetailReducer,
+  groupDevicesInfoReducer,
+} from '../../store/reducers';
 import DevicesTable from './DevicesTable';
 import GroupsDetailInfo from './GroupsDetailInfo';
 
@@ -43,11 +46,13 @@ const GroupsDetail = () => {
   );
 
   useEffect(() => {
-    const registered = getRegistry().register({ groupsDetailReducer });
+    const registered = getRegistry().register({
+      groupsDetailReducer,
+      groupDevicesInfoReducer,
+    });
     dispatch(loadGroupsDetail(uuid));
     () => registered();
   }, []);
-  console.log(groupName, 'fff');
   return (
     <Fragment>
       <PageHeader>

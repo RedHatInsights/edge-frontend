@@ -2,7 +2,12 @@ import React, { useEffect, Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadGroups } from '../../store/actions';
 import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
-import { groupsReducer } from '../../store/reducers';
+import {
+  groupsReducer,
+  thresholdReducer,
+  devicesInfoReducer,
+  canariesInfoReducer,
+} from '../../store/reducers';
 import { statusMapper } from '../../constants';
 import {
   PageHeader,
@@ -37,7 +42,12 @@ const Groups = () => {
       }
   );
   useEffect(() => {
-    const registered = getRegistry().register({ groupsReducer });
+    const registered = getRegistry().register({
+      groupsReducer,
+      thresholdReducer,
+      devicesInfoReducer,
+      canariesInfoReducer,
+    });
     dispatch(loadGroups());
     () => registered();
   }, []);

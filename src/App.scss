@@ -13,8 +13,12 @@
 .edge-groups--detail .edge-groups--detail__info {
   .pf-c-card.edge-groups--detail__complex {
     .pf-c-card__header .pf-l-grid { width: 100%; }
-    .pf-c-card__body .pf-l-grid__item:first-of-type {
-      border-right: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
+    .pf-c-card__body .pf-l-grid {
+      height: 100%;
+
+      .pf-l-grid__item:first-of-type {
+        border-right: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--100);
+      }
     }
   }
 }

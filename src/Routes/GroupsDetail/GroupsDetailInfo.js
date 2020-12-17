@@ -10,20 +10,28 @@ import {
   TextContent,
   Text,
   TextVariants,
+  TextListItem,
+  Skeleton,
+  TextListItemVariants,
+  TextList,
+  TextListVariants,
 } from '@patternfly/react-core';
-import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import { loadGroupDevicesInfo } from '../../store/actions';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
-import { groupDevicesInfoReducer } from '../../store/reducers';
 
-const GroupsInfo = () => {
+const GroupsInfo = ({ uuid }) => {
   const dispatch = useDispatch();
+  const isDevicesInfoLoading = useSelector(
+    ({ groupDevicesInfoReducer }) => groupDevicesInfoReducer?.isLoading
+  );
+  const devicesInfo = useSelector(
+    ({ groupDevicesInfoReducer }) => groupDevicesInfoReducer?.devicesInfo
+  );
   useEffect(() => {
-    const registered = getRegistry().register({ groupDevicesInfoReducer });
     dispatch(loadGroupDevicesInfo());
-    () => registered();
   }, []);
-
   return (
     <Grid hasGutter>
       <GridItem span={3}>
@@ -39,7 +47,66 @@ const GroupsInfo = () => {
           <CardHeader>
             <Title headingLevel="h3">Devices info</Title>
           </CardHeader>
-          <CardBody></CardBody>
+          <CardBody>
+            <TextContent>
+              <TextList component={TextListVariants.dl}>
+                <TextListItem component={TextListItemVariants.dt}>
+                  {isDevicesInfoLoading === false ? (
+                    <Text component={TextVariants.h1}>
+                      {devicesInfo?.total}
+                    </Text>
+                  ) : (
+                    <Skeleton />
+                  )}
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>
+                  <Text component={TextVariants.h3}>Total devices</Text>
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>
+                  {isDevicesInfoLoading === false ? (
+                    <Text component={TextVariants.h1}>
+                      <Link to={`/groups/${uuid}`}>
+                        {devicesInfo?.newDevices}
+                      </Link>
+                    </Text>
+                  ) : (
+                    <Skeleton />
+                  )}
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>
+                  New devices added
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>
+                  {isDevicesInfoLoading === false ? (
+                    <Text component={TextVariants.h1}>
+                      <Link to={`/groups/${uuid}`}>
+                        {devicesInfo?.offlineDevices}
+                      </Link>
+                    </Text>
+                  ) : (
+                    <Skeleton />
+                  )}
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>
+                  Devices offline
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>
+                  {isDevicesInfoLoading === false ? (
+                    <Text component={TextVariants.h1}>
+                      <Link to={`/groups/${uuid}`}>
+                        {devicesInfo?.deliveringDevices}
+                      </Link>
+                    </Text>
+                  ) : (
+                    <Skeleton />
+                  )}
+                </TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>
+                  Devices on the way
+                </TextListItem>
+              </TextList>
+            </TextContent>
+          </CardBody>
         </Card>
       </GridItem>
       <GridItem span={6}>
@@ -77,6 +144,10 @@ const GroupsInfo = () => {
       </GridItem>
     </Grid>
   );
+};
+
+GroupsInfo.propTypes = {
+  uuid: PropTypes.string,
 };
 
 export default GroupsInfo;
