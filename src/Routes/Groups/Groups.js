@@ -28,9 +28,11 @@ import {
 } from '@redhat-cloud-services/frontend-components';
 import GroupsInfo from './GroupsInfo';
 import GroupsTable from './GroupsTable';
+import NewGroup from './NewGroup';
 
 const Groups = () => {
   const [activeFilters, setActiveFilters] = useState({});
+  const [isNewGroupOpen, setIsNewGroupOpen] = useState(false);
   const dispatch = useDispatch();
   const isLoading = useSelector(
     ({ groupsReducer }) => groupsReducer?.isLoading
@@ -74,7 +76,7 @@ const Groups = () => {
                     },
                     dedicatedAction: (
                       <Button
-                        onClick={() => console.log('ff')}
+                        onClick={() => setIsNewGroupOpen(true)}
                         isDisabled={isLoading !== false}
                       >
                         Add group
@@ -163,6 +165,10 @@ const Groups = () => {
           </StackItem>
         </Stack>
       </Main>
+      <NewGroup
+        isOpened={isNewGroupOpen}
+        onAction={() => setIsNewGroupOpen(false)}
+      />
     </Fragment>
   );
 };
