@@ -16,7 +16,14 @@ const FormTemplate = (props) => (
 const NewGroup = ({ onAction }) => {
   const [registry, setRegistry] = useState();
   useEffect(() => {
-    setRegistry(new ReducerRegistry({}, [promiseMiddleware]));
+    setRegistry(
+      new ReducerRegistry(
+        {
+          selected: new Map(),
+        },
+        [promiseMiddleware]
+      )
+    );
   }, []);
 
   return (

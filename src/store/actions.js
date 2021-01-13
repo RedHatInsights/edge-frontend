@@ -5,6 +5,7 @@ import {
   LOAD_CANARIES_INFO,
   LOAD_GROUP_DETAIL,
   LOAD_GROUP_DEVICES_INFO,
+  SELECT_ENTITY,
 } from './action-types';
 import {
   fetchGroups,
@@ -43,4 +44,12 @@ export const loadGroupsDetail = (uuid, page, perPage) => ({
 export const loadGroupDevicesInfo = (uuid) => ({
   type: LOAD_GROUP_DEVICES_INFO,
   payload: groupDevicesInfo(uuid),
+});
+
+export const selectEntity = (id, selected) => ({
+  type: SELECT_ENTITY,
+  payload: {
+    id,
+    selected,
+  },
 });
