@@ -1,10 +1,13 @@
 import componentTypes from '@data-driven-forms/react-form-renderer/dist/esm/component-types';
+import { INVENTORY_TABLE } from '../../components/form';
 
 export default {
   fields: [
     {
       component: componentTypes.WIZARD,
       name: 'wizzard',
+      inModal: true,
+      title: 'Create new group',
       fields: [
         {
           title: 'General information',
@@ -35,9 +38,8 @@ export default {
           name: 'choos-systems',
           fields: [
             {
-              component: componentTypes.PLAIN_TEXT,
-              name: 'selected-systems',
-              label: 'Here will be inventory table',
+              component: INVENTORY_TABLE,
+              name: 'select-system',
             },
           ],
         },

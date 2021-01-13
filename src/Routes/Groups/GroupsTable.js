@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import {
+  Bullseye,
+  EmptyState,
+  EmptyStateVariant,
+  Title,
+  EmptyStateBody,
+  Button,
+} from '@patternfly/react-core';
 import {
   Table,
   TableHeader,
@@ -34,22 +43,24 @@ const columns = [
   },
 ];
 
-const GroupsTable = () => {
+const GroupsTable = ({ onAddNewGroup }) => {
   const [sortBy, setSortBy] = useState({});
   const groups = useSelector(({ groupsReducer }) => groupsReducer?.groups);
   return (
     <Table
       aria-label="Groups table"
-      actions={[
-        {
-          title: 'Adopt',
-          onClick: console.log,
-        },
-        {
-          title: 'Reject',
-          onClick: console.log,
-        },
-      ]}
+      {...(groups.length > 0 && {
+        actions: [
+          {
+            title: 'Adopt',
+            onClick: console.log,
+          },
+          {
+            title: 'Reject',
+            onClick: console.log,
+          },
+        ],
+      })}
       cells={columns}
       sortBy={sortBy}
       onSort={(_e, index, direction) =>
@@ -58,28 +69,64 @@ const GroupsTable = () => {
           direction,
         }))
       }
-      rows={groups.map((group) => ({
-        cells: [
-          {
-            title: <Link to={`/groups/${group?.uuid}`}>{group?.name}</Link>,
-          },
-          group?.sensors,
-          {
-            title: <SecureIcon isSecure={group?.is_secure} />,
-          },
-          {
-            title: <DateFormat date={group?.last_seen} />,
-          },
-          {
-            title: <StatusIcon status={group?.status} />,
-          },
-        ],
-      }))}
+      rows={
+        groups.length > 0
+          ? groups.map((group) => ({
+              cells: [
+                {
+                  title: (
+                    <Link to={`/groups/${group?.uuid}`}>{group?.name}</Link>
+                  ),
+                },
+                group?.sensors?.length,
+                {
+                  title: <SecureIcon isSecure={group?.is_secure} />,
+                },
+                {
+                  title: <DateFormat date={group?.last_seen} />,
+                },
+                {
+                  title: <StatusIcon status={group?.status} />,
+                },
+              ],
+            }))
+          : [
+              {
+                cells: [
+                  {
+                    title: (
+                      <Bullseye>
+                        <EmptyState variant={EmptyStateVariant.full}>
+                          <Title headingLevel="h5" size="lg">
+                            No matching groups found
+                          </Title>
+                          <EmptyStateBody>
+                            This filter criteria matches no groups. <br /> Try
+                            changing your filter settings. Or adding new group.
+                          </EmptyStateBody>
+                          <Button variant="primary" onClick={onAddNewGroup}>
+                            Add group
+                          </Button>
+                        </EmptyState>
+                      </Bullseye>
+                    ),
+                    props: {
+                      colSpan: columns.length + 1,
+                    },
+                  },
+                ],
+              },
+            ]
+      }
     >
       <TableHeader />
       <TableBody />
     </Table>
   );
+};
+
+GroupsTable.propTypes = {
+  onAddNewGroup: PropTypes.func,
 };
 
 export default GroupsTable;

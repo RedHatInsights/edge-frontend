@@ -1,5 +1,6 @@
-import React, { useEffect, Fragment, useState } from 'react';
+import React, { useEffect, Fragment, useState, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { createNewGroup } from '../../api/';
 import { loadGroups } from '../../store/actions';
 import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
 import {
@@ -28,7 +29,7 @@ import {
 } from '@redhat-cloud-services/frontend-components';
 import GroupsInfo from './GroupsInfo';
 import GroupsTable from './GroupsTable';
-import NewGroup from './NewGroup';
+const NewGroup = lazy(() => import('./NewGroup'));
 
 const Groups = () => {
   const [activeFilters, setActiveFilters] = useState({});
@@ -148,7 +149,7 @@ const Groups = () => {
                   })}
             />
             {isLoading === false ? (
-              <GroupsTable />
+              <GroupsTable onAddNewGroup={() => setIsNewGroupOpen(true)} />
             ) : (
               <SkeletonTable colSize={5} rowSize={15} />
             )}
@@ -165,10 +166,26 @@ const Groups = () => {
           </StackItem>
         </Stack>
       </Main>
-      <NewGroup
-        isOpened={isNewGroupOpen}
-        onAction={() => setIsNewGroupOpen(false)}
-      />
+      {isNewGroupOpen && (
+        <Suspense fallback="">
+          <NewGroup
+            isOpened={isNewGroupOpen}
+            onAction={(isSubmit, values) => {
+              if (isSubmit) {
+                (async () => {
+                  await createNewGroup({
+                    groupName: values['group-name'],
+                    isSecure: values['is-secure'],
+                    systemIDs: values.selected,
+                  });
+                  dispatch(loadGroups());
+                })();
+              }
+              setIsNewGroupOpen(false);
+            }}
+          />
+        </Suspense>
+      )}
     </Fragment>
   );
 };
