@@ -7,7 +7,7 @@ const randomBool = () => Boolean(Math.round(Math.random() * 10) % 2);
 const randomDate = (offset = 10000000000) =>
   new Date(+new Date() - Math.floor(Math.random() * offset));
 
-const randomwUUID = () =>
+const randomUUID = () =>
   'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0;
     return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
@@ -15,32 +15,35 @@ const randomwUUID = () =>
 
 const randomStatus = () => statusMapper[randomNumber(0, statusMapper.length)];
 
-const rowGroupCreator = () => ({
-  uuid: randomwUUID(),
-  name: randomString(),
-  sensors: randomNumber(0, 5000),
-  is_secure: randomBool(),
-  last_seen: randomDate(),
+const rowGroupCreator = (uuid, name, sensors, isSecure, lastSeen) => ({
+  uuid,
+  name,
+  sensors,
+  is_secure: isSecure,
+  last_seen: lastSeen,
   status: randomStatus(),
 });
 
 const rowGroupDetailCreator = (status) => {
   return {
-    uuid: randomwUUID(),
+    uuid: randomUUID(),
     name: randomString(),
     version: `${randomNumber(0, 10)}.${randomNumber(0, 10)}`,
     last_seen: randomDate(),
+    is_secure: randomBool(),
     status,
   };
 };
+
+const groups = [];
 
 export const fetchGroups = ({ perPage, page }) => {
   const currPage = page || 1;
   const currPerPage = perPage || 20;
   return insights.chrome.auth.getUser().then(() => ({
-    results: [...new Array(currPerPage)].map(rowGroupCreator),
+    results: groups,
     meta: {
-      count: 200,
+      count: groups.length,
       limit: currPerPage * currPage,
       offset: currPerPage * (currPage - 1),
     },
@@ -120,4 +123,11 @@ export const groupDevicesInfo = (uuid) => {
     offlineDevices: randomNumber(0, 50),
     deliveringDevices: randomNumber(0, 50),
   });
+};
+
+export const createNewGroup = ({ groupName, isSecure, systemIDs }) => {
+  groups.push(
+    rowGroupCreator(randomUUID, groupName, systemIDs, isSecure, new Date())
+  );
+  return Promise.resolve();
 };

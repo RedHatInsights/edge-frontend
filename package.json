@@ -42,15 +42,18 @@
   ],
   "dependencies": {
     "@babel/runtime": "7.10.0",
+    "@data-driven-forms/pf4-component-mapper": "^2.19.1",
+    "@data-driven-forms/react-form-renderer": "^2.19.1",
     "@patternfly/patternfly": "4.70.2",
     "@patternfly/react-charts": "^6.12.12",
     "@patternfly/react-core": "4.84.3",
+    "@patternfly/react-icons": "^4.7.22",
     "@patternfly/react-styles": "^4.7.22",
     "@patternfly/react-table": "4.19.44",
     "@patternfly/react-tokens": "^4.9.22",
-    "@redhat-cloud-services/frontend-components": "2.5.2",
-    "@redhat-cloud-services/frontend-components-notifications": "^2.0.4",
-    "@redhat-cloud-services/frontend-components-utilities": "2.0.4",
+    "@redhat-cloud-services/frontend-components": "2.5.8",
+    "@redhat-cloud-services/frontend-components-notifications": "^2.2.4",
+    "@redhat-cloud-services/frontend-components-utilities": "2.2.9",
     "babel-plugin-transform-imports": "^2.0.0",
     "classnames": "2.2.6",
     "react": "16.13.1",
@@ -70,7 +73,7 @@
     "@babel/preset-flow": "7.9.0",
     "@babel/preset-react": "7.10.0",
     "@redhat-cloud-services/eslint-config-redhat-cloud-services": "0.0.1",
-    "@redhat-cloud-services/frontend-components-config": "3.0.0-beta12",
+    "@redhat-cloud-services/frontend-components-config": "3.0.0-beta16",
     "@testing-library/react": "^11.2.2",
     "@webpack-cli/serve": "^1.1.0",
     "babel-core": "7.0.0-bridge.0",
@@ -96,9 +99,9 @@
     "stylelint": "13.5.0",
     "stylelint-config-recommended-scss": "4.2.0",
     "stylelint-scss": "3.17.2",
-    "webpack": "5.10.1",
+    "webpack": "5.13.0",
     "webpack-bundle-analyzer": "3.8.0",
-    "webpack-cli": "4.2.0"
+    "webpack-cli": "4.3.1"
   },
   "insights": {
     "appname": "edge"
