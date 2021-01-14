@@ -6,7 +6,7 @@ import { Routes } from './Routes';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import './App.scss';
 
-import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications/';
+import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications';
 
 const App = (props) => {
   const [isLogged, setIsLogged] = useState(false);

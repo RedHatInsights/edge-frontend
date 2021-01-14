@@ -38,42 +38,44 @@ const FormInventoryTable = ({
   const calculateSelected = () => (selected ? selected.size : 0);
 
   return (
-    <InventoryTable
-      {...rest}
-      bulkSelect={{
-        count: calculateSelected(),
-        items: [
-          {
-            title: 'Select none (0)',
-            onClick: () => {
-              dispatch(selectEntity(-1, false));
+    <div>
+      <InventoryTable
+        {...rest}
+        bulkSelect={{
+          count: calculateSelected(),
+          items: [
+            {
+              title: 'Select none (0)',
+              onClick: () => {
+                dispatch(selectEntity(-1, false));
+              },
             },
+            {
+              ...(loaded && rows && rows.length > 0
+                ? {
+                    title: `Select page (${rows.length})`,
+                    onClick: () => {
+                      dispatch(selectEntity(0, true));
+                    },
+                  }
+                : {}),
+            },
+          ],
+          checked: calculateChecked(rows, selected),
+          onSelect: (value) => {
+            dispatch(selectEntity(0, value));
           },
-          {
-            ...(loaded && rows && rows.length > 0
-              ? {
-                  title: `Select page (${rows.length})`,
-                  onClick: () => {
-                    dispatch(selectEntity(0, true));
-                  },
-                }
-              : {}),
-          },
-        ],
-        checked: calculateChecked(rows, selected),
-        onSelect: (value) => {
-          dispatch(selectEntity(0, value));
-        },
-      }}
-      ref={inventory}
-      onRefresh={onRefresh}
-      tableProps={{
-        canSelectAll: false,
-      }}
-      onLoad={({ mergeWithEntities }) => {
-        registry?.register?.(mergeWithEntities(entitiesReducer()));
-      }}
-    />
+        }}
+        ref={inventory}
+        onRefresh={onRefresh}
+        tableProps={{
+          canSelectAll: false,
+        }}
+        onLoad={({ mergeWithEntities }) => {
+          registry?.register?.(mergeWithEntities(entitiesReducer()));
+        }}
+      />
+    </div>
   );
 };
 

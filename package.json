@@ -24,7 +24,7 @@
       "!src/**/stories/*"
     ],
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(@patternfly/react-core/|@patternfly/react-icons/|@patternfly/react-tokens/|@redhat-cloud-services)).*$"
+      "<rootDir>/node_modules/(?!(@data-driven-forms/|@patternfly/|@redhat-cloud-services)).*$"
     ],
     "coverageDirectory": "./coverage/",
     "moduleNameMapper": {
@@ -49,7 +49,7 @@
     "@patternfly/react-core": "4.84.3",
     "@patternfly/react-icons": "^4.7.22",
     "@patternfly/react-styles": "^4.7.22",
-    "@patternfly/react-table": "4.19.44",
+    "@patternfly/react-table": "4.19.45",
     "@patternfly/react-tokens": "^4.9.22",
     "@redhat-cloud-services/frontend-components": "2.5.8",
     "@redhat-cloud-services/frontend-components-notifications": "^2.2.4",
@@ -100,7 +100,7 @@
     "stylelint-config-recommended-scss": "4.2.0",
     "stylelint-scss": "3.17.2",
     "webpack": "5.13.0",
-    "webpack-bundle-analyzer": "3.8.0",
+    "webpack-bundle-analyzer": "^3.8.0",
     "webpack-cli": "4.3.1"
   },
   "insights": {
