@@ -1,5 +1,7 @@
+import React from 'react';
 import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/esm/ReducerRegistry';
 import { LOAD_GROUP_DETAIL } from './action-types';
+import { StatusIcon } from '../components';
 
 const initialState = {};
 
@@ -16,6 +18,34 @@ const loadGroupsFulfilled = (state, { payload }) => ({
   devices: payload?.results,
   meta: payload?.meta || {},
 });
+
+const onEntitiesLoaded = (state) => {
+  const [name, updated] =
+    state?.columns?.filter(
+      ({ key }) => key === 'display_name' || key === 'updated'
+    ) || [];
+  return {
+    ...state,
+    columns: [
+      name,
+      { key: 'version', title: 'Version' },
+      updated,
+      {
+        key: 'status',
+        title: 'Status',
+        // eslint-disable-next-line react/display-name
+        renderFunc: (status) => {
+          return <StatusIcon status={status} />;
+        },
+      },
+    ],
+  };
+};
+
+export const systemsList = ({ LOAD_ENTITIES_FULFILLED }) =>
+  applyReducerHash({
+    [LOAD_ENTITIES_FULFILLED]: onEntitiesLoaded,
+  });
 
 export default applyReducerHash(
   {

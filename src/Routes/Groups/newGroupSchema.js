@@ -1,4 +1,4 @@
-import componentTypes from '@data-driven-forms/react-form-renderer/dist/esm/component-types';
+import { componentTypes } from '@data-driven-forms/react-form-renderer';
 import { INVENTORY_TABLE } from '../../components/form';
 
 export default {

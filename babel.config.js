@@ -2,6 +2,12 @@ require.extensions['.css'] = () => undefined;
 const path = require('path');
 const glob = require('glob');
 
+const cammelToDash = (name) =>
+  name
+    .split(/(?=[A-Z])/)
+    .join('-')
+    .toLowerCase();
+
 // Mapper for Patternly components
 const mapper = {
   TextVariants: 'Text',
@@ -20,6 +26,17 @@ const FECMapper = {
   PageHeaderTitle: 'PageHeader',
 };
 
+const NotificationMapper = {
+  REMOVE_NOTIFICATION: 'actionTypes',
+  ADD_NOTIFICATION: 'actionTypes',
+  NotificationsPortal: 'NotificationPortal',
+  addNotification: 'actions',
+};
+
+const CharMapper = {
+  ChartThemeColor: 'ChartTheme',
+};
+
 module.exports = {
   presets: ['@babel/env', '@babel/react'],
   plugins: [
@@ -36,7 +53,7 @@ module.exports = {
             const files = glob.sync(
               path.resolve(
                 __dirname,
-                `./node_modules/@patternfly/react-core/dist/js/**/${
+                `./node_modules/@patternfly/react-core/dist/esm/**/${
                   mapper[importName] || importName
                 }.js`
               )
@@ -50,47 +67,49 @@ module.exports = {
           preventFullImport: false,
           skipDefaultConversion: true,
         },
-      },
-      'react-core',
-    ],
-    [
-      'transform-imports',
-      {
         '@patternfly/react-icons': {
           transform: (importName) =>
-            `@patternfly/react-icons/dist/js/icons/${importName
-              .split(/(?=[A-Z])/)
-              .join('-')
-              .toLowerCase()}`,
+            `@patternfly/react-icons/dist/esm/icons/${cammelToDash(
+              importName
+            )}.js`,
           preventFullImport: true,
         },
-      },
-      'react-icons',
-    ],
-    [
-      'transform-imports',
-      {
+        '@patternfly/react-charts': {
+          transform: (importName) =>
+            `@patternfly/react-charts/dist/esm/components/${
+              CharMapper[importName] || importName
+            }/index.js`,
+          preventFullImport: true,
+          skipDefaultConversion: true,
+        },
         '@redhat-cloud-services/frontend-components': {
           transform: (importName) =>
-            `@redhat-cloud-services/frontend-components/components/cjs/${
+            `@redhat-cloud-services/frontend-components/components/esm/${
               FECMapper[importName] || importName
-            }`,
+            }.js`,
           preventFullImport: false,
           skipDefaultConversion: true,
         },
-      },
-      'frontend-components',
-    ],
-    [
-      'transform-imports',
-      {
         '@redhat-cloud-services/frontend-components-notifications': {
           transform: (importName) =>
-            `@redhat-cloud-services/frontend-components-notifications/cjs/${importName}`,
+            `@redhat-cloud-services/frontend-components-notifications/esm/${
+              NotificationMapper[importName] || importName
+            }.js`,
           preventFullImport: true,
         },
+        '@data-driven-forms/react-form-renderer': {
+          transform: (importName) =>
+            `@data-driven-forms/react-form-renderer/dist/esm/${cammelToDash(
+              importName
+            )}.js`,
+        },
+        '@data-driven-forms/pf4-component-mapper': {
+          transform: (importName) =>
+            `@data-driven-forms/pf4-component-mapper/dist/esm/${cammelToDash(
+              importName
+            )}.js`,
+        },
       },
-      'frontend-notifications',
     ],
   ],
 };

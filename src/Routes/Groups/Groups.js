@@ -29,7 +29,8 @@ import {
 } from '@redhat-cloud-services/frontend-components';
 import GroupsInfo from './GroupsInfo';
 import GroupsTable from './GroupsTable';
-const NewGroup = lazy(() => import('./NewGroup'));
+const InventoryForm = lazy(() => import('../../components/InventoryForm'));
+import schema from './newGroupSchema';
 
 const Groups = () => {
   const [activeFilters, setActiveFilters] = useState({});
@@ -168,7 +169,8 @@ const Groups = () => {
       </Main>
       {isNewGroupOpen && (
         <Suspense fallback="">
-          <NewGroup
+          <InventoryForm
+            schema={schema}
             isOpened={isNewGroupOpen}
             onAction={(isSubmit, values) => {
               if (isSubmit) {

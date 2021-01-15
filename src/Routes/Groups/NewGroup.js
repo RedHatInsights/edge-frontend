@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import FormRenderer from '@data-driven-forms/react-form-renderer/dist/esm/form-renderer';
-import Pf4FormTemplate from '@data-driven-forms/pf4-component-mapper/dist/esm/form-template';
-import componentMapper from '@data-driven-forms/pf4-component-mapper/dist/esm/component-mapper';
+import { FormRenderer } from '@data-driven-forms/react-form-renderer';
+import {
+  FormTemplate as Pf4FormTemplate,
+  componentMapper,
+} from '@data-driven-forms/pf4-component-mapper';
 import schema from './newGroupSchema';
 import { FormInventoryTable, INVENTORY_TABLE } from '../../components/form';
 import ReducerRegistry from '@redhat-cloud-services/frontend-components-utilities/files/esm/ReducerRegistry';

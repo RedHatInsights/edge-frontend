@@ -3,7 +3,7 @@ import { statusMapper } from '../constants';
 const randomNumber = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
 const randomString = () => Math.random().toString(36).substr(2, 10);
-const randomBool = () => Boolean(Math.round(Math.random() * 10) % 2);
+// const randomBool = () => Boolean(Math.round(Math.random() * 10) % 2);
 const randomDate = (offset = 10000000000) =>
   new Date(+new Date() - Math.floor(Math.random() * offset));
 
@@ -24,13 +24,10 @@ const rowGroupCreator = (uuid, name, sensors, isSecure, lastSeen) => ({
   status: randomStatus(),
 });
 
-const rowGroupDetailCreator = (status) => {
+const rowGroupDetailCreator = (uuid, version, status) => {
   return {
-    uuid: randomUUID(),
-    name: randomString(),
-    version: `${randomNumber(0, 10)}.${randomNumber(0, 10)}`,
-    last_seen: randomDate(),
-    is_secure: randomBool(),
+    uuid,
+    version,
     status,
   };
 };
@@ -101,14 +98,19 @@ export const groupsDetail = (uuid, { page, perPage }) => {
   const currPage = page || 1;
   const currPerPage = perPage || 20;
   const status = randomStatus();
+  const group = groups.find(({ uuid: groupUUID }) => uuid === groupUUID);
   return Promise.resolve({
     uuid,
     name: randomString(),
-    results: [...new Array(currPerPage)].map(() =>
-      rowGroupDetailCreator(status)
+    results: group?.sensors?.map((uuid) =>
+      rowGroupDetailCreator(
+        uuid,
+        `${randomNumber(0, 10)}.${randomNumber(0, 10)}`,
+        status
+      )
     ),
     meta: {
-      count: 200,
+      count: group?.sensors?.length || 0,
       limit: currPerPage * currPage,
       offset: currPerPage * (currPage - 1),
     },
@@ -127,7 +129,15 @@ export const groupDevicesInfo = (uuid) => {
 
 export const createNewGroup = ({ groupName, isSecure, systemIDs }) => {
   groups.push(
-    rowGroupCreator(randomUUID, groupName, systemIDs, isSecure, new Date())
+    rowGroupCreator(randomUUID(), groupName, systemIDs, isSecure, new Date())
   );
+  return Promise.resolve();
+};
+
+export const updateGroup = ({ uuid, selected }) => {
+  const group = groups.find(({ uuid: groupUUID }) => groupUUID === uuid);
+  if (group) {
+    group.sensors = selected;
+  }
   return Promise.resolve();
 };
