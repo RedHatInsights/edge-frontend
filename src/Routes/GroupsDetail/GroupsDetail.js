@@ -31,9 +31,31 @@ import { systemsList } from '../../store/groupsDetail';
 const InventoryForm = lazy(() => import('../../components/InventoryForm'));
 import schema from './addDeviceSchema';
 import { updateGroup } from '../../api';
+import {
+  statusMapper,
+  isEmptyFilters,
+  constructActiveFilters,
+  onDeleteFilter,
+} from '../../constants';
+
+const defaultFilters = {
+  name: {
+    label: 'Name',
+    value: '',
+  },
+  version: {
+    label: 'Version',
+    value: [],
+  },
+  status: {
+    label: 'Status',
+    value: [],
+  },
+};
 
 const GroupsDetail = () => {
   const [isAddDeviceOpen, setIsAddDeviceOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState(defaultFilters);
   const inventory = useRef(null);
   const { uuid } = useParams();
   const dispatch = useDispatch();
@@ -68,6 +90,7 @@ const GroupsDetail = () => {
       callback(options);
     }
   };
+
   return (
     <Fragment>
       <PageHeader>
@@ -96,6 +119,81 @@ const GroupsDetail = () => {
               }}
               isLoaded={!isLoading}
               onRefresh={onRefresh}
+              filterConfig={{
+                items: [
+                  {
+                    label: activeFilters?.name?.label,
+                    filterValues: {
+                      key: 'text-filter',
+                      onChange: (event, value) =>
+                        setActiveFilters(() => ({
+                          ...activeFilters,
+                          name: {
+                            ...(activeFilters?.name || {}),
+                            value,
+                          },
+                        })),
+                      value: activeFilters?.name?.value || '',
+                    },
+                  },
+                  {
+                    label: activeFilters?.version?.label,
+                    type: 'checkbox',
+                    filterValues: {
+                      onChange: (event, value) =>
+                        setActiveFilters(() => ({
+                          ...(activeFilters || {}),
+                          version: {
+                            ...(activeFilters?.version || {}),
+                            value,
+                          },
+                        })),
+                      value: activeFilters?.version?.value || [],
+                      items: [
+                        {
+                          label: 'All versions',
+                          value: 'all',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    label: activeFilters?.status?.label,
+                    type: 'checkbox',
+                    filterValues: {
+                      onChange: (event, value) =>
+                        setActiveFilters(() => ({
+                          ...(activeFilters || {}),
+                          status: {
+                            ...(activeFilters?.status || {}),
+                            value,
+                          },
+                        })),
+                      items: statusMapper.map((item) => ({
+                        value: item,
+                        label: `${item.charAt(0).toUpperCase()}${item.slice(
+                          1
+                        )}`,
+                      })),
+                      value: activeFilters?.status?.value || [],
+                    },
+                  },
+                ],
+              }}
+              activeFiltersConfig={{
+                ...(isEmptyFilters(activeFilters) && {
+                  filters: constructActiveFilters(activeFilters),
+                }),
+                onDelete: (event, itemsToRemove, isAll) => {
+                  if (isAll) {
+                    setActiveFilters(defaultFilters);
+                  } else {
+                    setActiveFilters(() =>
+                      onDeleteFilter(activeFilters, itemsToRemove)
+                    );
+                  }
+                },
+              }}
               onLoad={({ mergeWithEntities, INVENTORY_ACTION_TYPES }) => {
                 getRegistry().register({
                   ...mergeWithEntities(systemsList(INVENTORY_ACTION_TYPES)),

@@ -19,6 +19,7 @@ const FormInventoryTable = ({
   formOptions,
   component,
   registry,
+  onLoad,
   ...rest
 }) => {
   const dispatch = useDispatch();
@@ -71,8 +72,11 @@ const FormInventoryTable = ({
         tableProps={{
           canSelectAll: false,
         }}
-        onLoad={({ mergeWithEntities }) => {
-          registry?.register?.(mergeWithEntities(entitiesReducer()));
+        onLoad={({ mergeWithEntities, INVENTORY_ACTION_TYPES, ...rest }) => {
+          registry?.register?.(
+            mergeWithEntities(entitiesReducer(INVENTORY_ACTION_TYPES))
+          );
+          onLoad({ mergeWithEntities, INVENTORY_ACTION_TYPES, ...rest });
         }}
       />
     </div>
@@ -81,10 +85,10 @@ const FormInventoryTable = ({
 
 const WrappedFormInventoryTable = (props) => (
   <InventoryContext.Consumer>
-    {({ registry }) =>
+    {({ registry, onLoad }) =>
       registry ? (
         <Provider store={registry.store}>
-          <FormInventoryTable registry={registry} {...props} />
+          <FormInventoryTable registry={registry} onLoad={onLoad} {...props} />
         </Provider>
       ) : (
         <Fragment />
@@ -108,6 +112,11 @@ FormInventoryTable.propTypes = {
   registry: PropTypes.shape({
     register: PropTypes.func,
   }),
+  onLoad: PropTypes.func,
+};
+
+FormInventoryTable.defaultProps = {
+  onLoad: () => undefined,
 };
 
 export default WrappedFormInventoryTable;

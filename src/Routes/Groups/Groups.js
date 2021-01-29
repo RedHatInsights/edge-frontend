@@ -9,7 +9,12 @@ import {
   devicesInfoReducer,
   canariesInfoReducer,
 } from '../../store/reducers';
-import { statusMapper } from '../../constants';
+import {
+  statusMapper,
+  isEmptyFilters,
+  constructActiveFilters,
+  onDeleteFilter,
+} from '../../constants';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -32,8 +37,23 @@ import GroupsTable from './GroupsTable';
 const InventoryForm = lazy(() => import('../../components/InventoryForm'));
 import schema from './newGroupSchema';
 
+const defaultFilters = {
+  name: {
+    label: 'Name',
+    value: '',
+  },
+  security: {
+    label: 'Security',
+    value: [],
+  },
+  status: {
+    label: 'Status',
+    value: [],
+  },
+};
+
 const Groups = () => {
-  const [activeFilters, setActiveFilters] = useState({});
+  const [activeFilters, setActiveFilters] = useState(defaultFilters);
   const [isNewGroupOpen, setIsNewGroupOpen] = useState(false);
   const dispatch = useDispatch();
   const isLoading = useSelector(
@@ -55,6 +75,8 @@ const Groups = () => {
     dispatch(loadGroups());
     () => registered();
   }, []);
+
+  console.log(activeFilters);
 
   return (
     <Fragment>
@@ -87,28 +109,34 @@ const Groups = () => {
                     filterConfig: {
                       items: [
                         {
-                          label: 'Name',
+                          label: defaultFilters.name.label,
                           type: 'text',
                           filterValues: {
                             key: 'text-filter',
                             onChange: (event, value) =>
-                              setActiveFilters({
-                                ...(activeFilters || {}),
-                                name: value,
-                              }),
-                            value: activeFilters?.name || '',
+                              setActiveFilters(() => ({
+                                ...activeFilters,
+                                name: {
+                                  ...(activeFilters?.name || {}),
+                                  value,
+                                },
+                              })),
+                            value: activeFilters?.name?.value || '',
                             placeholder: 'Filter by name',
                           },
                         },
                         {
-                          label: 'Security',
+                          label: defaultFilters.security.label,
                           type: 'checkbox',
                           filterValues: {
-                            key: 'text-filter',
+                            key: 'security-filter',
                             onChange: (event, value) =>
                               setActiveFilters({
                                 ...(activeFilters || {}),
-                                name: value,
+                                security: {
+                                  ...(activeFilters?.security || {}),
+                                  value,
+                                },
                               }),
                             items: [
                               {
@@ -120,18 +148,21 @@ const Groups = () => {
                                 label: 'Not secure',
                               },
                             ],
-                            value: activeFilters?.security || [],
+                            value: activeFilters?.security?.value || [],
                           },
                         },
                         {
-                          label: 'Status',
+                          label: defaultFilters.status.label,
                           type: 'checkbox',
                           filterValues: {
-                            key: 'text-filter',
+                            key: 'status-filter',
                             onChange: (event, value) =>
                               setActiveFilters({
                                 ...(activeFilters || {}),
-                                name: value,
+                                status: {
+                                  ...(activeFilters?.status || {}),
+                                  value,
+                                },
                               }),
                             items: statusMapper.map((item) => ({
                               value: item,
@@ -139,10 +170,24 @@ const Groups = () => {
                                 .charAt(0)
                                 .toUpperCase()}${item.slice(1)}`,
                             })),
-                            value: activeFilters?.status || [],
+                            value: activeFilters?.status?.value || [],
                           },
                         },
                       ],
+                    },
+                    activeFiltersConfig: {
+                      filters: isEmptyFilters(activeFilters)
+                        ? constructActiveFilters(activeFilters)
+                        : [],
+                      onDelete: (event, itemsToRemove, isAll) => {
+                        if (isAll) {
+                          setActiveFilters(defaultFilters);
+                        } else {
+                          setActiveFilters(() =>
+                            onDeleteFilter(activeFilters, itemsToRemove)
+                          );
+                        }
+                      },
                     },
                   }
                 : {

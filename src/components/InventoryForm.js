@@ -10,7 +10,7 @@ import ReducerRegistry from '@redhat-cloud-services/frontend-components-utilitie
 import { InventoryContext } from './form/constants';
 import promiseMiddleware from 'redux-promise-middleware';
 import { Modal, Button } from '@patternfly/react-core';
-import { selectEntity } from '../store/actions';
+import { preSelectEntity } from '../store/actions';
 
 const FormTemplate = (props) => (
   <Pf4FormTemplate {...props} showFormControls={false} />
@@ -33,13 +33,21 @@ const InventoryForm = ({
         [promiseMiddleware]
       )
     );
-    selectedSystems?.map(({ id }) => selectEntity(id, true));
   }, []);
 
   const Wrapper = title ? Modal : Fragment;
 
   return (
-    <InventoryContext.Provider value={{ registry }}>
+    <InventoryContext.Provider
+      value={{
+        registry,
+        onLoad: () => {
+          selectedSystems?.map(({ id }) => {
+            registry.store.dispatch(preSelectEntity(id, true));
+          });
+        },
+      }}
+    >
       <Wrapper
         {...(title && {
           title,

@@ -39,6 +39,7 @@ const onEntitiesLoaded = (state) => {
         },
       },
     ],
+    loaded: true,
   };
 };
 
