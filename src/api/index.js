@@ -101,7 +101,7 @@ export const groupsDetail = (uuid, { page, perPage }) => {
   const group = groups.find(({ uuid: groupUUID }) => uuid === groupUUID);
   return Promise.resolve({
     uuid,
-    name: randomString(),
+    name: group?.name || randomString(),
     results: group?.sensors?.map((uuid) =>
       rowGroupDetailCreator(
         uuid,
@@ -134,10 +134,12 @@ export const createNewGroup = ({ groupName, isSecure, systemIDs }) => {
   return Promise.resolve();
 };
 
-export const updateGroup = ({ uuid, selected }) => {
+export const updateGroup = ({ uuid, systemIDs, groupName }) => {
   const group = groups.find(({ uuid: groupUUID }) => groupUUID === uuid);
   if (group) {
-    group.sensors = selected;
+    group.sensors = systemIDs;
+  } else {
+    groups.push(rowGroupCreator(uuid, groupName, systemIDs, false, new Date()));
   }
   return Promise.resolve();
 };

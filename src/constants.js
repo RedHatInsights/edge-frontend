@@ -32,3 +32,39 @@ export const statusToIcon = {
   warning: { icon: ExclamationTriangleIcon, color: warningColor.value },
   notification: { icon: BellIcon, color: infoColor.value },
 };
+
+export const isEmptyFilters = (activeFilters) =>
+  Object.values(activeFilters).find(
+    (item) => item?.value?.length > 0 || item?.length > 0
+  );
+
+export const constructActiveFilters = (activeFilters) =>
+  Object.entries(activeFilters).map(([key, { label, value } = {}]) => ({
+    category: label,
+    chipKey: key,
+    chips:
+      value?.length > 0
+        ? Array.isArray(value)
+          ? value.map((item) => ({ name: item }))
+          : [
+              {
+                name: value,
+              },
+            ]
+        : [],
+  }));
+
+export const onDeleteFilter = (activeFilters, itemsToRemove) => {
+  const currItem = itemsToRemove[0];
+  return {
+    ...activeFilters,
+    [currItem?.chipKey]: {
+      ...(activeFilters[currItem?.chipKey] || {}),
+      value: Array.isArray(activeFilters[currItem?.chipKey]?.value)
+        ? activeFilters[currItem?.chipKey]?.value?.filter(
+            (item) => !currItem?.chips?.find(({ name }) => name === item)
+          )
+        : '',
+    },
+  };
+};

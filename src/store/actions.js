@@ -6,6 +6,7 @@ import {
   LOAD_GROUP_DETAIL,
   LOAD_GROUP_DEVICES_INFO,
   SELECT_ENTITY,
+  PRE_SELECT_ENTITY,
 } from './action-types';
 import {
   fetchGroups,
@@ -48,6 +49,14 @@ export const loadGroupDevicesInfo = (uuid) => ({
 
 export const selectEntity = (id, selected) => ({
   type: SELECT_ENTITY,
+  payload: {
+    id,
+    selected,
+  },
+});
+
+export const preSelectEntity = (id, selected) => ({
+  type: PRE_SELECT_ENTITY,
   payload: {
     id,
     selected,

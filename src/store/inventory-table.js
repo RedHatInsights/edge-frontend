@@ -1,5 +1,5 @@
 import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/esm/ReducerRegistry';
-import { SELECT_ENTITY } from './action-types';
+import { SELECT_ENTITY, PRE_SELECT_ENTITY } from './action-types';
 
 const entitySelected = (state, { payload }) => {
   const selected = state.selected || new Map();
@@ -7,8 +7,7 @@ const entitySelected = (state, { payload }) => {
     if (payload.id === 0) {
       state.rows.forEach((row) => selected.set(row.id, row));
     } else {
-      const selectedRow =
-        state.rows && state.rows.find(({ id }) => id === payload.id);
+      const selectedRow = state?.rows?.find(({ id } = {}) => id === payload.id);
       selected.set(payload.id, { ...(selectedRow || {}), id: payload.id });
     }
   } else {
@@ -27,7 +26,20 @@ const entitySelected = (state, { payload }) => {
   };
 };
 
-export const entitiesReducer = () =>
+const loadEntitiesFulfilled = (state) => {
+  return {
+    ...state,
+    rows: state.rows.map(({ id, ...row }) => ({
+      id,
+      ...row,
+      selected: !!state.selected?.get(id),
+    })),
+  };
+};
+
+export const entitiesReducer = ({ LOAD_ENTITIES_FULFILLED }) =>
   applyReducerHash({
     [SELECT_ENTITY]: entitySelected,
+    [PRE_SELECT_ENTITY]: entitySelected,
+    [LOAD_ENTITIES_FULFILLED]: loadEntitiesFulfilled,
   });
