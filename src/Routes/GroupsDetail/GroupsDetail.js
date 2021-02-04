@@ -6,7 +6,7 @@ import React, {
   lazy,
   useState,
 } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { PageHeader, Main } from '@redhat-cloud-services/frontend-components';
 import {
@@ -56,6 +56,7 @@ const defaultFilters = {
 const GroupsDetail = () => {
   const [isAddDeviceOpen, setIsAddDeviceOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState(defaultFilters);
+  const history = useHistory();
   const inventory = useRef(null);
   const { uuid } = useParams();
   const dispatch = useDispatch();
@@ -194,6 +195,7 @@ const GroupsDetail = () => {
                   }
                 },
               }}
+              onRowClick={(_e, id) => history.push(`/groups/${uuid}/${id}`)}
               onLoad={({ mergeWithEntities, INVENTORY_ACTION_TYPES }) => {
                 getRegistry().register({
                   ...mergeWithEntities(systemsList(INVENTORY_ACTION_TYPES)),

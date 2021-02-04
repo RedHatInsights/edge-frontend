@@ -109,6 +109,6 @@
   "routes": {
     "groups": "/groups",
     "groups-detail": "/groups/:uuid",
-    "device-detail": "/groups/:uuid/:deviceId"
+    "device-detail": "/groups/:uuid/:inventoryId"
   }
 }
