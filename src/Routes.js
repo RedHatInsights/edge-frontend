@@ -13,19 +13,11 @@ const GroupsDetail = React.lazy(() =>
   )
 );
 
-const InsightsRoute = ({ rootClass, ...rest }) => {
-  const root = document.getElementById('root');
-  root.removeAttribute('class');
-  root.classList.add(`page__${rootClass}`, 'pf-c-page__main');
-  root.setAttribute('role', 'main');
-
-  return <Route {...rest} />;
-};
-
-InsightsRoute.propTypes = {
-  component: PropTypes.func,
-  rootClass: PropTypes.string,
-};
+const DeviceDetail = React.lazy(() =>
+  import(
+    /* webpackChunkName: "GroupsDetailPage" */ './Routes/DeviceDetail/DeviceDetail'
+  )
+);
 
 export const Routes = () => {
   return (
@@ -37,17 +29,9 @@ export const Routes = () => {
       }
     >
       <Switch>
-        <InsightsRoute
-          exact
-          path={paths.groups}
-          component={Groups}
-          rootClass="groupsPage"
-        />
-        <InsightsRoute
-          path={paths['groups-detail']}
-          component={GroupsDetail}
-          rootClass="oopsPage"
-        />
+        <Route exact path={paths.groups} component={Groups} />
+        <Route exact path={paths['groups-detail']} component={GroupsDetail} />
+        <Route path={paths['device-detail']} component={DeviceDetail} />
         <Route>
           <Redirect to={paths.groups} />
         </Route>
