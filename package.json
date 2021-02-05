@@ -109,6 +109,7 @@
   "routes": {
     "groups": "/groups",
     "groups-detail": "/groups/:uuid",
-    "device-detail": "/groups/:uuid/:inventoryId"
+    "device-detail": "/groups/:uuid/:inventoryId",
+    "canaries": "/canaries"
   }
 }

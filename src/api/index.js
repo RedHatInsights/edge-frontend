@@ -13,7 +13,8 @@ const randomUUID = () =>
     return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
   });
 
-const randomStatus = () => statusMapper[randomNumber(0, statusMapper.length)];
+const randomStatus = () =>
+  statusMapper[randomNumber(0, statusMapper.length - 1)];
 
 const rowGroupCreator = (uuid, name, sensors, isSecure, lastSeen) => ({
   uuid,
@@ -61,36 +62,27 @@ export const threshold = () => {
   });
 };
 
-export const devicesInfo = () => {
+export const devicesInfo = (devicesCount) => {
   return Promise.resolve({
     results: {
-      requiredApproval: randomNumber(0, 100),
-      orphaned: randomNumber(0, 100),
-      delivering: randomNumber(0, 100),
+      requiredApproval: devicesCount || 0,
+      orphaned: 0,
+      delivering: 0,
     },
   });
 };
 
 export const canariesInfo = () => {
+  const canaries = randomNumber(0, 100);
   return Promise.resolve({
-    results: {
-      sensors: {
-        time: randomDate(),
-        status: randomStatus(),
+    results: [...new Array(canaries)].map(() => ({
+      group: {
+        name: randomString(),
+        uuid: randomUUID(),
       },
-      scanners: {
-        time: randomDate(),
-        status: randomStatus(),
-      },
-      kiosks: {
-        time: randomDate(),
-        status: randomStatus(),
-      },
-      antenna: {
-        time: randomDate(),
-        status: randomStatus(),
-      },
-    },
+      date: randomDate(),
+      status: randomStatus(),
+    })),
   });
 };
 

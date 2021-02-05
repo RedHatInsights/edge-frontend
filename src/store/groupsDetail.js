@@ -7,7 +7,6 @@ const initialState = {};
 
 const loadGroupsPending = (state) => ({
   ...state,
-  devices: [],
   isLoading: true,
 });
 const loadGroupsFulfilled = (state, { payload }) => ({

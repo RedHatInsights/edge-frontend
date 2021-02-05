@@ -24,13 +24,29 @@ export const statusMapper = [
 ];
 
 export const statusToIcon = {
-  done: { icon: CheckCircleIcon, color: successColor.value },
-  error: { icon: ExclamationCircleIcon, color: dangerColor.value },
-  pending: { icon: PauseCircleIcon },
-  updating: { icon: CircleNotchIcon },
-  unknown: { icon: UnknownIcon },
-  warning: { icon: ExclamationTriangleIcon, color: warningColor.value },
-  notification: { icon: BellIcon, color: infoColor.value },
+  done: {
+    icon: CheckCircleIcon,
+    color: successColor.value,
+    title: 'Fully adopted',
+  },
+  error: {
+    icon: ExclamationCircleIcon,
+    color: dangerColor.value,
+    title: 'Error while adopting',
+  },
+  pending: { icon: PauseCircleIcon, title: 'Pending adoption' },
+  updating: { icon: CircleNotchIcon, title: 'Updating' },
+  unknown: { icon: UnknownIcon, title: 'Unknown state' },
+  warning: {
+    icon: ExclamationTriangleIcon,
+    color: warningColor.value,
+    title: 'Warning while adopting',
+  },
+  notification: {
+    icon: BellIcon,
+    color: infoColor.value,
+    title: 'Delivering',
+  },
 };
 
 export const isEmptyFilters = (activeFilters) =>

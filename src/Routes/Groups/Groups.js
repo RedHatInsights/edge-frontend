@@ -59,6 +59,12 @@ const Groups = () => {
   const isLoading = useSelector(
     ({ groupsReducer }) => groupsReducer?.isLoading
   );
+  const systemsCount = useSelector(({ groupsReducer }) =>
+    groupsReducer?.groups?.reduce(
+      (acc, { sensors } = {}) => acc + (sensors?.length || 0),
+      0
+    )
+  );
   const meta = useSelector(
     ({ groupsReducer }) =>
       groupsReducer?.meta || {
@@ -76,8 +82,6 @@ const Groups = () => {
     () => registered();
   }, []);
 
-  console.log(activeFilters);
-
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
@@ -86,7 +90,7 @@ const Groups = () => {
       <Main className="edge-groups">
         <Stack hasGutter>
           <StackItem className="edge-groups__info">
-            <GroupsInfo />
+            <GroupsInfo numberOfSystems={systemsCount} />
           </StackItem>
           <StackItem isFilled>
             <PrimaryToolbar

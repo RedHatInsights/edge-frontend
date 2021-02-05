@@ -3,4 +3,5 @@
 <url> <loc>https://cloud.redhat.com/undefined/undefined/groups</loc> </url>
 <url> <loc>https://cloud.redhat.com/undefined/undefined/groups/:uuid</loc> </url>
 <url> <loc>https://cloud.redhat.com/undefined/undefined/groups/:uuid/:inventoryId</loc> </url>
+<url> <loc>https://cloud.redhat.com/undefined/undefined/canaries</loc> </url>
 </urlset>

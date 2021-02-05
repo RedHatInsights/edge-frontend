@@ -5,7 +5,7 @@ const initialState = {};
 
 const loadCanariesInfoPending = (state) => ({
   ...state,
-  canariesInfo: {},
+  canariesInfo: [],
   isLoading: true,
 });
 const loadCanariesInfoFulfilled = (state, { payload }) => ({

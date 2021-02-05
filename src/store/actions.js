@@ -27,9 +27,9 @@ export const loadThreshold = () => ({
   payload: threshold(),
 });
 
-export const loadDevicesInfo = () => ({
+export const loadDevicesInfo = (systemsCount) => ({
   type: LOAD_DEVICES_INFO,
-  payload: devicesInfo(),
+  payload: devicesInfo(systemsCount),
 });
 
 export const loadCanariesInfo = () => ({

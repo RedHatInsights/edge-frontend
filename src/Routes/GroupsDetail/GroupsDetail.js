@@ -85,6 +85,7 @@ const GroupsDetail = () => {
   }, []);
 
   const onRefresh = (options, callback) => {
+    console.log(options, 'this is options!');
     if (!callback && inventory && inventory.current) {
       inventory.current.onRefreshData(options);
     } else if (callback) {
@@ -92,6 +93,7 @@ const GroupsDetail = () => {
     }
   };
 
+  console.log(isLoading, 'this is isLoading');
   return (
     <Fragment>
       <PageHeader>
@@ -118,7 +120,6 @@ const GroupsDetail = () => {
               tableProps={{
                 canSelectAll: false,
               }}
-              isLoaded={!isLoading}
               onRefresh={onRefresh}
               filterConfig={{
                 items: [
