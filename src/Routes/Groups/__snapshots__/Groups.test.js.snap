@@ -170,96 +170,7 @@ exports[`Groups should render correctly 1`] = `
               <dl
                 class=""
                 data-pf-content="true"
-              >
-                <dt
-                  class=""
-                  data-pf-content="true"
-                >
-                  <a
-                    href="/groups"
-                  >
-                    Sensors
-                  </a>
-                </dt>
-                <dd
-                  class=""
-                  data-pf-content="true"
-                >
-                  <div
-                    class="pf-c-skeleton"
-                  >
-                    <span
-                      class="pf-u-screen-reader"
-                    />
-                  </div>
-                </dd>
-                <dt
-                  class=""
-                  data-pf-content="true"
-                >
-                  <a
-                    href="/groups"
-                  >
-                    Scanners
-                  </a>
-                </dt>
-                <dd
-                  class=""
-                  data-pf-content="true"
-                >
-                  <div
-                    class="pf-c-skeleton"
-                  >
-                    <span
-                      class="pf-u-screen-reader"
-                    />
-                  </div>
-                </dd>
-                <dt
-                  class=""
-                  data-pf-content="true"
-                >
-                  <a
-                    href="/groups"
-                  >
-                    Kiosks
-                  </a>
-                </dt>
-                <dd
-                  class=""
-                  data-pf-content="true"
-                >
-                  <div
-                    class="pf-c-skeleton"
-                  >
-                    <span
-                      class="pf-u-screen-reader"
-                    />
-                  </div>
-                </dd>
-                <dt
-                  class=""
-                  data-pf-content="true"
-                >
-                  <a
-                    href="/groups"
-                  >
-                    Antenna
-                  </a>
-                </dt>
-                <dd
-                  class=""
-                  data-pf-content="true"
-                >
-                  <div
-                    class="pf-c-skeleton"
-                  >
-                    <span
-                      class="pf-u-screen-reader"
-                    />
-                  </div>
-                </dd>
-              </dl>
+              />
             </div>
           </div>
           <div
@@ -275,7 +186,7 @@ exports[`Groups should render correctly 1`] = `
                 class="pf-l-split__item"
               >
                 <a
-                  href="/groups"
+                  href="/canaries"
                 >
                   See canaries 
                   <svg

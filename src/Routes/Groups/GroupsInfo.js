@@ -23,7 +23,7 @@ import {
   SplitItem,
 } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
-import { DateFormat } from '@redhat-cloud-services/frontend-components';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {

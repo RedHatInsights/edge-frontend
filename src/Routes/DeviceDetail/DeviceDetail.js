@@ -6,9 +6,9 @@ import { getRegistry } from '@redhat-cloud-services/frontend-components-utilitie
 import {
   Skeleton,
   SkeletonSize,
-  PageHeader,
-  Main,
-} from '@redhat-cloud-services/frontend-components';
+} from '@redhat-cloud-services/frontend-components/Skeleton';
+import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
+import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import {
   InventoryDetailHead,
   AppInfo,

@@ -7,7 +7,7 @@ import {
   sortable,
   cellWidth,
 } from '@patternfly/react-table';
-import { DateFormat } from '@redhat-cloud-services/frontend-components';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { StatusIcon } from '../../components';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';

@@ -12,6 +12,8 @@ plugins.push(
   )
 );
 
+// plugins.push(new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)());
+
 module.exports = {
   ...webpackConfig,
   plugins,

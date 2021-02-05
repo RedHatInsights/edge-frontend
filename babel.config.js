@@ -82,21 +82,6 @@ module.exports = {
           preventFullImport: true,
           skipDefaultConversion: true,
         },
-        '@redhat-cloud-services/frontend-components': {
-          transform: (importName) =>
-            `@redhat-cloud-services/frontend-components/components/esm/${
-              FECMapper[importName] || importName
-            }.js`,
-          preventFullImport: false,
-          skipDefaultConversion: true,
-        },
-        '@redhat-cloud-services/frontend-components-notifications': {
-          transform: (importName) =>
-            `@redhat-cloud-services/frontend-components-notifications/esm/${
-              NotificationMapper[importName] || importName
-            }.js`,
-          preventFullImport: true,
-        },
         '@data-driven-forms/react-form-renderer': {
           transform: (importName) =>
             `@data-driven-forms/react-form-renderer/dist/esm/${cammelToDash(

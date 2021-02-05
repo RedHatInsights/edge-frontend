@@ -8,7 +8,8 @@ import React, {
 } from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { PageHeader, Main } from '@redhat-cloud-services/frontend-components';
+import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
+import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import {
   Breadcrumb,
   BreadcrumbItem,

@@ -18,8 +18,11 @@ import {
 import {
   PageHeader,
   PageHeaderTitle,
-  Main,
-} from '@redhat-cloud-services/frontend-components';
+} from '@redhat-cloud-services/frontend-components/PageHeader';
+import { Main } from '@redhat-cloud-services/frontend-components/Main';
+import { SkeletonTable } from '@redhat-cloud-services/frontend-components/SkeletonTable';
+import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
+import { TableToolbar } from '@redhat-cloud-services/frontend-components/TableToolbar';
 import {
   Stack,
   StackItem,
@@ -27,11 +30,6 @@ import {
   Skeleton,
   Button,
 } from '@patternfly/react-core';
-import {
-  PrimaryToolbar,
-  TableToolbar,
-  SkeletonTable,
-} from '@redhat-cloud-services/frontend-components';
 import GroupsInfo from './GroupsInfo';
 import GroupsTable from './GroupsTable';
 const InventoryForm = lazy(() => import('../../components/InventoryForm'));
