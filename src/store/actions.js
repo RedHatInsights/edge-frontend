@@ -7,6 +7,7 @@ import {
   LOAD_GROUP_DEVICES_INFO,
   SELECT_ENTITY,
   PRE_SELECT_ENTITY,
+  CLEAN_ENTITIES,
 } from './action-types';
 import {
   fetchGroups,
@@ -27,9 +28,9 @@ export const loadThreshold = () => ({
   payload: threshold(),
 });
 
-export const loadDevicesInfo = () => ({
+export const loadDevicesInfo = (systemsCount) => ({
   type: LOAD_DEVICES_INFO,
-  payload: devicesInfo(),
+  payload: devicesInfo(systemsCount),
 });
 
 export const loadCanariesInfo = () => ({
@@ -61,4 +62,8 @@ export const preSelectEntity = (id, selected) => ({
     id,
     selected,
   },
+});
+
+export const cleanEntities = () => ({
+  type: CLEAN_ENTITIES,
 });

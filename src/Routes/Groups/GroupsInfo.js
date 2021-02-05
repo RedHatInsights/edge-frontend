@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import {
   Grid,
   GridItem,
@@ -22,7 +22,8 @@ import {
   Split,
   SplitItem,
 } from '@patternfly/react-core';
-import { DateFormat } from '@redhat-cloud-services/frontend-components';
+import PropTypes from 'prop-types';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -34,7 +35,7 @@ import { StatusIcon } from '../../components';
 import { ChartPie, ChartThemeColor } from '@patternfly/react-charts';
 import { ArrowRightIcon } from '@patternfly/react-icons';
 
-const GroupsInfo = () => {
+const GroupsInfo = ({ numberOfSystems }) => {
   const dispatch = useDispatch();
   const threshold = useSelector(
     ({ thresholdReducer }) => thresholdReducer?.threshold || {}
@@ -48,17 +49,20 @@ const GroupsInfo = () => {
   const devicesInfo = useSelector(
     ({ devicesInfoReducer }) => devicesInfoReducer?.devicesInfo || {}
   );
-  const canariesInfo = useSelector(
-    ({ canariesInfoReducer }) => canariesInfoReducer?.canariesInfo || {}
+  const canariesInfo = useSelector(({ canariesInfoReducer }) =>
+    (canariesInfoReducer?.canariesInfo || []).slice(0, 4)
   );
   const isCanariesInfoLoading = useSelector(
     ({ canariesInfoReducer }) => canariesInfoReducer?.isLoading
   );
   useEffect(() => {
     dispatch(loadThreshold());
-    dispatch(loadDevicesInfo());
     dispatch(loadCanariesInfo());
   }, []);
+
+  useEffect(() => {
+    dispatch(loadDevicesInfo(numberOfSystems));
+  }, [numberOfSystems]);
 
   return (
     <Grid hasGutter>
@@ -160,74 +164,27 @@ const GroupsInfo = () => {
           <CardBody>
             <TextContent>
               <TextList component={TextListVariants.dl}>
-                <TextListItem component={TextListItemVariants.dt}>
-                  <Link to="/groups">Sensors</Link>
-                </TextListItem>
-                <TextListItem component={TextListItemVariants.dd}>
-                  {isCanariesInfoLoading === false ? (
-                    <Level>
-                      <LevelItem>
-                        <DateFormat date={canariesInfo?.sensors?.time} />
-                      </LevelItem>
-                      <LevelItem>
-                        <StatusIcon status={canariesInfo?.sensors?.status} />
-                      </LevelItem>
-                    </Level>
-                  ) : (
-                    <Skeleton />
-                  )}
-                </TextListItem>
-                <TextListItem component={TextListItemVariants.dt}>
-                  <Link to="/groups">Scanners</Link>
-                </TextListItem>
-                <TextListItem component={TextListItemVariants.dd}>
-                  {isCanariesInfoLoading === false ? (
-                    <Level>
-                      <LevelItem>
-                        <DateFormat date={canariesInfo?.scanners?.time} />
-                      </LevelItem>
-                      <LevelItem>
-                        <StatusIcon status={canariesInfo?.scanners?.status} />
-                      </LevelItem>
-                    </Level>
-                  ) : (
-                    <Skeleton />
-                  )}
-                </TextListItem>
-                <TextListItem component={TextListItemVariants.dt}>
-                  <Link to="/groups">Kiosks</Link>
-                </TextListItem>
-                <TextListItem component={TextListItemVariants.dd}>
-                  {isCanariesInfoLoading === false ? (
-                    <Level>
-                      <LevelItem>
-                        <DateFormat date={canariesInfo?.kiosks?.time} />
-                      </LevelItem>
-                      <LevelItem>
-                        <StatusIcon status={canariesInfo?.kiosks?.status} />
-                      </LevelItem>
-                    </Level>
-                  ) : (
-                    <Skeleton />
-                  )}
-                </TextListItem>
-                <TextListItem component={TextListItemVariants.dt}>
-                  <Link to="/groups">Antenna</Link>
-                </TextListItem>
-                <TextListItem component={TextListItemVariants.dd}>
-                  {isCanariesInfoLoading === false ? (
-                    <Level>
-                      <LevelItem>
-                        <DateFormat date={canariesInfo?.antenna?.time} />
-                      </LevelItem>
-                      <LevelItem>
-                        <StatusIcon status={canariesInfo?.antenna?.status} />
-                      </LevelItem>
-                    </Level>
-                  ) : (
-                    <Skeleton />
-                  )}
-                </TextListItem>
+                {isCanariesInfoLoading === true ? (
+                  <Spinner />
+                ) : (
+                  canariesInfo.map(({ group, date, status }, key) => (
+                    <Fragment key={group?.uuid || key}>
+                      <TextListItem component={TextListItemVariants.dt}>
+                        <Link to={`/groups/${group?.uuid}`}>{group?.name}</Link>
+                      </TextListItem>
+                      <TextListItem component={TextListItemVariants.dd}>
+                        <Level>
+                          <LevelItem>
+                            <DateFormat date={date} />
+                          </LevelItem>
+                          <LevelItem>
+                            <StatusIcon status={status} />
+                          </LevelItem>
+                        </Level>
+                      </TextListItem>
+                    </Fragment>
+                  ))
+                )}
               </TextList>
             </TextContent>
           </CardBody>
@@ -235,7 +192,7 @@ const GroupsInfo = () => {
             <Split>
               <SplitItem isFilled />
               <SplitItem>
-                <Link to="/groups">
+                <Link to="/canaries">
                   See canaries <ArrowRightIcon />
                 </Link>
               </SplitItem>
@@ -245,6 +202,14 @@ const GroupsInfo = () => {
       </GridItem>
     </Grid>
   );
+};
+
+GroupsInfo.propTypes = {
+  numberOfSystems: PropTypes.number,
+};
+
+GroupsInfo.defaultProps = {
+  numberOfSystems: 0,
 };
 
 export default GroupsInfo;

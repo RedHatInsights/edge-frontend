@@ -2,18 +2,18 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, GridItem } from '@patternfly/react-core';
 import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
+import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/Registry';
 import {
   Skeleton,
   SkeletonSize,
-  PageHeader,
-  Main,
-} from '@redhat-cloud-services/frontend-components';
+} from '@redhat-cloud-services/frontend-components/Skeleton';
+import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
+import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import {
   InventoryDetailHead,
   AppInfo,
   DetailWrapper,
-} from '@redhat-cloud-services/frontend-components/components/esm/Inventory';
+} from '@redhat-cloud-services/frontend-components/Inventory';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 

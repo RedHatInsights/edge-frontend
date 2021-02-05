@@ -1,4 +1,4 @@
-import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/esm/ReducerRegistry';
+import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
 import { SELECT_ENTITY, PRE_SELECT_ENTITY } from './action-types';
 
 const entitySelected = (state, { payload }) => {

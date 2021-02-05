@@ -8,7 +8,8 @@ import React, {
 } from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { PageHeader, Main } from '@redhat-cloud-services/frontend-components';
+import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
+import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,20 +18,20 @@ import {
   StackItem,
   Button,
 } from '@patternfly/react-core';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
+import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/Registry';
 import { routes } from '../../../package.json';
-import { loadGroupsDetail } from '../../store/actions';
+import { loadGroupsDetail, cleanEntities } from '../../store/actions';
 import {
   groupsDetailReducer,
   groupDevicesInfoReducer,
 } from '../../store/reducers';
 import GroupsDetailInfo from './GroupsDetailInfo';
 
-import { InventoryTable } from '@redhat-cloud-services/frontend-components/components/esm/Inventory';
+import { InventoryTable } from '@redhat-cloud-services/frontend-components/Inventory';
 import { systemsList } from '../../store/groupsDetail';
 const InventoryForm = lazy(() => import('../../components/InventoryForm'));
 import schema from './addDeviceSchema';
-import { updateGroup } from '../../api';
+import { groupsDetail, updateGroup } from '../../api';
 import {
   statusMapper,
   isEmptyFilters,
@@ -55,6 +56,8 @@ const defaultFilters = {
 
 const GroupsDetail = () => {
   const [isAddDeviceOpen, setIsAddDeviceOpen] = useState(false);
+  const [getEntities, setGetEntities] = useState();
+  const [unregister, setUnregister] = useState();
   const [activeFilters, setActiveFilters] = useState(defaultFilters);
   const history = useHistory();
   const inventory = useRef(null);
@@ -81,16 +84,13 @@ const GroupsDetail = () => {
       groupDevicesInfoReducer,
     });
     dispatch(loadGroupsDetail(uuid));
-    () => registered();
+    return () => {
+      console.log(registered, unregister, 'cleaned up');
+      registered?.();
+      unregister?.();
+      dispatch(cleanEntities());
+    };
   }, []);
-
-  const onRefresh = (options, callback) => {
-    if (!callback && inventory && inventory.current) {
-      inventory.current.onRefreshData(options);
-    } else if (callback) {
-      callback(options);
-    }
-  };
 
   return (
     <Fragment>
@@ -112,14 +112,29 @@ const GroupsDetail = () => {
           <StackItem isFilled>
             <InventoryTable
               ref={inventory}
-              items={items || []}
-              total={items?.length || 0}
               page={1}
               tableProps={{
                 canSelectAll: false,
               }}
-              isLoaded={!isLoading}
-              onRefresh={onRefresh}
+              hideFilters={{ all: true }}
+              getEntities={async (_items, config) => {
+                const { results } = await groupsDetail(uuid, {});
+                const data = await getEntities?.(
+                  (results || []).map(({ uuid }) => uuid),
+                  {
+                    ...config,
+                    hasItems: true,
+                  },
+                  false
+                );
+                return {
+                  ...data,
+                  results: data.results.map((system) => ({
+                    ...system,
+                    ...results.find(({ uuid }) => uuid === system.id),
+                  })),
+                };
+              }}
               filterConfig={{
                 items: [
                   {
@@ -196,10 +211,13 @@ const GroupsDetail = () => {
                 },
               }}
               onRowClick={(_e, id) => history.push(`/groups/${uuid}/${id}`)}
-              onLoad={({ mergeWithEntities, INVENTORY_ACTION_TYPES }) => {
-                getRegistry().register({
-                  ...mergeWithEntities(systemsList(INVENTORY_ACTION_TYPES)),
-                });
+              onLoad={({ mergeWithEntities, INVENTORY_ACTION_TYPES, api }) => {
+                setGetEntities(() => api?.getEntities);
+                setUnregister(() =>
+                  getRegistry().register({
+                    ...mergeWithEntities(systemsList(INVENTORY_ACTION_TYPES)),
+                  })
+                );
               }}
             >
               <Button onClick={() => setIsAddDeviceOpen(true)}>
@@ -224,6 +242,7 @@ const GroupsDetail = () => {
                     systemIDs: values.selected,
                   });
                   dispatch(loadGroupsDetail(uuid));
+                  inventory.current.onRefreshData();
                 })();
               }
               setIsAddDeviceOpen(false);

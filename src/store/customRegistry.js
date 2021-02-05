@@ -1,4 +1,4 @@
-import ReducerRegistry from '@redhat-cloud-services/frontend-components-utilities/files/esm/ReducerRegistry';
+import ReducerRegistry from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
 
 export const createRegistry = (
   initialState = {},

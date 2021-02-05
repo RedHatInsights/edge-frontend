@@ -1,11 +1,11 @@
-import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/esm/ReducerRegistry';
+import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
 import { LOAD_CANARIES_INFO } from './action-types';
 
 const initialState = {};
 
 const loadCanariesInfoPending = (state) => ({
   ...state,
-  canariesInfo: {},
+  canariesInfo: [],
   isLoading: true,
 });
 const loadCanariesInfoFulfilled = (state, { payload }) => ({

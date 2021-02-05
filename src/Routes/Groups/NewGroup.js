@@ -7,7 +7,7 @@ import {
 } from '@data-driven-forms/pf4-component-mapper';
 import schema from './newGroupSchema';
 import { FormInventoryTable, INVENTORY_TABLE } from '../../components/form';
-import ReducerRegistry from '@redhat-cloud-services/frontend-components-utilities/files/esm/ReducerRegistry';
+import ReducerRegistry from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
 import { InventoryContext } from '../../components/form/constants';
 import promiseMiddleware from 'redux-promise-middleware';
 

@@ -1,13 +1,12 @@
 import React from 'react';
-import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/esm/ReducerRegistry';
-import { LOAD_GROUP_DETAIL } from './action-types';
+import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
+import { LOAD_GROUP_DETAIL, CLEAN_ENTITIES } from './action-types';
 import { StatusIcon } from '../components';
 
 const initialState = {};
 
 const loadGroupsPending = (state) => ({
   ...state,
-  devices: [],
   isLoading: true,
 });
 const loadGroupsFulfilled = (state, { payload }) => ({
@@ -46,6 +45,7 @@ const onEntitiesLoaded = (state) => {
 export const systemsList = ({ LOAD_ENTITIES_FULFILLED }) =>
   applyReducerHash({
     [LOAD_ENTITIES_FULFILLED]: onEntitiesLoaded,
+    [CLEAN_ENTITIES]: () => ({ loaded: false }),
   });
 
 export default applyReducerHash(

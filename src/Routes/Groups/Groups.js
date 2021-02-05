@@ -2,7 +2,7 @@ import React, { useEffect, Fragment, useState, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewGroup } from '../../api/';
 import { loadGroups } from '../../store/actions';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
+import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/Registry';
 import {
   groupsReducer,
   thresholdReducer,
@@ -18,8 +18,11 @@ import {
 import {
   PageHeader,
   PageHeaderTitle,
-  Main,
-} from '@redhat-cloud-services/frontend-components';
+} from '@redhat-cloud-services/frontend-components/PageHeader';
+import { Main } from '@redhat-cloud-services/frontend-components/Main';
+import { SkeletonTable } from '@redhat-cloud-services/frontend-components/SkeletonTable';
+import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
+import { TableToolbar } from '@redhat-cloud-services/frontend-components/TableToolbar';
 import {
   Stack,
   StackItem,
@@ -27,11 +30,6 @@ import {
   Skeleton,
   Button,
 } from '@patternfly/react-core';
-import {
-  PrimaryToolbar,
-  TableToolbar,
-  SkeletonTable,
-} from '@redhat-cloud-services/frontend-components';
 import GroupsInfo from './GroupsInfo';
 import GroupsTable from './GroupsTable';
 const InventoryForm = lazy(() => import('../../components/InventoryForm'));
@@ -59,6 +57,12 @@ const Groups = () => {
   const isLoading = useSelector(
     ({ groupsReducer }) => groupsReducer?.isLoading
   );
+  const systemsCount = useSelector(({ groupsReducer }) =>
+    groupsReducer?.groups?.reduce(
+      (acc, { sensors } = {}) => acc + (sensors?.length || 0),
+      0
+    )
+  );
   const meta = useSelector(
     ({ groupsReducer }) =>
       groupsReducer?.meta || {
@@ -76,8 +80,6 @@ const Groups = () => {
     () => registered();
   }, []);
 
-  console.log(activeFilters);
-
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
@@ -86,7 +88,7 @@ const Groups = () => {
       <Main className="edge-groups">
         <Stack hasGutter>
           <StackItem className="edge-groups__info">
-            <GroupsInfo />
+            <GroupsInfo numberOfSystems={systemsCount} />
           </StackItem>
           <StackItem isFilled>
             <PrimaryToolbar

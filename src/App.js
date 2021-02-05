@@ -6,7 +6,7 @@ import { Routes } from './Routes';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import './App.scss';
 
-import { NotificationsPortal } from '@redhat-cloud-services/frontend-components-notifications';
+import { NotificationPortal } from '@redhat-cloud-services/frontend-components-notifications/NotificationPortal';
 
 const App = (props) => {
   const [isLogged, setIsLogged] = useState(false);
@@ -26,7 +26,7 @@ const App = (props) => {
 
   return (
     <Fragment>
-      <NotificationsPortal />
+      <NotificationPortal />
       {isLogged ? (
         <Routes childProps={props} />
       ) : (
