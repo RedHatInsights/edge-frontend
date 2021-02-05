@@ -2,7 +2,7 @@ import React, { useEffect, Fragment, useState, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewGroup } from '../../api/';
 import { loadGroups } from '../../store/actions';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/files/esm/Registry';
+import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/Registry';
 import {
   groupsReducer,
   thresholdReducer,

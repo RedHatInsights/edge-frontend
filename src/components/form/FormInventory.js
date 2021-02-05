@@ -1,5 +1,5 @@
 import React, { Fragment, useRef } from 'react';
-import { InventoryTable } from '@redhat-cloud-services/frontend-components/components/esm/Inventory';
+import { InventoryTable } from '@redhat-cloud-services/frontend-components/Inventory';
 import PropTypes from 'prop-types';
 import { InventoryContext } from './constants';
 import { Provider, useSelector, useDispatch } from 'react-redux';

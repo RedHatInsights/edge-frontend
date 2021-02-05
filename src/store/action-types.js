@@ -22,3 +22,4 @@ export const ACTION_TYPES = keyBy(asyncActions, (k) => k);
 
 export const SELECT_ENTITY = 'SELECT_ENTITY';
 export const PRE_SELECT_ENTITY = 'PRE_SELECT_ENTITY';
+export const CLEAN_ENTITIES = 'CLEAN_ENTITIES';

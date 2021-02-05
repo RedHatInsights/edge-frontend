@@ -1,4 +1,4 @@
-import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/files/esm/ReducerRegistry';
+import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
 import { LOAD_GROUPS } from './action-types';
 
 const initialState = {};
