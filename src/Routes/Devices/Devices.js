@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useEffect } from 'react';
+import React, { Fragment, useRef, useEffect, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   PageHeader,
@@ -7,10 +7,11 @@ import {
 import { useHistory } from 'react-router-dom';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { InventoryTable } from '@redhat-cloud-services/frontend-components/Inventory';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/Registry';
 import { cleanEntities } from '../../store/actions';
+import { RegistryContext } from '../../store';
 
 const Devices = () => {
+  const { getRegistry } = useContext(RegistryContext);
   const inventory = useRef(null);
   const history = useHistory();
   const dispatch = useDispatch();
@@ -39,7 +40,9 @@ const Devices = () => {
           }}
           onRowClick={(_e, id) => history.push(`/devices/${id}`)}
           onLoad={({ mergeWithEntities }) => {
-            getRegistry()?.register?.(mergeWithEntities());
+            getRegistry()?.register?.({
+              ...mergeWithEntities(),
+            });
           }}
         />
       </Main>

@@ -1,8 +1,14 @@
-import React, { useEffect, Fragment, useState, lazy, Suspense } from 'react';
+import React, {
+  useEffect,
+  Fragment,
+  useState,
+  lazy,
+  Suspense,
+  useContext,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewGroup } from '../../api/';
 import { loadGroups } from '../../store/actions';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/Registry';
 import {
   groupsReducer,
   thresholdReducer,
@@ -34,6 +40,7 @@ import GroupsInfo from './GroupsInfo';
 import GroupsTable from './GroupsTable';
 const InventoryForm = lazy(() => import('../../components/InventoryForm'));
 import schema from './newGroupSchema';
+import { RegistryContext } from '../../store';
 
 const defaultFilters = {
   name: {
@@ -51,6 +58,7 @@ const defaultFilters = {
 };
 
 const Groups = () => {
+  const { getRegistry } = useContext(RegistryContext);
   const [activeFilters, setActiveFilters] = useState(defaultFilters);
   const [isNewGroupOpen, setIsNewGroupOpen] = useState(false);
   const dispatch = useDispatch();

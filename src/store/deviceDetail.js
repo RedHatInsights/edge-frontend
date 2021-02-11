@@ -1,4 +1,5 @@
 import GeneralInformationTab from '../components/DeviceDetail';
+import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
 
 const entityLoaded = (state) => {
   return {
@@ -14,6 +15,6 @@ const entityLoaded = (state) => {
   };
 };
 
-export const deviceDetail = {
-  ['blabla']: entityLoaded,
-};
+export const deviceDetail = applyReducerHash({
+  LOAD_ENTITY_FULFILLED: entityLoaded,
+});

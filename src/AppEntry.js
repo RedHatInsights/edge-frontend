@@ -2,20 +2,30 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { init } from './store';
+import { init, RegistryContext } from './store';
 import App from './App';
 import { getBaseName } from '@redhat-cloud-services/frontend-components-utilities/helpers';
+import logger from 'redux-logger';
 
-const AppEntry = ({ logger }) => (
-  <Provider store={(logger ? init(logger) : init()).getStore()}>
-    <Router basename={getBaseName(window.location.pathname, 1)}>
-      <App />
-    </Router>
-  </Provider>
-);
+const AppEntry = ({ hasLogger }) => {
+  const registry = hasLogger ? init(logger) : init(logger);
+  return (
+    <RegistryContext.Provider
+      value={{
+        getRegistry: () => registry,
+      }}
+    >
+      <Provider store={registry.getStore()}>
+        <Router basename={getBaseName(window.location.pathname, 1)}>
+          <App />
+        </Router>
+      </Provider>
+    </RegistryContext.Provider>
+  );
+};
 
 AppEntry.propTypes = {
-  logger: PropTypes.func,
+  hasLogger: PropTypes.bool,
 };
 
 export default AppEntry;
