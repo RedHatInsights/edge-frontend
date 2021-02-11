@@ -1,7 +1,5 @@
-import PropTypes from 'prop-types';
 import React, { useEffect, Fragment, useState } from 'react';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Routes } from './Routes';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import './App.scss';
@@ -10,13 +8,14 @@ import { NotificationPortal } from '@redhat-cloud-services/frontend-components-n
 
 const App = (props) => {
   const [isLogged, setIsLogged] = useState(false);
+  const history = useHistory();
   useEffect(() => {
     insights.chrome.init();
     // TODO change this to your appname
     insights.chrome.identifyApp('groups');
 
     insights.chrome.on('APP_NAVIGATION', (event) =>
-      this.props.history.push(`/${event.navId}`)
+      history.push(`/${event.navId}`)
     );
     (async () => {
       await insights.chrome.auth.getUser();
@@ -38,8 +37,4 @@ const App = (props) => {
   );
 };
 
-App.propTypes = {
-  history: PropTypes.object,
-};
-
-export default withRouter(connect()(App));
+export default App;

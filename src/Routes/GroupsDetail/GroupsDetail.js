@@ -85,7 +85,6 @@ const GroupsDetail = () => {
     });
     dispatch(loadGroupsDetail(uuid));
     return () => {
-      console.log(registered, unregister, 'cleaned up');
       registered?.();
       unregister?.();
       dispatch(cleanEntities());

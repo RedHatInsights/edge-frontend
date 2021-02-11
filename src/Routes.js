@@ -1,6 +1,5 @@
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import PropTypes from 'prop-types';
 import React, { Suspense } from 'react';
 import { routes as paths } from '../package.json';
 import { Bullseye, Spinner } from '@patternfly/react-core';
@@ -19,6 +18,16 @@ const DeviceDetail = React.lazy(() =>
   )
 );
 
+const Canaries = React.lazy(() =>
+  import(
+    /* webpackChunkName: "GroupsDetailPage" */ './Routes/Canaries/Canaries'
+  )
+);
+
+const Devices = React.lazy(() =>
+  import(/* webpackChunkName: "GroupsDetailPage" */ './Routes/Devices/Devices')
+);
+
 export const Routes = () => {
   return (
     <Suspense
@@ -32,18 +41,12 @@ export const Routes = () => {
         <Route exact path={paths.groups} component={Groups} />
         <Route exact path={paths['groups-detail']} component={GroupsDetail} />
         <Route path={paths['device-detail']} component={DeviceDetail} />
+        <Route path={paths.canaries} component={Canaries} />
+        <Route path={paths.devices} component={Devices} />
         <Route>
           <Redirect to={paths.groups} />
         </Route>
       </Switch>
     </Suspense>
   );
-};
-
-Routes.propTypes = {
-  childProps: PropTypes.shape({
-    history: PropTypes.shape({
-      push: PropTypes.func,
-    }),
-  }),
 };
