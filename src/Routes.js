@@ -42,7 +42,8 @@ export const Routes = () => {
         <Route exact path={paths['groups-detail']} component={GroupsDetail} />
         <Route path={paths['device-detail']} component={DeviceDetail} />
         <Route path={paths.canaries} component={Canaries} />
-        <Route path={paths.devices} component={Devices} />
+        <Route exact path={paths.devices} component={Devices} />
+        <Route path={paths['devices-detail']} component={DeviceDetail} />
         <Route>
           <Redirect to={paths.groups} />
         </Route>

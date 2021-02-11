@@ -16,6 +16,7 @@ import {
 } from '@redhat-cloud-services/frontend-components/Inventory';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { deviceDetail } from '../../store/deviceDetail';
 
 const DeviceDetail = () => {
   const { inventoryId, uuid } = useParams();
@@ -40,34 +41,32 @@ const DeviceDetail = () => {
       hideInvLink
       showTags
       onLoad={({ mergeWithDetail }) => {
-        getRegistry().register(mergeWithDetail());
+        getRegistry().register(mergeWithDetail(deviceDetail));
       }}
     >
       <PageHeader>
         <Breadcrumb ouiaId="systems-list">
           <BreadcrumbItem>
-            <Link to={`/groups`}>Groups</Link>
+            <Link to={uuid ? `/groups` : '/devices'}>
+              {uuid ? 'Groups' : 'Devices'}
+            </Link>
           </BreadcrumbItem>
-          <BreadcrumbItem>
-            {groupName ? (
-              <Link to={`/groups/${uuid}`}>{groupName}</Link>
-            ) : (
-              <Skeleton size={SkeletonSize.xs} />
-            )}
-          </BreadcrumbItem>
+          {uuid && (
+            <BreadcrumbItem>
+              {groupName ? (
+                <Link to={`/groups/${uuid}`}>{groupName}</Link>
+              ) : (
+                <Skeleton size={SkeletonSize.xs} />
+              )}
+            </BreadcrumbItem>
+          )}
           <BreadcrumbItem isActive>
             <div className="ins-c-inventory__detail--breadcrumb-name">
               {displayName || <Skeleton size={SkeletonSize.xs} />}
             </div>
           </BreadcrumbItem>
         </Breadcrumb>
-        <InventoryDetailHead
-          fallback=""
-          hideBack
-          showTags
-          hideInvLink
-          hideInvDrawer
-        />
+        <InventoryDetailHead fallback="" hideBack showTags hideInvDrawer />
       </PageHeader>
       <Main>
         <Grid gutter="md">
