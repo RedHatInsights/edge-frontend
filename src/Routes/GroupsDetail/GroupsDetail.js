@@ -5,6 +5,7 @@ import React, {
   Suspense,
   lazy,
   useState,
+  useContext,
 } from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
@@ -18,7 +19,6 @@ import {
   StackItem,
   Button,
 } from '@patternfly/react-core';
-import { getRegistry } from '@redhat-cloud-services/frontend-components-utilities/Registry';
 import { routes } from '../../../package.json';
 import { loadGroupsDetail, cleanEntities } from '../../store/actions';
 import {
@@ -38,6 +38,7 @@ import {
   constructActiveFilters,
   onDeleteFilter,
 } from '../../constants';
+import { RegistryContext } from '../../store';
 
 const defaultFilters = {
   name: {
@@ -55,6 +56,7 @@ const defaultFilters = {
 };
 
 const GroupsDetail = () => {
+  const { getRegistry } = useContext(RegistryContext);
   const [isAddDeviceOpen, setIsAddDeviceOpen] = useState(false);
   const [getEntities, setGetEntities] = useState();
   const [unregister, setUnregister] = useState();
@@ -85,7 +87,6 @@ const GroupsDetail = () => {
     });
     dispatch(loadGroupsDetail(uuid));
     return () => {
-      console.log(registered, unregister, 'cleaned up');
       registered?.();
       unregister?.();
       dispatch(cleanEntities());

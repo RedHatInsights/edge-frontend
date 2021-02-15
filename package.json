@@ -51,9 +51,10 @@
     "@patternfly/react-styles": "^4.7.22",
     "@patternfly/react-table": "4.19.45",
     "@patternfly/react-tokens": "^4.9.22",
-    "@redhat-cloud-services/frontend-components": "3.0.4",
+    "@redhat-cloud-services/frontend-components": "3.0.6",
+    "@redhat-cloud-services/frontend-components-inventory-general-info": "^3.0.2",
     "@redhat-cloud-services/frontend-components-notifications": "^3.0.3",
-    "@redhat-cloud-services/frontend-components-utilities": "3.0.2",
+    "@redhat-cloud-services/frontend-components-utilities": "3.0.3",
     "babel-plugin-transform-imports": "^2.0.0",
     "classnames": "2.2.6",
     "react": "16.13.1",
@@ -73,7 +74,7 @@
     "@babel/preset-flow": "7.9.0",
     "@babel/preset-react": "7.10.0",
     "@redhat-cloud-services/eslint-config-redhat-cloud-services": "1.0.0",
-    "@redhat-cloud-services/frontend-components-config": "3.0.0-beta22",
+    "@redhat-cloud-services/frontend-components-config": "4.0.1",
     "@testing-library/react": "^11.2.2",
     "@webpack-cli/serve": "^1.1.0",
     "babel-core": "7.0.0-bridge.0",
@@ -110,6 +111,8 @@
     "groups": "/groups",
     "groups-detail": "/groups/:uuid",
     "device-detail": "/groups/:uuid/:inventoryId",
-    "canaries": "/canaries"
+    "canaries": "/canaries",
+    "devices": "/devices",
+    "devices-detail": "/devices/:inventoryId"
   }
 }
