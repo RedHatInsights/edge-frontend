@@ -73,7 +73,7 @@ const DeviceDetail = () => {
         </Breadcrumb>
         <InventoryDetailHead fallback="" hideBack showTags hideInvDrawer />
       </PageHeader>
-      <Main>
+      <Main className="edge-c-device--detail">
         <Grid gutter="md">
           <GridItem span={12}>
             <AppInfo showTags fallback="" />
