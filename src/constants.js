@@ -54,17 +54,21 @@ export const isEmptyFilters = (activeFilters) =>
     (item) => item?.value?.length > 0 || item?.length > 0
   );
 
-export const constructActiveFilters = (activeFilters) =>
+export const constructActiveFilters = (activeFilters, getLabel) =>
   Object.entries(activeFilters).map(([key, { label, value } = {}]) => ({
     category: label,
     chipKey: key,
     chips:
       value?.length > 0
         ? Array.isArray(value)
-          ? value.map((item) => ({ name: item }))
+          ? value.map((item) => ({
+              name: getLabel?.(item) || item,
+              value: item,
+            }))
           : [
               {
-                name: value,
+                name: getLabel?.(value) || value,
+                value,
               },
             ]
         : [],
@@ -78,7 +82,7 @@ export const onDeleteFilter = (activeFilters, itemsToRemove) => {
       ...(activeFilters[currItem?.chipKey] || {}),
       value: Array.isArray(activeFilters[currItem?.chipKey]?.value)
         ? activeFilters[currItem?.chipKey]?.value?.filter(
-            (item) => !currItem?.chips?.find(({ name }) => name === item)
+            (item) => !currItem?.chips?.find(({ value }) => value === item)
           )
         : '',
     },
