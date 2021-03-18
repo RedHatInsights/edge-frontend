@@ -7,6 +7,17 @@ const GeneralInformation = lazy(() =>
   )
 );
 
+const SystemCard = lazy(() =>
+  import(
+    '@redhat-cloud-services/frontend-components-inventory-general-info/SystemCard'
+  )
+);
+const OperatingSystemCard = lazy(() =>
+  import(
+    '@redhat-cloud-services/frontend-components-inventory-general-info/OperatingSystemCard'
+  )
+);
+
 const GeneralInformationTab = () => {
   const writePermissions = useSelector(
     ({ permissionsReducer }) => permissionsReducer?.writePermissions
@@ -17,6 +28,17 @@ const GeneralInformationTab = () => {
       <GeneralInformation
         store={useStore()}
         writePermissions={writePermissions}
+        ConfigurationCardWrapper={false}
+        SystemCardWrapper={(props) => (
+          <Suspense fallback="">
+            <SystemCard {...props} hasSAP={false} />
+          </Suspense>
+        )}
+        OperatingSystemCardWrapper={(props) => (
+          <Suspense fallback="">
+            <OperatingSystemCard {...props} hasKernelModules={false} />
+          </Suspense>
+        )}
       />
     </Suspense>
   );
