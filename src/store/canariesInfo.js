@@ -10,7 +10,7 @@ const loadCanariesInfoPending = (state) => ({
 });
 const loadCanariesInfoFulfilled = (state, { payload }) => ({
   ...state,
-  canariesInfo: payload?.results,
+  canariesInfo: payload?.results || [],
   isLoading: false,
 });
 

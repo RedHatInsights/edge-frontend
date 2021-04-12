@@ -10,7 +10,7 @@ const loadDevicesInfoPending = (state) => ({
 });
 const loadDevicesInfoFulfilled = (state, { payload }) => ({
   ...state,
-  devicesInfo: payload?.results,
+  devicesInfo: payload?.results || {},
   isLoading: false,
 });
 

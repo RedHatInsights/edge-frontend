@@ -10,7 +10,7 @@ const loadThresholdPending = (state) => ({
 });
 const loadThresholdFulfilled = (state, { payload }) => ({
   ...state,
-  threshold: payload?.results,
+  threshold: payload?.results || {},
   isLoading: false,
 });
 

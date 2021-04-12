@@ -5,7 +5,7 @@ const entitySelected = (state, { payload }) => {
   const selected = state.selected || new Map();
   if (payload.selected) {
     if (payload.id === 0) {
-      state.rows.forEach((row) => selected.set(row.id, row));
+      state?.rows?.forEach((row) => selected.set(row?.id, row));
     } else {
       const selectedRow = state?.rows?.find(({ id } = {}) => id === payload.id);
       selected.set(payload.id, { ...(selectedRow || {}), id: payload.id });
