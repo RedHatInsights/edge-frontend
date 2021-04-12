@@ -12,9 +12,9 @@ const loadGroupsPending = (state) => ({
 const loadGroupsFulfilled = (state, { payload }) => ({
   ...state,
   isLoading: false,
-  name: payload?.name,
-  uuid: payload?.uuid,
-  devices: payload?.results,
+  name: payload?.name || '',
+  uuid: payload?.uuid || '',
+  devices: payload?.results || [],
   meta: payload?.meta || {},
 });
 
@@ -33,11 +33,9 @@ const onEntitiesLoaded = (state) => {
         key: 'status',
         title: 'Status',
         // eslint-disable-next-line react/display-name
-        renderFunc: (status) => {
-          return <StatusIcon status={status} />;
-        },
+        renderFunc: (status) => <StatusIcon status={status} />,
       },
-    ],
+    ].filter(Boolean),
     loaded: true,
   };
 };

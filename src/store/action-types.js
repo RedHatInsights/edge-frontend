@@ -15,6 +15,7 @@ const asyncActions = flatMap(
     LOAD_TRESHOLD,
     LOAD_DEVICES_INFO,
     LOAD_CANARIES_INFO,
+    LOAD_GROUP_DEVICES_INFO,
   ],
   (a) => [a, `${a}_PENDING`, `${a}_FULFILLED`, `${a}_REJECTED`]
 );
