@@ -1,4 +1,5 @@
 import { statusMapper } from '../constants';
+import { instance } from '@redhat-cloud-services/frontend-components-utilities/interceptors/interceptors';
 
 const randomNumber = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
@@ -134,4 +135,8 @@ export const updateGroup = ({ uuid, systemIDs, groupName }) => {
     groups.push(rowGroupCreator(uuid, groupName, systemIDs, false, new Date()));
   }
   return Promise.resolve();
+};
+
+export const fetchActiveImages = () => {
+  return instance.get('/api/image-builder/v1/composes');
 };
