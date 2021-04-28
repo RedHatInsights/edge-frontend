@@ -1,6 +1,7 @@
 import keyBy from 'lodash/keyBy';
 import flatMap from 'lodash/flatMap';
 
+export const LOAD_ACTIVE_IMAGES = 'LOAD_ACTIVE_IMAGES';
 export const LOAD_GROUPS = 'LOAD_GROUPS';
 export const LOAD_GROUP_DETAIL = 'LOAD_GROUP_DETAIL';
 export const LOAD_TRESHOLD = 'LOAD_TRESHOLD';
@@ -10,6 +11,7 @@ export const LOAD_GROUP_DEVICES_INFO = 'LOAD_GROUP_DEVICES_INFO';
 
 const asyncActions = flatMap(
   [
+    LOAD_ACTIVE_IMAGES,
     LOAD_GROUPS,
     LOAD_GROUP_DETAIL,
     LOAD_TRESHOLD,

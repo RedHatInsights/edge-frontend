@@ -20,6 +20,7 @@ import {
   constructActiveFilters,
   onDeleteFilter,
 } from '../../constants';
+import { Tiles } from '../../components/Tiles';
 
 const defaultFilters = {
   deviceStatus: {
@@ -62,12 +63,14 @@ const Devices = () => {
   useEffect(() => {
     return () => dispatch(cleanEntities());
   }, []);
+
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
         <PageHeaderTitle title="Available devices" />
       </PageHeader>
       <Main className="edge-devices">
+        <Tiles />
         <InventoryTable
           ref={inventory}
           onRefresh={onRefresh}
@@ -76,7 +79,6 @@ const Devices = () => {
           }}
           getEntities={async (_i, config) => {
             const data = await getEntities(undefined, config);
-            console.log(data, activeFilters, 'This is data!');
             return data;
           }}
           hideFilters={{ registeredWith: true }}

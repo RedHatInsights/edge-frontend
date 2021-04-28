@@ -8,6 +8,7 @@ import {
   SELECT_ENTITY,
   PRE_SELECT_ENTITY,
   CLEAN_ENTITIES,
+  LOAD_ACTIVE_IMAGES,
 } from './action-types';
 import {
   fetchGroups,
@@ -16,6 +17,7 @@ import {
   canariesInfo,
   groupsDetail,
   groupDevicesInfo,
+  fetchActiveImages,
 } from '../api';
 
 export const loadGroups = (perPage = 50, page = 1) => ({
@@ -67,3 +69,22 @@ export const preSelectEntity = (id, selected) => ({
 export const cleanEntities = () => ({
   type: CLEAN_ENTITIES,
 });
+
+export const loadImages = (dispatch) => {
+  dispatch({
+    type: LOAD_ACTIVE_IMAGES,
+    payload: fetchActiveImages,
+    meta: {
+      notifications: {
+        rejected: {
+          variant: 'danger',
+          title: 'Can not show images data',
+          description: 'Failed receiving images from image-builder',
+        },
+      },
+    },
+    // the '.catch' part is necessary because redux-promise-middleware throws the error on REJECTED
+    // and to avoid the app exploding I need to catch it here.
+    // THANK you redux-promise-middleware for not allowing to customize this behavior. 😠
+  }).catch(() => null);
+};
