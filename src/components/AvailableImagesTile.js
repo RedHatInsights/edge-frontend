@@ -50,6 +50,11 @@ const AvailableImageTile = () => {
     return (
       <AvailableImageTileBase>
         <CardBody>{data}</CardBody>
+        <CardFooter>
+          <Button isDisabled variant="primary">
+            Create new image
+          </Button>
+        </CardFooter>
       </AvailableImageTileBase>
     );
   }
