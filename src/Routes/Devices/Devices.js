@@ -65,7 +65,7 @@ const Devices = () => {
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Available devices" />
+        <PageHeaderTitle title="Fleet management" />
       </PageHeader>
       <Main className="edge-devices">
         <InventoryTable

@@ -111,7 +111,7 @@
     "groups-detail": "/groups/:uuid",
     "device-detail": "/groups/:uuid/:inventoryId",
     "canaries": "/canaries",
-    "devices": "/devices",
-    "devices-detail": "/devices/:inventoryId"
+    "fleet-management": "/fleet-management",
+    "fleet-management-detail": "/fleet-management/:inventoryId"
   }
 }
