@@ -6,6 +6,12 @@ const { config: webpackConfig, plugins } = config({
   https: false,
   useFileHash: false,
   sassPrefix: '.groups',
+  ...(process.env.PROXY && {
+    https: true,
+    useProxy: true,
+    proxyVerbose: true,
+    appUrl: process.env.BETA ? '/beta/edge' : '/edge',
+  }),
 });
 
 plugins.push(
