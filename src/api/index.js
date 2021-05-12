@@ -1,5 +1,11 @@
-import { statusMapper } from '../constants';
+import {
+  statusMapper,
+  deviceSummaryMapper,
+  inventoryFields,
+} from '../constants';
 import { instance } from '@redhat-cloud-services/frontend-components-utilities/interceptors/interceptors';
+import { HostsApi } from '@redhat-cloud-services/host-inventory-client';
+import { generateFilter } from '@redhat-cloud-services/frontend-components-utilities/helpers';
 
 const randomNumber = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
@@ -139,4 +145,90 @@ export const updateGroup = ({ uuid, systemIDs, groupName }) => {
 
 export const fetchActiveImages = () => {
   return instance.get('/api/image-builder/v1/composes');
+};
+
+export const fetchDeviceSummary = async () => {
+  const client = new HostsApi(undefined, '/api/inventory/v1/', instance);
+  return await Promise.all([
+    client.apiHostGetHostList(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      ['fresh'],
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      {
+        query: generateFilter(inventoryFields, 'fields'),
+      }
+    ),
+    client.apiHostGetHostList(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      ['stale'],
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      {
+        query: generateFilter(inventoryFields, 'fields'),
+      }
+    ),
+    client.apiHostGetHostList(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      ['stale_warning'],
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      {
+        query: generateFilter(inventoryFields, 'fields'),
+      }
+    ),
+    client.apiHostGetHostList(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      ['unknown'],
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      {
+        query: generateFilter(inventoryFields, 'fields'),
+      }
+    ),
+  ]).then((resp) => {
+    return resp.reduce((acc, curr, index) => {
+      return { ...acc, [deviceSummaryMapper[index]]: curr.total };
+    }, {});
+  });
 };

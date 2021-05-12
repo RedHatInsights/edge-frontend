@@ -1,3 +1,4 @@
+export { default as deviceSummaryReducer } from './deviceSummary';
 export { default as imagesReducer } from './images';
 export { default as groupsReducer } from './groups';
 export { default as thresholdReducer } from './threshold';

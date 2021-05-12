@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import { useSelector, shallowEqual } from 'react-redux';
 
 const AvailableImageTileBase = ({ children }) => (
-  <Card>
+  <Card className="tiles-card">
     <CardTitle>Available images</CardTitle>
     {children}
   </Card>

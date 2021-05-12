@@ -88,3 +88,14 @@ export const onDeleteFilter = (activeFilters, itemsToRemove) => {
     },
   };
 };
+
+export const deviceSummaryMapper = [
+  'active',
+  'noReports',
+  'neverReported',
+  'orphaned',
+];
+
+export const inventoryFields = {
+  system_profile: { host_type: 'edge' },
+};
