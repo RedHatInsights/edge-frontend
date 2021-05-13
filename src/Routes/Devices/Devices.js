@@ -78,7 +78,16 @@ const Devices = () => {
             canSelectAll: false,
           }}
           getEntities={async (_i, config) => {
-            const data = await getEntities(undefined, config);
+            const data = await getEntities(undefined, {
+              ...config,
+              filter: {
+                ...config.filter,
+                system_profile: {
+                  ...config.filter?.system_profile,
+                  host_type: 'edge',
+                },
+              },
+            });
             return data;
           }}
           hideFilters={{ registeredWith: true }}

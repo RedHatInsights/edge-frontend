@@ -124,6 +124,13 @@ const GroupsDetail = () => {
                   (results || []).map(({ uuid }) => uuid),
                   {
                     ...config,
+                    filter: {
+                      ...config.filter,
+                      system_profile: {
+                        ...config.filter?.system_profile,
+                        host_type: 'edge',
+                      },
+                    },
                     hasItems: true,
                   },
                   false

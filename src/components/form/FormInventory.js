@@ -22,6 +22,7 @@ const FormInventoryTable = ({
   onLoad,
   ...rest
 }) => {
+  const getEntities = useRef();
   const dispatch = useDispatch();
   const inventory = useRef(null);
   const selected = useSelector(
@@ -72,11 +73,30 @@ const FormInventoryTable = ({
         tableProps={{
           canSelectAll: false,
         }}
-        onLoad={({ mergeWithEntities, INVENTORY_ACTION_TYPES, ...rest }) => {
+        getEntities={async (_i, config) => {
+          const data = await getEntities(undefined, {
+            ...config,
+            filter: {
+              ...config.filter,
+              system_profile: {
+                ...config.filter?.system_profile,
+                host_type: 'edge',
+              },
+            },
+          });
+          return data;
+        }}
+        onLoad={({
+          mergeWithEntities,
+          INVENTORY_ACTION_TYPES,
+          api,
+          ...rest
+        }) => {
+          getEntities.current = api?.getEntities;
           registry?.register?.(
             mergeWithEntities(entitiesReducer(INVENTORY_ACTION_TYPES))
           );
-          onLoad({ mergeWithEntities, INVENTORY_ACTION_TYPES, ...rest });
+          onLoad({ mergeWithEntities, INVENTORY_ACTION_TYPES, api, ...rest });
         }}
       />
     </div>
