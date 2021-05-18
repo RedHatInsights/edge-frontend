@@ -5,7 +5,7 @@ const { config: webpackConfig, plugins } = config({
   debug: true,
   https: false,
   useFileHash: false,
-  sassPrefix: '.groups',
+  sassPrefix: '.fleet-management',
   ...(process.env.PROXY && {
     https: true,
     useProxy: true,
