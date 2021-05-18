@@ -28,6 +28,12 @@ const Devices = React.lazy(() =>
   import(/* webpackChunkName: "GroupsDetailPage" */ './Routes/Devices/Devices')
 );
 
+const Images = React.lazy(() =>
+  import(
+    /* webpackChunkName: "GroupsDetailPage" */ './Routes/ImageManager/Images'
+  )
+);
+
 export const Routes = () => {
   return (
     <Suspense
@@ -43,6 +49,7 @@ export const Routes = () => {
         {/* <Route path={paths['device-detail']} component={DeviceDetail} /> */}
         {/* <Route path={paths.canaries} component={Canaries} /> */}
         <Route exact path={paths['fleet-management']} component={Devices} />
+        <Route path={paths['manage-images']} component={Images} />
         <Route
           path={paths['fleet-management-detail']}
           component={DeviceDetail}

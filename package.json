@@ -113,6 +113,7 @@
     "device-detail": "/groups/:uuid/:inventoryId",
     "canaries": "/canaries",
     "fleet-management": "/fleet-management",
-    "fleet-management-detail": "/fleet-management/:inventoryId"
+    "fleet-management-detail": "/fleet-management/:inventoryId",
+    "manage-images": "/manage-images"
   }
 }
