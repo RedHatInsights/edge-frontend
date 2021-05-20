@@ -9,6 +9,7 @@ import {
   PRE_SELECT_ENTITY,
   CLEAN_ENTITIES,
   LOAD_ACTIVE_IMAGES,
+  LOAD_DEVICE_SUMMARY,
 } from './action-types';
 import {
   fetchGroups,
@@ -18,6 +19,7 @@ import {
   groupsDetail,
   groupDevicesInfo,
   fetchActiveImages,
+  fetchDeviceSummary,
 } from '../api';
 
 export const loadGroups = (perPage = 50, page = 1) => ({
@@ -80,6 +82,25 @@ export const loadImages = (dispatch) => {
           variant: 'danger',
           title: 'Can not show images data',
           description: 'Failed receiving images from image-builder',
+        },
+      },
+    },
+    // the '.catch' part is necessary because redux-promise-middleware throws the error on REJECTED
+    // and to avoid the app exploding I need to catch it here.
+    // THANK you redux-promise-middleware for not allowing to customize this behavior. 😠
+  }).catch(() => null);
+};
+
+export const loadDeviceSummary = (dispatch) => {
+  dispatch({
+    type: LOAD_DEVICE_SUMMARY,
+    payload: fetchDeviceSummary,
+    meta: {
+      notifications: {
+        rejected: {
+          variant: 'danger',
+          title: 'Can not show device summary data',
+          description: 'Failed receiving device summary data from inventory',
         },
       },
     },

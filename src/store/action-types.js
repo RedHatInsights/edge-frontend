@@ -1,6 +1,7 @@
 import keyBy from 'lodash/keyBy';
 import flatMap from 'lodash/flatMap';
 
+export const LOAD_DEVICE_SUMMARY = 'LOAD_DEVICE_SUMMARY';
 export const LOAD_ACTIVE_IMAGES = 'LOAD_ACTIVE_IMAGES';
 export const LOAD_GROUPS = 'LOAD_GROUPS';
 export const LOAD_GROUP_DETAIL = 'LOAD_GROUP_DETAIL';
