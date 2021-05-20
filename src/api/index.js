@@ -204,7 +204,7 @@ export const fetchDeviceSummary = async () => {
       undefined,
       undefined,
       {
-        query: generateFilter(inventoryFields, 'fields'),
+        query: generateFilter(inventoryFields),
       }
     ),
     client.apiHostGetHostList(
