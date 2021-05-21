@@ -12,7 +12,7 @@ Install all dependencies
 
 Replace line 6 in `edge-frontend/profiles/local-frontend.js` to:
 
-```bash
+```js
 const routes = {
     '/config': { host: 'http://127.0.0.1:8889' },
     '/beta/config': { host: 'http://127.0.0.1:8889' },
