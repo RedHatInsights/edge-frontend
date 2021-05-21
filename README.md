@@ -10,6 +10,31 @@ Install all dependencies
 >$ npm install
 ```
 
+Replace line 6 in `edge-frontend/profiles/local-frontend.js` to:
+
+```bash
+const routes = {
+    '/config': { host: 'http://127.0.0.1:8889' },
+    '/beta/config': { host: 'http://127.0.0.1:8889' },
+};
+```
+
+### Setting up cloud-services-config
+
+Clone [cloud-services-config](https://github.com/RedHatInsights/cloud-services-config) to your local machine and navigate into the cloned directory.
+
+Copy `main.yml` to its own config directory.
+
+```bash
+>$ mkdir config
+>$ cp main.yml config
+```
+
+Start `http-server`
+```bash
+>$ npx http-server -p 8889
+```
+
 You can choose to either run the application with [webpack-proxy](#running-locally-with-webpack-proxy) or with [insights-proxy](#running-locally-with-insights-proxy).
 
 ### Running locally with webpack-proxy
