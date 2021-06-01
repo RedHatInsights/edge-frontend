@@ -143,8 +143,10 @@ export const updateGroup = ({ uuid, systemIDs, groupName }) => {
   return Promise.resolve();
 };
 
-export const fetchActiveImages = () => {
-  return instance.get('/api/image-builder/v1/composes');
+export const fetchActiveImages = ({ limit = 100, offset = 0 } = {}) => {
+  return instance.get(
+    `/api/image-builder/v1/composes?limit=${limit}&offset=${offset}`
+  );
 };
 
 export const fetchDeviceSummary = async () => {
@@ -166,7 +168,10 @@ export const fetchDeviceSummary = async () => {
       undefined,
       undefined,
       {
-        query: generateFilter(inventoryFields),
+        query: {
+          ...generateFilter(inventoryFields),
+          ...generateFilter({ system_profile: ['host_type'] }, 'fields'),
+        },
       }
     ),
     client.apiHostGetHostList(
@@ -185,7 +190,10 @@ export const fetchDeviceSummary = async () => {
       undefined,
       undefined,
       {
-        query: generateFilter(inventoryFields),
+        query: {
+          ...generateFilter(inventoryFields),
+          ...generateFilter({ system_profile: ['host_type'] }, 'fields'),
+        },
       }
     ),
     client.apiHostGetHostList(
@@ -204,7 +212,10 @@ export const fetchDeviceSummary = async () => {
       undefined,
       undefined,
       {
-        query: generateFilter(inventoryFields),
+        query: {
+          ...generateFilter(inventoryFields),
+          ...generateFilter({ system_profile: ['host_type'] }, 'fields'),
+        },
       }
     ),
     client.apiHostGetHostList(
@@ -223,7 +234,10 @@ export const fetchDeviceSummary = async () => {
       undefined,
       undefined,
       {
-        query: generateFilter(inventoryFields),
+        query: {
+          ...generateFilter(inventoryFields),
+          ...generateFilter({ system_profile: ['host_type'] }, 'fields'),
+        },
       }
     ),
   ]).then((resp) => {
