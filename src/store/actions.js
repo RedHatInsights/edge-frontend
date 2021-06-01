@@ -72,10 +72,10 @@ export const cleanEntities = () => ({
   type: CLEAN_ENTITIES,
 });
 
-export const loadImages = (dispatch) => {
+export const loadImages = (dispatch, pagination) => {
   dispatch({
     type: LOAD_ACTIVE_IMAGES,
-    payload: fetchActiveImages,
+    payload: fetchActiveImages(pagination),
     meta: {
       notifications: {
         rejected: {
