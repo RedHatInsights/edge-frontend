@@ -16,6 +16,8 @@ import {
   EmptyStateIcon,
   EmptyStateBody,
   Title,
+  LabelGroup,
+  Label,
 } from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
 import {
@@ -89,9 +91,13 @@ const Images = () => {
               cells={columns}
               rows={flatten(
                 data.data.map((item, index) => {
-                  const isOpen = opened.some(
-                    (oneOpen) => oneOpen === 2 * index
-                  );
+                  const packagesNumber =
+                    item?.request?.customizations?.packages?.length || 0;
+                  // if there are no packages - disable the option to expand row.
+                  const isOpen =
+                    packagesNumber > 0
+                      ? opened.some((oneOpen) => oneOpen === 2 * index)
+                      : undefined;
                   return [
                     {
                       isOpen,
@@ -102,10 +108,12 @@ const Images = () => {
                           ),
                         },
                         {
-                          title:
-                            item?.request?.customizations?.packages?.length,
+                          title: packagesNumber,
                           props: {
                             isOpen,
+                            // to align text with other rows that are expandable use this class
+                            className:
+                              packagesNumber === 0 ? 'force-padding-left' : '',
                           },
                         },
                         item?.request?.distribution,
@@ -117,8 +125,22 @@ const Images = () => {
                       compoundParent: 1,
                       cells: [
                         {
-                          title: 'Something!' + index,
-                          props: { colSpan: 6, className: 'pf-m-no-padding' },
+                          title:
+                            packagesNumber > 0 ? (
+                              <LabelGroup>
+                                {item.request.customizations.packages.map(
+                                  (packageName) => (
+                                    <Label key={packageName}>
+                                      {packageName}
+                                    </Label>
+                                  )
+                                )}
+                              </LabelGroup>
+                            ) : undefined,
+                          props: {
+                            colSpan: 6,
+                            className: 'packages-compound-expand',
+                          },
                         },
                       ],
                     },
