@@ -79,39 +79,51 @@ const Images = () => {
           ) : (
             <Table
               onExpand={(_e, rowIndex) => {
-                setOpened([...opened, rowIndex]);
+                setOpened(
+                  opened.includes(rowIndex)
+                    ? opened.filter((item) => item !== rowIndex)
+                    : [...opened, rowIndex]
+                );
               }}
               ariaLabel="Images table"
               cells={columns}
               rows={flatten(
-                data.data.map((item) => [
-                  {
-                    isOpen: opened.find((oneOpen) => oneOpen === item.id),
-                    cells: [
-                      {
-                        title: <DateFormat date={new Date(item.created_at)} />,
-                      },
-                      {
-                        title: item?.request?.customizations?.packages?.length,
-                        props: {
-                          isOpen: opened.find((oneOpen) => oneOpen === item.id),
+                data.data.map((item, index) => {
+                  const isOpen = opened.some(
+                    (oneOpen) => oneOpen === 2 * index
+                  );
+                  return [
+                    {
+                      isOpen,
+                      cells: [
+                        {
+                          title: (
+                            <DateFormat date={new Date(item.created_at)} />
+                          ),
                         },
-                      },
-                      item?.request?.distribution,
-                      item?.request?.image_requests?.[0]?.architecture,
-                    ],
-                  },
-                  // {
-                  //   parent: index * 2,
-                  //   compoundParent: 1,
-                  //   cells: [
-                  //     {
-                  //       title: 'Something!',
-                  //       props: { colSpan: 6, className: 'pf-m-no-padding' },
-                  //     },
-                  //   ],
-                  // },
-                ])
+                        {
+                          title:
+                            item?.request?.customizations?.packages?.length,
+                          props: {
+                            isOpen,
+                          },
+                        },
+                        item?.request?.distribution,
+                        item?.request?.image_requests?.[0]?.architecture,
+                      ],
+                    },
+                    {
+                      parent: 2 * index,
+                      compoundParent: 1,
+                      cells: [
+                        {
+                          title: 'Something!' + index,
+                          props: { colSpan: 6, className: 'pf-m-no-padding' },
+                        },
+                      ],
+                    },
+                  ];
+                })
               )}
             >
               <TableHeader />
