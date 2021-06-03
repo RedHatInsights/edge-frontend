@@ -80,11 +80,13 @@ const Images = () => {
             </EmptyState>
           ) : (
             <Table
-              onExpand={(_e, rowIndex) => {
+              aria-label="Manage Images table"
+              onExpand={(_e, _rowIndex, _colIndex, isExpanded, rowData) => {
+                const imageId = rowData.id;
                 setOpened(
-                  opened.includes(rowIndex)
-                    ? opened.filter((item) => item !== rowIndex)
-                    : [...opened, rowIndex]
+                  isExpanded
+                    ? opened.filter((item) => item !== imageId)
+                    : [...opened, imageId]
                 );
               }}
               ariaLabel="Images table"
@@ -96,10 +98,11 @@ const Images = () => {
                   // if there are no packages - disable the option to expand row.
                   const isOpen =
                     packagesNumber > 0
-                      ? opened.some((oneOpen) => oneOpen === 2 * index)
+                      ? opened.some((oneOpen) => oneOpen === item.id)
                       : undefined;
                   return [
                     {
+                      id: item.id,
                       isOpen,
                       cells: [
                         {
