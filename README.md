@@ -10,6 +10,37 @@ Install all dependencies
 >$ npm install
 ```
 
+Replace line 6 in `edge-frontend/profiles/local-frontend.js` to:
+
+```js
+const routes = {
+    '/config': { host: 'http://127.0.0.1:8889' },
+    '/beta/config': { host: 'http://127.0.0.1:8889' },
+};
+```
+
+**NOTE:**
+You will need to run cloud-services-config until edge-frontend is on a stable branch
+
+
+Read more [here](https://github.com/RedHatInsights/cloud-services-config#testing-your-changes-locally)
+
+### Setting up cloud-services-config
+
+Clone [cloud-services-config](https://github.com/RedHatInsights/cloud-services-config) to your local machine and navigate into the cloned directory.
+
+Copy `main.yml` to its own config directory.
+
+```bash
+>$ mkdir config
+>$ cp main.yml config
+```
+
+Start `http-server`
+```bash
+>$ npx http-server -p 8889
+```
+
 You can choose to either run the application with [webpack-proxy](#running-locally-with-webpack-proxy) or with [insights-proxy](#running-locally-with-insights-proxy).
 
 ### Running locally with webpack-proxy
@@ -26,18 +57,22 @@ Your `/etc/hosts` file can look like:
 127.0.0.1 qaprodauth.foo.redhat.com
 ```
 
-Run the application - beta only supported
+Run the application in beta environment - beta only supported
 ```bash
 >$ BETA=true npm run start:proxy
 ```
 
-**Edge application will be available on https://ci.foo.redhat.com:1337/beta/edge/fleet-management**
+**(Beta) Edge application will be available on https://ci.foo.redhat.com:1337/beta/edge/fleet-management**
 
 ### Running locally with insights-proxy
 
 Follow the guide on [insights-proxy](https://github.com/RedHatInsights/insights-proxy) on how to install proxy.
 
-Once docker is installed and set run `SPANDX_CONFIG=./profiles/local-frontend.js ../insights-proxy/scripts/run.sh` in one terminal.
+Once docker is installed, run
+```bash
+SPANDX_CONFIG=./profiles/local-frontend.js ../insights-proxy/scripts/run.sh
+```
+in one terminal.
 
 Open another terminal and run
 
