@@ -12,6 +12,7 @@ const { config: webpackConfig, plugins } = config({
     proxyVerbose: true,
     appUrl: process.env.BETA ? '/beta/edge' : '/edge',
   }),
+  ...(process.env.BETA ? { deployment: 'beta/apps' } : {}),
 });
 
 plugins.push(
