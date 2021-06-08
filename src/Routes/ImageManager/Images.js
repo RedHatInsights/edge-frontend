@@ -29,6 +29,7 @@ import {
 import flatten from 'lodash/flatten';
 
 const columns = [
+  'UUID',
   'Created',
   {
     title: 'Packages',
@@ -105,6 +106,7 @@ const Images = () => {
                       id: item.id,
                       isOpen,
                       cells: [
+                        item?.id,
                         {
                           title: (
                             <DateFormat date={new Date(item.created_at)} />
@@ -125,7 +127,7 @@ const Images = () => {
                     },
                     {
                       parent: 2 * index,
-                      compoundParent: 1,
+                      compoundParent: 2,
                       cells: [
                         {
                           title:
