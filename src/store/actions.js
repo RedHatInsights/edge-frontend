@@ -10,6 +10,7 @@ import {
   CLEAN_ENTITIES,
   LOAD_ACTIVE_IMAGES,
   LOAD_DEVICE_SUMMARY,
+  LOAD_IMAGE_STATUS,
 } from './action-types';
 import {
   fetchGroups,
@@ -20,6 +21,7 @@ import {
   groupDevicesInfo,
   fetchActiveImages,
   fetchDeviceSummary,
+  fetchImageStatus,
 } from '../api';
 
 export const loadGroups = (perPage = 50, page = 1) => ({
@@ -107,5 +109,12 @@ export const loadDeviceSummary = (dispatch) => {
     // the '.catch' part is necessary because redux-promise-middleware throws the error on REJECTED
     // and to avoid the app exploding I need to catch it here.
     // THANK you redux-promise-middleware for not allowing to customize this behavior. 😠
+  }).catch(() => null);
+};
+
+export const loadImageStatus = (dispatch, imageId) => {
+  dispatch({
+    type: LOAD_IMAGE_STATUS,
+    payload: fetchImageStatus(imageId),
   }).catch(() => null);
 };

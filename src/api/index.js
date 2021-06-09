@@ -149,6 +149,10 @@ export const fetchActiveImages = ({ limit = 100, offset = 0 } = {}) => {
   );
 };
 
+export const fetchImageStatus = ({ id }) => {
+  return instance.get(`/api/image-builder/v1/composes/${id}`);
+};
+
 export const fetchDeviceSummary = async () => {
   const client = new HostsApi(undefined, '/api/inventory/v1/', instance);
   return await Promise.all([

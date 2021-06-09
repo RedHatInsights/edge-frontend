@@ -9,6 +9,7 @@ export const LOAD_TRESHOLD = 'LOAD_TRESHOLD';
 export const LOAD_DEVICES_INFO = 'LOAD_DEVICES_INFO';
 export const LOAD_CANARIES_INFO = 'LOAD_CANARIES_INFO';
 export const LOAD_GROUP_DEVICES_INFO = 'LOAD_GROUP_DEVICES_INFO';
+export const LOAD_IMAGE_STATUS = 'LOAD_IMAGE_STATUS';
 
 const asyncActions = flatMap(
   [
@@ -19,6 +20,7 @@ const asyncActions = flatMap(
     LOAD_DEVICES_INFO,
     LOAD_CANARIES_INFO,
     LOAD_GROUP_DEVICES_INFO,
+    LOAD_IMAGE_STATUS,
   ],
   (a) => [a, `${a}_PENDING`, `${a}_FULFILLED`, `${a}_REJECTED`]
 );
