@@ -7,6 +7,7 @@ import { instance } from '@redhat-cloud-services/frontend-components-utilities/i
 import { HostsApi } from '@redhat-cloud-services/host-inventory-client';
 import { generateFilter } from '@redhat-cloud-services/frontend-components-utilities/helpers';
 
+const IMAGE_BUILDER_API = '/api/image-builder/v1';
 const randomNumber = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
 const randomString = () => Math.random().toString(36).substr(2, 10);
@@ -145,7 +146,7 @@ export const updateGroup = ({ uuid, systemIDs, groupName }) => {
 
 export const fetchActiveImages = ({ limit = 100, offset = 0 } = {}) => {
   return instance.get(
-    `/api/image-builder/v1/composes?limit=${limit}&offset=${offset}`
+    `${IMAGE_BUILDER_API}/composes?limit=${limit}&offset=${offset}`
   );
 };
 
@@ -249,4 +250,13 @@ export const fetchDeviceSummary = async () => {
       return { ...acc, [deviceSummaryMapper[index]]: curr.total };
     }, {});
   });
+};
+
+export const getPackages = async (distribution, architecture, search) => {
+  const params = new URLSearchParams({
+    distribution,
+    architecture,
+    search,
+  });
+  return instance(`${IMAGE_BUILDER_API}/packages?${params.toString()}`);
 };

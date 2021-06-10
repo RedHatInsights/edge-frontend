@@ -7,8 +7,9 @@ import { imagesReducer, deviceSummaryReducer } from '../store/reducers';
 import { useDispatch } from 'react-redux';
 import { loadImages, loadDeviceSummary } from '../store/actions';
 import { RegistryContext } from '../store';
+import PropTypes from 'prop-types';
 
-export const Tiles = () => {
+export const Tiles = ({ onNewImageClick }) => {
   const { getRegistry } = useContext(RegistryContext);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -24,11 +25,15 @@ export const Tiles = () => {
   return (
     <Flex className="tiles">
       <FlexItem>
-        <AvailableImagesTile />
+        <AvailableImagesTile onNewImageClick={onNewImageClick} />
       </FlexItem>
       <FlexItem>
         <DeviceSummaryTile />
       </FlexItem>
     </Flex>
   );
+};
+
+Tiles.propTypes = {
+  onNewImageClick: PropTypes.func,
 };

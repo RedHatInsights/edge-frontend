@@ -53,7 +53,7 @@ module.exports = {
             const files = glob.sync(
               path.resolve(
                 __dirname,
-                `./node_modules/@patternfly/react-core/dist/esm/**/${
+                `./node_modules/@patternfly/react-core/dist/js/**/${
                   mapper[importName] || importName
                 }.js`
               )
@@ -81,18 +81,6 @@ module.exports = {
             }/index.js`,
           preventFullImport: true,
           skipDefaultConversion: true,
-        },
-        '@data-driven-forms/react-form-renderer': {
-          transform: (importName) =>
-            `@data-driven-forms/react-form-renderer/dist/esm/${cammelToDash(
-              importName
-            )}.js`,
-        },
-        '@data-driven-forms/pf4-component-mapper': {
-          transform: (importName) =>
-            `@data-driven-forms/pf4-component-mapper/dist/esm/${cammelToDash(
-              importName
-            )}.js`,
         },
       },
     ],
