@@ -53,7 +53,7 @@ module.exports = {
             const files = glob.sync(
               path.resolve(
                 __dirname,
-                `./node_modules/@patternfly/react-core/dist/js/**/${
+                `./node_modules/@patternfly/react-core/dist/esm/**/${
                   mapper[importName] || importName
                 }.js`
               )

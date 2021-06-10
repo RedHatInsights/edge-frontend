@@ -4,6 +4,7 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import { review, packages } from './steps';
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
+import ReviewStep from '../../components/form/ReviewStep';
 
 const CreateImage = ({ navigateBack }) => {
   const [user, setUser] = useState();
@@ -16,6 +17,9 @@ const CreateImage = ({ navigateBack }) => {
   return user ? (
     <ImageCreator
       onClose={() => navigateBack()}
+      customComponentMapper={{
+        review: ReviewStep,
+      }}
       onSubmit={(values) => {
         console.log(values);
         navigateBack();

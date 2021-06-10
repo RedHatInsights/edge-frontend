@@ -54,7 +54,7 @@ const ReviewStep = () => {
           Subscription
         </TextListItem>
         <TextListItem component={TextListItemVariants.dd}>
-            Add value
+          Add value
         </TextListItem>
         <TextListItem component={TextListItemVariants.dt}>
           Activation key

@@ -7,6 +7,21 @@ import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import Review from './form/ReviewStep';
 import Packages from './form/Packages';
+import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
+
+/**
+ * Use this instead of CreateImageWizard once this PR is merged https://github.com/RedHatInsights/image-builder-frontend/pull/230
+ * @returns Async component
+ */
+export const AsyncCreateImageWizard = (props) => (
+  <AsyncComponent
+    appName="image-builder"
+    scope="image_builder"
+    module="./ImageCreator"
+    fallback={<Spinner />}
+    {...props}
+  />
+);
 
 const CreateImageWizard = ({
   schema,
