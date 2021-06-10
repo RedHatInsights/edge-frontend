@@ -22,7 +22,7 @@ AvailableImageTileBase.propTypes = {
   children: PropTypes.children,
 };
 
-const AvailableImageTile = () => {
+const AvailableImageTile = ({ onNewImageClick }) => {
   const { isLoading, hasError, data } = useSelector(
     ({ imagesReducer }) => ({
       isLoading:
@@ -35,42 +35,32 @@ const AvailableImageTile = () => {
     shallowEqual
   );
 
-  if (isLoading) {
-    return (
-      <AvailableImageTileBase>
-        <CardBody>
-          <Bullseye>
-            <Spinner />
-          </Bullseye>
-        </CardBody>
-      </AvailableImageTileBase>
-    );
-  }
-  if (hasError) {
-    return (
-      <AvailableImageTileBase>
-        <CardBody>{data}</CardBody>
-        <CardFooter>
-          <Button isDisabled variant="primary">
-            Create new image
-          </Button>
-        </CardFooter>
-      </AvailableImageTileBase>
-    );
-  }
-
   return (
     <AvailableImageTileBase>
       <CardBody>
-        <Button variant="link" style={{ paddingLeft: 0 }}>
-          {data.meta.count} images
-        </Button>
+        {isLoading ? (
+          <Bullseye>
+            <Spinner />
+          </Bullseye>
+        ) : hasError ? (
+          data
+        ) : (
+          <Button variant="link" style={{ paddingLeft: 0 }}>
+            {data.meta.count} images
+          </Button>
+        )}
       </CardBody>
       <CardFooter>
-        <Button variant="primary">Create new image</Button>
+        <Button variant="primary" onClick={() => onNewImageClick()}>
+          Create new image
+        </Button>
       </CardFooter>
     </AvailableImageTileBase>
   );
+};
+
+AvailableImageTile.propTypes = {
+  onNewImageClick: PropTypes.func,
 };
 
 export default AvailableImageTile;

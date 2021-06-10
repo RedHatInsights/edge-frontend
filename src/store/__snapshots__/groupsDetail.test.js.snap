@@ -3,7 +3,6 @@
 exports[`systemsList should use component 1`] = `
 <div>
   <svg
-    aria-describedby="pf-tooltip-1"
     aria-hidden="true"
     fill="#3e8635"
     height="1em"

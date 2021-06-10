@@ -4,13 +4,14 @@ import React, {
   useEffect,
   useContext,
   useState,
+  Suspense,
 } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { useHistory } from 'react-router-dom';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { InventoryTable } from '@redhat-cloud-services/frontend-components/Inventory';
 import { cleanEntities } from '../../store/actions';
@@ -21,6 +22,13 @@ import {
   onDeleteFilter,
 } from '../../constants';
 import { Tiles } from '../../components/Tiles';
+import { Bullseye, Spinner } from '@patternfly/react-core';
+
+const CreateImageWizard = React.lazy(() =>
+  import(
+    /* webpackChunkName: "CreateImageWizard" */ '../ImageManager/CreateImageWizard'
+  )
+);
 
 const defaultFilters = {
   deviceStatus: {
@@ -47,6 +55,7 @@ const deviceStatusMapper = [
 
 const Devices = () => {
   const [getEntities, setGetEntities] = useState();
+  const [isOpen, setIsOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState(defaultFilters);
   const { getRegistry } = useContext(RegistryContext);
   const inventory = useRef(null);
@@ -61,6 +70,10 @@ const Devices = () => {
   };
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(history.location.search);
+    if (searchParams.get('create_image') === 'true') {
+      setIsOpen(() => true);
+    }
     return () => dispatch(cleanEntities());
   }, []);
 
@@ -70,7 +83,17 @@ const Devices = () => {
         <PageHeaderTitle title="Fleet management" />
       </PageHeader>
       <Main className="edge-devices">
-        <Tiles />
+        <Tiles
+          onNewImageClick={() => {
+            history.push({
+              pathname: history.location.pathname,
+              search: new URLSearchParams({
+                create_image: true,
+              }).toString(),
+            });
+            setIsOpen(true);
+          }}
+        />
         <InventoryTable
           ref={inventory}
           onRefresh={onRefresh}
@@ -148,6 +171,22 @@ const Devices = () => {
           }}
         />
       </Main>
+      {isOpen && (
+        <Suspense
+          fallback={
+            <Bullseye>
+              <Spinner />
+            </Bullseye>
+          }
+        >
+          <CreateImageWizard
+            navigateBack={() => {
+              history.push({ pathname: history.location.pathname });
+              setIsOpen(false);
+            }}
+          />
+        </Suspense>
+      )}
     </Fragment>
   );
 };

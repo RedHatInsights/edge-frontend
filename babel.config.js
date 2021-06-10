@@ -82,18 +82,6 @@ module.exports = {
           preventFullImport: true,
           skipDefaultConversion: true,
         },
-        '@data-driven-forms/react-form-renderer': {
-          transform: (importName) =>
-            `@data-driven-forms/react-form-renderer/dist/esm/${cammelToDash(
-              importName
-            )}.js`,
-        },
-        '@data-driven-forms/pf4-component-mapper': {
-          transform: (importName) =>
-            `@data-driven-forms/pf4-component-mapper/dist/esm/${cammelToDash(
-              importName
-            )}.js`,
-        },
       },
     ],
   ],
