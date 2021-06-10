@@ -25,11 +25,17 @@ import {
   TableHeader,
   TableBody,
   compoundExpand,
+  cellWidth,
 } from '@patternfly/react-table';
 import flatten from 'lodash/flatten';
+import { Link } from 'react-router-dom';
+import { routes as paths } from '../../../package.json';
 
 const columns = [
-  'UUID',
+  {
+    title: 'UUID',
+    cellTransforms: [cellWidth(25)],
+  },
   'Created',
   {
     title: 'Packages',
@@ -106,7 +112,13 @@ const Images = () => {
                       id: item.id,
                       isOpen,
                       cells: [
-                        item?.id,
+                        {
+                          title: (
+                            <Link to={`${paths['manage-images']}/${item.id}`}>
+                              {item.id}
+                            </Link>
+                          ),
+                        },
                         {
                           title: (
                             <DateFormat date={new Date(item.created_at)} />
