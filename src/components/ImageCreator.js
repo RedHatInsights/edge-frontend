@@ -7,7 +7,10 @@ import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import Review from './form/ReviewStep';
 import Packages from './form/Packages';
+import RegistrationCreds from './form/RegistrationCreds';
 import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
+import { registrationCredsValidator } from './form/RegistrationCreds';
+import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 
 /**
  * Use this instead of CreateImageWizard once this PR is merged https://github.com/RedHatInsights/image-builder-frontend/pull/230
@@ -42,12 +45,19 @@ const CreateImageWizard = ({
       componentMapper={{
         ...componentMapper,
         // wizard: WrappedWizard,
+        'registration-creds': {
+          component: RegistrationCreds,
+        },
         review: Review,
         'package-selector': {
           component: Packages,
           defaultArch,
         },
         ...customComponentMapper,
+      }}
+      validatorMapper={{
+        ...validatorTypes,
+        registrationCredsValidator,
       }}
       onCancel={onClose}
     />
