@@ -1,4 +1,10 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useState,
+  Suspense,
+} from 'react';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -9,15 +15,18 @@ import { loadImages } from '../../store/actions';
 import { RegistryContext } from '../../store';
 import { imagesReducer } from '../../store/reducers';
 import { DateFormat } from '@redhat-cloud-services/frontend-components';
+import { SkeletonTable } from '@redhat-cloud-services/frontend-components/SkeletonTable';
 import {
-  Bullseye,
-  Spinner,
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
   Title,
   LabelGroup,
   Label,
+  Button,
+  Skeleton,
+  Spinner,
+  Bullseye,
 } from '@patternfly/react-core';
 import { DisconnectedIcon } from '@patternfly/react-icons';
 import {
@@ -30,6 +39,14 @@ import {
 import flatten from 'lodash/flatten';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
+import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
+import { useHistory } from 'react-router-dom';
+
+const CreateImageWizard = React.lazy(() =>
+  import(
+    /* webpackChunkName: "CreateImageWizard" */ '../ImageManager/CreateImageWizard'
+  )
+);
 
 const columns = [
   {
@@ -46,6 +63,8 @@ const columns = [
 ];
 
 const Images = () => {
+  const history = useHistory();
+  const [isOpen, setIsOpen] = useState(false);
   const [opened, setOpened] = useState([]);
   const dispatch = useDispatch();
   const { getRegistry } = useContext(RegistryContext);
@@ -74,8 +93,14 @@ const Images = () => {
         <PageHeaderTitle title="Manage images" />
       </PageHeader>
       <Main className="edge-devices">
-        {!isLoading ? (
-          hasError ? (
+        <Fragment>
+          {isLoading ? (
+            <Fragment>
+              <PrimaryToolbar pagination={<Skeleton />} />
+              <SkeletonTable colSize={5} rowSize={15} />
+            </Fragment>
+          ) : null}
+          {!isLoading && hasError ? (
             <EmptyState>
               <EmptyStateIcon icon={DisconnectedIcon} />
               <Title headingLevel="h4" size="lg">
@@ -85,96 +110,137 @@ const Images = () => {
                 There was an error while loading images list!
               </EmptyStateBody>
             </EmptyState>
-          ) : (
-            <Table
-              aria-label="Manage Images table"
-              onExpand={(_e, _rowIndex, _colIndex, isExpanded, rowData) => {
-                const imageId = rowData.id;
-                setOpened(
-                  isExpanded
-                    ? opened.filter((item) => item !== imageId)
-                    : [...opened, imageId]
-                );
-              }}
-              ariaLabel="Images table"
-              cells={columns}
-              rows={flatten(
-                data.data.map((item, index) => {
-                  const packagesNumber =
-                    item?.request?.customizations?.packages?.length || 0;
-                  // if there are no packages - disable the option to expand row.
-                  const isOpen =
-                    packagesNumber > 0
-                      ? opened.some((oneOpen) => oneOpen === item.id)
-                      : undefined;
-                  return [
-                    {
-                      id: item.id,
-                      isOpen,
-                      cells: [
-                        {
-                          title: (
-                            <Link to={`${paths['manage-images']}/${item.id}`}>
-                              {item.id}
-                            </Link>
-                          ),
-                        },
-                        {
-                          title: (
-                            <DateFormat date={new Date(item.created_at)} />
-                          ),
-                        },
-                        {
-                          title: packagesNumber,
-                          props: {
-                            isOpen,
-                            // to align text with other rows that are expandable use this class
-                            className:
-                              packagesNumber === 0 ? 'force-padding-left' : '',
+          ) : null}
+          {!isLoading && !hasError ? (
+            <Fragment>
+              <PrimaryToolbar
+                pagination={{
+                  itemCount: data?.meta?.count,
+                  page: data?.meta?.offset / data?.meta?.limit + 1,
+                  perPage: Number(data?.meta?.limit),
+                  isCompact: true,
+                }}
+                dedicatedAction={
+                  <Button
+                    onClick={() => {
+                      history.push({
+                        pathname: history.location.pathname,
+                        search: new URLSearchParams({
+                          create_image: true,
+                        }).toString(),
+                      });
+                      setIsOpen(true);
+                    }}
+                    isDisabled={isLoading !== false}
+                  >
+                    Create new image
+                  </Button>
+                }
+              />
+              <Table
+                aria-label="Manage Images table"
+                onExpand={(_e, _rowIndex, _colIndex, isExpanded, rowData) => {
+                  const imageId = rowData.id;
+                  setOpened(
+                    isExpanded
+                      ? opened.filter((item) => item !== imageId)
+                      : [...opened, imageId]
+                  );
+                }}
+                ariaLabel="Images table"
+                cells={columns}
+                rows={flatten(
+                  data.data.map((item, index) => {
+                    const packagesNumber =
+                      item?.request?.customizations?.packages?.length || 0;
+                    // if there are no packages - disable the option to expand row.
+                    const isOpen =
+                      packagesNumber > 0
+                        ? opened.some((oneOpen) => oneOpen === item.id)
+                        : undefined;
+                    return [
+                      {
+                        id: item.id,
+                        isOpen,
+                        cells: [
+                          {
+                            title: (
+                              <Link to={`${paths['manage-images']}/${item.id}`}>
+                                {item.id}
+                              </Link>
+                            ),
                           },
-                        },
-                        item?.request?.distribution,
-                        item?.request?.image_requests?.[0]?.architecture,
-                      ],
-                    },
-                    {
-                      parent: 2 * index,
-                      compoundParent: 2,
-                      cells: [
-                        {
-                          title:
-                            packagesNumber > 0 ? (
-                              <LabelGroup>
-                                {item.request.customizations.packages.map(
-                                  (packageName) => (
-                                    <Label key={packageName}>
-                                      {packageName}
-                                    </Label>
-                                  )
-                                )}
-                              </LabelGroup>
-                            ) : undefined,
-                          props: {
-                            colSpan: 6,
-                            className: 'packages-compound-expand',
+                          {
+                            title: (
+                              <DateFormat date={new Date(item.created_at)} />
+                            ),
                           },
-                        },
-                      ],
-                    },
-                  ];
-                })
-              )}
-            >
-              <TableHeader />
-              <TableBody />
-            </Table>
-          )
-        ) : (
-          <Bullseye>
-            <Spinner />
-          </Bullseye>
-        )}
+                          {
+                            title: packagesNumber,
+                            props: {
+                              isOpen,
+                              // to align text with other rows that are expandable use this class
+                              className:
+                                packagesNumber === 0
+                                  ? 'force-padding-left'
+                                  : '',
+                            },
+                          },
+                          item?.request?.distribution,
+                          item?.request?.image_requests?.[0]?.architecture,
+                        ],
+                      },
+                      {
+                        parent: 2 * index,
+                        compoundParent: 2,
+                        cells: [
+                          {
+                            title:
+                              packagesNumber > 0 ? (
+                                <LabelGroup>
+                                  {item.request.customizations.packages.map(
+                                    (packageName) => (
+                                      <Label key={packageName}>
+                                        {packageName}
+                                      </Label>
+                                    )
+                                  )}
+                                </LabelGroup>
+                              ) : undefined,
+                            props: {
+                              colSpan: 6,
+                              className: 'packages-compound-expand',
+                            },
+                          },
+                        ],
+                      },
+                    ];
+                  })
+                )}
+              >
+                <TableHeader />
+                <TableBody />
+              </Table>
+            </Fragment>
+          ) : null}
+        </Fragment>
       </Main>
+      {isOpen && (
+        <Suspense
+          fallback={
+            <Bullseye>
+              <Spinner />
+            </Bullseye>
+          }
+        >
+          <CreateImageWizard
+            navigateBack={() => {
+              history.push({ pathname: history.location.pathname });
+              setIsOpen(false);
+            }}
+          />
+        </Suspense>
+      )}
     </Fragment>
   );
 };
