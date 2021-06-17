@@ -99,3 +99,14 @@ export const deviceSummaryMapper = [
 export const inventoryFields = {
   system_profile: { host_type: 'edge' },
 };
+
+export const imageDistributionMapper = {
+  'rhel-8.1': 'RHEL 8.1',
+  'rhel-8.2': 'RHEL 8.2',
+  'rhel-8.3': 'RHEL 8.3',
+};
+
+export const imageArchMapper = {
+  x86_64: '64bit',
+  arm: 'Arm',
+};
