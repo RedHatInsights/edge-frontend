@@ -11,6 +11,7 @@ import {
   LOAD_ACTIVE_IMAGES,
   LOAD_DEVICE_SUMMARY,
   LOAD_IMAGE_STATUS,
+  CREATE_NEW_IMAGE,
 } from './action-types';
 import {
   fetchGroups,
@@ -22,6 +23,7 @@ import {
   fetchActiveImages,
   fetchDeviceSummary,
   fetchImageStatus,
+  createImage,
 } from '../api';
 
 export const loadGroups = (perPage = 50, page = 1) => ({
@@ -117,4 +119,13 @@ export const loadImageStatus = (dispatch, imageId) => {
     type: LOAD_IMAGE_STATUS,
     payload: fetchImageStatus(imageId),
   }).catch(() => null);
+};
+
+export const createNewImage = (dispatch, payload, callback) => {
+  dispatch({
+    type: CREATE_NEW_IMAGE,
+    payload: createImage(payload),
+  })
+    .then(() => callback())
+    .catch(() => null);
 };

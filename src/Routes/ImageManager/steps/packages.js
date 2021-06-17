@@ -31,6 +31,8 @@ export default {
       component: 'package-selector',
       name: 'selected-packages',
       label: 'Available options',
+      initialValue: [],
+      clearedValue: [],
     },
   ],
 };
