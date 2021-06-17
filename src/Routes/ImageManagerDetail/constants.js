@@ -32,3 +32,7 @@ export const statusColors = {
   uploading: 'cyan',
   registering: 'cyan',
 };
+
+export const releaseMapper = {
+  'rhel-8.3': 'Red Hat Enterprise Linux (RHEL) 8.3',
+};

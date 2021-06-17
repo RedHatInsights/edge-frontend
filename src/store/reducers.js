@@ -7,3 +7,4 @@ export { default as devicesInfoReducer } from './devicesInfo';
 export { default as canariesInfoReducer } from './canariesInfo';
 export { default as groupsDetailReducer } from './groupsDetail';
 export { default as groupDevicesInfoReducer } from './groupDevicesInfo';
+export { default as createImageReducer } from './createImage';
