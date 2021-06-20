@@ -265,12 +265,12 @@ export const getPackages = async (distribution, architecture, search) => {
 export const createImage = ({
   release,
   architecture,
-  outputType,
+  imageType,
   'selected-packages': packages,
 }) => {
   const payload = {
     distribution: release,
-    outputType: outputType,
+    imageType,
     commit: {
       arch: architecture,
       packages: packages.map((item) => ({ name: item })),

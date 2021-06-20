@@ -2,7 +2,10 @@ import React from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import { Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
-import { releaseMapper } from '../../ImageManagerDetail/constants';
+import {
+  imageTypeMapper,
+  releaseMapper,
+} from '../../ImageManagerDetail/constants';
 
 export default {
   title: 'Image Output',
@@ -20,23 +23,26 @@ export default {
       component: componentTypes.SELECT,
       name: 'release',
       label: 'Release',
-      options: Object.keys(releaseMapper).map((release) => ({
+      options: Object.entries(releaseMapper).map(([release, releaseLabel]) => ({
         value: release,
-        label: releaseMapper[release],
+        label: releaseLabel,
       })),
-      initialValue: 'rhel-8.3',
+      initialValue: 'rhel-8',
       validate: [{ type: validatorTypes.REQUIRED }],
       isRequired: true,
       isDisabled: true,
     },
     {
       component: componentTypes.SELECT,
-      name: 'outputType',
+      name: 'imageType',
       label: 'Output Type',
-      options: [
-        { value: 'rhel-edge-iso', label: 'RHEL for Edge Installer (.iso)' },
-      ],
-      initialValue: 'rhel-edge-iso',
+      options: Object.entries(imageTypeMapper).map(
+        ([imageType, imageTypeLabel]) => ({
+          value: imageType,
+          label: imageTypeLabel,
+        })
+      ),
+      initialValue: 'rhel-edge-installer',
       validate: [{ type: validatorTypes.REQUIRED }],
       isRequired: true,
       isDisabled: true,
