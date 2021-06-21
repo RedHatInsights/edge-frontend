@@ -152,7 +152,7 @@ export const fetchActiveImages = ({ limit = 100, offset = 0 } = {}) => {
 };
 
 export const fetchImageStatus = ({ id }) => {
-  return instance.get(`/api/image-builder/v1/composes/${id}`);
+  return instance.get(`${EDGE_API}/images/${id}/status`);
 };
 
 export const fetchDeviceSummary = async () => {
@@ -277,4 +277,8 @@ export const createImage = ({
     },
   };
   return instance.post(`${EDGE_API}/images`, payload);
+};
+
+export const fetchEdgeImages = ({ limit = 100, offset = 0 } = {}) => {
+  return instance.get(`${EDGE_API}/images?limit=${limit}&offset=${offset}`);
 };

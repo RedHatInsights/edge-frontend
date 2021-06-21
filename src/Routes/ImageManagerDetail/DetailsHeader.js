@@ -21,7 +21,7 @@ const DetailsHead = () => {
     shallowEqual
   );
 
-  const status = !isLoading && !hasError ? data.status : null;
+  const status = !isLoading && !hasError ? data.Status : null;
 
   return (
     <TextContent>

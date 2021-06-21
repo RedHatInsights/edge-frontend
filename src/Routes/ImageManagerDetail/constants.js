@@ -5,32 +5,26 @@ import TimesCircleIcon from '@patternfly/react-icons/dist/js/icons/times-circle-
 import QuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/question-circle-icon';
 
 export const composeStatus = [
-  'success',
-  'failure',
-  'pending',
-  'building',
-  'uploading',
-  'registering',
+  'CREATED',
+  'BUILDING',
+  'ERROR',
+  'SUCCESS',
 ];
 
 export const statusIcons = {
   unknown: <QuestionCircleIcon />,
-  success: <CheckCircleIcon />,
-  failure: <TimesCircleIcon />,
-  pending: <PendingIcon />,
-  building: <PendingIcon />,
-  uploading: <PendingIcon />,
-  registering: <PendingIcon />,
+  CREATED: <CheckCircleIcon />,
+  BUILDING: <PendingIcon />,
+  ERROR: <TimesCircleIcon />,
+  SUCCESS: <CheckCircleIcon />,
 };
 
 export const statusColors = {
   unknown: 'grey',
-  success: 'green',
-  failure: 'red',
-  pending: 'cyan',
-  building: 'cyan',
-  uploading: 'cyan',
-  registering: 'cyan',
+  CREATED: 'green',
+  BUILDING: 'cyan',
+  ERROR: 'red',
+  SUCCESS: 'green',
 };
 
 export const releaseMapper = {
