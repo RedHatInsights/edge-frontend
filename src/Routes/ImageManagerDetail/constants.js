@@ -34,5 +34,10 @@ export const statusColors = {
 };
 
 export const releaseMapper = {
-  'rhel-8.3': 'Red Hat Enterprise Linux (RHEL) 8.3',
+  'rhel-8': 'Red Hat Enterprise Linux (RHEL) 8.3',
+};
+
+export const imageTypeMapper = {
+  'rhel-edge-installer': 'RHEL for Edge Installer (.iso)',
+  'rhel-edge-commit': 'RHEL for Edge Commit (.tar)',
 };
