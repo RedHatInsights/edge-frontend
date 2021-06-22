@@ -9,6 +9,7 @@ import {
   PRE_SELECT_ENTITY,
   CLEAN_ENTITIES,
   LOAD_ACTIVE_IMAGES,
+  LOAD_EDGE_IMAGES,
   LOAD_DEVICE_SUMMARY,
   LOAD_IMAGE_STATUS,
   CREATE_NEW_IMAGE,
@@ -23,6 +24,7 @@ import {
   fetchActiveImages,
   fetchDeviceSummary,
   fetchImageStatus,
+  fetchEdgeImages,
   createImage,
 } from '../api';
 
@@ -117,7 +119,7 @@ export const loadDeviceSummary = (dispatch) => {
 export const loadImageStatus = (dispatch, imageId) => {
   dispatch({
     type: LOAD_IMAGE_STATUS,
-    payload: fetchImageStatus(imageId),
+    payload: fetchImageStatus({ id: imageId }),
   }).catch(() => null);
 };
 
@@ -128,4 +130,11 @@ export const createNewImage = (dispatch, payload, callback) => {
   })
     .then(() => callback())
     .catch(() => null);
+};
+
+export const loadEdgeImages = (dispatch, query) => {
+  dispatch({
+    type: LOAD_EDGE_IMAGES,
+    payload: fetchEdgeImages(query),
+  }).catch(() => null);
 };

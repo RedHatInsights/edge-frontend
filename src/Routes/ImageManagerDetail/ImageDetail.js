@@ -12,7 +12,7 @@ import { routes as paths } from '../../../package.json';
 import { useDispatch } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { loadImageStatus } from '../../store/actions';
-import { imageStatusReducer, imagesReducer } from '../../store/reducers';
+import { imageStatusReducer } from '../../store/reducers';
 import DetailsHead from './DetailsHeader';
 
 const ImageDetail = () => {
@@ -20,10 +20,7 @@ const ImageDetail = () => {
   const { getRegistry } = useContext(RegistryContext);
   const dispatch = useDispatch();
   useEffect(() => {
-    const registered = getRegistry().register({
-      imageStatusReducer,
-      imagesReducer,
-    });
+    const registered = getRegistry().register({ imageStatusReducer });
     loadImageStatus(dispatch, imageId);
     return () => registered();
   }, [dispatch]);
