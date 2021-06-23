@@ -233,36 +233,40 @@ const Images = () => {
                           ];
                         })
                       )
-                    : [{
-                      heightAuto: true,
-                      cells: [
+                    : [
                         {
-                          props: { colSpan: 8 },
-                          title: (
-            <Bullseye>
-              <EmptyState variant="small">
-                <EmptyStateIcon icon={PlusCircleIcon} />
-                <Title headingLevel="h2" size="lg">
-                  No images found
-                </Title>
-                  <Button
-                      onClick={() => {
-                        history.push({
-                          pathname: history.location.pathname,
-                          search: new URLSearchParams({
-                            create_image: true,
-                          }).toString(),
-                        });
-                        setIsOpen(true);
-                      }}
-                      isDisabled={isLoading !== false}
-                  >Create new images</Button>
-              </EmptyState>
-            </Bullseye>
-                          )
-                        }
+                          heightAuto: true,
+                          cells: [
+                            {
+                              props: { colSpan: 8 },
+                              title: (
+                                <Bullseye>
+                                  <EmptyState variant="small">
+                                    <EmptyStateIcon icon={PlusCircleIcon} />
+                                    <Title headingLevel="h2" size="lg">
+                                      No images found
+                                    </Title>
+                                    <Button
+                                      onClick={() => {
+                                        history.push({
+                                          pathname: history.location.pathname,
+                                          search: new URLSearchParams({
+                                            create_image: true,
+                                          }).toString(),
+                                        });
+                                        setIsOpen(true);
+                                      }}
+                                      isDisabled={isLoading !== false}
+                                    >
+                                      Create new images
+                                    </Button>
+                                  </EmptyState>
+                                </Bullseye>
+                              ),
+                            },
+                          ],
+                        },
                       ]
-                    }]
                 }
               >
                 <TableHeader />
