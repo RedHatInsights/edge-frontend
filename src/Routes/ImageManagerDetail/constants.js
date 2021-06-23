@@ -4,12 +4,7 @@ import PendingIcon from '@patternfly/react-icons/dist/js/icons/pending-icon';
 import TimesCircleIcon from '@patternfly/react-icons/dist/js/icons/times-circle-icon';
 import QuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/question-circle-icon';
 
-export const composeStatus = [
-  'CREATED',
-  'BUILDING',
-  'ERROR',
-  'SUCCESS',
-];
+export const composeStatus = ['CREATED', 'BUILDING', 'ERROR', 'SUCCESS'];
 
 export const statusIcons = {
   unknown: <QuestionCircleIcon />,
