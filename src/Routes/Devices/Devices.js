@@ -109,13 +109,13 @@ const Devices = () => {
                   ...config.filter?.system_profile,
                   host_type: 'edge',
                 },
-                fields: {
-                  ...config?.fields,
-                  system_profile: [
-                    ...(config?.fields?.system_profile || []),
-                    'host_type',
-                  ],
-                },
+              },
+              fields: {
+                ...config?.fields,
+                system_profile: [
+                  ...(config?.fields?.system_profile || []),
+                  'host_type',
+                ],
               },
             });
             return data;
