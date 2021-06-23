@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ImageCreator from '../../components/ImageCreator';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-import { registration, review, packages, imageOutput } from './steps';
+import { registration, review, packages, imageSetDetails, imageOutput } from './steps';
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
@@ -54,7 +54,7 @@ const CreateImage = ({ navigateBack }) => {
             description: 'Create RHEL for Edge image',
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
-            fields: [imageOutput, registration, packages, review],
+            fields: [imageSetDetails, imageOutput, registration, packages, review],
           },
         ],
       }}
