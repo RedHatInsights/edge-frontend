@@ -27,8 +27,10 @@ import {
   Skeleton,
   Spinner,
   Bullseye,
+  Flex,
+  FlexItem,
 } from '@patternfly/react-core';
-import { DisconnectedIcon, PlusCircleIcon } from '@patternfly/react-icons';
+import { DisconnectedIcon, PlusCircleIcon, ExclamationCircleIcon, CheckCircleIcon, InProgressIcon } from '@patternfly/react-icons';
 import {
   Table,
   TableHeader,
@@ -49,17 +51,12 @@ const CreateImageWizard = React.lazy(() =>
 );
 
 const columns = [
-  {
-    title: 'UUID',
-    cellTransforms: [cellWidth(25)],
-  },
+  'Name',
+  'Version',
+  'RHEL',
+  'Type',
   'Created',
-  {
-    title: 'Packages',
-    cellTransforms: [compoundExpand],
-  },
-  'Distrubution',
-  'Architecture',
+  'Status'
 ];
 
 const Images = () => {
@@ -81,6 +78,40 @@ const Images = () => {
     }),
     shallowEqual
   );
+
+  const actionResolver = (rowData) => {
+    if (rowData.currentStatus === "Image build in progress") {
+      return [
+        {
+          title: 'Download',
+          onClick: (event, rowId) => (console.log(`Action clicked on row with id: ${rowId}`))
+        }
+      ]
+    } else if (rowData.currentStatus === "Building error") {
+      return [
+        {
+          title: 'Rebuild',
+          onClick: (event, rowId) => (console.log(`Action clicked on row with id: ${rowId}`))
+        },
+        {
+          title: 'Download',
+          onClick: (event, rowId) => (console.log(`Action clicked on row with id: ${rowId}`))
+        }
+      ]
+    } else {
+      return [
+        {
+          title: 'Update Image',
+          onClick: (event, rowId) => (console.log(`Action clicked on row with id: ${rowId}`))
+        },
+        {
+          title: 'Download',
+          onClick: (event, rowId) => (console.log(`Action clicked on row with id: ${rowId}`))
+        }
+      ]
+    }
+  }
+
   useEffect(() => {
     const registered = getRegistry().register({
       edgeImagesReducer,
@@ -158,75 +189,46 @@ const Images = () => {
                   );
                 }}
                 ariaLabel="Images table"
+                variant='compact'
                 cells={columns}
                 rows={
                   data.length > 0
                     ? flatten(
-                        data.map((item, index) => {
-                          const packagesNumber =
-                            item?.Commit?.Packages?.length || 0;
-                          // if there are no packages - disable the option to expand row.
-                          const isOpen =
-                            packagesNumber > 0
-                              ? opened.some((oneOpen) => oneOpen === item.ID)
-                              : undefined;
+                        data.map(item => {
+                          const statusIconHash = {
+                            "Ready": <CheckCircleIcon color="var(--pf-global--success-color--100)" />,
+                            "Image build in progress": <InProgressIcon color="var(--pf-global--palette--blue-400)" />,
+                            "Building error": <ExclamationCircleIcon color="var(--pf-global--danger-color--100)" />
+                          } 
                           return [
                             {
-                              id: item.ID,
-                              isOpen,
+                              id: item.id,
+                              currentStatus: item?.request.status,
                               cells: [
                                 {
                                   title: (
                                     <Link
-                                      to={`${paths['manage-images']}/${item.ID}`}
+                                      to={`${paths['manage-images']}/${item.id}`}
                                     >
-                                      {item.ID}
+                                      {item.request.name}
                                     </Link>
                                   ),
                                 },
+                                item?.request.version,
+                                item?.request.distribution,
+                                item?.request.type,
+                                item?.created_at,
                                 {
                                   title: (
-                                    <DateFormat
-                                      date={new Date(item.CreatedAt)}
-                                    />
-                                  ),
-                                },
-                                {
-                                  title: packagesNumber,
-                                  props: {
-                                    isOpen,
-                                    // to align text with other rows that are expandable use this class
-                                    className:
-                                      packagesNumber === 0
-                                        ? 'force-padding-left'
-                                        : '',
-                                  },
-                                },
-                                item?.Distribution,
-                                item?.Commit?.Arch || '',
-                              ],
-                            },
-                            {
-                              parent: 2 * index,
-                              compoundParent: 2,
-                              cells: [
-                                {
-                                  title:
-                                    packagesNumber > 0 ? (
-                                      <LabelGroup>
-                                        {item.Commit.Packages.map(
-                                          (packageName) => (
-                                            <Label key={packageName}>
-                                              {packageName}
-                                            </Label>
-                                          )
-                                        )}
-                                      </LabelGroup>
-                                    ) : undefined,
-                                  props: {
-                                    colSpan: 6,
-                                    className: 'packages-compound-expand',
-                                  },
+                                    <Flex>
+                                      <FlexItem>
+                                        {statusIconHash[item?.request.status]}
+                                      </FlexItem>
+                                      <FlexItem>
+                                        {item?.request.status}
+                                      </FlexItem>
+                                    </Flex>
+                                  )
                                 },
                               ],
                             },
@@ -268,6 +270,7 @@ const Images = () => {
                         },
                       ]
                 }
+                actionResolver={actionResolver}
               >
                 <TableHeader />
                 <TableBody />
