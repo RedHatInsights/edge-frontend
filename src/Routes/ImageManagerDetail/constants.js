@@ -22,7 +22,7 @@ export const statusColors = {
   SUCCESS: 'green',
 };
 
-export const statusMapper = {
+export const imageStatusMapper = {
   'CREATED': 'CREATED',
   'BUILDING': 'Image build in progress',
   'ERROR': 'ERROR',
