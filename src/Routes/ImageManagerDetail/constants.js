@@ -22,6 +22,13 @@ export const statusColors = {
   SUCCESS: 'green',
 };
 
+export const statusMapper = {
+  'CREATED': 'CREATED',
+  'BUILDING': 'Image build in progress',
+  'ERROR': 'ERROR',
+  'SUCCESS': 'SUCCESS'
+};
+
 export const releaseMapper = {
   'rhel-8': 'Red Hat Enterprise Linux (RHEL) 8.3',
 };
