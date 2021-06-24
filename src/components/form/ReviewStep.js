@@ -13,7 +13,6 @@ import ReviewSection from '../ReviewSection';
 
 const ReviewStep = () => {
   const { getState } = useFormApi();
-  console.log(getState().values);
   const { getRegistry } = useContext(RegistryContext);
   const { isLoading, hasError } = useSelector(
     ({ createImageReducer }) => ({
