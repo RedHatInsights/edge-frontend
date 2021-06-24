@@ -22,6 +22,7 @@ export default {
       component: componentTypes.TEXT_FIELD,
       name: 'username',
       label: 'Username',
+      placeholder: 'Enter username',
       helperText:
         'The user name can only consist of letters from a-z, digits, dots, dashes and underscores.',
       validate: [
@@ -35,11 +36,14 @@ export default {
       isRequired: true,
     },
     {
-      component: 'registration-creds',
+      component: componentTypes.TEXTAREA,
       name: 'credentials',
-      initialValue: [],
-      clearedValue: [],
-      validate: [{ type: 'registrationCredsValidator' }],
+      label: 'SSH Key',
+      helperText:
+        'Paste your public SSH key here',
+      validate: [{ type: validatorTypes.REQUIRED }],
+      isRequired: true,
+      resizeOrientation: 'vertical',
     },
   ],
 };

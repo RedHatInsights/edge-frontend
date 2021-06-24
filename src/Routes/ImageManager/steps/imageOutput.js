@@ -33,7 +33,7 @@ export default {
       isDisabled: true,
     },
     {
-      component: componentTypes.SELECT,
+      component: componentTypes.CHECKBOX,
       name: 'imageType',
       label: 'Output Type',
       options: Object.entries(imageTypeMapper).map(
@@ -42,10 +42,8 @@ export default {
           label: imageTypeLabel,
         })
       ),
-      initialValue: 'rhel-edge-installer',
       validate: [{ type: validatorTypes.REQUIRED }],
       isRequired: true,
-      isDisabled: true,
     },
   ],
 };
