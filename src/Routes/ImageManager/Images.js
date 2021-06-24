@@ -43,6 +43,8 @@ import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
 import { useHistory } from 'react-router-dom';
+import StatusLabel from '../ImageManagerDetail/StatusLabel';
+import { imageTypeMapper } from '../ImageManagerDetail/constants';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -78,39 +80,6 @@ const Images = () => {
     }),
     shallowEqual
   );
-
-  const actionResolver = (rowData) => {
-    if (rowData.currentStatus === "Image build in progress") {
-      return [
-        {
-          title: 'Download',
-          onClick: (event, rowId) => (console.log(`Action clicked on row with id: ${rowId}`))
-        }
-      ]
-    } else if (rowData.currentStatus === "Building error") {
-      return [
-        {
-          title: 'Rebuild',
-          onClick: (event, rowId) => (console.log(`Action clicked on row with id: ${rowId}`))
-        },
-        {
-          title: 'Download',
-          onClick: (event, rowId) => (console.log(`Action clicked on row with id: ${rowId}`))
-        }
-      ]
-    } else {
-      return [
-        {
-          title: 'Update Image',
-          onClick: (event, rowId) => (console.log(`Action clicked on row with id: ${rowId}`))
-        },
-        {
-          title: 'Download',
-          onClick: (event, rowId) => (console.log(`Action clicked on row with id: ${rowId}`))
-        }
-      ]
-    }
-  }
 
   useEffect(() => {
     const registered = getRegistry().register({
@@ -202,32 +171,28 @@ const Images = () => {
                           } 
                           return [
                             {
-                              id: item.id,
-                              currentStatus: item?.request.status,
+                              id: item.ID,
                               cells: [
                                 {
                                   title: (
                                     <Link
-                                      to={`${paths['manage-images']}/${item.id}`}
+                                      to={`${paths['manage-images']}/${item.ID}`}
                                     >
-                                      {item.request.name}
+                                      {item.Name}
                                     </Link>
                                   ),
                                 },
-                                item?.request.version,
-                                item?.request.distribution,
-                                item?.request.type,
-                                item?.created_at,
+                                item?.Version,
+                                item?.Distribution,
                                 {
                                   title: (
-                                    <Flex>
-                                      <FlexItem>
-                                        {statusIconHash[item?.request.status]}
-                                      </FlexItem>
-                                      <FlexItem>
-                                        {item?.request.status}
-                                      </FlexItem>
-                                    </Flex>
+                                    imageTypeMapper[item?.ImageType]
+                                  )
+                                },
+                                item?.CreatedAt,
+                                {
+                                  title: (
+                                    <StatusLabel status={item?.Status} />
                                   )
                                 },
                               ],
@@ -270,7 +235,6 @@ const Images = () => {
                         },
                       ]
                 }
-                actionResolver={actionResolver}
               >
                 <TableHeader />
                 <TableBody />
