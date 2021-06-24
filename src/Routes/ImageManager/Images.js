@@ -162,44 +162,37 @@ const Images = () => {
                 cells={columns}
                 rows={
                   data.length > 0
-                    ? flatten(
-                        data.map(item => {
-                          const statusIconHash = {
-                            "Ready": <CheckCircleIcon color="var(--pf-global--success-color--100)" />,
-                            "Image build in progress": <InProgressIcon color="var(--pf-global--palette--blue-400)" />,
-                            "Building error": <ExclamationCircleIcon color="var(--pf-global--danger-color--100)" />
-                          } 
-                          return [
-                            {
-                              id: item.ID,
-                              cells: [
-                                {
-                                  title: (
-                                    <Link
-                                      to={`${paths['manage-images']}/${item.ID}`}
-                                    >
-                                      {item.Name}
-                                    </Link>
-                                  ),
-                                },
-                                item?.Version,
-                                item?.Distribution,
-                                {
-                                  title: (
-                                    imageTypeMapper[item?.ImageType]
-                                  )
-                                },
-                                item?.CreatedAt,
-                                {
-                                  title: (
-                                    <StatusLabel status={item?.Status} />
-                                  )
-                                },
-                              ],
-                            },
-                          ];
-                        })
-                      )
+                    ? data.map(item => (
+                        [
+                          {
+                            id: item.ID,
+                            cells: [
+                              {
+                                title: (
+                                  <Link
+                                    to={`${paths['manage-images']}/${item.ID}`}
+                                  >
+                                    {item.Name}
+                                  </Link>
+                                ),
+                              },
+                              item?.Version,
+                              item?.Distribution,
+                              {
+                                title: (
+                                  imageTypeMapper[item?.ImageType]
+                                )
+                              },
+                              item?.CreatedAt,
+                              {
+                                title: (
+                                  <StatusLabel status={item?.Status} />
+                                )
+                              },
+                            ],
+                          },
+                        ]
+                      ))
                     : [
                         {
                           heightAuto: true,
