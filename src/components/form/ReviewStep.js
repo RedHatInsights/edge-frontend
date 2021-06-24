@@ -1,10 +1,10 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import { TextContent, Text } from '@patternfly/react-core';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
-import { 
+import {
   imageTypeMapper,
-  releaseMapper
-} from  '../../Routes/ImageManagerDetail/constants';
+  releaseMapper,
+} from '../../Routes/ImageManagerDetail/constants';
 import { shallowEqual, useSelector } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { createImageReducer } from '../../store/reducers';
@@ -45,10 +45,10 @@ const ReviewStep = () => {
 
   const output = [
     { name: 'Release', value: releaseMapper[getState().values.release] },
-    { name: 'Type',
+    {
+      name: 'Type',
       value: getState()
-      .values.imageType.map(type =>
-        `${imageTypeMapper[type]}`)
+        .values.imageType.map((type) => `${imageTypeMapper[type]}`)
         .join(', '),
     },
   ];
@@ -61,15 +61,16 @@ const ReviewStep = () => {
   const packages = [
     {
       name: 'Added Packages',
-      value: getState().values['selected-packages'] === undefined
-      ? '0'
-      : getState().values['selected-packages'].length
+      value:
+        getState().values['selected-packages'] === undefined
+          ? '0'
+          : getState().values['selected-packages'].length,
     },
   ];
 
   return (
     <Fragment>
-      {hasError &&(
+      {hasError && (
         <Alert
           variant="danger"
           title="Failed sending the request: Edge API is not available"
@@ -84,7 +85,7 @@ const ReviewStep = () => {
           title={'Details'}
           data={details}
           testid={'review-image-details'}
-        /> 
+        />
         <ReviewSection
           title={'Output'}
           data={output}

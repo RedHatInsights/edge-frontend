@@ -5,8 +5,9 @@ import {
   GridItem,
   TextListItem,
   TextVariants,
-  TextListItemVariants
+  TextListItemVariants,
 } from '@patternfly/react-core';
+import PropTypes from 'prop-types';
 
 const ReviewSection = ({ title, data, testid }) => {
   return (
@@ -33,12 +34,14 @@ const ReviewSection = ({ title, data, testid }) => {
 };
 
 ReviewSection.propTypes = {
-  title: propTypes.string,
-  data: propTypes.arrayOf(propTypes.shape({
-    name: propTypes.string,
-    value: propTypes.string,
-  })),
-  testid: propTypes.string
+  title: PropTypes.string,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      value: PropTypes.string,
+    })
+  ),
+  testid: PropTypes.string,
 };
 
 export default ReviewSection;

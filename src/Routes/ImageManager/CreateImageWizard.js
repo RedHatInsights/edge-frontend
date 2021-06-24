@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ImageCreator from '../../components/ImageCreator';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-import { 
-  registration, 
-  review, 
-  packages, 
-  imageSetDetails, 
-  imageOutput 
+import {
+  registration,
+  review,
+  packages,
+  imageSetDetails,
+  imageOutput,
 } from './steps';
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -61,11 +61,11 @@ const CreateImage = ({ navigateBack }) => {
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
             fields: [
-              imageSetDetails, 
-              imageOutput, 
-              registration, 
-              packages, 
-              review
+              imageSetDetails,
+              imageOutput,
+              registration,
+              packages,
+              review,
             ],
           },
         ],

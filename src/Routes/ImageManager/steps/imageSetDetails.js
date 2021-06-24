@@ -12,8 +12,9 @@ export default {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
       label: (
-        <Text>How would you like to identify this image later?
-          What will it be used for?
+        <Text>
+          How would you like to identify this image later? What will it be used
+          for?
         </Text>
       ),
     },
