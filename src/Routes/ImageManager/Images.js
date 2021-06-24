@@ -14,31 +14,19 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { loadEdgeImages } from '../../store/actions';
 import { RegistryContext } from '../../store';
 import { edgeImagesReducer } from '../../store/reducers';
-import { DateFormat } from '@redhat-cloud-services/frontend-components';
 import { SkeletonTable } from '@redhat-cloud-services/frontend-components/SkeletonTable';
 import {
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
   Title,
-  LabelGroup,
-  Label,
   Button,
   Skeleton,
   Spinner,
   Bullseye,
-  Flex,
-  FlexItem,
 } from '@patternfly/react-core';
-import { DisconnectedIcon, PlusCircleIcon, ExclamationCircleIcon, CheckCircleIcon, InProgressIcon } from '@patternfly/react-icons';
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  compoundExpand,
-  cellWidth,
-} from '@patternfly/react-table';
-import flatten from 'lodash/flatten';
+import { DisconnectedIcon, PlusCircleIcon } from '@patternfly/react-icons';
+import { Table, TableHeader, TableBody } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
@@ -52,14 +40,7 @@ const CreateImageWizard = React.lazy(() =>
   )
 );
 
-const columns = [
-  'Name',
-  'Version',
-  'RHEL',
-  'Type',
-  'Created',
-  'Status'
-];
+const columns = ['Name', 'Version', 'RHEL', 'Type', 'Created', 'Status'];
 
 const Images = () => {
   const history = useHistory();
@@ -158,41 +139,35 @@ const Images = () => {
                   );
                 }}
                 ariaLabel="Images table"
-                variant='compact'
+                variant="compact"
                 cells={columns}
                 rows={
                   data.length > 0
-                    ? data.map(item => (
-                        [
-                          {
-                            id: item.ID,
-                            cells: [
-                              {
-                                title: (
-                                  <Link
-                                    to={`${paths['manage-images']}/${item.ID}`}
-                                  >
-                                    {item.Name}
-                                  </Link>
-                                ),
-                              },
-                              item?.Version,
-                              item?.Distribution,
-                              {
-                                title: (
-                                  imageTypeMapper[item?.ImageType]
-                                )
-                              },
-                              item?.CreatedAt,
-                              {
-                                title: (
-                                  <StatusLabel status={item?.Status} />
-                                )
-                              },
-                            ],
-                          },
-                        ]
-                      ))
+                    ? data.map((item) => [
+                        {
+                          id: item.ID,
+                          cells: [
+                            {
+                              title: (
+                                <Link
+                                  to={`${paths['manage-images']}/${item.ID}`}
+                                >
+                                  {item.Name}
+                                </Link>
+                              ),
+                            },
+                            item?.Version,
+                            item?.Distribution,
+                            {
+                              title: imageTypeMapper[item?.ImageType],
+                            },
+                            item?.CreatedAt,
+                            {
+                              title: <StatusLabel status={item?.Status} />,
+                            },
+                          ],
+                        },
+                      ])
                     : [
                         {
                           heightAuto: true,

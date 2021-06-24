@@ -1,7 +1,12 @@
 import React from 'react';
 import { Label } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
-import { composeStatus, statusIcons, statusColors, statusMapper } from './constants';
+import {
+  composeStatus,
+  statusIcons,
+  statusColors,
+  statusMapper,
+} from './constants';
 
 const StatusLabel = ({ status }) => {
   let icon = statusIcons['unknown'];

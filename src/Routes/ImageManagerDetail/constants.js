@@ -23,10 +23,10 @@ export const statusColors = {
 };
 
 export const imageStatusMapper = {
-  'CREATED': 'CREATED',
-  'BUILDING': 'Image build in progress',
-  'ERROR': 'ERROR',
-  'SUCCESS': 'SUCCESS'
+  CREATED: 'CREATED',
+  BUILDING: 'Image build in progress',
+  ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS',
 };
 
 export const releaseMapper = {
