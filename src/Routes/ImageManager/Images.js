@@ -37,8 +37,6 @@ import {
   TableBody,
   compoundExpand,
   cellWidth,
-  sortable,
-  SortByDirection
 } from '@patternfly/react-table';
 import flatten from 'lodash/flatten';
 import { Link } from 'react-router-dom';
@@ -53,30 +51,12 @@ const CreateImageWizard = React.lazy(() =>
 );
 
 const columns = [
-  {
-    title: 'Name',
-    transforms: [sortable]
-  },
-  {
-    title: 'Version',
-    transforms: [sortable]
-  },
-  {
-    title: 'RHEL',
-    transforms: [sortable]
-  },
-  {
-    title: 'Type',
-    transforms: [sortable]
-  },
-  {
-    title: 'Created',
-    transforms: [sortable]
-  },
-  {
-    title: 'Status',
-    transforms: [sortable]
-  }
+  'Name',
+  'Version',
+  'RHEL',
+  'Type',
+  'Created',
+  'Status'
 ];
 
 const Images = () => {
@@ -85,8 +65,6 @@ const Images = () => {
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [opened, setOpened] = useState([]);
-  const [rows, setRows] = useState([]);
-  const [sortBy, setSortBy] = useState({});
   const dispatch = useDispatch();
   const { getRegistry } = useContext(RegistryContext);
   const { isLoading, hasError, data } = useSelector(
@@ -100,63 +78,6 @@ const Images = () => {
     }),
     shallowEqual
   );
-
-  useEffect(() => {
-    if (data) {
-      setRows(
-        flatten(
-          data.map(item => {
-            const statusIconHash = {
-              "Ready": <CheckCircleIcon color="var(--pf-global--success-color--100)" />,
-              "Image build in progress": <InProgressIcon color="var(--pf-global--palette--blue-400)" />,
-              "Building error": <ExclamationCircleIcon color="var(--pf-global--danger-color--100)" />
-            } 
-            return [
-              {
-                id: item.id,
-                currentStatus: item?.request.status,
-                rowArray: [
-                  item.request.name,
-                  item.request.version,
-                  item.request.distribution,
-                  item.request.type,
-                  item.created_at,
-                  item.request.status,
-                ],
-                cells: [
-                  {
-                    title: (
-                      <Link
-                        to={`${paths['manage-images']}/${item.id}`}
-                      >
-                        {item.request.name}
-                      </Link>
-                    ),
-                  },
-                  item?.request.version,
-                  item?.request.distribution,
-                  item?.request.type,
-                  item?.created_at,
-                  {
-                    title: (
-                      <Flex>
-                        <FlexItem>
-                          {statusIconHash[item?.request.status]}
-                        </FlexItem>
-                        <FlexItem>
-                          {item?.request.status}
-                        </FlexItem>
-                      </Flex>
-                    )
-                  },
-                ],
-              },
-            ];
-          })
-        )
-      )
-    }
-  },[])
 
   const actionResolver = (rowData) => {
     if (rowData.currentStatus === "Image build in progress") {
@@ -189,15 +110,6 @@ const Images = () => {
         }
       ]
     }
-  }
-
-  const handleSort = (event, index, direction) => {
-    const sortedRows = rows.sort((a, b) => (a.rowArray[index] < b.rowArray[index] ? -1 : a.rowArray[index] > b.rowArray[index] ? 1 : 0));
-    setSortBy({
-      index,
-      direction
-    }),
-    setRows(sortBy.direction === SortByDirection.asc ? sortedRows : sortedRows.reverse())
   }
 
   useEffect(() => {
@@ -278,12 +190,51 @@ const Images = () => {
                 }}
                 ariaLabel="Images table"
                 variant='compact'
-                sortBy={sortBy}
-                onSort={handleSort}
                 cells={columns}
                 rows={
                   data.length > 0
-                    ? rows
+                    ? flatten(
+                        data.map(item => {
+                          const statusIconHash = {
+                            "Ready": <CheckCircleIcon color="var(--pf-global--success-color--100)" />,
+                            "Image build in progress": <InProgressIcon color="var(--pf-global--palette--blue-400)" />,
+                            "Building error": <ExclamationCircleIcon color="var(--pf-global--danger-color--100)" />
+                          } 
+                          return [
+                            {
+                              id: item.id,
+                              currentStatus: item?.request.status,
+                              cells: [
+                                {
+                                  title: (
+                                    <Link
+                                      to={`${paths['manage-images']}/${item.id}`}
+                                    >
+                                      {item.request.name}
+                                    </Link>
+                                  ),
+                                },
+                                item?.request.version,
+                                item?.request.distribution,
+                                item?.request.type,
+                                item?.created_at,
+                                {
+                                  title: (
+                                    <Flex>
+                                      <FlexItem>
+                                        {statusIconHash[item?.request.status]}
+                                      </FlexItem>
+                                      <FlexItem>
+                                        {item?.request.status}
+                                      </FlexItem>
+                                    </Flex>
+                                  )
+                                },
+                              ],
+                            },
+                          ];
+                        })
+                      )
                     : [
                         {
                           heightAuto: true,
