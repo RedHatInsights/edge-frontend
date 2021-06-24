@@ -39,8 +39,7 @@ export default {
       component: componentTypes.TEXTAREA,
       name: 'credentials',
       label: 'SSH Key',
-      helperText:
-        'Paste your public SSH key here',
+      helperText: 'Paste your public SSH key here',
       validate: [{ type: validatorTypes.REQUIRED }],
       isRequired: true,
       resizeOrientation: 'vertical',
