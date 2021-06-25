@@ -30,6 +30,7 @@ import { Table, TableHeader, TableBody } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { useHistory } from 'react-router-dom';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import { imageTypeMapper } from '../ImageManagerDetail/constants';
@@ -160,8 +161,9 @@ const Images = () => {
                             item?.Distribution,
                             {
                               title: imageTypeMapper[item?.ImageType],
+                            },{
+                              title: <DateFormat date={item?.CreatedAt} />
                             },
-                            item?.CreatedAt,
                             {
                               title: <StatusLabel status={item?.Status} />,
                             },
