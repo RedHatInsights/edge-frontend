@@ -5,7 +5,7 @@ import {
   composeStatus,
   statusIcons,
   statusColors,
-  statusMapper,
+  imageStatusMapper,
 } from './constants';
 
 const StatusLabel = ({ status }) => {
@@ -15,7 +15,7 @@ const StatusLabel = ({ status }) => {
   if (composeStatus.includes(status)) {
     icon = statusIcons[status];
     color = statusColors[status];
-    text = statusMapper[status];
+    text = imageStatusMapper[status];
     text = text.charAt(0).toUpperCase() + text.slice(1);
   }
   return (
