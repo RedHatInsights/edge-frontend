@@ -26,6 +26,7 @@ import {
   Bullseye,
 } from '@patternfly/react-core';
 import { DisconnectedIcon, PlusCircleIcon } from '@patternfly/react-icons';
+import flatten from 'lodash/flatten';
 import { Table, TableHeader, TableBody } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
@@ -144,32 +145,35 @@ const Images = () => {
                 cells={columns}
                 rows={
                   data.length > 0
-                    ? data.map((item) => [
-                        {
-                          id: item.ID,
-                          cells: [
-                            {
-                              title: (
-                                <Link
-                                  to={`${paths['manage-images']}/${item.ID}`}
-                                >
-                                  {item.Name}
-                                </Link>
-                              ),
-                            },
-                            item?.Version,
-                            item?.Distribution,
-                            {
-                              title: imageTypeMapper[item?.ImageType],
-                            },{
-                              title: <DateFormat date={item?.CreatedAt} />
-                            },
-                            {
-                              title: <StatusLabel status={item?.Status} />,
-                            },
-                          ],
-                        },
-                      ])
+                    ? flatten(
+                        data.map((item) => [
+                          {
+                            id: item.ID,
+                            cells: [
+                              {
+                                title: (
+                                  <Link
+                                    to={`${paths['manage-images']}/${item.ID}`}
+                                  >
+                                    {item.Name}
+                                  </Link>
+                                ),
+                              },
+                              item?.Version,
+                              item?.Distribution,
+                              {
+                                title: imageTypeMapper[item?.ImageType],
+                              },
+                              {
+                                title: <DateFormat date={item?.CreatedAt} />,
+                              },
+                              {
+                                title: <StatusLabel status={item?.Status} />,
+                              },
+                            ],
+                          },
+                        ])
+                      )
                     : [
                         {
                           heightAuto: true,
