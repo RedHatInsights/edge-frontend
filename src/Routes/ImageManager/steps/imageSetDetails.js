@@ -23,7 +23,13 @@ export default {
       name: 'image-name',
       label: 'Image Name',
       placeholder: 'Image Name',
-      validate: [{ type: validatorTypes.REQUIRED }],
+      validate: [
+        { type: validatorTypes.REQUIRED },
+        {
+          type: validatorTypes.PATTERN,
+          pattern: /^[A-Za-z0-9]+[A-Za-z0-9_-]*$/,
+        },
+      ],
       isRequired: true,
     },
     {

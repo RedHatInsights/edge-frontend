@@ -22,7 +22,7 @@ const ReviewSection = ({ title, data, testid }) => {
               {name}
             </TextListItem>
           </GridItem>
-          <GridItem style={{ paddingBottom: '20px' }} span={9} hasGutter>
+          <GridItem className="pf-u-pb-md" span={9} hasGutter>
             <TextListItem component={TextListItemVariants.dd}>
               {value}
             </TextListItem>
