@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 import Review from './form/ReviewStep';
 import Packages from './form/Packages';
 import RegistrationCreds from './form/RegistrationCreds';
+import ImageOutputCheckbox from './form/ImageOutputCheckbox';
+import SSHInputField from './form/SSHInputField';
 import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
 import { registrationCredsValidator } from './form/RegistrationCreds';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
@@ -47,6 +49,12 @@ const CreateImageWizard = ({
         // wizard: WrappedWizard,
         'registration-creds': {
           component: RegistrationCreds,
+        },
+        'image-output-checkbox': {
+          component: ImageOutputCheckbox,
+        },
+        'ssh-input-field': {
+          component: SSHInputField,
         },
         review: Review,
         'package-selector': {
