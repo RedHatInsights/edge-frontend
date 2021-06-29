@@ -1,7 +1,12 @@
 import React from 'react';
 import { Label } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
-import { composeStatus, statusIcons, statusColors } from './constants';
+import {
+  composeStatus,
+  statusIcons,
+  statusColors,
+  imageStatusMapper,
+} from './constants';
 
 const StatusLabel = ({ status }) => {
   let icon = statusIcons['unknown'];
@@ -10,7 +15,8 @@ const StatusLabel = ({ status }) => {
   if (composeStatus.includes(status)) {
     icon = statusIcons[status];
     color = statusColors[status];
-    text = status.charAt(0).toUpperCase() + status.slice(1);
+    text = imageStatusMapper[status];
+    text = text.charAt(0).toUpperCase() + text.slice(1);
   }
   return (
     <Label color={color} icon={icon}>

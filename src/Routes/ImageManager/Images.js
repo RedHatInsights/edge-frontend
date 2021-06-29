@@ -14,33 +14,27 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { loadEdgeImages } from '../../store/actions';
 import { RegistryContext } from '../../store';
 import { edgeImagesReducer } from '../../store/reducers';
-import { DateFormat } from '@redhat-cloud-services/frontend-components';
 import { SkeletonTable } from '@redhat-cloud-services/frontend-components/SkeletonTable';
 import {
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
   Title,
-  LabelGroup,
-  Label,
   Button,
   Skeleton,
   Spinner,
   Bullseye,
 } from '@patternfly/react-core';
 import { DisconnectedIcon, PlusCircleIcon } from '@patternfly/react-icons';
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  compoundExpand,
-  cellWidth,
-} from '@patternfly/react-table';
 import flatten from 'lodash/flatten';
+import { Table, TableHeader, TableBody } from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { useHistory } from 'react-router-dom';
+import StatusLabel from '../ImageManagerDetail/StatusLabel';
+import { imageTypeMapper } from '../ImageManagerDetail/constants';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -48,19 +42,7 @@ const CreateImageWizard = React.lazy(() =>
   )
 );
 
-const columns = [
-  {
-    title: 'UUID',
-    cellTransforms: [cellWidth(25)],
-  },
-  'Created',
-  {
-    title: 'Packages',
-    cellTransforms: [compoundExpand],
-  },
-  'Distrubution',
-  'Architecture',
-];
+const columns = ['Name', 'Version', 'RHEL', 'Type', 'Created', 'Status'];
 
 const Images = () => {
   const history = useHistory();
@@ -81,6 +63,7 @@ const Images = () => {
     }),
     shallowEqual
   );
+
   useEffect(() => {
     const registered = getRegistry().register({
       edgeImagesReducer,
@@ -158,80 +141,38 @@ const Images = () => {
                   );
                 }}
                 ariaLabel="Images table"
+                variant="compact"
                 cells={columns}
                 rows={
                   data.length > 0
                     ? flatten(
-                        data.map((item, index) => {
-                          const packagesNumber =
-                            item?.Commit?.Packages?.length || 0;
-                          // if there are no packages - disable the option to expand row.
-                          const isOpen =
-                            packagesNumber > 0
-                              ? opened.some((oneOpen) => oneOpen === item.ID)
-                              : undefined;
-                          return [
-                            {
-                              id: item.ID,
-                              isOpen,
-                              cells: [
-                                {
-                                  title: (
-                                    <Link
-                                      to={`${paths['manage-images']}/${item.ID}`}
-                                    >
-                                      {item.ID}
-                                    </Link>
-                                  ),
-                                },
-                                {
-                                  title: (
-                                    <DateFormat
-                                      date={new Date(item.CreatedAt)}
-                                    />
-                                  ),
-                                },
-                                {
-                                  title: packagesNumber,
-                                  props: {
-                                    isOpen,
-                                    // to align text with other rows that are expandable use this class
-                                    className:
-                                      packagesNumber === 0
-                                        ? 'force-padding-left'
-                                        : '',
-                                  },
-                                },
-                                item?.Distribution,
-                                item?.Commit?.Arch || '',
-                              ],
-                            },
-                            {
-                              parent: 2 * index,
-                              compoundParent: 2,
-                              cells: [
-                                {
-                                  title:
-                                    packagesNumber > 0 ? (
-                                      <LabelGroup>
-                                        {item.Commit.Packages.map(
-                                          (packageName) => (
-                                            <Label key={packageName}>
-                                              {packageName}
-                                            </Label>
-                                          )
-                                        )}
-                                      </LabelGroup>
-                                    ) : undefined,
-                                  props: {
-                                    colSpan: 6,
-                                    className: 'packages-compound-expand',
-                                  },
-                                },
-                              ],
-                            },
-                          ];
-                        })
+                        data.map((item) => [
+                          {
+                            id: item.ID,
+                            cells: [
+                              {
+                                title: (
+                                  <Link
+                                    to={`${paths['manage-images']}/${item.ID}`}
+                                  >
+                                    {item.Name}
+                                  </Link>
+                                ),
+                              },
+                              item?.Version,
+                              item?.Distribution,
+                              {
+                                title: imageTypeMapper[item?.ImageType],
+                              },
+                              {
+                                title: <DateFormat date={item?.CreatedAt} />,
+                              },
+                              {
+                                title: <StatusLabel status={item?.Status} />,
+                              },
+                            ],
+                          },
+                        ])
                       )
                     : [
                         {
