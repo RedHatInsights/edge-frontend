@@ -1,45 +1,40 @@
 import React from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-import { Text } from '@patternfly/react-core';
+import { TextContent, Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 
 export default {
-  title: 'Registration',
+  title: 'Device Registration',
   name: 'registration',
   nextStep: 'packages',
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
-      label: (
-        <Text>
-          A user is required to register the device and make it visible on
-          cloud.redhat.com
-        </Text>
-      ),
+      label: <Text>Use this to connect your device to Fleet Management.</Text>,
     },
     {
       component: componentTypes.TEXT_FIELD,
       name: 'username',
-      label: 'Username',
-      helperText:
-        'The user name can only consist of letters from a-z, digits, dots, dashes and underscores.',
-      validate: [
-        { type: validatorTypes.REQUIRED },
-        {
-          type: validatorTypes.PATTERN,
-          pattern: /^[A-Za-z0-9]+[A-Za-z0-9_-]*$/,
-        },
-        { type: validatorTypes.MIN_LENGTH, threshold: 5 },
-      ],
-      isRequired: true,
+      helperText: (
+        <TextContent>
+          <Text>
+            <strong>Username</strong>
+          </Text>
+          <Text>
+            Use the default <strong>root</strong> username to log in and
+            register your device.
+          </Text>
+        </TextContent>
+      ),
+      initialValue: 'root',
+      hidden: true,
     },
     {
-      component: 'registration-creds',
+      component: 'ssh-input-field',
       name: 'credentials',
-      initialValue: [],
-      clearedValue: [],
-      validate: [{ type: 'registrationCredsValidator' }],
+      validate: [{ type: validatorTypes.REQUIRED }],
+      isRequired: true,
     },
   ],
 };
