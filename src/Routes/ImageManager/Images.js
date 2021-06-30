@@ -11,7 +11,7 @@ import {
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { loadEdgeImages, filterEdgeImages } from '../../store/actions';
+import { loadEdgeImages, sortEdgeImages } from '../../store/actions';
 import { RegistryContext } from '../../store';
 import { edgeImagesReducer } from '../../store/reducers';
 import { SkeletonTable } from '@redhat-cloud-services/frontend-components/SkeletonTable';
@@ -111,9 +111,9 @@ const Images = () => {
   const handleSort = (_event, index, direction) => {
     setSortBy({ index, direction });
     if (direction === 'asc') {
-      filterEdgeImages(dispatch, { sortColunm: columns[index].type });
+      sortEdgeImages(dispatch, { sortColunm: columns[index].type });
     } else {
-      filterEdgeImages(dispatch, { sortColunm: `-${columns[index].type}` });
+      sortEdgeImages(dispatch, { sortColunm: `-${columns[index].type}` });
     }
   };
 

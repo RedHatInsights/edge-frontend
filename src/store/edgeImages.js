@@ -18,7 +18,7 @@ const loadEdgeImagesFulfilled = (state, { payload }) => {
   };
 };
 
-const loadEdgeImagesFiltered = (state, { payload }) => ({
+const loadEdgeImagesSorted = (state, { payload }) => ({
   ...state,
   isLoading: false,
   hasError: true,
@@ -36,7 +36,7 @@ export default applyReducerHash(
   {
     [`${LOAD_EDGE_IMAGES}_PENDING`]: loadEdgeImagesPending,
     [`${LOAD_EDGE_IMAGES}_FULFILLED`]: loadEdgeImagesFulfilled,
-    [`${LOAD_EDGE_IMAGES}_FILTERED`]: loadEdgeImagesFiltered,
+    [`${LOAD_EDGE_IMAGES}_SORTED`]: loadEdgeImagesSorted,
     [`${LOAD_EDGE_IMAGES}_REJECTED`]: loadEdgeImagesRejected,
   },
   initialState
