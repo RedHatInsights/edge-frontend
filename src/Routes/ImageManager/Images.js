@@ -11,7 +11,7 @@ import {
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { loadEdgeImages } from '../../store/actions';
+import { loadEdgeImages, filterEdgeImages } from '../../store/actions';
 import { RegistryContext } from '../../store';
 import { edgeImagesReducer } from '../../store/reducers';
 import { SkeletonTable } from '@redhat-cloud-services/frontend-components/SkeletonTable';
@@ -27,7 +27,12 @@ import {
 } from '@patternfly/react-core';
 import { DisconnectedIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import flatten from 'lodash/flatten';
-import { Table, TableHeader, TableBody } from '@patternfly/react-table';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  sortable,
+} from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
@@ -42,7 +47,34 @@ const CreateImageWizard = React.lazy(() =>
   )
 );
 
-const columns = ['Name', 'Version', 'RHEL', 'Type', 'Created', 'Status'];
+const columns = [
+  {
+    title: 'Name',
+    type: 'name',
+    transforms: [sortable],
+  },
+  'Version',
+  {
+    title: 'RHEL',
+    type: 'distribution',
+    transforms: [sortable],
+  },
+  {
+    title: 'Type',
+    type: 'image_type',
+    transforms: [sortable],
+  },
+  {
+    title: 'Created',
+    type: 'created_at',
+    transforms: [sortable],
+  },
+  {
+    title: 'Status',
+    type: 'status',
+    transforms: [sortable],
+  },
+];
 
 const Images = () => {
   const history = useHistory();
@@ -50,6 +82,7 @@ const Images = () => {
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [opened, setOpened] = useState([]);
+  const [sortBy, setSortBy] = useState({});
   const dispatch = useDispatch();
   const { getRegistry } = useContext(RegistryContext);
   const { isLoading, hasError, data } = useSelector(
@@ -74,6 +107,15 @@ const Images = () => {
   useEffect(() => {
     loadEdgeImages(dispatch, { limit: perPage, offset: (page - 1) * perPage });
   }, [page, perPage]);
+
+  const handleSort = (_event, index, direction) => {
+    setSortBy({ index, direction });
+    if (direction === 'asc') {
+      filterEdgeImages(dispatch, { sortColunm: columns[index].type });
+    } else {
+      filterEdgeImages(dispatch, { sortColunm: `-${columns[index].type}` });
+    }
+  };
 
   return (
     <Fragment>
@@ -142,6 +184,8 @@ const Images = () => {
                 }}
                 ariaLabel="Images table"
                 variant="compact"
+                sortBy={sortBy}
+                onSort={handleSort}
                 cells={columns}
                 rows={
                   data.length > 0
