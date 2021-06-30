@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   FormGroup,
   TextInput,
@@ -9,37 +9,43 @@ import {
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 
-const SSHInputField = () => {
-  const { input: sshKeyInput } = useFieldApi({ name: 'credentials' });
+const SSHInputField = (props) => {
+  const { input: sshKeyInput, meta } = useFieldApi({
+    name: 'credentials',
+    ...props,
+  });
   return (
     <FormGroup
-      label="Output Type"
-      isHelperTextBeforeField
-      hasNoPaddingTop
+      label="SSH key"
+      helperTextInvalid={meta.error}
+      validated={meta.error && meta.touched ? 'error' : 'default'}
       isRequired
-      isStack
+      helperText={
+        <Fragment>
+          <TextContent>
+            <Text component={TextVariants.small}>
+              Paste your public SSH key file here.
+            </Text>
+          </TextContent>
+          <Text component={TextVariants.small}>
+            <Text
+              target="_blank"
+              href="https://en.wikipedia.org/wiki/Secure_Shell_Protocol"
+              isVisitedLink
+              component={TextVariants.a}
+            >
+              Learn more about SSH keys
+              <ExternalLinkAltIcon className="pf-u-ml-sm" />
+            </Text>
+          </Text>
+        </Fragment>
+      }
     >
       <TextInput
         id="credentials"
         placeholder="Enter SSH key"
         {...sshKeyInput}
       />
-      <TextContent>
-        <Text component={TextVariants.small}>
-          Paste your public SSH key file here.
-        </Text>
-      </TextContent>
-      <Text component={TextVariants.small}>
-        <Text
-          target="_blank"
-          href="https://en.wikipedia.org/wiki/Secure_Shell_Protocol"
-          isVisitedLink
-          component={TextVariants.a}
-        >
-          Learn more about SSH keys
-          <ExternalLinkAltIcon className="pf-u-ml-sm" />
-        </Text>
-      </Text>
     </FormGroup>
   );
 };
