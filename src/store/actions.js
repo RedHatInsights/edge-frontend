@@ -25,6 +25,7 @@ import {
   fetchDeviceSummary,
   fetchImageStatus,
   fetchEdgeImages,
+  filterImageColunm,
   createImage,
 } from '../api';
 
@@ -136,5 +137,12 @@ export const loadEdgeImages = (dispatch, query) => {
   dispatch({
     type: LOAD_EDGE_IMAGES,
     payload: fetchEdgeImages(query),
+  }).catch(() => null);
+};
+
+export const filterEdgeImages = (dispatch, query) => {
+  dispatch({
+    type: LOAD_EDGE_IMAGES,
+    payload: filterImageColunm(query),
   }).catch(() => null);
 };
