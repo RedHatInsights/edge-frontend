@@ -18,6 +18,13 @@ const loadEdgeImagesFulfilled = (state, { payload }) => {
   };
 };
 
+const loadEdgeImagesFiltered = (state, { payload }) => ({
+  ...state,
+  isLoading: false,
+  hasError: true,
+  data: payload,
+});
+
 const loadEdgeImagesRejected = (state, { payload }) => ({
   ...state,
   isLoading: false,
@@ -29,6 +36,7 @@ export default applyReducerHash(
   {
     [`${LOAD_EDGE_IMAGES}_PENDING`]: loadEdgeImagesPending,
     [`${LOAD_EDGE_IMAGES}_FULFILLED`]: loadEdgeImagesFulfilled,
+    [`${LOAD_EDGE_IMAGES}_FILTERED`]: loadEdgeImagesFiltered,
     [`${LOAD_EDGE_IMAGES}_REJECTED`]: loadEdgeImagesRejected,
   },
   initialState
