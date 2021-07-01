@@ -8,7 +8,7 @@ import { HostsApi } from '@redhat-cloud-services/host-inventory-client';
 import { generateFilter } from '@redhat-cloud-services/frontend-components-utilities/helpers';
 
 const IMAGE_BUILDER_API = '/api/image-builder/v1';
-const EDGE_API = '/api/edge/v1/';
+const EDGE_API = '/api/edge/v1';
 const randomNumber = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
 const randomString = () => Math.random().toString(36).substr(2, 10);
