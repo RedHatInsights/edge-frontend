@@ -39,7 +39,7 @@ const ReviewStep = () => {
   }
 
   const details = [
-    { name: 'Name', value: getState().values.image },
+    { name: 'Name', value: getState().values.name },
     { name: 'Version', value: '2' },
     { name: 'Description', value: getState().values.description },
   ];
@@ -79,8 +79,8 @@ const ReviewStep = () => {
       )}
       <TextContent>
         <Text>
-          Review the information and click <Text component={'b'}>
-          Create image</Text> to create your image.
+          Review the information and click{' '}
+          <Text component={'b'}>Create image</Text> to create your image.
         </Text>
         <ReviewSection
           title={'Details'}

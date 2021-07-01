@@ -24,7 +24,7 @@ export default {
           type: validatorTypes.PATTERN,
           pattern: /^[A-Za-z0-9]+[A-Za-z0-9_-]*$/,
         },
-        { type: validatorTypes.MIN_LENGTH, threshold: 5 },
+        { type: validatorTypes.MAX_LENGTH, threshold: 50 },
       ],
       isRequired: true,
     },

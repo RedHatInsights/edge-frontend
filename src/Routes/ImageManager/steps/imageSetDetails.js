@@ -20,8 +20,8 @@ export default {
     {
       component: componentTypes.TEXT_FIELD,
       name: 'name',
-      label: 'Image Name',
-      placeholder: 'Image Name',
+      label: 'Image name',
+      placeholder: 'Image name',
       validate: [
         { type: validatorTypes.REQUIRED },
         {
@@ -36,7 +36,7 @@ export default {
       component: componentTypes.TEXTAREA,
       name: 'description',
       label: 'Description',
-      placeholder: 'Add Description',
+      placeholder: 'Add description',
       resizeOrientation: 'vertical',
       validate: [{ type: validatorTypes.MAX_LENGTH, threshold: 250 }],
     },
