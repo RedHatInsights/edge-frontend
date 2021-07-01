@@ -19,23 +19,26 @@ export default {
     },
     {
       component: componentTypes.TEXT_FIELD,
-      name: 'image-name',
+      name: 'name',
       label: 'Image Name',
       placeholder: 'Image Name',
       validate: [
         { type: validatorTypes.REQUIRED },
         {
           type: validatorTypes.PATTERN,
-          pattern: /^[A-Za-z0-9]+[A-Za-z0-9_-]*$/,
+          pattern: /^[A-Za-z0-9]+[A-Za-z0-9_-\s]*$/,
         },
+        { type: validatorTypes.MAX_LENGTH, threshold: 50 },
       ],
       isRequired: true,
     },
     {
-      component: componentTypes.TEXT_FIELD,
+      component: componentTypes.TEXTAREA,
       name: 'description',
       label: 'Description',
       placeholder: 'Add Description',
+      resizeOrientation: 'vertical',
+      validate: [{ type: validatorTypes.MAX_LENGTH, threshold: 250 }],
     },
   ],
 };

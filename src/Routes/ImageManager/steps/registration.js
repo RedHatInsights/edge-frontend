@@ -31,7 +31,13 @@ export default {
     {
       component: 'ssh-input-field',
       name: 'credentials',
-      validate: [{ type: validatorTypes.REQUIRED }],
+      validate: [
+        { type: validatorTypes.REQUIRED },
+        {
+          type: validatorTypes.PATTERN,
+          pattern: /^(ssh-(rsa|dss)|ecdsa-sha2-nistp(256|384|521)) \S+/,
+        },
+      ],
       isRequired: true,
     },
   ],

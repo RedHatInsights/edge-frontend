@@ -263,12 +263,16 @@ export const getPackages = async (distribution, architecture, search) => {
 };
 
 export const createImage = ({
+  name,
+  description,
   release,
   architecture,
   imageType,
   'selected-packages': packages,
 }) => {
   const payload = {
+    name,
+    description,
     distribution: release,
     imageType,
     commit: {
