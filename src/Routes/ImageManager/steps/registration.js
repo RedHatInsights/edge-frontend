@@ -22,8 +22,8 @@ export default {
             <strong>Username</strong>
           </Text>
           <Text>
-            Use the default <strong>root</strong> username to log in and
-            register your device.
+            Use the default <Text component={'b'}>root</Text> username to log in
+            and register your device.
           </Text>
         </TextContent>
       ),
@@ -33,7 +33,13 @@ export default {
     {
       component: 'ssh-input-field',
       name: 'credentials',
-      validate: [{ type: validatorTypes.REQUIRED }],
+      validate: [
+        { type: validatorTypes.REQUIRED },
+        {
+          type: validatorTypes.PATTERN,
+          pattern: /^(ssh-(rsa|dss)|ecdsa-sha2-nistp(256|384|521)) \S+/,
+        },
+      ],
       isRequired: true,
     },
   ],
