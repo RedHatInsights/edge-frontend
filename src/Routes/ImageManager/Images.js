@@ -34,7 +34,15 @@ import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/Prima
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { useHistory } from 'react-router-dom';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
-import { imageTypeMapper } from '../ImageManagerDetail/constants';
+import {
+  imageTypeMapper,
+  composeStatus,
+} from '../ImageManagerDetail/constants';
+import {
+  isEmptyFilters,
+  constructActiveFilters,
+  onDeleteFilter,
+} from '../../constants';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -44,8 +52,28 @@ const CreateImageWizard = React.lazy(() =>
 
 const columns = ['Name', 'Version', 'RHEL', 'Type', 'Created', 'Status'];
 
+const defaultFilters = {
+  name: {
+    label: 'Name',
+    value: '',
+  },
+  distribution: {
+    label: 'Distribution',
+    value: [],
+  },
+  status: {
+    label: 'Status',
+    value: [],
+  },
+  imageType: {
+    label: 'Image type',
+    value: [],
+  },
+};
+
 const Images = () => {
   const history = useHistory();
+  const [activeFilters, setActiveFilters] = useState(defaultFilters);
   const [perPage, setPerPage] = useState(100);
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
@@ -63,6 +91,84 @@ const Images = () => {
     }),
     shallowEqual
   );
+
+  const filterConfig = {
+    items: [
+      {
+        label: defaultFilters.name.label,
+        type: 'text',
+        filterValues: {
+          key: 'name-filter',
+          onChange: (event, value) =>
+            setActiveFilters(() => ({
+              ...activeFilters,
+              name: {
+                ...(activeFilters?.name || {}),
+                value,
+              },
+            })),
+          value: activeFilters?.name?.value || '',
+          placeholder: 'Filter by name',
+        },
+      },
+      {
+        label: defaultFilters.distribution.label,
+        type: 'text',
+        filterValues: {
+          key: 'distribution-filter',
+          onChange: (event, value) =>
+            setActiveFilters({
+              ...(activeFilters || {}),
+              distribution: {
+                ...(activeFilters?.distribution || {}),
+                value,
+              },
+            }),
+          value: activeFilters?.distribution?.value || '',
+        },
+      },
+      {
+        label: defaultFilters.status.label,
+        type: 'checkbox',
+        filterValues: {
+          key: 'status-filter',
+          onChange: (event, value) =>
+            setActiveFilters({
+              ...(activeFilters || {}),
+              status: {
+                ...(activeFilters?.status || {}),
+                value,
+              },
+            }),
+          items: composeStatus.map((item) => ({
+            value: item,
+            label: item,
+          })),
+          value: activeFilters?.status?.value || [],
+        },
+      },
+      {
+        label: defaultFilters.imageType.label,
+        type: 'checkbox',
+        filterValues: {
+          key: 'image-type-filter',
+          onChange: (event, value) =>
+            setActiveFilters({
+              ...(activeFilters || {}),
+              imageType: {
+                ...(activeFilters?.imageType || {}),
+                value,
+              },
+            }),
+          items: Object.entries(imageTypeMapper).map(([value, label]) => ({
+            value,
+            label,
+          })),
+          value: activeFilters?.imageType?.value || [],
+        },
+      },
+    ],
+  };
 
   useEffect(() => {
     const registered = getRegistry().register({
@@ -103,6 +209,21 @@ const Images = () => {
             <Fragment>
               {data.length > 0 ? (
                 <PrimaryToolbar
+                  filterConfig={filterConfig}
+                  activeFiltersConfig={{
+                    filters: isEmptyFilters(activeFilters)
+                      ? constructActiveFilters(activeFilters)
+                      : [],
+                    onDelete: (event, itemsToRemove, isAll) => {
+                      if (isAll) {
+                        setActiveFilters(defaultFilters);
+                      } else {
+                        setActiveFilters(() =>
+                          onDeleteFilter(activeFilters, itemsToRemove)
+                        );
+                      }
+                    },
+                  }}
                   pagination={{
                     itemCount: data?.length || 0,
                     page,
