@@ -283,10 +283,12 @@ export const createImage = ({
   return instance.post(`${EDGE_API}/images`, payload);
 };
 
-export const fetchEdgeImages = ({ limit = 100, offset = 0 } = {}) => {
-  return instance.get(`${EDGE_API}/images?limit=${limit}&offset=${offset}`);
-};
-
-export const sortImageColunm = ({ sortColunm }) => {
-  return instance.get(`${EDGE_API}?sort_by=${sortColunm}`);
+export const fetchEdgeImages = ({
+  limit = 100,
+  offset = 0,
+  sortColunm = 'created_at',
+} = {}) => {
+  return instance.get(
+    `${EDGE_API}/images?limit=${limit}&offset=${offset}&sort_by=${sortColunm}`
+  );
 };
