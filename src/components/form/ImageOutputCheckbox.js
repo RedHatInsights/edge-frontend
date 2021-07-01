@@ -18,7 +18,7 @@ const ImageOutputCheckbox = (props) => {
 
   return (
     <FormGroup
-      label="Output Type"
+      label="Output type"
       isHelperTextBeforeField
       hasNoPaddingTop
       isRequired

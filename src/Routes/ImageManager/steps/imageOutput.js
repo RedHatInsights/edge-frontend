@@ -8,16 +8,14 @@ import {
 } from '../../ImageManagerDetail/constants';
 
 export default {
-  title: 'Image Output',
+  title: 'Image output',
   name: 'imageOutput',
   nextStep: 'registration',
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
-      label: (
-        <Text>Enter some basic info about the image you are creating</Text>
-      ),
+      label: <Text>Enter some basic information for your image.</Text>,
     },
     {
       component: componentTypes.SELECT,

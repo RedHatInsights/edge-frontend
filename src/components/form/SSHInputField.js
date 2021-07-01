@@ -2,7 +2,7 @@ import React from 'react';
 import {
   FormGroup,
   TextInput,
-  TextContent,
+  TextArea,
   Text,
   TextVariants,
 } from '@patternfly/react-core';
@@ -19,16 +19,11 @@ const SSHInputField = () => {
       isRequired
       isStack
     >
-      <TextInput
+      <TextArea
         id="credentials"
-        placeholder="Enter SSH key"
+        placeholder="Paste your public SSH key"
         {...sshKeyInput}
       />
-      <TextContent>
-        <Text component={TextVariants.small}>
-          Paste your public SSH key file here.
-        </Text>
-      </TextContent>
       <Text component={TextVariants.small}>
         <Text
           target="_blank"

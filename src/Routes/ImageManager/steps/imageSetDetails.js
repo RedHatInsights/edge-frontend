@@ -4,7 +4,7 @@ import { Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 
 export default {
-  title: 'Image Set Details',
+  title: 'Image details',
   name: 'imageSetDetails',
   nextStep: 'imageOutput',
   fields: [
@@ -13,8 +13,7 @@ export default {
       name: 'description',
       label: (
         <Text>
-          How would you like to identify this image later? What will it be used
-          for?
+          Enter a name and description to easily identify your image later.
         </Text>
       ),
     },
