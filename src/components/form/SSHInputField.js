@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
 import {
   FormGroup,
-  TextInput,
-  TextContent,
+  TextArea,
   Text,
   TextVariants,
 } from '@patternfly/react-core';
@@ -22,11 +21,6 @@ const SSHInputField = (props) => {
       isRequired
       helperText={
         <Fragment>
-          <TextContent>
-            <Text component={TextVariants.small}>
-              Paste your public SSH key file here.
-            </Text>
-          </TextContent>
           <Text component={TextVariants.small}>
             <Text
               target="_blank"
@@ -41,9 +35,10 @@ const SSHInputField = (props) => {
         </Fragment>
       }
     >
-      <TextInput
+      <TextArea
+        className="pf-u-h-25vh"
         id="credentials"
-        placeholder="Enter SSH key"
+        placeholder="Paste your public SSH key"
         {...sshKeyInput}
       />
     </FormGroup>

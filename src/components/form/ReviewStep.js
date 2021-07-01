@@ -39,7 +39,8 @@ const ReviewStep = () => {
   }
 
   const details = [
-    { name: 'Name', value: getState().values.image },
+    { name: 'Name', value: getState().values.name },
+    { name: 'Version', value: '2' },
     { name: 'Description', value: getState().values.description },
   ];
 
@@ -60,7 +61,7 @@ const ReviewStep = () => {
 
   const packages = [
     {
-      name: 'Added Packages',
+      name: 'Added packages',
       value:
         getState().values['selected-packages'] === undefined
           ? '0'
@@ -78,8 +79,8 @@ const ReviewStep = () => {
       )}
       <TextContent>
         <Text>
-          Review the information and click the Create button to create your
-          image using the following criteria.
+          Review the information and click{' '}
+          <Text component={'b'}>Create image</Text> to create your image.
         </Text>
         <ReviewSection
           title={'Details'}

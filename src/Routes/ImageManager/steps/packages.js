@@ -18,7 +18,7 @@ const PackagesLabel = () => {
 };
 
 export default {
-  title: 'Additional Packages',
+  title: 'Additional packages',
   name: 'packages',
   nextStep: 'review',
   fields: [
