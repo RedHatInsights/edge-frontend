@@ -11,7 +11,7 @@ import {
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { loadEdgeImages, sortEdgeImages } from '../../store/actions';
+import { loadEdgeImages } from '../../store/actions';
 import { RegistryContext } from '../../store';
 import { edgeImagesReducer } from '../../store/reducers';
 import { SkeletonTable } from '@redhat-cloud-services/frontend-components/SkeletonTable';
@@ -55,7 +55,7 @@ const columns = [
   },
   'Version',
   {
-    title: 'RHEL',
+    title: 'Distribution',
     type: 'distribution',
     transforms: [sortable],
   },
@@ -82,7 +82,7 @@ const Images = () => {
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [opened, setOpened] = useState([]);
-  const [sortBy, setSortBy] = useState({});
+  const [sortBy, setSortBy] = useState({ index: 4, direction: 'asc' });
   const dispatch = useDispatch();
   const { getRegistry } = useContext(RegistryContext);
   const { isLoading, hasError, data } = useSelector(
@@ -105,16 +105,23 @@ const Images = () => {
   }, []);
 
   useEffect(() => {
-    loadEdgeImages(dispatch, { limit: perPage, offset: (page - 1) * perPage });
-  }, [page, perPage]);
+    if (sortBy.direction === 'asc') {
+      loadEdgeImages(dispatch, {
+        limit: perPage,
+        offset: (page - 1) * perPage,
+        sortColunm: columns[sortBy.index].type,
+      });
+    } else {
+      loadEdgeImages(dispatch, {
+        limit: perPage,
+        offset: (page - 1) * perPage,
+        sortColunm: `-${columns[sortBy.index].type}`,
+      });
+    }
+  }, [page, perPage, sortBy]);
 
   const handleSort = (_event, index, direction) => {
     setSortBy({ index, direction });
-    if (direction === 'asc') {
-      sortEdgeImages(dispatch, { sortColunm: columns[index].type });
-    } else {
-      sortEdgeImages(dispatch, { sortColunm: `-${columns[index].type}` });
-    }
   };
 
   return (
