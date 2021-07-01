@@ -162,7 +162,7 @@ const Devices = () => {
               inventory.current.onRefreshData();
             },
           }}
-          onRowClick={(_e, id) => history.push(`/devices/${id}`)}
+          onRowClick={(_e, id) => history.push(`/fleet-management/${id}`)}
           onLoad={({ mergeWithEntities, api }) => {
             setGetEntities(() => api?.getEntities);
             getRegistry()?.register?.({
