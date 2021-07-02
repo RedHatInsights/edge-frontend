@@ -82,7 +82,7 @@ const Images = () => {
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [opened, setOpened] = useState([]);
-  const [sortBy, setSortBy] = useState({ index: 4, direction: 'asc' });
+  const [sortBy, setSortBy] = useState({ index: 4, direction: 'desc' });
   const dispatch = useDispatch();
   const { getRegistry } = useContext(RegistryContext);
   const { isLoading, hasError, data } = useSelector(

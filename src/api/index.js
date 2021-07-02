@@ -286,7 +286,7 @@ export const createImage = ({
 export const fetchEdgeImages = ({
   limit = 100,
   offset = 0,
-  sortColunm = 'created_at',
+  sortColunm = '-created_at',
 } = {}) => {
   return instance.get(
     `${EDGE_API}/images?limit=${limit}&offset=${offset}&sort_by=${sortColunm}`
