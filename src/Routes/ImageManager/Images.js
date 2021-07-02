@@ -34,6 +34,7 @@ import { routes as paths } from '../../../package.json';
 import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { useHistory } from 'react-router-dom';
+import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import {
   imageTypeMapper,
@@ -72,22 +73,25 @@ const defaultFilters = {
   },
 };
 
-const activeFilterReducer = (state, action) => {
-  switch (action.type) {
-    case 'UPDATE_FILTER':
-      return {
-        ...state,
-        [action.property]: {
-          ...(state[action.property] || {}),
-          value: action.value,
-        },
-      };
-    case 'DELETE_FILTER':
-      return action.payload;
-    default:
-      return state;
-  }
+const updateFilter = (state, action) => ({
+  ...state,
+  [action.property]: {
+    ...(state[action.property] || {}),
+    value: action.value,
+  },
+});
+
+const deleteFilter = (_state, action) => action.payload;
+
+const activeFilterMapper = {
+  UPDATE_FILTER: updateFilter,
+  DELETE_FILTER: deleteFilter,
 };
+
+const activeFilterReducer = applyReducerHash(
+  activeFilterMapper,
+  defaultFilters
+);
 
 const Images = () => {
   const history = useHistory();
@@ -120,7 +124,7 @@ const Images = () => {
         type: 'text',
         filterValues: {
           key: 'name-filter',
-          onChange: (event, value) =>
+          onChange: (_event, value) =>
             dispatchActiveFilters({
               type: 'UPDATE_FILTER',
               property: 'name',
@@ -135,7 +139,7 @@ const Images = () => {
         type: 'text',
         filterValues: {
           key: 'distribution-filter',
-          onChange: (event, value) =>
+          onChange: (_event, value) =>
             dispatchActiveFilters({
               type: 'UPDATE_FILTER',
               property: 'distribution',
@@ -149,7 +153,7 @@ const Images = () => {
         type: 'checkbox',
         filterValues: {
           key: 'status-filter',
-          onChange: (event, value) =>
+          onChange: (_event, value) =>
             dispatchActiveFilters({
               type: 'UPDATE_FILTER',
               property: 'status',
@@ -167,7 +171,7 @@ const Images = () => {
         type: 'checkbox',
         filterValues: {
           key: 'image-type-filter',
-          onChange: (event, value) =>
+          onChange: (_event, value) =>
             dispatchActiveFilters({
               type: 'UPDATE_FILTER',
               property: 'imageType',
@@ -227,7 +231,7 @@ const Images = () => {
                     filters: isEmptyFilters(activeFilters)
                       ? constructActiveFilters(activeFilters)
                       : [],
-                    onDelete: (event, itemsToRemove, isAll) => {
+                    onDelete: (_event, itemsToRemove, isAll) => {
                       if (isAll) {
                         dispatchActiveFilters({
                           type: 'DELETE_FILTER',
