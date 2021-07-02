@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
   Suspense,
+  useReducer,
 } from 'react';
 import {
   PageHeader,
@@ -71,9 +72,29 @@ const defaultFilters = {
   },
 };
 
+const activeFilterReducer = (state, action) => {
+  switch (action.type) {
+    case 'UPDATE_FILTER':
+      return {
+        ...state,
+        [action.property]: {
+          ...(state[action.property] || {}),
+          value: action.value,
+        },
+      };
+    case 'DELETE_FILTER':
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 const Images = () => {
   const history = useHistory();
-  const [activeFilters, setActiveFilters] = useState(defaultFilters);
+  const [activeFilters, dispatchActiveFilters] = useReducer(
+    activeFilterReducer,
+    defaultFilters
+  );
   const [perPage, setPerPage] = useState(100);
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
@@ -100,13 +121,11 @@ const Images = () => {
         filterValues: {
           key: 'name-filter',
           onChange: (event, value) =>
-            setActiveFilters(() => ({
-              ...activeFilters,
-              name: {
-                ...(activeFilters?.name || {}),
-                value,
-              },
-            })),
+            dispatchActiveFilters({
+              type: 'UPDATE_FILTER',
+              property: 'name',
+              value,
+            }),
           value: activeFilters?.name?.value || '',
           placeholder: 'Filter by name',
         },
@@ -117,12 +136,10 @@ const Images = () => {
         filterValues: {
           key: 'distribution-filter',
           onChange: (event, value) =>
-            setActiveFilters({
-              ...(activeFilters || {}),
-              distribution: {
-                ...(activeFilters?.distribution || {}),
-                value,
-              },
+            dispatchActiveFilters({
+              type: 'UPDATE_FILTER',
+              property: 'distribution',
+              value,
             }),
           value: activeFilters?.distribution?.value || '',
         },
@@ -133,12 +150,10 @@ const Images = () => {
         filterValues: {
           key: 'status-filter',
           onChange: (event, value) =>
-            setActiveFilters({
-              ...(activeFilters || {}),
-              status: {
-                ...(activeFilters?.status || {}),
-                value,
-              },
+            dispatchActiveFilters({
+              type: 'UPDATE_FILTER',
+              property: 'status',
+              value,
             }),
           items: composeStatus.map((item) => ({
             value: item,
@@ -153,12 +168,10 @@ const Images = () => {
         filterValues: {
           key: 'image-type-filter',
           onChange: (event, value) =>
-            setActiveFilters({
-              ...(activeFilters || {}),
-              imageType: {
-                ...(activeFilters?.imageType || {}),
-                value,
-              },
+            dispatchActiveFilters({
+              type: 'UPDATE_FILTER',
+              property: 'imageType',
+              value,
             }),
           items: Object.entries(imageTypeMapper).map(([value, label]) => ({
             value,
@@ -216,11 +229,15 @@ const Images = () => {
                       : [],
                     onDelete: (event, itemsToRemove, isAll) => {
                       if (isAll) {
-                        setActiveFilters(defaultFilters);
+                        dispatchActiveFilters({
+                          type: 'DELETE_FILTER',
+                          payload: defaultFilters,
+                        });
                       } else {
-                        setActiveFilters(() =>
-                          onDeleteFilter(activeFilters, itemsToRemove)
-                        );
+                        dispatchActiveFilters({
+                          type: 'DELETE_FILTER',
+                          payload: onDeleteFilter(activeFilters, itemsToRemove),
+                        });
                       }
                     },
                   }}
