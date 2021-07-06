@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
   Suspense,
+  useReducer,
 } from 'react';
 import {
   PageHeader,
@@ -38,8 +39,17 @@ import { routes as paths } from '../../../package.json';
 import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { useHistory } from 'react-router-dom';
+import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
-import { imageTypeMapper } from '../ImageManagerDetail/constants';
+import {
+  imageTypeMapper,
+  composeStatus,
+} from '../ImageManagerDetail/constants';
+import {
+  isEmptyFilters,
+  constructActiveFilters,
+  onDeleteFilter,
+} from '../../constants';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -76,8 +86,55 @@ const columns = [
   },
 ];
 
+const defaultFilters = {
+  name: {
+    label: 'Name',
+    key: 'name',
+    value: '',
+  },
+  distribution: {
+    label: 'Distribution',
+    key: 'distribution',
+    value: [],
+  },
+  status: {
+    label: 'Status',
+    key: 'status',
+    value: [],
+  },
+  imageType: {
+    label: 'Image type',
+    key: 'image_type',
+    value: [],
+  },
+};
+
+const updateFilter = (state, action) => ({
+  ...state,
+  [action.property]: {
+    ...(state[action.property] || {}),
+    value: action.value,
+  },
+});
+
+const deleteFilter = (_state, action) => action.payload;
+
+const activeFilterMapper = {
+  UPDATE_FILTER: updateFilter,
+  DELETE_FILTER: deleteFilter,
+};
+
+const activeFilterReducer = applyReducerHash(
+  activeFilterMapper,
+  defaultFilters
+);
+
 const Images = () => {
   const history = useHistory();
+  const [activeFilters, dispatchActiveFilters] = useReducer(
+    activeFilterReducer,
+    defaultFilters
+  );
   const [perPage, setPerPage] = useState(100);
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
@@ -96,6 +153,99 @@ const Images = () => {
     }),
     shallowEqual
   );
+
+  const filterConfig = {
+    items: [
+      {
+        label: defaultFilters.name.label,
+        type: 'text',
+        filterValues: {
+          key: 'name-filter',
+          onChange: (_event, value) =>
+            dispatchActiveFilters({
+              type: 'UPDATE_FILTER',
+              property: 'name',
+              value,
+            }),
+          value: activeFilters?.name?.value || '',
+          placeholder: 'Filter by name',
+        },
+      },
+      {
+        label: defaultFilters.distribution.label,
+        type: 'text',
+        filterValues: {
+          key: 'distribution-filter',
+          onChange: (_event, value) =>
+            dispatchActiveFilters({
+              type: 'UPDATE_FILTER',
+              property: 'distribution',
+              value,
+            }),
+          value: activeFilters?.distribution?.value || '',
+        },
+      },
+      {
+        label: defaultFilters.status.label,
+        type: 'checkbox',
+        filterValues: {
+          key: 'status-filter',
+          onChange: (_event, value) =>
+            dispatchActiveFilters({
+              type: 'UPDATE_FILTER',
+              property: 'status',
+              value,
+            }),
+          items: composeStatus.map((item) => ({
+            value: item,
+            label: item,
+          })),
+          value: activeFilters?.status?.value || [],
+        },
+      },
+      {
+        label: defaultFilters.imageType.label,
+        type: 'checkbox',
+        filterValues: {
+          key: 'image-type-filter',
+          onChange: (_event, value) =>
+            dispatchActiveFilters({
+              type: 'UPDATE_FILTER',
+              property: 'imageType',
+              value,
+            }),
+          items: Object.entries(imageTypeMapper).map(([value, label]) => ({
+            value,
+            label,
+          })),
+          value: activeFilters?.imageType?.value || [],
+        },
+      },
+    ],
+  };
+
+  useEffect(() => {
+    const tid = setTimeout(() => {
+      loadEdgeImages(
+        dispatch,
+        Object.keys(activeFilters).reduce((filters, key) => {
+          const filter = activeFilters[key];
+          if (typeof filter.value === 'string') {
+            return { ...filters, [key]: filter.value };
+          }
+          if (typeof filter.value === 'object') {
+            if (typeof filter.value.length !== 'number') {
+              return filters;
+            }
+            const prevValues = filters[key] || [];
+            return { ...filters, [key]: [...prevValues, ...filter.value] };
+          }
+          return filters;
+        }, {})
+      );
+    }, 570);
+    return () => clearTimeout(tid);
+  }, [activeFilters]);
 
   useEffect(() => {
     const registered = getRegistry().register({
@@ -152,6 +302,25 @@ const Images = () => {
             <Fragment>
               {data.length > 0 ? (
                 <PrimaryToolbar
+                  filterConfig={filterConfig}
+                  activeFiltersConfig={{
+                    filters: isEmptyFilters(activeFilters)
+                      ? constructActiveFilters(activeFilters)
+                      : [],
+                    onDelete: (_event, itemsToRemove, isAll) => {
+                      if (isAll) {
+                        dispatchActiveFilters({
+                          type: 'DELETE_FILTER',
+                          payload: defaultFilters,
+                        });
+                      } else {
+                        dispatchActiveFilters({
+                          type: 'DELETE_FILTER',
+                          payload: onDeleteFilter(activeFilters, itemsToRemove),
+                        });
+                      }
+                    },
+                  }}
                   pagination={{
                     itemCount: data?.length || 0,
                     page,

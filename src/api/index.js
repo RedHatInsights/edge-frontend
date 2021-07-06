@@ -270,7 +270,7 @@ export const createImage = ({
   imageType: imageTypes,
   'selected-packages': packages,
 }) => {
-  let [ imageType ] = imageTypes || [];
+  let [imageType] = imageTypes || [];
   if (imageTypes.length > 1) {
     imageType = 'rhel-edge-installer';
   }
@@ -287,12 +287,35 @@ export const createImage = ({
   return instance.post(`${EDGE_API}/images`, payload);
 };
 
-export const fetchEdgeImages = ({
-  limit = 100,
-  offset = 0,
-  sortColunm = '-created_at',
-} = {}) => {
-  return instance.get(
-    `${EDGE_API}/images?limit=${limit}&offset=${offset}&sort_by=${sortColunm}`
-  );
+export const fetchEdgeImages = (
+  q = {
+    limit: 100,
+    offset: 0,
+    sortColunm: '-created_at',
+  }
+) => {
+  const query = Object.keys(q).reduce((acc, curr) => {
+    let value = undefined;
+    if (
+      typeof q[curr] === 'object' &&
+      typeof q[curr].length === 'number' &&
+      q[curr].length > 0
+    ) {
+      value = q[curr].reduce(
+        (multiVals, val) =>
+          multiVals === '' ? `${curr}=${val}` : `${multiVals}&${curr}=${val}`,
+        ''
+      );
+    }
+    if (typeof q[curr] === 'string' && q[curr] !== '') {
+      value = `${curr}=${q[curr]}`;
+    }
+    return value === undefined
+      ? acc
+      : acc === ''
+      ? `${value}`
+      : `${acc}&${value}`;
+  }, '');
+
+  return instance.get(`${EDGE_API}/images?${query}`);
 };
