@@ -89,18 +89,22 @@ const columns = [
 const defaultFilters = {
   name: {
     label: 'Name',
+    key: 'name',
     value: '',
   },
   distribution: {
     label: 'Distribution',
+    key: 'distribution',
     value: [],
   },
   status: {
     label: 'Status',
+    key: 'status',
     value: [],
   },
   imageType: {
     label: 'Image type',
+    key: 'image_type',
     value: [],
   },
 };
@@ -219,6 +223,29 @@ const Images = () => {
       },
     ],
   };
+
+  useEffect(() => {
+    const tid = setTimeout(() => {
+      loadEdgeImages(
+        dispatch,
+        Object.keys(activeFilters).reduce((filters, key) => {
+          const filter = activeFilters[key];
+          if (typeof filter.value === 'string') {
+            return { ...filters, [key]: filter.value };
+          }
+          if (typeof filter.value === 'object') {
+            if (typeof filter.value.length !== 'number') {
+              return filters;
+            }
+            const prevValues = filters[key] || [];
+            return { ...filters, [key]: [...prevValues, ...filter.value] };
+          }
+          return filters;
+        }, {})
+      );
+    }, 570);
+    return () => clearTimeout(tid);
+  }, [activeFilters]);
 
   useEffect(() => {
     const registered = getRegistry().register({
