@@ -8,7 +8,7 @@ import { HostsApi } from '@redhat-cloud-services/host-inventory-client';
 import { generateFilter } from '@redhat-cloud-services/frontend-components-utilities/helpers';
 
 const IMAGE_BUILDER_API = '/api/image-builder/v1';
-const EDGE_API = '/api/edge/v1/';
+const EDGE_API = '/api/edge/v1';
 const randomNumber = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
 const randomString = () => Math.random().toString(36).substr(2, 10);
@@ -267,9 +267,13 @@ export const createImage = ({
   description,
   release,
   architecture,
-  imageType,
+  imageType: imageTypes,
   'selected-packages': packages,
 }) => {
+  let [ imageType ] = imageTypes || [];
+  if (imageTypes.length > 1) {
+    imageType = 'rhel-edge-installer';
+  }
   const payload = {
     name,
     description,
@@ -283,6 +287,12 @@ export const createImage = ({
   return instance.post(`${EDGE_API}/images`, payload);
 };
 
-export const fetchEdgeImages = ({ limit = 100, offset = 0 } = {}) => {
-  return instance.get(`${EDGE_API}/images?limit=${limit}&offset=${offset}`);
+export const fetchEdgeImages = ({
+  limit = 100,
+  offset = 0,
+  sortColunm = '-created_at',
+} = {}) => {
+  return instance.get(
+    `${EDGE_API}/images?limit=${limit}&offset=${offset}&sort_by=${sortColunm}`
+  );
 };

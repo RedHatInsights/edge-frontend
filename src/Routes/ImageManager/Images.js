@@ -28,7 +28,12 @@ import {
 } from '@patternfly/react-core';
 import { DisconnectedIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import flatten from 'lodash/flatten';
-import { Table, TableHeader, TableBody } from '@patternfly/react-table';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  sortable,
+} from '@patternfly/react-table';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
@@ -52,7 +57,34 @@ const CreateImageWizard = React.lazy(() =>
   )
 );
 
-const columns = ['Name', 'Version', 'RHEL', 'Type', 'Created', 'Status'];
+const columns = [
+  {
+    title: 'Name',
+    type: 'name',
+    transforms: [sortable],
+  },
+  'Version',
+  {
+    title: 'Distribution',
+    type: 'distribution',
+    transforms: [sortable],
+  },
+  {
+    title: 'Type',
+    type: 'image_type',
+    transforms: [sortable],
+  },
+  {
+    title: 'Created',
+    type: 'created_at',
+    transforms: [sortable],
+  },
+  {
+    title: 'Status',
+    type: 'status',
+    transforms: [sortable],
+  },
+];
 
 const defaultFilters = {
   name: {
@@ -103,6 +135,7 @@ const Images = () => {
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [opened, setOpened] = useState([]);
+  const [sortBy, setSortBy] = useState({ index: 4, direction: 'desc' });
   const dispatch = useDispatch();
   const { getRegistry } = useContext(RegistryContext);
   const { isLoading, hasError, data } = useSelector(
@@ -195,8 +228,24 @@ const Images = () => {
   }, []);
 
   useEffect(() => {
-    loadEdgeImages(dispatch, { limit: perPage, offset: (page - 1) * perPage });
-  }, [page, perPage]);
+    if (sortBy.direction === 'asc') {
+      loadEdgeImages(dispatch, {
+        limit: perPage,
+        offset: (page - 1) * perPage,
+        sortColunm: columns[sortBy.index].type,
+      });
+    } else {
+      loadEdgeImages(dispatch, {
+        limit: perPage,
+        offset: (page - 1) * perPage,
+        sortColunm: `-${columns[sortBy.index].type}`,
+      });
+    }
+  }, [page, perPage, sortBy]);
+
+  const handleSort = (_event, index, direction) => {
+    setSortBy({ index, direction });
+  };
 
   return (
     <Fragment>
@@ -284,6 +333,8 @@ const Images = () => {
                 }}
                 ariaLabel="Images table"
                 variant="compact"
+                sortBy={sortBy}
+                onSort={handleSort}
                 cells={columns}
                 rows={
                   data.length > 0

@@ -1,7 +1,7 @@
 /*global module*/
 
-const SECTION = 'insights';
-const APP_ID = 'starter';
+const SECTION = '';
+const APP_ID = 'edge';
 const FRONTEND_PORT = 8002;
 const API_PORT = 8888;
 const routes = {};

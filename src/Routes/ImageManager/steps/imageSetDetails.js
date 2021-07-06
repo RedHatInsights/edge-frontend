@@ -4,7 +4,7 @@ import { Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 
 export default {
-  title: 'Image Set Details',
+  title: 'Image details',
   name: 'imageSetDetails',
   nextStep: 'imageOutput',
   fields: [
@@ -13,16 +13,15 @@ export default {
       name: 'description',
       label: (
         <Text>
-          How would you like to identify this image later? What will it be used
-          for?
+          Enter a name and description to easily identify your image later.
         </Text>
       ),
     },
     {
       component: componentTypes.TEXT_FIELD,
       name: 'name',
-      label: 'Image Name',
-      placeholder: 'Image Name',
+      label: 'Image name',
+      placeholder: 'Image name',
       validate: [
         { type: validatorTypes.REQUIRED },
         {
@@ -37,7 +36,7 @@ export default {
       component: componentTypes.TEXTAREA,
       name: 'description',
       label: 'Description',
-      placeholder: 'Add Description',
+      placeholder: 'Add description',
       resizeOrientation: 'vertical',
       validate: [{ type: validatorTypes.MAX_LENGTH, threshold: 250 }],
     },
