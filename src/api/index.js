@@ -267,9 +267,13 @@ export const createImage = ({
   description,
   release,
   architecture,
-  imageType,
+  imageType: imageTypes,
   'selected-packages': packages,
 }) => {
+  let [ imageType ] = imageTypes || [];
+  if (imageTypes.length > 1) {
+    imageType = 'rhel-edge-installer';
+  }
   const payload = {
     name,
     description,

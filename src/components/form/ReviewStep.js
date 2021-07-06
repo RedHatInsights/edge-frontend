@@ -40,7 +40,7 @@ const ReviewStep = () => {
 
   const details = [
     { name: 'Name', value: getState().values.name },
-    { name: 'Version', value: '2' },
+    { name: 'Version', value: '1' },
     { name: 'Description', value: getState().values.description },
   ];
 
