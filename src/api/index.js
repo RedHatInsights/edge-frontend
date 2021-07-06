@@ -270,7 +270,7 @@ export const createImage = ({
   imageType: imageTypes,
   'selected-packages': packages,
 }) => {
-  let imageType = imageTypes[0];
+  let [ imageType ] = imageTypes || [];
   if (imageTypes.length > 1) {
     imageType = 'rhel-edge-installer';
   }
