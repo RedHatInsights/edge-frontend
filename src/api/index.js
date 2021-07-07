@@ -291,7 +291,7 @@ export const fetchEdgeImages = (
   q = {
     limit: 100,
     offset: 0,
-    sortColunm: '-created_at',
+    sort_by: '-created_at',
   }
 ) => {
   const query = Object.keys(q).reduce((acc, curr) => {
