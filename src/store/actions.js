@@ -128,7 +128,7 @@ export const createNewImage = (dispatch, payload, callback) => {
     type: CREATE_NEW_IMAGE,
     payload: createImage(payload),
   })
-    .then(() => callback())
+    .then((resp) => callback(resp))
     .catch(() => null);
 };
 
