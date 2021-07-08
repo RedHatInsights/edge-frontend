@@ -300,54 +300,51 @@ const Images = () => {
           ) : null}
           {!isLoading && !hasError ? (
             <Fragment>
-              {data.length > 0 ? (
-                <PrimaryToolbar
-                  filterConfig={filterConfig}
-                  activeFiltersConfig={{
-                    filters: isEmptyFilters(activeFilters)
-                      ? constructActiveFilters(activeFilters)
-                      : [],
-                    onDelete: (_event, itemsToRemove, isAll) => {
-                      if (isAll) {
-                        dispatchActiveFilters({
-                          type: 'DELETE_FILTER',
-                          payload: defaultFilters,
-                        });
-                      } else {
-                        dispatchActiveFilters({
-                          type: 'DELETE_FILTER',
-                          payload: onDeleteFilter(activeFilters, itemsToRemove),
-                        });
-                      }
-                    },
-                  }}
-                  pagination={{
-                    itemCount: data?.length || 0,
-                    page,
-                    perPage,
-                    onSetPage: (_evt, newPage) => setPage(newPage),
-                    onPerPageSelect: (_evt, newPerPage) =>
-                      setPerPage(newPerPage),
-                    isCompact: true,
-                  }}
-                  dedicatedAction={
-                    <Button
-                      onClick={() => {
-                        history.push({
-                          pathname: history.location.pathname,
-                          search: new URLSearchParams({
-                            create_image: true,
-                          }).toString(),
-                        });
-                        setIsOpen(true);
-                      }}
-                      isDisabled={isLoading !== false}
-                    >
-                      Create new image
-                    </Button>
-                  }
-                />
-              ) : null}
+              <PrimaryToolbar
+                filterConfig={filterConfig}
+                activeFiltersConfig={{
+                  filters: isEmptyFilters(activeFilters)
+                    ? constructActiveFilters(activeFilters)
+                    : [],
+                  onDelete: (_event, itemsToRemove, isAll) => {
+                    if (isAll) {
+                      dispatchActiveFilters({
+                        type: 'DELETE_FILTER',
+                        payload: defaultFilters,
+                      });
+                    } else {
+                      dispatchActiveFilters({
+                        type: 'DELETE_FILTER',
+                        payload: onDeleteFilter(activeFilters, itemsToRemove),
+                      });
+                    }
+                  },
+                }}
+                pagination={{
+                  itemCount: data?.length || 0,
+                  page,
+                  perPage,
+                  onSetPage: (_evt, newPage) => setPage(newPage),
+                  onPerPageSelect: (_evt, newPerPage) => setPerPage(newPerPage),
+                  isCompact: true,
+                }}
+                dedicatedAction={
+                  <Button
+                    onClick={() => {
+                      history.push({
+                        pathname: history.location.pathname,
+                        search: new URLSearchParams({
+                          create_image: true,
+                        }).toString(),
+                      });
+                      setIsOpen(true);
+                    }}
+                    isDisabled={isLoading !== false}
+                  >
+                    Create new image
+                  </Button>
+                }
+              />
               <Table
                 aria-label="Manage Images table"
                 onExpand={(_e, _rowIndex, _colIndex, isExpanded, rowData) => {
