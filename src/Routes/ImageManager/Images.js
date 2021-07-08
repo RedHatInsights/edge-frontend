@@ -259,13 +259,13 @@ const Images = () => {
       loadEdgeImages(dispatch, {
         limit: perPage,
         offset: (page - 1) * perPage,
-        sortColunm: columns[sortBy.index].type,
+        sort_by: columns[sortBy.index].type,
       });
     } else {
       loadEdgeImages(dispatch, {
         limit: perPage,
         offset: (page - 1) * perPage,
-        sortColunm: `-${columns[sortBy.index].type}`,
+        sort_by: `-${columns[sortBy.index].type}`,
       });
     }
   }, [page, perPage, sortBy]);
