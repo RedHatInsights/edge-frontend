@@ -6,6 +6,8 @@ import {
   Button,
   Bullseye,
   Spinner,
+  Grid,
+  GridItem,
   Stack,
   StackItem,
 } from '@patternfly/react-core';
@@ -19,24 +21,42 @@ const DeviceSummaryTileBase = ({
   neverReported,
 }) => (
   <Card className="tiles-card">
-    <CardTitle>Device summary information</CardTitle>
+    <CardTitle>Device summary</CardTitle>
     <CardBody>
-      <Stack>
-        <StackItem>
-          <Button variant="link">{orphaned}</Button> orphaned devices
-        </StackItem>
-        <StackItem>
-          <Button variant="link">{active}</Button> active devices
-        </StackItem>
-        <StackItem>
-          <Button variant="link">{noReports}</Button> devices has not reported
-          in the last 6 months
-        </StackItem>
-        <StackItem>
-          <Button variant="link">{neverReported}</Button> devices were
-          registered but never reported
-        </StackItem>
-      </Stack>
+      <Grid>
+        <GridItem span={6}>
+          <Stack hasGutter>
+            <StackItem>
+              <Button isInline className="pf-u-pr-md" variant="link">
+                {active}
+              </Button>{' '}
+              Active
+            </StackItem>
+            <StackItem>
+              <Button isInline className="pf-u-pr-md" variant="link">
+                {orphaned}
+              </Button>{' '}
+              Orphaned
+            </StackItem>
+          </Stack>
+        </GridItem>
+        <GridItem span={6}>
+          <Stack hasGutter>
+            <StackItem>
+              <Button isInline className="pf-u-pr-md" variant="link">
+                {noReports}
+              </Button>
+              Stale
+            </StackItem>
+            <StackItem>
+              <Button isInline className="pf-u-pr-md" variant="link">
+                {neverReported}
+              </Button>
+              Registered but never reported
+            </StackItem>
+          </Stack>
+        </GridItem>
+      </Grid>
     </CardBody>
   </Card>
 );
