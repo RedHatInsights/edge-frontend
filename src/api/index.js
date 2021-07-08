@@ -289,8 +289,8 @@ export const createImage = ({
 
 export const fetchEdgeImages = (
   q = {
-    limit: '100',
-    offset: '0',
+    limit: 100,
+    offset: 0,
     sort_by: '-created_at',
   }
 ) => {
@@ -307,7 +307,7 @@ export const fetchEdgeImages = (
         ''
       );
     }
-    if (typeof q[curr] === 'string' && q[curr] !== '') {
+    if (['string', 'number'].includes(typeof q[curr]) && q[curr] !== '') {
       value = `${curr}=${q[curr]}`;
     }
     return value === undefined
