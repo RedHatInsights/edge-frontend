@@ -30,7 +30,7 @@ export const imageStatusMapper = {
 };
 
 export const releaseMapper = {
-  'rhel-8': 'Red Hat Enterprise Linux (RHEL) 8.3',
+  'rhel-84': 'Red Hat Enterprise Linux (RHEL) 8.3',
 };
 
 export const imageTypeMapper = {
