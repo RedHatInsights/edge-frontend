@@ -257,14 +257,14 @@ const Images = () => {
   useEffect(() => {
     if (sortBy.direction === 'asc') {
       loadEdgeImages(dispatch, {
-        limit: perPage.toString(),
-        offset: ((page - 1) * perPage).toString(),
+        limit: perPage,
+        offset: (page - 1) * perPage,
         sort_by: columns[sortBy.index].type,
       });
     } else {
       loadEdgeImages(dispatch, {
-        limit: perPage.toString(),
-        offset: ((page - 1) * perPage).toString(),
+        limit: perPage,
+        offset: (page - 1) * perPage,
         sort_by: `-${columns[sortBy.index].type}`,
       });
     }
