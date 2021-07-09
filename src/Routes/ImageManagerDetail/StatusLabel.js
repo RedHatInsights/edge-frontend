@@ -21,7 +21,12 @@ const StatusLabel = ({ status }) => {
   }
   return (
     <div className="label-container">
-      <Label className="force-label-no-border" color={color} icon={icon} variant={labelVariant} />
+      <Label
+        className="force-label-no-border"
+        color={color}
+        icon={icon}
+        variant={labelVariant}
+      />
       <p>{text}</p>
     </div>
   );

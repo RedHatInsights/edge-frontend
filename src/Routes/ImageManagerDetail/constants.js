@@ -38,4 +38,4 @@ export const imageTypeMapper = {
   'rhel-edge-commit': 'RHEL for Edge Commit (.tar)',
 };
 
-export const labelVariant = 'outline'
+export const labelVariant = 'outline';
