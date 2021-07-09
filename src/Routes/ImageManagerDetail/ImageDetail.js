@@ -29,7 +29,7 @@ const ImageDetail = () => {
       <PageHeader className="pf-m-light">
         <Breadcrumb>
           <BreadcrumbItem>
-            <Link to={paths['manage-images']}>Manged images</Link>
+            <Link to={paths['manage-images']}>Manage Images</Link>
           </BreadcrumbItem>
           <BreadcrumbItem isActive>{imageId}</BreadcrumbItem>
         </Breadcrumb>
