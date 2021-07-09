@@ -382,7 +382,7 @@ const Images = () => {
                               },
                               item?.Version,
                               {
-                                title: releaseMapper[item?.Distribution],
+                                title: releaseMapper[`${item?.Distribution}-short`],
                               },
                               {
                                 title: imageTypeMapper[item?.ImageType],
