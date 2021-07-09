@@ -25,7 +25,7 @@ export default {
         value: release,
         label: releaseLabel,
       })),
-      initialValue: 'rhel-8',
+      initialValue: 'rhel-84',
       validate: [{ type: validatorTypes.REQUIRED }],
       isRequired: true,
       isDisabled: true,
