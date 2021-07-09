@@ -1,12 +1,11 @@
 import React from 'react';
-import { Label, Split, SplitItem } from '@patternfly/react-core';
+import { Split, SplitItem } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import {
   composeStatus,
   statusIcons,
   statusColors,
   imageStatusMapper,
-  labelVariant,
 } from './constants';
 
 const StatusLabel = ({ status }) => {
@@ -21,12 +20,9 @@ const StatusLabel = ({ status }) => {
   }
   return (
     <Split>
-      <SplitItem className='pf-u-mr-sm'>
-        {icon(color)}
-      </SplitItem>
-      <SplitItem className=''>{text}</SplitItem>
+      <SplitItem className="pf-u-mr-sm">{icon(color)}</SplitItem>
+      <SplitItem>{text}</SplitItem>
     </Split>
-    
   );
 };
 
