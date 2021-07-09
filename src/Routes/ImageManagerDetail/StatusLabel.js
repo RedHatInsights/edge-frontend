@@ -6,6 +6,7 @@ import {
   statusIcons,
   statusColors,
   imageStatusMapper,
+  labelVariant,
 } from './constants';
 
 const StatusLabel = ({ status }) => {
@@ -16,12 +17,13 @@ const StatusLabel = ({ status }) => {
     icon = statusIcons[status];
     color = statusColors[status];
     text = imageStatusMapper[status];
-    text = text.charAt(0).toUpperCase() + text.slice(1);
+    text = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   }
   return (
-    <Label color={color} icon={icon}>
-      {text}
-    </Label>
+    <div className="label-container">
+      <Label className="force-label-no-border" color={color} icon={icon} variant={labelVariant} />
+      <p>{text}</p>
+    </div>
   );
 };
 

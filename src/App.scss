@@ -45,3 +45,13 @@
 .grid-align-center {
   align-self: center;
 }
+
+.force-label-no-border {
+  --pf-c-label__content--before--BorderWidth : 0 !important
+}
+
+.label-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

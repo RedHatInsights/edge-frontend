@@ -37,3 +37,5 @@ export const imageTypeMapper = {
   'rhel-edge-installer': 'RHEL for Edge Installer (.iso)',
   'rhel-edge-commit': 'RHEL for Edge Commit (.tar)',
 };
+
+export const labelVariant = 'outline'
