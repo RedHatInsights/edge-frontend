@@ -7,11 +7,11 @@ import QuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/question-c
 export const composeStatus = ['CREATED', 'BUILDING', 'ERROR', 'SUCCESS'];
 
 export const statusIcons = {
-  unknown: <QuestionCircleIcon />,
-  CREATED: <CheckCircleIcon />,
-  BUILDING: <InProgressIcon />,
-  ERROR: <TimesCircleIcon />,
-  SUCCESS: <CheckCircleIcon />,
+  unknown: color => <QuestionCircleIcon color={color}/>,
+  CREATED: color => <CheckCircleIcon color={color} />,
+  BUILDING: color => <InProgressIcon color={color} />,
+  ERROR: color => <TimesCircleIcon color={color} />,
+  SUCCESS: color => <CheckCircleIcon color={color}/>,
 };
 
 export const statusColors = {
@@ -38,4 +38,3 @@ export const imageTypeMapper = {
   'rhel-edge-commit': 'RHEL for Edge Commit (.tar)',
 };
 
-export const labelVariant = 'outline';
