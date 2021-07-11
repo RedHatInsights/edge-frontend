@@ -307,7 +307,7 @@ export const fetchEdgeImages = (
         ''
       );
     }
-    if (typeof q[curr] === 'string' && q[curr] !== '') {
+    if (['string', 'number'].includes(typeof q[curr]) && q[curr] !== '') {
       value = `${curr}=${q[curr]}`;
     }
     return value === undefined

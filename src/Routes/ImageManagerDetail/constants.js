@@ -8,12 +8,18 @@ export const composeStatus = ['CREATED', 'BUILDING', 'ERROR', 'SUCCESS'];
 
 export const DEFAULT_RELEASE = 'rhel-84';
 
+//For this object, it's need to sisable lint once this is not a react component
 export const statusIcons = {
-  unknown: <QuestionCircleIcon />,
-  CREATED: <CheckCircleIcon />,
-  BUILDING: <InProgressIcon />,
-  ERROR: <TimesCircleIcon />,
-  SUCCESS: <CheckCircleIcon />,
+  // eslint-disable-next-line react/display-name
+  unknown: (color) => <QuestionCircleIcon color={color} />,
+  // eslint-disable-next-line react/display-name
+  CREATED: (color) => <CheckCircleIcon color={color} />,
+  // eslint-disable-next-line react/display-name
+  BUILDING: (color) => <InProgressIcon color={color} />,
+  // eslint-disable-next-line react/display-name
+  ERROR: (color) => <TimesCircleIcon color={color} />,
+  // eslint-disable-next-line react/display-name
+  SUCCESS: (color) => <CheckCircleIcon color={color} />,
 };
 
 export const statusColors = {
