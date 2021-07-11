@@ -27,7 +27,6 @@ import {
   Bullseye,
 } from '@patternfly/react-core';
 import { DisconnectedIcon, PlusCircleIcon } from '@patternfly/react-icons';
-import flatten from 'lodash/flatten';
 import {
   Table,
   TableHeader,
@@ -73,7 +72,6 @@ const columns = [
   {
     title: 'Type',
     type: 'image_type',
-    transforms: [sortable],
   },
   {
     title: 'Created',
@@ -101,11 +99,6 @@ const defaultFilters = {
   status: {
     label: 'Status',
     key: 'status',
-    value: [],
-  },
-  imageType: {
-    label: 'Image type',
-    key: 'image_type',
     value: [],
   },
 };
@@ -202,24 +195,6 @@ const Images = () => {
             label: item,
           })),
           value: activeFilters?.status?.value || [],
-        },
-      },
-      {
-        label: defaultFilters.imageType.label,
-        type: 'checkbox',
-        filterValues: {
-          key: 'image-type-filter',
-          onChange: (_event, value) =>
-            dispatchActiveFilters({
-              type: 'UPDATE_FILTER',
-              property: 'imageType',
-              value,
-            }),
-          items: Object.entries(imageTypeMapper).map(([value, label]) => ({
-            value,
-            label,
-          })),
-          value: activeFilters?.imageType?.value || [],
         },
       },
     ],
@@ -366,37 +341,36 @@ const Images = () => {
                 cells={columns}
                 rows={
                   data.length > 0
-                    ? flatten(
-                        data.map((item) => [
+                    ? data.map((item) => ({
+                        id: item.ID,
+                        cells: [
                           {
-                            id: item.ID,
-                            cells: [
-                              {
-                                title: (
-                                  <Link
-                                    to={`${paths['manage-images']}/${item.ID}`}
-                                  >
-                                    {item.Name}
-                                  </Link>
-                                ),
-                              },
-                              item?.Version,
-                              {
-                                title: distributionMapper[item?.Distribution],
-                              },
-                              {
-                                title: imageTypeMapper[item?.ImageType],
-                              },
-                              {
-                                title: <DateFormat date={item?.CreatedAt} />,
-                              },
-                              {
-                                title: <StatusLabel status={item?.Status} />,
-                              },
-                            ],
+                            title: (
+                              <Link to={`${paths['manage-images']}/${item.ID}`}>
+                                {item.Name}
+                              </Link>
+                            ),
                           },
-                        ])
-                      )
+                          item?.Version,
+                          {
+                            title: distributionMapper[item?.Distribution],
+                          },
+                          {
+                            title:
+                              imageTypeMapper[
+                                item.Version === 1
+                                  ? 'rhel-edge-installer'
+                                  : 'rhel-edge-commit'
+                              ],
+                          },
+                          {
+                            title: <DateFormat date={item?.CreatedAt} />,
+                          },
+                          {
+                            title: <StatusLabel status={item?.Status} />,
+                          },
+                        ],
+                      }))
                     : [
                         {
                           heightAuto: true,
