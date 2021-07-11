@@ -1,5 +1,5 @@
 import React from 'react';
-import { Label } from '@patternfly/react-core';
+import { Split, SplitItem } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import {
   composeStatus,
@@ -16,12 +16,13 @@ const StatusLabel = ({ status }) => {
     icon = statusIcons[status];
     color = statusColors[status];
     text = imageStatusMapper[status];
-    text = text.charAt(0).toUpperCase() + text.slice(1);
+    text = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   }
   return (
-    <Label color={color} icon={icon}>
-      {text}
-    </Label>
+    <Split>
+      <SplitItem className="pf-u-mr-sm">{icon(color)}</SplitItem>
+      <SplitItem>{text}</SplitItem>
+    </Split>
   );
 };
 
