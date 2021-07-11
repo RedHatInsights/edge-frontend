@@ -5,6 +5,7 @@ import validatorTypes from '@data-driven-forms/react-form-renderer/validator-typ
 import {
   imageTypeMapper,
   releaseMapper,
+  DEFAULT_RELEASE,
 } from '../../ImageManagerDetail/constants';
 
 export default {
@@ -25,7 +26,7 @@ export default {
         value: release,
         label: releaseLabel,
       })),
-      initialValue: 'rhel-84',
+      initialValue: DEFAULT_RELEASE,
       validate: [{ type: validatorTypes.REQUIRED }],
       isRequired: true,
       isDisabled: true,
