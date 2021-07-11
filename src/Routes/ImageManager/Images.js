@@ -44,6 +44,7 @@ import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import {
   imageTypeMapper,
   composeStatus,
+  distributionMapper,
 } from '../ImageManagerDetail/constants';
 import {
   isEmptyFilters,
@@ -380,7 +381,9 @@ const Images = () => {
                                 ),
                               },
                               item?.Version,
-                              item?.Distribution,
+                              {
+                                title: distributionMapper[item?.Distribution],
+                              },
                               {
                                 title: imageTypeMapper[item?.ImageType],
                               },

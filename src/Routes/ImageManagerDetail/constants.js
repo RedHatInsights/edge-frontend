@@ -6,6 +6,8 @@ import QuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/question-c
 
 export const composeStatus = ['CREATED', 'BUILDING', 'ERROR', 'SUCCESS'];
 
+export const DEFAULT_RELEASE = 'rhel-84';
+
 //For this object, it's need to sisable lint once this is not a react component
 export const statusIcons = {
   // eslint-disable-next-line react/display-name
@@ -33,6 +35,10 @@ export const imageStatusMapper = {
   BUILDING: 'Image build in progress',
   ERROR: 'ERROR',
   SUCCESS: 'SUCCESS',
+};
+
+export const distributionMapper = {
+  'rhel-84': 'RHEL 8.4',
 };
 
 export const releaseMapper = {
