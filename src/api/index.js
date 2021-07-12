@@ -281,7 +281,7 @@ export const createImage = ({
     imageType,
     commit: {
       arch: architecture,
-      packages
+      packages,
     },
   };
   return instance.post(`${EDGE_API}/images`, payload);
