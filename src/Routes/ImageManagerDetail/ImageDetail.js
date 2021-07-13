@@ -6,7 +6,7 @@ import {
   StackItem,
   Breadcrumb,
   BreadcrumbItem,
-  Title,
+  Text,
 } from '@patternfly/react-core';
 import { routes as paths } from '../../../package.json';
 import { useDispatch } from 'react-redux';
@@ -14,11 +14,13 @@ import { RegistryContext } from '../../store';
 import { loadImageStatus } from '../../store/actions';
 import { imageStatusReducer } from '../../store/reducers';
 import DetailsHead from './DetailsHeader';
+import ImageDetailTabs from './ImageDetailTabs';
 
 const ImageDetail = () => {
   const { imageId } = useParams();
   const { getRegistry } = useContext(RegistryContext);
   const dispatch = useDispatch();
+
   useEffect(() => {
     const registered = getRegistry().register({ imageStatusReducer });
     loadImageStatus(dispatch, imageId);
@@ -31,19 +33,18 @@ const ImageDetail = () => {
           <BreadcrumbItem>
             <Link to={paths['manage-images']}>Manage Images</Link>
           </BreadcrumbItem>
-          <BreadcrumbItem isActive>{imageId}</BreadcrumbItem>
+          <BreadcrumbItem isActive>Point of Sale</BreadcrumbItem>
         </Breadcrumb>
         <Stack hasGutter>
-          <StackItem>
-            <Title headingLevel="h1" size="2xl">
-              {imageId}
-            </Title>
-          </StackItem>
           <StackItem>
             <DetailsHead />
           </StackItem>
         </Stack>
+        <StackItem>
+          <Text>Image for all point of sale devices</Text>
+        </StackItem>
       </PageHeader>
+      <ImageDetailTabs />
     </Fragment>
   );
 };

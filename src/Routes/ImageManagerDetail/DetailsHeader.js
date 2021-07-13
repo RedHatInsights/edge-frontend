@@ -26,8 +26,8 @@ const DetailsHead = () => {
   return (
     <TextContent>
       <TextList component="dl">
-        <TextListItem component="dt" className="grid-align-center">
-          Status
+        <TextListItem component="h1" className="grid-align-center">
+          Point of Sale
         </TextListItem>
         <TextListItem component="dd">
           {isLoading ? <Skeleton /> : <StatusLabel status={status} />}
