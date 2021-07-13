@@ -8,15 +8,25 @@ import {
 } from '@patternfly/react-core';
 
 const ImageDetailTab = () => {
+  const data = {
+    Name: 'Point of Sale',
+    Version: 2,
+    CreatedAt: '30 Jun 2021',
+    Distribution: 'RHEL 8.4',
+    OutputType: 'RHEL for Edge Commit(.tar)',
+    Packages: 3,
+    BasePackages: 0,
+    Dependancies: 0
+  }
   const labelsToValueMapper = {
     'Image name': 'Name',
     Version: 'Version',
     Created: 'CreatedAt',
     Release: 'Distribution',
-    'Output type': '',
+    'Output type': 'OutputType',
     'Added packages': 'Packages',
-    'Base Packages': '',
-    Dependancies: '',
+    'Base Packages': 'BasePackages',
+    Dependancies: 'Dependancies',
   };
 
   return (
@@ -29,7 +39,7 @@ const ImageDetailTab = () => {
                 {label}
               </TextListItem>
               <TextListItem component={TextListItemVariants.dd}>
-                {value}
+                {data[value]}
               </TextListItem>
             </>
           );
