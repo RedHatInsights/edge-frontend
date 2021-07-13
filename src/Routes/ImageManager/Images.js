@@ -275,6 +275,13 @@ const Images = () => {
     setSortBy({ index, direction });
   };
 
+  const tableRowActions = [
+    {
+      title: 'Download',
+      onClick: (event, rowId, rowData) => window.open(rowData.isoURL),
+    },
+  ];
+
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
@@ -361,6 +368,7 @@ const Images = () => {
                 }}
                 ariaLabel="Images table"
                 variant="compact"
+                actions={tableRowActions}
                 sortBy={sortBy}
                 onSort={handleSort}
                 cells={columns}
@@ -394,6 +402,7 @@ const Images = () => {
                                 title: <StatusLabel status={item?.Status} />,
                               },
                             ],
+                            isoURL: item?.Installer?.InstallerISOURL,
                           },
                         ])
                       )
