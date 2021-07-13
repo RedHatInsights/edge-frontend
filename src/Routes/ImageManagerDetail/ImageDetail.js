@@ -1,14 +1,7 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { Link, useParams } from 'react-router-dom';
-import {
-  Stack,
-  StackItem,
-  Breadcrumb,
-  BreadcrumbItem,
-  Text,
-} from '@patternfly/react-core';
-import { routes as paths } from '../../../package.json';
+import { useParams } from 'react-router-dom';
+import { Stack, StackItem, Text } from '@patternfly/react-core';
 import { useDispatch } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { loadImageStatus } from '../../store/actions';
@@ -29,19 +22,13 @@ const ImageDetail = () => {
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <Link to={paths['manage-images']}>Manage Images</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem isActive>Point of Sale</BreadcrumbItem>
-        </Breadcrumb>
         <Stack hasGutter>
           <StackItem>
             <DetailsHead />
           </StackItem>
         </Stack>
         <StackItem>
-          <Text>Image for all point of sale devices</Text>
+          <Text>{/*Image description*/}</Text>
         </StackItem>
       </PageHeader>
       <ImageDetailTabs />

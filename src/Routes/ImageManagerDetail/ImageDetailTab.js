@@ -16,8 +16,8 @@ const ImageDetailTab = () => {
     OutputType: 'RHEL for Edge Commit(.tar)',
     Packages: 3,
     BasePackages: 0,
-    Dependancies: 0
-  }
+    Dependancies: 0,
+  };
   const labelsToValueMapper = {
     'Image name': 'Name',
     Version: 'Version',
