@@ -14,33 +14,33 @@ const SSHInputField = (props) => {
     ...props,
   });
   return (
-    <FormGroup
-      label="SSH key"
-      helperTextInvalid={meta.error}
-      validated={meta.error && meta.touched ? 'error' : 'default'}
-      isRequired
-      helperText={
-        <Fragment>
-          <Text component={TextVariants.small}>
-            <Text
-              target="_blank"
-              href="https://en.wikipedia.org/wiki/Secure_Shell_Protocol"
-              isVisitedLink
-              component={TextVariants.a}
-            >
-              Learn more about SSH keys
-              <ExternalLinkAltIcon className="pf-u-ml-sm" />
-            </Text>
+    <FormGroup>
+      <FormGroup
+        label="SSH key"
+        helperTextInvalid={meta.error}
+        validated={meta.error && meta.touched ? 'error' : 'default'}
+      >
+        <TextArea
+          className="pf-u-h-25vh"
+          id="credentials"
+          placeholder="Paste your public SSH key"
+          isRequired
+          {...sshKeyInput}
+        />
+      </FormGroup>
+      <Fragment>
+        <Text component={TextVariants.small}>
+          <Text
+            target="_blank"
+            href="https://access.redhat.com/solutions/3356121"
+            isVisitedLink
+            component={TextVariants.a}
+          >
+            Learn more about SSH keys
+            <ExternalLinkAltIcon className="pf-u-ml-sm" />
           </Text>
-        </Fragment>
-      }
-    >
-      <TextArea
-        className="pf-u-h-25vh"
-        id="credentials"
-        placeholder="Paste your public SSH key"
-        {...sshKeyInput}
-      />
+        </Text>
+      </Fragment>
     </FormGroup>
   );
 };
