@@ -112,6 +112,7 @@ const GroupsDetail = () => {
           </StackItem>
           <StackItem isFilled>
             <InventoryTable
+              disableDefaultColumns
               ref={inventory}
               page={1}
               tableProps={{
