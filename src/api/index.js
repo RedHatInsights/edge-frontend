@@ -319,3 +319,7 @@ export const fetchEdgeImages = (
 
   return instance.get(`${EDGE_API}/images?${query}`);
 };
+
+export const getEdgeImageStatus = (id) => {
+  return instance.get(`${EDGE_API}/images/${id}/status`);
+};

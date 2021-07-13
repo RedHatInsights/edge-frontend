@@ -11,9 +11,11 @@ import {
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import { createNewImage } from '../../store/actions';
+import { createNewImage, loadEdgeImages } from '../../store/actions';
 import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
 import { useDispatch } from 'react-redux';
+import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
+import { getEdgeImageStatus } from '../../api';
 
 const CreateImage = ({ navigateBack }) => {
   const [user, setUser] = useState();
@@ -40,7 +42,49 @@ const CreateImage = ({ navigateBack }) => {
           ...values,
           architecture: 'x86_64',
         };
-        createNewImage(dispatch, payload, closeAction);
+        createNewImage(dispatch, payload, (resp) => {
+          dispatch({
+            ...addNotification({
+              variant: 'info',
+              title: 'Created image',
+              description: `${resp.value.Name} image was added to the queue.`,
+            }),
+            meta: {
+              polling: {
+                id: `IMAGE_${resp.value.ID}_BUILD_STATUS`,
+                fetcher: () => getEdgeImageStatus(resp.value.ID),
+                condition: (resp) => {
+                  switch (resp.Status) {
+                    case 'BUILDING':
+                      return [true, ''];
+                    case 'ERROR':
+                      return [false, 'failure'];
+                    default:
+                      return [false, 'success'];
+                  }
+                },
+                notifications: {
+                  failure: {
+                    ...addNotification({
+                      variant: 'danger',
+                      title: 'Image build failed',
+                      description: `${resp.value.Name} image build is completed unsuccessfully`,
+                    }),
+                  },
+                  success: {
+                    ...addNotification({
+                      variant: 'success',
+                      title: 'Image is ready',
+                      description: `${resp.value.Name} image build is completed`,
+                    }),
+                  },
+                },
+              },
+            },
+          });
+          closeAction();
+          loadEdgeImages(dispatch);
+        });
       }}
       defaultArch="x86_64"
       schema={{
