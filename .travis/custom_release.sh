@@ -10,8 +10,9 @@ then
         rm -rf ./dist/.git
         .travis/release.sh "${env}-beta"
     done
+fi
 
-elif [ "${TRAVIS_BRANCH}" = "master-stable" ]
+if [ "${TRAVIS_BRANCH}" = "master-stable" ]
 then
     for env in ci qa
     do
@@ -19,8 +20,9 @@ then
         rm -rf ./dist/.git
         .travis/release.sh "${env}-stable"
     done
+fi
 
-elif [[ "${TRAVIS_BRANCH}" = "prod-beta" || "${TRAVIS_BRANCH}" = "prod-stable" || "${TRAVIS_BRANCH}" = "qa-stable" || "${TRAVIS_BRANCH}" = "qa-beta" || "${TRAVIS_BRANCH}" = "ci-stable" ]]; then
+if [[ "${TRAVIS_BRANCH}" = "prod-beta" || "${TRAVIS_BRANCH}" = "prod-stable" ]]; then
     echo "PUSHING ${TRAVIS_BRANCH}"
     rm -rf ./build/.git
     .travis/release.sh "${TRAVIS_BRANCH}"
