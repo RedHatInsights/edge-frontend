@@ -34,13 +34,13 @@ const DetailsHead = () => {
         <BreadcrumbItem>
           <Link to={paths['manage-images']}>Manage Images</Link>
         </BreadcrumbItem>
-        <BreadcrumbItem isActive>{data.Name}</BreadcrumbItem>
+        <BreadcrumbItem isActive>{data?.Name}</BreadcrumbItem>
       </Breadcrumb>
 
       <TextContent>
         <TextList component="dl">
           <TextListItem component="h1" className="grid-align-center">
-            {data.Name}
+            {data?.Name}
           </TextListItem>
           <TextListItem className="pf-u-pt-xs" component="dd">
             {isLoading ? <Skeleton /> : <StatusLabel status={status} />}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Tabs, Tab, TabTitleText } from '@patternfly/react-core';
 
 import ImageDetailTab from './ImageDetailTab';
+import ImagePackagesTab from './ImagePackagesTab';
 
 const ImageDetailTabs = () => {
   const [activeTabKey, setActiveTabkey] = useState(0);
@@ -17,7 +18,7 @@ const ImageDetailTabs = () => {
           <ImageDetailTab />
         </Tab>
         <Tab eventKey={1} title={<TabTitleText>Packages</TabTitleText>}>
-          Packages
+          <ImagePackagesTab />
         </Tab>
       </Tabs>
     </div>

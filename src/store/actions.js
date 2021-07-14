@@ -12,6 +12,7 @@ import {
   LOAD_EDGE_IMAGES,
   LOAD_DEVICE_SUMMARY,
   LOAD_IMAGE_STATUS,
+  LOAD_IMAGE_DETAIL,
   CREATE_NEW_IMAGE,
 } from './action-types';
 import {
@@ -24,6 +25,7 @@ import {
   fetchActiveImages,
   fetchDeviceSummary,
   fetchImageStatus,
+  fetchImage,
   fetchEdgeImages,
   createImage,
 } from '../api';
@@ -120,6 +122,13 @@ export const loadImageStatus = (dispatch, imageId) => {
   dispatch({
     type: LOAD_IMAGE_STATUS,
     payload: fetchImageStatus({ id: imageId }),
+  }).catch(() => null);
+};
+
+export const loadImageDetail = (dispatch, imageId) => {
+  dispatch({
+    type: LOAD_IMAGE_DETAIL,
+    payload: fetchImage({ id: imageId }),
   }).catch(() => null);
 };
 
