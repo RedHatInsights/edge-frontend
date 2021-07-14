@@ -21,7 +21,7 @@ const loadImageDetailFulfilled = (state, { payload }) => {
 const loadImageDetailRejected = () => ({
   isLoading: false,
   hasError: true,
-  data: 'No image status to view',
+  data: 'No image detail to view',
 });
 
 export default applyReducerHash(
