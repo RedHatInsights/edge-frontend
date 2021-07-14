@@ -2,6 +2,7 @@ export { default as deviceSummaryReducer } from './deviceSummary';
 export { default as imagesReducer } from './images';
 export { default as edgeImagesReducer } from './edgeImages';
 export { default as imageStatusReducer } from './imageStatus';
+export { default as imageDetailReducer } from './imageDetail';
 export { default as groupsReducer } from './groups';
 export { default as thresholdReducer } from './threshold';
 export { default as devicesInfoReducer } from './devicesInfo';
