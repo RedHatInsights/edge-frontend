@@ -155,6 +155,10 @@ export const fetchImageStatus = ({ id }) => {
   return instance.get(`${EDGE_API}/images/${id}/status`);
 };
 
+export const fetchImage = ({ id }) => {
+  return instance.get(`${EDGE_API}/images/${id}`);
+};
+
 export const fetchDeviceSummary = async () => {
   const client = new HostsApi(undefined, '/api/inventory/v1/', instance);
   return await Promise.all([

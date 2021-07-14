@@ -1,49 +1,48 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { Link, useParams } from 'react-router-dom';
-import {
-  Stack,
-  StackItem,
-  Breadcrumb,
-  BreadcrumbItem,
-  Title,
-} from '@patternfly/react-core';
-import { routes as paths } from '../../../package.json';
+import { useParams } from 'react-router-dom';
+import { Stack, StackItem, Text } from '@patternfly/react-core';
 import { useDispatch } from 'react-redux';
 import { RegistryContext } from '../../store';
-import { loadImageStatus } from '../../store/actions';
-import { imageStatusReducer } from '../../store/reducers';
+import { loadImageStatus, loadImageDetail } from '../../store/actions';
+import { imageStatusReducer, imageDetailReducer } from '../../store/reducers';
 import DetailsHead from './DetailsHeader';
+import ImageDetailTabs from './ImageDetailTabs';
+import { useSelector, shallowEqual } from 'react-redux';
 
 const ImageDetail = () => {
   const { imageId } = useParams();
   const { getRegistry } = useContext(RegistryContext);
   const dispatch = useDispatch();
+
+  const { data } = useSelector(
+    ({ imageDetailReducer }) => ({ data: imageDetailReducer?.data || null }),
+    shallowEqual
+  );
+
   useEffect(() => {
-    const registered = getRegistry().register({ imageStatusReducer });
+    const registered = getRegistry().register({
+      imageStatusReducer,
+      imageDetailReducer,
+    });
     loadImageStatus(dispatch, imageId);
+    loadImageDetail(dispatch, imageId);
     return () => registered();
   }, [dispatch]);
+
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <Link to={paths['manage-images']}>Manage Images</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem isActive>{imageId}</BreadcrumbItem>
-        </Breadcrumb>
         <Stack hasGutter>
-          <StackItem>
-            <Title headingLevel="h1" size="2xl">
-              {imageId}
-            </Title>
-          </StackItem>
           <StackItem>
             <DetailsHead />
           </StackItem>
         </Stack>
+        <StackItem>
+          <Text>{data?.Description}</Text>
+        </StackItem>
       </PageHeader>
+      <ImageDetailTabs />
     </Fragment>
   );
 };
