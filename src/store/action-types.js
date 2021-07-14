@@ -13,6 +13,7 @@ export const LOAD_GROUP_DEVICES_INFO = 'LOAD_GROUP_DEVICES_INFO';
 export const LOAD_IMAGE_STATUS = 'LOAD_IMAGE_STATUS';
 export const CREATE_NEW_IMAGE = 'CREATE_NEW_IMAGE';
 export const CREATE_NEW_IMAGE_RESET = `${CREATE_NEW_IMAGE}_RESET`;
+export const POLLING_IMAGES = 'POLLING_IMAGES';
 
 const asyncActions = flatMap(
   [

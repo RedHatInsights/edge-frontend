@@ -278,7 +278,7 @@ export const createImage = ({
     name,
     description,
     distribution: release,
-    imageType,
+    imageType: imageType[0],
     commit: {
       arch: architecture,
       packages: packages.map((item) => ({ name: item.name })),
@@ -318,4 +318,10 @@ export const fetchEdgeImages = (
   }, '');
 
   return instance.get(`${EDGE_API}/images?${query}`);
+};
+
+export const getEdgeStatus = (ids) => {
+  return Promise.allSettled(
+    ids.map((id) => instance.get(`${EDGE_API}/images/${id}/status`))
+  );
 };
