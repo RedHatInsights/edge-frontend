@@ -275,12 +275,21 @@ const Images = () => {
     setSortBy({ index, direction });
   };
 
-  const tableRowActions = [
-    {
-      title: 'Download',
-      onClick: (event, rowId, rowData) => window.open(rowData.isoURL),
-    },
-  ];
+  const actionResolver = (rowData) => {
+    if (rowData?.isoURL === undefined) {
+      return [];
+    }
+
+    return [
+      {
+        title: (
+          <a href={rowData.isoURL} rel="noopener noreferrer" target="_blank">
+            Download
+          </a>
+        ),
+      },
+    ];
+  };
 
   return (
     <Fragment>
@@ -368,7 +377,7 @@ const Images = () => {
                 }}
                 ariaLabel="Images table"
                 variant="compact"
-                actions={tableRowActions}
+                actionResolver={actionResolver}
                 sortBy={sortBy}
                 onSort={handleSort}
                 cells={columns}

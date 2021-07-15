@@ -11,7 +11,7 @@ import {
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import { createNewImage } from '../../store/actions';
+import { createNewImage, addImageToPoll } from '../../store/actions';
 import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
 import { useDispatch } from 'react-redux';
 
@@ -40,7 +40,12 @@ const CreateImage = ({ navigateBack }) => {
           ...values,
           architecture: 'x86_64',
         };
-        createNewImage(dispatch, payload, closeAction);
+        createNewImage(dispatch, payload, (data) => {
+          closeAction();
+          dispatch(
+            addImageToPoll({ name: data.value.Name, id: data.value.ID })
+          );
+        });
       }}
       defaultArch="x86_64"
       schema={{

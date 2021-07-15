@@ -12,7 +12,9 @@ import {
   LOAD_EDGE_IMAGES,
   LOAD_DEVICE_SUMMARY,
   LOAD_IMAGE_STATUS,
+  LOAD_IMAGE_DETAIL,
   CREATE_NEW_IMAGE,
+  POLLING_IMAGES,
 } from './action-types';
 import {
   fetchGroups,
@@ -24,6 +26,7 @@ import {
   fetchActiveImages,
   fetchDeviceSummary,
   fetchImageStatus,
+  fetchImage,
   fetchEdgeImages,
   createImage,
 } from '../api';
@@ -123,12 +126,21 @@ export const loadImageStatus = (dispatch, imageId) => {
   }).catch(() => null);
 };
 
+export const loadImageDetail = (dispatch, imageId) => {
+  dispatch({
+    type: LOAD_IMAGE_DETAIL,
+    payload: fetchImage({ id: imageId }),
+  }).catch(() => null);
+};
+
 export const createNewImage = (dispatch, payload, callback) => {
   dispatch({
     type: CREATE_NEW_IMAGE,
     payload: createImage(payload),
   })
-    .then(() => callback())
+    .then((resp) => {
+      callback(resp);
+    })
     .catch(() => null);
 };
 
@@ -137,4 +149,30 @@ export const loadEdgeImages = (dispatch, query) => {
     type: LOAD_EDGE_IMAGES,
     payload: fetchEdgeImages(query),
   }).catch(() => null);
+};
+
+export const setPolling = (toStart, interval) => {
+  const subAction = toStart ? 'START' : 'END';
+  const payload = toStart ? { interval } : {};
+  return {
+    type: `${POLLING_IMAGES}_${subAction}`,
+    ...payload,
+  };
+};
+
+export const addImageToPoll = ({ id, name }) => {
+  return {
+    type: `${POLLING_IMAGES}_ADD`,
+    payload: {
+      name,
+      id,
+    },
+  };
+};
+
+export const removeImagesToPoll = (ids) => {
+  return {
+    type: `${POLLING_IMAGES}_REMOVE`,
+    ids,
+  };
 };
