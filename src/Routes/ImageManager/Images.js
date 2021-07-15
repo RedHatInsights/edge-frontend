@@ -25,6 +25,7 @@ import {
   Skeleton,
   Spinner,
   Bullseye,
+  SimpleListItem,
 } from '@patternfly/react-core';
 import { DisconnectedIcon, PlusCircleIcon } from '@patternfly/react-icons';
 import flatten from 'lodash/flatten';
@@ -138,7 +139,9 @@ const Images = () => {
   );
   const [perPage, setPerPage] = useState(100);
   const [page, setPage] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCreateWizardOpen, setIsCreateWizardOpen] = useState(false);
+  const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState(false);
+  const [updateImageID, setUpdateImageID] = useState(null);
   const [opened, setOpened] = useState([]);
   const [sortBy, setSortBy] = useState({ index: 4, direction: 'desc' });
   const dispatch = useDispatch();
@@ -276,19 +279,33 @@ const Images = () => {
   };
 
   const actionResolver = (rowData) => {
-    if (rowData?.isoURL === undefined) {
-      return [];
+    const actionsArray = [];
+    if (rowData?.isoURL !== undefined) {
+      actionsArray.push({
+        title: (
+          <SimpleListItem
+            component="a"
+            href={rowData.isoURL}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Download
+          </SimpleListItem>
+        ),
+      });
     }
 
-    return [
-      {
-        title: (
-          <a href={rowData.isoURL} rel="noopener noreferrer" target="_blank">
-            Download
-          </a>
-        ),
-      },
-    ];
+    if (rowData?.imageStatus === 'SUCCESS') {
+      actionsArray.push({
+        title: 'Update Image',
+        onClick: (_event, _rowId, rowData) => {
+          setUpdateImageID(rowData.id);
+          setIsUpdateWizardOpen(true);
+        },
+      });
+    }
+
+    return actionsArray;
   };
 
   return (
@@ -356,7 +373,7 @@ const Images = () => {
                             create_image: true,
                           }).toString(),
                         });
-                        setIsOpen(true);
+                        setIsCreateWizardOpen(true);
                       }}
                       isDisabled={isLoading !== false}
                     >
@@ -412,6 +429,7 @@ const Images = () => {
                               },
                             ],
                             isoURL: item?.Installer?.InstallerISOURL,
+                            imageStatus: item?.Status,
                           },
                         ])
                       )
@@ -436,7 +454,7 @@ const Images = () => {
                                             create_image: true,
                                           }).toString(),
                                         });
-                                        setIsOpen(true);
+                                        setIsCreateWizardOpen(true);
                                       }}
                                       isDisabled={isLoading !== false}
                                     >
@@ -458,7 +476,7 @@ const Images = () => {
           ) : null}
         </Fragment>
       </Main>
-      {isOpen && (
+      {isCreateWizardOpen && (
         <Suspense
           fallback={
             <Bullseye>
@@ -469,8 +487,25 @@ const Images = () => {
           <CreateImageWizard
             navigateBack={() => {
               history.push({ pathname: history.location.pathname });
-              setIsOpen(false);
+              setIsCreateWizardOpen(false);
             }}
+          />
+        </Suspense>
+      )}
+      {isUpdateWizardOpen && (
+        <Suspense
+          fallback={
+            <Bullseye>
+              <Spinner />
+            </Bullseye>
+          }
+        >
+          <CreateImageWizard
+            navigateBack={() => {
+              history.push({ pathname: history.location.pathname });
+              setIsUpdateWizardOpen(false);
+            }}
+            updateImageID={updateImageID}
           />
         </Suspense>
       )}
