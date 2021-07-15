@@ -411,7 +411,7 @@ const Images = () => {
                                 title: <StatusLabel status={item?.Status} />,
                               },
                             ],
-                            isoURL: item?.Installer?.InstallerISOURL,
+                            isoURL: item?.Installer?.ImageBuildISOURL,
                           },
                         ])
                       )
