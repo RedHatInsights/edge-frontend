@@ -283,7 +283,7 @@ const Images = () => {
     return [
       {
         title: (
-          <a href={rowData.isoURL} rel="noopener noreferrer" target="_blank">
+          <a href={rowData.isoURL} rel="noopener noreferrer" target="_blank" download >
             Download
           </a>
         ),
