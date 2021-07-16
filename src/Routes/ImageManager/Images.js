@@ -59,6 +59,12 @@ const CreateImageWizard = React.lazy(() =>
   )
 );
 
+const UpdateImageWizard = React.lazy(() =>
+  import(
+    /* webpackChunkName: "CreateImageWizard" */ '../ImageManager/UpdateImageWizard'
+  )
+);
+
 const columns = [
   {
     title: 'Name',
@@ -492,8 +498,7 @@ const Images = () => {
           />
         </Suspense>
       )}
-      {/* Add UpdateImageWizard component here */}
-      {isUpdateWizardOpen && (
+      {isUpdateWizardOpen && ( 
         <Suspense
           fallback={
             <Bullseye>
@@ -501,7 +506,7 @@ const Images = () => {
             </Bullseye>
           }
         >
-          <CreateImageWizard
+          <UpdateImageWizard
             navigateBack={() => {
               history.push({ pathname: history.location.pathname });
               setIsUpdateWizardOpen(false);
