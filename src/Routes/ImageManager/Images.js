@@ -492,6 +492,7 @@ const Images = () => {
           />
         </Suspense>
       )}
+      {/* Add UpdateImageWizard component here */}
       {isUpdateWizardOpen && (
         <Suspense
           fallback={
