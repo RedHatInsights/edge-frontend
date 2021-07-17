@@ -33,6 +33,7 @@ const CreateImageWizard = ({
   onSubmit,
   onClose,
   customComponentMapper,
+  initialValues,
   defaultArch,
 }) => {
   return schema ? (
@@ -44,6 +45,7 @@ const CreateImageWizard = ({
         <Pf4FormTemplate {...props} showFormControls={false} />
       )}
       onSubmit={(formValues) => onSubmit(formValues)}
+      initialValues={initialValues}
       componentMapper={{
         ...componentMapper,
         // wizard: WrappedWizard,

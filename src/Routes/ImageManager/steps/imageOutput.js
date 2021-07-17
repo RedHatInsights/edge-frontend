@@ -11,7 +11,7 @@ import {
 export default {
   title: 'Image output',
   name: 'imageOutput',
-  nextStep: 'registration',
+  nextStep: ({ values }) => values.isUpdate ? 'packages' : 'registration',
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,
