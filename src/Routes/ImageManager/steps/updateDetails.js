@@ -12,9 +12,7 @@ export default {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
       label: (
-        <Text>
-          Add a description to easily identify your image later.
-        </Text>
+        <Text>Add a description to easily identify your image later.</Text>
       ),
     },
     {

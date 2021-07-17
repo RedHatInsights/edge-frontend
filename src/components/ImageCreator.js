@@ -78,6 +78,7 @@ const CreateImageWizard = ({
 
 CreateImageWizard.propTypes = {
   schema: PropTypes.object,
+  initialValues: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   customComponentMapper: PropTypes.shape({

@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ImageCreator from '../../components/ImageCreator';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-import {
-  review,
-  packages,
-  updateDetails,
-  imageOutput,
-} from './steps';
+import { review, packages, updateDetails, imageOutput } from './steps';
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
@@ -71,7 +66,10 @@ const UpdateImage = ({ navigateBack }) => {
         isUpdate: true,
         description: data?.Description,
         version: data?.Version,
-        'selected-packages': data?.Commit?.Packages.map(pkg => ({ ...pkg, name: pkg.Name }))
+        'selected-packages': data?.Commit?.Packages.map((pkg) => ({
+          ...pkg,
+          name: pkg.Name,
+        })),
       }}
       schema={{
         fields: [
@@ -89,12 +87,7 @@ const UpdateImage = ({ navigateBack }) => {
             crossroads: ['target-environment', 'release'],
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
-            fields: [
-              updateDetails,
-              imageOutput,
-              packages,
-              review,
-            ],
+            fields: [updateDetails, imageOutput, packages, review],
           },
         ],
       }}
