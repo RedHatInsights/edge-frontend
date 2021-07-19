@@ -29,7 +29,7 @@ const CreateImageWizard = React.lazy(() =>
 
 const UpdateImageWizard = React.lazy(() =>
   import(
-    /* webpackChunkName: "CreateImageWizard" */ '../ImageManager/UpdateImageWizard'
+    /* webpackChunkName: "UpdateImageWizard" */ '../ImageManager/UpdateImageWizard'
   )
 );
 
@@ -97,7 +97,7 @@ const Images = () => {
     history.push({
       pathname: history.location.pathname,
       search: new URLSearchParams({
-        create_image: true,
+        update_image: true,
       }).toString(),
     });
     setIsUpdateWizardOpen(true);
