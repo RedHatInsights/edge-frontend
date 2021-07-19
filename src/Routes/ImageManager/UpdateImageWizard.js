@@ -55,7 +55,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         const payload = {
           ...values,
           architecture: 'x86_64',
-          OSTreeParentCommit: updateRepoURL
+          OSTreeParentCommit: updateRepoURL,
         };
         createNewImage(dispatch, payload, (data) => {
           closeAction();
@@ -103,6 +103,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
 
 UpdateImage.propTypes = {
   navigateBack: PropTypes.func,
+  updateImageID: PropTypes.number,
 };
 UpdateImage.defaultProps = {
   navigateBack: () => undefined,
