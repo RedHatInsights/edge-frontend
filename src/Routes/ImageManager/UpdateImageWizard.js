@@ -12,10 +12,12 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail } from '../../store/actions';
+import { imageUpdateRepoURL } from '../../api/index';
 
-const UpdateImage = ({ navigateBack }) => {
+const UpdateImage = ({ navigateBack, updateImageID }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
+  const [updateRepoURL, setUpdateRepoURL] = useState('');
   const closeAction = () => {
     navigateBack();
     dispatch({ type: CREATE_NEW_IMAGE_RESET });
@@ -31,7 +33,7 @@ const UpdateImage = ({ navigateBack }) => {
     const registered = getRegistry().register({
       imageDetailReducer,
     });
-    loadImageDetail(dispatch, 3);
+    loadImageDetail(dispatch, updateImageID);
     return () => registered();
   }, [dispatch]);
 
@@ -40,6 +42,7 @@ const UpdateImage = ({ navigateBack }) => {
       const userData = (await insights?.chrome?.auth?.getUser()) || {};
       setUser(() => userData);
     })();
+    setUpdateRepoURL(imageUpdateRepoURL(updateImageID));
   }, []);
 
   return user ? (
@@ -52,6 +55,7 @@ const UpdateImage = ({ navigateBack }) => {
         const payload = {
           ...values,
           architecture: 'x86_64',
+          OSTreeParentCommit: updateRepoURL
         };
         createNewImage(dispatch, payload, (data) => {
           closeAction();

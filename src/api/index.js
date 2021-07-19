@@ -271,6 +271,7 @@ export const createImage = ({
   description,
   release,
   architecture,
+  OSTreeParentCommit,
   imageType: imageTypes,
   'selected-packages': packages,
 }) => {
@@ -288,6 +289,9 @@ export const createImage = ({
       packages: packages.map((item) => ({ name: item.name })),
     },
   };
+
+  if (OSTreeParentCommit) payload.OSTreeParentCommit = OSTreeParentCommit;
+
   return instance.post(`${EDGE_API}/images`, payload);
 };
 
@@ -327,3 +331,8 @@ export const fetchEdgeImages = (
 export const getEdgeImageStatus = (id) => {
   return instance.get(`${EDGE_API}/images/${id}/status`);
 };
+
+export const imageUpdateRepoURL = id => {
+  const updates = instance.get(`${EDGE_API}/commits/updates`);
+  return updates.find(update => update.CommitID === id).UpdateRepoURL;
+}
