@@ -23,3 +23,7 @@ export const transformSort = ({ direction, name }) => {
     sort_by: direction === 'asc' ? name : `-${name}`,
   };
 };
+
+export const getFilterDep = (filter = undefined) => {
+  return filter?.chips?.map((chip) => chip.value).join('.') || undefined;
+};
