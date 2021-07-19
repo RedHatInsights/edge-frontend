@@ -29,10 +29,11 @@ import {
   transformFilters,
   transformPaginationParams,
   transformSort,
+  getFilterDep,
 } from './constants';
 import PropTypes from 'prop-types';
 
-const ImageTable = (props) => {
+const ImageTable = ({ filters, pagination, openWizard, clearFilters }) => {
   const [sortBy, setSortBy] = useState({ index: 4, direction: 'desc' });
   const dispatch = useDispatch();
   const { data, isLoading, hasError } = useSelector(
@@ -76,13 +77,7 @@ const ImageTable = (props) => {
     },
   ];
   const toShowSort = isLoading || hasError || (!data?.length && hasFilters);
-
   useEffect(() => {
-    loadEdgeImages(dispatch);
-  }, []);
-
-  useEffect(() => {
-    const { pagination, filters } = props;
     loadEdgeImages(dispatch, {
       ...transformFilters(filters),
       ...transformPaginationParams(pagination),
@@ -91,8 +86,17 @@ const ImageTable = (props) => {
         name: columns[sortBy.index].type,
       }),
     });
-  }, [props.pagination, props.filters, sortBy]);
-  const hasFilters = Object.keys(props.filters).some((filterKey) => filterKey);
+  }, [
+    pagination.perPage,
+    pagination.page,
+    sortBy.index,
+    sortBy.direction,
+    // We have 3 different filters in the primary toolbar (status, name, distribution):
+    getFilterDep(filters[0]),
+    getFilterDep(filters[1]),
+    getFilterDep(filters[2]),
+  ]);
+  const hasFilters = Object.keys(filters).some((filterKey) => filterKey);
 
   let rows = [
     {
@@ -128,7 +132,7 @@ const ImageTable = (props) => {
                       No images found
                     </Title>
                     <Button
-                      onClick={props.openWizard}
+                      onClick={openWizard}
                       isDisabled={isLoading !== false}
                     >
                       Create new images
@@ -156,7 +160,7 @@ const ImageTable = (props) => {
                       No match found
                     </Title>
                     <EmptyStateSecondaryActions>
-                      <Button onClick={props.clearFilters} variant="link">
+                      <Button onClick={clearFilters} variant="link">
                         Clear all filters
                       </Button>
                     </EmptyStateSecondaryActions>
