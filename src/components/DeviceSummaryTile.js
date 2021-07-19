@@ -27,13 +27,13 @@ const DeviceSummaryTileBase = ({
         <GridItem span={6}>
           <Stack hasGutter>
             <StackItem>
-              <Button isInline className="pf-u-pr-md" variant="link">
+              <Button isDisabled isInline className="pf-u-pr-md" variant="link">
                 {active}
               </Button>{' '}
               Active
             </StackItem>
             <StackItem>
-              <Button isInline className="pf-u-pr-md" variant="link">
+              <Button isDisabled isInline className="pf-u-pr-md" variant="link">
                 {orphaned}
               </Button>{' '}
               Orphaned
@@ -43,13 +43,13 @@ const DeviceSummaryTileBase = ({
         <GridItem span={6}>
           <Stack hasGutter>
             <StackItem>
-              <Button isInline className="pf-u-pr-md" variant="link">
+              <Button isDisabled isInline className="pf-u-pr-md" variant="link">
                 {noReports}
               </Button>
               Stale
             </StackItem>
             <StackItem>
-              <Button isInline className="pf-u-pr-md" variant="link">
+              <Button isDisabled isInline className="pf-u-pr-md" variant="link">
                 {neverReported}
               </Button>
               Registered but never reported
