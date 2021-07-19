@@ -215,7 +215,12 @@ const ImageTable = ({ filters, pagination, openWizard, clearFilters }) => {
     return [
       {
         title: (
-          <a href={rowData.isoURL} rel="noopener noreferrer" target="_blank" download>
+          <a
+            href={rowData.isoURL}
+            rel="noopener noreferrer"
+            target="_blank"
+            download
+          >
             Download
           </a>
         ),
