@@ -1,11 +1,7 @@
 import React from 'react';
 
 const UpdateImageWizard = () => {
-  return (
-    <div>
+  return <div></div>;
+};
 
-    </div>
-  )
-} 
-
-export default UpdateImageWizard
+export default UpdateImageWizard;

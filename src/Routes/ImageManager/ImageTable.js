@@ -13,6 +13,7 @@ import {
   Button,
   Spinner,
   Bullseye,
+  SimpleListItem,
 } from '@patternfly/react-core';
 import {
   imageTypeMapper,
@@ -128,7 +129,7 @@ const ImageTable = (props) => {
                       No images found
                     </Title>
                     <Button
-                      onClick={props.openWizard}
+                      onClick={props.openCreateWizard}
                       isDisabled={isLoading !== false}
                     >
                       Create new images
@@ -194,6 +195,7 @@ const ImageTable = (props) => {
             title: <StatusLabel status={image?.Status} />,
           },
         ],
+        imageStatus: image?.Status,
       }));
     }
   }
@@ -203,19 +205,33 @@ const ImageTable = (props) => {
   };
 
   const actionResolver = (rowData) => {
-    if (rowData?.isoURL === undefined) {
-      return [];
+    const actionsArray = [];
+    if (rowData?.isoURL !== undefined) {
+      actionsArray.push({
+        title: (
+          <SimpleListItem
+            component="a"
+            href={rowData.isoURL}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Download
+          </SimpleListItem>
+        ),
+      });
     }
 
-    return [
-      {
-        title: (
-          <a href={rowData.isoURL} rel="noopener noreferrer" target="_blank">
-            Download
-          </a>
-        ),
-      },
-    ];
+    if (rowData?.imageStatus === 'SUCCESS') {
+      actionsArray.push({
+        title: 'Update Image',
+        onClick: (_event, _rowId, rowData) => {
+          props.setUpdateImageID(rowData.id);
+          props.openUpdateWizard();
+        },
+      });
+    }
+
+    return actionsArray;
   };
 
   return (
@@ -236,7 +252,9 @@ const ImageTable = (props) => {
 
 ImageTable.propTypes = {
   clearFilters: PropTypes.func.isRequired,
-  openWizard: PropTypes.func.isRequired,
+  openCreateWizard: PropTypes.func.isRequired,
+  openUpdateWizard: PropTypes.func.isRequired,
+  setUpdateImageID: PropTypes.func.isRequired,
   filters: PropTypes.array.isRequired,
   pagination: PropTypes.shape({
     page: PropTypes.number,

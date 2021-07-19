@@ -27,6 +27,12 @@ const CreateImageWizard = React.lazy(() =>
   )
 );
 
+const UpdateImageWizard = React.lazy(() =>
+  import(
+    /* webpackChunkName: "CreateImageWizard" */ '../ImageManager/UpdateImageWizard'
+  )
+);
+
 const defaultFilters = {
   name: {
     label: 'Name',
@@ -68,21 +74,33 @@ const activeFilterReducer = applyReducerHash(
 const Images = () => {
   const { getRegistry } = useContext(RegistryContext);
   const [pagination, setPagination] = useState({ page: 1, perPage: 100 });
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCreateWizardOpen, setIsCreateWizardOpen] = useState(false);
+  const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState(false);
+  const [updateImageID, setUpdateImageID] = useState(null);
   const history = useHistory();
   const [activeFilters, dispatchActiveFilters] = useReducer(
     activeFilterReducer,
     defaultFilters
   );
 
-  const openWizard = () => {
+  const openCreateWizard = () => {
     history.push({
       pathname: history.location.pathname,
       search: new URLSearchParams({
         create_image: true,
       }).toString(),
     });
-    setIsOpen(true);
+    setIsCreateWizardOpen(true);
+  };
+
+  const openUpdateWizard = () => {
+    history.push({
+      pathname: history.location.pathname,
+      search: new URLSearchParams({
+        create_image: true,
+      }).toString(),
+    });
+    setIsUpdateWizardOpen(true);
   };
 
   const filterConfig = {
@@ -155,7 +173,7 @@ const Images = () => {
           activeFilters={activeFilters}
           dispatchActiveFilters={dispatchActiveFilters}
           defaultFilters={defaultFilters}
-          openWizard={openWizard}
+          openCreateWizard={openCreateWizard}
         />
         <ImageTable
           clearFilters={() =>
@@ -164,7 +182,9 @@ const Images = () => {
               payload: defaultFilters,
             })
           }
-          openWizard={openWizard}
+          openCreateWizard={openCreateWizard}
+          openUpdateWizard={openUpdateWizard}
+          setUpdateImageID={setUpdateImageID}
           filters={
             isEmptyFilters(activeFilters)
               ? constructActiveFilters(activeFilters)
@@ -189,7 +209,7 @@ const Images = () => {
           />
         </Suspense>
       )}
-      {isUpdateWizardOpen && ( 
+      {isUpdateWizardOpen && (
         <Suspense
           fallback={
             <Bullseye>
