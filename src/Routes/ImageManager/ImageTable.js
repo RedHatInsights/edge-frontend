@@ -194,6 +194,7 @@ const ImageTable = (props) => {
             title: <StatusLabel status={image?.Status} />,
           },
         ],
+        isoURL: image?.Installer?.ImageBuildISOURL,
       }));
     }
   }
@@ -210,7 +211,7 @@ const ImageTable = (props) => {
     return [
       {
         title: (
-          <a href={rowData.isoURL} rel="noopener noreferrer" target="_blank">
+          <a href={rowData.isoURL} rel="noopener noreferrer" target="_blank" download>
             Download
           </a>
         ),
