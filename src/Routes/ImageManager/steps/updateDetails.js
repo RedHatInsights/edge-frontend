@@ -9,6 +9,11 @@ export default {
   nextStep: 'imageOutput',
   fields: [
     {
+      component: componentTypes.TEXT_FIELD,
+      name: 'name',
+      hidden: true,
+    },
+    {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
       label: (

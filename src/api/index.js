@@ -333,6 +333,10 @@ export const getEdgeImageStatus = (id) => {
 };
 
 export const imageUpdateRepoURL = (id) => {
-  const updates = instance.get(`${EDGE_API}/commits/updates`);
-  return updates.find((update) => update.CommitID === id).UpdateRepoURL;
+  return instance
+    .get(`${EDGE_API}/commits/updates`)
+    .then(
+      (updates) =>
+        updates.filter((update) => update.CommitID === id).UpdateRepoURL
+    );
 };
