@@ -13,7 +13,7 @@ import {
   Button,
   Spinner,
   Bullseye,
-  Text,
+  SimpleListItem,
 } from '@patternfly/react-core';
 import {
   imageTypeMapper,
@@ -40,7 +40,6 @@ const ImageTable = ({
   clearFilters,
   openCreateWizard,
   openUpdateWizard,
-  setUpdateImageID,
 }) => {
   const [sortBy, setSortBy] = useState({ index: 4, direction: 'desc' });
   const dispatch = useDispatch();

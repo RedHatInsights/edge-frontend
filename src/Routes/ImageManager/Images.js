@@ -75,11 +75,10 @@ const Images = () => {
   const { getRegistry } = useContext(RegistryContext);
   const [pagination, setPagination] = useState({ page: 1, perPage: 100 });
   const [isCreateWizardOpen, setIsCreateWizardOpen] = useState(false);
-  const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState({
+  const [UpdateWizard, setUpdateWizard] = useState({
     isOpen: false,
-    imageId: null
+    imageId: null,
   });
-  const [updateImageID, setUpdateImageID] = useState(null);
   const history = useHistory();
   const [activeFilters, dispatchActiveFilters] = useReducer(
     activeFilterReducer,
@@ -103,9 +102,9 @@ const Images = () => {
         update_image: true,
       }).toString(),
     });
-    setIsUpdateWizardOpen({
+    setUpdateWizard({
       isOpen: true,
-      imageId: id
+      imageId: id,
     });
   };
 
@@ -214,7 +213,7 @@ const Images = () => {
           />
         </Suspense>
       )}
-      {isUpdateWizardOpen.isOpen && (
+      {UpdateWizard.isOpen && (
         <Suspense
           fallback={
             <Bullseye>
@@ -225,14 +224,14 @@ const Images = () => {
           <UpdateImageWizard
             navigateBack={() => {
               history.push({ pathname: history.location.pathname });
-              setIsUpdateWizardOpen(prevState => {
+              setUpdateWizard((prevState) => {
                 return {
                   ...prevState,
-                  isOpen:false
-                }
+                  isOpen: false,
+                };
               });
             }}
-            updateImageID={updateImageID}
+            updateImageID={UpdateWizard.imageId}
           />
         </Suspense>
       )}
