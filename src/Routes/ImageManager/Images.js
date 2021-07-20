@@ -27,6 +27,12 @@ const CreateImageWizard = React.lazy(() =>
   )
 );
 
+const UpdateImageWizard = React.lazy(() =>
+  import(
+    /* webpackChunkName: "UpdateImageWizard" */ '../ImageManager/UpdateImageWizard'
+  )
+);
+
 const defaultFilters = {
   name: {
     label: 'Name',
@@ -68,21 +74,38 @@ const activeFilterReducer = applyReducerHash(
 const Images = () => {
   const { getRegistry } = useContext(RegistryContext);
   const [pagination, setPagination] = useState({ page: 1, perPage: 100 });
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCreateWizardOpen, setIsCreateWizardOpen] = useState(false);
+  const [UpdateWizard, setUpdateWizard] = useState({
+    isOpen: false,
+    imageId: null,
+  });
   const history = useHistory();
   const [activeFilters, dispatchActiveFilters] = useReducer(
     activeFilterReducer,
     defaultFilters
   );
 
-  const openWizard = () => {
+  const openCreateWizard = () => {
     history.push({
       pathname: history.location.pathname,
       search: new URLSearchParams({
         create_image: true,
       }).toString(),
     });
-    setIsOpen(true);
+    setIsCreateWizardOpen(true);
+  };
+
+  const openUpdateWizard = (id) => {
+    history.push({
+      pathname: history.location.pathname,
+      search: new URLSearchParams({
+        update_image: true,
+      }).toString(),
+    });
+    setUpdateWizard({
+      isOpen: true,
+      imageId: id,
+    });
   };
 
   const filterConfig = {
@@ -155,7 +178,7 @@ const Images = () => {
           activeFilters={activeFilters}
           dispatchActiveFilters={dispatchActiveFilters}
           defaultFilters={defaultFilters}
-          openWizard={openWizard}
+          openCreateWizard={openCreateWizard}
         />
         <ImageTable
           clearFilters={() =>
@@ -164,7 +187,8 @@ const Images = () => {
               payload: defaultFilters,
             })
           }
-          openWizard={openWizard}
+          openCreateWizard={openCreateWizard}
+          openUpdateWizard={openUpdateWizard}
           filters={
             isEmptyFilters(activeFilters)
               ? constructActiveFilters(activeFilters)
@@ -173,7 +197,7 @@ const Images = () => {
           pagination={pagination}
         />
       </Main>
-      {isOpen && (
+      {isCreateWizardOpen && (
         <Suspense
           fallback={
             <Bullseye>
@@ -184,8 +208,30 @@ const Images = () => {
           <CreateImageWizard
             navigateBack={() => {
               history.push({ pathname: history.location.pathname });
-              setIsOpen(false);
+              setIsCreateWizardOpen(false);
             }}
+          />
+        </Suspense>
+      )}
+      {UpdateWizard.isOpen && (
+        <Suspense
+          fallback={
+            <Bullseye>
+              <Spinner />
+            </Bullseye>
+          }
+        >
+          <UpdateImageWizard
+            navigateBack={() => {
+              history.push({ pathname: history.location.pathname });
+              setUpdateWizard((prevState) => {
+                return {
+                  ...prevState,
+                  isOpen: false,
+                };
+              });
+            }}
+            updateImageID={UpdateWizard.imageId}
           />
         </Suspense>
       )}

@@ -13,6 +13,7 @@ import {
   Button,
   Spinner,
   Bullseye,
+  SimpleListItem,
 } from '@patternfly/react-core';
 import {
   imageTypeMapper,
@@ -33,7 +34,13 @@ import {
 } from './constants';
 import PropTypes from 'prop-types';
 
-const ImageTable = ({ filters, pagination, openWizard, clearFilters }) => {
+const ImageTable = ({
+  filters,
+  pagination,
+  clearFilters,
+  openCreateWizard,
+  openUpdateWizard,
+}) => {
   const [sortBy, setSortBy] = useState({ index: 4, direction: 'desc' });
   const dispatch = useDispatch();
   const { data, isLoading, hasError } = useSelector(
@@ -132,7 +139,7 @@ const ImageTable = ({ filters, pagination, openWizard, clearFilters }) => {
                       No images found
                     </Title>
                     <Button
-                      onClick={openWizard}
+                      onClick={openCreateWizard}
                       isDisabled={isLoading !== false}
                     >
                       Create new images
@@ -198,6 +205,7 @@ const ImageTable = ({ filters, pagination, openWizard, clearFilters }) => {
             title: <StatusLabel status={image?.Status} />,
           },
         ],
+        imageStatus: image?.Status,
         isoURL: image?.Installer?.ImageBuildISOURL,
       }));
     }
@@ -208,24 +216,32 @@ const ImageTable = ({ filters, pagination, openWizard, clearFilters }) => {
   };
 
   const actionResolver = (rowData) => {
-    if (rowData?.isoURL === undefined) {
-      return [];
-    }
-
-    return [
-      {
+    const actionsArray = [];
+    if (rowData?.isoURL !== undefined) {
+      actionsArray.push({
         title: (
-          <a
+          <SimpleListItem
+            component="a"
             href={rowData.isoURL}
             rel="noopener noreferrer"
             target="_blank"
-            download
           >
             Download
-          </a>
+          </SimpleListItem>
         ),
-      },
-    ];
+      });
+    }
+
+    if (rowData?.imageStatus === 'SUCCESS') {
+      actionsArray.push({
+        title: 'Update Image',
+        onClick: (_event, _rowId, rowData) => {
+          openUpdateWizard(rowData.id);
+        },
+      });
+    }
+
+    return actionsArray;
   };
 
   return (
@@ -246,7 +262,8 @@ const ImageTable = ({ filters, pagination, openWizard, clearFilters }) => {
 
 ImageTable.propTypes = {
   clearFilters: PropTypes.func.isRequired,
-  openWizard: PropTypes.func.isRequired,
+  openCreateWizard: PropTypes.func.isRequired,
+  openUpdateWizard: PropTypes.func.isRequired,
   filters: PropTypes.array.isRequired,
   pagination: PropTypes.shape({
     page: PropTypes.number,

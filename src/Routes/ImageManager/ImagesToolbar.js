@@ -16,7 +16,7 @@ const ImageToolbar = ({
   activeFilters,
   dispatchActiveFilters,
   defaultFilters,
-  openWizard,
+  openCreateWizard,
 }) => {
   const { isLoading } = useSelector(
     ({ edgeImagesReducer }) => ({
@@ -57,7 +57,7 @@ const ImageToolbar = ({
         },
       }}
       dedicatedAction={
-        <Button onClick={openWizard} isDisabled={isLoading !== false}>
+        <Button onClick={openCreateWizard} isDisabled={isLoading !== false}>
           Create new image
         </Button>
       }
@@ -79,7 +79,7 @@ ImageToolbar.propTypes = {
     status: PropTypes.object,
   }),
   dispatchActiveFilters: PropTypes.func.isRequired,
-  openWizard: PropTypes.func.isRequired,
+  openCreateWizard: PropTypes.func.isRequired,
   filters: PropTypes.array.isRequired,
   pagination: PropTypes.shape({
     page: PropTypes.number,
