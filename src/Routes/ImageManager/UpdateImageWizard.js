@@ -42,7 +42,10 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       const userData = (await insights?.chrome?.auth?.getUser()) || {};
       setUser(() => userData);
     })();
-    setUpdateRepoURL(imageUpdateRepoURL(updateImageID));
+    (async () => {
+      const found = await imageUpdateRepoURL(updateImageID);
+      setUpdateRepoURL(found);
+    })();
   }, []);
 
   return user ? (
@@ -54,6 +57,8 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       onSubmit={(values) => {
         const payload = {
           ...values,
+          name: data?.Name,
+          version: data?.Version + 1,
           architecture: 'x86_64',
           OSTreeParentCommit: updateRepoURL,
         };

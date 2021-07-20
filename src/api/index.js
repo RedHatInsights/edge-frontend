@@ -268,6 +268,7 @@ export const getPackages = async (distribution, architecture, search) => {
 
 export const createImage = ({
   name,
+  version,
   description,
   release,
   architecture,
@@ -281,6 +282,7 @@ export const createImage = ({
   }
   const payload = {
     name,
+    version,
     description,
     distribution: release,
     imageType: imageType,
@@ -333,10 +335,8 @@ export const getEdgeImageStatus = (id) => {
 };
 
 export const imageUpdateRepoURL = (id) => {
-  return instance
-    .get(`${EDGE_API}/commits/updates`)
-    .then(
-      (updates) =>
-        updates.filter((update) => update.CommitID === id).UpdateRepoURL
-    );
+  return instance.get(`${EDGE_API}/commits/updates`).then((updates) => {
+    const [found] = updates.filter((update) => update.CommitID === id);
+    return found ? found.UpdateRepoURL : '';
+  });
 };
