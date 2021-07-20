@@ -13,6 +13,7 @@ import ReviewSection from '../ReviewSection';
 
 const ReviewStep = () => {
   const { getState } = useFormApi();
+  const isUpdate = getState().initialValues.isUpdate;
   const { getRegistry } = useContext(RegistryContext);
   const { isLoading, hasError } = useSelector(
     ({ createImageReducer }) => ({
@@ -59,15 +60,20 @@ const ReviewStep = () => {
     { name: 'ssh-key', value: getState().values.credentials },
   ];
 
-  const packages = [
-    {
-      name: 'Added packages',
-      value:
-        getState().values['selected-packages'] === undefined
-          ? '0'
-          : getState().values['selected-packages'].length,
-    },
-  ];
+  const packages = () => {
+    const init = [
+      {
+        name: isUpdate ? 'Added' : 'Added packages',
+        value:
+          getState().values['selected-packages'] === undefined
+            ? '0'
+            : getState().values['selected-packages'].length,
+      },
+    ];
+    return isUpdate
+      ? [...init, { name: 'Removed', value: 0 }, { name: 'Updated', value: 0 }]
+      : init;
+  };
 
   return (
     <Fragment>
@@ -80,7 +86,8 @@ const ReviewStep = () => {
       <TextContent>
         <Text>
           Review the information and click{' '}
-          <Text component={'b'}>Create image</Text> to create your image.
+          <Text component={'b'}>Create {isUpdate ? 'update' : 'image'}</Text> to{' '}
+          {isUpdate ? 'update' : 'create'} your image.
         </Text>
         <ReviewSection
           title={'Details'}
@@ -92,14 +99,18 @@ const ReviewStep = () => {
           data={output}
           testid={'review-image-output'}
         />
-        <ReviewSection
-          title={'Registration'}
-          data={registration}
-          testid={'review-image-registration'}
-        />
+        {isUpdate ? (
+          ''
+        ) : (
+          <ReviewSection
+            title={'Registration'}
+            data={registration}
+            testid={'review-image-registration'}
+          />
+        )}
         <ReviewSection
           title={'Packages'}
-          data={packages}
+          data={packages()}
           testid={'review-image-packages'}
         />
       </TextContent>
