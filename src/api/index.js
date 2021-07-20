@@ -324,8 +324,6 @@ export const fetchEdgeImages = (
   return instance.get(`${EDGE_API}/images?${query}`);
 };
 
-export const getEdgeStatus = (ids) => {
-  return Promise.allSettled(
-    ids.map((id) => instance.get(`${EDGE_API}/images/${id}/status`))
-  );
+export const getEdgeImageStatus = (id) => {
+  return instance.get(`${EDGE_API}/images/${id}/status`);
 };

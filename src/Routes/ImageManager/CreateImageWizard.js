@@ -11,9 +11,11 @@ import {
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import { createNewImage, addImageToPoll } from '../../store/actions';
+import { createNewImage, loadEdgeImages } from '../../store/actions';
 import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
 import { useDispatch } from 'react-redux';
+import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
+import { getEdgeImageStatus } from '../../api';
 
 const CreateImage = ({ navigateBack }) => {
   const [user, setUser] = useState();
@@ -40,11 +42,55 @@ const CreateImage = ({ navigateBack }) => {
           ...values,
           architecture: 'x86_64',
         };
-        createNewImage(dispatch, payload, (data) => {
+        createNewImage(dispatch, payload, (resp) => {
+          dispatch({
+            ...addNotification({
+              variant: 'info',
+              title: 'Created image',
+              description: `${resp.value.Name} image was added to the queue.`,
+            }),
+            meta: {
+              polling: {
+                id: `FETCH_IMAGE_${resp.value.ID}_BUILD_STATUS`,
+                fetcher: () => getEdgeImageStatus(resp.value.ID),
+                condition: (resp) => {
+                  switch (resp.Status) {
+                    case 'BUILDING':
+                      return [true, ''];
+                    case 'ERROR':
+                      return [false, 'failure'];
+                    default:
+                      return [false, 'success'];
+                  }
+                },
+                onEvent: {
+                  failure: [
+                    (dispatch) =>
+                      dispatch(
+                        addNotification({
+                          variant: 'danger',
+                          title: 'Image build failed',
+                          description: `${resp.value.Name} image build is completed unsuccessfully`,
+                        })
+                      ),
+                  ],
+                  success: [
+                    (dispatch) =>
+                      dispatch(
+                        addNotification({
+                          variant: 'success',
+                          title: 'Image is ready',
+                          description: `${resp.value.Name} image build is completed`,
+                        })
+                      ),
+                    (dispatch) => loadEdgeImages(dispatch),
+                  ],
+                },
+              },
+            },
+          });
           closeAction();
-          dispatch(
-            addImageToPoll({ name: data.value.Name, id: data.value.ID })
-          );
+          loadEdgeImages(dispatch);
         });
       }}
       defaultArch="x86_64"

@@ -35,7 +35,7 @@ export default {
         { type: validatorTypes.REQUIRED },
         {
           type: validatorTypes.PATTERN,
-          pattern: /^(ssh-(rsa|dss)|ecdsa-sha2-nistp(256|384|521)) \S+/,
+          pattern: /^(ssh-(rsa|dss|ed25519)|ecdsa-sha2-nistp(256|384|521)) \S+/,
         },
       ],
       isRequired: true,

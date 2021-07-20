@@ -1,25 +1,50 @@
-import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
-import { POLLING_IMAGES } from './action-types';
+const POLLING_SUFFIX = 'POLLING';
 
-const initialState = {};
-
-const addImageToPoll = (state, { payload: { id } }) => ({
-  ...state,
-  [id]: 'BUILDING',
-});
-
-const removeImageToPoll = (state, { ids }) => {
-  const newState = state;
-  ids.forEach((id) => {
-    delete newState[id];
-  });
-  return newState;
+const hasPollingData = (polling = {}) => {
+  return polling?.id && polling?.fetcher && polling?.condition;
 };
 
-export default applyReducerHash(
-  {
-    [`${POLLING_IMAGES}_ADD`]: addImageToPoll,
-    [`${POLLING_IMAGES}_REMOVE`]: removeImageToPoll,
-  },
-  initialState
-);
+const ofPollingType = (type) => type.endsWith(`_${POLLING_SUFFIX}`);
+
+export const polling = (pollHash = {}) => ({ dispatch }) => (next) => (
+  action
+) => {
+  const { type, payload, meta } = action;
+  if (ofPollingType(type) && hasPollingData(payload)) {
+    const { id, fetcher, condition, onEvent } = payload;
+    if (pollHash[id]) {
+      return;
+    }
+    pollHash[id] = true;
+    setTimeout(() => {
+      dispatch({
+        type: id,
+        payload: fetcher().then((resp) => {
+          pollHash[id] = false;
+          const [toContinue, stateName] = condition(resp);
+          const nextActions = onEvent?.[stateName] || [];
+          nextActions.forEach((action) => action(dispatch));
+          if (toContinue) {
+            dispatch(action);
+          }
+        }),
+      }).catch(() => null);
+    }, 15 * 1000);
+    return;
+  }
+
+  if (hasPollingData(meta?.polling)) {
+    const { id, fetcher, condition, onEvent } = meta.polling;
+    dispatch({
+      type: `${id}_POLLING`,
+      payload: {
+        id,
+        fetcher,
+        condition,
+        onEvent,
+      },
+    });
+  }
+
+  next(action);
+};
