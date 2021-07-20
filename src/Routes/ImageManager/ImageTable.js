@@ -13,7 +13,7 @@ import {
   Button,
   Spinner,
   Bullseye,
-  SimpleListItem,
+  Text,
 } from '@patternfly/react-core';
 import {
   imageTypeMapper,
@@ -237,8 +237,7 @@ const ImageTable = ({
       actionsArray.push({
         title: 'Update Image',
         onClick: (_event, _rowId, rowData) => {
-          setUpdateImageID(rowData.id);
-          openUpdateWizard();
+          openUpdateWizard(rowData.id);
         },
       });
     }
@@ -266,7 +265,6 @@ ImageTable.propTypes = {
   clearFilters: PropTypes.func.isRequired,
   openCreateWizard: PropTypes.func.isRequired,
   openUpdateWizard: PropTypes.func.isRequired,
-  setUpdateImageID: PropTypes.func.isRequired,
   filters: PropTypes.array.isRequired,
   pagination: PropTypes.shape({
     page: PropTypes.number,

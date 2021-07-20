@@ -75,7 +75,10 @@ const Images = () => {
   const { getRegistry } = useContext(RegistryContext);
   const [pagination, setPagination] = useState({ page: 1, perPage: 100 });
   const [isCreateWizardOpen, setIsCreateWizardOpen] = useState(false);
-  const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState(false);
+  const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState({
+    isOpen: false,
+    imageId: null
+  });
   const [updateImageID, setUpdateImageID] = useState(null);
   const history = useHistory();
   const [activeFilters, dispatchActiveFilters] = useReducer(
@@ -93,14 +96,17 @@ const Images = () => {
     setIsCreateWizardOpen(true);
   };
 
-  const openUpdateWizard = () => {
+  const openUpdateWizard = (id) => {
     history.push({
       pathname: history.location.pathname,
       search: new URLSearchParams({
         update_image: true,
       }).toString(),
     });
-    setIsUpdateWizardOpen(true);
+    setIsUpdateWizardOpen({
+      isOpen: true,
+      imageId: id
+    });
   };
 
   const filterConfig = {
@@ -184,7 +190,6 @@ const Images = () => {
           }
           openCreateWizard={openCreateWizard}
           openUpdateWizard={openUpdateWizard}
-          setUpdateImageID={setUpdateImageID}
           filters={
             isEmptyFilters(activeFilters)
               ? constructActiveFilters(activeFilters)
@@ -209,7 +214,7 @@ const Images = () => {
           />
         </Suspense>
       )}
-      {isUpdateWizardOpen && (
+      {isUpdateWizardOpen.isOpen && (
         <Suspense
           fallback={
             <Bullseye>
@@ -220,7 +225,12 @@ const Images = () => {
           <UpdateImageWizard
             navigateBack={() => {
               history.push({ pathname: history.location.pathname });
-              setIsUpdateWizardOpen(false);
+              setIsUpdateWizardOpen(prevState => {
+                return {
+                  ...prevState,
+                  isOpen:false
+                }
+              });
             }}
             updateImageID={updateImageID}
           />
