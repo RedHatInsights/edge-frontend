@@ -41,7 +41,7 @@ const ReviewStep = () => {
 
   const details = [
     { name: 'Name', value: getState().values.name },
-    { name: 'Version', value: '1' },
+    { name: 'Version', value: getState().initialValues.version },
     { name: 'Description', value: getState().values.description },
   ];
 
@@ -60,19 +60,28 @@ const ReviewStep = () => {
     { name: 'ssh-key', value: getState().values.credentials },
   ];
 
+  const before = getState().initialValues['selected-packages'];
+  const after = getState().values['selected-packages'];
+  const calcPkgDiff = (arr1, arr2) =>
+    arr1.reduce(
+      (acc, { name }) => acc + (!arr2.some((pkg) => pkg.name === name) ? 1 : 0),
+      0
+    );
+
   const packages = () => {
-    const init = [
+    const pkgs = [
       {
         name: isUpdate ? 'Added' : 'Added packages',
-        value:
-          getState().values['selected-packages'] === undefined
-            ? '0'
-            : getState().values['selected-packages'].length,
+        value: calcPkgDiff(after, before),
       },
     ];
     return isUpdate
-      ? [...init, { name: 'Removed', value: 0 }, { name: 'Updated', value: 0 }]
-      : init;
+      ? [
+          ...pkgs,
+          { name: 'Removed', value: calcPkgDiff(before, after) },
+          { name: 'Updated', value: 0 },
+        ]
+      : pkgs;
   };
 
   return (
