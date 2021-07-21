@@ -23,6 +23,8 @@ import {
 } from '../../constants';
 import { Tiles } from '../../components/Tiles';
 import { Bullseye, Spinner } from '@patternfly/react-core';
+import DeviceStatus from './DeviceStatus';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -100,6 +102,29 @@ const Devices = () => {
           tableProps={{
             canSelectAll: false,
           }}
+          columns={() => {
+            return [
+              {
+                key: 'display_name',
+                title: 'Name',
+              },
+              {
+                key: 'updated',
+                title: 'Last seen',
+                // eslint-disable-next-line react/display-name
+                renderFunc: (dateStr) => <DateFormat date={dateStr} />,
+              },
+              {
+                key: 'system_profile',
+                title: 'Status',
+                // eslint-disable-next-line react/display-name
+                renderFunc: (sysProf) => (
+                  <DeviceStatus systemProfile={sysProf} />
+                ),
+                props: { width: 20, isStatic: true },
+              },
+            ];
+          }}
           getEntities={async (_i, config) => {
             const data = await getEntities(undefined, {
               ...config,
@@ -115,6 +140,10 @@ const Devices = () => {
                 system_profile: [
                   ...(config?.fields?.system_profile || []),
                   'host_type',
+                  'operating_system',
+                  'greenboot_status',
+                  'greenboot_fallback_detected',
+                  'rpm_ostree_deployments',
                 ],
               },
             });
@@ -143,6 +172,7 @@ const Devices = () => {
               },
             ],
           }}
+          hasCheckbox={false}
           activeFiltersConfig={{
             ...(isEmptyFilters(activeFilters) && {
               filters: constructActiveFilters(
