@@ -24,7 +24,6 @@ import {
 import { Tiles } from '../../components/Tiles';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import DeviceStatus from './DeviceStatus';
-import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -102,18 +101,12 @@ const Devices = () => {
           tableProps={{
             canSelectAll: false,
           }}
-          columns={() => {
+          columns={(defaultColumns) => {
+            const newColumns = defaultColumns.filter((column) =>
+              ['display_name', 'updated'].includes(column.key)
+            );
             return [
-              {
-                key: 'display_name',
-                title: 'Name',
-              },
-              {
-                key: 'updated',
-                title: 'Last seen',
-                // eslint-disable-next-line react/display-name
-                renderFunc: (dateStr) => <DateFormat date={dateStr} />,
-              },
+              ...newColumns,
               {
                 key: 'system_profile',
                 title: 'Status',
