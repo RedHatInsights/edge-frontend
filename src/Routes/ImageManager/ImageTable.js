@@ -217,7 +217,7 @@ const ImageTable = ({
 
   const actionResolver = (rowData) => {
     const actionsArray = [];
-    if (rowData?.isoURL !== undefined) {
+    if (rowData?.isoURL) {
       actionsArray.push({
         title: (
           <SimpleListItem
