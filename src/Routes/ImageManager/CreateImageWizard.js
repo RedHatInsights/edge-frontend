@@ -94,6 +94,7 @@ const CreateImage = ({ navigateBack }) => {
         });
       }}
       defaultArch="x86_64"
+      initialValues={{ version: 0 }}
       schema={{
         fields: [
           {
