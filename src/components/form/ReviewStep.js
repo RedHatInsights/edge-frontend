@@ -41,7 +41,7 @@ const ReviewStep = () => {
 
   const details = [
     { name: 'Name', value: getState().values.name },
-    { name: 'Version', value: getState().initialValues.version },
+    { name: 'Version', value: getState().initialValues.version + 1 },
     { name: 'Description', value: getState().values.description },
   ];
 
