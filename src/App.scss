@@ -38,10 +38,6 @@
   padding: 1rem;
 }
 
-.force-padding-left {
-  padding-left: 1rem !important;
-}
-
 .grid-align-center {
   align-self: center;
 }
@@ -51,7 +47,7 @@
 }
 
 .force-text-black {
-  color: var(--pf-c-dropdown__menu-item--Color) !important;
+  color: var(--pf-c-dropdown__menu-item--Color);
 }
 
 .remove-underline {
