@@ -49,3 +49,11 @@
 .add-100vh {
   height: 100vh
 }
+
+.force-text-black {
+  color: var(--pf-c-dropdown__menu-item--Color) !important;
+}
+
+.remove-underline {
+  text-decoration: none;
+}
