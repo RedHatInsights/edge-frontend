@@ -13,7 +13,7 @@ import {
   Button,
   Spinner,
   Bullseye,
-  SimpleListItem,
+  Text,
 } from '@patternfly/react-core';
 import {
   imageTypeMapper,
@@ -220,14 +220,15 @@ const ImageTable = ({
     if (rowData?.isoURL) {
       actionsArray.push({
         title: (
-          <SimpleListItem
+          <Text
+            className="force-text-black remove-underline"
             component="a"
             href={rowData.isoURL}
             rel="noopener noreferrer"
             target="_blank"
           >
             Download
-          </SimpleListItem>
+          </Text>
         ),
       });
     }
