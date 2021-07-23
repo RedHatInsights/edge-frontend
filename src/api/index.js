@@ -272,6 +272,8 @@ export const createImage = ({
   description,
   release,
   architecture,
+  username,
+  credentials,
   OSTreeParentCommit,
   imageType: imageTypes,
   'selected-packages': packages,
@@ -289,6 +291,10 @@ export const createImage = ({
     commit: {
       arch: architecture,
       packages: packages.map((item) => ({ name: item.name })),
+    },
+    Installer: {
+      Username: username,
+      SshKey: credentials,
     },
   };
 
