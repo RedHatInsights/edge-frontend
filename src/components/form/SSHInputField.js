@@ -19,12 +19,12 @@ const SSHInputField = (props) => {
         label="SSH key"
         helperTextInvalid={meta.error}
         validated={meta.error && meta.touched ? 'error' : 'default'}
+        isRequired
       >
         <TextArea
           className="pf-u-h-25vh"
           id="credentials"
           placeholder="Paste your public SSH key"
-          isRequired
           {...sshKeyInput}
         />
       </FormGroup>
