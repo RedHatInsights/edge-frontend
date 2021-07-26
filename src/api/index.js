@@ -335,8 +335,5 @@ export const getEdgeImageStatus = (id) => {
 };
 
 export const imageUpdateRepoURL = (id) => {
-  return instance.get(`${EDGE_API}/commits/updates`).then((updates) => {
-    const [found] = updates.filter((update) => update.CommitID === id);
-    return found ? found.UpdateRepoURL : '';
-  });
+  return instance.get(`${EDGE_API}/images/${id}/repo`).RepoURL;
 };
