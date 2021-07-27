@@ -81,6 +81,7 @@ const GroupsDetail = () => {
     shallowEqual
   );
   useEffect(() => {
+    insights.chrome.registerModule('inventory');
     const registered = getRegistry().register({
       groupsDetailReducer,
       groupDevicesInfoReducer,
