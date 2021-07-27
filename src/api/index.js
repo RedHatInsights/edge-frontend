@@ -272,7 +272,9 @@ export const createImage = ({
   description,
   release,
   architecture,
-  OSTreeParentCommit,
+  username,
+  credentials,
+  oSTreeParentCommit,
   imageType: imageTypes,
   'selected-packages': packages,
 }) => {
@@ -290,9 +292,15 @@ export const createImage = ({
       arch: architecture,
       packages: packages.map((item) => ({ name: item.name })),
     },
+    installer: {
+      username,
+      sshkey: credentials,
+    },
   };
 
-  if (OSTreeParentCommit) payload.OSTreeParentCommit = OSTreeParentCommit;
+  if (oSTreeParentCommit) {
+    payload.oSTreeParentCommit = oSTreeParentCommit;
+  }
 
   return instance.post(`${EDGE_API}/images`, payload);
 };

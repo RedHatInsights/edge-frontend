@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import { Stack, StackItem, Text } from '@patternfly/react-core';
 import { useDispatch } from 'react-redux';
 import { RegistryContext } from '../../store';
-import { loadImageStatus, loadImageDetail } from '../../store/actions';
-import { imageStatusReducer, imageDetailReducer } from '../../store/reducers';
+import { loadImageDetail } from '../../store/actions';
+import { imageDetailReducer } from '../../store/reducers';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
 import { useSelector, shallowEqual } from 'react-redux';
@@ -22,10 +22,8 @@ const ImageDetail = () => {
 
   useEffect(() => {
     const registered = getRegistry().register({
-      imageStatusReducer,
       imageDetailReducer,
     });
-    loadImageStatus(dispatch, imageId);
     loadImageDetail(dispatch, imageId);
     return () => registered();
   }, [dispatch]);
@@ -35,7 +33,7 @@ const ImageDetail = () => {
       <PageHeader className="pf-m-light">
         <Stack hasGutter>
           <StackItem>
-            <DetailsHead />
+            <DetailsHead name={data?.Name} status={data?.Status} />
           </StackItem>
         </Stack>
         <StackItem>
