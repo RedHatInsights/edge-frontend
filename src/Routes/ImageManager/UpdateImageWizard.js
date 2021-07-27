@@ -60,7 +60,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
           name: data?.Name,
           version: data?.Version + 1,
           architecture: 'x86_64',
-          OSTreeParentCommit: updateRepoURL,
+          oSTreeParentCommit: updateRepoURL,
         };
         createNewImage(dispatch, payload, (data) => {
           closeAction();
