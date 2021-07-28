@@ -1270,9 +1270,11 @@ exports[`Groups should render correctly 1`] = `
     </table>
     <div
       class="pf-c-toolbar ins-c-table__toolbar ins-m-footer"
+      data-ouia-component-id="OUIA-Generated-RHI/TableToolbar-true-1"
+      data-ouia-component-type="RHI/TableToolbar"
+      data-ouia-safe="true"
       id="pf-random-id-0"
     >
-       
       <div
         class="pf-c-toolbar__content pf-m-hidden"
         hidden=""

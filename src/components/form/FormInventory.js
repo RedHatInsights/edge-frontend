@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment, useRef, useEffect } from 'react';
 import { InventoryTable } from '@redhat-cloud-services/frontend-components/Inventory';
 import PropTypes from 'prop-types';
 import { InventoryContext } from './constants';
@@ -30,6 +30,9 @@ const FormInventoryTable = ({
   );
   const loaded = useSelector(({ entities }) => entities?.loaded);
   const rows = useSelector(({ entities }) => entities?.rows);
+  useEffect(() => {
+    insights.chrome.registerModule('inventory');
+  }, []);
   const onRefresh = (options, callback) => {
     if (!callback && inventory && inventory.current) {
       inventory.current.onRefreshData(options);

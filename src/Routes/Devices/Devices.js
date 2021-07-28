@@ -73,6 +73,7 @@ const Devices = () => {
   };
 
   useEffect(() => {
+    insights.chrome.registerModule('inventory');
     const searchParams = new URLSearchParams(history.location.search);
     if (searchParams.get('update_device') === 'true') {
       setUpdateModal((prevState) => {

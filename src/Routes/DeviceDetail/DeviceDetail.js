@@ -30,6 +30,7 @@ const DeviceDetail = () => {
   );
 
   useEffect(() => {
+    insights.chrome.registerModule('inventory');
     insights.chrome?.hideGlobalFilter?.(true);
     insights.chrome.appAction('system-detail');
   }, []);
