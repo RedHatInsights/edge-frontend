@@ -7,5 +7,6 @@ global.window.insights = {
     auth: {
       getUser: () => Promise.resolve({}),
     },
+    registerModule: jest.fn(),
   },
 };
