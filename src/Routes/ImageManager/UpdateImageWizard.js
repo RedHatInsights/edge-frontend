@@ -5,7 +5,11 @@ import { review, packages, updateDetails, imageOutput } from './steps';
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import { createNewImage, addImageToPoll } from '../../store/actions';
+import {
+  createNewImage,
+  addImageToPoll,
+  loadEdgeImages,
+} from '../../store/actions';
 import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
 import { useDispatch } from 'react-redux';
 import { useSelector, shallowEqual } from 'react-redux';
@@ -14,6 +18,7 @@ import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail } from '../../store/actions';
 import { imageUpdateRepoURL } from '../../api/index';
 import { getEdgeImageStatus } from '../../api';
+import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 
 const UpdateImage = ({ navigateBack, updateImageID }) => {
   const [user, setUser] = useState();
@@ -58,16 +63,15 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       onSubmit={(values) => {
         const payload = {
           ...values,
+          username: data?.Installer?.Username,
+          credentials: data?.Installer?.SshKey,
           name: data?.Name,
           version: data?.Version + 1,
           architecture: 'x86_64',
           oSTreeParentCommit: updateRepoURL,
         };
+
         createNewImage(dispatch, payload, (resp) => {
-          closeAction();
-          dispatch(
-            addImageToPoll({ name: data.value.Name, id: data.value.ID })
-          );
           dispatch({
             ...addNotification({
               variant: 'info',
@@ -113,7 +117,12 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
                 },
               },
             },
-          })
+          });
+          closeAction();
+          dispatch(
+            addImageToPoll({ name: data.value.Name, id: data.value.ID })
+          );
+          loadEdgeImages(dispatch);
         });
       }}
       defaultArch="x86_64"
