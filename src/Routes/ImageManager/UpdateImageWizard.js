@@ -63,8 +63,6 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       onSubmit={(values) => {
         const payload = {
           ...values,
-          username: data?.Installer?.Username,
-          credentials: data?.Installer?.SshKey,
           name: data?.Name,
           version: data?.Version + 1,
           architecture: 'x86_64',
