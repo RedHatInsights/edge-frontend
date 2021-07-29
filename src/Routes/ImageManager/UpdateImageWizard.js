@@ -74,6 +74,45 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
               title: 'Update image',
               description: `${resp.value.Name} image was added to the queue.`,
             }),
+            meta: {
+              polling: {
+                id: `FETCH_IMAGE_${resp.value.ID}_BUILD_STATUS`,
+                fetcher: () => getEdgeImageStatus(resp.value.ID),
+                condition: (resp) => {
+                  switch (resp.Status) {
+                    case 'BUILDING':
+                      return [true, ''];
+                    case 'ERROR':
+                      return [false, 'failure'];
+                    default:
+                      return [false, 'success'];
+                  }
+                },
+                onEvent: {
+                  failure: [
+                    (dispatch) =>
+                      dispatch(
+                        addNotification({
+                          variant: 'danger',
+                          title: 'Image build failed',
+                          description: `${resp.value.Name} image build is completed unsuccessfully`,
+                        })
+                      ),
+                  ],
+                  success: [
+                    (dispatch) =>
+                      dispatch(
+                        addNotification({
+                          variant: 'success',
+                          title: 'Image is ready',
+                          description: `${resp.value.Name} image build is completed`,
+                        })
+                      ),
+                    (dispatch) => loadEdgeImages(dispatch),
+                  ],
+                },
+              },
+            },
           })
         });
       }}
