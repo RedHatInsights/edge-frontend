@@ -13,6 +13,7 @@ import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail } from '../../store/actions';
 import { imageUpdateRepoURL } from '../../api/index';
+import { getEdgeImageStatus } from '../../api';
 
 const UpdateImage = ({ navigateBack, updateImageID }) => {
   const [user, setUser] = useState();
@@ -62,11 +63,18 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
           architecture: 'x86_64',
           oSTreeParentCommit: updateRepoURL,
         };
-        createNewImage(dispatch, payload, (data) => {
+        createNewImage(dispatch, payload, (resp) => {
           closeAction();
           dispatch(
             addImageToPoll({ name: data.value.Name, id: data.value.ID })
           );
+          dispatch({
+            ...addNotification({
+              variant: 'info',
+              title: 'Update image',
+              description: `${resp.value.Name} image was added to the queue.`,
+            }),
+          })
         });
       }}
       defaultArch="x86_64"
