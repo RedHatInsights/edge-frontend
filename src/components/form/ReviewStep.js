@@ -114,9 +114,7 @@ const ReviewStep = () => {
             data={registration}
             testid={'review-image-registration'}
           />
-        ) : (
-          ''
-        )}
+        ) : null}
         <ReviewSection
           title={'Packages'}
           data={packages()}
