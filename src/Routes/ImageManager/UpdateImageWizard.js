@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import ImageCreator from '../../components/ImageCreator';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-import { review, packages, updateDetails, imageOutput } from './steps';
+import {
+  review,
+  packages,
+  updateDetails,
+  registration,
+  imageOutput,
+} from './steps';
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
@@ -61,6 +67,12 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
           version: data?.Version + 1,
           architecture: 'x86_64',
           oSTreeParentCommit: updateRepoURL,
+          credentials: values.credentials
+            ? values.credentials
+            : data?.Installer.SshKey,
+          username: values.username
+            ? values.username
+            : data?.Installer.Username,
         };
         createNewImage(dispatch, payload, (data) => {
           closeAction();
@@ -74,7 +86,10 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         name: data?.Name,
         isUpdate: true,
         description: data?.Description,
+        credentials: data?.Installer.SshKey,
+        username: data?.Installer.Username,
         version: data?.Version,
+        imageType: ['rhel-edge-commit'],
         'selected-packages': data?.Commit?.Packages.map((pkg) => ({
           ...pkg,
           name: pkg.Name,
@@ -93,10 +108,16 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
             },
             showTitles: true,
             title: `Update image: ${data?.Name}`,
-            crossroads: ['target-environment', 'release'],
+            crossroads: ['target-environment', 'release', 'imageType'],
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
-            fields: [updateDetails, imageOutput, packages, review],
+            fields: [
+              updateDetails,
+              imageOutput,
+              registration,
+              packages,
+              review,
+            ],
           },
         ],
       }}

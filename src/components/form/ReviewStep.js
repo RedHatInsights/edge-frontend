@@ -108,14 +108,14 @@ const ReviewStep = () => {
           data={output}
           testid={'review-image-output'}
         />
-        {isUpdate ? (
-          ''
-        ) : (
+        {getState().values.imageType.includes('rhel-edge-installer') ? (
           <ReviewSection
             title={'Registration'}
             data={registration}
             testid={'review-image-registration'}
           />
+        ) : (
+          ''
         )}
         <ReviewSection
           title={'Packages'}
