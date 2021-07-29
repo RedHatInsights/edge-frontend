@@ -17,7 +17,6 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { deviceDetail } from '../../store/deviceDetail';
 import { RegistryContext } from '../../store';
-import systemProfileStore from '@redhat-cloud-services/frontend-components-inventory-general-info/redux';
 
 const DeviceDetail = () => {
   const { getRegistry } = useContext(RegistryContext);
@@ -45,7 +44,6 @@ const DeviceDetail = () => {
       showTags
       onLoad={({ mergeWithDetail }) => {
         getRegistry().register({
-          systemProfileStore,
           ...mergeWithDetail(deviceDetail),
         });
       }}

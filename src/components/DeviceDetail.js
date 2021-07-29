@@ -1,37 +1,22 @@
-import React, { Suspense, lazy } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useStore, useSelector } from 'react-redux';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 import { Tooltip } from '@patternfly/react-core';
-
-const GeneralInformation = lazy(() =>
-  import(
-    '@redhat-cloud-services/frontend-components-inventory-general-info/GeneralInformation'
-  )
-);
-
-const SystemCard = lazy(() =>
-  import(
-    '@redhat-cloud-services/frontend-components-inventory-general-info/SystemCard'
-  )
-);
-const OperatingSystemCard = lazy(() =>
-  import(
-    '@redhat-cloud-services/frontend-components-inventory-general-info/OperatingSystemCard'
-  )
-);
-
-const CollectionCard = lazy(() =>
-  import(
-    '@redhat-cloud-services/frontend-components-inventory-general-info/CollectionCard'
-  )
-);
-
-import {
-  generalMapper,
-  statusHelper,
-} from '@redhat-cloud-services/frontend-components-inventory-general-info/dataMapper';
+import { useModule } from '@scalprum/react-core';
+import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
+import { RegistryContext } from '../store';
 
 const GeneralInformationTab = () => {
+  useEffect(() => {
+    insights.chrome.registerModule('inventory');
+  }, []);
+  const { generalMapper, statusHelper } = useModule(
+    'inventory',
+    './dataMapper',
+    {}
+  );
+  const { getRegistry } = useContext(RegistryContext);
+  const store = useStore();
   const writePermissions = useSelector(
     ({ permissionsReducer }) => permissionsReducer?.writePermissions
   );
@@ -53,71 +38,86 @@ const GeneralInformationTab = () => {
     rhcHealth: systemProfileStore?.systemProfile?.rhc_health,
   }));
 
-  return (
-    <Suspense fallback="">
-      <GeneralInformation
-        store={useStore()}
-        writePermissions={writePermissions}
-        ConfigurationCardWrapper={false}
-        SystemCardWrapper={(props) => (
-          <Suspense fallback="">
-            <SystemCard {...props} hasSAP={false} />
-          </Suspense>
-        )}
-        OperatingSystemCardWrapper={(props) => (
-          <Suspense fallback="">
-            <OperatingSystemCard
-              {...props}
-              hasKernelModules={false}
-              extra={[
-                { title: 'Running rpm-ostree version', value: runningVersion },
-                {
-                  title: 'Staged rpm-ostree version',
-                  value: stagedVersion,
-                },
-                {
-                  title: 'Non-active (available rollback version(s))',
-                  value: nonActiveVersion?.length,
-                  plural: 'versions',
-                  singular: 'version',
-                  onClick: (_e, handleClick) =>
-                    handleClick(
-                      'Non-active (available rollback version(s))',
-                      generalMapper(nonActiveVersion || [], 'Version'),
-                      'small'
-                    ),
-                },
-                {
-                  title: 'Health check status',
-                  value: statusHelper[heathCheck?.toUpperCase()] || (
-                    <Tooltip content="Unknown service status">
-                      <OutlinedQuestionCircleIcon className="ins-c-inventory__detail--unknown" />
-                    </Tooltip>
-                  ),
-                },
-              ]}
-            />
-          </Suspense>
-        )}
-        CollectionCardWrapper={(props) => (
-          <Suspense fallback="">
-            <CollectionCard
-              {...props}
-              extra={[
-                {
-                  title: 'RHC Health (broker functioning)',
-                  value: statusHelper[rhcHealth?.toUpperCase()] || (
-                    <Tooltip content="Unknown service status">
-                      <OutlinedQuestionCircleIcon className="ins-c-inventory__detail--unknown" />
-                    </Tooltip>
-                  ),
-                },
-              ]}
-            />
-          </Suspense>
-        )}
-      />
-    </Suspense>
+  return generalMapper && statusHelper ? (
+    <AsyncComponent
+      store={store}
+      getRegistry={getRegistry}
+      appName="inventory"
+      module="./SystemDetail"
+      writePermissions={writePermissions}
+      ConfigurationCardWrapper={false}
+      SystemCardWrapper={(props) => (
+        <AsyncComponent
+          store={store}
+          getRegistry={getRegistry}
+          appName="inventory"
+          module="./SystemCard"
+          {...props}
+          hasSAP={false}
+        />
+      )}
+      OperatingSystemCardWrapper={(props) => (
+        <AsyncComponent
+          store={store}
+          getRegistry={getRegistry}
+          appName="inventory"
+          module="./OperatingSystemCard"
+          {...props}
+          hasKernelModules={false}
+          extra={[
+            {
+              title: 'Running rpm-ostree version',
+              value: runningVersion,
+            },
+            {
+              title: 'Staged rpm-ostree version',
+              value: stagedVersion,
+            },
+            {
+              title: 'Non-active (available rollback version(s))',
+              value: nonActiveVersion?.length,
+              plural: 'versions',
+              singular: 'version',
+              onClick: (_e, handleClick) =>
+                handleClick(
+                  'Non-active (available rollback version(s))',
+                  generalMapper(nonActiveVersion || [], 'Version'),
+                  'small'
+                ),
+            },
+            {
+              title: 'Health check status',
+              value: statusHelper[heathCheck?.toUpperCase()] || (
+                <Tooltip content="Unknown service status">
+                  <OutlinedQuestionCircleIcon className="ins-c-inventory__detail--unknown" />
+                </Tooltip>
+              ),
+            },
+          ]}
+        />
+      )}
+      CollectionCardWrapper={(props) => (
+        <AsyncComponent
+          store={store}
+          getRegistry={getRegistry}
+          appName="inventory"
+          module="./CollectionCard"
+          {...props}
+          extra={[
+            {
+              title: 'RHC Health (broker functioning)',
+              value: statusHelper[rhcHealth?.toUpperCase()] || (
+                <Tooltip content="Unknown service status">
+                  <OutlinedQuestionCircleIcon className="ins-c-inventory__detail--unknown" />
+                </Tooltip>
+              ),
+            },
+          ]}
+        />
+      )}
+    />
+  ) : (
+    ''
   );
 };
 
