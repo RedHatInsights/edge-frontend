@@ -11,7 +11,10 @@ import {
 export default {
   title: 'Image output',
   name: 'imageOutput',
-  nextStep: ({ values }) => (values.isUpdate ? 'packages' : 'registration'),
+  nextStep: ({ values }) =>
+    values.imageType?.includes('rhel-edge-installer')
+      ? 'registration'
+      : 'packages',
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,
