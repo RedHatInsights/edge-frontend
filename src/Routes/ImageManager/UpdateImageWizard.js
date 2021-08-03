@@ -129,10 +129,10 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
             },
           });
           closeAction();
+          loadEdgeImages(dispatch);
           dispatch(
             addImageToPoll({ name: data.value.Name, id: data.value.ID })
           );
-          loadEdgeImages(dispatch);
         });
       }}
       defaultArch="x86_64"
