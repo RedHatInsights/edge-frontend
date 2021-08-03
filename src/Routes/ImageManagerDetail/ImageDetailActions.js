@@ -11,7 +11,6 @@ import {
 } from '@patternfly/react-core';
 
 const ImageActions = ({ imageData, openUpdateWizard }) => {
-  console.log(imageData);
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownItems = [
