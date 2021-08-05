@@ -18,12 +18,13 @@ const ImageToolbar = ({
   defaultFilters,
   openCreateWizard,
 }) => {
-  const { isLoading } = useSelector(
+  const { count, isLoading } = useSelector(
     ({ edgeImagesReducer }) => ({
       isLoading:
         edgeImagesReducer?.isLoading === undefined
           ? true
           : edgeImagesReducer.isLoading,
+      count: edgeImagesReducer?.data?.count || 0,
     }),
     shallowEqual
   );
@@ -32,9 +33,10 @@ const ImageToolbar = ({
     <PrimaryToolbar
       filterConfig={filterConfig}
       pagination={{
-        itemCount: 100,
+        itemCount: count,
         ...pagination,
-        onSetPage: (_evt, newPage) => setPagination({ page: newPage }),
+        onSetPage: (_evt, newPage) =>
+          setPagination({ ...pagination, page: newPage }),
         onPerPageSelect: (_evt, newPerPage) =>
           setPagination({ page: 1, perPage: newPerPage }),
       }}
