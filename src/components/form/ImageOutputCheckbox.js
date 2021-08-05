@@ -5,24 +5,22 @@ import {
   TextContent,
   Text,
   TextVariants,
-  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import PropTypes from 'prop-types';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
-import { ExclamationTriangleIcon } from '@patternfly/react-icons';
-import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 
 const WarningInstallerHelperText = () => (
-  <FormHelperText
-    isHidden={false}
-    className='pf-u-ml-xl'
-    icon={<ExclamationTriangleIcon color={warningColor.value} />}
-  >
-    Creating an installable version of your image increases the build time and
-    is not needed for updating existing devices. You can create an installable
-    version of this image later if you continue with this option
-  </FormHelperText>
+  <HelperText className="pf-u-ml-lg" hasIcon>
+    <HelperTextItem className="pf-u-pb-md" variant="warning" hasIcon>
+      Creating an installable version of your image increases the build time and
+      is not needed for updating existing devices. <br />
+      You can create an installable version of this image later if you continue
+      with this option
+    </HelperTextItem>
+  </HelperText>
 );
 
 const outputHelperText = {
@@ -30,8 +28,6 @@ const outputHelperText = {
     'An OSTree commit is always created when building an image.',
   'rhel-edge-installer':
     'An installable version of the image is typically created with a brand new image.',
-  'rhel-edge-installer-warning': `Creating an installable version of your image increases the build time  \
-  and is not needed for updating existing devices. \n You can create an installable version of this image later if you continue with this option`,
 };
 
 const ImageOutputCheckbox = (props) => {
@@ -50,7 +46,7 @@ const ImageOutputCheckbox = (props) => {
 
   return (
     <FormGroup
-      label='Output type'
+      label="Output type"
       isHelperTextBeforeField
       hasNoPaddingTop
       isRequired
@@ -67,21 +63,23 @@ const ImageOutputCheckbox = (props) => {
             isDisabled={value === 'rhel-edge-commit'}
           />
           <TextContent>
-            <Text component={TextVariants.small}>
-              {getState()?.initialValues?.isUpdate &&
-              value === 'rhel-edge-installer' ? (
-                <WarningInstallerHelperText />
-              ) : (
-                outputHelperText[value]
-              )}
-            </Text>
+            {getState()?.initialValues?.isUpdate &&
+            value === 'rhel-edge-installer' ? (
+              <WarningInstallerHelperText />
+            ) : (
+              <HelperText className="pf-u-ml-lg pf-u-pb-sm">
+                <HelperTextItem variant="indeterminate">
+                  {outputHelperText[value]}
+                </HelperTextItem>
+              </HelperText>
+            )}
             {value === 'rhel-edge-installer' && (
               <Text component={TextVariants.small}>
                 <Text
-                  className='pf-u-ml-xl'
+                  className="pf-u-ml-lg"
                   component={TextVariants.a}
                   isVisitedLink
-                  href='#'
+                  href="#"
                 >
                   Learn more about image types.
                 </Text>
