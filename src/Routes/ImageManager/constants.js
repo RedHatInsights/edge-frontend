@@ -1,9 +1,7 @@
-export const transformPaginationParams = ({ perPage, page }) => {
-  return {
-    limit: perPage,
-    offset: (page - 1) * perPage,
-  };
-};
+export const transformPaginationParams = ({ perPage, page }) => ({
+  limit: perPage,
+  offset: (page - 1) * perPage,
+});
 
 export const transformFilters = (filters) => {
   const f = filters.reduce((acc, filter) => {

@@ -180,8 +180,8 @@ const ImageTable = ({
       ];
     }
 
-    if (data?.length) {
-      rows = data.map((image) => ({
+    if (data?.data?.length) {
+      rows = data.data.map((image) => ({
         id: image.ID,
         cells: [
           {
