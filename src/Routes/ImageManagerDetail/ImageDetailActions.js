@@ -14,10 +14,7 @@ const ImageActions = ({ imageData, openUpdateWizard }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownItems = [
-    <DropdownItem
-      href={imageData?.Installer?.ImageBuildISOURL}
-      key="link"
-    >
+    <DropdownItem href={imageData?.Installer?.ImageBuildISOURL} key="link">
       <Text className="force-text-black">Download</Text>
     </DropdownItem>,
   ];
@@ -38,16 +35,18 @@ const ImageActions = ({ imageData, openUpdateWizard }) => {
         <Button onClick={handleUpdate} variant="secondary">
           Update
         </Button>
-        {imageData.Installer.ImageBuildISOURL ? 
+        {imageData.Installer.ImageBuildISOURL ? (
           <Dropdown
             position="right"
             onSelect={handleSelect}
-            toggle={<KebabToggle onToggle={handleToggle} id="image-detail-kebab" />}
+            toggle={
+              <KebabToggle onToggle={handleToggle} id="image-detail-kebab" />
+            }
             isOpen={isOpen}
             isPlain
             dropdownItems={dropdownItems}
           />
-        : null}
+        ) : null}
       </SplitItem>
     </>
   );
@@ -59,6 +58,9 @@ ImageActions.propTypes = {
     ID: PropTypes.number,
     Name: PropTypes.string,
     Status: PropTypes.string,
+    Installer: PropTypes.shape({
+      ImageBuildISOURL: PropTypes.string,
+    }),
   }),
 };
 
