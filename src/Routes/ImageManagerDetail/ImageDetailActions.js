@@ -15,7 +15,6 @@ const ImageActions = ({ imageData, openUpdateWizard }) => {
 
   const dropdownItems = [
     <DropdownItem
-      listItemClassName="remove-list-style pf-u-mr-lg"
       href={imageData?.Installer?.ImageBuildISOURL}
       key="link"
     >
@@ -27,12 +26,6 @@ const ImageActions = ({ imageData, openUpdateWizard }) => {
 
   const handleSelect = () => {
     setIsOpen((prevState) => !prevState);
-    onFocus();
-  };
-
-  const onFocus = () => {
-    const element = document.getElementById('toggle-id-6');
-    element.focus();
   };
 
   const handleUpdate = () => {
@@ -45,14 +38,16 @@ const ImageActions = ({ imageData, openUpdateWizard }) => {
         <Button onClick={handleUpdate} variant="secondary">
           Update
         </Button>
-        <Dropdown
-          position="right"
-          onSelect={handleSelect}
-          toggle={<KebabToggle onToggle={handleToggle} id="toggle-id-6" />}
-          isOpen={isOpen}
-          isPlain
-          dropdownItems={dropdownItems}
-        />
+        {imageData.Installer.ImageBuildISOURL ? 
+          <Dropdown
+            position="right"
+            onSelect={handleSelect}
+            toggle={<KebabToggle onToggle={handleToggle} id="image-detail-kebab" />}
+            isOpen={isOpen}
+            isPlain
+            dropdownItems={dropdownItems}
+          />
+        : null}
       </SplitItem>
     </>
   );
