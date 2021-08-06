@@ -9,37 +9,59 @@ import {
   Skeleton,
   Breadcrumb,
   BreadcrumbItem,
+  Split,
+  SplitItem,
 } from '@patternfly/react-core';
 import StatusLabel from './StatusLabel';
+import ImageDetailActions from './ImageDetailActions';
 import { routes as paths } from '../../../package.json';
 
-const DetailsHead = ({ name, status }) => {
+const DetailsHead = ({ imageData, openUpdateWizard }) => {
   return (
     <>
       <Breadcrumb>
         <BreadcrumbItem>
           <Link to={paths['manage-images']}>Manage Images</Link>
         </BreadcrumbItem>
-        <BreadcrumbItem isActive>{name}</BreadcrumbItem>
+        <BreadcrumbItem isActive>{imageData?.Name}</BreadcrumbItem>
       </Breadcrumb>
 
       <TextContent>
-        <TextList component="dl">
-          <TextListItem component="h1" className="grid-align-center">
-            {name}
-          </TextListItem>
-          <TextListItem className="pf-u-pt-xs" component="dd">
-            {status ? <StatusLabel status={status} /> : <Skeleton />}
-          </TextListItem>
-        </TextList>
+        <Split>
+          <SplitItem>
+            <TextList component="dl">
+              <TextListItem component="h1" className="grid-align-center">
+                {imageData?.Name}
+              </TextListItem>
+              <TextListItem component="dd">
+                {imageData?.Status ? (
+                  <StatusLabel status={imageData?.Status} />
+                ) : (
+                  <Skeleton />
+                )}
+              </TextListItem>
+            </TextList>
+          </SplitItem>
+          <SplitItem isFilled></SplitItem>
+          {imageData?.Status === 'SUCCESS' ? (
+            <ImageDetailActions
+              imageData={imageData}
+              openUpdateWizard={openUpdateWizard}
+            />
+          ) : null}
+        </Split>
       </TextContent>
     </>
   );
 };
 
 DetailsHead.propTypes = {
-  name: PropTypes.string,
-  status: PropTypes.string,
+  openUpdateWizard: PropTypes.func,
+  imageData: PropTypes.shape({
+    ID: PropTypes.number,
+    Name: PropTypes.string,
+    Status: PropTypes.string,
+  }),
 };
 
 export default DetailsHead;

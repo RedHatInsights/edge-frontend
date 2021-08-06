@@ -53,3 +53,8 @@
 .remove-underline {
   text-decoration: none;
 }
+
+[aria-labelledby="image-detail-kebab"] {
+  list-style-type: none;
+  padding-left: 0;
+}
