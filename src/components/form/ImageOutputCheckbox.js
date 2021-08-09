@@ -8,6 +8,7 @@ import {
   HelperText,
   HelperTextItem,
 } from '@patternfly/react-core';
+import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import PropTypes from 'prop-types';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
@@ -79,9 +80,9 @@ const ImageOutputCheckbox = (props) => {
                   className="pf-u-ml-lg"
                   component={TextVariants.a}
                   isVisitedLink
-                  href="#"
                 >
                   Learn more about image types.
+                  <ExternalLinkAltIcon className="pf-u-ml-sm" />
                 </Text>
               </Text>
             )}
