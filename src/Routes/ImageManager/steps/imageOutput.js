@@ -9,10 +9,10 @@ import {
 } from '../../ImageManagerDetail/constants';
 
 export default {
-  title: 'Image output',
+  title: 'Options',
   name: 'imageOutput',
   nextStep: ({ values }) =>
-    values.imageType?.includes('rhel-edge-installer')
+    values?.imageType?.includes('rhel-edge-installer') || !values.imageType
       ? 'registration'
       : 'packages',
   fields: [
@@ -43,7 +43,7 @@ export default {
           label: imageTypeLabel,
         })
       ),
-      initialValue: ['rhel-edge-installer'],
+      initialValue: ['rhel-edge-installer', 'rhel-edge-commit'],
       clearedValue: [],
       validate: [{ type: validatorTypes.REQUIRED }],
     },

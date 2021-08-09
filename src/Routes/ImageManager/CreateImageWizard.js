@@ -108,8 +108,7 @@ const CreateImage = ({ navigateBack }) => {
             },
             showTitles: true,
             title: 'Create image',
-            crossroads: ['target-environment', 'release'],
-            description: 'Create RHEL for Edge image',
+            crossroads: ['target-environment', 'release', 'imageType'],
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
             fields: [

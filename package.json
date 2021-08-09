@@ -46,7 +46,7 @@
     "@data-driven-forms/react-form-renderer": "^3.7.0",
     "@patternfly/patternfly": "4.70.2",
     "@patternfly/react-charts": "^6.12.12",
-    "@patternfly/react-core": "4.128.2",
+    "@patternfly/react-core": "4.135.0",
     "@patternfly/react-icons": "^4.7.22",
     "@patternfly/react-styles": "^4.7.22",
     "@patternfly/react-table": "4.19.45",

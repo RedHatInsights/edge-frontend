@@ -30,6 +30,12 @@ const Packages = ({ defaultArch, ...props }) => {
     setPackagesSelected(
       mapPackagesToComponent(getState()?.values?.[input.name] || [])
     );
+    const availableSearchInput = document.querySelector(
+      '[aria-label="Available search input"]'
+    );
+    availableSearchInput?.addEventListener('keydown', handleSearchOnEnter);
+    return () =>
+      availableSearchInput.removeEventListener('keydown', handleSearchOnEnter);
   }, []);
 
   const packageListChange = (newAvailablePackages, newChosenPackages) => {
@@ -46,6 +52,13 @@ const Packages = ({ defaultArch, ...props }) => {
       packagesSearchName.current
     );
     setPackagesAvailable(mapPackagesToComponent(data || []));
+  };
+
+  const handleSearchOnEnter = (e) => {
+    if (e.key === 'Enter') {
+      e.stopPropagation();
+      handlePackagesSearch();
+    }
   };
 
   return (
