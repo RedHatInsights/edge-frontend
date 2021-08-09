@@ -25,7 +25,7 @@ const ImageDetailTab = () => {
     'Output type': () => imageTypeMapper[data['ImageType']],
     'Added packages': () => data.Commit.Packages.length,
     'Base Packages': () => 0,
-    Dependancies: () => 0,
+    Dependencies: () => 0,
   };
 
   return (
