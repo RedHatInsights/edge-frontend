@@ -35,7 +35,7 @@ const ImageActions = ({ imageData, openUpdateWizard }) => {
         <Button onClick={handleUpdate} variant="secondary">
           Update
         </Button>
-        {imageData.Installer.ImageBuildISOURL ? (
+        {imageDatat?.Installer?.ImageBuildISOURL ? (
           <Dropdown
             position="right"
             onSelect={handleSelect}
