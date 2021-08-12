@@ -342,6 +342,6 @@ export const getEdgeImageStatus = (id) => {
   return instance.get(`${EDGE_API}/images/${id}/status`);
 };
 
-export const imageUpdateRepoURL = (id) => {
-  return instance.get(`${EDGE_API}/images/${id}/repo`).RepoURL;
+export const getImageRepo = (id) => {
+  return instance.get(`${EDGE_API}/images/${id}/repo`);
 };
