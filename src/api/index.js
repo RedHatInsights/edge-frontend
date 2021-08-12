@@ -300,6 +300,7 @@ export const createImage = ({
 
   if (oSTreeParentCommit) {
     payload.oSTreeParentCommit = oSTreeParentCommit;
+    payload['OSTreeRef'] = 'rhel/8/x86_64/edge';
   }
 
   return instance.post(`${EDGE_API}/images`, payload);
