@@ -274,7 +274,7 @@ export const createImage = ({
   architecture,
   username,
   credentials,
-  oSTreeParentCommit,
+  ostreeParentCommit,
   imageType: imageTypes,
   'selected-packages': packages,
 }) => {
@@ -298,8 +298,9 @@ export const createImage = ({
     },
   };
 
-  if (oSTreeParentCommit) {
-    payload.oSTreeParentCommit = oSTreeParentCommit;
+  if (ostreeParentCommit) {
+    payload.commit.ostreeParentCommit = ostreeParentCommit;
+    payload.commit.ostreeRef = 'rhel/8/x86_64/edge';
   }
 
   return instance.post(`${EDGE_API}/images`, payload);

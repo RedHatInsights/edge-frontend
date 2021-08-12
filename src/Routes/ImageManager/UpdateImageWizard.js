@@ -72,7 +72,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
           name: data?.Name,
           version: data?.Version + 1,
           architecture: 'x86_64',
-          oSTreeParentCommit: updateRepoURL,
+          ostreeParentCommit: updateRepoURL,
           credentials: values.credentials
             ? values.credentials
             : data?.Installer.SshKey,
