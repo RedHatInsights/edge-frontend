@@ -22,7 +22,7 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail } from '../../store/actions';
-import { imageUpdateRepoURL } from '../../api/index';
+import { getImageRepo } from '../../api/index';
 import { getEdgeImageStatus } from '../../api';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 
@@ -55,8 +55,8 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       setUser(() => userData);
     })();
     (async () => {
-      const found = await imageUpdateRepoURL(updateImageID);
-      setUpdateRepoURL(found);
+      const repo = await getImageRepo(updateImageID);
+      setUpdateRepoURL(repo.RepoURL);
     })();
   }, []);
 
