@@ -31,6 +31,32 @@ import {
   statusHelper,
 } from '@redhat-cloud-services/frontend-components-inventory-general-info/dataMapper';
 
+// temp
+const data = {
+  greenboot_status: 'green',
+  rpm_ostree_deployments: [
+    {
+      id:
+        'rhel-edge-7b7ffe8a0a8c54d9625313437a01fa292a866cfa6edf64087879698de7384329.0',
+      booted: true,
+      origin: 'rhel-edge:rhel/8/x86_64/edge',
+      osname: 'rhel-edge',
+      pinned: false,
+      checksum:
+        '7b7ffe8a0a8c54d9625313437a01fa292a866cfa6edf64087879698de7384329',
+    },
+    {
+      id:
+        'rhel-edge-7b7ffe8a0a8c54d9625313437a01fa292a866cfa6edf64087879698de7384329.0',
+      booted: false,
+      origin: 'rhel-edge:rhel/8/x86_64/edge',
+      osname: 'rhel-edge',
+      pinned: false,
+      checksum:
+        '7b7ffe8a0a8c54d9625313437a01fa292a866cfa6edf64087879698de7384329',
+    },
+  ],
+};
 const GeneralInformationTab = () => {
   const writePermissions = useSelector(
     ({ permissionsReducer }) => permissionsReducer?.writePermissions
@@ -44,12 +70,16 @@ const GeneralInformationTab = () => {
     rhcHealth,
   } = useSelector(({ systemProfileStore }) => ({
     runningVersion:
-      systemProfileStore?.systemProfile?.running_rpm_os_tree_version,
+      //systemProfileStore?.systemProfile?.running_rpm_os_tree_version,
+      data.rpm_ostree_deployments.find((deployment) => deployment.booted)
+        .checksum,
     stagedVersion:
       systemProfileStore?.systemProfile?.staged_rpm_os_tree_version,
     nonActiveVersion:
-      systemProfileStore?.systemProfile?.non_active_rpm_os_tree_version || [],
-    heathCheck: systemProfileStore?.systemProfile?.health_check,
+      //systemProfileStore?.systemProfile?.non_active_rpm_os_tree_version || [],
+      data.rpm_ostree_deployments.filter((deployment) => !deployment.booted),
+    heathCheck: data.greenboot_status === 'green' ? 'up' : 'down',
+    //systemProfileStore?.systemProfile?.health_check,
     rhcHealth: systemProfileStore?.systemProfile?.rhc_health,
   }));
 
