@@ -66,7 +66,8 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       customComponentMapper={{
         review: ReviewStep,
       }}
-      onSubmit={(values) => {
+      onSubmit={({ values, setIsSaving }) => {
+        setIsSaving(() => true);
         const payload = {
           ...values,
           name: data?.Name,
