@@ -11,7 +11,7 @@ export default {
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
-      label: <Text>Use this to connect your device to Fleet Management.</Text>,
+      label: <Text>Use this to log into your device.</Text>,
     },
     {
       component: componentTypes.TEXT_FIELD,
