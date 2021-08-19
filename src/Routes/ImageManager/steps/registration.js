@@ -20,22 +20,19 @@ export default {
       helperText: (
         <HelperText>
           <HelperTextItem className="pf-u-mt-xs" variant="indeterminate">
-            Can only contain letters, numbers, hyphen (-), and underscores(_).
+            Can only contain letters, numbers, hyphen ( - ), and underscores( _
+            ).
           </HelperTextItem>
         </HelperText>
       ),
       name: 'username',
       validate: [
-        {
-          type: validatorTypes.REQUIRED,
-          message:
-            'Required, can only contain letters, numbers, hyphen (-), and underscores(_).',
-        },
+        { type: validatorTypes.REQUIRED },
         {
           type: validatorTypes.PATTERN,
           pattern: /^[A-Za-z0-9]+[A-Za-z0-9_-]*$/,
           message:
-            'Can only contain letters, numbers, hyphen (-), and underscores(_).',
+            'Can only contain letters, numbers, hyphen ( - ), and underscores( _ ).',
         },
         { type: validatorTypes.MAX_LENGTH, threshold: 50 },
       ],
