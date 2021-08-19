@@ -19,7 +19,7 @@ export default {
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
-      label: <Text>Enter some basic information for your image.</Text>,
+      label: <Text>Enter some basic information about your image.</Text>,
     },
     {
       component: componentTypes.SELECT,

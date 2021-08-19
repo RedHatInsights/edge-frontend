@@ -45,15 +45,19 @@ const ReviewStep = () => {
     { name: 'Description', value: getState().values.description },
   ];
 
-  const output = [
-    { name: 'Release', value: releaseMapper[getState().values.release] },
-    {
-      name: 'Type',
-      value: getState()
-        .values.imageType.map((type) => `${imageTypeMapper[type]}`)
-        .join(', '),
-    },
-  ];
+  const output = () => {
+    let outputs = [
+      { name: 'Release', value: releaseMapper[getState().values.release] },
+      {
+        name: 'Output Type',
+        value: imageTypeMapper['rhel-edge-commit'],
+      },
+    ];
+    if (getState().values.imageType.includes('rhel-edge-installer')) {
+      outputs.push({ name: '', value: imageTypeMapper['rhel-edge-installer'] });
+    }
+    return outputs;
+  };
 
   const registration = [
     { name: 'Username', value: getState().values['username'] },
@@ -71,7 +75,7 @@ const ReviewStep = () => {
   const packages = () => {
     const pkgs = [
       {
-        name: isUpdate ? 'Added' : 'Added packages',
+        name: 'Added',
         value: calcPkgDiff(after, before),
       },
     ];
@@ -95,8 +99,7 @@ const ReviewStep = () => {
       <TextContent>
         <Text>
           Review the information and click{' '}
-          <Text component={'b'}>Create {isUpdate ? 'update' : 'image'}</Text> to{' '}
-          {isUpdate ? 'update' : 'create'} your image.
+          <Text component={'b'}>Create image</Text> to start the build process.
         </Text>
         <ReviewSection
           title={'Details'}
@@ -105,7 +108,7 @@ const ReviewStep = () => {
         />
         <ReviewSection
           title={'Output'}
-          data={output}
+          data={output()}
           testid={'review-image-output'}
         />
         {getState().values.imageType.includes('rhel-edge-installer') ? (
