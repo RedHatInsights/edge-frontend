@@ -12,6 +12,7 @@ import ImageOutputCheckbox from './form/ImageOutputCheckbox';
 import SSHInputField from './form/SSHInputField';
 import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
 import { registrationCredsValidator } from './form/RegistrationCreds';
+import { reservedUsernameValidator } from './form/validators';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 
 /**
@@ -68,6 +69,7 @@ const CreateImageWizard = ({
       validatorMapper={{
         ...validatorTypes,
         registrationCredsValidator,
+        reservedUsernameValidator,
       }}
       onCancel={onClose}
     />

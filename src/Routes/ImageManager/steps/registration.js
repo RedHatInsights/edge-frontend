@@ -25,6 +25,7 @@ export default {
           pattern: /^[A-Za-z0-9]+[A-Za-z0-9_-]*$/,
         },
         { type: validatorTypes.MAX_LENGTH, threshold: 50 },
+        { type: 'reservedUsernameValidator' },
       ],
       isRequired: true,
     },
