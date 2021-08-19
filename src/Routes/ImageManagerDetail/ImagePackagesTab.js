@@ -95,19 +95,19 @@ const ImagePackagesTab = () => {
   }, [data]);
 
   const handleSort = (_event, index, direction) => {
-    const sortedRows = rows.sort((a, b) =>
-      a.rowArray[index] < b.rowArray[index]
-        ? -1
-        : a.rowArray[index] > b.rowArray[index]
-        ? 1
-        : 0
+    const sortedRows = data.sort((a, b) =>
+      a.Name < b.Name ? -1 : a.Name > b.Name ? 1 : 0
     );
     setSortBy({
       index,
       direction,
     });
     setRows(
-      direction === SortByDirection.asc ? sortedRows : sortedRows.reverse()
+      flatten(
+        parserRows(
+          direction === SortByDirection.asc ? sortedRows : sortedRows.reverse()
+        ).slice(0, perPage)
+      )
     );
   };
 
