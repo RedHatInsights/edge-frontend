@@ -35,6 +35,7 @@ export default {
             'Can only contain letters, numbers, hyphen ( - ), and underscores( _ ).',
         },
         { type: validatorTypes.MAX_LENGTH, threshold: 50 },
+        { type: 'reservedUsernameValidator' },
       ],
       isRequired: true,
     },
