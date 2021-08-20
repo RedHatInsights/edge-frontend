@@ -18,7 +18,7 @@ The edge-frontend repo is the front-end for [RHEL for Edge/Fleet managment ](htt
 - [Data-Driven-Forms](#data-driven-forms)
 
 ## Cloud-Services-Config
-[Cloud-service-config](https://github.com/RedHatInsights/cloud-services-config) is used to run Red Hat Hybrid Cloud Console locally, RHEL for Edge/Fleet Management is part of Red Hat Hybrid Cloud Console. 
+[Cloud-service-config](https://github.com/RedHatInsights/cloud-services-config) is used to run Red Hat Hybrid Cloud Console locally. RHEL for Edge/Fleet Management is part of Red Hat Hybrid Cloud Console. 
 
 ## Insights-Proxy
 [Insights-proxy](https://github.com/RedHatInsights/insights-proxy) is the proxy this repo uses to combine together local code and remote code. In this repo we use insights to combine our local edge-frontend code to the remote code that runs console.redhat.com.
@@ -92,7 +92,7 @@ BETA=true npm run start:proxy
 
 Follow the guide on [insights-proxy](https://github.com/RedHatInsights/insights-proxy) on how to install proxy.
 
-Once insights is setup, run Spandx with the following commands:
+Once insights-proxy is setup, run Spandx with the following commands:
 
 ### **For frontend only**
 In one terminal run
@@ -102,7 +102,7 @@ USE_CLOUD=true SPANDX_CONFIG=./profiles/local-frontend.js ../insights-proxy/scri
 
 ### **For frontend and backend** 
 
-In one termainal setup and run the [Edge-api](https://github.com/RedHatInsights/edge-api)
+In one terminal setup and run [Edge-api](https://github.com/RedHatInsights/edge-api)
 
 In another terminal run
  
