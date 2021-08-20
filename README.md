@@ -37,7 +37,7 @@ More technically, spandx is a flexible, configuration-based reverse proxy for lo
 [Frontend-components](https://github.com/RedHatInsights/frontend-components) is a monorepo of Red Hat Cloud services Components for applications in a React.js environment. This repo uses a lot of components imported from the frontend-components repo using module federation.
 
 ## Module Federation
-[Module Federation](https://webpack.js.org/concepts/module-federation/) is a feature in Webpack that allows for sharing components outside a repo. When importing a component with module federation, the component is bundled with it's dependances.
+[Module Federation](https://webpack.js.org/concepts/module-federation/) is a feature in Webpack that allows for sharing components outside a repo. When importing a component with module federation, the component is bundled with it's dependencies.
 
 ## Data Driven Forms
 [Data Driven Forms](https://data-driven-forms.org/) converts JSON form definitions (schemas) into fully functional React forms with the provided set of features.
