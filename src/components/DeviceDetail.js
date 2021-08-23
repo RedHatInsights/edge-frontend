@@ -2,6 +2,8 @@ import React, { Suspense, lazy } from 'react';
 import { useStore, useSelector } from 'react-redux';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 import { Tooltip } from '@patternfly/react-core';
+import TitleWithPopover from './TitleWithPopover';
+import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 
 const GeneralInformation = lazy(() =>
   import(
@@ -20,11 +22,24 @@ const OperatingSystemCard = lazy(() =>
   )
 );
 
+const BiosCard = lazy(() =>
+  import(
+    '@redhat-cloud-services/frontend-components-inventory-general-info/BiosCard'
+  )
+);
+
 const CollectionCard = lazy(() =>
   import(
     '@redhat-cloud-services/frontend-components-inventory-general-info/CollectionCard'
   )
 );
+
+const InfrastructureCard = lazy(() =>
+  import(
+    '@redhat-cloud-services/frontend-components-inventory-general-info/InfrastructureCard'
+  )
+);
+const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
 
 import {
   generalMapper,
@@ -88,45 +103,56 @@ const GeneralInformationTab = () => {
       <GeneralInformation
         store={useStore()}
         writePermissions={writePermissions}
-        ConfigurationCardWrapper={false}
         SystemCardWrapper={(props) => (
           <Suspense fallback="">
-            <SystemCard {...props} hasSAP={false} />
-          </Suspense>
-        )}
-        OperatingSystemCardWrapper={(props) => (
-          <Suspense fallback="">
-            <OperatingSystemCard
+            <SystemCard
               {...props}
-              hasKernelModules={false}
+              hasCPUs={false}
+              hasSockets={false}
+              hasCores={false}
+              hasCPUFlags={false}
+              hasRAM={false}
+              hasSAP={false}
               extra={[
-                { title: 'Running rpm-ostree version', value: runningVersion },
                 {
-                  title: 'Staged rpm-ostree version',
-                  value: stagedVersion,
-                },
-                {
-                  title: 'Non-active (available rollback version(s))',
-                  value: nonActiveVersion?.length,
-                  plural: 'versions',
-                  singular: 'version',
-                  onClick: (_e, handleClick) =>
-                    handleClick(
-                      'Non-active (available rollback version(s))',
-                      generalMapper(nonActiveVersion || [], 'Version'),
-                      'small'
-                    ),
-                },
-                {
-                  title: 'Health check status',
-                  value: statusHelper[heathCheck?.toUpperCase()] || (
-                    <Tooltip content="Unknown service status">
-                      <OutlinedQuestionCircleIcon className="ins-c-inventory__detail--unknown" />
-                    </Tooltip>
+                  title: (
+                    <TitleWithPopover
+                      title="GreenBoot Status"
+                      content="This is a description about greenboot status"
+                    />
+                  ),
+                  value: (
+                    <>
+                      Last check in:{' '}
+                      <DateFormat date={Date.now()} type="relative" />
+                    </>
                   ),
                 },
               ]}
             />
+          </Suspense>
+        )}
+        OperatingSystemCardWrapper={(props) => (
+          <Suspense fallback="">
+            {' '}
+            <InfrastructureCard {...props} />
+          </Suspense>
+        )}
+        BiosCardWrapper={(props) => (
+          <Suspense fallback="">
+            {' '}
+            <ImageInformationCard {...props} />
+            {/*<div>Hello</div>*/}
+          </Suspense>
+        )}
+        InfrastructureCardWrapper={(props) => (
+          <Suspense fallback="">
+            <BiosCard {...props} />
+          </Suspense>
+        )}
+        ConfigurationCardWrapper={(props) => (
+          <Suspense fallback="">
+            <OperatingSystemCard {...props} hasKernelModules={true} />
           </Suspense>
         )}
         CollectionCardWrapper={(props) => (
