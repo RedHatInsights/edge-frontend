@@ -15,7 +15,10 @@ import ImageTable from './ImageTable';
 import ImageToolbar from './ImagesToolbar';
 import { Spinner, Bullseye } from '@patternfly/react-core';
 import { useHistory } from 'react-router-dom';
-import { composeStatus, distributionMapper } from '../ImageManagerDetail/constants';
+import {
+  composeStatus,
+  distributionMapper,
+} from '../ImageManagerDetail/constants';
 import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
 import { isEmptyFilters, constructActiveFilters } from '../../constants';
 import { RegistryContext } from '../../store';
@@ -136,7 +139,10 @@ const Images = () => {
               property: 'distribution',
               value,
             }),
-            items: Object.entries(distributionMapper).map(([value, label]) => ({label, value,})),
+          items: Object.entries(distributionMapper).map(([value, label]) => ({
+            label,
+            value,
+          })),
           value: activeFilters?.distribution?.value || '',
         },
       },
