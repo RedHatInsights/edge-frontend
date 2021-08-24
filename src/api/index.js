@@ -288,6 +288,7 @@ export const createImage = ({
     description,
     distribution: release,
     imageType: imageType,
+    outputTypes: imageTypes,
     commit: {
       arch: architecture,
       packages: packages.map((item) => ({ name: item.name })),
