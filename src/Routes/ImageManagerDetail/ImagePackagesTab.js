@@ -109,6 +109,7 @@ const ImagePackagesTab = () => {
         ).slice(0, perPage)
       )
     );
+    setPage(0);
   };
 
   return (
