@@ -11,6 +11,11 @@ const webpackProxy = {
   useProxy: true,
   env: 'stage-beta', // for accessing prod-beta change this to 'prod-beta'
   appUrl: process.env.BETA ? '/beta/edge' : '/edge',
+  ...(process.env.API_PORT && {
+    routes: {
+      '/api/edge': { host: `http://localhost:${process.env.API_PORT}` },
+    },
+  }),
 };
 
 const { config: webpackConfig, plugins } = config({
