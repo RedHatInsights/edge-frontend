@@ -275,7 +275,6 @@ export const createImage = ({
   architecture,
   username,
   credentials,
-  ostreeParentCommit,
   imageType: imageTypes,
   'selected-packages': packages,
 }) => {
@@ -299,11 +298,6 @@ export const createImage = ({
       sshkey: credentials,
     },
   };
-
-  if (ostreeParentCommit) {
-    payload.commit.ostreeParentCommit = ostreeParentCommit;
-    payload.commit.ostreeRef = 'rhel/8/x86_64/edge';
-  }
 
   let endpoint = `${EDGE_API}/images`;
 

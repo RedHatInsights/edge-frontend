@@ -29,7 +29,6 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 const UpdateImage = ({ navigateBack, updateImageID }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
-  const [updateRepoURL, setUpdateRepoURL] = useState('');
   const closeAction = () => {
     navigateBack();
     dispatch({ type: CREATE_NEW_IMAGE_RESET });
@@ -56,7 +55,6 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
     })();
     (async () => {
       const repo = await getImageRepo(updateImageID);
-      setUpdateRepoURL(repo.RepoURL);
     })();
   }, []);
 
@@ -74,7 +72,6 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
           name: data?.Name,
           version: data?.Version + 1,
           architecture: 'x86_64',
-          ostreeParentCommit: updateRepoURL,
           credentials: values.credentials
             ? values.credentials
             : data?.Installer.SshKey,
