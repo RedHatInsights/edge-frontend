@@ -126,7 +126,7 @@ const Devices = () => {
                 ...config.filter,
                 system_profile: {
                   ...config.filter?.system_profile,
-                  //host_type: 'edge', temporary
+                  host_type: 'edge',
                 },
               },
               fields: {

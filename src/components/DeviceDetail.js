@@ -3,7 +3,7 @@ import { useStore, useSelector } from 'react-redux';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 import { Tooltip } from '@patternfly/react-core';
 import TitleWithPopover from './TitleWithPopover';
-import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
+import GreenbootStatus from './GreenbootStatus';
 
 const GeneralInformation = lazy(() =>
   import(
@@ -39,63 +39,27 @@ const InfrastructureCard = lazy(() =>
     '@redhat-cloud-services/frontend-components-inventory-general-info/InfrastructureCard'
   )
 );
-const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
+//const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
 
-import {
-  generalMapper,
-  statusHelper,
-} from '@redhat-cloud-services/frontend-components-inventory-general-info/dataMapper';
+import { statusHelper } from '@redhat-cloud-services/frontend-components-inventory-general-info/dataMapper';
 
-// temp
-const data = {
-  greenboot_status: 'green',
-  rpm_ostree_deployments: [
-    {
-      id:
-        'rhel-edge-7b7ffe8a0a8c54d9625313437a01fa292a866cfa6edf64087879698de7384329.0',
-      booted: true,
-      origin: 'rhel-edge:rhel/8/x86_64/edge',
-      osname: 'rhel-edge',
-      pinned: false,
-      checksum:
-        '7b7ffe8a0a8c54d9625313437a01fa292a866cfa6edf64087879698de7384329',
-    },
-    {
-      id:
-        'rhel-edge-7b7ffe8a0a8c54d9625313437a01fa292a866cfa6edf64087879698de7384329.0',
-      booted: false,
-      origin: 'rhel-edge:rhel/8/x86_64/edge',
-      osname: 'rhel-edge',
-      pinned: false,
-      checksum:
-        '7b7ffe8a0a8c54d9625313437a01fa292a866cfa6edf64087879698de7384329',
-    },
-  ],
-};
 const GeneralInformationTab = () => {
   const writePermissions = useSelector(
     ({ permissionsReducer }) => permissionsReducer?.writePermissions
   );
 
   const {
-    runningVersion,
-    stagedVersion,
-    nonActiveVersion,
-    heathCheck,
+    //runningVersion,
+    //stagedVersion,
+    //rollbackVersion,
+    greenbootStatus,
     rhcHealth,
   } = useSelector(({ systemProfileStore }) => ({
-    runningVersion:
-      //systemProfileStore?.systemProfile?.running_rpm_os_tree_version,
-      data.rpm_ostree_deployments.find((deployment) => deployment.booted)
-        .checksum,
-    stagedVersion:
-      systemProfileStore?.systemProfile?.staged_rpm_os_tree_version,
-    nonActiveVersion:
-      //systemProfileStore?.systemProfile?.non_active_rpm_os_tree_version || [],
-      data.rpm_ostree_deployments.filter((deployment) => !deployment.booted),
-    heathCheck: data.greenboot_status === 'green' ? 'up' : 'down',
-    //systemProfileStore?.systemProfile?.health_check,
-    rhcHealth: systemProfileStore?.systemProfile?.rhc_health,
+    runningVersion: null,
+    stagedVersion: null,
+    nonActiveVersion: null,
+    greenbootStatus: systemProfileStore?.systemProfile?.greenboot_status,
+    rhcHealth: null,
   }));
 
   return (
@@ -121,12 +85,7 @@ const GeneralInformationTab = () => {
                       content="This is a description about greenboot status"
                     />
                   ),
-                  value: (
-                    <>
-                      Last check in:{' '}
-                      <DateFormat date={Date.now()} type="relative" />
-                    </>
-                  ),
+                  value: <GreenbootStatus status={greenbootStatus} />,
                 },
               ]}
             />
@@ -138,13 +97,14 @@ const GeneralInformationTab = () => {
             <InfrastructureCard {...props} />
           </Suspense>
         )}
-        BiosCardWrapper={(props) => (
-          <Suspense fallback="">
-            {' '}
-            <ImageInformationCard {...props} />
-            {/*<div>Hello</div>*/}
-          </Suspense>
-        )}
+        BiosCardWrapper={false}
+        // replace above with below when image data available
+        //BiosCardWrapper={(props) => (
+        //  <Suspense fallback=''>
+        //    {' '}
+        //    <ImageInformationCard {...props} />
+        //  </Suspense>
+        //)}
         InfrastructureCardWrapper={(props) => (
           <Suspense fallback="">
             <BiosCard {...props} />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Popover, Button } from '@patternfly/react-core';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
+import PropTypes from 'prop-types';
 
 const TitleWithPopover = ({ title, content }) => (
   <>
@@ -19,5 +20,10 @@ const TitleWithPopover = ({ title, content }) => (
     </Popover>
   </>
 );
+
+TitleWithPopover.propTypes = {
+  title: PropTypes.string,
+  content: PropTypes.string,
+};
 
 export default TitleWithPopover;

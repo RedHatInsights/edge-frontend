@@ -10,7 +10,6 @@ import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeade
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import {
   InventoryDetailHead,
-  AppInfo,
   DetailWrapper,
 } from '@redhat-cloud-services/frontend-components/Inventory';
 import { useParams } from 'react-router-dom';
@@ -18,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { deviceDetail } from '../../store/deviceDetail';
 import { RegistryContext } from '../../store';
 import systemProfileStore from '@redhat-cloud-services/frontend-components-inventory-general-info/redux';
+import DeviceDetailTabs from './DeviceDetailTabs';
 
 const DeviceDetail = () => {
   const { getRegistry } = useContext(RegistryContext);
@@ -77,7 +77,7 @@ const DeviceDetail = () => {
       <Main className="edge-c-device--detail">
         <Grid gutter="md">
           <GridItem span={12}>
-            <AppInfo showTags fallback="" />
+            <DeviceDetailTabs />
           </GridItem>
         </Grid>
       </Main>
