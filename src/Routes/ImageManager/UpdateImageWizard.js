@@ -70,6 +70,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         setIsSaving(() => true);
         const payload = {
           ...values,
+          Id: data?.ID,
           name: data?.Name,
           version: data?.Version + 1,
           architecture: 'x86_64',

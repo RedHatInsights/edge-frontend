@@ -267,6 +267,7 @@ export const getPackages = async (distribution, architecture, search) => {
 };
 
 export const createImage = ({
+  Id,
   name,
   version,
   description,
@@ -304,7 +305,13 @@ export const createImage = ({
     payload.commit.ostreeRef = 'rhel/8/x86_64/edge';
   }
 
-  return instance.post(`${EDGE_API}/images`, payload);
+  let endpoint = `${EDGE_API}/images`
+
+  if (version > 1) {
+    endpoint += `/${Id}/update`
+  }
+
+  return instance.post(endpoint, payload);
 };
 
 export const fetchEdgeImages = (
