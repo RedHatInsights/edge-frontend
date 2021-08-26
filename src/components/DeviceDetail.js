@@ -2,6 +2,8 @@ import React, { Suspense, lazy } from 'react';
 import { useStore, useSelector } from 'react-redux';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 import { Tooltip } from '@patternfly/react-core';
+import TitleWithPopover from './TitleWithPopover';
+import GreenbootStatus from './GreenbootStatus';
 
 const GeneralInformation = lazy(() =>
   import(
@@ -20,16 +22,26 @@ const OperatingSystemCard = lazy(() =>
   )
 );
 
+const BiosCard = lazy(() =>
+  import(
+    '@redhat-cloud-services/frontend-components-inventory-general-info/BiosCard'
+  )
+);
+
 const CollectionCard = lazy(() =>
   import(
     '@redhat-cloud-services/frontend-components-inventory-general-info/CollectionCard'
   )
 );
 
-import {
-  generalMapper,
-  statusHelper,
-} from '@redhat-cloud-services/frontend-components-inventory-general-info/dataMapper';
+const InfrastructureCard = lazy(() =>
+  import(
+    '@redhat-cloud-services/frontend-components-inventory-general-info/InfrastructureCard'
+  )
+);
+//const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
+
+import { statusHelper } from '@redhat-cloud-services/frontend-components-inventory-general-info/dataMapper';
 
 const GeneralInformationTab = () => {
   const writePermissions = useSelector(
@@ -37,20 +49,17 @@ const GeneralInformationTab = () => {
   );
 
   const {
-    runningVersion,
-    stagedVersion,
-    nonActiveVersion,
-    heathCheck,
+    //runningVersion,
+    //stagedVersion,
+    //rollbackVersion,
+    greenbootStatus,
     rhcHealth,
   } = useSelector(({ systemProfileStore }) => ({
-    runningVersion:
-      systemProfileStore?.systemProfile?.running_rpm_os_tree_version,
-    stagedVersion:
-      systemProfileStore?.systemProfile?.staged_rpm_os_tree_version,
-    nonActiveVersion:
-      systemProfileStore?.systemProfile?.non_active_rpm_os_tree_version || [],
-    heathCheck: systemProfileStore?.systemProfile?.health_check,
-    rhcHealth: systemProfileStore?.systemProfile?.rhc_health,
+    runningVersion: null,
+    stagedVersion: null,
+    nonActiveVersion: null,
+    greenbootStatus: systemProfileStore?.systemProfile?.greenboot_status,
+    rhcHealth: null,
   }));
 
   return (
@@ -58,45 +67,52 @@ const GeneralInformationTab = () => {
       <GeneralInformation
         store={useStore()}
         writePermissions={writePermissions}
-        ConfigurationCardWrapper={false}
         SystemCardWrapper={(props) => (
           <Suspense fallback="">
-            <SystemCard {...props} hasSAP={false} />
+            <SystemCard
+              {...props}
+              hasCPUs={false}
+              hasSockets={false}
+              hasCores={false}
+              hasCPUFlags={false}
+              hasRAM={false}
+              hasSAP={false}
+              extra={[
+                {
+                  title: (
+                    <TitleWithPopover
+                      title="GreenBoot Status"
+                      content="This is a description about greenboot status"
+                    />
+                  ),
+                  value: <GreenbootStatus status={greenbootStatus} />,
+                },
+              ]}
+            />
           </Suspense>
         )}
         OperatingSystemCardWrapper={(props) => (
           <Suspense fallback="">
-            <OperatingSystemCard
-              {...props}
-              hasKernelModules={false}
-              extra={[
-                { title: 'Running rpm-ostree version', value: runningVersion },
-                {
-                  title: 'Staged rpm-ostree version',
-                  value: stagedVersion,
-                },
-                {
-                  title: 'Non-active (available rollback version(s))',
-                  value: nonActiveVersion?.length,
-                  plural: 'versions',
-                  singular: 'version',
-                  onClick: (_e, handleClick) =>
-                    handleClick(
-                      'Non-active (available rollback version(s))',
-                      generalMapper(nonActiveVersion || [], 'Version'),
-                      'small'
-                    ),
-                },
-                {
-                  title: 'Health check status',
-                  value: statusHelper[heathCheck?.toUpperCase()] || (
-                    <Tooltip content="Unknown service status">
-                      <OutlinedQuestionCircleIcon className="ins-c-inventory__detail--unknown" />
-                    </Tooltip>
-                  ),
-                },
-              ]}
-            />
+            {' '}
+            <InfrastructureCard {...props} />
+          </Suspense>
+        )}
+        BiosCardWrapper={false}
+        // replace above with below when image data available
+        //BiosCardWrapper={(props) => (
+        //  <Suspense fallback=''>
+        //    {' '}
+        //    <ImageInformationCard {...props} />
+        //  </Suspense>
+        //)}
+        InfrastructureCardWrapper={(props) => (
+          <Suspense fallback="">
+            <BiosCard {...props} />
+          </Suspense>
+        )}
+        ConfigurationCardWrapper={(props) => (
+          <Suspense fallback="">
+            <OperatingSystemCard {...props} hasKernelModules={true} />
           </Suspense>
         )}
         CollectionCardWrapper={(props) => (
