@@ -305,10 +305,10 @@ export const createImage = ({
     payload.commit.ostreeRef = 'rhel/8/x86_64/edge';
   }
 
-  let endpoint = `${EDGE_API}/images`
+  let endpoint = `${EDGE_API}/images`;
 
   if (version > 1) {
-    endpoint += `/${Id}/update`
+    endpoint += `/${Id}/update`;
   }
 
   return instance.post(endpoint, payload);
