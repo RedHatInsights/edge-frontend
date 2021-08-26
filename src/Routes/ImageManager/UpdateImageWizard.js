@@ -22,7 +22,6 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail } from '../../store/actions';
-import { getImageRepo } from '../../api/index';
 import { getEdgeImageStatus } from '../../api';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 
@@ -52,9 +51,6 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
     (async () => {
       const userData = (await insights?.chrome?.auth?.getUser()) || {};
       setUser(() => userData);
-    })();
-    (async () => {
-      const repo = await getImageRepo(updateImageID);
     })();
   }, []);
 
