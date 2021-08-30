@@ -53,3 +53,12 @@
 .remove-underline {
   text-decoration: none;
 }
+
+[aria-labelledby="image-detail-kebab"] {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.ins-c-general-information dt {
+  width: 175px;
+}

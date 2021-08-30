@@ -4,7 +4,7 @@ import { Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 
 export default {
-  title: 'Image details',
+  title: 'Details',
   name: 'imageSetDetails',
   nextStep: 'imageOutput',
   fields: [
@@ -12,7 +12,7 @@ export default {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
       label: (
-        <Text>Add a description to easily identify your image later.</Text>
+        <Text>Enter a description to easily identify your image later.</Text>
       ),
     },
     {

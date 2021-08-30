@@ -267,6 +267,7 @@ export const getPackages = async (distribution, architecture, search) => {
 };
 
 export const createImage = ({
+  Id,
   name,
   version,
   description,
@@ -274,7 +275,6 @@ export const createImage = ({
   architecture,
   username,
   credentials,
-  oSTreeParentCommit,
   imageType: imageTypes,
   'selected-packages': packages,
 }) => {
@@ -288,6 +288,7 @@ export const createImage = ({
     description,
     distribution: release,
     imageType: imageType,
+    outputTypes: imageTypes,
     commit: {
       arch: architecture,
       packages: packages.map((item) => ({ name: item.name })),
@@ -298,11 +299,13 @@ export const createImage = ({
     },
   };
 
-  if (oSTreeParentCommit) {
-    payload.oSTreeParentCommit = oSTreeParentCommit;
+  let endpoint = `${EDGE_API}/images`;
+
+  if (version > 1) {
+    endpoint += `/${Id}/update`;
   }
 
-  return instance.post(`${EDGE_API}/images`, payload);
+  return instance.post(endpoint, payload);
 };
 
 export const fetchEdgeImages = (
@@ -340,8 +343,4 @@ export const fetchEdgeImages = (
 
 export const getEdgeImageStatus = (id) => {
   return instance.get(`${EDGE_API}/images/${id}/status`);
-};
-
-export const imageUpdateRepoURL = (id) => {
-  return instance.get(`${EDGE_API}/images/${id}/repo`).RepoURL;
 };

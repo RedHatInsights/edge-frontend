@@ -19,7 +19,7 @@ import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/Prima
 import flatten from 'lodash/flatten';
 
 const ImagePackagesTab = () => {
-  const [perPage, setPerPage] = useState(100);
+  const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState({});
   const [rows, setRows] = useState([]);
@@ -39,26 +39,39 @@ const ImagePackagesTab = () => {
     },
   ];
 
+  const parserRows = (rows) => {
+    return rows.map((pack) => [
+      {
+        id: pack?.ID,
+        rowArray: [pack.Name],
+        cells: [
+          {
+            title: (
+              <TextContent>
+                <Text component={TextVariants.p}>{pack?.Name}</Text>
+              </TextContent>
+            ),
+          },
+        ],
+      },
+    ]);
+  };
+
+  const handleSetPage = (_evt, newPage, perPage, startIdx, endIdx) => {
+    setPage(newPage);
+    setRows(flatten(parserRows(data.slice(startIdx, endIdx))));
+  };
+
+  const handlePerPage = (_evt, newPerPage, newPage, startIdx, endIdx) => {
+    setPerPage(newPerPage);
+    setPage(newPage);
+    setRows(flatten(parserRows(data.slice(startIdx, endIdx))));
+  };
+
   useEffect(() => {
     setRows(
       data !== null && data.length > 0
-        ? flatten(
-            data.map((pack) => [
-              {
-                id: pack?.ID,
-                rowArray: [pack.Name],
-                cells: [
-                  {
-                    title: (
-                      <TextContent>
-                        <Text component={TextVariants.p}>{pack?.Name}</Text>
-                      </TextContent>
-                    ),
-                  },
-                ],
-              },
-            ])
-          )
+        ? flatten(parserRows(data.slice(0, perPage)))
         : [
             {
               heightAuto: true,
@@ -82,20 +95,21 @@ const ImagePackagesTab = () => {
   }, [data]);
 
   const handleSort = (_event, index, direction) => {
-    const sortedRows = rows.sort((a, b) =>
-      a.rowArray[index] < b.rowArray[index]
-        ? -1
-        : a.rowArray[index] > b.rowArray[index]
-        ? 1
-        : 0
+    const sortedRows = data.sort((a, b) =>
+      a.Name < b.Name ? -1 : a.Name > b.Name ? 1 : 0
     );
     setSortBy({
       index,
       direction,
     });
     setRows(
-      direction === SortByDirection.asc ? sortedRows : sortedRows.reverse()
+      flatten(
+        parserRows(
+          direction === SortByDirection.asc ? sortedRows : sortedRows.reverse()
+        ).slice(0, perPage)
+      )
     );
+    setPage(0);
   };
 
   return (
@@ -106,8 +120,8 @@ const ImagePackagesTab = () => {
             itemCount: data?.length || 0,
             page,
             perPage,
-            onSetPage: (_evt, newPage) => setPage(newPage),
-            onPerPageSelect: (_evt, newPerPage) => setPerPage(newPerPage),
+            onSetPage: handleSetPage,
+            onPerPageSelect: handlePerPage,
             isCompact: true,
           }}
         />

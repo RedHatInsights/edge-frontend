@@ -24,8 +24,6 @@ const ImageDetailTab = () => {
     Release: () => distributionMapper[data['Distribution']],
     'Output type': () => imageTypeMapper[data['ImageType']],
     'Added packages': () => data.Commit.Packages.length,
-    'Base Packages': () => 0,
-    Dependancies: () => 0,
   };
 
   return (

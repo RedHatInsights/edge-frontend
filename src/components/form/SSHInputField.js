@@ -32,7 +32,7 @@ const SSHInputField = (props) => {
         <Text component={TextVariants.small}>
           <Text
             target="_blank"
-            href="https://access.redhat.com/solutions/3356121"
+            href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_basic_system_settings/using-secure-communications-between-two-systems-with-openssh_configuring-basic-system-settings#generating-ssh-key-pairs_using-secure-communications-between-two-systems-with-openssh"
             isVisitedLink
             component={TextVariants.a}
           >

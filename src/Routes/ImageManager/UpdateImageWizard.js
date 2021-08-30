@@ -22,14 +22,12 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail } from '../../store/actions';
-import { imageUpdateRepoURL } from '../../api/index';
 import { getEdgeImageStatus } from '../../api';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 
 const UpdateImage = ({ navigateBack, updateImageID }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
-  const [updateRepoURL, setUpdateRepoURL] = useState('');
   const closeAction = () => {
     navigateBack();
     dispatch({ type: CREATE_NEW_IMAGE_RESET });
@@ -54,10 +52,6 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       const userData = (await insights?.chrome?.auth?.getUser()) || {};
       setUser(() => userData);
     })();
-    (async () => {
-      const found = await imageUpdateRepoURL(updateImageID);
-      setUpdateRepoURL(found);
-    })();
   }, []);
 
   return user ? (
@@ -66,13 +60,14 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       customComponentMapper={{
         review: ReviewStep,
       }}
-      onSubmit={(values) => {
+      onSubmit={({ values, setIsSaving }) => {
+        setIsSaving(() => true);
         const payload = {
           ...values,
+          Id: data?.ID,
           name: data?.Name,
           version: data?.Version + 1,
           architecture: 'x86_64',
-          oSTreeParentCommit: updateRepoURL,
           credentials: values.credentials
             ? values.credentials
             : data?.Installer.SshKey,
@@ -158,7 +153,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
             isDynamic: true,
             inModal: true,
             buttonLabels: {
-              submit: 'Create update',
+              submit: 'Create image',
             },
             showTitles: true,
             title: `Update image: ${data?.Name}`,
