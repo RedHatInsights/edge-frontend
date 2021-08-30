@@ -98,6 +98,7 @@ const Devices = () => {
           onRefresh={onRefresh}
           tableProps={{
             canSelectAll: false,
+            variant: 'compact',
           }}
           actions={[
             {
@@ -117,14 +118,18 @@ const Devices = () => {
             const newColumns = defaultColumns.filter((column) =>
               ['display_name', 'updated'].includes(column.key)
             );
+            newColumns.filter((col) => col.key === 'updated')[0].props = {
+              width: 20,
+            };
+
             return [
               ...newColumns,
               {
                 key: 'system_profile',
                 title: 'Status',
                 // eslint-disable-next-line react/display-name
-                renderFunc: (sysProf) => (
-                  <DeviceStatus systemProfile={sysProf} />
+                renderFunc: (sysProf, id) => (
+                  <DeviceStatus id={id} systemProfile={sysProf} />
                 ),
                 props: { width: 20, isStatic: true },
               },

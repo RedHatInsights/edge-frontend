@@ -344,3 +344,11 @@ export const fetchEdgeImages = (
 export const getEdgeImageStatus = (id) => {
   return instance.get(`${EDGE_API}/images/${id}/status`);
 };
+
+export const getDeviceHasUpdate = async (id) => {
+  try {
+    return await instance.get(`${EDGE_API}/updates/device/${id}/updates`);
+  } catch (err) {
+    console.log('get device update error', err);
+  }
+};
