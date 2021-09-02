@@ -6,7 +6,7 @@ import React, {
   useState,
   Suspense,
 } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
   PageHeader,
@@ -24,6 +24,7 @@ import {
 import { Tiles } from '../../components/Tiles';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import DeviceStatus from './DeviceStatus';
+import { getDeviceHasUpdate } from '../../api';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -55,7 +56,6 @@ const deviceStatusMapper = [
 ];
 
 const Devices = () => {
-  const [getEntities, setGetEntities] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState(defaultFilters);
   const { getRegistry } = useContext(RegistryContext);
@@ -69,6 +69,8 @@ const Devices = () => {
       callback(options);
     }
   };
+  const rows = useSelector(({ entities }) => entities?.rows);
+  console.log(rows);
 
   useEffect(() => {
     insights.chrome.registerModule('inventory');
@@ -117,15 +119,20 @@ const Devices = () => {
                 key: 'system_profile',
                 title: 'Status',
                 // eslint-disable-next-line react/display-name
-                renderFunc: (sysProf, id) => (
-                  <DeviceStatus id={id} systemProfile={sysProf} />
+                renderFunc: (sysProf) => (
+                  <DeviceStatus systemProfile={sysProf} />
                 ),
                 props: { width: 20, isStatic: true },
               },
             ];
           }}
-          getEntities={async (_i, config) => {
-            const data = await getEntities(undefined, {
+          getEntities={async (
+            _items,
+            config,
+            _showTags,
+            defaultGetEntities
+          ) => {
+            const defaultData = await defaultGetEntities(undefined, {
               ...config,
               filter: {
                 ...config.filter,
@@ -146,7 +153,26 @@ const Devices = () => {
                 ],
               },
             });
-            return data;
+
+            const promises = defaultData.results.map(async (device) => {
+              const getImageInfo = await getDeviceHasUpdate(device.id);
+              const imageInfo =
+                getImageInfo === 404 ? { data: null } : getImageInfo;
+              return {
+                ...device,
+                system_profile: {
+                  ...device.system_profile,
+                  image_data: Object.prototype.hasOwnProperty.call(
+                    imageInfo,
+                    'data'
+                  )
+                    ? null
+                    : imageInfo,
+                },
+              };
+            });
+            const rows = await Promise.all(promises);
+            return { ...defaultData, results: rows };
           }}
           hideFilters={{ registeredWith: true }}
           filterConfig={{
@@ -156,6 +182,11 @@ const Devices = () => {
                 type: 'checkbox',
                 filterValues: {
                   onChange: (event, value) => {
+                    console.log(value);
+                    const filteredData = rows.filter(
+                      (row) => row.system_profile.image_data
+                    );
+                    console.log(filteredData);
                     setActiveFilters(() => ({
                       ...(activeFilters || {}),
                       deviceStatus: {
@@ -192,8 +223,7 @@ const Devices = () => {
             },
           }}
           onRowClick={(_e, id) => history.push(`/fleet-management/${id}`)}
-          onLoad={({ mergeWithEntities, api }) => {
-            setGetEntities(() => api?.getEntities);
+          onLoad={({ mergeWithEntities }) => {
             getRegistry()?.register?.({
               ...mergeWithEntities(),
             });
