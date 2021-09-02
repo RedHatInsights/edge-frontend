@@ -6,7 +6,7 @@ import React, {
   useState,
   Suspense,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
   PageHeader,
@@ -69,8 +69,6 @@ const Devices = () => {
       callback(options);
     }
   };
-  const rows = useSelector(({ entities }) => entities?.rows);
-  console.log(rows);
 
   useEffect(() => {
     insights.chrome.registerModule('inventory');
@@ -182,11 +180,6 @@ const Devices = () => {
                 type: 'checkbox',
                 filterValues: {
                   onChange: (event, value) => {
-                    console.log(value);
-                    const filteredData = rows.filter(
-                      (row) => row.system_profile.image_data
-                    );
-                    console.log(filteredData);
                     setActiveFilters(() => ({
                       ...(activeFilters || {}),
                       deviceStatus: {
