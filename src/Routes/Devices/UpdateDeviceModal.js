@@ -11,10 +11,25 @@ import {
   TextListItemVariants,
 } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
+import { distributionMapper } from '../ImageManagerDetail/constants';
 import PropTypes from 'prop-types';
+import { updateDeviceLatestImage } from '../../api/index';
 
 const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
+  const imageData =
+    updateModal.deviceData.system_profile.image_data[
+      updateModal.deviceData.system_profile.image_data.length - 1
+    ];
   const handleUpdateModal = () => {
+    updateDeviceLatestImage({
+      DeviceUUID: updateModal.deviceData.id,
+      CommitId: imageData.Image.CommitID,
+    });
+    handleClose();
+  };
+
+  const handleClose = () => {
     setUpdateModal((prevState) => {
       return {
         ...prevState,
@@ -26,15 +41,15 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
   return (
     <Modal
       variant="medium"
-      title={`Update ${updateModal.deviceName} to latest image`}
+      title={`Update ${updateModal.deviceData.display_name} to latest image`}
       description="Update this device to use the latest version of the image linked to it."
       isOpen={updateModal.isOpen}
-      onClose={handleUpdateModal}
+      onClose={handleClose}
       actions={[
         <Button key="confirm" variant="primary" onClick={handleUpdateModal}>
           Update Device
         </Button>,
-        <Button key="cancel" variant="link" onClick={handleUpdateModal}>
+        <Button key="cancel" variant="link" onClick={handleClose}>
           Cancel
         </Button>,
       ]}
@@ -48,23 +63,25 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
             Image Name
           </TextListItem>
           <TextListItem component={TextListItemVariants.dd}>
-            Controller
+            {imageData.Image.Name}
           </TextListItem>
           <TextListItem component={TextListItemVariants.dt}>
             Version
           </TextListItem>
-          <TextListItem component={TextListItemVariants.dd}>2</TextListItem>
+          <TextListItem component={TextListItemVariants.dd}>
+            {imageData.Image.Version}
+          </TextListItem>
           <TextListItem component={TextListItemVariants.dt}>
             Created
           </TextListItem>
           <TextListItem component={TextListItemVariants.dd}>
-            18 Jun 2021
+            <DateFormat date={imageData.Image.CreatedAt} />
           </TextListItem>
           <TextListItem component={TextListItemVariants.dt}>
             Release
           </TextListItem>
           <TextListItem component={TextListItemVariants.dd}>
-            RHEL 8.4
+            {distributionMapper[imageData.Image.Distribution]}
           </TextListItem>
         </TextList>
         <TextListItem component={TextVariants.h3}>
@@ -72,15 +89,21 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
         </TextListItem>
         <TextList component={TextListVariants.dl}>
           <TextListItem component={TextListItemVariants.dt}>Added</TextListItem>
-          <TextListItem component={TextListItemVariants.dd}>3</TextListItem>
+          <TextListItem component={TextListItemVariants.dd}>
+            {imageData.PackageDiff?.Added?.length || 0}
+          </TextListItem>
           <TextListItem component={TextListItemVariants.dt}>
             Removed
           </TextListItem>
-          <TextListItem component={TextListItemVariants.dd}>2</TextListItem>
+          <TextListItem component={TextListItemVariants.dd}>
+            {imageData.PackageDiff?.Removed?.length || 0}
+          </TextListItem>
           <TextListItem component={TextListItemVariants.dt}>
             Updated
           </TextListItem>
-          <TextListItem component={TextListItemVariants.dd}>24</TextListItem>
+          <TextListItem component={TextListItemVariants.dd}>
+            {imageData.PackageDiff?.Updated?.length || 0}
+          </TextListItem>
         </TextList>
       </TextContent>
       <TextContent className="pf-u-pt-md">
@@ -99,8 +122,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
 UpdateDeviceModal.propTypes = {
   updateModal: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
-    imageId: PropTypes.number,
-    deviceName: PropTypes.string.isRequired,
+    deviceData: PropTypes.object.isRequired,
   }).isRequired,
   setUpdateModal: PropTypes.func.isRequired,
 };

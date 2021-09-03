@@ -54,12 +54,10 @@ const deviceStatusMapper = [
 ];
 
 const Devices = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState(defaultFilters);
   const [updateModal, setUpdateModal] = useState({
     isOpen: false,
-    imageId: null,
-    deviceName: null,
+    deviceData: null,
   });
   const { getRegistry } = useContext(RegistryContext);
   const inventory = useRef(null);
@@ -100,21 +98,25 @@ const Devices = () => {
           tableProps={{
             canSelectAll: false,
             variant: 'compact',
-          }}
-          actions={[
-            {
-              title: 'Update',
-              onClick: (_event, _index, { display_name: displayName }) => {
-                setUpdateModal((prevState) => {
-                  return {
-                    ...prevState,
-                    isOpen: true,
-                    deviceName: displayName,
-                  };
-                });
-              },
+            actionResolver: (rowData) => {
+              return rowData.system_profile.image_data
+                ? [
+                    {
+                      title: 'Update',
+                      onClick: (_event, _index, rowData) => {
+                        setUpdateModal((prevState) => {
+                          return {
+                            ...prevState,
+                            isOpen: true,
+                            deviceData: rowData,
+                          };
+                        });
+                      },
+                    },
+                  ]
+                : null;
             },
-          ]}
+          }}
           columns={(defaultColumns) => {
             const newColumns = defaultColumns.filter((column) =>
               ['display_name', 'updated'].includes(column.key)

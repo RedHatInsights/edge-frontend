@@ -352,3 +352,7 @@ export const getDeviceHasUpdate = async (id) => {
     console.log('get device update error', err);
   }
 };
+
+export const updateDeviceLatestImage = (payload) => {
+  return instance.post(`${EDGE_API}/updates`, payload);
+};
