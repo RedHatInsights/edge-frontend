@@ -241,7 +241,7 @@ const ImageTable = ({
         },
       });
     }
-    
+
     if (rowData?.imageStatus !== 'SUCCESS' || !rowData?.isoURL) {
       actionsArray.push({
         title: '',
