@@ -26,10 +26,8 @@ import { Bullseye, Spinner } from '@patternfly/react-core';
 import DeviceStatus from './DeviceStatus';
 import { getDeviceHasUpdate } from '../../api';
 
-const CreateImageWizard = React.lazy(() =>
-  import(
-    /* webpackChunkName: "CreateImageWizard" */ '../ImageManager/CreateImageWizard'
-  )
+const UpdateDeviceModal = React.lazy(() =>
+  import(/* webpackChunkName: "CreateImageWizard" */ './UpdateDeviceModal')
 );
 
 const defaultFilters = {
@@ -56,8 +54,11 @@ const deviceStatusMapper = [
 ];
 
 const Devices = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState(defaultFilters);
+  const [updateModal, setUpdateModal] = useState({
+    isOpen: false,
+    deviceData: null,
+  });
   const { getRegistry } = useContext(RegistryContext);
   const inventory = useRef(null);
   const history = useHistory();
@@ -73,8 +74,13 @@ const Devices = () => {
   useEffect(() => {
     insights.chrome.registerModule('inventory');
     const searchParams = new URLSearchParams(history.location.search);
-    if (searchParams.get('create_image') === 'true') {
-      setIsOpen(() => true);
+    if (searchParams.get('update_device') === 'true') {
+      setUpdateModal((prevState) => {
+        return {
+          ...prevState,
+          isOpen: true,
+        };
+      });
     }
     return () => dispatch(cleanEntities());
   }, []);
@@ -85,23 +91,36 @@ const Devices = () => {
         <PageHeaderTitle title="Fleet management" />
       </PageHeader>
       <Main className="edge-devices">
-        <Tiles
-          onNewImageClick={() => {
-            history.push({
-              pathname: history.location.pathname,
-              search: new URLSearchParams({
-                create_image: true,
-              }).toString(),
-            });
-            setIsOpen(true);
-          }}
-        />
+        <Tiles />
         <InventoryTable
           ref={inventory}
           onRefresh={onRefresh}
           tableProps={{
             canSelectAll: false,
             variant: 'compact',
+            actionResolver: (rowData) => {
+              return rowData.system_profile.image_data
+                ? [
+                    {
+                      title: 'Update',
+                      onClick: (_event, _index, rowData) => {
+                        setUpdateModal((prevState) => {
+                          return {
+                            ...prevState,
+                            isOpen: true,
+                            deviceData: rowData,
+                          };
+                        });
+                      },
+                    },
+                  ]
+                : [
+                    {
+                      title: 'No Action',
+                    },
+                  ];
+            },
+            areActionsDisabled: (rowData) => !rowData.system_profile.image_data,
           }}
           columns={(defaultColumns) => {
             const newColumns = defaultColumns.filter((column) =>
@@ -223,7 +242,7 @@ const Devices = () => {
           }}
         />
       </Main>
-      {isOpen && (
+      {updateModal.isOpen && (
         <Suspense
           fallback={
             <Bullseye>
@@ -231,11 +250,18 @@ const Devices = () => {
             </Bullseye>
           }
         >
-          <CreateImageWizard
+          <UpdateDeviceModal
             navigateBack={() => {
               history.push({ pathname: history.location.pathname });
-              setIsOpen(false);
+              setUpdateModal((prevState) => {
+                return {
+                  ...prevState,
+                  isOpen: false,
+                };
+              });
             }}
+            setUpdateModal={setUpdateModal}
+            updateModal={updateModal}
           />
         </Suspense>
       )}
