@@ -114,8 +114,13 @@ const Devices = () => {
                       },
                     },
                   ]
-                : null;
+                : [
+                    {
+                      title: 'No Action',
+                    },
+                  ];
             },
+            areActionsDisabled: (rowData) => (!rowData.system_profile.image_data)
           }}
           columns={(defaultColumns) => {
             const newColumns = defaultColumns.filter((column) =>
