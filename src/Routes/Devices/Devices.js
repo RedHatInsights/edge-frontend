@@ -120,7 +120,7 @@ const Devices = () => {
                     },
                   ];
             },
-            areActionsDisabled: (rowData) => (!rowData.system_profile.image_data)
+            areActionsDisabled: (rowData) => !rowData.system_profile.image_data,
           }}
           columns={(defaultColumns) => {
             const newColumns = defaultColumns.filter((column) =>
