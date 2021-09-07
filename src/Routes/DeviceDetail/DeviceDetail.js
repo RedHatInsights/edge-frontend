@@ -63,8 +63,6 @@ const DeviceDetail = () => {
         return;
       }
       const image_data = await getDeviceHasUpdate(deviceId);
-      console.log(deviceId);
-      console.log(image_data);
       setUpdateModal((prevState) => ({
         ...prevState,
         deviceData: {
@@ -121,7 +119,6 @@ const DeviceDetail = () => {
                 isDisabled:
                   updateModal.deviceData?.system_profile?.image_data === 404,
                 onClick: () => {
-                  console.log(updateModal);
                   setUpdateModal((prevState) => ({
                     ...prevState,
                     isOpen: true,
@@ -130,7 +127,6 @@ const DeviceDetail = () => {
               },
             ]}
             hideBack
-            showTags
             hideInvDrawer
           />
           {updateModal.deviceData?.system_profile?.image_data === 404 ? (
