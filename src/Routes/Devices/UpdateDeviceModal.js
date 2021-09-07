@@ -17,7 +17,6 @@ import PropTypes from 'prop-types';
 import { updateDeviceLatestImage } from '../../api/index';
 
 const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
-  console.log(updateModal);
   const imageData =
     updateModal.deviceData?.system_profile?.image_data[
       updateModal.deviceData?.system_profile?.image_data.length - 1
