@@ -18,13 +18,13 @@ import { updateDeviceLatestImage } from '../../api/index';
 
 const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
   const imageData =
-    updateModal.deviceData.system_profile.image_data[
-      updateModal.deviceData.system_profile.image_data.length - 1
+    updateModal.deviceData?.system_profile?.image_data[
+      updateModal.deviceData?.system_profile?.image_data.length - 1
     ];
   const handleUpdateModal = () => {
     updateDeviceLatestImage({
-      DeviceUUID: updateModal.deviceData.id,
-      CommitId: imageData.Image.CommitID,
+      DeviceUUID: updateModal.deviceData?.id,
+      CommitId: imageData?.Image.CommitID,
     });
     handleClose();
   };
@@ -41,7 +41,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
   return (
     <Modal
       variant="medium"
-      title={`Update ${updateModal.deviceData.display_name} to latest image`}
+      title={`Update ${updateModal.deviceData?.display_name} to latest image`}
       description="Update this device to use the latest version of the image linked to it."
       isOpen={updateModal.isOpen}
       onClose={handleClose}
@@ -63,25 +63,25 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
             Image Name
           </TextListItem>
           <TextListItem component={TextListItemVariants.dd}>
-            {imageData.Image.Name}
+            {imageData?.Image.Name}
           </TextListItem>
           <TextListItem component={TextListItemVariants.dt}>
             Version
           </TextListItem>
           <TextListItem component={TextListItemVariants.dd}>
-            {imageData.Image.Version}
+            {imageData?.Image.Version}
           </TextListItem>
           <TextListItem component={TextListItemVariants.dt}>
             Created
           </TextListItem>
           <TextListItem component={TextListItemVariants.dd}>
-            <DateFormat date={imageData.Image.CreatedAt} />
+            <DateFormat date={imageData?.Image.CreatedAt} />
           </TextListItem>
           <TextListItem component={TextListItemVariants.dt}>
             Release
           </TextListItem>
           <TextListItem component={TextListItemVariants.dd}>
-            {distributionMapper[imageData.Image.Distribution]}
+            {distributionMapper[imageData?.Image.Distribution]}
           </TextListItem>
         </TextList>
         <TextListItem component={TextVariants.h3}>
@@ -90,19 +90,19 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
         <TextList component={TextListVariants.dl}>
           <TextListItem component={TextListItemVariants.dt}>Added</TextListItem>
           <TextListItem component={TextListItemVariants.dd}>
-            {imageData.PackageDiff?.Added?.length || 0}
+            {imageData?.PackageDiff?.Added?.length || 0}
           </TextListItem>
           <TextListItem component={TextListItemVariants.dt}>
             Removed
           </TextListItem>
           <TextListItem component={TextListItemVariants.dd}>
-            {imageData.PackageDiff?.Removed?.length || 0}
+            {imageData?.PackageDiff?.Removed?.length || 0}
           </TextListItem>
           <TextListItem component={TextListItemVariants.dt}>
             Updated
           </TextListItem>
           <TextListItem component={TextListItemVariants.dd}>
-            {imageData.PackageDiff?.Updated?.length || 0}
+            {imageData?.PackageDiff?.Updated?.length || 0}
           </TextListItem>
         </TextList>
       </TextContent>
