@@ -356,3 +356,7 @@ export const getDeviceHasUpdate = async (id) => {
 export const updateDeviceLatestImage = (payload) => {
   return instance.post(`${EDGE_API}/updates`, payload);
 };
+
+export const getImageDataOnDevice = (id) => {
+  return instance.post(`${EDGE_API}/updates/device/${id}/image`);
+};
