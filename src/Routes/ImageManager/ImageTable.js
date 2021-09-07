@@ -242,7 +242,7 @@ const ImageTable = ({
       });
     }
 
-    if (rowData?.imageStatus !== 'SUCCESS' || !rowData?.isoURL) {
+    if (rowData?.imageStatus !== 'SUCCESS') {
       actionsArray.push({
         title: '',
       });
@@ -251,8 +251,7 @@ const ImageTable = ({
     return actionsArray;
   };
 
-  const areActionsDisabled = (rowData) =>
-    rowData?.imageStatus !== 'SUCCESS' && !rowData?.isoURL;
+  const areActionsDisabled = (rowData) => rowData?.imageStatus !== 'SUCCESS';
 
   return (
     <Table
