@@ -174,7 +174,9 @@ const Devices = () => {
             const promises = defaultData.results.map(async (device) => {
               const getImageInfo = await getDeviceHasUpdate(device.id);
               const imageInfo =
-                getImageInfo === 404 ? { data: null } : getImageInfo;
+                !getImageInfo || getImageInfo === 404
+                  ? { data: null }
+                  : getImageInfo;
               return {
                 ...device,
                 system_profile: {
