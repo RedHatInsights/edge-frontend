@@ -26,26 +26,26 @@ const ImageInformationCard = () => {
         {
           title: 'Running image',
           value: (
-            <Link to={`${paths['manage-images']}/${imageData?.ID}`}>
-              {imageData?.Name}
+            <Link to={`${paths['manage-images']}/${imageData?.Image?.ID}`}>
+              {imageData?.Image?.Name}
             </Link>
           ),
         },
         {
           title: 'Running version',
           value: (
-            <Link to={`${paths['manage-images']}/${imageData?.ID}`}>
-              {imageData?.Version}
+            <Link to={`${paths['manage-images']}/${imageData?.Image?.ID}`}>
+              {imageData?.Image?.Version}
             </Link>
           ),
         },
         {
           title: 'Target version',
-          value: imageData?.updateAvailable ? (
+          value: imageData?.UpdateAvailable ? (
             <Link
-              to={`${paths['manage-images']}/${imageData?.updateAvailable?.ID}`}
+              to={`${paths['manage-images']}/${imageData?.UpdateAvailable?.ID}`}
             >
-              {imageData?.updateAvailable?.Version}
+              {imageData?.UpdateAvailable?.Version}
             </Link>
           ) : (
             'Same as running'
@@ -53,9 +53,9 @@ const ImageInformationCard = () => {
         },
         {
           title: 'Rollback version',
-          value: imageData?.rollback ? (
-            <Link to={`${paths['manage-images']}/${imageData?.rollback?.ID}`}>
-              {imageData?.rollback?.Version}
+          value: imageData?.Rollback.ParentId ? (
+            <Link to={`${paths['manage-images']}/${imageData?.Rollback?.ID}`}>
+              {imageData?.Rollback?.Version}
             </Link>
           ) : (
             'None'

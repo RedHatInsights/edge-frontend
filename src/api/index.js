@@ -358,5 +358,5 @@ export const updateDeviceLatestImage = (payload) => {
 };
 
 export const getImageDataOnDevice = (id) => {
-  return instance.post(`${EDGE_API}/updates/device/${id}/image`);
+  return instance.get(`${EDGE_API}/updates/device/${id}/image`);
 };
