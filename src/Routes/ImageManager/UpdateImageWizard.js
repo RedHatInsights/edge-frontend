@@ -74,8 +74,11 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       const userData = (await insights?.chrome?.auth?.getUser()) || {};
       setUser(() => userData);
     })();
-    getPackageSummary();
   }, []);
+
+  useEffect(() => {
+    getPackageSummary();
+  }, [data]);
 
   return user ? (
     <ImageCreator
