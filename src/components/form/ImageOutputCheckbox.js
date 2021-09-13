@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { Fragment, useCallback } from 'react';
 import {
   FormGroup,
   Checkbox,
@@ -74,10 +74,13 @@ const ImageOutputCheckbox = (props) => {
                 </HelperTextItem>
               </HelperText>
             )}
-            {value === 'rhel-edge-installer' && (
+          </TextContent>
+          {value === 'rhel-edge-installer' && (
+            <Fragment>
               <Text component={TextVariants.small}>
                 <Text
-                  className="pf-u-ml-lg"
+                  target="_blank"
+                  href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/composing_installing_and_managing_rhel_for_edge_images/index#edge-how-to-compose-and-deploy-a-rhel-for-edge-image_introducing-rhel-for-edge-images"
                   component={TextVariants.a}
                   isVisitedLink
                 >
@@ -85,8 +88,8 @@ const ImageOutputCheckbox = (props) => {
                   <ExternalLinkAltIcon className="pf-u-ml-sm" />
                 </Text>
               </Text>
-            )}
-          </TextContent>
+            </Fragment>
+          )}
         </>
       ))}
     </FormGroup>
