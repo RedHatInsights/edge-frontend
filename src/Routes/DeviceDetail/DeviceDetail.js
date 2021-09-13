@@ -51,6 +51,7 @@ const DeviceDetail = () => {
     isOpen: false,
     deviceData: null,
   });
+  const [isDeviceStatusLoading, setIsDeviceStatusLoading] = useState(true);
   useEffect(() => {
     insights.chrome.registerModule('inventory');
     insights.chrome?.hideGlobalFilter?.(true);
@@ -63,6 +64,7 @@ const DeviceDetail = () => {
         return;
       }
       const image_data = await getDeviceHasUpdate(deviceId);
+      setIsDeviceStatusLoading(false);
       setUpdateModal((prevState) => ({
         ...prevState,
         deviceData: {
@@ -116,8 +118,7 @@ const DeviceDetail = () => {
             actions={[
               {
                 title: 'Update',
-                isDisabled:
-                  updateModal.deviceData?.system_profile?.image_data === 404,
+                isDisabled: !updateModal.deviceData?.system_profile?.image_data,
                 onClick: () => {
                   setUpdateModal((prevState) => ({
                     ...prevState,
@@ -129,15 +130,10 @@ const DeviceDetail = () => {
             hideBack
             hideInvDrawer
           />
-          {updateModal.deviceData?.system_profile?.image_data === 404 ? (
-            <Label
-              className="pf-u-mt-sm"
-              color="green"
-              icon={<CheckCircleIcon color="green" />}
-            >
-              Running
-            </Label>
-          ) : updateModal.deviceData ? (
+
+          {isDeviceStatusLoading ? (
+            <Skeleton size={SkeletonSize.xs} />
+          ) : updateModal.deviceData?.system_profile?.image_data ? (
             <Label
               className="pf-u-mt-sm"
               color="orange"
@@ -146,7 +142,13 @@ const DeviceDetail = () => {
               Update Available
             </Label>
           ) : (
-            <Skeleton size={SkeletonSize.xs} />
+            <Label
+              className="pf-u-mt-sm"
+              color="green"
+              icon={<CheckCircleIcon color="green" />}
+            >
+              Running
+            </Label>
           )}
         </PageHeader>
         <Main className="edge-c-device--detail">
