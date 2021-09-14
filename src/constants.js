@@ -75,8 +75,6 @@ export const constructActiveFilters = (activeFilters, getLabel) =>
   }));
 
 export const onDeleteFilter = (activeFilters, itemsToRemove) => {
-  console.log('activeFilters: ', activeFilters);
-  console.log('itemsToRemove: ', itemsToRemove);
   const currItem = itemsToRemove[0];
   return {
     ...activeFilters,
