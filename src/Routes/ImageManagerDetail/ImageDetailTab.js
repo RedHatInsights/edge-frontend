@@ -24,8 +24,11 @@ const ImageDetailTab = () => {
     Release: () => distributionMapper[data['Distribution']],
     'Output type': () => imageTypeMapper[data['ImageType']],
     'Added packages': () => data.Commit.Packages.length,
-    Checksum: () => data.Installer.Checksum,
   };
+
+  if (data?.Installer?.Checksum) {
+    labelsToValueMapper.Checksum = () => data?.Installer?.Checksum;
+  }
 
   return (
     <TextContent className="pf-u-ml-lg pf-u-mt-md">
