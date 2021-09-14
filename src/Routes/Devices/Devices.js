@@ -19,7 +19,7 @@ import { RegistryContext } from '../../store';
 import {
   isEmptyFilters,
   constructActiveFilters,
-  onDeleteFilter,
+  //onDeleteFilter,
 } from '../../constants';
 import { Tiles } from '../../components/Tiles';
 import { Bullseye, Spinner } from '@patternfly/react-core';
@@ -54,7 +54,7 @@ const deviceStatusMapper = [
 ];
 
 const Devices = () => {
-  const [activeFilters, setActiveFilters] = useState(defaultFilters);
+  const [activeFilters] = useState(defaultFilters);
   const [updateModal, setUpdateModal] = useState({
     isOpen: false,
     deviceData: null,
@@ -134,7 +134,7 @@ const Devices = () => {
               ...newColumns,
               {
                 key: 'system_profile',
-                title: 'Status',
+                title: 'Device status',
                 // eslint-disable-next-line react/display-name
                 renderFunc: (sysProf) => (
                   <DeviceStatus systemProfile={sysProf} />
@@ -149,6 +149,7 @@ const Devices = () => {
             _showTags,
             defaultGetEntities
           ) => {
+            console.log(config);
             const defaultData = await defaultGetEntities(undefined, {
               ...config,
               filter: {
@@ -194,28 +195,29 @@ const Devices = () => {
             return { ...defaultData, results: rows };
           }}
           hideFilters={{ registeredWith: true }}
-          filterConfig={{
-            items: [
-              {
-                label: activeFilters?.deviceStatus?.label,
-                type: 'checkbox',
-                filterValues: {
-                  onChange: (event, value) => {
-                    setActiveFilters(() => ({
-                      ...(activeFilters || {}),
-                      deviceStatus: {
-                        ...(activeFilters?.deviceStatus || {}),
-                        value,
-                      },
-                    }));
-                    inventory.current.onRefreshData();
-                  },
-                  items: deviceStatusMapper,
-                  value: activeFilters?.deviceStatus?.value || [],
-                },
-              },
-            ],
-          }}
+          // NOTE: add back in when device status is sent with inventory data
+          //filterConfig={{
+          //  items: [
+          //    {
+          //      label: activeFilters?.deviceStatus?.label,
+          //      type: 'checkbox',
+          //      filterValues: {
+          //        onChange: (event, value) => {
+          //          setActiveFilters(() => ({
+          //            ...(activeFilters || {}),
+          //            deviceStatus: {
+          //              ...(activeFilters?.deviceStatus || {}),
+          //              value,
+          //            },
+          //          }));
+          //          inventory.current.onRefreshData();
+          //        },
+          //        items: deviceStatusMapper,
+          //        value: activeFilters?.deviceStatus?.value || [],
+          //      },
+          //    },
+          //  ],
+          //}}
           hasCheckbox={false}
           activeFiltersConfig={{
             ...(isEmptyFilters(activeFilters) && {
@@ -225,16 +227,18 @@ const Devices = () => {
                   deviceStatusMapper.find((item) => item.value === value)?.label
               ),
             }),
-            onDelete: (event, itemsToRemove, isAll) => {
-              if (isAll) {
-                setActiveFilters(defaultFilters);
-              } else {
-                setActiveFilters(() =>
-                  onDeleteFilter(activeFilters, itemsToRemove)
-                );
-              }
-              inventory.current.onRefreshData();
-            },
+            // NOTE: Adding custom onDelete function overrides default inventory deletion behavior
+            //onDelete: (event, itemsToRemove, isAll) => {
+            //  console.log(itemsToRemove);
+            //  if (isAll) {
+            //    setActiveFilters(defaultFilters);
+            //  } else {
+            //    setActiveFilters(() =>
+            //      onDeleteFilter(activeFilters, itemsToRemove)
+            //    );
+            //  }
+            //  inventory.current.onRefreshData();
+            //},
           }}
           onRowClick={(_e, id) => history.push(`/fleet-management/${id}`)}
           onLoad={({ mergeWithEntities }) => {

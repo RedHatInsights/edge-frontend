@@ -349,7 +349,8 @@ export const getDeviceHasUpdate = async (id) => {
   try {
     return await instance.get(`${EDGE_API}/updates/device/${id}/updates`);
   } catch (err) {
-    console.log('get device update error', err);
+    // temp error solution
+    console.log('');
   }
 };
 
