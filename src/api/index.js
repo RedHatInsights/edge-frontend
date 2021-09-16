@@ -172,6 +172,8 @@ export const fetchDeviceSummary = async () => {
       undefined,
       undefined,
       undefined,
+      undefined,
+      undefined,
       ['fresh'],
       undefined,
       undefined,
@@ -185,6 +187,8 @@ export const fetchDeviceSummary = async () => {
       }
     ),
     client.apiHostGetHostList(
+      undefined,
+      undefined,
       undefined,
       undefined,
       undefined,
@@ -216,6 +220,8 @@ export const fetchDeviceSummary = async () => {
       undefined,
       undefined,
       undefined,
+      undefined,
+      undefined,
       ['stale_warning'],
       undefined,
       undefined,
@@ -229,6 +235,8 @@ export const fetchDeviceSummary = async () => {
       }
     ),
     client.apiHostGetHostList(
+      undefined,
+      undefined,
       undefined,
       undefined,
       undefined,
