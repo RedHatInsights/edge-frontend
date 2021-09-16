@@ -4,17 +4,28 @@ import { getImageDataOnDevice } from '../api/index';
 import { routes as paths } from '../../package.json';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import {
+  Skeleton,
+  SkeletonSize,
+} from '@redhat-cloud-services/frontend-components/Skeleton';
 
 const ImageInformationCard = () => {
   const deviceId = useSelector(
     ({ entityDetails }) => entityDetails?.entity?.id
   );
+  const [isImageInfoLoading, setIsImageInfoLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   const [imageData, setImageData] = useState(null);
   useEffect(() => {
     (async () => {
-      const data = await getImageDataOnDevice(deviceId);
-      setImageData(data);
+      try {
+        const data = await getImageDataOnDevice(deviceId);
+        setImageData(data);
+      } catch (err) {
+        setHasError(true);
+      }
+      setIsImageInfoLoading(false);
     })();
   }, []);
 
@@ -25,38 +36,62 @@ const ImageInformationCard = () => {
       items={[
         {
           title: 'Running image',
-          value: (
+          value: isImageInfoLoading ? (
+            <Skeleton size={SkeletonSize.sm} />
+          ) : imageData ? (
             <Link to={`${paths['manage-images']}/${imageData?.Image?.ID}`}>
               {imageData?.Image?.Name}
             </Link>
+          ) : (
+            'unavailable'
           ),
         },
         {
           title: 'Running version',
-          value: (
+          value: isImageInfoLoading ? (
+            <Skeleton size={SkeletonSize.sm} />
+          ) : imageData ? (
             <Link to={`${paths['manage-images']}/${imageData?.Image?.ID}`}>
               {imageData?.Image?.Version}
             </Link>
+          ) : (
+            'unavailable'
           ),
         },
         {
           title: 'Target version',
-          value: imageData?.UpdateAvailable ? (
+          value: isImageInfoLoading ? (
+            <Skeleton size={SkeletonSize.sm} />
+          ) : imageData?.UpdatesAvailable ? (
             <Link
-              to={`${paths['manage-images']}/${imageData?.UpdateAvailable?.ID}`}
+              to={`${paths['manage-images']}/${
+                imageData?.UpdatesAvailable[
+                  imageData?.UpdatesAvailable.length - 1
+                ]?.Image?.ID
+              }`}
             >
-              {imageData?.UpdateAvailable?.Version}
+              {
+                imageData?.UpdatesAvailable[
+                  imageData?.UpdatesAvailable.length - 1
+                ]?.Image?.Version
+              }
             </Link>
+          ) : hasError ? (
+            'unavailable'
           ) : (
             'Same as running'
           ),
         },
         {
           title: 'Rollback version',
-          value: imageData?.Rollback.ParentId ? (
+          value: isImageInfoLoading ? (
+            <Skeleton size={SkeletonSize.sm} />
+          ) : imageData?.Rollback?.ParentId ? (
             <Link to={`${paths['manage-images']}/${imageData?.Rollback?.ID}`}>
               {imageData?.Rollback?.Version}
             </Link>
+          ) : hasError ? (
+            'unavailable'
           ) : (
             'None'
           ),
