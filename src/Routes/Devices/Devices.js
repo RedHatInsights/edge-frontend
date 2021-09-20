@@ -137,7 +137,10 @@ const Devices = () => {
                 title: 'Device status',
                 // eslint-disable-next-line react/display-name
                 renderFunc: (sysProf) => (
-                  <DeviceStatus systemProfile={sysProf} />
+                  <DeviceStatus
+                    rpm_ostree_deployments={sysProf.rpm_ostree_deployments}
+                    updateTransactions={sysProf.UpdateTransactions}
+                  />
                 ),
                 props: { width: 20, isStatic: true },
               },
@@ -149,7 +152,6 @@ const Devices = () => {
             _showTags,
             defaultGetEntities
           ) => {
-            console.log(config);
             const defaultData = await defaultGetEntities(undefined, {
               ...config,
               filter: {

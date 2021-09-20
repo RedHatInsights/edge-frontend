@@ -26,6 +26,7 @@ import systemProfileStore from '@redhat-cloud-services/frontend-components-inven
 import DeviceDetailTabs from './DeviceDetailTabs';
 import CheckCircleIcon from '@patternfly/react-icons/dist/js/icons/check-circle-icon';
 import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-triangle-icon';
+import InProgressIcon from '@patternfly/react-icons/dist/js/icons/in-progress-icon';
 import { getDeviceHasUpdate } from '../../api/index';
 
 const UpdateDeviceModal = React.lazy(() =>
@@ -69,7 +70,12 @@ const DeviceDetail = () => {
         ...prevState,
         deviceData: {
           display_name: displayName,
-          system_profile: { image_data },
+          system_profile: {
+            image_data,
+            status: image_data?.UpdateTransactions?.filter(
+              (item) => item.Status === 'BUILDING' || item.Status === 'CREATED'
+            ),
+          },
         },
       }));
     })();
@@ -133,7 +139,16 @@ const DeviceDetail = () => {
 
           {isDeviceStatusLoading ? (
             <Skeleton size={SkeletonSize.xs} />
-          ) : updateModal.deviceData?.system_profile?.image_data ? (
+          ) : !updateModal.deviceData?.system_profile.status?.[0] ? (
+            <Label
+              className="pf-u-mt-sm"
+              color="green"
+              icon={<CheckCircleIcon color="green" />}
+            >
+              Running
+            </Label>
+          ) : updateModal.deviceData?.system_profile.status[0]?.Status ===
+            'CREATED' ? (
             <Label
               className="pf-u-mt-sm"
               color="orange"
@@ -144,10 +159,10 @@ const DeviceDetail = () => {
           ) : (
             <Label
               className="pf-u-mt-sm"
-              color="green"
-              icon={<CheckCircleIcon color="green" />}
+              color="blue"
+              icon={<InProgressIcon />}
             >
-              Running
+              Updating
             </Label>
           )}
         </PageHeader>

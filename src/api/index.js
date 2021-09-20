@@ -334,8 +334,8 @@ export const fetchEdgeImages = (
     return value === undefined
       ? acc
       : acc === ''
-        ? `${value}`
-        : `${acc}&${value}`;
+      ? `${value}`
+      : `${acc}&${value}`;
   }, '');
 
   return instance.get(`${EDGE_API}/images?${query}`);
@@ -347,7 +347,7 @@ export const getEdgeImageStatus = (id) => {
 
 export const getDeviceHasUpdate = async (id) => {
   try {
-    return await instance.get(`${EDGE_API}/devices/${id}/updates`);
+    return await instance.get(`${EDGE_API}/devices/${id}`);
   } catch (err) {
     // temp error solution
     console.log('');
