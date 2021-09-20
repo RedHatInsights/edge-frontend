@@ -22,12 +22,11 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail } from '../../store/actions';
-import { getEdgeImageStatus, getPackages } from '../../api';
+import { getEdgeImageStatus } from '../../api';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications';
 
 const UpdateImage = ({ navigateBack, updateImageID }) => {
   const [user, setUser] = useState();
-  const [packageSummary, setPackageSummary] = useState();
   const dispatch = useDispatch();
   const closeAction = () => {
     navigateBack();
@@ -39,27 +38,6 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
     ({ imageDetailReducer }) => ({ data: imageDetailReducer?.data || null }),
     shallowEqual
   );
-
-  const getPackageSummary = async () => {
-    const packages = data?.Commit?.Packages;
-    if (packages?.length > 0) {
-      const promises = packages.map(async (pkg) => {
-        const { data } = await getPackages('rhel-84', 'x86_64', pkg.Name);
-        const correctPackage = data.find((result) => result.name === pkg.Name);
-        const getSummary = {
-          name: correctPackage.name,
-          summary: correctPackage.summary,
-        };
-
-        return {
-          ...pkg,
-          ...getSummary,
-        };
-      });
-      const results = await Promise.all(promises);
-      setPackageSummary(results);
-    }
-  };
 
   useEffect(() => {
     const registered = getRegistry().register({
@@ -75,10 +53,6 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       setUser(() => userData);
     })();
   }, []);
-
-  useEffect(() => {
-    getPackageSummary();
-  }, [data]);
 
   return user ? (
     <ImageCreator
@@ -165,7 +139,10 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         username: data?.Installer.Username,
         version: data?.Version,
         imageType: ['rhel-edge-commit'],
-        'selected-packages': packageSummary,
+        'selected-packages': data?.Commit?.Packages.map((pkg) => ({
+          ...pkg,
+          name: pkg.Name,
+        })),
       }}
       schema={{
         fields: [
