@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 
 const DeviceStatus = ({ imageData, rpm_ostree_deployments }) => {
   const { UpdateTransactions, ImageInfo } = imageData || {};
-  console.log(imageData);
   if (rpm_ostree_deployments?.length === undefined) {
     return (
       <Split>

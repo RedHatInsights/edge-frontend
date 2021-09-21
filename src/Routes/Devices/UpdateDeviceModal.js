@@ -19,7 +19,6 @@ import { useDispatch } from 'react-redux';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 
 const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
-  console.log(updateModal);
   const dispatch = useDispatch();
   const imageData =
     updateModal.deviceData?.system_profile?.image_data?.ImageInfo

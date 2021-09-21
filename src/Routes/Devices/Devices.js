@@ -231,7 +231,6 @@ const Devices = () => {
             }),
             // NOTE: Adding custom onDelete function overrides default inventory deletion behavior
             //onDelete: (event, itemsToRemove, isAll) => {
-            //  console.log(itemsToRemove);
             //  if (isAll) {
             //    setActiveFilters(defaultFilters);
             //  } else {
