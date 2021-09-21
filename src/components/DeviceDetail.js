@@ -39,7 +39,7 @@ const InfrastructureCard = lazy(() =>
     '@redhat-cloud-services/frontend-components-inventory-general-info/InfrastructureCard'
   )
 );
-//const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
+const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
 
 import { statusHelper } from '@redhat-cloud-services/frontend-components-inventory-general-info/dataMapper';
 
@@ -48,19 +48,12 @@ const GeneralInformationTab = () => {
     ({ permissionsReducer }) => permissionsReducer?.writePermissions
   );
 
-  const {
-    //runningVersion,
-    //stagedVersion,
-    //rollbackVersion,
-    greenbootStatus,
-    rhcHealth,
-  } = useSelector(({ systemProfileStore }) => ({
-    runningVersion: null,
-    stagedVersion: null,
-    nonActiveVersion: null,
-    greenbootStatus: systemProfileStore?.systemProfile?.greenboot_status,
-    rhcHealth: null,
-  }));
+  const { greenbootStatus, rhcHealth } = useSelector(
+    ({ systemProfileStore }) => ({
+      greenbootStatus: systemProfileStore?.systemProfile?.greenboot_status,
+      rhcHealth: null,
+    })
+  );
 
   return (
     <Suspense fallback="">
@@ -97,14 +90,12 @@ const GeneralInformationTab = () => {
             <InfrastructureCard {...props} />
           </Suspense>
         )}
-        BiosCardWrapper={false}
-        // replace above with below when image data available
-        //BiosCardWrapper={(props) => (
-        //  <Suspense fallback=''>
-        //    {' '}
-        //    <ImageInformationCard {...props} />
-        //  </Suspense>
-        //)}
+        BiosCardWrapper={(props) => (
+          <Suspense fallback="">
+            {' '}
+            <ImageInformationCard {...props} />
+          </Suspense>
+        )}
         InfrastructureCardWrapper={(props) => (
           <Suspense fallback="">
             <BiosCard {...props} />
