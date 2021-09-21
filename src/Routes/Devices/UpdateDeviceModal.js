@@ -40,7 +40,6 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
         }),
       });
     } catch (err) {
-      console.log(err);
       dispatch({
         ...addNotification({
           variant: 'danger',
