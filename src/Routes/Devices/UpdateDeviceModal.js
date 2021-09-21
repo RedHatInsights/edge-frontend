@@ -18,8 +18,10 @@ import { updateDeviceLatestImage } from '../../api/index';
 
 const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
   const imageData =
-    updateModal.deviceData?.system_profile?.image_data[
-      updateModal.deviceData?.system_profile?.image_data.length - 1
+    updateModal.deviceData?.system_profile?.image_data?.ImageInfo
+      ?.UpdatesAvailable[
+      updateModal.deviceData?.system_profile?.image_data?.ImageInfo
+        ?.UpdatesAvailable.length - 1
     ];
   const handleUpdateModal = () => {
     updateDeviceLatestImage({

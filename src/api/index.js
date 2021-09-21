@@ -334,8 +334,8 @@ export const fetchEdgeImages = (
     return value === undefined
       ? acc
       : acc === ''
-        ? `${value}`
-        : `${acc}&${value}`;
+      ? `${value}`
+      : `${acc}&${value}`;
   }, '');
 
   return instance.get(`${EDGE_API}/images?${query}`);
