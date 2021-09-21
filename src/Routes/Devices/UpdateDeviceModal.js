@@ -15,19 +15,42 @@ import { DateFormat } from '@redhat-cloud-services/frontend-components/DateForma
 import { distributionMapper } from '../ImageManagerDetail/constants';
 import PropTypes from 'prop-types';
 import { updateDeviceLatestImage } from '../../api/index';
+import { useDispatch } from 'react-redux';
+import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 
 const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
+  console.log(updateModal);
+  const dispatch = useDispatch();
   const imageData =
     updateModal.deviceData?.system_profile?.image_data?.ImageInfo
       ?.UpdatesAvailable[
       updateModal.deviceData?.system_profile?.image_data?.ImageInfo
         ?.UpdatesAvailable.length - 1
     ];
-  const handleUpdateModal = () => {
-    updateDeviceLatestImage({
-      DeviceUUID: updateModal.deviceData?.id,
-      CommitId: imageData?.Image.CommitID,
-    });
+  const handleUpdateModal = async () => {
+    try {
+      await updateDeviceLatestImage({
+        DeviceUUID: updateModal.deviceData?.id,
+        CommitId: imageData?.Image.CommitID,
+      });
+      dispatch({
+        ...addNotification({
+          variant: 'info',
+          title: 'Updating device',
+          description: ` ${updateModal.deviceData.display_name} was added to the queue.`,
+        }),
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        ...addNotification({
+          variant: 'danger',
+          title: 'Updating a device was unsuccessful',
+          description: `Response: ${err.statusText}`,
+        }),
+      });
+    }
+
     handleClose();
     refreshTable();
   };
@@ -43,16 +66,16 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
 
   return (
     <Modal
-      variant='medium'
+      variant="medium"
       title={`Update ${updateModal.deviceData?.display_name} to latest image`}
-      description='Update this device to use the latest version of the image linked to it.'
+      description="Update this device to use the latest version of the image linked to it."
       isOpen={updateModal.isOpen}
       onClose={handleClose}
       actions={[
-        <Button key='confirm' variant='primary' onClick={handleUpdateModal}>
+        <Button key="confirm" variant="primary" onClick={handleUpdateModal}>
           Update Device
         </Button>,
-        <Button key='cancel' variant='link' onClick={handleClose}>
+        <Button key="cancel" variant="link" onClick={handleClose}>
           Cancel
         </Button>,
       ]}
@@ -109,10 +132,10 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
           </TextListItem>
         </TextList>
       </TextContent>
-      <TextContent className='pf-u-pt-md'>
+      <TextContent className="pf-u-pt-md">
         <Text
           style={{ color: 'var(--pf-global--palette--gold-500)' }}
-          component='small'
+          component="small"
         >
           <ExclamationTriangleIcon /> After the update is installed, the device
           will apply the changes.
@@ -123,6 +146,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
 };
 
 UpdateDeviceModal.propTypes = {
+  refreshTable: PropTypes.func,
   updateModal: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
     deviceData: PropTypes.object.isRequired,
