@@ -347,15 +347,15 @@ export const getEdgeImageStatus = (id) => {
 
 export const getDeviceHasUpdate = async (id) => {
   try {
-    return await instance.get(`${EDGE_API}/devices/${id}/updates`);
+    return await instance.get(`${EDGE_API}/devices/${id}`);
   } catch (err) {
     // temp error solution
     console.log('');
   }
 };
 
-export const updateDeviceLatestImage = (payload) => {
-  return instance.post(`${EDGE_API}/updates`, payload);
+export const updateDeviceLatestImage = async (payload) => {
+  return await instance.post(`${EDGE_API}/updates`, payload);
 };
 
 export const getImageDataOnDevice = (id) => {

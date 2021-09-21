@@ -5,10 +5,11 @@ import InProgressIcon from '@patternfly/react-icons/dist/js/icons/in-progress-ic
 import QuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/question-circle-icon';
 import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-triangle-icon';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
+import infoColor from '@patternfly/react-tokens/dist/esm/global_active_color_300';
 import PropTypes from 'prop-types';
 
-const DeviceStatus = ({ systemProfile }) => {
-  const { rpm_ostree_deployments } = systemProfile;
+const DeviceStatus = ({ imageData, rpm_ostree_deployments }) => {
+  const { UpdateTransactions, ImageInfo } = imageData || {};
   if (rpm_ostree_deployments?.length === undefined) {
     return (
       <Split>
@@ -30,7 +31,23 @@ const DeviceStatus = ({ systemProfile }) => {
       </Split>
     );
   }
-  if (systemProfile.image_data) {
+
+  const transaction = UpdateTransactions?.filter(
+    (item) => item.Status === 'BUILDING' || item.Status === 'CREATED'
+  );
+
+  if (transaction?.length > 0) {
+    return (
+      <Split>
+        <SplitItem className="pf-u-mr-sm">
+          <InProgressIcon color={infoColor.value} />
+        </SplitItem>
+        <SplitItem>Updating</SplitItem>
+      </Split>
+    );
+  }
+
+  if (ImageInfo?.UpdatesAvailable?.length > 0) {
     return (
       <Split>
         <SplitItem className="pf-u-mr-sm">
@@ -54,15 +71,9 @@ const DeviceStatus = ({ systemProfile }) => {
 
 DeviceStatus.propTypes = {
   id: PropTypes.string,
-  systemProfile: PropTypes.shape({
-    image_data: PropTypes.object,
-    rpm_ostree_deployments: PropTypes.arrayOf(
-      PropTypes.shape({
-        booted: PropTypes.bool,
-        checksum: PropTypes.string,
-      })
-    ),
-  }).isRequired,
+  updateTransactions: PropTypes.array,
+  rpm_ostree_deployments: PropTypes.array,
+  imageData: PropTypes.object,
 };
 
 export default DeviceStatus;

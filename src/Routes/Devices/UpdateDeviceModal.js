@@ -15,20 +15,42 @@ import { DateFormat } from '@redhat-cloud-services/frontend-components/DateForma
 import { distributionMapper } from '../ImageManagerDetail/constants';
 import PropTypes from 'prop-types';
 import { updateDeviceLatestImage } from '../../api/index';
+import { useDispatch } from 'react-redux';
+import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 
-const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
+const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
+  const dispatch = useDispatch();
   const imageData =
     updateModal.deviceData?.system_profile?.image_data?.ImageInfo
       ?.UpdatesAvailable[
       updateModal.deviceData?.system_profile?.image_data?.ImageInfo
         ?.UpdatesAvailable.length - 1
     ];
-  const handleUpdateModal = () => {
-    updateDeviceLatestImage({
-      DeviceUUID: updateModal.deviceData?.id,
-      CommitId: imageData?.Image.CommitID,
-    });
+  const handleUpdateModal = async () => {
+    try {
+      await updateDeviceLatestImage({
+        DeviceUUID: updateModal.deviceData?.id,
+        CommitId: imageData?.Image.CommitID,
+      });
+      dispatch({
+        ...addNotification({
+          variant: 'info',
+          title: 'Updating device',
+          description: ` ${updateModal.deviceData.display_name} was added to the queue.`,
+        }),
+      });
+    } catch (err) {
+      dispatch({
+        ...addNotification({
+          variant: 'danger',
+          title: 'Updating a device was unsuccessful',
+          description: `Response: ${err.statusText}`,
+        }),
+      });
+    }
+
     handleClose();
+    refreshTable();
   };
 
   const handleClose = () => {
@@ -122,6 +144,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
 };
 
 UpdateDeviceModal.propTypes = {
+  refreshTable: PropTypes.func,
   updateModal: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
     deviceData: PropTypes.object.isRequired,

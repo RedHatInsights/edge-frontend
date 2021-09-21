@@ -137,7 +137,10 @@ const Devices = () => {
                 title: 'Device status',
                 // eslint-disable-next-line react/display-name
                 renderFunc: (sysProf) => (
-                  <DeviceStatus systemProfile={sysProf} />
+                  <DeviceStatus
+                    rpm_ostree_deployments={sysProf.rpm_ostree_deployments}
+                    imageData={sysProf.image_data}
+                  />
                 ),
                 props: { width: 20, isStatic: true },
               },
@@ -149,7 +152,6 @@ const Devices = () => {
             _showTags,
             defaultGetEntities
           ) => {
-            console.log(config);
             const defaultData = await defaultGetEntities(undefined, {
               ...config,
               filter: {
@@ -229,7 +231,6 @@ const Devices = () => {
             }),
             // NOTE: Adding custom onDelete function overrides default inventory deletion behavior
             //onDelete: (event, itemsToRemove, isAll) => {
-            //  console.log(itemsToRemove);
             //  if (isAll) {
             //    setActiveFilters(defaultFilters);
             //  } else {
@@ -268,6 +269,7 @@ const Devices = () => {
             }}
             setUpdateModal={setUpdateModal}
             updateModal={updateModal}
+            refreshTable={inventory.current.onRefreshData}
           />
         </Suspense>
       )}
