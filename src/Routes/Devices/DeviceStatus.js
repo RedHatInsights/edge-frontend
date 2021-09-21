@@ -8,12 +8,14 @@ import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color
 import infoColor from '@patternfly/react-tokens/dist/esm/global_active_color_300';
 import PropTypes from 'prop-types';
 
-const DeviceStatus = ({ rpm_ostree_deployments, updateTransactions }) => {
+const DeviceStatus = ({ imageData, rpm_ostree_deployments }) => {
+  const { UpdateTransactions, ImageInfo } = imageData || {};
+  console.log(imageData);
   if (rpm_ostree_deployments?.length === undefined) {
     return (
       <Split>
-        <SplitItem className="pf-u-mr-sm">
-          <QuestionCircleIcon color="grey" />
+        <SplitItem className='pf-u-mr-sm'>
+          <QuestionCircleIcon color='grey' />
         </SplitItem>
         <SplitItem>Unspecified</SplitItem>
       </Split>
@@ -23,22 +25,22 @@ const DeviceStatus = ({ rpm_ostree_deployments, updateTransactions }) => {
   if (!current_deployment.booted) {
     return (
       <Split>
-        <SplitItem className="pf-u-mr-sm">
-          <InProgressIcon color="blue" />
+        <SplitItem className='pf-u-mr-sm'>
+          <InProgressIcon color='blue' />
         </SplitItem>
         <SplitItem>Booting</SplitItem>
       </Split>
     );
   }
 
-  const transaction = updateTransactions?.filter(
+  const transaction = UpdateTransactions?.filter(
     (item) => item.Status === 'BUILDING' || item.Status === 'CREATED'
   );
 
-  if (transaction?.[0].Status === 'BUILDING') {
+  if (transaction?.length > 0) {
     return (
       <Split>
-        <SplitItem className="pf-u-mr-sm">
+        <SplitItem className='pf-u-mr-sm'>
           <InProgressIcon color={infoColor.value} />
         </SplitItem>
         <SplitItem>Updating</SplitItem>
@@ -46,13 +48,13 @@ const DeviceStatus = ({ rpm_ostree_deployments, updateTransactions }) => {
     );
   }
 
-  if (transaction?.[0].Status === 'CREATED') {
+  if (ImageInfo?.UpdatesAvailable?.length > 0) {
     return (
       <Split>
-        <SplitItem className="pf-u-mr-sm">
+        <SplitItem className='pf-u-mr-sm'>
           <ExclamationTriangleIcon color={warningColor.value} />
         </SplitItem>
-        <SplitItem className="pf-u-warning-color-200">
+        <SplitItem className='pf-u-warning-color-200'>
           Update Available
         </SplitItem>
       </Split>
@@ -60,8 +62,8 @@ const DeviceStatus = ({ rpm_ostree_deployments, updateTransactions }) => {
   }
   return (
     <Split>
-      <SplitItem className="pf-u-mr-sm">
-        <CheckCircleIcon color="green" />
+      <SplitItem className='pf-u-mr-sm'>
+        <CheckCircleIcon color='green' />
       </SplitItem>
       <SplitItem>Running</SplitItem>
     </Split>

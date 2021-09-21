@@ -87,10 +87,10 @@ const Devices = () => {
 
   return (
     <Fragment>
-      <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Fleet management" />
+      <PageHeader className='pf-m-light'>
+        <PageHeaderTitle title='Fleet management' />
       </PageHeader>
-      <Main className="edge-devices">
+      <Main className='edge-devices'>
         <Tiles />
         <InventoryTable
           ref={inventory}
@@ -139,7 +139,7 @@ const Devices = () => {
                 renderFunc: (sysProf) => (
                   <DeviceStatus
                     rpm_ostree_deployments={sysProf.rpm_ostree_deployments}
-                    updateTransactions={sysProf.UpdateTransactions}
+                    imageData={sysProf.image_data}
                   />
                 ),
                 props: { width: 20, isStatic: true },
@@ -270,6 +270,7 @@ const Devices = () => {
             }}
             setUpdateModal={setUpdateModal}
             updateModal={updateModal}
+            refreshTable={inventory.current.onRefreshData}
           />
         </Suspense>
       )}

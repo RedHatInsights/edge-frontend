@@ -16,7 +16,7 @@ import { distributionMapper } from '../ImageManagerDetail/constants';
 import PropTypes from 'prop-types';
 import { updateDeviceLatestImage } from '../../api/index';
 
-const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
+const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   const imageData =
     updateModal.deviceData?.system_profile?.image_data[
       updateModal.deviceData?.system_profile?.image_data.length - 1
@@ -27,6 +27,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
       CommitId: imageData?.Image.CommitID,
     });
     handleClose();
+    refreshTable();
   };
 
   const handleClose = () => {
@@ -40,16 +41,16 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
 
   return (
     <Modal
-      variant="medium"
+      variant='medium'
       title={`Update ${updateModal.deviceData?.display_name} to latest image`}
-      description="Update this device to use the latest version of the image linked to it."
+      description='Update this device to use the latest version of the image linked to it.'
       isOpen={updateModal.isOpen}
       onClose={handleClose}
       actions={[
-        <Button key="confirm" variant="primary" onClick={handleUpdateModal}>
+        <Button key='confirm' variant='primary' onClick={handleUpdateModal}>
           Update Device
         </Button>,
-        <Button key="cancel" variant="link" onClick={handleClose}>
+        <Button key='cancel' variant='link' onClick={handleClose}>
           Cancel
         </Button>,
       ]}
@@ -106,10 +107,10 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal }) => {
           </TextListItem>
         </TextList>
       </TextContent>
-      <TextContent className="pf-u-pt-md">
+      <TextContent className='pf-u-pt-md'>
         <Text
           style={{ color: 'var(--pf-global--palette--gold-500)' }}
-          component="small"
+          component='small'
         >
           <ExclamationTriangleIcon /> After the update is installed, the device
           will apply the changes.
