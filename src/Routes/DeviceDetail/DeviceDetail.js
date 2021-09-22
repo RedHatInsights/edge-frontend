@@ -145,16 +145,16 @@ const DeviceDetail = () => {
 
           {isDeviceStatusLoading ? (
             <Skeleton size={SkeletonSize.xs} />
-          ) : !updateModal.deviceData?.system_profile.status?.[0] ? (
+          ) : updateModal?.deviceData?.system_profile?.status?.length > 0 ? (
             <Label
               className="pf-u-mt-sm"
-              color="green"
-              icon={<CheckCircleIcon color="green" />}
+              color="blue"
+              icon={<InProgressIcon />}
             >
-              Running
+              Updating
             </Label>
-          ) : updateModal.deviceData?.system_profile.status[0]?.Status ===
-            'CREATED' ? (
+          ) : updateModal?.deviceData?.system_profile?.image_data?.ImageInfo
+              ?.UpdatesAvailable?.length > 0 ? (
             <Label
               className="pf-u-mt-sm"
               color="orange"
@@ -165,10 +165,10 @@ const DeviceDetail = () => {
           ) : (
             <Label
               className="pf-u-mt-sm"
-              color="blue"
-              icon={<InProgressIcon />}
+              color="green"
+              icon={<CheckCircleIcon color="green" />}
             >
-              Updating
+              Running
             </Label>
           )}
         </PageHeader>
