@@ -120,7 +120,12 @@ const Devices = () => {
                     },
                   ];
             },
-            areActionsDisabled: (rowData) => !rowData.system_profile.image_data,
+            areActionsDisabled: (rowData) =>
+              rowData?.system_profile?.image_data?.UpdateTransactions?.filter(
+                (item) =>
+                  item.Status === 'BUILDING' || item.Status === 'CREATED'
+              ) ||
+              !rowData?.system_profile?.image_data?.ImageInfo?.UpdatesAvailable,
           }}
           columns={(defaultColumns) => {
             const newColumns = defaultColumns.filter((column) =>
