@@ -124,7 +124,13 @@ const DeviceDetail = () => {
             actions={[
               {
                 title: 'Update',
-                isDisabled: !updateModal.deviceData?.system_profile?.image_data,
+                isDisabled:
+                  updateModal.deviceData?.system_profile?.image_data?.UpdateTransactions?.filter(
+                    (item) =>
+                      item.Status === 'BUILDING' || item.Status === 'CREATED'
+                  ).length > 0 ||
+                  !updateModal.deviceData?.system_profile?.image_data?.ImageInfo
+                    ?.UpdatesAvailable,
                 onClick: () => {
                   setUpdateModal((prevState) => ({
                     ...prevState,
