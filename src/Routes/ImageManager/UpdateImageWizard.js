@@ -64,16 +64,16 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         setIsSaving(() => true);
         const payload = {
           ...values,
-          Id: data?.ID,
-          name: data?.Name,
-          version: data?.Version + 1,
+          Id: data?.id,
+          name: data?.name,
+          version: data?.version + 1,
           architecture: 'x86_64',
           credentials: values.credentials
             ? values.credentials
-            : data?.Installer.SshKey,
+            : data?.Installer.sshkey,
           username: values.username
             ? values.username
-            : data?.Installer.Username,
+            : data?.Installer.username,
         };
 
         createNewImage(dispatch, payload, (resp) => {
@@ -81,7 +81,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
             ...addNotification({
               variant: 'info',
               title: 'Update image',
-              description: `${resp.value.Name} image was added to the queue.`,
+              description: `${resp.value.ID} image was added to the queue.`,
             }),
             meta: {
               polling: {
@@ -132,16 +132,16 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       }}
       defaultArch="x86_64"
       initialValues={{
-        name: data?.Name,
+        name: data?.name,
         isUpdate: true,
-        description: data?.Description,
-        credentials: data?.Installer.SshKey,
-        username: data?.Installer.Username,
-        version: data?.Version,
+        description: data?.description,
+        credentials: data?.Installer.sshkey,
+        username: data?.Installer.username,
+        version: data?.version,
         imageType: ['rhel-edge-commit'],
         'selected-packages': data?.Commit?.Packages.map((pkg) => ({
           ...pkg,
-          name: pkg.Name,
+          name: pkg.name,
         })),
       }}
       schema={{
@@ -156,7 +156,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
               submit: 'Create image',
             },
             showTitles: true,
-            title: `Update image: ${data?.Name}`,
+            title: `Update image: ${data?.name}`,
             crossroads: ['target-environment', 'release', 'imageType'],
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!

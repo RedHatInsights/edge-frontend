@@ -76,7 +76,7 @@ const ImageDetail = () => {
           </StackItem>
         </Stack>
         <StackItem>
-          <Text>{data?.Description}</Text>
+          <Text>{data?.description}</Text>
         </StackItem>
       </PageHeader>
       <ImageDetailTabs />
@@ -93,7 +93,7 @@ const ImageDetail = () => {
               history.push({ pathname: history.location.pathname });
               setIsUpdateWizardOpen(false);
             }}
-            updateImageID={data?.ID}
+            updateImageID={data?.id}
           />
         </Suspense>
       )}

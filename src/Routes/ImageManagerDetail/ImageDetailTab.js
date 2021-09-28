@@ -16,7 +16,7 @@ const ImageDetailTab = () => {
     shallowEqual
   );
 
-  const dateFormat = () => <DateFormat date={data['CreatedAt']} />;
+  const dateFormat = () => <DateFormat date={data['created_at']} />;
   const labelsToValueMapper = {
     'Image name': 'Name',
     Version: 'Version',

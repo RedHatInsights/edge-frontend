@@ -182,11 +182,11 @@ const ImageTable = ({
 
     if (data?.data?.length) {
       rows = data.data.map((image) => ({
-        id: image.ID,
+        id: image.id,
         cells: [
           {
             title: (
-              <Link to={`${paths['manage-images']}/${image.ID}`}>
+              <Link to={`${paths['manage-images']}/${image.id}`}>
                 {image.Name}
               </Link>
             ),
@@ -199,7 +199,7 @@ const ImageTable = ({
             title: imageTypeMapper[image?.ImageType],
           },
           {
-            title: <DateFormat date={image?.CreatedAt} />,
+            title: <DateFormat date={image?.created_at} />,
           },
           {
             title: <StatusLabel status={image?.Status} />,

@@ -39,7 +39,7 @@ const ImageInformationCard = () => {
           value: isImageInfoLoading ? (
             <Skeleton size={SkeletonSize.sm} />
           ) : imageData ? (
-            <Link to={`${paths['manage-images']}/${imageData?.Image?.ID}`}>
+            <Link to={`${paths['manage-images']}/${imageData?.Image?.id}`}>
               {imageData?.Image?.Name}
             </Link>
           ) : (
@@ -51,7 +51,7 @@ const ImageInformationCard = () => {
           value: isImageInfoLoading ? (
             <Skeleton size={SkeletonSize.sm} />
           ) : imageData ? (
-            <Link to={`${paths['manage-images']}/${imageData?.Image?.ID}`}>
+            <Link to={`${paths['manage-images']}/${imageData?.Image?.id}`}>
               {imageData?.Image?.Version}
             </Link>
           ) : (
@@ -67,7 +67,7 @@ const ImageInformationCard = () => {
               to={`${paths['manage-images']}/${
                 imageData?.UpdatesAvailable[
                   imageData?.UpdatesAvailable.length - 1
-                ]?.Image?.ID
+                ]?.Image?.id
               }`}
             >
               {
@@ -87,7 +87,7 @@ const ImageInformationCard = () => {
           value: isImageInfoLoading ? (
             <Skeleton size={SkeletonSize.sm} />
           ) : imageData?.Rollback?.ParentId ? (
-            <Link to={`${paths['manage-images']}/${imageData?.Rollback?.ID}`}>
+            <Link to={`${paths['manage-images']}/${imageData?.Rollback?.id}`}>
               {imageData?.Rollback?.Version}
             </Link>
           ) : hasError ? (

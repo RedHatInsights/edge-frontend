@@ -23,7 +23,7 @@ const DetailsHead = ({ imageData, openUpdateWizard }) => {
         <BreadcrumbItem>
           <Link to={paths['manage-images']}>Manage Images</Link>
         </BreadcrumbItem>
-        <BreadcrumbItem isActive>{imageData?.Name}</BreadcrumbItem>
+        <BreadcrumbItem isActive>{imageData?.name}</BreadcrumbItem>
       </Breadcrumb>
 
       <TextContent>
@@ -31,11 +31,11 @@ const DetailsHead = ({ imageData, openUpdateWizard }) => {
           <SplitItem>
             <TextList component="dl">
               <TextListItem component="h1" className="grid-align-center">
-                {imageData?.Name}
+                {imageData?.name}
               </TextListItem>
               <TextListItem component="dd">
-                {imageData?.Status ? (
-                  <StatusLabel status={imageData?.Status} />
+                {imageData?.status ? (
+                  <StatusLabel status={imageData?.status} />
                 ) : (
                   <Skeleton />
                 )}
@@ -43,7 +43,7 @@ const DetailsHead = ({ imageData, openUpdateWizard }) => {
             </TextList>
           </SplitItem>
           <SplitItem isFilled></SplitItem>
-          {imageData?.Status === 'SUCCESS' ? (
+          {imageData?.status === 'SUCCESS' ? (
             <ImageDetailActions
               imageData={imageData}
               openUpdateWizard={openUpdateWizard}
