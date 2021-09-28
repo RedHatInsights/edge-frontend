@@ -125,7 +125,8 @@ const Devices = () => {
                 (item) =>
                   item.Status === 'BUILDING' || item.Status === 'CREATED'
               ).length > 0 ||
-              !rowData?.system_profile?.image_data?.ImageInfo?.UpdatesAvailable,
+              !rowData?.system_profile?.image_data?.ImageInfo?.UpdatesAvailable
+                ?.length > 0,
           }}
           columns={(defaultColumns) => {
             const newColumns = defaultColumns.filter((column) =>

@@ -27,7 +27,7 @@ const ImageDetailTab = () => {
   };
 
   if (data?.Installer?.Checksum) {
-    labelsToValueMapper.Checksum = () => data?.Installer?.Checksum;
+    labelsToValueMapper['SHA-256 Checksum'] = () => data?.Installer?.Checksum;
   }
 
   return (
