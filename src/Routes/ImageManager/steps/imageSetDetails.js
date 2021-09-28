@@ -4,7 +4,7 @@ import { Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 
 const helperText =
-  'Can only contain letters, numbers,hyphens(-), and underscores(_).';
+  'Can only contain letters, numbers, hyphens(-), and underscores(_).';
 
 export default {
   title: 'Details',
