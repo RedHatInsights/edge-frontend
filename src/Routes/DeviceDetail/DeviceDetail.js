@@ -130,7 +130,7 @@ const DeviceDetail = () => {
                       item.Status === 'BUILDING' || item.Status === 'CREATED'
                   ).length > 0 ||
                   !updateModal.deviceData?.system_profile?.image_data?.ImageInfo
-                    ?.UpdatesAvailable,
+                    ?.UpdatesAvailable?.length > 0,
                 onClick: () => {
                   setUpdateModal((prevState) => ({
                     ...prevState,
