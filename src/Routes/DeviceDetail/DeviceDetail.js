@@ -38,9 +38,7 @@ const UpdateDeviceModal = React.lazy(() =>
 const DeviceDetail = () => {
   const { getRegistry } = useContext(RegistryContext);
   const { inventoryId, uuid } = useParams();
-  const displayName = useSelector(
-    ({ entityDetails }) => entityDetails?.entity?.display_name
-  );
+  const entity = useSelector(({ entityDetails }) => entityDetails?.entity);
   const groupName = useSelector(
     ({ groupsDetailReducer }) => groupsDetailReducer?.name
   );
@@ -61,7 +59,7 @@ const DeviceDetail = () => {
 
   useEffect(() => {
     (async () => {
-      if (!displayName) {
+      if (!entity?.display_name) {
         return;
       }
       const image_data = await getDeviceHasUpdate(deviceId);
@@ -69,7 +67,8 @@ const DeviceDetail = () => {
       setUpdateModal((prevState) => ({
         ...prevState,
         deviceData: {
-          display_name: displayName,
+          display_name: entity.display_name,
+          id: entity.id,
           system_profile: {
             image_data,
             status: image_data?.UpdateTransactions?.filter(
@@ -79,7 +78,7 @@ const DeviceDetail = () => {
         },
       }));
     })();
-  }, [displayName]);
+  }, [entity]);
 
   useEffect(() => {
     insights?.chrome?.appObjectId?.(inventoryId);
@@ -115,7 +114,7 @@ const DeviceDetail = () => {
             )}
             <BreadcrumbItem isActive>
               <div className="ins-c-inventory__detail--breadcrumb-name">
-                {displayName || <Skeleton size={SkeletonSize.xs} />}
+                {entity?.display_name || <Skeleton size={SkeletonSize.xs} />}
               </div>
             </BreadcrumbItem>
           </Breadcrumb>
