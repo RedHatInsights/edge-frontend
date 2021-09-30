@@ -50,7 +50,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
     }
 
     handleClose();
-    refreshTable();
+    refreshTable ? refreshTable() : null;
   };
 
   const handleClose = () => {
