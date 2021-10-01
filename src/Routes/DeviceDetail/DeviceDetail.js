@@ -71,9 +71,7 @@ const DeviceDetail = () => {
           id: entity.id,
           system_profile: {
             image_data,
-            status: image_data?.UpdateTransactions?.filter(
-              (item) => item.Status === 'BUILDING' || item.Status === 'CREATED'
-            ),
+            status: image_data?.UpdateTransactions?.at(-1).Status,
           },
         },
       }));
@@ -124,10 +122,12 @@ const DeviceDetail = () => {
               {
                 title: 'Update',
                 isDisabled:
-                  updateModal.deviceData?.system_profile?.image_data?.UpdateTransactions?.filter(
-                    (item) =>
-                      item.Status === 'BUILDING' || item.Status === 'CREATED'
-                  ).length > 0 ||
+                  updateModal.deviceData?.system_profile?.image_data?.UpdateTransactions?.at(
+                    -1
+                  ).Status === 'BUILDING' ||
+                  updateModal.deviceData?.system_profile?.image_data?.UpdateTransactions?.at(
+                    -1
+                  ).Status === 'CREATED' ||
                   !updateModal.deviceData?.system_profile?.image_data?.ImageInfo
                     ?.UpdatesAvailable?.length > 0,
                 onClick: () => {
@@ -144,7 +144,8 @@ const DeviceDetail = () => {
 
           {isDeviceStatusLoading ? (
             <Skeleton size={SkeletonSize.xs} />
-          ) : updateModal?.deviceData?.system_profile?.status?.length > 0 ? (
+          ) : updateModal?.deviceData?.system_profile?.status === 'BUILDING' ||
+            updateModal?.deviceData?.system_profile?.status === 'CREATED' ? (
             <Label
               className="pf-u-mt-sm"
               color="blue"
