@@ -121,10 +121,10 @@ const Devices = () => {
                   ];
             },
             areActionsDisabled: (rowData) =>
-              rowData?.system_profile?.image_data?.UpdateTransactions?.filter(
-                (item) =>
-                  item.Status === 'BUILDING' || item.Status === 'CREATED'
-              ).length > 0 ||
+              rowData?.system_profile?.image_data?.UpdateTransactions?.at(-1)
+                .Status === 'BUILDING' ||
+              rowData?.system_profile?.image_data?.UpdateTransactions?.at(-1)
+                .Status === 'CREATED' ||
               !rowData?.system_profile?.image_data?.ImageInfo?.UpdatesAvailable
                 ?.length > 0,
           }}

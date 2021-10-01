@@ -32,11 +32,10 @@ const DeviceStatus = ({ imageData, rpm_ostree_deployments }) => {
     );
   }
 
-  const transaction = UpdateTransactions?.filter(
-    (item) => item.Status === 'BUILDING' || item.Status === 'CREATED'
-  );
-
-  if (transaction?.length > 0) {
+  if (
+    UpdateTransactions?.at(-1).Status === 'BUILDING' ||
+    UpdateTransactions?.at(-1).Status === 'CREATED'
+  ) {
     return (
       <Split>
         <SplitItem className="pf-u-mr-sm">
