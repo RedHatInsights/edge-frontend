@@ -99,7 +99,7 @@ const Devices = () => {
             canSelectAll: false,
             variant: 'compact',
             actionResolver: (rowData) => {
-              return rowData.system_profile.image_data
+              return rowData?.system_profile?.image_data
                 ? [
                     {
                       title: 'Update',
