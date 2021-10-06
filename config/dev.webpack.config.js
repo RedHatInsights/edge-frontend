@@ -9,13 +9,20 @@ const insightsProxy = {
 const webpackProxy = {
   deployment: process.env.BETA ? 'beta/apps' : 'apps',
   useProxy: true,
-  env: 'stage-beta', // for accessing prod-beta change this to 'prod-beta'
+  env: `${process.env.ENVIRONMENT || 'stage'}-${
+    process.env.BETA ? 'beta' : 'stable'
+  }`, // for accessing prod-beta start your app with ENVIRONMENT=prod and BETA=true
   appUrl: process.env.BETA ? '/beta/edge' : '/edge',
-  ...(process.env.API_PORT && {
-    routes: {
+  routes: {
+    ...(process.env.API_PORT && {
       '/api/edge': { host: `http://localhost:${process.env.API_PORT}` },
-    },
-  }),
+    }),
+    ...(process.env.CONFIG_PORT && {
+      [`${process.env.BETA ? '/beta' : ''}/config`]: {
+        host: `http://localhost:${process.env.CONFIG_PORT}`,
+      },
+    }),
+  },
 };
 
 const { config: webpackConfig, plugins } = config({

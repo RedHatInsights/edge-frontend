@@ -82,11 +82,26 @@ Your `/etc/hosts` file can look like:
 127.0.0.1 qaprodauth.foo.redhat.com
 ```
 
+### **For frontend only**
+
 Run the application in beta environment - beta only supported
 ```bash
 BETA=true npm run start:proxy
 ```
-**Edge application will be available on https://ci.foo.redhat.com:1337/beta/edge/fleet-management**
+
+### **For frontend and backend**
+
+Run the application in beta environment - beta only supported
+```bash
+API_PORT=3000 BETA=true npm run start:proxy
+```
+**Edge application will be available on https://stage.foo.redhat.com:1337/beta/edge/fleet-management**
+
+To switch environment (for instance if you want to run your app with prod DB)
+```bash
+ENVIRONMENT=prod BETA=true npm run start:proxy
+```
+**Edge application will be available on https://prod.foo.redhat.com:1337/beta/edge/fleet-management**
 
 ## Running locally with insights-proxy
 
