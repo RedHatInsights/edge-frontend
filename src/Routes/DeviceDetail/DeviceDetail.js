@@ -74,7 +74,7 @@ const DeviceDetail = () => {
             status:
               image_data?.UpdateTransactions?.[
                 image_data.UpdateTransactions.length - 1
-              ].Status,
+              ]?.Status,
           },
         },
       }));
@@ -125,12 +125,16 @@ const DeviceDetail = () => {
               {
                 title: 'Update',
                 isDisabled:
-                  updateModal.deviceData?.system_profile?.image_data?.UpdateTransactions?.at(
-                    -1
-                  ).Status === 'BUILDING' ||
-                  updateModal.deviceData?.system_profile?.image_data?.UpdateTransactions?.at(
-                    -1
-                  ).Status === 'CREATED' ||
+                  updateModal.deviceData?.system_profile?.image_data
+                    ?.UpdateTransactions?.[
+                    updateModal.deviceData?.system_profile?.image_data
+                      ?.UpdateTransactions.length - 1
+                  ]?.Status === 'BUILDING' ||
+                  updateModal.deviceData?.system_profile?.image_data
+                    ?.UpdateTransactions?.[
+                    updateModal.deviceData?.system_profile?.image_data
+                      ?.UpdateTransactions.length - 1
+                  ]?.Status === 'CREATED' ||
                   !updateModal.deviceData?.system_profile?.image_data?.ImageInfo
                     ?.UpdatesAvailable?.length > 0,
                 onClick: () => {
