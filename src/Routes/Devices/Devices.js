@@ -120,13 +120,19 @@ const Devices = () => {
                     },
                   ];
             },
-            areActionsDisabled: (rowData) =>
-              rowData?.system_profile?.image_data?.UpdateTransactions?.at(-1)
-                .Status === 'BUILDING' ||
-              rowData?.system_profile?.image_data?.UpdateTransactions?.at(-1)
-                .Status === 'CREATED' ||
-              !rowData?.system_profile?.image_data?.ImageInfo?.UpdatesAvailable
-                ?.length > 0,
+            areActionsDisabled: (rowData) => {
+              const updateTransactions =
+                rowData?.system_profile?.image_data?.UpdateTransactions;
+
+              return (
+                updateTransactions[updateTransactions.length - 1].Status ===
+                  'BUILDING' ||
+                updateTransactions[updateTransactions.length - 1].Status ===
+                  'CREATED' ||
+                !rowData?.system_profile?.image_data?.ImageInfo
+                  ?.UpdatesAvailable?.length > 0
+              );
+            },
           }}
           columns={(defaultColumns) => {
             const newColumns = defaultColumns.filter((column) =>
