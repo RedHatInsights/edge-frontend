@@ -71,7 +71,10 @@ const DeviceDetail = () => {
           id: entity.id,
           system_profile: {
             image_data,
-            status: image_data?.UpdateTransactions?.[image_data.UpdateTransactions.length - 1].Status,
+            status:
+              image_data?.UpdateTransactions?.[
+                image_data.UpdateTransactions.length - 1
+              ].Status,
           },
         },
       }));
@@ -154,7 +157,7 @@ const DeviceDetail = () => {
               Updating
             </Label>
           ) : updateModal?.deviceData?.system_profile?.image_data?.ImageInfo
-            ?.UpdatesAvailable?.length > 0 ? (
+              ?.UpdatesAvailable?.length > 0 ? (
             <Label
               className="pf-u-mt-sm"
               color="orange"
