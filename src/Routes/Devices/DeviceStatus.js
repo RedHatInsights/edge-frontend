@@ -33,8 +33,8 @@ const DeviceStatus = ({ imageData, rpm_ostree_deployments }) => {
   }
 
   if (
-    UpdateTransactions?.at(-1).Status === 'BUILDING' ||
-    UpdateTransactions?.at(-1).Status === 'CREATED'
+    UpdateTransactions?.[UpdateTransactions.length - 1].Status === 'BUILDING' ||
+    UpdateTransactions?.[UpdateTransactions.length - 1].Status === 'CREATED'
   ) {
     return (
       <Split>
