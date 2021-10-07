@@ -122,12 +122,12 @@ const Devices = () => {
             },
             areActionsDisabled: (rowData) => {
               const updateTransactions =
-                rowData?.system_profile?.image_data?.UpdateTransactions;
+                rowData?.system_profile?.image_data?.UpdateTransactions || [];
 
               return (
-                updateTransactions[updateTransactions.length - 1].Status ===
+                updateTransactions[updateTransactions.length - 1]?.Status ===
                   'BUILDING' ||
-                updateTransactions[updateTransactions.length - 1].Status ===
+                updateTransactions[updateTransactions.length - 1]?.Status ===
                   'CREATED' ||
                 !rowData?.system_profile?.image_data?.ImageInfo
                   ?.UpdatesAvailable?.length > 0
