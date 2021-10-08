@@ -23,7 +23,7 @@ const ImageDetailTab = () => {
     Created: () => dateFormat(),
     Release: () => distributionMapper[data['Distribution']],
     'Output type': () => imageTypeMapper[data['ImageType']],
-    'Added packages': () => data.Commit.Packages.length,
+    'Added packages': () => data.Packages.length,
   };
 
   if (data?.Installer?.Checksum) {

@@ -25,7 +25,7 @@ const ImagePackagesTab = () => {
   const [rows, setRows] = useState([]);
   const { data, imageName } = useSelector(
     ({ imageDetailReducer }) => ({
-      data: imageDetailReducer?.data?.Commit?.Packages || null,
+      data: imageDetailReducer?.data?.Packages || null,
       imageName: imageDetailReducer?.data?.Name || null,
     }),
     shallowEqual
