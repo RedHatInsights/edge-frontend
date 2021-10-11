@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {
   Table,
   TableHeader,
@@ -14,6 +14,12 @@ import {
   Spinner,
   Bullseye,
 } from '@patternfly/react-core';
+import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
+import {
+  isEmptyFilters,
+  constructActiveFilters,
+  onDeleteFilter,
+} from '../constants';
 import { useDispatch } from 'react-redux';
 import { PlusCircleIcon, SearchIcon } from '@patternfly/react-icons';
 import {
@@ -38,6 +44,11 @@ const GeneralTable = ({
   clearFilters,
   actionResolver,
   areActionsDisabled,
+  setPagination,
+  filterConfig,
+  activeFilters,
+  dispatchActiveFilters,
+  defaultFilters,
 }) => {
   const [sortBy, setSortBy] = useState(defaultSort);
   const dispatch = useDispatch();
@@ -157,19 +168,55 @@ const GeneralTable = ({
   };
 
   return (
-    <Table
-      variant="compact"
-      aria-label="Manage Images table"
-      sortBy={sortBy}
-      onSort={handleSort}
-      actionResolver={actionResolver}
-      areActionsDisabled={areActionsDisabled}
-      cells={columns}
-      rows={rows}
-    >
-      <TableHeader />
-      <TableBody />
-    </Table>
+    <Fragment>
+      <PrimaryToolbar
+        filterConfig={filterConfig}
+        pagination={{
+          itemCount: count,
+          ...pagination,
+          onSetPage: (_evt, newPage) =>
+            setPagination({ ...pagination, page: newPage }),
+          onPerPageSelect: (_evt, newPerPage) =>
+            setPagination({ page: 1, perPage: newPerPage }),
+        }}
+        activeFiltersConfig={{
+          filters: isEmptyFilters(activeFilters)
+            ? constructActiveFilters(activeFilters)
+            : [],
+          onDelete: (_event, itemsToRemove, isAll) => {
+            if (isAll) {
+              dispatchActiveFilters({
+                type: 'DELETE_FILTER',
+                payload: defaultFilters,
+              });
+            } else {
+              dispatchActiveFilters({
+                type: 'DELETE_FILTER',
+                payload: onDeleteFilter(activeFilters, itemsToRemove),
+              });
+            }
+          },
+        }}
+        dedicatedAction={
+          <Button onClick={emptyStateAction} isDisabled={isLoading !== false}>
+            {emptyStateActionMessage}
+          </Button>
+        }
+      />
+      <Table
+        variant="compact"
+        aria-label="Manage Images table"
+        sortBy={sortBy}
+        onSort={handleSort}
+        actionResolver={actionResolver}
+        areActionsDisabled={areActionsDisabled}
+        cells={columns}
+        rows={rows}
+      >
+        <TableHeader />
+        <TableBody />
+      </Table>
+    </Fragment>
   );
 };
 
@@ -191,6 +238,19 @@ GeneralTable.propTypes = {
     page: PropTypes.number,
     perPage: PropTypes.number,
   }).isRequired,
+  setPagination: PropTypes.func.isRequired,
+  filterConfig: PropTypes.shape({ items: PropTypes.array }),
+  defaultFilters: PropTypes.shape({
+    name: PropTypes.object,
+    distribution: PropTypes.object,
+    status: PropTypes.object,
+  }),
+  activeFilters: PropTypes.shape({
+    name: PropTypes.object,
+    distribution: PropTypes.object,
+    status: PropTypes.object,
+  }),
+  dispatchActiveFilters: PropTypes.func.isRequired,
 };
 
 export default GeneralTable;
