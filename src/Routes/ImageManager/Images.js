@@ -11,11 +11,17 @@ import {
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
-import ImageTable from './ImageTable';
+import GeneralTable from '../../components/GeneralTable';
 import ImageToolbar from './ImagesToolbar';
-import { Spinner, Bullseye } from '@patternfly/react-core';
+import { Spinner, Bullseye, Text } from '@patternfly/react-core';
 import { useHistory } from 'react-router-dom';
+import { shallowEqual, useSelector } from 'react-redux';
+import { routes as paths } from '../../../package.json';
+import { Link } from 'react-router-dom';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
+import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import {
+  imageTypeMapper,
   composeStatus,
   distributionMapper,
 } from '../ImageManagerDetail/constants';
@@ -23,6 +29,7 @@ import { applyReducerHash } from '@redhat-cloud-services/frontend-components-uti
 import { isEmptyFilters, constructActiveFilters } from '../../constants';
 import { RegistryContext } from '../../store';
 import { edgeImagesReducer } from '../../store/reducers';
+import { loadEdgeImages } from '../../store/actions';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -87,6 +94,18 @@ const Images = () => {
     activeFilterReducer,
     defaultFilters
   );
+  const { count, data, isLoading, hasError } = useSelector(
+    ({ edgeImagesReducer }) => ({
+      count: edgeImagesReducer?.data?.count,
+      data: edgeImagesReducer?.data?.data || null,
+      isLoading:
+        edgeImagesReducer?.isLoading === undefined
+          ? true
+          : edgeImagesReducer.isLoading,
+      hasError: edgeImagesReducer?.hasError,
+    }),
+    shallowEqual
+  );
 
   const openCreateWizard = () => {
     history.push({
@@ -109,6 +128,45 @@ const Images = () => {
       isOpen: true,
       imageId: id,
     });
+  };
+
+  const columnNames = [
+    { title: 'Name', type: 'name', sort: true },
+    { title: 'Version', type: 'version', sort: false },
+    { title: 'Distribution', type: 'distribution', sort: true },
+    { title: 'Type', type: 'image_type', sort: false },
+    { title: 'Created', type: 'created_at', sort: true },
+    { title: 'Status', type: 'status', sort: true },
+  ];
+
+  const createRows = (data) => {
+    return data.map((image) => ({
+      id: image.ID,
+      cells: [
+        {
+          title: (
+            <Link to={`${paths['manage-images']}/${image.ID}`}>
+              {image.Name}
+            </Link>
+          ),
+        },
+        image?.Version,
+        {
+          title: distributionMapper[image?.Distribution],
+        },
+        {
+          title: imageTypeMapper[image?.ImageType],
+        },
+        {
+          title: <DateFormat date={image?.CreatedAt} />,
+        },
+        {
+          title: <StatusLabel status={image?.Status} />,
+        },
+      ],
+      imageStatus: image?.Status,
+      isoURL: image?.Installer?.ImageBuildISOURL,
+    }));
   };
 
   const filterConfig = {
@@ -166,6 +224,45 @@ const Images = () => {
       },
     ],
   };
+  const filterDep = Object.values(activeFilters);
+
+  const actionResolver = (rowData) => {
+    const actionsArray = [];
+    if (rowData?.isoURL) {
+      actionsArray.push({
+        title: (
+          <Text
+            className="force-text-black remove-underline"
+            component="a"
+            href={rowData.isoURL}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Download
+          </Text>
+        ),
+      });
+    }
+
+    if (rowData?.imageStatus === 'SUCCESS') {
+      actionsArray.push({
+        title: 'Update Image',
+        onClick: (_event, _rowId, rowData) => {
+          openUpdateWizard(rowData.id);
+        },
+      });
+    }
+
+    if (rowData?.imageStatus !== 'SUCCESS') {
+      actionsArray.push({
+        title: '',
+      });
+    }
+
+    return actionsArray;
+  };
+
+  const areActionsDisabled = (rowData) => rowData?.imageStatus !== 'SUCCESS';
 
   useEffect(() => {
     const registered = getRegistry().register({ edgeImagesReducer });
@@ -187,21 +284,31 @@ const Images = () => {
           defaultFilters={defaultFilters}
           openCreateWizard={openCreateWizard}
         />
-        <ImageTable
+        <GeneralTable
           clearFilters={() =>
             dispatchActiveFilters({
               type: 'DELETE_FILTER',
               payload: defaultFilters,
             })
           }
-          openCreateWizard={openCreateWizard}
+          tableData={{ count, data, isLoading, hasError }}
           openUpdateWizard={openUpdateWizard}
+          columnNames={columnNames}
+          createRows={createRows}
+          emptyStateMessage="No images found"
+          emptyStateActionMessage="Create new images"
+          emptyStateAction={openCreateWizard}
+          defaultSort={{ index: 4, direction: 'desc' }}
+          loadTableData={loadEdgeImages}
           filters={
             isEmptyFilters(activeFilters)
               ? constructActiveFilters(activeFilters)
               : []
           }
+          filterDep={filterDep}
           pagination={pagination}
+          actionResolver={actionResolver}
+          areActionsDisabled={areActionsDisabled}
         />
       </Main>
       {isCreateWizardOpen && (
