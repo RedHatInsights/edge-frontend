@@ -1,4 +1,4 @@
-import React, { Fragment, useReducer, useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import GeneralTable from '../../components/GeneralTable';
 import PropTypes from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
@@ -208,38 +208,36 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
   const areActionsDisabled = (rowData) => rowData?.imageStatus !== 'SUCCESS';
 
   return (
-    <Fragment>
-      <GeneralTable
-        clearFilters={() =>
-          dispatchActiveFilters({
-            type: 'DELETE_FILTER',
-            payload: defaultFilters,
-          })
-        }
-        tableData={{ count, data, isLoading, hasError }}
-        columnNames={columnNames}
-        createRows={createRows}
-        emptyStateMessage="No images found"
-        emptyStateActionMessage="Create new images"
-        emptyStateAction={openCreateWizard}
-        defaultSort={{ index: 4, direction: 'desc' }}
-        loadTableData={loadEdgeImages}
-        filters={
-          isEmptyFilters(activeFilters)
-            ? constructActiveFilters(activeFilters)
-            : []
-        }
-        filterDep={filterDep}
-        pagination={pagination}
-        actionResolver={actionResolver}
-        areActionsDisabled={areActionsDisabled}
-        setPagination={setPagination}
-        filterConfig={filterConfig}
-        activeFilters={activeFilters}
-        dispatchActiveFilters={dispatchActiveFilters}
-        defaultFilters={defaultFilters}
-      />
-    </Fragment>
+    <GeneralTable
+      clearFilters={() =>
+        dispatchActiveFilters({
+          type: 'DELETE_FILTER',
+          payload: defaultFilters,
+        })
+      }
+      tableData={{ count, data, isLoading, hasError }}
+      columnNames={columnNames}
+      createRows={createRows}
+      emptyStateMessage="No images found"
+      emptyStateActionMessage="Create new images"
+      emptyStateAction={openCreateWizard}
+      defaultSort={{ index: 4, direction: 'desc' }}
+      loadTableData={loadEdgeImages}
+      filters={
+        isEmptyFilters(activeFilters)
+          ? constructActiveFilters(activeFilters)
+          : []
+      }
+      filterDep={filterDep}
+      pagination={pagination}
+      actionResolver={actionResolver}
+      areActionsDisabled={areActionsDisabled}
+      setPagination={setPagination}
+      filterConfig={filterConfig}
+      activeFilters={activeFilters}
+      dispatchActiveFilters={dispatchActiveFilters}
+      defaultFilters={defaultFilters}
+    />
   );
 };
 
