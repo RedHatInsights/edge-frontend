@@ -2,9 +2,28 @@ import React from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import { Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
-
+import { checkImageName } from '../../../api';
 const helperText =
   'Can only contain letters, numbers, hyphens(-), and underscores(_).';
+
+const asyncImageNameValidation = (value) =>
+  new Promise((resolve, reject) => {
+    if (value !== undefined) {
+      checkImageName(value)
+        .then((response) =>
+          response
+            ? reject({ message: 'Name already exists' })
+            : resolve({ message: 'validation succesfull' })
+        )
+        .catch(() =>
+          reject({
+            message: 'Cannot validate name in server, please try again later',
+          })
+        );
+    }
+  }).catch(({ message }) => {
+    throw message;
+  });
 
 export default {
   title: 'Details',
@@ -27,6 +46,7 @@ export default {
       placeholder: 'Image name',
       helperText: helperText,
       validate: [
+        asyncImageNameValidation,
         { type: validatorTypes.REQUIRED },
         {
           type: validatorTypes.PATTERN,
