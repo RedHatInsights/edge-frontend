@@ -20,9 +20,6 @@ The edge-frontend repo is the front-end for [RHEL for Edge/Fleet managment ](htt
 ## Cloud-Services-Config
 [Cloud-service-config](https://github.com/RedHatInsights/cloud-services-config) is used to run Red Hat Hybrid Cloud Console locally. RHEL for Edge/Fleet Management is part of Red Hat Hybrid Cloud Console. 
 
-## Insights-Proxy
-[Insights-proxy](https://github.com/RedHatInsights/insights-proxy) is the proxy this repo uses to combine together local code and remote code. In this repo we use insights to combine our local edge-frontend code to the remote code that runs console.redhat.com.
-
 ## Spandx
 [spandx](https://github.com/redhataccess/spandx) is an HTTP switchboard. With it, you can weave together pieces of a large, complex website by choosing which resources should come from your local system and which should come from a remote environment.
 
@@ -65,8 +62,6 @@ Start `http-server`
 ```bash
 npx http-server -p 8889
 ```
-### *You can choose to either run the application with [webpack-proxy](#running-locally-with-webpack-proxy) or with [insights-proxy](#running-locally-with-insights-proxy).*
-*If you need to run edge-api locally you will need to use insights-proxy.*
 
 ## Running locally with webpack-proxy
 
@@ -102,32 +97,3 @@ To switch environment (for instance if you want to run your app with prod DB)
 ENVIRONMENT=prod BETA=true npm run start:proxy
 ```
 **Edge application will be available on https://prod.foo.redhat.com:1337/beta/edge/fleet-management**
-
-## Running locally with insights-proxy
-
-Follow the guide on [insights-proxy](https://github.com/RedHatInsights/insights-proxy) on how to install proxy.
-
-Once insights-proxy is setup, run Spandx with the following commands:
-
-### **For frontend only**
-In one terminal run
-```bash
-USE_CLOUD=true SPANDX_CONFIG=./profiles/local-frontend.js ../insights-proxy/scripts/run.sh
-```
-
-### **For frontend and backend** 
-
-In one terminal setup and run [Edge-api](https://github.com/RedHatInsights/edge-api)
-
-In another terminal run
- 
-```bash
-USE_CLOUD=true SPANDX_CONFIG=./profiles/local-frontend-and-api.js ../insights-proxy/scripts/run.sh
-```
-
-After running SPANDX open another terminal and run
-
-```bash
-npm start
-```
-**Edge application will be available on https://ci.foo.redhat.com:1337/beta/edge/fleet-management**
