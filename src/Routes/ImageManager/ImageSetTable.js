@@ -81,28 +81,29 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
 
   const createRows = (data) => {
     return data.map((image) => {
-      const currentImage = image?.Images?.[image.Images.length - 1]
+      const currentImage = image?.Images?.[image.Images.length - 1];
       return {
-      id: image.ID,
-      cells: [
-        {
-          title: (
-            <Link to={`${paths['manage-images']}/${image.ID}`}>
-              {image.Name}
-            </Link>
-          ),
-        },
-        image?.Version,
-        {
-          title: <DateFormat date={currentImage?.CreatedAt} />,
-        },
-        {
-          title: <StatusLabel status={currentImage?.Status} />,
-        },
-      ],
-      imageStatus: currentImage?.Status,
-      isoURL: currentImage?.Installer?.ImageBuildISOURL,
-    }});
+        id: image.ID,
+        cells: [
+          {
+            title: (
+              <Link to={`${paths['manage-images']}/${image.ID}`}>
+                {image.Name}
+              </Link>
+            ),
+          },
+          image?.Version,
+          {
+            title: <DateFormat date={currentImage?.CreatedAt} />,
+          },
+          {
+            title: <StatusLabel status={currentImage?.Status} />,
+          },
+        ],
+        imageStatus: currentImage?.Status,
+        isoURL: currentImage?.Installer?.ImageBuildISOURL,
+      };
+    });
   };
 
   const filterConfig = {
