@@ -14,7 +14,7 @@ import { Spinner, Bullseye } from '@patternfly/react-core';
 import { useHistory } from 'react-router-dom';
 import { RegistryContext } from '../../store';
 import { edgeImagesReducer } from '../../store/reducers';
-import ImageTable from './ImageTable';
+import ImageTable from './ImageSetTable';
 
 const CreateImageWizard = React.lazy(() =>
   import(

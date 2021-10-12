@@ -8,13 +8,12 @@ import { Text } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import {
-  imageTypeMapper,
   composeStatus,
   distributionMapper,
 } from '../ImageManagerDetail/constants';
 import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
 import { isEmptyFilters, constructActiveFilters } from '../../constants';
-import { loadEdgeImages } from '../../store/actions';
+import { loadEdgeImageSets } from '../../store/actions';
 
 const defaultFilters = {
   name: {
@@ -63,7 +62,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
   const { count, data, isLoading, hasError } = useSelector(
     ({ edgeImagesReducer }) => ({
       count: edgeImagesReducer?.data?.count,
-      data: edgeImagesReducer?.data?.data || null,
+      data: edgeImagesReducer?.data || null,
       isLoading:
         edgeImagesReducer?.isLoading === undefined
           ? true
@@ -75,15 +74,15 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
 
   const columnNames = [
     { title: 'Name', type: 'name', sort: true },
-    { title: 'Version', type: 'version', sort: false },
-    { title: 'Distribution', type: 'distribution', sort: true },
-    { title: 'Type', type: 'image_type', sort: false },
-    { title: 'Created', type: 'created_at', sort: true },
+    { title: 'Current Version', type: 'version', sort: false },
+    { title: 'Last Updated', type: 'created_at', sort: true },
     { title: 'Status', type: 'status', sort: true },
   ];
 
   const createRows = (data) => {
-    return data.map((image) => ({
+    return data.map((image) => {
+      const currentImage = image?.Images?.[image.Images.length - 1]
+      return {
       id: image.ID,
       cells: [
         {
@@ -95,21 +94,15 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
         },
         image?.Version,
         {
-          title: distributionMapper[image?.Distribution],
+          title: <DateFormat date={currentImage?.CreatedAt} />,
         },
         {
-          title: imageTypeMapper[image?.ImageType],
-        },
-        {
-          title: <DateFormat date={image?.CreatedAt} />,
-        },
-        {
-          title: <StatusLabel status={image?.Status} />,
+          title: <StatusLabel status={currentImage?.Status} />,
         },
       ],
-      imageStatus: image?.Status,
-      isoURL: image?.Installer?.ImageBuildISOURL,
-    }));
+      imageStatus: currentImage?.Status,
+      isoURL: currentImage?.Installer?.ImageBuildISOURL,
+    }});
   };
 
   const filterConfig = {
@@ -221,8 +214,8 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       emptyStateMessage="No images found"
       emptyStateActionMessage="Create new images"
       emptyStateAction={openCreateWizard}
-      defaultSort={{ index: 4, direction: 'desc' }}
-      loadTableData={loadEdgeImages}
+      defaultSort={{ index: 2, direction: 'desc' }}
+      loadTableData={loadEdgeImageSets}
       filters={
         isEmptyFilters(activeFilters)
           ? constructActiveFilters(activeFilters)

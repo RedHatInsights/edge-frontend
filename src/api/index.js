@@ -316,7 +316,7 @@ export const createImage = ({
   return instance.post(endpoint, payload);
 };
 
-export const fetchEdgeImages = (
+export const fetchEdgeImageSets = (
   q = {
     limit: 100,
     offset: 0,
@@ -346,7 +346,7 @@ export const fetchEdgeImages = (
       : `${acc}&${value}`;
   }, '');
 
-  return instance.get(`${EDGE_API}/images?${query}`);
+  return instance.get(`${EDGE_API}/image-sets?${query}`);
 };
 
 export const getEdgeImageStatus = (id) => {
