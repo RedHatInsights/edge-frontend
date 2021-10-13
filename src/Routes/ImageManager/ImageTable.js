@@ -34,6 +34,43 @@ const defaultFilters = {
   },
 };
 
+const columnNames = [
+  { title: 'Name', type: 'name', sort: true },
+  { title: 'Version', type: 'version', sort: false },
+  { title: 'Distribution', type: 'distribution', sort: true },
+  { title: 'Type', type: 'image_type', sort: false },
+  { title: 'Created', type: 'created_at', sort: true },
+  { title: 'Status', type: 'status', sort: true },
+];
+
+const createRows = (data) => {
+  return data.map((image) => ({
+    id: image.ID,
+    cells: [
+      {
+        title: (
+          <Link to={`${paths['manage-images']}/${image.ID}`}>{image.Name}</Link>
+        ),
+      },
+      image?.Version,
+      {
+        title: distributionMapper[image?.Distribution],
+      },
+      {
+        title: imageTypeMapper[image?.ImageType],
+      },
+      {
+        title: <DateFormat date={image?.CreatedAt} />,
+      },
+      {
+        title: <StatusLabel status={image?.Status} />,
+      },
+    ],
+    imageStatus: image?.Status,
+    isoURL: image?.Installer?.ImageBuildISOURL,
+  }));
+};
+
 const updateFilter = (state, action) => ({
   ...state,
   [action.property]: {
@@ -72,44 +109,43 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     shallowEqual
   );
 
-  const columnNames = [
-    { title: 'Name', type: 'name', sort: true },
-    { title: 'Version', type: 'version', sort: false },
-    { title: 'Distribution', type: 'distribution', sort: true },
-    { title: 'Type', type: 'image_type', sort: false },
-    { title: 'Created', type: 'created_at', sort: true },
-    { title: 'Status', type: 'status', sort: true },
-  ];
+  const actionResolver = (rowData) => {
+    const actionsArray = [];
+    if (rowData?.isoURL) {
+      actionsArray.push({
+        title: (
+          <Text
+            className="force-text-black remove-underline"
+            component="a"
+            href={rowData.isoURL}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Download
+          </Text>
+        ),
+      });
+    }
 
-  const createRows = (data) => {
-    return data.map((image) => ({
-      id: image.ID,
-      cells: [
-        {
-          title: (
-            <Link to={`${paths['manage-images']}/${image.ID}`}>
-              {image.Name}
-            </Link>
-          ),
+    if (rowData?.imageStatus === 'SUCCESS') {
+      actionsArray.push({
+        title: 'Update Image',
+        onClick: (_event, _rowId, rowData) => {
+          openUpdateWizard(rowData.id);
         },
-        image?.Version,
-        {
-          title: distributionMapper[image?.Distribution],
-        },
-        {
-          title: imageTypeMapper[image?.ImageType],
-        },
-        {
-          title: <DateFormat date={image?.CreatedAt} />,
-        },
-        {
-          title: <StatusLabel status={image?.Status} />,
-        },
-      ],
-      imageStatus: image?.Status,
-      isoURL: image?.Installer?.ImageBuildISOURL,
-    }));
+      });
+    }
+
+    if (rowData?.imageStatus !== 'SUCCESS') {
+      actionsArray.push({
+        title: '',
+      });
+    }
+
+    return actionsArray;
   };
+
+  const areActionsDisabled = (rowData) => rowData?.imageStatus !== 'SUCCESS';
 
   const filterConfig = {
     items: [
@@ -167,44 +203,6 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     ],
   };
   const filterDep = Object.values(activeFilters);
-
-  const actionResolver = (rowData) => {
-    const actionsArray = [];
-    if (rowData?.isoURL) {
-      actionsArray.push({
-        title: (
-          <Text
-            className="force-text-black remove-underline"
-            component="a"
-            href={rowData.isoURL}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Download
-          </Text>
-        ),
-      });
-    }
-
-    if (rowData?.imageStatus === 'SUCCESS') {
-      actionsArray.push({
-        title: 'Update Image',
-        onClick: (_event, _rowId, rowData) => {
-          openUpdateWizard(rowData.id);
-        },
-      });
-    }
-
-    if (rowData?.imageStatus !== 'SUCCESS') {
-      actionsArray.push({
-        title: '',
-      });
-    }
-
-    return actionsArray;
-  };
-
-  const areActionsDisabled = (rowData) => rowData?.imageStatus !== 'SUCCESS';
 
   return (
     <GeneralTable
