@@ -1,51 +1,105 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  sortable,
-} from '@patternfly/react-table';
-import {
-  EmptyState,
-  EmptyStateIcon,
-  EmptyStateSecondaryActions,
-  Title,
-  Button,
-  Spinner,
-  Bullseye,
-  Text,
-} from '@patternfly/react-core';
-import {
-  imageTypeMapper,
-  distributionMapper,
-} from '../ImageManagerDetail/constants';
+import React, { useReducer } from 'react';
+import GeneralTable from '../../components/GeneralTable';
+import PropTypes from 'prop-types';
+import { shallowEqual, useSelector } from 'react-redux';
+import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
+import { Text } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
-import { loadEdgeImages } from '../../store/actions';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { PlusCircleIcon, SearchIcon } from '@patternfly/react-icons';
-import { routes as paths } from '../../../package.json';
 import {
-  transformFilters,
-  transformPaginationParams,
-  transformSort,
-  getFilterDep,
-} from './constants';
-import PropTypes from 'prop-types';
+  imageTypeMapper,
+  composeStatus,
+  distributionMapper,
+} from '../ImageManagerDetail/constants';
+import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
+import { isEmptyFilters, constructActiveFilters } from '../../constants';
+import { loadEdgeImages } from '../../store/actions';
 
-const ImageTable = ({
-  filters,
-  pagination,
-  clearFilters,
-  openCreateWizard,
-  openUpdateWizard,
-}) => {
-  const [sortBy, setSortBy] = useState({ index: 4, direction: 'desc' });
-  const dispatch = useDispatch();
-  const { data, isLoading, hasError } = useSelector(
+const defaultFilters = {
+  name: {
+    label: 'Name',
+    key: 'name',
+    value: '',
+  },
+  distribution: {
+    label: 'Distribution',
+    key: 'distribution',
+    value: [],
+  },
+  status: {
+    label: 'Status',
+    key: 'status',
+    value: [],
+  },
+};
+
+const columnNames = [
+  { title: 'Name', type: 'name', sort: true },
+  { title: 'Version', type: 'version', sort: false },
+  { title: 'Distribution', type: 'distribution', sort: true },
+  { title: 'Type', type: 'image_type', sort: false },
+  { title: 'Created', type: 'created_at', sort: true },
+  { title: 'Status', type: 'status', sort: true },
+];
+
+const createRows = (data) => {
+  return data.map((image) => ({
+    id: image.ID,
+    cells: [
+      {
+        title: (
+          <Link to={`${paths['manage-images']}/${image.ID}`}>{image.Name}</Link>
+        ),
+      },
+      image?.Version,
+      {
+        title: distributionMapper[image?.Distribution],
+      },
+      {
+        title: imageTypeMapper[image?.ImageType],
+      },
+      {
+        title: <DateFormat date={image?.CreatedAt} />,
+      },
+      {
+        title: <StatusLabel status={image?.Status} />,
+      },
+    ],
+    imageStatus: image?.Status,
+    isoURL: image?.Installer?.ImageBuildISOURL,
+  }));
+};
+
+const updateFilter = (state, action) => ({
+  ...state,
+  [action.property]: {
+    ...(state[action.property] || {}),
+    value: action.value,
+  },
+});
+
+const deleteFilter = (_state, action) => action.payload;
+
+const activeFilterMapper = {
+  UPDATE_FILTER: updateFilter,
+  DELETE_FILTER: deleteFilter,
+};
+
+const activeFilterReducer = applyReducerHash(
+  activeFilterMapper,
+  defaultFilters
+);
+
+const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
+  const [activeFilters, dispatchActiveFilters] = useReducer(
+    activeFilterReducer,
+    defaultFilters
+  );
+  const { count, data, isLoading, hasError } = useSelector(
     ({ edgeImagesReducer }) => ({
-      data: edgeImagesReducer?.data || null,
+      count: edgeImagesReducer?.data?.count,
+      data: edgeImagesReducer?.data?.data || null,
       isLoading:
         edgeImagesReducer?.isLoading === undefined
           ? true
@@ -54,166 +108,6 @@ const ImageTable = ({
     }),
     shallowEqual
   );
-
-  const columns = [
-    {
-      title: 'Name',
-      type: 'name',
-      transforms: toShowSort ? [] : [sortable],
-    },
-    'Version',
-    {
-      title: 'Distribution',
-      type: 'distribution',
-      transforms: toShowSort ? [] : [sortable],
-    },
-    {
-      title: 'Type',
-      type: 'image_type',
-      transforms: [],
-    },
-    {
-      title: 'Created',
-      type: 'created_at',
-      transforms: toShowSort ? [] : [sortable],
-    },
-    {
-      title: 'Status',
-      type: 'status',
-      transforms: toShowSort ? [] : [sortable],
-    },
-  ];
-  const toShowSort = isLoading || hasError || (!data?.length && hasFilters);
-  useEffect(() => {
-    loadEdgeImages(dispatch, {
-      ...transformFilters(filters),
-      ...transformPaginationParams(pagination),
-      ...transformSort({
-        direction: sortBy.direction,
-        name: columns[sortBy.index].type,
-      }),
-    });
-  }, [
-    pagination.perPage,
-    pagination.page,
-    sortBy.index,
-    sortBy.direction,
-    // We have 3 different filters in the primary toolbar (status, name, distribution):
-    getFilterDep(filters[0]),
-    getFilterDep(filters[1]),
-    getFilterDep(filters[2]),
-  ]);
-  const hasFilters = Object.keys(filters).some((filterKey) => filterKey);
-
-  let rows = [
-    {
-      heightAuto: true,
-      cells: [
-        {
-          props: { colSpan: 8 },
-          title: (
-            <Bullseye>
-              <EmptyState variant="small">
-                <EmptyStateIcon icon={Spinner} />
-              </EmptyState>
-            </Bullseye>
-          ),
-        },
-      ],
-    },
-  ];
-
-  if (isLoading === false && hasError === false) {
-    if (!data?.length && !hasFilters) {
-      rows = [
-        {
-          heightAuto: true,
-          cells: [
-            {
-              props: { colSpan: 8 },
-              title: (
-                <Bullseye>
-                  <EmptyState variant="small">
-                    <EmptyStateIcon icon={PlusCircleIcon} />
-                    <Title headingLevel="h2" size="lg">
-                      No images found
-                    </Title>
-                    <Button
-                      onClick={openCreateWizard}
-                      isDisabled={isLoading !== false}
-                    >
-                      Create new images
-                    </Button>
-                  </EmptyState>
-                </Bullseye>
-              ),
-            },
-          ],
-        },
-      ];
-    }
-    if (!data?.length && hasFilters) {
-      rows = [
-        {
-          heightAuto: true,
-          cells: [
-            {
-              props: { colSpan: 8 },
-              title: (
-                <Bullseye>
-                  <EmptyState variant="small">
-                    <EmptyStateIcon icon={SearchIcon} />
-                    <Title headingLevel="h2" size="lg">
-                      No match found
-                    </Title>
-                    <EmptyStateSecondaryActions>
-                      <Button onClick={clearFilters} variant="link">
-                        Clear all filters
-                      </Button>
-                    </EmptyStateSecondaryActions>
-                  </EmptyState>
-                </Bullseye>
-              ),
-            },
-          ],
-        },
-      ];
-    }
-
-    if (data?.data?.length) {
-      rows = data.data.map((image) => ({
-        id: image.ID,
-        cells: [
-          {
-            title: (
-              <Link to={`${paths['manage-images']}/${image.ID}`}>
-                {image.Name}
-              </Link>
-            ),
-          },
-          image?.Version,
-          {
-            title: distributionMapper[image?.Distribution],
-          },
-          {
-            title: imageTypeMapper[image?.ImageType],
-          },
-          {
-            title: <DateFormat date={image?.CreatedAt} />,
-          },
-          {
-            title: <StatusLabel status={image?.Status} />,
-          },
-        ],
-        imageStatus: image?.Status,
-        isoURL: image?.Installer?.ImageBuildISOURL,
-      }));
-    }
-  }
-
-  const handleSort = (_event, index, direction) => {
-    setSortBy({ index, direction });
-  };
 
   const actionResolver = (rowData) => {
     const actionsArray = [];
@@ -253,20 +147,92 @@ const ImageTable = ({
 
   const areActionsDisabled = (rowData) => rowData?.imageStatus !== 'SUCCESS';
 
+  const filterConfig = {
+    items: [
+      {
+        label: defaultFilters.name.label,
+        type: 'text',
+        filterValues: {
+          key: 'name-filter',
+          onChange: (_event, value) =>
+            dispatchActiveFilters({
+              type: 'UPDATE_FILTER',
+              property: 'name',
+              value,
+            }),
+          value: activeFilters?.name?.value || '',
+          placeholder: 'Filter by name',
+        },
+      },
+      {
+        label: defaultFilters.distribution.label,
+        type: 'checkbox',
+        filterValues: {
+          key: 'distribution-filter',
+          onChange: (_event, value) =>
+            dispatchActiveFilters({
+              type: 'UPDATE_FILTER',
+              property: 'distribution',
+              value,
+            }),
+          items: Object.entries(distributionMapper).map(([value, label]) => ({
+            label,
+            value,
+          })),
+          value: activeFilters?.distribution?.value || '',
+        },
+      },
+      {
+        label: defaultFilters.status.label,
+        type: 'checkbox',
+        filterValues: {
+          key: 'status-filter',
+          onChange: (_event, value) =>
+            dispatchActiveFilters({
+              type: 'UPDATE_FILTER',
+              property: 'status',
+              value,
+            }),
+          items: composeStatus.map((item) => ({
+            label: item,
+            value: item,
+          })),
+          value: activeFilters?.status?.value || [],
+        },
+      },
+    ],
+  };
+
   return (
-    <Table
-      variant="compact"
-      aria-label="Manage Images table"
-      sortBy={sortBy}
-      onSort={handleSort}
+    <GeneralTable
+      clearFilters={() =>
+        dispatchActiveFilters({
+          type: 'DELETE_FILTER',
+          payload: defaultFilters,
+        })
+      }
+      tableData={{ count, data, isLoading, hasError }}
+      columnNames={columnNames}
+      createRows={createRows}
+      emptyStateMessage="No images found"
+      emptyStateActionMessage="Create new images"
+      emptyStateAction={openCreateWizard}
+      defaultSort={{ index: 4, direction: 'desc' }}
+      loadTableData={loadEdgeImages}
+      filters={
+        isEmptyFilters(activeFilters)
+          ? constructActiveFilters(activeFilters)
+          : []
+      }
+      filterDep={Object.values(activeFilters)}
       actionResolver={actionResolver}
       areActionsDisabled={areActionsDisabled}
-      cells={columns}
-      rows={rows}
-    >
-      <TableHeader />
-      <TableBody />
-    </Table>
+      filterConfig={filterConfig}
+      activeFilters={activeFilters}
+      dispatchActiveFilters={dispatchActiveFilters}
+      defaultFilters={defaultFilters}
+      perPage={100}
+    />
   );
 };
 
