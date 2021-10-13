@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer } from 'react';
 import GeneralTable from '../../components/GeneralTable';
 import PropTypes from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
@@ -55,7 +55,6 @@ const activeFilterReducer = applyReducerHash(
 );
 
 const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
-  const [pagination, setPagination] = useState({ page: 1, perPage: 100 });
   const [activeFilters, dispatchActiveFilters] = useReducer(
     activeFilterReducer,
     defaultFilters
@@ -229,14 +228,13 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
           : []
       }
       filterDep={filterDep}
-      pagination={pagination}
       actionResolver={actionResolver}
       areActionsDisabled={areActionsDisabled}
-      setPagination={setPagination}
       filterConfig={filterConfig}
       activeFilters={activeFilters}
       dispatchActiveFilters={dispatchActiveFilters}
       defaultFilters={defaultFilters}
+      perPage={100}
     />
   );
 };
