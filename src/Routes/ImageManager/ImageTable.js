@@ -202,7 +202,6 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       },
     ],
   };
-  const filterDep = Object.values(activeFilters);
 
   return (
     <GeneralTable
@@ -225,7 +224,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
           ? constructActiveFilters(activeFilters)
           : []
       }
-      filterDep={filterDep}
+      filterDep={Object.values(activeFilters)}
       actionResolver={actionResolver}
       areActionsDisabled={areActionsDisabled}
       filterConfig={filterConfig}
