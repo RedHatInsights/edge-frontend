@@ -139,7 +139,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         username: data?.Installer.Username,
         version: data?.Version,
         imageType: ['rhel-edge-commit'],
-        'selected-packages': data?.Commit?.Packages.map((pkg) => ({
+        'selected-packages': data?.Packages.map((pkg) => ({
           ...pkg,
           name: pkg.Name,
         })),
