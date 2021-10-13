@@ -40,17 +40,17 @@ const GeneralTable = ({
   loadTableData,
   filters,
   filterDep,
-  pagination,
   clearFilters,
   actionResolver,
   areActionsDisabled,
-  setPagination,
   filterConfig,
   activeFilters,
   dispatchActiveFilters,
   defaultFilters,
+  perPage
 }) => {
   const [sortBy, setSortBy] = useState(defaultSort);
+  const [pagination, setPagination] = useState({ page: 1, perPage });
   const dispatch = useDispatch();
 
   const columns = columnNames.map((columnName) => ({

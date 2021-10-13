@@ -54,7 +54,6 @@ const activeFilterReducer = applyReducerHash(
 );
 
 const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
-  const [pagination, setPagination] = useState({ page: 1, perPage: 100 });
   const [activeFilters, dispatchActiveFilters] = useReducer(
     activeFilterReducer,
     defaultFilters
@@ -223,10 +222,9 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
           : []
       }
       filterDep={filterDep}
-      pagination={pagination}
+      perPage={100}
       actionResolver={actionResolver}
       areActionsDisabled={areActionsDisabled}
-      setPagination={setPagination}
       filterConfig={filterConfig}
       activeFilters={activeFilters}
       dispatchActiveFilters={dispatchActiveFilters}
