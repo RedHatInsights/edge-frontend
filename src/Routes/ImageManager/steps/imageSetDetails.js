@@ -7,23 +7,15 @@ const helperText =
   'Can only contain letters, numbers, hyphens(-), and underscores(_).';
 
 const asyncImageNameValidation = (value) =>
-  new Promise((resolve, reject) => {
-    if (value !== undefined) {
-      checkImageName(value)
-        .then((response) =>
-          response
-            ? reject({ message: 'Name already exists' })
-            : resolve({ message: 'validation succesfull' })
-        )
-        .catch(() =>
-          reject({
-            message: 'Cannot validate name in server, please try again later',
-          })
-        );
-    }
-  }).catch(({ message }) => {
-    throw message;
-  });
+  checkImageName(value)
+    .then((result) => {
+      if (result.ImageExists) {
+        throw new Error('Name already exists');
+      }
+    })
+    .catch(({ message }) => {
+      throw message;
+    });
 
 export default {
   title: 'Details',
