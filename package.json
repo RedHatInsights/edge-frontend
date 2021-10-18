@@ -120,6 +120,7 @@
     "fleet-management": "/fleet-management",
     "fleet-management-detail": "/fleet-management/:inventoryId",
     "manage-images": "/manage-images",
-    "manage-images-detail": "/manage-images/:imageId"
+    "manage-images-detail": "/manage-images/:imageId",
+    "repositories": "/repositories"
   }
 }
