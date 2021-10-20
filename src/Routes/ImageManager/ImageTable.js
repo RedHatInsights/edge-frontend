@@ -215,7 +215,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       columnNames={columnNames}
       createRows={createRows}
       emptyStateMessage="No images found"
-      emptyStateActionMessage="Create new images"
+      emptyStateActionMessage="Create new image"
       emptyStateAction={openCreateWizard}
       defaultSort={{ index: 4, direction: 'desc' }}
       loadTableData={loadEdgeImages}
