@@ -98,7 +98,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
   );
   const { count, data, isLoading, hasError } = useSelector(
     ({ edgeImagesReducer }) => ({
-      count: edgeImagesReducer?.data?.count,
+      count: edgeImagesReducer?.data?.count || 0,
       data: edgeImagesReducer?.data?.data || null,
       isLoading:
         edgeImagesReducer?.isLoading === undefined
