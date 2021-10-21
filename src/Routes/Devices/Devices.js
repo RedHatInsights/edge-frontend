@@ -114,11 +114,13 @@ const Devices = () => {
                       },
                     },
                   ]
-                : [
+                : rowData?.system_profile
+                ? [
                     {
                       title: 'No Action',
                     },
-                  ];
+                  ]
+                : null;
             },
             areActionsDisabled: (rowData) => {
               const updateTransactions =
