@@ -136,7 +136,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       });
     }
 
-    if (rowData?.imageStatus !== 'SUCCESS') {
+    if (rowData?.imageStatus !== 'SUCCESS' && rowData?.id) {
       actionsArray.push({
         title: '',
       });
