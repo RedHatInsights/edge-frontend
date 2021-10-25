@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 
 const EditModal = ({ toggle, isOpen, id, name, baseURL, reloadData }) => {
-  console.log(id);
   const editSchema = {
     fields: [
       {
