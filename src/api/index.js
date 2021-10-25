@@ -376,3 +376,14 @@ export const checkImageName = (name) => {
   };
   return instance.post(`${EDGE_API}/images/checkImageName`, payload);
 };
+
+export const getCustomRepositories = () => {
+  return instance.get(`${EDGE_API}/thirdpartyrepo`);
+};
+
+export const createCustomRepository = (payload) => {
+  return instance.post(`${EDGE_API}/thirdpartyrepo`, {
+    Name: payload.name,
+    URL: payload.baseURL,
+  });
+};

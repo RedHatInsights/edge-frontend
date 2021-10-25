@@ -40,6 +40,10 @@ const ImageDetail = React.lazy(() =>
   )
 );
 
+const Repositories = React.lazy(() =>
+  import('./Routes/Repositories/Repositories')
+);
+
 export const Routes = () => {
   return (
     <Suspense
@@ -61,6 +65,7 @@ export const Routes = () => {
           path={paths['fleet-management-detail']}
           component={DeviceDetail}
         />
+        <Route exact path={paths['repositories']} component={Repositories} />
         <Route>
           <Redirect to={paths['fleet-management']} />
         </Route>
