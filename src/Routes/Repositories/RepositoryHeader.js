@@ -8,12 +8,13 @@ import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 
 const RepositoryHeader = () => {
   return (
-    <PageHeader>
+    <PageHeader data-testid="repository-header-title" >
       <>
         <PageHeaderTitle title="Applications settings" />
-        <p className="pf-u-mt-sm">
+        <p data-testid="repository-header-sub-title" className="pf-u-mt-sm">
           Settings for Fleet Management
           <Popover
+            data-testid="repository-header-popover"
             aria-label="Basic popover"
             headerContent={<div>About Fleet Management</div>}
             bodyContent={
@@ -30,6 +31,7 @@ const RepositoryHeader = () => {
             }
           >
             <QuestionCircleIcon
+              data-testid="repository-header-question-icon"
               style={{ cursor: 'pointer' }}
               className="pf-u-ml-xs"
             />

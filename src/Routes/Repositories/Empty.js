@@ -17,15 +17,22 @@ const emptyStateIconMapper = {
 
 const Empty = ({ icon, title, body, primaryAction, secondaryActions }) => (
   <EmptyState>
-    <EmptyStateIcon icon={emptyStateIconMapper[icon]} />
-    <Title headingLevel="h4" size="lg">
+    <EmptyStateIcon
+      data-testid="empty-state-icon"
+      icon={emptyStateIconMapper[icon]}
+    />
+    <Title data-testid="empty-state-title" headingLevel="h4" size="lg">
       {title}
     </Title>
-    <EmptyStateBody>{body}</EmptyStateBody>
-    <Button onClick={primaryAction.click} variant="primary">
+    <EmptyStateBody data-testid="empty-state-body">{body}</EmptyStateBody>
+    <Button
+      data-testid="empty-state-primary-action"
+      onClick={primaryAction.click}
+      variant="primary"
+    >
       {primaryAction.text}
     </Button>
-    <EmptyStateSecondaryActions>
+    <EmptyStateSecondaryActions data-testid="empty-state-secondary-actions">
       {secondaryActions.map(({ title, link }, index) => (
         <Button variant="link" key={index}>
           <a href={link}>{title}</a>
@@ -38,9 +45,9 @@ const Empty = ({ icon, title, body, primaryAction, secondaryActions }) => (
 
 Empty.propTypes = {
   icon: PropTypes.string,
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   body: PropTypes.string,
-  primaryAction: PropTypes.object,
+  primaryAction: PropTypes.object.isRequired,
   secondaryActions: PropTypes.array,
 };
 
