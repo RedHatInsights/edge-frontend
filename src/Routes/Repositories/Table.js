@@ -30,8 +30,7 @@ const Table = ({ toggle, columns, rows }) => {
                   {name}
                 </Text>
                 <Text component={TextVariants.a}>
-                  {baseURL}{' '}
-                  <ExternalLinkAltIcon className="pf-u-ml-sm" />
+                  {baseURL} <ExternalLinkAltIcon className="pf-u-ml-sm" />
                 </Text>
               </Td>
               <Td
