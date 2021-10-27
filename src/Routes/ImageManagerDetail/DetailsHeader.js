@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -11,12 +11,29 @@ import {
   BreadcrumbItem,
   Split,
   SplitItem,
+  Dropdown,
+  DropdownItem,
+  DropdownToggle,
+  DropdownPosition,
 } from '@patternfly/react-core';
 import StatusLabel from './StatusLabel';
-import ImageDetailActions from './ImageDetailActions';
 import { routes as paths } from '../../../package.json';
+import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 
-const DetailsHead = ({ imageData, openUpdateWizard }) => {
+const dropdownItems = [
+  <DropdownItem key="action" component="button">
+    Create new version
+  </DropdownItem>,
+  <DropdownItem key="action" component="button">
+    Download instalable .iso for newest image
+  </DropdownItem>,
+  <DropdownItem key="action" component="button">
+    Archive
+  </DropdownItem>,
+];
+
+const DetailsHead = ({ imageData }) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       <Breadcrumb>
@@ -43,12 +60,22 @@ const DetailsHead = ({ imageData, openUpdateWizard }) => {
             </TextList>
           </SplitItem>
           <SplitItem isFilled></SplitItem>
-          {imageData?.Status === 'SUCCESS' ? (
-            <ImageDetailActions
-              imageData={imageData}
-              openUpdateWizard={openUpdateWizard}
+          <SplitItem>
+            <Dropdown
+              position={DropdownPosition.right}
+              toggle={
+                <DropdownToggle
+                  id="image-set-details-dropdown"
+                  toggleIndicator={CaretDownIcon}
+                  onToggle={(newState) => setIsOpen(newState)}
+                >
+                  Actions
+                </DropdownToggle>
+              }
+              isOpen={isOpen}
+              dropdownItems={dropdownItems}
             />
-          ) : null}
+          </SplitItem>
         </Split>
       </TextContent>
     </>
@@ -56,7 +83,6 @@ const DetailsHead = ({ imageData, openUpdateWizard }) => {
 };
 
 DetailsHead.propTypes = {
-  openUpdateWizard: PropTypes.func,
   imageData: PropTypes.shape({
     ID: PropTypes.number,
     Name: PropTypes.string,
