@@ -14,27 +14,29 @@ const RepositoryHeader = () => {
         <p data-testid="repository-header-sub-title" className="pf-u-mt-sm">
           Settings for Fleet Management
           <Popover
-            data-testid="repository-header-popover"
             aria-label="Basic popover"
-            headerContent={<div>About Fleet Management</div>}
+            className="pf-ml-0"
+            headerContent={<div data-testid="repository-header-popover-title" >About Fleet Management</div>}
             bodyContent={
-              <div>
-                Fleet Management is a service that allows you to provision,
-                update and maintain edge systems.
+              <div data-testid="repository-header-popover-body" >
+                Fleet Management is a service that allows you to provision, update and maintain edge systems.
               </div>
             }
             footerContent={
-              <Button variant="link" style={{ 'padding-left': 0 }}>
+              <Button data-testid="repository-header-popover-footer" variant="link" style={{ 'padding-left': 0 }}>
                 <a href="#">Documentation</a>
                 <ExternalLinkAltIcon className="pf-u-ml-sm" />
               </Button>
             }
           >
-            <QuestionCircleIcon
-              data-testid="repository-header-question-icon"
-              style={{ cursor: 'pointer' }}
-              className="pf-u-ml-xs"
-            />
+            <Button
+              variant="plain"
+              className="extra-small-padding-right"
+              isSmall="true"
+              data-testid="repository-header-popover-btn"
+            >
+              <QuestionCircleIcon />
+            </Button>
           </Popover>
         </p>
       </>
