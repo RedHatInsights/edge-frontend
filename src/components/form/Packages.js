@@ -54,11 +54,14 @@ const Packages = ({ defaultArch, ...props }) => {
   };
 
   const addAllPackages = (allAvailablePackages) => {
-    setPackagesAvailable([])
-    setPackagesSelected((prevState=[]) => [...allAvailablePackages, ...prevState]);
+    setPackagesAvailable([]);
+    setPackagesSelected((prevState = []) => [
+      ...allAvailablePackages,
+      ...prevState,
+    ]);
     const chosenPkgs = allAvailablePackages.map(mapComponentToPackage);
     change(input.name, chosenPkgs);
-  }
+  };
 
   const handlePackagesSearch = async () => {
     const { data } = await getPackages(
@@ -105,9 +108,7 @@ const Packages = ({ defaultArch, ...props }) => {
       chosenOptionsTitle="Chosen packages"
       addSelected={packageListChange}
       removeSelected={packageListChange}
-      addAll={(allAvailablePackages) =>
-        addAllPackages(allAvailablePackages)
-      }
+      addAll={(allAvailablePackages) => addAllPackages(allAvailablePackages)}
       removeAll={(newAvailablePackages) =>
         packageListChange(
           newAvailablePackages,
