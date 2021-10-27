@@ -40,7 +40,7 @@ const RepositoryHeader = () => {
           >
             <Button
               variant="plain"
-              className="extra-small-padding-right"
+              className="extra-small-padding"
               isSmall="true"
               data-testid="repository-header-popover-btn"
             >

@@ -10,7 +10,7 @@ const RepositoryTable = ({ data, toolbarButtons, toggle }) => {
   const [page, setPage] = useState(1);
   const filteredByName = () =>
     data
-      .filter((repo) => repo.Name.toLowerCase().includes(input.toLowerCase()))
+      .filter((repo) => repo.name.toLowerCase().includes(input.toLowerCase()))
       .reverse();
   return (
     <>

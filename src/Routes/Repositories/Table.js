@@ -26,12 +26,12 @@ const Table = ({ toggle, columns, rows }) => {
           {rows.map(({ id, name, baseURL }, rowIndex) => (
             <Tr key={rowIndex}>
               <Td key={`${rowIndex}_0`} dataLabel={columns[0]}>
-                <Text classname="pf-u-mb-xs" component={TextVariants.p}>
+                <Text className="pf-u-mb-xs" component={TextVariants.p}>
                   {name}
                 </Text>
                 <Text component={TextVariants.a}>
-                  <a href={baseURL}>{baseURL}</a>{' '}
-                  <ExternalLinkAltIcon classname="pf-u-ml-sm" />
+                  {baseURL}{' '}
+                  <ExternalLinkAltIcon className="pf-u-ml-sm" />
                 </Text>
               </Td>
               <Td
