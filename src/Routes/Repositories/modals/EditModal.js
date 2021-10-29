@@ -10,7 +10,7 @@ const EditModal = ({ toggle, isOpen, id, name, baseURL, reloadData }) => {
       {
         component: 'plain-text',
         name: 'title',
-        label: 'Update information about this third-party repository.',
+        label: 'Update information about this custom repository.',
       },
       {
         component: 'text-field',

@@ -11,7 +11,7 @@ const AddModal = ({ isOpen, toggle, reloadData }) => {
         component: 'plain-text',
         name: 'title',
         label:
-          'Link to a third-party repository to add packages to RHEL for Edge images.',
+          'Link to a custom repository to add packages to RHEL for Edge images.',
       },
       {
         component: 'text-field',
@@ -28,7 +28,7 @@ const AddModal = ({ isOpen, toggle, reloadData }) => {
         name: 'baseURL',
         label: 'BaseURL',
         placeholder: 'https://',
-        helperText: 'Enter the baseURL for the third-party repository.',
+        helperText: 'Enter the baseURL for the custom repository.',
         isRequired: true,
         validate: [{ type: validatorTypes.REQUIRED }],
       },
