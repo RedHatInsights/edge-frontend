@@ -387,3 +387,12 @@ export const createCustomRepository = (payload) => {
     URL: payload.baseURL,
   });
 };
+
+export const getImageSet = ({ id }) => {
+  try {
+    return instance.get(`${EDGE_API}/image-sets/${id}`);
+  } catch (err) {
+    // temp error solution
+    console.log('');
+  }
+};
