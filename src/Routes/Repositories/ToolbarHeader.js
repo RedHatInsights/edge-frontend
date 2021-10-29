@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import {
   Toolbar,
   Pagination,
@@ -7,9 +7,9 @@ import {
   Button,
   InputGroup,
   TextInput,
-} from '@patternfly/react-core';
-import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
-import PropTypes from 'prop-types';
+} from "@patternfly/react-core";
+import PropTypes from "prop-types";
+import FilterControls from "./FilterControls";
 
 const ToolbarButtons = ({ buttons }) => {
   return buttons.map(({ title, click }, index) => (
@@ -21,6 +21,36 @@ const ToolbarButtons = ({ buttons }) => {
   ));
 };
 
+const filters = [
+  { label: "Name", type: "text" },
+  {
+    label: "Distribution",
+    type: "checkbox",
+    options: [{ label: "8.4" }, { label: "8.3" }],
+  },
+  {
+    label: "Status",
+    type: "checkbox",
+    options: [{ label: "BUILDING" }, { label: "CREATED" }],
+  },
+];
+
+const filterValues = () =>
+  filters.map((filter) => {
+    const config = {
+      type: filter.type,
+      label: filter.label,
+    };
+
+    if (filter.type === "text") config.value = filter.value || "";
+    if (filter.type === "checkbox")
+      config.value = filter.options.map((option) => ({
+        ...option,
+        isChecked: option.isChecked || false,
+      }));
+    return config;
+  });
+
 const ToolbarHeader = ({
   toolbarButtons,
   setInput,
@@ -30,31 +60,18 @@ const ToolbarHeader = ({
   page,
   setPage,
 }) => {
+  const [values, setValues] = useState(filterValues());
   return (
     <Toolbar id="toolbar">
       <ToolbarContent>
-        <ToolbarItem>
-          <InputGroup>
-            <TextInput
-              name="textInput1"
-              id="textInput1"
-              type="search"
-              aria-label="search input example"
-              placeholder="Filter by name"
-              onChange={(value) => setInput(value)}
-            />
-            <Button
-              variant="control"
-              aria-label="search button for search input"
-            >
-              <SearchIcon />
-            </Button>
-          </InputGroup>
-        </ToolbarItem>
+        <FilterControls
+          filterValues={values}
+          setFilterValues={setValues}
+          setInput={setInput}
+        />
         <ToolbarButtons buttons={toolbarButtons} />
-        <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
+        <ToolbarItem variant="pagination" align={{ default: "alignRight" }}>
           <Pagination
-            isCompact
             itemCount={count}
             perPage={perPage}
             page={page}

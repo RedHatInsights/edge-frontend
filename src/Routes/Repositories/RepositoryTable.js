@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { createContext, useContext, useState, useMemo } from 'react';
 import ToolbarHeader from './ToolbarHeader';
 import ToolbarFooter from './ToolbarFooter';
 import Table from './Table';
 import PropTypes from 'prop-types';
+
+//const TableFilterContext = createContext({
+//  filters: [{ label: "Name", type: "text", key: "name" }],
+//});
 
 const RepositoryTable = ({ data, toolbarButtons, toggle }) => {
   const [input, setInput] = useState('');
