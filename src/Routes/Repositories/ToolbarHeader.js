@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Toolbar,
   Pagination,
@@ -8,8 +8,8 @@ import {
   InputGroup,
   TextInput,
 } from '@patternfly/react-core';
-import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
 import PropTypes from 'prop-types';
+import FilterControls from './FilterControls';
 
 const ToolbarButtons = ({ buttons }) => {
   return buttons.map(({ title, click }, index) => (
@@ -20,6 +20,16 @@ const ToolbarButtons = ({ buttons }) => {
     </ToolbarItem>
   ));
 };
+
+const filters = [
+  { label: 'Name', type: 'text' },
+  { label: 'Distribution', type: 'checkbox' },
+  {
+    label: 'Status',
+    type: 'checkbox',
+    options: [{ label: 'BUILDING' }, { label: 'CREATED' }],
+  },
+];
 
 const ToolbarHeader = ({
   toolbarButtons,
@@ -33,28 +43,10 @@ const ToolbarHeader = ({
   return (
     <Toolbar id="toolbar">
       <ToolbarContent>
-        <ToolbarItem>
-          <InputGroup>
-            <TextInput
-              name="textInput1"
-              id="textInput1"
-              type="search"
-              aria-label="search input example"
-              placeholder="Filter by name"
-              onChange={(value) => setInput(value)}
-            />
-            <Button
-              variant="control"
-              aria-label="search button for search input"
-            >
-              <SearchIcon />
-            </Button>
-          </InputGroup>
-        </ToolbarItem>
+        <FilterControls filters={filters} setInput={setInput} />
         <ToolbarButtons buttons={toolbarButtons} />
         <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
           <Pagination
-            isCompact
             itemCount={count}
             perPage={perPage}
             page={page}
