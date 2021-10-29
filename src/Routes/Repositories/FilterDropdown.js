@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ToolbarItem, Select, SelectOption } from '@patternfly/react-core';
+import React, { useState } from "react";
+import { ToolbarItem, Select, SelectOption } from "@patternfly/react-core";
 
 const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
   const toggle = () => {

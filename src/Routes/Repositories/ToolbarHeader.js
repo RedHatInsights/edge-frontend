@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Toolbar,
   Pagination,
@@ -7,9 +7,9 @@ import {
   Button,
   InputGroup,
   TextInput,
-} from '@patternfly/react-core';
-import PropTypes from 'prop-types';
-import FilterControls from './FilterControls';
+} from "@patternfly/react-core";
+import PropTypes from "prop-types";
+import FilterControls from "./FilterControls";
 
 const ToolbarButtons = ({ buttons }) => {
   return buttons.map(({ title, click }, index) => (
@@ -22,14 +22,34 @@ const ToolbarButtons = ({ buttons }) => {
 };
 
 const filters = [
-  { label: 'Name', type: 'text' },
-  { label: 'Distribution', type: 'checkbox' },
+  { label: "Name", type: "text" },
   {
-    label: 'Status',
-    type: 'checkbox',
-    options: [{ label: 'BUILDING' }, { label: 'CREATED' }],
+    label: "Distribution",
+    type: "checkbox",
+    options: [{ label: "8.4" }, { label: "8.3" }],
+  },
+  {
+    label: "Status",
+    type: "checkbox",
+    options: [{ label: "BUILDING" }, { label: "CREATED" }],
   },
 ];
+
+const filterValues = () =>
+  filters.map((filter) => {
+    const config = {
+      type: filter.type,
+      label: filter.label,
+    };
+
+    if (filter.type === "text") config.value = filter.value || "";
+    if (filter.type === "checkbox")
+      config.value = filter.options.map((option) => ({
+        ...option,
+        isChecked: option.isChecked || false,
+      }));
+    return config;
+  });
 
 const ToolbarHeader = ({
   toolbarButtons,
@@ -40,12 +60,17 @@ const ToolbarHeader = ({
   page,
   setPage,
 }) => {
+  const [values, setValues] = useState(filterValues());
   return (
     <Toolbar id="toolbar">
       <ToolbarContent>
-        <FilterControls filters={filters} setInput={setInput} />
+        <FilterControls
+          filterValues={values}
+          setFilterValues={setValues}
+          setInput={setInput}
+        />
         <ToolbarButtons buttons={toolbarButtons} />
-        <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
+        <ToolbarItem variant="pagination" align={{ default: "alignRight" }}>
           <Pagination
             itemCount={count}
             perPage={perPage}

@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
-import FilterDropdown from './FilterDropdown';
-import FilterInput from './FilterInput';
+import React, { useState } from "react";
+import FilterDropdown from "./FilterDropdown";
+import FilterInput from "./FilterInput";
 
-const FilterControls = ({ filters, setInput }) => {
+const FilterControls = ({
+  filters,
+  filterValues,
+  setFilterValues,
+  setInput,
+}) => {
   const [dropdown, setDropdown] = useState({
     isOpen: false,
     selected: filters[0].label,
@@ -15,7 +20,11 @@ const FilterControls = ({ filters, setInput }) => {
         setDropdown={setDropdown}
         filters={filters}
       />
-      <FilterInput filters={filters} input={dropdown.selected} />
+      <FilterInput
+        filterValues={filterValues}
+        setFilterValues={setFilterValues}
+        input={dropdown.selected}
+      />
     </>
   );
 };

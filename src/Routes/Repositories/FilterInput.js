@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   ToolbarItem,
   InputGroup,
@@ -8,15 +8,19 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownItem,
-} from '@patternfly/react-core';
-import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
-import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
+} from "@patternfly/react-core";
+import SearchIcon from "@patternfly/react-icons/dist/esm/icons/search-icon";
+import CaretDownIcon from "@patternfly/react-icons/dist/esm/icons/caret-down-icon";
 
-const FilterInput = ({ filters, input }) => {
-  const selectedFilter = filters.find((filter) => filter.label === input);
+const FilterInput = ({ filterValues, setFilterValues, input }) => {
+  const selectedFilter = filterValues.find((filter) => filter.label === input);
   const [isOpen, setIsOpen] = useState(false);
+  /*
+  const [selectedFilter, setSelectedFilter] = useState();
 
-  if (selectedFilter.type === 'text') {
+  */
+
+  if (selectedFilter.type === "text") {
     return (
       <ToolbarItem>
         <InputGroup>
@@ -36,10 +40,15 @@ const FilterInput = ({ filters, input }) => {
     );
   }
 
-  if (selectedFilter.type === 'checkbox') {
-    const dropdownItems = selectedFilter.options.map((filter) => (
+  if (selectedFilter.type === "checkbox") {
+    const dropdownItems = selectedFilter.value.map((filter) => (
       <DropdownItem>
-        <Checkbox label={filter.label} />
+        <Checkbox
+          id={filter.label}
+          isChecked={filter.isChecked}
+          onChange={setFilterValues((prevState) => ({}))}
+          label={filter.label}
+        />
       </DropdownItem>
     ));
     return (
