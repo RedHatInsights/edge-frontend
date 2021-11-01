@@ -20,8 +20,8 @@ export default {
       helperText: (
         <HelperText>
           <HelperTextItem className="pf-u-mt-xs" variant="indeterminate">
-            Can only contain letters, numbers, spaces, hyphen ( - ), and underscores( _
-            ).
+            Can only contain letters, numbers, spaces, hyphen ( - ), and
+            underscores( _ ).
           </HelperTextItem>
         </HelperText>
       ),
