@@ -16,6 +16,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
   const [isOpen, setIsOpen] = useState(false);
   /*
   const [selectedFilter, setSelectedFilter] = useState();
+  
   */
 
   const handleFilterChange = (label, index) => (checked, event) => {
