@@ -54,7 +54,7 @@ const ImageDetailTab = () => {
   return (
     <TextContent className="pf-u-ml-lg pf-u-mt-md">
       <Flex>
-        <FlexItem>
+        <FlexItem flex={{ default: 'flex_1' }}>
           <Text component={TextVariants.h3}>Most recent imag </Text>
           <TextList component={TextListVariants.dl}>
             {data
@@ -94,7 +94,7 @@ const ImageDetailTab = () => {
               : null}
           </TextList>
         </FlexItem>
-        <FlexItem>
+        <FlexItem flex={{ default: 'flex_1' }}>
           <Text component={TextVariants.h3}>Packages </Text>
           <TextList component={TextListVariants.dl}>
             {data

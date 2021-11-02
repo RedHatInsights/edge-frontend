@@ -75,15 +75,15 @@ const Repository = () => {
           ) : (
             <EmptyState
               icon="repository"
-              title="Add a third-party repository"
-              body="Add third-party repositories to build RHEL for Edge images with additional packages."
+              title="Add a custom repository"
+              body="Add custom repositories to build RHEL for Edge images with additional packages."
               primaryAction={{
                 text: 'Add Repository',
                 click: () => toggle({ type: 'add' }),
               }}
               secondaryActions={[
                 {
-                  title: 'Learn more about third-party repositories',
+                  title: 'Learn more about custom repositories',
                   link: '#',
                 },
               ]}
