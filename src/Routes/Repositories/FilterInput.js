@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   ToolbarItem,
   InputGroup,
-  TextInput,
-  Button,
+  SearchInput,
   Checkbox,
   Dropdown,
   DropdownToggle,
   DropdownItem,
-} from "@patternfly/react-core";
-import SearchIcon from "@patternfly/react-icons/dist/esm/icons/search-icon";
-import CaretDownIcon from "@patternfly/react-icons/dist/esm/icons/caret-down-icon";
+} from '@patternfly/react-core';
+import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
+import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 
 const FilterInput = ({ filterValues, setFilterValues, input }) => {
   const selectedFilter = filterValues.find((filter) => filter.label === input);
@@ -20,34 +19,54 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
 
   */
 
-  if (selectedFilter.type === "text") {
+  const handleFilterChange = (label, index) => (checked, event) => {
+    setFilterValues((prevState) => {
+      const selectedIndex = prevState.findIndex(
+        (filter) => filter.label === selectedFilter.label
+      );
+      const checkedType = prevState.find(
+        (filter) => filter.label === selectedFilter.label
+      );
+      const newValueArray = Object.values({
+        ...checkedType.value,
+        [index]: { ...checkedType.value[index], isChecked: checked },
+      });
+      return Object.values({
+        ...prevState,
+        [selectedIndex]: {
+          ...prevState[selectedIndex],
+          value: newValueArray,
+        },
+      });
+    });
+  };
+
+  if (selectedFilter.type === 'text') {
     return (
       <ToolbarItem>
         <InputGroup>
-          <TextInput
+          <SearchInput
             name="textInput1"
             id="textInput1"
             type="search"
             aria-label="search input example"
             placeholder="Filter by name"
+            width="275px"
             onChange={(value) => setInput(value)}
           />
-          <Button variant="control" aria-label="search button for search input">
-            <SearchIcon />
-          </Button>
         </InputGroup>
       </ToolbarItem>
     );
   }
 
-  if (selectedFilter.type === "checkbox") {
-    const dropdownItems = selectedFilter.value.map((filter) => (
+  if (selectedFilter.type === 'checkbox') {
+    const dropdownItems = selectedFilter.value.map((filter, index) => (
       <DropdownItem>
         <Checkbox
-          id={filter.label}
+          id={filter.id}
           isChecked={filter.isChecked}
-          onChange={setFilterValues((prevState) => ({}))}
-          label={filter.label}
+          onChange={handleFilterChange([filter.option], index)}
+          label={filter.option}
         />
       </DropdownItem>
     ));
@@ -57,6 +76,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
           <Dropdown
             toggle={
               <DropdownToggle
+                width="275px"
                 id="toggle-id"
                 onToggle={() => setIsOpen((prevState) => !prevState)}
                 toggleIndicator={CaretDownIcon}

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { ToolbarItem, Select, SelectOption } from "@patternfly/react-core";
+import React from 'react';
+import { ToolbarItem, Select, SelectOption } from '@patternfly/react-core';
+import { FilterIcon } from '@patternfly/react-icons';
 
 const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
   const toggle = () => {
@@ -28,15 +29,16 @@ const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
       <ToolbarItem>
         <Select
           variant="single"
-          placeholder="test"
           aria-label="Select input for filters"
+          width="250px"
           onToggle={toggle}
           onSelect={select}
           selections={dropdown.selected}
           isOpen={dropdown.isOpen}
+          toggleIcon={<FilterIcon />}
         >
           {filters.map((filter, index) => (
-            <SelectOption key={index} value={filter.label} />
+            <SelectOption width="275px" key={index} value={filter.label} />
           ))}
         </Select>
       </ToolbarItem>

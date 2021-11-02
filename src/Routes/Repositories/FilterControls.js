@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import FilterDropdown from "./FilterDropdown";
-import FilterInput from "./FilterInput";
+import React, { useState } from 'react';
+import FilterDropdown from './FilterDropdown';
+import FilterInput from './FilterInput';
 
 const FilterControls = ({
   filters,
