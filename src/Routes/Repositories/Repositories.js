@@ -85,6 +85,7 @@ const Repository = () => {
                 [
                   //{
                   //  title: 'Learn more about custom repositories',
+                  //  type: 'link',
                   //  link: '#',
                   //},
                 ]
