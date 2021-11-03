@@ -2,9 +2,9 @@ import React from 'react';
 import PageHeader, {
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { Popover, Button } from '@patternfly/react-core';
-import QuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/outlined-question-circle-icon';
-import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+//import { Popover, Button } from "@patternfly/react-core";
+//import QuestionCircleIcon from "@patternfly/react-icons/dist/js/icons/outlined-question-circle-icon";
+//import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
 const RepositoryHeader = () => {
   return (
@@ -13,7 +13,7 @@ const RepositoryHeader = () => {
         <PageHeaderTitle title="Applications settings" />
         <p className="pf-u-mt-sm">
           Settings for Fleet Management
-          <Popover
+          {/*<Popover
             aria-label="Basic popover"
             headerContent={<div>About Fleet Management</div>}
             bodyContent={
@@ -33,7 +33,7 @@ const RepositoryHeader = () => {
               style={{ cursor: 'pointer' }}
               className="pf-u-ml-xs"
             />
-          </Popover>
+          </Popover>*/}
         </p>
       </>
     </PageHeader>
