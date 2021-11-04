@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Toolbar,
   Pagination,
@@ -8,7 +8,6 @@ import {
   InputGroup,
   TextInput,
 } from '@patternfly/react-core';
-import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
 import PropTypes from 'prop-types';
 
 const ToolbarButtons = ({ buttons }) => {
@@ -23,6 +22,7 @@ const ToolbarButtons = ({ buttons }) => {
 
 const ToolbarHeader = ({
   toolbarButtons,
+  input,
   setInput,
   count,
   perPage,
@@ -30,6 +30,10 @@ const ToolbarHeader = ({
   page,
   setPage,
 }) => {
+  useEffect(() => {
+    setPage(1);
+  }, [count]);
+
   return (
     <Toolbar id="toolbar">
       <ToolbarContent>
@@ -38,17 +42,13 @@ const ToolbarHeader = ({
             <TextInput
               name="textInput1"
               id="textInput1"
+              value={input}
               type="search"
               aria-label="search input example"
               placeholder="Filter by name"
               onChange={(value) => setInput(value)}
+              iconVariant="search"
             />
-            <Button
-              variant="control"
-              aria-label="search button for search input"
-            >
-              <SearchIcon />
-            </Button>
           </InputGroup>
         </ToolbarItem>
         <ToolbarButtons buttons={toolbarButtons} />
@@ -71,6 +71,7 @@ const ToolbarHeader = ({
 ToolbarHeader.propTypes = {
   toolbarButtons: PropTypes.array,
   setInput: PropTypes.func,
+  input: PropTypes.string,
   count: PropTypes.number,
   perPage: PropTypes.number,
   setPerPage: PropTypes.func,
