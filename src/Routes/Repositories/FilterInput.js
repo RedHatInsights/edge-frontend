@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ToolbarItem,
   InputGroup,
@@ -8,18 +8,14 @@ import {
   DropdownToggle,
   DropdownItem,
 } from '@patternfly/react-core';
-import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
+import { debounce } from 'lodash';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 
 const FilterInput = ({ filterValues, setFilterValues, input }) => {
   const selectedFilter = filterValues.find((filter) => filter.label === input);
   const [isOpen, setIsOpen] = useState(false);
-  /*
-  const [selectedFilter, setSelectedFilter] = useState();
-  
-  */
 
-  const handleFilterChange = (label, index) => (checked, event) => {
+  const handleFilterChange = (index) => (checked, event) => {
     setFilterValues((prevState) => {
       const selectedIndex = prevState.findIndex(
         (filter) => filter.label === selectedFilter.label
@@ -31,11 +27,14 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
         ...checkedType.value,
         [index]: { ...checkedType.value[index], isChecked: checked },
       });
+      const newTextValue = event.target.value;
+
       return Object.values({
         ...prevState,
         [selectedIndex]: {
           ...prevState[selectedIndex],
-          value: newValueArray,
+          value:
+            selectedFilter.type === 'checkbox' ? newValueArray : newTextValue,
         },
       });
     });
@@ -52,7 +51,8 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
             aria-label="search input example"
             placeholder="Filter by name"
             width="275px"
-            onChange={(value) => setInput(value)}
+            onChange={debounce(handleFilterChange(), 500)}
+            value={filterValues.find((filter) => filter.type === 'text').value}
           />
         </InputGroup>
       </ToolbarItem>
@@ -65,7 +65,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
         <Checkbox
           id={filter.id}
           isChecked={filter.isChecked}
-          onChange={handleFilterChange([filter.option], index)}
+          onChange={handleFilterChange(index)}
           label={filter.option}
         />
       </DropdownItem>
