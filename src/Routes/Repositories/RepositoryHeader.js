@@ -2,8 +2,8 @@ import React from 'react';
 import PageHeader, {
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
-//import { Popover, Button } from "@patternfly/react-core";
-//import QuestionCircleIcon from "@patternfly/react-icons/dist/js/icons/outlined-question-circle-icon";
+import { Popover } from '@patternfly/react-core';
+import QuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/outlined-question-circle-icon';
 //import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
 const RepositoryHeader = () => {
@@ -13,7 +13,7 @@ const RepositoryHeader = () => {
         <PageHeaderTitle title="Applications settings" />
         <p className="pf-u-mt-sm">
           Settings for Fleet Management
-          {/*<Popover
+          <Popover
             aria-label="Basic popover"
             headerContent={<div>About Fleet Management</div>}
             bodyContent={
@@ -22,18 +22,18 @@ const RepositoryHeader = () => {
                 update and maintain edge systems.
               </div>
             }
-            footerContent={
-              <Button variant="link" style={{ 'padding-left': 0 }}>
-                <a href="#">Documentation</a>
-                <ExternalLinkAltIcon className="pf-u-ml-sm" />
-              </Button>
-            }
+            //footerContent={
+            //  <Button variant="link" style={{ 'padding-left': 0 }}>
+            //    <a href="#">Documentation</a>
+            //    <ExternalLinkAltIcon className="pf-u-ml-sm" />
+            //  </Button>
+            //}
           >
             <QuestionCircleIcon
               style={{ cursor: 'pointer' }}
               className="pf-u-ml-xs"
             />
-          </Popover>*/}
+          </Popover>
         </p>
       </>
     </PageHeader>
