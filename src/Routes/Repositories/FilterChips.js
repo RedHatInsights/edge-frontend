@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ChipGroup, Chip, Button } from '@patternfly/react-core';
 import { groupBy } from 'lodash';
+import PropTypes from 'prop-types';
 
 const FilterChips = ({ filterValues, setFilterValues }) => {
   const [chipsArray, setChipsArray] = useState([]);
@@ -111,9 +112,9 @@ const FilterChips = ({ filterValues, setFilterValues }) => {
     <>
       {chipsArray.length > 0
         ? Object.entries(groupBy(chipsArray, 'key')).map(([key, value]) => (
-            <ChipGroup className="pf-u-mr-xs" categoryName={key}>
+            <ChipGroup className="pf-u-mr-xs" categoryName={key} key={key}>
               {value.map((filter) => (
-                <Chip onClick={() => handleDeleteFilter(filter)}>
+                <Chip onClick={() => handleDeleteFilter(filter)} key={key}>
                   {filter.label}
                 </Chip>
               ))}
@@ -127,6 +128,11 @@ const FilterChips = ({ filterValues, setFilterValues }) => {
       ) : null}
     </>
   );
+};
+
+FilterChips.propTypes = {
+  filterValues: PropTypes.object,
+  setFilterValues: PropTypes.func,
 };
 
 export default FilterChips;

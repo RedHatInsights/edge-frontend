@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ToolbarItem,
   InputGroup,
@@ -10,6 +10,7 @@ import {
 } from '@patternfly/react-core';
 import { debounce } from 'lodash';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
+import PropTypes from 'prop-types';
 
 const FilterInput = ({ filterValues, setFilterValues, input }) => {
   const selectedFilter = filterValues.find((filter) => filter.label === input);
@@ -61,7 +62,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
 
   if (selectedFilter.type === 'checkbox') {
     const dropdownItems = selectedFilter.value.map((filter, index) => (
-      <DropdownItem>
+      <DropdownItem key={filter.id}>
         <Checkbox
           id={filter.id}
           isChecked={filter.isChecked}
@@ -91,6 +92,12 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
       </ToolbarItem>
     );
   }
+};
+
+FilterInput.propTypes = {
+  filterValues: PropTypes.object,
+  setFilterValues: PropTypes.func,
+  input: PropTypes.string,
 };
 
 export default FilterInput;

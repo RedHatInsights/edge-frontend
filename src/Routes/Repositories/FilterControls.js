@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import FilterDropdown from './FilterDropdown';
 import FilterInput from './FilterInput';
+import PropTypes from 'prop-types';
 
-const FilterControls = ({
-  filters,
-  filterValues,
-  setFilterValues,
-  setInput,
-}) => {
+const FilterControls = ({ filters, filterValues, setFilterValues }) => {
   const [dropdown, setDropdown] = useState({
     isOpen: false,
     selected: filters[0].label,
@@ -27,6 +23,12 @@ const FilterControls = ({
       />
     </>
   );
+};
+
+FilterControls.propTypes = {
+  filters: PropTypes.object,
+  filterValues: PropTypes.object,
+  setFilterValues: PropTypes.func,
 };
 
 export default FilterControls;
