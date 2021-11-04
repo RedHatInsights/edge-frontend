@@ -44,25 +44,6 @@ Install all dependencies
 ```bash
 npm install
 ```
-**NOTE:**
-You will need to run cloud-services-config until edge-frontend is on a stable branch
-
-## Setting up cloud-services-config
-
-Clone [cloud-services-config](https://github.com/RedHatInsights/cloud-services-config) to your local machine and navigate into the cloned directory.
-
-Copy `main.yml` to its own config directory.
-
-```bash
-mkdir config
-cp main.yml config
-```
-
-Start `http-server`
-```bash
-npx http-server -p 8889
-```
-
 ## Running locally with webpack-proxy
 
 Add `prod.foo.redhat.com`, `stage.foo.redhat.com`, `qa.foo.redhat.com` and  `ci.foo.redhat.com` to your `/etc/hosts` file (one time action). Follow this guide on [how to edit your `/etc/hosts file`](https://docs.rackspace.com/support/how-to/modify-your-hosts-file/)
