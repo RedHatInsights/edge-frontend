@@ -19,8 +19,8 @@ const RepositoryTable = ({ data, toolbarButtons, toggle }) => {
   const sortedByDirection = (rows) =>
     rows.sort((a, b) =>
       sortDirection === 'asc'
-        ? a.name.toLowerCase() > b.name.toLowerCase()
-        : b.name.toLowerCase() > a.name.toLowerCase()
+        ? a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        : b.name.toLowerCase().localeCompare(a.name.toLowerCase())
     );
 
   return (
@@ -39,11 +39,9 @@ const RepositoryTable = ({ data, toolbarButtons, toggle }) => {
         <Table
           toggle={toggle}
           columns={['Name']}
-          rows={sortedByDirection(
-            filteredByName().slice(
-              (page - 1) * perPage,
-              (page - 1) * perPage + perPage
-            )
+          rows={sortedByDirection(filteredByName()).slice(
+            (page - 1) * perPage,
+            (page - 1) * perPage + perPage
           )}
           sortDirection={sortDirection}
           setSortDirection={setSortDirection}
