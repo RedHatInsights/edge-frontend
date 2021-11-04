@@ -19,7 +19,7 @@ const AddModal = ({ isOpen, toggle, reloadData }) => {
         label: 'Name',
         placeholder: 'Repository name',
         helperText:
-          'Can only contain letters, numbers, spaces, hypthon ( - ), and underscores( _ ).',
+          'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
         isRequired: true,
         validate: [{ type: validatorTypes.REQUIRED }],
       },
