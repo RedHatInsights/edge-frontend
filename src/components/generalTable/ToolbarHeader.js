@@ -9,8 +9,10 @@ import {
 import PropTypes from 'prop-types';
 import FilterControls from './FilterControls';
 import FilterChip from './FilterChips';
+import createFilterValues from '../../components/generalTable/createFilterValues';
 
 const ToolbarButtons = ({ buttons }) => {
+  console.log(buttons);
   return buttons.map(({ title, click }, index) => (
     <ToolbarItem key={index}>
       <Button onClick={click} variant="primary">
@@ -20,40 +22,9 @@ const ToolbarButtons = ({ buttons }) => {
   ));
 };
 
-const filters = [
-  { label: 'Name', type: 'text' },
-  {
-    label: 'Distribution',
-    type: 'checkbox',
-    options: [{ option: '8.4' }, { option: '8.3' }],
-  },
-  {
-    label: 'Status',
-    type: 'checkbox',
-    options: [{ option: 'BUILDING' }, { option: 'CREATED' }],
-  },
-];
-
-const filterValues = () =>
-  filters.map((filter) => {
-    const config = {
-      type: filter.type,
-      label: filter.label,
-    };
-
-    if (filter.type === 'text') config.value = filter.value || '';
-    if (filter.type === 'checkbox')
-      config.value = filter.options.map((option, index) => ({
-        ...option,
-        id: 'option' + index,
-        isChecked: option.isChecked || false,
-      }));
-    return config;
-  });
-
 const ToolbarHeader = ({
   toolbarButtons,
-  input,
+  filters,
   setInput,
   count,
   perPage,
@@ -61,7 +32,7 @@ const ToolbarHeader = ({
   page,
   setPage,
 }) => {
-  const [values, setValues] = useState(filterValues());
+  const [values, setValues] = useState(createFilterValues(filters));
   return (
     <Toolbar id="toolbar">
       <ToolbarContent>
@@ -93,6 +64,7 @@ const ToolbarHeader = ({
 };
 
 ToolbarHeader.propTypes = {
+  filters: PropTypes.func,
   toolbarButtons: PropTypes.array,
   setInput: PropTypes.func,
   input: PropTypes.string,

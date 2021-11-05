@@ -11,7 +11,13 @@ import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { Text, TextVariants } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 
-const Table = ({ toggle, columns, rows, sortDirection, setSortDirection }) => {
+const Table = ({
+  columns,
+  rows,
+  sortDirection,
+  setSortDirection,
+  actionFunction,
+}) => {
   return (
     <React.Fragment>
       <TableComposable aria-label="Simple table" variant="compact">
@@ -51,7 +57,7 @@ const Table = ({ toggle, columns, rows, sortDirection, setSortDirection }) => {
                     {
                       title: 'Edit',
                       onClick: () =>
-                        toggle({
+                        actionFunction({
                           type: 'edit',
                           id,
                           name,
@@ -61,7 +67,7 @@ const Table = ({ toggle, columns, rows, sortDirection, setSortDirection }) => {
                     {
                       title: 'Remove',
                       onClick: () =>
-                        toggle({
+                        actionFunction({
                           type: 'remove',
                           id,
                           name,
@@ -82,7 +88,7 @@ const Table = ({ toggle, columns, rows, sortDirection, setSortDirection }) => {
 Table.propTypes = {
   columns: PropTypes.array,
   rows: PropTypes.array,
-  toggle: PropTypes.func,
+  actionFunction: PropTypes.func,
   sortDirection: PropTypes.string,
   setSortDirection: PropTypes.func,
 };
