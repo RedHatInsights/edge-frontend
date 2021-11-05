@@ -53,6 +53,7 @@ const filterValues = () =>
 
 const ToolbarHeader = ({
   toolbarButtons,
+  input,
   setInput,
   count,
   perPage,
@@ -94,6 +95,7 @@ const ToolbarHeader = ({
 ToolbarHeader.propTypes = {
   toolbarButtons: PropTypes.array,
   setInput: PropTypes.func,
+  input: PropTypes.string,
   count: PropTypes.number,
   perPage: PropTypes.number,
   setPerPage: PropTypes.func,

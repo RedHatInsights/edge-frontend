@@ -81,12 +81,15 @@ const Repository = () => {
                 text: 'Add Repository',
                 click: () => toggle({ type: 'add' }),
               }}
-              secondaryActions={[
-                {
-                  title: 'Learn more about custom repositories',
-                  link: '#',
-                },
-              ]}
+              secondaryActions={
+                [
+                  //{
+                  //  title: 'Learn more about custom repositories',
+                  //  type: 'link',
+                  //  link: '#',
+                  //},
+                ]
+              }
             />
           )
         ) : (
