@@ -8,6 +8,7 @@ import {
 } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import FilterControls from './FilterControls';
+import FilterChip from './FilterChips';
 
 const ToolbarButtons = ({ buttons }) => {
   return buttons.map(({ title, click }, index) => (
@@ -79,6 +80,11 @@ const ToolbarHeader = ({
             widgetId="pagination-options-menu-top"
             onPerPageSelect={(_e, perPage) => setPerPage(perPage)}
           />
+        </ToolbarItem>
+      </ToolbarContent>
+      <ToolbarContent>
+        <ToolbarItem variant="chip-group" spacer={{ default: 'spacerNone' }}>
+          <FilterChip filterValues={values} setFilterValues={setValues} />
         </ToolbarItem>
       </ToolbarContent>
     </Toolbar>

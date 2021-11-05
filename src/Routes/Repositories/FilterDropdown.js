@@ -1,6 +1,7 @@
 import React from 'react';
 import { ToolbarItem, Select, SelectOption } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
+import PropTypes from 'prop-types';
 
 const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
   const toggle = () => {
@@ -8,13 +9,6 @@ const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
       ...prevState,
       isOpen: !prevState.isOpen,
     }));
-  };
-
-  const clearSelection = () => {
-    setDropdown({
-      selected: null,
-      isOpen: false,
-    });
   };
 
   const select = (_e, selection) => {
@@ -30,7 +24,7 @@ const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
         <Select
           variant="single"
           aria-label="Select input for filters"
-          width="250px"
+          width="180px"
           onToggle={toggle}
           onSelect={select}
           selections={dropdown.selected}
@@ -38,12 +32,18 @@ const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
           toggleIcon={<FilterIcon />}
         >
           {filters.map((filter, index) => (
-            <SelectOption width="275px" key={index} value={filter.label} />
+            <SelectOption key={index} value={filter.label} />
           ))}
         </Select>
       </ToolbarItem>
     </>
   );
+};
+
+FilterDropdown.propTypes = {
+  filters: PropTypes.object,
+  dropdown: PropTypes.object,
+  setDropdown: PropTypes.func,
 };
 
 export default FilterDropdown;
