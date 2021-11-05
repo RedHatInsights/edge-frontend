@@ -70,7 +70,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
           <Select
             variant="checkbox"
             aria-label={`Select input for ${selectedFilter.label}`}
-            width="180px"
+            width="11rem"
             placeholderText={`Filter by ${selectedFilter.label}`}
             isCheckboxSelectionBadgeHidden
             onToggle={() => setIsOpen((prevState) => !prevState)}

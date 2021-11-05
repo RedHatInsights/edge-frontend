@@ -24,7 +24,7 @@ const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
         <Select
           variant="single"
           aria-label="Select input for filters"
-          width="180px"
+          width="11rem"
           onToggle={toggle}
           onSelect={select}
           selections={dropdown.selected}
