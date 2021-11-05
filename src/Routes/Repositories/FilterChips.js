@@ -18,6 +18,19 @@ const FilterChips = ({ filterValues, setFilterValues }) => {
               ...prevState,
               { label: filterOption.option, key: filter.label },
             ]);
+          } else if (
+            filterOption.isChecked === false &&
+            chipsArray.find((chip) => chip.label === filterOption.option)
+          ) {
+            setChipsArray((prevState) => {
+              const index = prevState.findIndex(
+                (state) => state.label === filterOption.option
+              );
+              return [
+                ...prevState.slice(0, index),
+                ...prevState.slice(index + 1, prevState.length),
+              ];
+            });
           }
         });
       }

@@ -24,7 +24,7 @@ const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
         <Select
           variant="single"
           aria-label="Select input for filters"
-          width="250px"
+          width="180px"
           onToggle={toggle}
           onSelect={select}
           selections={dropdown.selected}
@@ -32,7 +32,7 @@ const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
           toggleIcon={<FilterIcon />}
         >
           {filters.map((filter, index) => (
-            <SelectOption width="275px" key={index} value={filter.label} />
+            <SelectOption key={index} value={filter.label} />
           ))}
         </Select>
       </ToolbarItem>
