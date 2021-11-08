@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Toolbar,
   Pagination,
@@ -9,10 +9,8 @@ import {
 import PropTypes from 'prop-types';
 import FilterControls from './FilterControls';
 import FilterChip from './FilterChips';
-import createFilterValues from '../../components/generalTable/createFilterValues';
 
 const ToolbarButtons = ({ buttons }) => {
-  console.log(buttons);
   return buttons.map(({ title, click }, index) => (
     <ToolbarItem key={index}>
       <Button onClick={click} variant="primary">
@@ -25,22 +23,21 @@ const ToolbarButtons = ({ buttons }) => {
 const ToolbarHeader = ({
   toolbarButtons,
   filters,
-  setInput,
+  setFilterValues,
+  filterValues,
   count,
   perPage,
   setPerPage,
   page,
   setPage,
 }) => {
-  const [values, setValues] = useState(createFilterValues(filters));
   return (
     <Toolbar id="toolbar">
       <ToolbarContent>
         <FilterControls
           filters={filters}
-          filterValues={values}
-          setFilterValues={setValues}
-          setInput={setInput}
+          filterValues={filterValues}
+          setFilterValues={setFilterValues}
         />
         <ToolbarButtons buttons={toolbarButtons} />
         <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
@@ -56,7 +53,10 @@ const ToolbarHeader = ({
       </ToolbarContent>
       <ToolbarContent>
         <ToolbarItem variant="chip-group" spacer={{ default: 'spacerNone' }}>
-          <FilterChip filterValues={values} setFilterValues={setValues} />
+          <FilterChip
+            filterValues={filterValues}
+            setFilterValues={setFilterValues}
+          />
         </ToolbarItem>
       </ToolbarContent>
     </Toolbar>
@@ -66,7 +66,8 @@ const ToolbarHeader = ({
 ToolbarHeader.propTypes = {
   filters: PropTypes.func,
   toolbarButtons: PropTypes.array,
-  setInput: PropTypes.func,
+  setFilterValues: PropTypes.func,
+  filterValues: PropTypes.array,
   input: PropTypes.string,
   count: PropTypes.number,
   perPage: PropTypes.number,

@@ -19,7 +19,7 @@ LabelWithText.propTypes = {
   text: PropTypes.string,
 };
 
-const RemoveModal = ({ toggle, isOpen, name, baseURL, reloadData }) => {
+const RemoveModal = ({ openModal, isOpen, name, baseURL, reloadData }) => {
   const addSchema = {
     fields: [
       {
@@ -53,7 +53,7 @@ const RemoveModal = ({ toggle, isOpen, name, baseURL, reloadData }) => {
         </>
       }
       isOpen={isOpen}
-      toggle={() => toggle({ type: 'remove' })}
+      openModal={() => openModal({ type: 'remove' })}
       submitLabel="Remove"
       schema={addSchema}
       variant="danger"
@@ -64,7 +64,7 @@ const RemoveModal = ({ toggle, isOpen, name, baseURL, reloadData }) => {
 };
 
 RemoveModal.propTypes = {
-  toggle: PropTypes.func,
+  openModal: PropTypes.func,
   reloadData: PropTypes.func,
   isOpen: PropTypes.boo,
   id: PropTypes.number,

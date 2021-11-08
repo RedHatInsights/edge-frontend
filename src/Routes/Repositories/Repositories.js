@@ -60,11 +60,7 @@ const Repository = () => {
           data.length > 0 ? (
             <>
               <TableHeader />
-              <RepositoryTable
-                data={data}
-                columns={['Name']}
-                openModal={openModal}
-              />
+              <RepositoryTable data={data} openModal={openModal} />
             </>
           ) : (
             <EmptyState

@@ -20,22 +20,24 @@ const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
 
   return (
     <>
-      <ToolbarItem>
-        <Select
-          variant="single"
-          aria-label="Select input for filters"
-          width="11rem"
-          onToggle={toggle}
-          onSelect={select}
-          selections={dropdown.selected}
-          isOpen={dropdown.isOpen}
-          toggleIcon={<FilterIcon />}
-        >
-          {filters.map((filter, index) => (
-            <SelectOption key={index} value={filter.label} />
-          ))}
-        </Select>
-      </ToolbarItem>
+      {filters.length > 1 ? (
+        <ToolbarItem>
+          <Select
+            variant="single"
+            aria-label="Select input for filters"
+            width="11rem"
+            onToggle={toggle}
+            onSelect={select}
+            selections={dropdown.selected}
+            isOpen={dropdown.isOpen}
+            toggleIcon={<FilterIcon />}
+          >
+            {filters.map((filter, index) => (
+              <SelectOption key={index} value={filter.label} />
+            ))}
+          </Select>
+        </ToolbarItem>
+      ) : null}
     </>
   );
 };
