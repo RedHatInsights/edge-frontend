@@ -3,6 +3,7 @@ import Modal from './Modal';
 import { HelperText, HelperTextItem } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
+import { editCustomRepository } from '../../../api/index';
 
 const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
   const editSchema = {
@@ -51,7 +52,7 @@ const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
       submitLabel="Update"
       schema={editSchema}
       initialValues={{ id, name, baseURL }}
-      onSubmit={console.log}
+      onSubmit={(values) => editCustomRepository(values)}
       reloadData={reloadData}
     />
   );
