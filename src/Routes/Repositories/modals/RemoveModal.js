@@ -20,7 +20,7 @@ LabelWithText.propTypes = {
   text: PropTypes.string,
 };
 
-const RemoveModal = ({ openModal, isOpen, name, baseURL, reloadData }) => {
+const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
   const addSchema = {
     fields: [
       {
