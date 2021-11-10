@@ -26,6 +26,8 @@ const Packages = ({ defaultArch, ...props }) => {
   const [packagesSelected, setPackagesSelected] = useState([]);
   const [filterSelected, setFilterSelected] = useState('');
   const [enterPressed, setEnterPressed] = useState(false);
+  const [availableSelected, setAvailableSelected] = useState([]);
+  const [chosenSelected, setChosenSelected] = useState([]);
 
   useEffect(() => {
     setPackagesSelected(
@@ -45,6 +47,20 @@ const Packages = ({ defaultArch, ...props }) => {
       setEnterPressed(false);
     }
   }, [enterPressed]);
+
+  const updateSelect = (prevState, id) =>
+    prevState.includes(id)
+      ? prevState.filter((entity) => entity !== id)
+      : [...prevState, id];
+
+  const onOptionSelect = (e) => {
+    const id = e.target.offsetParent.id;
+    if (id.split('-')[1] === 'available') {
+      setAvailableSelected((prevState) => updateSelect(prevState, id));
+    } else {
+      setChosenSelected((prevState) => updateSelect(prevState, id));
+    }
+  };
 
   const packageListChange = (newAvailablePackages, newChosenPackages) => {
     const chosenPkgs = newChosenPackages.map(mapComponentToPackage);
@@ -100,6 +116,7 @@ const Packages = ({ defaultArch, ...props }) => {
           Search
         </Button>,
       ]}
+      onOptionSelect={onOptionSelect}
       availableOptions={packagesAvailable}
       availableOptionsTitle="Available packages"
       chosenOptions={packagesSelected.filter((item) =>
@@ -107,6 +124,16 @@ const Packages = ({ defaultArch, ...props }) => {
       )}
       chosenOptionsTitle="Chosen packages"
       addSelected={packageListChange}
+      availableOptionsStatus={
+        availableSelected.length
+          ? `${availableSelected.length} of ${packagesAvailable.length} items`
+          : `${packagesAvailable.length} items`
+      }
+      chosenOptionsStatus={
+        chosenSelected.length
+          ? `${chosenSelected.length} of ${packagesSelected.length} items`
+          : `${packagesSelected.length} items`
+      }
       removeSelected={packageListChange}
       addAll={(allAvailablePackages) => addAllPackages(allAvailablePackages)}
       removeAll={(newAvailablePackages) =>
