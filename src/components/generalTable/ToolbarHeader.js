@@ -6,6 +6,10 @@ import {
   ToolbarContent,
   Button,
 } from '@patternfly/react-core';
+import {
+  Skeleton,
+  SkeletonSize,
+} from '@redhat-cloud-services/frontend-components/Skeleton';
 import PropTypes from 'prop-types';
 import FilterControls from './FilterControls';
 import FilterChip from './FilterChips';
@@ -25,6 +29,9 @@ const ToolbarHeader = ({
   filters,
   setFilterValues,
   filterValues,
+  chipsArray,
+  setChipsArray,
+  isLoading,
   count,
   perPage,
   setPerPage,
@@ -41,14 +48,19 @@ const ToolbarHeader = ({
         />
         <ToolbarButtons buttons={toolbarButtons} />
         <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
-          <Pagination
-            itemCount={count}
-            perPage={perPage}
-            page={page}
-            onSetPage={(_e, pageNumber) => setPage(pageNumber)}
-            widgetId="pagination-options-menu-top"
-            onPerPageSelect={(_e, perPage) => setPerPage(perPage)}
-          />
+          {isLoading ? (
+            <Skeleton size={SkeletonSize.xs} />
+          ) : (
+            <Pagination
+              itemCount={count}
+              perPage={perPage}
+              page={page}
+              onSetPage={(_e, pageNumber) => setPage(pageNumber)}
+              widgetId="pagination-options-menu-top"
+              onPerPageSelect={(_e, perPage) => setPerPage(perPage)}
+              isCompact
+            />
+          )}
         </ToolbarItem>
       </ToolbarContent>
       <ToolbarContent>
@@ -56,6 +68,8 @@ const ToolbarHeader = ({
           <FilterChip
             filterValues={filterValues}
             setFilterValues={setFilterValues}
+            chipsArray={chipsArray}
+            setChipsArray={setChipsArray}
           />
         </ToolbarItem>
       </ToolbarContent>
@@ -74,5 +88,8 @@ ToolbarHeader.propTypes = {
   setPerPage: PropTypes.func,
   page: PropTypes.number,
   setPage: PropTypes.func,
+  chipsArray: PropTypes.array,
+  setChipsArray: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 export default ToolbarHeader;

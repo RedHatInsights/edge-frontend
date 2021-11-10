@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ToolbarHeader from './ToolbarHeader';
 import ToolbarFooter from './ToolbarFooter';
 import createFilterValues from '../../components/generalTable/createFilterValues';
-
 import {
   Table,
   TableHeader,
   TableBody,
   sortable,
 } from '@patternfly/react-table';
+import {
+  Bullseye,
+  EmptyState,
+  EmptyStateIcon,
+  Spinner,
+} from '@patternfly/react-core';
 import PropTypes from 'prop-types';
-import EmptyState from './Empty';
+import CustomEmptyState from './Empty';
+import { useDispatch } from 'react-redux';
+import { transformSort } from '../../Routes/ImageManager/constants';
 
 const GeneralTable = ({
   apiFilterSort,
   filters,
+  loadTableData,
   tableData,
   columnNames,
   rows,
@@ -24,9 +32,39 @@ const GeneralTable = ({
   defaultSort,
 }) => {
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
+  const [chipsArray, setChipsArray] = useState([]);
   const [sortBy, setSortBy] = useState(defaultSort);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(20);
   const [page, setPage] = useState(1);
+  const dispatch = useDispatch();
+
+  const filterParams = (chipsArray) => {
+    const filterParamsObj =
+      chipsArray.length > 0
+        ? chipsArray.reduce(
+            (acc, filter) => ({
+              ...acc,
+              [filter.key.toLowerCase()]: filter.apiName
+                ? filter.apiName
+                : filter.label,
+            }),
+            {}
+          )
+        : {};
+    return filterParamsObj;
+  };
+
+  useEffect(() => {
+    loadTableData(dispatch, {
+      ...filterParams(chipsArray),
+      limit: perPage,
+      offset: (page - 1) * perPage,
+      ...transformSort({
+        direction: sortBy.direction,
+        name: columns[sortBy.index].type,
+      }),
+    });
+  }, [chipsArray, perPage, page, sortBy]);
 
   const { count, isLoading, hasError } = tableData;
 
@@ -72,6 +110,24 @@ const GeneralTable = ({
         (page - 1) * perPage + perPage
       );
 
+  const loadingRows = [
+    {
+      heightAuto: true,
+      cells: [
+        {
+          props: { colSpan: 8 },
+          title: (
+            <Bullseye>
+              <EmptyState variant="small">
+                <EmptyStateIcon icon={Spinner} />
+              </EmptyState>
+            </Bullseye>
+          ),
+        },
+      ],
+    },
+  ];
+
   return (
     <>
       <ToolbarHeader
@@ -80,27 +136,16 @@ const GeneralTable = ({
         filters={filters}
         filterValues={filterValues}
         setFilterValues={setFilterValues}
+        chipsArray={chipsArray}
+        setChipsArray={setChipsArray}
+        isLoading={isLoading}
         perPage={perPage}
         setPerPage={setPerPage}
         page={page}
         setPage={setPage}
       />
-      {filteredRows.length > 0 ? (
-        <Table
-          variant="compact"
-          aria-label="Manage Images table"
-          sortBy={sortBy}
-          onSort={handleSort}
-          actionResolver={actionResolver ? actionResolver : null}
-          areActionsDisabled={areActionsDisabled}
-          cells={columns}
-          rows={filteredRows}
-        >
-          <TableHeader />
-          <TableBody />
-        </Table>
-      ) : (
-        <EmptyState
+      {!isLoading && !filteredRows.length > 0 ? (
+        <CustomEmptyState
           bgColor="white"
           icon="search"
           title="No match found"
@@ -111,7 +156,22 @@ const GeneralTable = ({
             },
           ]}
         />
+      ) : (
+        <Table
+          variant="compact"
+          aria-label="Manage Images table"
+          sortBy={sortBy}
+          onSort={handleSort}
+          actionResolver={actionResolver ? actionResolver : null}
+          areActionsDisabled={areActionsDisabled}
+          cells={columns}
+          rows={isLoading ? loadingRows : filteredRows}
+        >
+          <TableHeader />
+          <TableBody />
+        </Table>
       )}
+
       <ToolbarFooter
         count={apiFilterSort ? count : nonApiCount}
         setFilterValues={setFilterValues}
@@ -127,6 +187,7 @@ const GeneralTable = ({
 GeneralTable.propTypes = {
   apiFilterSort: PropTypes.bool,
   filters: PropTypes.func,
+  loadTableData: PropTypes.func,
   tableData: PropTypes.array,
   columnNames: PropTypes.array,
   rows: PropTypes.array,
