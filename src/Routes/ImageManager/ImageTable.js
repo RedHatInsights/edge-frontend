@@ -132,9 +132,9 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       tableData={{ count, data, isLoading, hasError }}
       columnNames={columnNames}
       rows={data ? createRows(data) : []}
-      // emptyStateMessage="No images found"
-      // emptyStateActionMessage="Create new image"
-      // emptyStateAction={openCreateWizard}
+      emptyStateMessage="No images found"
+      emptyStateActionMessage="Create new image"
+      emptyStateAction={openCreateWizard}
       actionResolver={actionResolver}
       areActionsDisabled={areActionsDisabled}
       defaultSort={{ index: 4, direction: 'desc' }}

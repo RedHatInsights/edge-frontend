@@ -30,6 +30,9 @@ const GeneralTable = ({
   actionResolver,
   areActionsDisabled,
   defaultSort,
+  emptyStateMessage,
+  emptyStateAction,
+  emptyStateActionMessage,
 }) => {
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
@@ -41,29 +44,44 @@ const GeneralTable = ({
   const filterParams = (chipsArray) => {
     const filterParamsObj =
       chipsArray.length > 0
-        ? chipsArray.reduce(
-            (acc, filter) => ({
-              ...acc,
-              [filter.key.toLowerCase()]: filter.apiName
-                ? filter.apiName
-                : filter.label,
-            }),
-            {}
-          )
+        ? chipsArray.reduce((acc, filter) => {
+            if (acc[filter.key.toLowerCase()]) {
+              const returnAcc =
+                typeof acc[filter.key.toLowerCase()] === 'string'
+                  ? [acc[filter.key.toLowerCase()]]
+                  : [...acc[filter.key.toLowerCase()]];
+              return {
+                ...acc,
+                [filter.key.toLowerCase()]: [
+                  ...returnAcc,
+                  filter.apiName ? filter.apiName : filter.label,
+                ],
+              };
+            } else {
+              return {
+                ...acc,
+                [filter.key.toLowerCase()]: filter.apiName
+                  ? filter.apiName
+                  : filter.label,
+              };
+            }
+          }, {})
         : {};
     return filterParamsObj;
   };
 
   useEffect(() => {
-    loadTableData(dispatch, {
-      ...filterParams(chipsArray),
-      limit: perPage,
-      offset: (page - 1) * perPage,
-      ...transformSort({
-        direction: sortBy.direction,
-        name: columns[sortBy.index].type,
-      }),
-    });
+    apiFilterSort
+      ? loadTableData(dispatch, {
+          ...filterParams(chipsArray),
+          limit: perPage,
+          offset: (page - 1) * perPage,
+          ...transformSort({
+            direction: sortBy.direction,
+            name: columns[sortBy.index].type,
+          }),
+        })
+      : null;
   }, [chipsArray, perPage, page, sortBy]);
 
   const { count, isLoading, hasError } = tableData;
@@ -144,7 +162,19 @@ const GeneralTable = ({
         page={page}
         setPage={setPage}
       />
-      {!isLoading && !filteredRows.length > 0 ? (
+      {!isLoading && !count > 0 ? (
+        <CustomEmptyState
+          bgColor="white"
+          icon="search"
+          title={emptyStateMessage}
+          secondaryActions={[
+            {
+              title: emptyStateActionMessage,
+              onClick: () => emptyStateAction(),
+            },
+          ]}
+        />
+      ) : !isLoading && !filteredRows.length > 0 ? (
         <CustomEmptyState
           bgColor="white"
           icon="search"
@@ -195,6 +225,9 @@ GeneralTable.propTypes = {
   areActionsDisabled: PropTypes.func,
   defaultSort: PropTypes.object,
   toolbarButtons: PropTypes.array,
+  emptyStateMessage: PropTypes.string,
+  emptyStateActionMessage: PropTypes.string,
+  emptyStateAction: PropTypes.func,
 };
 
 export default GeneralTable;

@@ -9,8 +9,6 @@ const FilterChips = ({
   chipsArray,
   setChipsArray,
 }) => {
-  //const [chipsArray, setChipsArray] = useState([]);
-
   const buildChipsArray = () => {
     filterValues.forEach((filter) => {
       if (filter.type === 'checkbox') {
