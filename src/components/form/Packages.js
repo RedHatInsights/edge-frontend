@@ -117,6 +117,10 @@ const Packages = ({ defaultArch, ...props }) => {
         </Button>,
       ]}
       onOptionSelect={onOptionSelect}
+      onListChange={() => {
+        setAvailableSelected([]);
+        setChosenSelected([]);
+      }}
       availableOptions={packagesAvailable}
       availableOptionsTitle="Available packages"
       chosenOptions={packagesSelected.filter((item) =>
