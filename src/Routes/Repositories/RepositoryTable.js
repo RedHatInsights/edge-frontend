@@ -1,5 +1,5 @@
 import React from 'react';
-import GeneralTable from '../../components/generalTable/GeneralTable';
+import GeneralTable from '../../components/general-table/GeneralTable';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { Text, TextVariants } from '@patternfly/react-core';
 import PropTypes from 'prop-types';

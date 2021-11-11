@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ToolbarHeader from './ToolbarHeader';
 import ToolbarFooter from './ToolbarFooter';
-import createFilterValues from '../../components/generalTable/createFilterValues';
+import createFilterValues from '../../components/general-table/createFilterValues';
 import {
   Table,
   TableHeader,
@@ -15,7 +15,7 @@ import {
   Spinner,
 } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
-import CustomEmptyState from './Empty';
+import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
 import { transformSort } from '../../Routes/ImageManager/constants';
 

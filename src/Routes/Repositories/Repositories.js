@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import EmptyState from '../../components/generalTable/Empty';
+import EmptyState from '../../components/Empty';
 import AddModal from './modals/AddModal';
 import EditModal from './modals/EditModal';
 import RemoveModal from './modals/RemoveModal';
