@@ -69,13 +69,10 @@ const Packages = ({ defaultArch, ...props }) => {
     change(input.name, chosenPkgs);
   };
 
-  const addAllPackages = (allAvailablePackages) => {
+  const addAllPackages = () => {
+    setPackagesSelected((prevState) => [...packagesAvailable, ...prevState]);
     setPackagesAvailable([]);
-    setPackagesSelected((prevState = []) => [
-      ...allAvailablePackages,
-      ...prevState,
-    ]);
-    const chosenPkgs = allAvailablePackages.map(mapComponentToPackage);
+    const chosenPkgs = packagesAvailable.map(mapComponentToPackage);
     change(input.name, chosenPkgs);
   };
 
@@ -92,7 +89,10 @@ const Packages = ({ defaultArch, ...props }) => {
             chosenPkg.props.children[0].props.children === pack.name
         )
     );
-    setPackagesAvailable(mapPackagesToComponent(removeChosen || []));
+    setPackagesAvailable((prevState) => [
+      ...prevState,
+      ...mapPackagesToComponent(removeChosen || []),
+    ]);
   };
 
   const handleSearchOnEnter = (e) => {
@@ -139,7 +139,7 @@ const Packages = ({ defaultArch, ...props }) => {
           : `${packagesSelected.length} items`
       }
       removeSelected={packageListChange}
-      addAll={(allAvailablePackages) => addAllPackages(allAvailablePackages)}
+      addAll={() => addAllPackages()}
       removeAll={(newAvailablePackages) =>
         packageListChange(
           newAvailablePackages,
