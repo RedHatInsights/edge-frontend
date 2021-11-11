@@ -26,6 +26,8 @@ const Packages = ({ defaultArch, ...props }) => {
   const [packagesSelected, setPackagesSelected] = useState([]);
   const [filterSelected, setFilterSelected] = useState('');
   const [enterPressed, setEnterPressed] = useState(false);
+  const [availableSelected, setAvailableSelected] = useState([]);
+  const [chosenSelected, setChosenSelected] = useState([]);
 
   useEffect(() => {
     setPackagesSelected(
@@ -46,6 +48,20 @@ const Packages = ({ defaultArch, ...props }) => {
     }
   }, [enterPressed]);
 
+  const updateSelect = (prevState, id) =>
+    prevState.includes(id)
+      ? prevState.filter((entity) => entity !== id)
+      : [...prevState, id];
+
+  const onOptionSelect = (e) => {
+    const id = e.target.offsetParent.id;
+    if (id.split('-')[1] === 'available') {
+      setAvailableSelected((prevState) => updateSelect(prevState, id));
+    } else {
+      setChosenSelected((prevState) => updateSelect(prevState, id));
+    }
+  };
+
   const packageListChange = (newAvailablePackages, newChosenPackages) => {
     const chosenPkgs = newChosenPackages.map(mapComponentToPackage);
     setPackagesAvailable(newAvailablePackages);
@@ -53,13 +69,10 @@ const Packages = ({ defaultArch, ...props }) => {
     change(input.name, chosenPkgs);
   };
 
-  const addAllPackages = (allAvailablePackages) => {
+  const addAllPackages = () => {
+    setPackagesSelected((prevState) => [...packagesAvailable, ...prevState]);
     setPackagesAvailable([]);
-    setPackagesSelected((prevState = []) => [
-      ...allAvailablePackages,
-      ...prevState,
-    ]);
-    const chosenPkgs = allAvailablePackages.map(mapComponentToPackage);
+    const chosenPkgs = packagesAvailable.map(mapComponentToPackage);
     change(input.name, chosenPkgs);
   };
 
@@ -76,7 +89,10 @@ const Packages = ({ defaultArch, ...props }) => {
             chosenPkg.props.children[0].props.children === pack.name
         )
     );
-    setPackagesAvailable(mapPackagesToComponent(removeChosen || []));
+    setPackagesAvailable((prevState) => [
+      ...prevState,
+      ...mapPackagesToComponent(removeChosen || []),
+    ]);
   };
 
   const handleSearchOnEnter = (e) => {
@@ -100,6 +116,11 @@ const Packages = ({ defaultArch, ...props }) => {
           Search
         </Button>,
       ]}
+      onOptionSelect={onOptionSelect}
+      onListChange={() => {
+        setAvailableSelected([]);
+        setChosenSelected([]);
+      }}
       availableOptions={packagesAvailable}
       availableOptionsTitle="Available packages"
       chosenOptions={packagesSelected.filter((item) =>
@@ -107,8 +128,18 @@ const Packages = ({ defaultArch, ...props }) => {
       )}
       chosenOptionsTitle="Chosen packages"
       addSelected={packageListChange}
+      availableOptionsStatus={
+        availableSelected.length
+          ? `${availableSelected.length} of ${packagesAvailable.length} items`
+          : `${packagesAvailable.length} items`
+      }
+      chosenOptionsStatus={
+        chosenSelected.length
+          ? `${chosenSelected.length} of ${packagesSelected.length} items`
+          : `${packagesSelected.length} items`
+      }
       removeSelected={packageListChange}
-      addAll={(allAvailablePackages) => addAllPackages(allAvailablePackages)}
+      addAll={() => addAllPackages()}
       removeAll={(newAvailablePackages) =>
         packageListChange(
           newAvailablePackages,
