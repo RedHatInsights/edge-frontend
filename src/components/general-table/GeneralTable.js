@@ -96,7 +96,7 @@ const GeneralTable = ({
     });
   };
 
-  const filteredByNameRows = !apiFilterSort && filteredByName()
+  const filteredByNameRows = !apiFilterSort && filteredByName();
 
   //non-api sort function
   const sortedByDirection = (rows) =>
