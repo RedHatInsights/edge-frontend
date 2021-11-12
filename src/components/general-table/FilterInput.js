@@ -55,7 +55,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
             type="search"
             aria-label="search input example"
             placeholder="Filter by name"
-            onChange={debounce(handleFilterChange(), 500)}
+            onChange={debounce(handleFilterChange(), 400)}
             value={filterValues.find((filter) => filter.type === 'text').value}
           />
         </InputGroup>
@@ -70,7 +70,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
           <Select
             variant="checkbox"
             aria-label={`Select input for ${selectedFilter.label}`}
-            width="180px"
+            width="11rem"
             placeholderText={`Filter by ${selectedFilter.label}`}
             isCheckboxSelectionBadgeHidden
             onToggle={() => setIsOpen((prevState) => !prevState)}

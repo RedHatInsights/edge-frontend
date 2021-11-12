@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { ChipGroup, Chip, Button } from '@patternfly/react-core';
 import { groupBy } from 'lodash';
 import PropTypes from 'prop-types';
 
-const FilterChips = ({ filterValues, setFilterValues }) => {
-  const [chipsArray, setChipsArray] = useState([]);
-
+const FilterChips = ({
+  filterValues,
+  setFilterValues,
+  chipsArray,
+  setChipsArray,
+}) => {
   const buildChipsArray = () => {
     filterValues.forEach((filter) => {
       if (filter.type === 'checkbox') {
@@ -16,7 +19,11 @@ const FilterChips = ({ filterValues, setFilterValues }) => {
           ) {
             setChipsArray((prevState) => [
               ...prevState,
-              { label: filterOption.option, key: filter.label },
+              {
+                label: filterOption.option,
+                apiName: filterOption.optionApiName,
+                key: filter.label,
+              },
             ]);
           } else if (
             filterOption.isChecked === false &&
@@ -146,6 +153,8 @@ const FilterChips = ({ filterValues, setFilterValues }) => {
 FilterChips.propTypes = {
   filterValues: PropTypes.object,
   setFilterValues: PropTypes.func,
+  chipsArray: PropTypes.array,
+  setChipsArray: PropTypes.func,
 };
 
 export default FilterChips;

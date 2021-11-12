@@ -4,7 +4,7 @@ import { Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { checkImageName } from '../../../api';
 const helperText =
-  'Can only contain letters, numbers, hyphens(-), and underscores(_).';
+  'Can only contain letters, numbers, spaces, hyphens(-), and underscores(_).';
 
 const asyncImageNameValidation = (value) =>
   checkImageName(value)

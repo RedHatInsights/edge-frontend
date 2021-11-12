@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextContent, Text, TextVariants } from '@patternfly/react-core';
-import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+//import { ExternalLinkAltIcon } from "@patternfly/react-icons";
 
 const Header = () => {
   return (
@@ -9,7 +9,7 @@ const Header = () => {
       <Text component={TextVariants.p}>
         Add custom repositories to build RHEL for Edge images with additional
         packages.{' '}
-        <Text
+        {/*<Text
           style={{ display: 'inline' }}
           component={TextVariants.small}
           href="#"
@@ -18,7 +18,7 @@ const Header = () => {
             Learn more
             <ExternalLinkAltIcon size="sm" className="pf-u-ml-sm" />
           </Text>
-        </Text>
+        </Text>*/}
       </Text>
     </TextContent>
   );

@@ -4,6 +4,7 @@ import { TextContent, Text } from '@patternfly/react-core';
 import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-triangle-icon';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 import PropTypes from 'prop-types';
+import { removeCustomRepository } from '../../../api/index';
 
 const LabelWithText = ({ label, text }) => {
   return (
@@ -19,7 +20,7 @@ LabelWithText.propTypes = {
   text: PropTypes.string,
 };
 
-const RemoveModal = ({ toggle, isOpen, name, baseURL, reloadData }) => {
+const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
   const addSchema = {
     fields: [
       {
@@ -53,18 +54,19 @@ const RemoveModal = ({ toggle, isOpen, name, baseURL, reloadData }) => {
         </>
       }
       isOpen={isOpen}
-      toggle={() => toggle({ type: 'remove' })}
+      openModal={() => openModal({ type: 'remove' })}
       submitLabel="Remove"
       schema={addSchema}
+      initialValues={{ id }}
       variant="danger"
-      onSubmit={console.log}
+      onSubmit={({ id }) => removeCustomRepository(id)}
       reloadData={reloadData}
     />
   );
 };
 
 RemoveModal.propTypes = {
-  toggle: PropTypes.func,
+  openModal: PropTypes.func,
   reloadData: PropTypes.func,
   isOpen: PropTypes.boo,
   id: PropTypes.number,

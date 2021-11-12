@@ -387,3 +387,13 @@ export const createCustomRepository = (payload) => {
     URL: payload.baseURL,
   });
 };
+
+export const editCustomRepository = (payload) => {
+  return instance.put(`${EDGE_API}/thirdpartyrepo/${payload.id}`, {
+    Name: payload.name,
+    URL: payload.baseURL,
+  });
+};
+
+export const removeCustomRepository = (id) =>
+  instance.delete(`${EDGE_API}/thirdpartyrepo/${id}`);

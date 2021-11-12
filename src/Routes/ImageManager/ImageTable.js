@@ -1,5 +1,5 @@
-import React, { useReducer } from 'react';
-import GeneralTable from '../../components/GeneralTable';
+import React from 'react';
+import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
 import { routes as paths } from '../../../package.json';
@@ -9,30 +9,31 @@ import { DateFormat } from '@redhat-cloud-services/frontend-components/DateForma
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import {
   imageTypeMapper,
-  composeStatus,
   distributionMapper,
 } from '../ImageManagerDetail/constants';
-import { applyReducerHash } from '@redhat-cloud-services/frontend-components-utilities/ReducerRegistry';
-import { isEmptyFilters, constructActiveFilters } from '../../constants';
 import { loadEdgeImages } from '../../store/actions';
 
-const defaultFilters = {
-  name: {
+const defaultFilters = [
+  {
     label: 'Name',
-    key: 'name',
-    value: '',
+    type: 'text',
   },
-  distribution: {
+  {
     label: 'Distribution',
-    key: 'distribution',
-    value: [],
+    type: 'checkbox',
+    options: [{ option: 'RHEL 8.4', optionApiName: 'rhel-84' }],
   },
-  status: {
+  {
     label: 'Status',
-    key: 'status',
-    value: [],
+    type: 'checkbox',
+    options: [
+      { option: 'CREATED' },
+      { option: 'BUILDING' },
+      { option: 'ERROR' },
+      { option: 'SUCCESS' },
+    ],
   },
-};
+];
 
 const columnNames = [
   { title: 'Name', type: 'name', sort: true },
@@ -71,31 +72,7 @@ const createRows = (data) => {
   }));
 };
 
-const updateFilter = (state, action) => ({
-  ...state,
-  [action.property]: {
-    ...(state[action.property] || {}),
-    value: action.value,
-  },
-});
-
-const deleteFilter = (_state, action) => action.payload;
-
-const activeFilterMapper = {
-  UPDATE_FILTER: updateFilter,
-  DELETE_FILTER: deleteFilter,
-};
-
-const activeFilterReducer = applyReducerHash(
-  activeFilterMapper,
-  defaultFilters
-);
-
 const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
-  const [activeFilters, dispatchActiveFilters] = useReducer(
-    activeFilterReducer,
-    defaultFilters
-  );
   const { count, data, isLoading, hasError } = useSelector(
     ({ edgeImagesReducer }) => ({
       count: edgeImagesReducer?.data?.count || 0,
@@ -147,91 +124,26 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
 
   const areActionsDisabled = (rowData) => rowData?.imageStatus !== 'SUCCESS';
 
-  const filterConfig = {
-    items: [
-      {
-        label: defaultFilters.name.label,
-        type: 'text',
-        filterValues: {
-          key: 'name-filter',
-          onChange: (_event, value) =>
-            dispatchActiveFilters({
-              type: 'UPDATE_FILTER',
-              property: 'name',
-              value,
-            }),
-          value: activeFilters?.name?.value || '',
-          placeholder: 'Filter by name',
-        },
-      },
-      {
-        label: defaultFilters.distribution.label,
-        type: 'checkbox',
-        filterValues: {
-          key: 'distribution-filter',
-          onChange: (_event, value) =>
-            dispatchActiveFilters({
-              type: 'UPDATE_FILTER',
-              property: 'distribution',
-              value,
-            }),
-          items: Object.entries(distributionMapper).map(([value, label]) => ({
-            label,
-            value,
-          })),
-          value: activeFilters?.distribution?.value || '',
-        },
-      },
-      {
-        label: defaultFilters.status.label,
-        type: 'checkbox',
-        filterValues: {
-          key: 'status-filter',
-          onChange: (_event, value) =>
-            dispatchActiveFilters({
-              type: 'UPDATE_FILTER',
-              property: 'status',
-              value,
-            }),
-          items: composeStatus.map((item) => ({
-            label: item,
-            value: item,
-          })),
-          value: activeFilters?.status?.value || [],
-        },
-      },
-    ],
-  };
-
   return (
     <GeneralTable
-      clearFilters={() =>
-        dispatchActiveFilters({
-          type: 'DELETE_FILTER',
-          payload: defaultFilters,
-        })
-      }
+      apiFilterSort={true}
+      filters={defaultFilters}
+      loadTableData={loadEdgeImages}
       tableData={{ count, data, isLoading, hasError }}
       columnNames={columnNames}
-      createRows={createRows}
+      rows={data ? createRows(data) : []}
       emptyStateMessage="No images found"
       emptyStateActionMessage="Create new image"
       emptyStateAction={openCreateWizard}
-      defaultSort={{ index: 4, direction: 'desc' }}
-      loadTableData={loadEdgeImages}
-      filters={
-        isEmptyFilters(activeFilters)
-          ? constructActiveFilters(activeFilters)
-          : []
-      }
-      filterDep={Object.values(activeFilters)}
       actionResolver={actionResolver}
       areActionsDisabled={areActionsDisabled}
-      filterConfig={filterConfig}
-      activeFilters={activeFilters}
-      dispatchActiveFilters={dispatchActiveFilters}
-      defaultFilters={defaultFilters}
-      perPage={100}
+      defaultSort={{ index: 4, direction: 'desc' }}
+      toolbarButtons={[
+        {
+          title: 'Create new image',
+          click: () => openCreateWizard(),
+        },
+      ]}
     />
   );
 };
