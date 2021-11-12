@@ -19,6 +19,35 @@ import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
 import { transformSort } from '../../Routes/ImageManager/constants';
 
+const filterParams = (chipsArray) => {
+  const filterParamsObj =
+    chipsArray.length > 0
+      ? chipsArray.reduce((acc, filter) => {
+          if (acc[filter.key.toLowerCase()]) {
+            const returnAcc =
+              typeof acc[filter.key.toLowerCase()] === 'string'
+                ? [acc[filter.key.toLowerCase()]]
+                : [...acc[filter.key.toLowerCase()]];
+            return {
+              ...acc,
+              [filter.key.toLowerCase()]: [
+                ...returnAcc,
+                filter.apiName ? filter.apiName : filter.label,
+              ],
+            };
+          } else {
+            return {
+              ...acc,
+              [filter.key.toLowerCase()]: filter.apiName
+                ? filter.apiName
+                : filter.label,
+            };
+          }
+        }, {})
+      : {};
+  return filterParamsObj;
+};
+
 const GeneralTable = ({
   apiFilterSort,
   filters,
@@ -40,35 +69,6 @@ const GeneralTable = ({
   const [perPage, setPerPage] = useState(20);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
-
-  const filterParams = (chipsArray) => {
-    const filterParamsObj =
-      chipsArray.length > 0
-        ? chipsArray.reduce((acc, filter) => {
-            if (acc[filter.key.toLowerCase()]) {
-              const returnAcc =
-                typeof acc[filter.key.toLowerCase()] === 'string'
-                  ? [acc[filter.key.toLowerCase()]]
-                  : [...acc[filter.key.toLowerCase()]];
-              return {
-                ...acc,
-                [filter.key.toLowerCase()]: [
-                  ...returnAcc,
-                  filter.apiName ? filter.apiName : filter.label,
-                ],
-              };
-            } else {
-              return {
-                ...acc,
-                [filter.key.toLowerCase()]: filter.apiName
-                  ? filter.apiName
-                  : filter.label,
-              };
-            }
-          }, {})
-        : {};
-    return filterParamsObj;
-  };
 
   useEffect(() => {
     apiFilterSort
@@ -96,6 +96,8 @@ const GeneralTable = ({
     });
   };
 
+  const filteredByNameRows = !apiFilterSort && filteredByName()
+
   //non-api sort function
   const sortedByDirection = (rows) =>
     rows.sort((a, b) =>
@@ -105,7 +107,7 @@ const GeneralTable = ({
     );
 
   const nonApiCount = !apiFilterSort
-    ? sortedByDirection(filteredByName()).length
+    ? sortedByDirection(filteredByNameRows).length
     : 0;
 
   const handleSort = (_event, index, direction) => {
@@ -123,7 +125,7 @@ const GeneralTable = ({
 
   const filteredRows = apiFilterSort
     ? rows
-    : sortedByDirection(filteredByName()).slice(
+    : sortedByDirection(filteredByNameRows).slice(
         (page - 1) * perPage,
         (page - 1) * perPage + perPage
       );
