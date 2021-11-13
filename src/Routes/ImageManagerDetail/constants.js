@@ -39,10 +39,12 @@ export const imageStatusMapper = {
 
 export const distributionMapper = {
   'rhel-84': 'RHEL 8.4',
+  'rhel-85': 'RHEL 8.5',
 };
 
 export const releaseMapper = {
   'rhel-84': 'Red Hat Enterprise Linux (RHEL) 8.4',
+  'rhel-85': 'Red Hat Enterprise Linux (RHEL) 8.5',
 };
 
 export const imageTypeMapper = {
