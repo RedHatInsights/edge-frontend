@@ -166,6 +166,7 @@ const GeneralTable = ({
       />
       {!isLoading && !count > 0 ? (
         <CustomEmptyState
+          data-testid="general-table-empty-state-no-data"
           bgColor="white"
           icon="search"
           title={emptyStateMessage}
@@ -178,6 +179,7 @@ const GeneralTable = ({
         />
       ) : !isLoading && !filteredRows.length > 0 ? (
         <CustomEmptyState
+          data-testid="general-table-empty-state-no-match"
           bgColor="white"
           icon="search"
           title="No match found"
@@ -190,6 +192,7 @@ const GeneralTable = ({
         />
       ) : (
         <Table
+          data-testid="general-table-testid"
           variant="compact"
           aria-label="Manage Images table"
           sortBy={sortBy}
@@ -218,12 +221,12 @@ const GeneralTable = ({
 
 GeneralTable.propTypes = {
   apiFilterSort: PropTypes.bool,
-  filters: PropTypes.func,
+  filters: PropTypes.array,
   loadTableData: PropTypes.func,
-  tableData: PropTypes.array,
+  tableData: PropTypes.object,
   columnNames: PropTypes.array,
   rows: PropTypes.array,
-  actionResolver: PropTypes.array,
+  actionResolver: PropTypes.func,
   areActionsDisabled: PropTypes.func,
   defaultSort: PropTypes.object,
   toolbarButtons: PropTypes.array,

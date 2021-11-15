@@ -47,14 +47,14 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
 
   if (selectedFilter.type === 'text') {
     return (
-      <ToolbarItem>
+      <ToolbarItem data-testid="filter-input-testid">
         <InputGroup>
           <SearchInput
             name="textInput1"
             id="textInput1"
             type="search"
-            aria-label="search input example"
-            placeholder="Filter by name"
+            aria-label={`Select input for ${selectedFilter.label}`}
+            placeholder={`Filter by ${selectedFilter.label}`}
             onChange={debounce(handleFilterChange(), 400)}
             value={filterValues.find((filter) => filter.type === 'text').value}
           />
@@ -65,7 +65,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
 
   if (selectedFilter.type === 'checkbox') {
     return (
-      <ToolbarItem>
+      <ToolbarItem data-testid="filter-input-testid">
         <InputGroup>
           <Select
             variant="checkbox"
@@ -95,7 +95,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
 };
 
 FilterInput.propTypes = {
-  filterValues: PropTypes.object,
+  filterValues: PropTypes.array,
   setFilterValues: PropTypes.func,
   input: PropTypes.string,
 };

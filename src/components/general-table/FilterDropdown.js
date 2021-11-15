@@ -21,7 +21,7 @@ const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
   return (
     <>
       {filters.length > 1 ? (
-        <ToolbarItem>
+        <ToolbarItem data-testid="filter-dropdown-testid">
           <Select
             variant="single"
             aria-label="Select input for filters"
@@ -43,7 +43,7 @@ const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
 };
 
 FilterDropdown.propTypes = {
-  filters: PropTypes.object,
+  filters: PropTypes.array,
   dropdown: PropTypes.object,
   setDropdown: PropTypes.func,
 };

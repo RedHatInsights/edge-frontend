@@ -132,7 +132,12 @@ const FilterChips = ({
     <>
       {chipsArray.length > 0
         ? Object.entries(groupBy(chipsArray, 'key')).map(([key, value]) => (
-            <ChipGroup className="pf-u-mr-xs" categoryName={key} key={key}>
+            <ChipGroup
+              data-testid="filter-chip"
+              className="pf-u-mr-xs"
+              categoryName={key}
+              key={key}
+            >
               {value.map((filter) => (
                 <Chip onClick={() => handleDeleteFilter(filter)} key={key}>
                   {filter.label}
@@ -151,7 +156,7 @@ const FilterChips = ({
 };
 
 FilterChips.propTypes = {
-  filterValues: PropTypes.object,
+  filterValues: PropTypes.array,
   setFilterValues: PropTypes.func,
   chipsArray: PropTypes.array,
   setChipsArray: PropTypes.func,
