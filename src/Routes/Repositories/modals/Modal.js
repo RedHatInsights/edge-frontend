@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 const RepoModal = ({
   isOpen,
   title,
-  toggle,
+  openModal,
   submitLabel,
   schema,
   initialValues,
@@ -17,7 +17,7 @@ const RepoModal = ({
   onSubmit,
 }) => {
   return (
-    <Modal variant="small" title={title} isOpen={isOpen} onClose={toggle}>
+    <Modal variant="small" title={title} isOpen={isOpen} onClose={openModal}>
       <FormRenderer
         schema={schema}
         FormTemplate={(props) => (
@@ -34,10 +34,10 @@ const RepoModal = ({
         componentMapper={componentMapper}
         onSubmit={async (values) => {
           await onSubmit(values);
-          toggle();
+          openModal();
           reloadData();
         }}
-        onCancel={() => toggle()}
+        onCancel={() => openModal()}
       />
     </Modal>
   );
@@ -46,7 +46,7 @@ const RepoModal = ({
 RepoModal.propTypes = {
   isOpen: PropTypes.bool,
   title: PropTypes.string,
-  toggle: PropTypes.func,
+  openModal: PropTypes.func,
   reloadData: PropTypes.func,
   submitLabel: PropTypes.string,
   schema: PropTypes.object,

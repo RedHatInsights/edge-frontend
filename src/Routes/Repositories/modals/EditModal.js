@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { editCustomRepository } from '../../../api/index';
 
-const EditModal = ({ toggle, isOpen, id, name, baseURL, reloadData }) => {
+const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
   const editSchema = {
     fields: [
       {
@@ -48,7 +48,7 @@ const EditModal = ({ toggle, isOpen, id, name, baseURL, reloadData }) => {
     <Modal
       title="Edit Repository"
       isOpen={isOpen}
-      toggle={() => toggle({ type: 'edit' })}
+      openModal={() => openModal({ type: 'edit' })}
       submitLabel="Update"
       schema={editSchema}
       initialValues={{ id, name, baseURL }}
@@ -59,7 +59,7 @@ const EditModal = ({ toggle, isOpen, id, name, baseURL, reloadData }) => {
 };
 
 EditModal.propTypes = {
-  toggle: PropTypes.func,
+  openModal: PropTypes.func,
   reloadData: PropTypes.func,
   isOpen: PropTypes.boo,
   id: PropTypes.number,
