@@ -26,8 +26,8 @@ const FilterControls = ({ filters, filterValues, setFilterValues }) => {
 };
 
 FilterControls.propTypes = {
-  filters: PropTypes.object,
-  filterValues: PropTypes.object,
+  filters: PropTypes.array,
+  filterValues: PropTypes.array,
   setFilterValues: PropTypes.func,
 };
 

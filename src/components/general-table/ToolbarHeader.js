@@ -39,7 +39,7 @@ const ToolbarHeader = ({
   setPage,
 }) => {
   return (
-    <Toolbar id="toolbar">
+    <Toolbar id="toolbar" data-testid="toolbar-header-testid">
       <ToolbarContent>
         <FilterControls
           filters={filters}
@@ -52,6 +52,7 @@ const ToolbarHeader = ({
             <Skeleton size={SkeletonSize.xs} />
           ) : (
             <Pagination
+              data-testid="pagination-header-test-id"
               itemCount={count}
               perPage={perPage}
               page={page}
@@ -78,7 +79,7 @@ const ToolbarHeader = ({
 };
 
 ToolbarHeader.propTypes = {
-  filters: PropTypes.func,
+  filters: PropTypes.array,
   toolbarButtons: PropTypes.array,
   setFilterValues: PropTypes.func,
   filterValues: PropTypes.array,

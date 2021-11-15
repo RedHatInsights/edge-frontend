@@ -13,6 +13,7 @@ const ToolbarFooter = ({ count, perPage, setPerPage, page, setPage }) => {
       <ToolbarContent>
         <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
           <Pagination
+            data-testid="pagination-footer-test-id"
             itemCount={count}
             perPage={perPage}
             page={page}
