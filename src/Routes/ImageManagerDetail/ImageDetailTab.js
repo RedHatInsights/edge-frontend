@@ -57,7 +57,7 @@ const ImageDetailTab = () => {
     <TextContent className="pf-u-ml-lg pf-u-mt-md">
       <Flex>
         <FlexItem flex={{ default: 'flex_1' }}>
-          <Text component={TextVariants.h3}>Most recent imag </Text>
+          <Text component={TextVariants.h3}>Most recent image</Text>
           <TextList component={TextListVariants.dl}>
             {data
               ? Object.entries(labelsToValueMapperLeftTop).map(
