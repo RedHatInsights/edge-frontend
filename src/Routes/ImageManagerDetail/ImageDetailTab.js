@@ -16,7 +16,9 @@ import { distributionMapper } from './constants';
 
 const ImageDetailTab = () => {
   const { data } = useSelector(
-    ({ imageDetailReducer }) => ({ data: imageDetailReducer?.data || null }),
+    ({ imageSetDetailReducer }) => ({
+      data: imageSetDetailReducer?.data || null,
+    }),
     shallowEqual
   );
 
@@ -31,8 +33,8 @@ const ImageDetailTab = () => {
   };
 
   const labelsToValueMapperLeftBottom = {
-    Username: 'andarberkwine',
-    'SSH Key': 'SSH-RSA asnauidnsdfoigdfgntohi hnoihtoirhrdngdion',
+    Username: data?.Images[data.Images.length - 1].Installer.Username,
+    'SSH Key': data?.Images[data.Images.length - 1].Installer.SshKey,
   };
 
   const labelsToValueMapperRightTop = {
@@ -55,7 +57,7 @@ const ImageDetailTab = () => {
     <TextContent className="pf-u-ml-lg pf-u-mt-md">
       <Flex>
         <FlexItem flex={{ default: 'flex_1' }}>
-          <Text component={TextVariants.h3}>Most recent imag </Text>
+          <Text component={TextVariants.h3}>Most recent image</Text>
           <TextList component={TextListVariants.dl}>
             {data
               ? Object.entries(labelsToValueMapperLeftTop).map(

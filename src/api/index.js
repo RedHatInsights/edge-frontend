@@ -42,6 +42,33 @@ const rowGroupDetailCreator = (uuid, version, status) => {
   };
 };
 
+const getTableParams = (q) => {
+  const query = Object.keys(q).reduce((acc, curr) => {
+    let value = undefined;
+    if (
+      typeof q[curr] === 'object' &&
+      typeof q[curr].length === 'number' &&
+      q[curr].length > 0
+    ) {
+      value = q[curr].reduce(
+        (multiVals, val) =>
+          multiVals === '' ? `${curr}=${val}` : `${multiVals}&${curr}=${val}`,
+        ''
+      );
+    }
+    if (['string', 'number'].includes(typeof q[curr]) && q[curr] !== '') {
+      value = `${curr}=${q[curr]}`;
+    }
+    return value === undefined
+      ? acc
+      : acc === ''
+      ? `${value}`
+      : `${acc}&${value}`;
+  }, '');
+
+  return query;
+};
+
 const groups = [];
 
 export const fetchGroups = ({ perPage, page }) => {
@@ -323,30 +350,19 @@ export const fetchEdgeImages = (
     sort_by: '-created_at',
   }
 ) => {
-  const query = Object.keys(q).reduce((acc, curr) => {
-    let value = undefined;
-    if (
-      typeof q[curr] === 'object' &&
-      typeof q[curr].length === 'number' &&
-      q[curr].length > 0
-    ) {
-      value = q[curr].reduce(
-        (multiVals, val) =>
-          multiVals === '' ? `${curr}=${val}` : `${multiVals}&${curr}=${val}`,
-        ''
-      );
-    }
-    if (['string', 'number'].includes(typeof q[curr]) && q[curr] !== '') {
-      value = `${curr}=${q[curr]}`;
-    }
-    return value === undefined
-      ? acc
-      : acc === ''
-      ? `${value}`
-      : `${acc}&${value}`;
-  }, '');
-
+  const query = getTableParams(q);
   return instance.get(`${EDGE_API}/images?${query}`);
+};
+
+export const fetchEdgeImageSets = (
+  q = {
+    limit: 100,
+    offset: 0,
+    sort_by: 'updated_at',
+  }
+) => {
+  const query = getTableParams(q);
+  return instance.get(`${EDGE_API}/image-sets?${query}`);
 };
 
 export const getEdgeImageStatus = (id) => {

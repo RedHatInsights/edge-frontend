@@ -1,6 +1,7 @@
 export { default as deviceSummaryReducer } from './deviceSummary';
 export { default as imagesReducer } from './images';
 export { default as edgeImagesReducer } from './edgeImages';
+export { default as edgeImageSetsReducer } from './edgeImageSets';
 export { default as imageStatusReducer } from './imageStatus';
 export { default as imageDetailReducer } from './imageDetail';
 export { default as imageSetDetailReducer } from './imageSetDetail';

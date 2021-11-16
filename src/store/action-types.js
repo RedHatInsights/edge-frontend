@@ -4,6 +4,7 @@ import flatMap from 'lodash/flatMap';
 export const LOAD_DEVICE_SUMMARY = 'LOAD_DEVICE_SUMMARY';
 export const LOAD_ACTIVE_IMAGES = 'LOAD_ACTIVE_IMAGES';
 export const LOAD_EDGE_IMAGES = 'LOAD_EDGE_IMAGES';
+export const LOAD_EDGE_IMAGE_SETS = 'LOAD_EDGE_IMAGE_SETS';
 export const LOAD_GROUPS = 'LOAD_GROUPS';
 export const LOAD_GROUP_DETAIL = 'LOAD_GROUP_DETAIL';
 export const LOAD_TRESHOLD = 'LOAD_TRESHOLD';
@@ -20,6 +21,7 @@ export const POLLING_IMAGES = 'POLLING_IMAGES';
 const asyncActions = flatMap(
   [
     LOAD_EDGE_IMAGES,
+    LOAD_EDGE_IMAGE_SETS,
     LOAD_ACTIVE_IMAGES,
     LOAD_GROUPS,
     LOAD_GROUP_DETAIL,
