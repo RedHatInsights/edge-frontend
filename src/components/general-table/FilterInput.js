@@ -55,7 +55,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
             type="search"
             aria-label={`Select input for ${selectedFilter.label}`}
             placeholder={`Filter by ${selectedFilter.label}`}
-            onChange={debounce(handleFilterChange(), 400)}
+            onChange={debounce(handleFilterChange(), 500)}
             value={filterValues.find((filter) => filter.type === 'text').value}
           />
         </InputGroup>
