@@ -16,8 +16,8 @@ import {
 } from '@patternfly/react-core';
 import { useDispatch } from 'react-redux';
 import { RegistryContext } from '../../store';
-import { loadImageDetail } from '../../store/actions';
-import { imageDetailReducer } from '../../store/reducers';
+import { loadImageSetDetail } from '../../store/actions';
+import { imageSetDetailReducer } from '../../store/reducers';
 import { useHistory } from 'react-router-dom';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
@@ -38,7 +38,9 @@ const ImageDetail = () => {
   const [imageData, setImageData] = useState({});
 
   const { data } = useSelector(
-    ({ imageDetailReducer }) => ({ data: imageDetailReducer?.data || null }),
+    ({ imageSetDetailReducer }) => ({
+      data: imageSetDetailReducer?.data || null,
+    }),
     shallowEqual
   );
 
@@ -48,9 +50,9 @@ const ImageDetail = () => {
 
   useEffect(() => {
     const registered = getRegistry().register({
-      imageDetailReducer,
+      imageSetDetailReducer,
     });
-    loadImageDetail(dispatch, imageId);
+    loadImageSetDetail(dispatch, imageId);
     return () => registered();
   }, [dispatch]);
 

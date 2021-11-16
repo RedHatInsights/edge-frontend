@@ -51,7 +51,7 @@ const createRows = (data) => {
     ],
     imageStatus: Images[Images.length - 1].Status,
     //isoURL: ,
-    latestImageID: Images[Images.length - 1].ID
+    latestImageID: Images[Images.length - 1].ID,
   }));
 };
 
