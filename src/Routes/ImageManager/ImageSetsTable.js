@@ -50,7 +50,8 @@ const createRows = (data) => {
       },
     ],
     imageStatus: Images[Images.length - 1].Status,
-    isoURL: Images[Images.length - 1].Version,
+    //isoURL: ,
+    latestImageID: Images[Images.length - 1].ID
   }));
 };
 
@@ -90,7 +91,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       actionsArray.push({
         title: 'Update Image',
         onClick: (_event, _rowId, rowData) => {
-          openUpdateWizard(rowData.id);
+          openUpdateWizard(rowData.latestImageID);
         },
       });
     }
