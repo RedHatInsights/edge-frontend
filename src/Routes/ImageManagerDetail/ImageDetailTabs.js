@@ -17,7 +17,7 @@ const ImageDetailTabs = () => {
         <Tab eventKey={0} title={<TabTitleText>Details</TabTitleText>}>
           <ImageDetailTab />
         </Tab>
-        <Tab eventKey={1} title={<TabTitleText>Packages</TabTitleText>}>
+        <Tab eventKey={1} title={<TabTitleText>Versions</TabTitleText>}>
           <ImagePackagesTab />
         </Tab>
       </Tabs>

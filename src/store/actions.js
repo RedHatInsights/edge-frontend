@@ -14,6 +14,7 @@ import {
   LOAD_DEVICE_SUMMARY,
   LOAD_IMAGE_STATUS,
   LOAD_IMAGE_DETAIL,
+  LOAD_IMAGE_SET_DETAIL,
   CREATE_NEW_IMAGE,
   POLLING_IMAGES,
 } from './action-types';
@@ -31,6 +32,7 @@ import {
   fetchEdgeImages,
   fetchEdgeImageSets,
   createImage,
+  getImageSet,
 } from '../api';
 
 export const loadGroups = (perPage = 50, page = 1) => ({
@@ -182,4 +184,11 @@ export const removeImagesToPoll = (ids) => {
     type: `${POLLING_IMAGES}_REMOVE`,
     ids,
   };
+};
+
+export const loadImageSetDetail = (dispatch, imageSetId) => {
+  dispatch({
+    type: LOAD_IMAGE_SET_DETAIL,
+    payload: getImageSet({ id: imageSetId }),
+  }).catch(() => null);
 };

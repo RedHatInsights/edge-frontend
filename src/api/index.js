@@ -404,6 +404,14 @@ export const createCustomRepository = (payload) => {
   });
 };
 
+export const getImageSet = ({ id }) => {
+  try {
+    return instance.get(`${EDGE_API}/image-sets/${id}`);
+  } catch (err) {
+    // temp error solution
+    console.log('');
+  }
+};
 export const editCustomRepository = (payload) => {
   return instance.put(`${EDGE_API}/thirdpartyrepo/${payload.id}`, {
     Name: payload.name,
