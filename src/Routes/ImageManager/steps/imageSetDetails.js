@@ -1,10 +1,11 @@
 import React from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-import { Text } from '@patternfly/react-core';
+import { Flex, FlexItem, Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { checkImageName } from '../../../api';
+import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 const helperText =
-  'Can only contain letters, numbers, hyphens(-), and underscores(_).';
+  'Can only contain letters, numbers, spaces, hyphens(-), and underscores(_).';
 
 const asyncImageNameValidation = (value) =>
   checkImageName(value)
@@ -16,6 +17,12 @@ const asyncImageNameValidation = (value) =>
     .catch(({ message }) => {
       throw message;
     });
+
+const CharacterCount = () => {
+  const { getState } = useFormApi();
+  const description = getState().values?.description;
+  return <h1>{description?.length || 0}/250</h1>;
+};
 
 export default {
   title: 'Details',
@@ -51,8 +58,20 @@ export default {
     },
     {
       component: componentTypes.TEXTAREA,
+      style: {
+        paddingRight: '32px',
+      },
       name: 'description',
-      label: 'Description',
+      label: (
+        <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
+          <FlexItem>
+            <Text component={'b'}>Description</Text>
+          </FlexItem>
+          <FlexItem>
+            <CharacterCount />
+          </FlexItem>
+        </Flex>
+      ),
       placeholder: 'Add description',
 
       resizeOrientation: 'vertical',

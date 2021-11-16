@@ -3,8 +3,9 @@ import Modal from './Modal';
 import { HelperText, HelperTextItem } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
+import { editCustomRepository } from '../../../api/index';
 
-const EditModal = ({ toggle, isOpen, id, name, baseURL, reloadData }) => {
+const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
   const editSchema = {
     fields: [
       {
@@ -18,7 +19,7 @@ const EditModal = ({ toggle, isOpen, id, name, baseURL, reloadData }) => {
         label: 'Name',
         placeholder: 'Repository name',
         helperText:
-          'Can only contain letters, numbers, spaces, hypthon ( - ), and underscores( _ ).',
+          'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
         isRequired: true,
         validate: [{ type: validatorTypes.REQUIRED }],
       },
@@ -47,18 +48,18 @@ const EditModal = ({ toggle, isOpen, id, name, baseURL, reloadData }) => {
     <Modal
       title="Edit Repository"
       isOpen={isOpen}
-      toggle={() => toggle({ type: 'edit' })}
+      openModal={() => openModal({ type: 'edit' })}
       submitLabel="Update"
       schema={editSchema}
       initialValues={{ id, name, baseURL }}
-      onSubmit={console.log}
+      onSubmit={(values) => editCustomRepository(values)}
       reloadData={reloadData}
     />
   );
 };
 
 EditModal.propTypes = {
-  toggle: PropTypes.func,
+  openModal: PropTypes.func,
   reloadData: PropTypes.func,
   isOpen: PropTypes.boo,
   id: PropTypes.number,
