@@ -39,7 +39,10 @@ const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
         ),
 
         isRequired: true,
-        validate: [{ type: validatorTypes.REQUIRED }],
+        validate: [
+          { type: validatorTypes.REQUIRED },
+          { type: validatorTypes.URL, message: 'Must be a valid url' },
+        ],
       },
     ],
   };

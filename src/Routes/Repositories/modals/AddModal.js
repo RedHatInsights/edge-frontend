@@ -30,7 +30,10 @@ const AddModal = ({ isOpen, openModal, reloadData }) => {
         placeholder: 'https://',
         helperText: 'Enter the baseURL for the custom repository.',
         isRequired: true,
-        validate: [{ type: validatorTypes.REQUIRED }],
+        validate: [
+          { type: validatorTypes.REQUIRED },
+          { type: validatorTypes.URL, message: 'Must be a valid url' },
+        ],
       },
     ],
   };
