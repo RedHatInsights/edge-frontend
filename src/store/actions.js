@@ -10,6 +10,7 @@ import {
   CLEAN_ENTITIES,
   LOAD_ACTIVE_IMAGES,
   LOAD_EDGE_IMAGES,
+  LOAD_EDGE_IMAGE_SETS,
   LOAD_DEVICE_SUMMARY,
   LOAD_IMAGE_STATUS,
   LOAD_IMAGE_DETAIL,
@@ -28,6 +29,7 @@ import {
   fetchImageStatus,
   fetchImage,
   fetchEdgeImages,
+  fetchEdgeImageSets,
   createImage,
 } from '../api';
 
@@ -146,6 +148,13 @@ export const loadEdgeImages = (dispatch, query) => {
   dispatch({
     type: LOAD_EDGE_IMAGES,
     payload: fetchEdgeImages(query),
+  }).catch(() => null);
+};
+
+export const loadEdgeImageSets = (dispatch, query) => {
+  dispatch({
+    type: LOAD_EDGE_IMAGE_SETS,
+    payload: fetchEdgeImageSets(query),
   }).catch(() => null);
 };
 
