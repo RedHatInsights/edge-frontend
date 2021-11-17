@@ -138,6 +138,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         credentials: data?.Installer.SshKey,
         username: data?.Installer.Username,
         version: data?.Version,
+        release: data?.Distribution,
         imageType: ['rhel-edge-commit'],
         'selected-packages': data?.Packages.map((pkg) => ({
           ...pkg,
