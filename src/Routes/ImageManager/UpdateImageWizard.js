@@ -107,6 +107,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
                           description: `${resp.value.Name} image build is completed unsuccessfully`,
                         })
                       ),
+                    (dispatch) => loadEdgeImages(dispatch),
                   ],
                   success: [
                     (dispatch) =>
@@ -138,6 +139,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         credentials: data?.Installer.SshKey,
         username: data?.Installer.Username,
         version: data?.Version,
+        release: data?.Distribution,
         imageType: ['rhel-edge-commit'],
         'selected-packages': data?.Packages.map((pkg) => ({
           ...pkg,

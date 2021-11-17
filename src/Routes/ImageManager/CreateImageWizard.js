@@ -74,6 +74,7 @@ const CreateImage = ({ navigateBack }) => {
                           description: `${resp.value.Name} image build is completed unsuccessfully`,
                         })
                       ),
+                    (dispatch) => loadEdgeImages(dispatch),
                   ],
                   success: [
                     (dispatch) =>
