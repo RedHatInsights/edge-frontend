@@ -7,16 +7,14 @@ import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 const helperText =
   'Can only contain letters, numbers, spaces, hyphens(-), and underscores(_).';
 
-const asyncImageNameValidation = (value) =>
-  checkImageName(value)
-    .then((result) => {
-      if (result.ImageExists) {
-        throw new Error('Name already exists');
-      }
-    })
-    .catch(({ message }) => {
-      throw message;
-    });
+  const asyncImageNameValidation = async (value) => {
+    const checkName = await checkImageName(value)
+    if (checkName.ImageExists) {
+      throw ('Name already exists');
+    } else {
+      return true
+    }
+  }
 
 const CharacterCount = () => {
   const { getState } = useFormApi();
