@@ -71,6 +71,7 @@ const GeneralTable = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log(rows)
     apiFilterSort
       ? loadTableData(dispatch, {
           ...filterParams(chipsArray),

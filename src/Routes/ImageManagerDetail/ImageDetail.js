@@ -16,8 +16,8 @@ import {
 } from '@patternfly/react-core';
 import { useDispatch } from 'react-redux';
 import { RegistryContext } from '../../store';
-import { loadImageSetDetail } from '../../store/actions';
-import { imageSetDetailReducer } from '../../store/reducers';
+import { loadImageDetail } from '../../store/actions';
+import { imageDetailReducer } from '../../store/reducers';
 import { useHistory } from 'react-router-dom';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
@@ -37,22 +37,22 @@ const ImageDetail = () => {
   const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState(false);
   const [imageData, setImageData] = useState({});
 
-  const { data } = useSelector(
+  const { data, count, isLoading, hasError } = useSelector(
     ({ imageSetDetailReducer }) => ({
-      data: imageSetDetailReducer?.data || null,
+      data: imageSetDetailReducer?.data?.Data || null,
+      count: imageSetDetailReducer?.Count,
+      isLoading: imageSetDetailReducer?.isLoading,
+      hasError: imageSetDetailReducer?.hasError,
     }),
     shallowEqual
   );
 
   useEffect(() => {
-    setImageData(data);
-  }, [data]);
-
-  useEffect(() => {
+    console.log(imageId)
     const registered = getRegistry().register({
-      imageSetDetailReducer,
+      imageDetailReducer,
     });
-    loadImageSetDetail(dispatch, imageId);
+    loadImageDetail(dispatch, imageId);
     return () => registered();
   }, [dispatch]);
 
@@ -72,7 +72,7 @@ const ImageDetail = () => {
         <Stack hasGutter>
           <StackItem>
             <DetailsHead
-              imageData={imageData}
+              imageData={data}
               openUpdateWizard={openUpdateWizard}
             />
           </StackItem>
@@ -81,7 +81,7 @@ const ImageDetail = () => {
           <Text>{data?.Description}</Text>
         </StackItem>
       </PageHeader>
-      <ImageDetailTabs />
+      <ImageDetailTabs imageData={{data, count, isLoading, hasError}} />
       {isUpdateWizardOpen && (
         <Suspense
           fallback={

@@ -51,8 +51,8 @@ const DetailsHead = ({ imageData }) => {
                 {imageData?.Name}
               </TextListItem>
               <TextListItem component="dd">
-                {imageData?.Status ? (
-                  <StatusLabel status={imageData?.Status} />
+                {imageData?.Images?.[imageData?.Images?.length - 1].Status ? (
+                  <StatusLabel status={imageData?.Images[imageData?.Images.length - 1].Status} />
                 ) : (
                   <Skeleton />
                 )}
