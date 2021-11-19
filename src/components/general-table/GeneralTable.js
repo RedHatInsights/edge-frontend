@@ -50,6 +50,7 @@ const filterParams = (chipsArray) => {
 
 const GeneralTable = ({
   apiFilterSort,
+  urlParam,
   filters,
   loadTableData,
   tableData,
@@ -71,9 +72,8 @@ const GeneralTable = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(rows)
-    apiFilterSort
-      ? loadTableData(dispatch, {
+    const query = apiFilterSort
+      ? {
           ...filterParams(chipsArray),
           limit: perPage,
           offset: (page - 1) * perPage,
@@ -81,7 +81,12 @@ const GeneralTable = ({
             direction: sortBy.direction,
             name: columns[sortBy.index].type,
           }),
-        })
+        }
+      : null;
+    apiFilterSort && urlParam
+      ? loadTableData(dispatch, urlParam, query)
+      : apiFilterSort
+      ? loadTableData(dispatch, query)
       : null;
   }, [chipsArray, perPage, page, sortBy]);
 
@@ -223,6 +228,7 @@ const GeneralTable = ({
 GeneralTable.propTypes = {
   apiFilterSort: PropTypes.bool,
   filters: PropTypes.array,
+  urlParam: PropTypes.string,
   loadTableData: PropTypes.func,
   tableData: PropTypes.object,
   columnNames: PropTypes.array,

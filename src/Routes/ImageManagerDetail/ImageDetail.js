@@ -16,8 +16,8 @@ import {
 } from '@patternfly/react-core';
 import { useDispatch } from 'react-redux';
 import { RegistryContext } from '../../store';
-import { loadImageDetail } from '../../store/actions';
-import { imageDetailReducer } from '../../store/reducers';
+import { loadImageSetDetail } from '../../store/actions';
+import { imageSetDetailReducer } from '../../store/reducers';
 import { useHistory } from 'react-router-dom';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
@@ -34,13 +34,15 @@ const ImageDetail = () => {
   const { getRegistry } = useContext(RegistryContext);
   const dispatch = useDispatch();
   const history = useHistory();
-  const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState(false);
+  const [updateWizard, setUpdateWizard] = useState({
+    isOpen: false,
+    updateId: null,
+  });
   const [imageData, setImageData] = useState({});
 
-  const { data, count, isLoading, hasError } = useSelector(
+  const data = useSelector(
     ({ imageSetDetailReducer }) => ({
       data: imageSetDetailReducer?.data?.Data || null,
-      count: imageSetDetailReducer?.Count,
       isLoading: imageSetDetailReducer?.isLoading,
       hasError: imageSetDetailReducer?.hasError,
     }),
@@ -48,22 +50,29 @@ const ImageDetail = () => {
   );
 
   useEffect(() => {
-    console.log(imageId)
+    setImageData(data);
+  }, [data]);
+
+  useEffect(() => {
     const registered = getRegistry().register({
-      imageDetailReducer,
+      imageSetDetailReducer,
     });
-    loadImageDetail(dispatch, imageId);
+    loadImageSetDetail(dispatch, imageId);
     return () => registered();
   }, [dispatch]);
 
-  const openUpdateWizard = () => {
+  const openUpdateWizard = (id) => {
     history.push({
       pathname: history.location.pathname,
       search: new URLSearchParams({
         update_image: true,
       }).toString(),
     });
-    setIsUpdateWizardOpen(true);
+    setUpdateWizard((prevState) => ({
+      ...prevState,
+      isOpen: !prevState.isLoading,
+      updateId: id,
+    }));
   };
 
   return (
@@ -72,7 +81,7 @@ const ImageDetail = () => {
         <Stack hasGutter>
           <StackItem>
             <DetailsHead
-              imageData={data}
+              imageData={imageData}
               openUpdateWizard={openUpdateWizard}
             />
           </StackItem>
@@ -81,8 +90,12 @@ const ImageDetail = () => {
           <Text>{data?.Description}</Text>
         </StackItem>
       </PageHeader>
-      <ImageDetailTabs imageData={{data, count, isLoading, hasError}} />
-      {isUpdateWizardOpen && (
+      <ImageDetailTabs
+        imageData={imageData}
+        urlParam={imageId}
+        openUpdateWizard={openUpdateWizard}
+      />
+      {updateWizard.isOpen && (
         <Suspense
           fallback={
             <Bullseye>
@@ -93,9 +106,9 @@ const ImageDetail = () => {
           <UpdateImageWizard
             navigateBack={() => {
               history.push({ pathname: history.location.pathname });
-              setIsUpdateWizardOpen(false);
+              setUpdateWizard((prevState) => ({ ...prevState, isOpen: false }));
             }}
-            updateImageID={data?.ID}
+            updateImageID={updateWizard.updateId}
           />
         </Suspense>
       )}
