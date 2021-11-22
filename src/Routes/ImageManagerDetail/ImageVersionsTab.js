@@ -32,6 +32,12 @@ const columnNames = [
 const createRows = (data) => {
   return data.Images.map((image) => ({
     id: image.ID,
+    noApiSortFilter: [
+      image?.Version,
+      imageTypeMapper[image?.ImageType],
+      image?.CreatedAt,
+      image?.Status,
+    ],
     cells: [
       {
         title: (
@@ -55,7 +61,7 @@ const createRows = (data) => {
   }));
 };
 
-const ImageVersionsTab = ({ imageData, urlParam, openUpdateWizard }) => {
+const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
   const actionResolver = (rowData) => {
     const actionsArray = [];
     if (rowData?.isoURL) {
@@ -96,8 +102,8 @@ const ImageVersionsTab = ({ imageData, urlParam, openUpdateWizard }) => {
 
   return (
     <GeneralTable
-      apiFilterSort={true}
-      urlParam={urlParam}
+      apiFilterSort={false}
+      //urlParam={urlParam}
       filters={defaultFilters}
       loadTableData={loadImageSetDetail}
       tableData={{

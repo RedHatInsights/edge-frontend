@@ -35,8 +35,7 @@ const RepositoryTable = ({ data, openModal }) => {
   const buildRows = data.map(({ id, name, baseURL }) => {
     return {
       id: id,
-      rowName: name,
-      baseURL: baseURL,
+      noApiSortFilter: [name, baseURL],
       cells: [
         {
           title: (

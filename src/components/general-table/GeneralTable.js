@@ -94,12 +94,36 @@ const GeneralTable = ({
 
   //Used for repos until the api can sort and filter
   const filteredByName = () => {
-    const repoFilter = filterValues.find((filter) => filter?.label === 'Name');
-    return rows.filter((repo) => {
-      return repoFilter
-        ? repo.rowName.toLowerCase().includes(repoFilter.value.toLowerCase())
-        : repo;
+    const activeFilters = filterValues.filter(
+      (filter) =>
+        (filter?.type === 'text' && filter?.value !== '') ||
+        (filter?.type === 'checkbox' &&
+          filter?.value.find((checked) => checked.isChecked))
+    );
+    const filteredArray = rows.filter((row) => {
+      if (activeFilters.length > 0) {
+        return activeFilters?.every((filter) => {
+          if (filter.type === 'text') {
+            return row.noApiSortFilter[
+              columnNames.findIndex((row) => row.title === filter.label)
+            ]
+              .toLowerCase()
+              .includes(filter.value.toLowerCase());
+          } else if (filter.type === 'checkbox') {
+            return filter.value.some(
+              (value) =>
+                value.isChecked &&
+                row.noApiSortFilter[
+                  columnNames.findIndex((row) => row.title === filter.label)
+                ].toLowerCase() === value.option.toLowerCase()
+            );
+          }
+        });
+      } else {
+        return row;
+      }
     });
+    return filteredArray;
   };
 
   const filteredByNameRows = !apiFilterSort && filteredByName();
@@ -107,13 +131,25 @@ const GeneralTable = ({
   //non-api sort function
   const sortedByDirection = (rows) =>
     rows.sort((a, b) =>
-      sortBy.direction === 'asc'
-        ? a.rowName.toLowerCase().localeCompare(b.rowName.toLowerCase())
-        : b.rowName.toLowerCase().localeCompare(a.rowName.toLowerCase())
+      typeof a?.noApiSortFilter[sortBy.index] === 'number'
+        ? sortBy.direction === 'asc'
+          ? a?.noApiSortFilter[sortBy.index] - b?.noApiSortFilter[sortBy.index]
+          : b?.noApiSortFilter[sortBy.index] - a?.noApiSortFilter[sortBy.index]
+        : sortBy.direction === 'asc'
+        ? a?.noApiSortFilter[sortBy.index].localeCompare(
+            b?.noApiSortFilter[sortBy.index],
+            undefined,
+            { sensitivity: 'base' }
+          )
+        : b?.noApiSortFilter[sortBy.index].localeCompare(
+            a?.noApiSortFilter[sortBy.index],
+            undefined,
+            { sensitivity: 'base' }
+          )
     );
 
   const nonApiCount = !apiFilterSort
-    ? sortedByDirection(filteredByNameRows).length
+    ? sortedByDirection(filteredByNameRows)?.length
     : 0;
 
   const handleSort = (_event, index, direction) => {
@@ -131,10 +167,9 @@ const GeneralTable = ({
 
   const filteredRows = apiFilterSort
     ? rows
-    : sortedByDirection(filteredByNameRows).slice(
-        (page - 1) * perPage,
-        (page - 1) * perPage + perPage
-      );
+    : rows.length > 0
+    ? sortedByDirection(filteredByNameRows)
+    : rows;
 
   const loadingRows = [
     {
@@ -183,7 +218,7 @@ const GeneralTable = ({
             },
           ]}
         />
-      ) : !isLoading && !filteredRows.length > 0 ? (
+      ) : !isLoading && !filteredRows?.length > 0 ? (
         <CustomEmptyState
           data-testid="general-table-empty-state-no-match"
           bgColor="white"
