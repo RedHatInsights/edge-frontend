@@ -64,17 +64,9 @@ const ImageInformationCard = () => {
             <Skeleton size={SkeletonSize.sm} />
           ) : imageData?.UpdatesAvailable ? (
             <Link
-              to={`${paths['manage-images']}/${
-                imageData?.UpdatesAvailable[
-                  imageData?.UpdatesAvailable.length - 1
-                ]?.Image?.ID
-              }`}
+              to={`${paths['manage-images']}/${imageData?.UpdatesAvailable[0]?.Image?.ID}`}
             >
-              {
-                imageData?.UpdatesAvailable[
-                  imageData?.UpdatesAvailable.length - 1
-                ]?.Image?.Version
-              }
+              {imageData?.UpdatesAvailable[0]?.Image?.Version}
             </Link>
           ) : hasError ? (
             'unavailable'
