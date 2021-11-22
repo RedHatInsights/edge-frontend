@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Tabs, Tab, TabTitleText } from '@patternfly/react-core';
 
 import ImageDetailTab from './ImageDetailTab';
-import ImagePackagesTab from './ImagePackagesTab';
+import ImageVersionTab from './ImageVersionsTab';
+import PropTypes from 'prop-types';
 
-const ImageDetailTabs = () => {
+const ImageDetailTabs = ({ imageData, urlParam, openUpdateWizard }) => {
   const [activeTabKey, setActiveTabkey] = useState(0);
   const handleTabClick = (_event, tabIndex) => setActiveTabkey(tabIndex);
   return (
@@ -15,14 +16,24 @@ const ImageDetailTabs = () => {
         onSelect={handleTabClick}
       >
         <Tab eventKey={0} title={<TabTitleText>Details</TabTitleText>}>
-          <ImageDetailTab />
+          <ImageDetailTab imageData={imageData} />
         </Tab>
         <Tab eventKey={1} title={<TabTitleText>Versions</TabTitleText>}>
-          <ImagePackagesTab />
+          <ImageVersionTab
+            imageData={imageData}
+            urlParam={urlParam}
+            openUpdateWizard={openUpdateWizard}
+          />
         </Tab>
       </Tabs>
     </div>
   );
+};
+
+ImageDetailTabs.propTypes = {
+  imageData: PropTypes.object,
+  urlParam: PropTypes.string,
+  openUpdateWizard: PropTypes.func,
 };
 
 export default ImageDetailTabs;

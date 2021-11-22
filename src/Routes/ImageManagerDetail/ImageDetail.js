@@ -34,12 +34,17 @@ const ImageDetail = () => {
   const { getRegistry } = useContext(RegistryContext);
   const dispatch = useDispatch();
   const history = useHistory();
-  const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState(false);
+  const [updateWizard, setUpdateWizard] = useState({
+    isOpen: false,
+    updateId: null,
+  });
   const [imageData, setImageData] = useState({});
 
-  const { data } = useSelector(
+  const data = useSelector(
     ({ imageSetDetailReducer }) => ({
-      data: imageSetDetailReducer?.data || null,
+      data: imageSetDetailReducer?.data?.Data || null,
+      isLoading: imageSetDetailReducer?.isLoading,
+      hasError: imageSetDetailReducer?.hasError,
     }),
     shallowEqual
   );
@@ -56,14 +61,18 @@ const ImageDetail = () => {
     return () => registered();
   }, [dispatch]);
 
-  const openUpdateWizard = () => {
+  const openUpdateWizard = (id) => {
     history.push({
       pathname: history.location.pathname,
       search: new URLSearchParams({
         update_image: true,
       }).toString(),
     });
-    setIsUpdateWizardOpen(true);
+    setUpdateWizard((prevState) => ({
+      ...prevState,
+      isOpen: !prevState.isLoading,
+      updateId: id,
+    }));
   };
 
   return (
@@ -81,8 +90,12 @@ const ImageDetail = () => {
           <Text>{data?.Description}</Text>
         </StackItem>
       </PageHeader>
-      <ImageDetailTabs />
-      {isUpdateWizardOpen && (
+      <ImageDetailTabs
+        imageData={imageData}
+        urlParam={imageId}
+        openUpdateWizard={openUpdateWizard}
+      />
+      {updateWizard.isOpen && (
         <Suspense
           fallback={
             <Bullseye>
@@ -93,9 +106,9 @@ const ImageDetail = () => {
           <UpdateImageWizard
             navigateBack={() => {
               history.push({ pathname: history.location.pathname });
-              setIsUpdateWizardOpen(false);
+              setUpdateWizard((prevState) => ({ ...prevState, isOpen: false }));
             }}
-            updateImageID={data?.ID}
+            updateImageID={updateWizard.updateId}
           />
         </Suspense>
       )}

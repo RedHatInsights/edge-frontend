@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   TextContent,
   TextList,
@@ -10,17 +10,16 @@ import {
   Flex,
   FlexItem,
 } from '@patternfly/react-core';
-import { useSelector, shallowEqual } from 'react-redux';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from './constants';
+import PropTypes from 'prop-types';
 
-const ImageDetailTab = () => {
-  const { data } = useSelector(
-    ({ imageSetDetailReducer }) => ({
-      data: imageSetDetailReducer?.data || null,
-    }),
-    shallowEqual
-  );
+const ImageDetailTab = ({ imageData }) => {
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    setData(imageData.data);
+  }, [imageData]);
 
   const dateFormat = () => <DateFormat date={data['CreatedAt']} />;
   const labelsToValueMapperLeftTop = {
@@ -33,8 +32,8 @@ const ImageDetailTab = () => {
   };
 
   const labelsToValueMapperLeftBottom = {
-    Username: data?.Images[data.Images.length - 1].Installer.Username,
-    'SSH Key': data?.Images[data.Images.length - 1].Installer.SshKey,
+    Username: data?.Images?.[data?.Images?.length - 1]?.Installer?.Username,
+    'SSH Key': data?.Images?.[data?.Images?.length - 1]?.Installer?.SshKey,
   };
 
   const labelsToValueMapperRightTop = {
@@ -139,6 +138,10 @@ const ImageDetailTab = () => {
       </Flex>
     </TextContent>
   );
+};
+
+ImageDetailTab.propTypes = {
+  imageData: PropTypes.object,
 };
 
 export default ImageDetailTab;

@@ -404,13 +404,16 @@ export const createCustomRepository = (payload) => {
   });
 };
 
-export const getImageSet = ({ id }) => {
-  try {
-    return instance.get(`${EDGE_API}/image-sets/${id}`);
-  } catch (err) {
-    // temp error solution
-    console.log('');
-  }
+export const getImageSet = ({
+  id,
+  q = {
+    limit: 100,
+    offset: 0,
+    sort_by: 'updated_at',
+  },
+}) => {
+  const query = getTableParams(q);
+  return instance.get(`${EDGE_API}/image-sets/${id}?${query}`);
 };
 export const editCustomRepository = (payload) => {
   return instance.put(`${EDGE_API}/thirdpartyrepo/${payload.id}`, {

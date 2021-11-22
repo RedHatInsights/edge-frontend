@@ -186,9 +186,9 @@ export const removeImagesToPoll = (ids) => {
   };
 };
 
-export const loadImageSetDetail = (dispatch, imageSetId) => {
+export const loadImageSetDetail = (dispatch, urlParam, query) => {
   dispatch({
     type: LOAD_IMAGE_SET_DETAIL,
-    payload: getImageSet({ id: imageSetId }),
+    payload: getImageSet({ id: urlParam, q: query }),
   }).catch(() => null);
 };

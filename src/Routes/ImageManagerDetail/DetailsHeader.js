@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -34,13 +34,17 @@ const dropdownItems = [
 
 const DetailsHead = ({ imageData }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [data, setData] = useState({});
+  useEffect(() => {
+    setData(imageData.data);
+  }, [imageData]);
   return (
     <>
       <Breadcrumb>
         <BreadcrumbItem>
           <Link to={paths['manage-images']}>Manage Images</Link>
         </BreadcrumbItem>
-        <BreadcrumbItem isActive>{imageData?.Name}</BreadcrumbItem>
+        <BreadcrumbItem isActive>{data?.Name}</BreadcrumbItem>
       </Breadcrumb>
 
       <TextContent>
@@ -48,11 +52,13 @@ const DetailsHead = ({ imageData }) => {
           <SplitItem>
             <TextList component="dl">
               <TextListItem component="h1" className="grid-align-center">
-                {imageData?.Name}
+                {data?.Name}
               </TextListItem>
               <TextListItem component="dd">
-                {imageData?.Status ? (
-                  <StatusLabel status={imageData?.Status} />
+                {data?.Images?.[data?.Images?.length - 1].Status ? (
+                  <StatusLabel
+                    status={data?.Images[data?.Images.length - 1].Status}
+                  />
                 ) : (
                   <Skeleton />
                 )}
@@ -83,11 +89,7 @@ const DetailsHead = ({ imageData }) => {
 };
 
 DetailsHead.propTypes = {
-  imageData: PropTypes.shape({
-    ID: PropTypes.number,
-    Name: PropTypes.string,
-    Status: PropTypes.string,
-  }),
+  imageData: PropTypes.object,
 };
 
 export default DetailsHead;

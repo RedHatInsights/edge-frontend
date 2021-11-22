@@ -46,7 +46,7 @@ const ToolbarHeader = ({
           filterValues={filterValues}
           setFilterValues={setFilterValues}
         />
-        <ToolbarButtons buttons={toolbarButtons} />
+        {toolbarButtons && <ToolbarButtons buttons={toolbarButtons} />}
         <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
           {isLoading ? (
             <Skeleton size={SkeletonSize.xs} />
