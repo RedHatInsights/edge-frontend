@@ -40,6 +40,10 @@ const ImageDetail = React.lazy(() =>
   )
 );
 
+const ImageVersionDetail = React.lazy(() =>
+  import('./Routes/ImageManagerDetail/ImageVersionDetail')
+);
+
 const Repositories = React.lazy(() =>
   import('./Routes/Repositories/Repositories')
 );
@@ -60,6 +64,7 @@ export const Routes = () => {
         {/* <Route path={paths.canaries} component={Canaries} /> */}
         <Route exact path={paths['fleet-management']} component={Devices} />
         <Route path={paths['manage-images-detail']} component={ImageDetail} />
+        <Route path={paths['manage-images-version-detail']} component={ImageVersionDetail} />
         <Route path={paths['manage-images']} component={Images} />
         <Route
           path={paths['fleet-management-detail']}
