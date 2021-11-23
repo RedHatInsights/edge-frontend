@@ -122,6 +122,8 @@
     "fleet-management-detail": "/fleet-management/:inventoryId",
     "manage-images": "/manage-images",
     "manage-images-detail": "/manage-images/:imageId",
+    "manage-images-version": "/manage-images/version",
+    "manage-images-version-details": "/manage-images/version/:imageVersionId",
     "repositories": "/repositories"
   }
 }
