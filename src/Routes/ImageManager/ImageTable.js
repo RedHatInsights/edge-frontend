@@ -113,7 +113,6 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     return actionsArray;
   };
 
-
   return (
     <GeneralTable
       apiFilterSort={true}
