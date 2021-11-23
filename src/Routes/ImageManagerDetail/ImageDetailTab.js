@@ -14,11 +14,11 @@ import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from './constants';
 import PropTypes from 'prop-types';
 
-const ImageDetailTab = ({ imageData }) => {
+const ImageDetailTab = ({ imageData, isVersionDetails }) => {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    setData(imageData.data);
+    isVersionDetails ? setData(imageData) : setData(imageData?.data);
   }, [imageData]);
 
   const dateFormat = () => <DateFormat date={data['CreatedAt']} />;
@@ -142,6 +142,7 @@ const ImageDetailTab = ({ imageData }) => {
 
 ImageDetailTab.propTypes = {
   imageData: PropTypes.object,
+  isVersionDetails: PropTypes.bool,
 };
 
 export default ImageDetailTab;

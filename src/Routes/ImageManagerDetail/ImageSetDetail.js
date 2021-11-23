@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  useContext,
-  useEffect,
-  useState,
-  Suspense,
-} from 'react';
+import React, { Fragment, useEffect, useState, Suspense } from 'react';
 import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { useParams } from 'react-router-dom';
 import {
@@ -14,10 +8,6 @@ import {
   Spinner,
   Bullseye,
 } from '@patternfly/react-core';
-import { useDispatch } from 'react-redux';
-import { RegistryContext } from '../../store';
-import { loadImageDetail } from '../../store/actions';
-import { imageDetailReducer } from '../../store/reducers';
 import { useHistory } from 'react-router-dom';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
@@ -29,34 +19,31 @@ const UpdateImageWizard = React.lazy(() =>
   )
 );
 
-const ImageVersionDetail = ({ data, imageSetName }) => {
-  const { imageVersionId } = useParams();
-  const { getRegistry } = useContext(RegistryContext);
-  const dispatch = useDispatch();
+const ImageSetDetail = ({ data }) => {
+  const { imageId } = useParams();
   const history = useHistory();
-  const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState(false);
+  const [updateWizard, setUpdateWizard] = useState({
+    isOpen: false,
+    updateId: null,
+  });
   const [imageData, setImageData] = useState({});
 
   useEffect(() => {
     setImageData(data);
   }, [data]);
 
-  useEffect(() => {
-    const registered = getRegistry().register({
-      imageDetailReducer,
-    });
-    loadImageDetail(dispatch, imageVersionId);
-    return () => registered();
-  }, [dispatch]);
-
-  const openUpdateWizard = () => {
+  const openUpdateWizard = (id) => {
     history.push({
       pathname: history.location.pathname,
       search: new URLSearchParams({
         update_image: true,
       }).toString(),
     });
-    setIsUpdateWizardOpen(true);
+    setUpdateWizard((prevState) => ({
+      ...prevState,
+      isOpen: !prevState.isLoading,
+      updateId: id,
+    }));
   };
 
   return (
@@ -66,8 +53,6 @@ const ImageVersionDetail = ({ data, imageSetName }) => {
           <StackItem>
             <DetailsHead
               imageData={imageData}
-              isVersionDetails={true}
-              imageSetName={imageSetName}
               openUpdateWizard={openUpdateWizard}
             />
           </StackItem>
@@ -76,8 +61,12 @@ const ImageVersionDetail = ({ data, imageSetName }) => {
           <Text>{data?.Description}</Text>
         </StackItem>
       </PageHeader>
-      <ImageDetailTabs imageData={imageData} isVersionDetails={true} />
-      {isUpdateWizardOpen && (
+      <ImageDetailTabs
+        imageData={imageData}
+        urlParam={imageId}
+        openUpdateWizard={openUpdateWizard}
+      />
+      {updateWizard.isOpen && (
         <Suspense
           fallback={
             <Bullseye>
@@ -88,9 +77,9 @@ const ImageVersionDetail = ({ data, imageSetName }) => {
           <UpdateImageWizard
             navigateBack={() => {
               history.push({ pathname: history.location.pathname });
-              setIsUpdateWizardOpen(false);
+              setUpdateWizard((prevState) => ({ ...prevState, isOpen: false }));
             }}
-            updateimageVersionId={data?.ID}
+            updateImageID={updateWizard.updateId}
           />
         </Suspense>
       )}
@@ -98,9 +87,8 @@ const ImageVersionDetail = ({ data, imageSetName }) => {
   );
 };
 
-ImageVersionDetail.propTypes = {
+ImageSetDetail.propTypes = {
   data: PropTypes.object,
-  imageSetName: PropTypes.string,
 };
 
-export default ImageVersionDetail;
+export default ImageSetDetail;

@@ -3,9 +3,15 @@ import { Tabs, Tab, TabTitleText } from '@patternfly/react-core';
 
 import ImageDetailTab from './ImageDetailTab';
 import ImageVersionTab from './ImageVersionsTab';
+import ImagePackagesTab from './ImagePackagesTab';
 import PropTypes from 'prop-types';
 
-const ImageDetailTabs = ({ imageData, urlParam, openUpdateWizard }) => {
+const ImageDetailTabs = ({
+  imageData,
+  urlParam,
+  openUpdateWizard,
+  isVersionDetails,
+}) => {
   const [activeTabKey, setActiveTabkey] = useState(0);
   const handleTabClick = (_event, tabIndex) => setActiveTabkey(tabIndex);
   return (
@@ -16,15 +22,28 @@ const ImageDetailTabs = ({ imageData, urlParam, openUpdateWizard }) => {
         onSelect={handleTabClick}
       >
         <Tab eventKey={0} title={<TabTitleText>Details</TabTitleText>}>
-          <ImageDetailTab imageData={imageData} />
-        </Tab>
-        <Tab eventKey={1} title={<TabTitleText>Versions</TabTitleText>}>
-          <ImageVersionTab
+          <ImageDetailTab
             imageData={imageData}
-            urlParam={urlParam}
-            openUpdateWizard={openUpdateWizard}
+            isVersionDetails={isVersionDetails || false}
           />
         </Tab>
+        {isVersionDetails ? (
+          <Tab eventKey={1} title={<TabTitleText>Packages</TabTitleText>}>
+            <ImagePackagesTab
+              imageData={imageData}
+              urlParam={urlParam}
+              openUpdateWizard={openUpdateWizard}
+            />
+          </Tab>
+        ) : (
+          <Tab eventKey={1} title={<TabTitleText>Versions</TabTitleText>}>
+            <ImageVersionTab
+              imageData={imageData}
+              urlParam={urlParam}
+              openUpdateWizard={openUpdateWizard}
+            />
+          </Tab>
+        )}
       </Tabs>
     </div>
   );
@@ -34,6 +53,7 @@ ImageDetailTabs.propTypes = {
   imageData: PropTypes.object,
   urlParam: PropTypes.string,
   openUpdateWizard: PropTypes.func,
+  isVersionDetails: PropTypes.bool,
 };
 
 export default ImageDetailTabs;

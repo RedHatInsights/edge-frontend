@@ -32,11 +32,11 @@ const dropdownItems = [
   </DropdownItem>,
 ];
 
-const DetailsHead = ({ imageData }) => {
+const DetailsHead = ({ imageData, isVersionDetails, imageSetName }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState({});
   useEffect(() => {
-    setData(imageData.data);
+    isVersionDetails ? setData(imageData) : setData(imageData?.data);
   }, [imageData]);
   return (
     <>
@@ -44,7 +44,18 @@ const DetailsHead = ({ imageData }) => {
         <BreadcrumbItem>
           <Link to={paths['manage-images']}>Manage Images</Link>
         </BreadcrumbItem>
-        <BreadcrumbItem isActive>{data?.Name}</BreadcrumbItem>
+        {isVersionDetails ? (
+          <BreadcrumbItem>
+            <Link to={`${paths['manage-images']}/${data?.ImageSetID}`}>
+              {imageSetName}
+            </Link>
+          </BreadcrumbItem>
+        ) : (
+          <BreadcrumbItem isActive>{data?.Name}</BreadcrumbItem>
+        )}
+        {isVersionDetails && (
+          <BreadcrumbItem isActive>{data?.Version}</BreadcrumbItem>
+        )}
       </Breadcrumb>
 
       <TextContent>
@@ -55,9 +66,15 @@ const DetailsHead = ({ imageData }) => {
                 {data?.Name}
               </TextListItem>
               <TextListItem component="dd">
-                {data?.Images?.[data?.Images?.length - 1].Status ? (
+                {isVersionDetails ? (
+                  data?.Status
+                ) : data?.Images?.[data?.Images?.length - 1].Status ? (
                   <StatusLabel
-                    status={data?.Images[data?.Images.length - 1].Status}
+                    status={
+                      isVersionDetails
+                        ? data?.Status
+                        : data?.Images[data?.Images.length - 1].Status
+                    }
                   />
                 ) : (
                   <Skeleton />
@@ -90,6 +107,8 @@ const DetailsHead = ({ imageData }) => {
 
 DetailsHead.propTypes = {
   imageData: PropTypes.object,
+  isVersionDetails: PropTypes.bool,
+  imageSetName: PropTypes.object,
 };
 
 export default DetailsHead;

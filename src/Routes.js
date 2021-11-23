@@ -35,13 +35,7 @@ const Images = React.lazy(() =>
 );
 
 const ImageDetail = React.lazy(() =>
-  import(
-    /* webpackChunkName: "GroupsDetailPage" */ './Routes/ImageManagerDetail/ImageDetail'
-  )
-);
-
-const ImageVersionDetail = React.lazy(() =>
-  import('./Routes/ImageManagerDetail/ImageVersionDetail')
+  import('./Routes/ImageManagerDetail/ImageDetail')
 );
 
 const Repositories = React.lazy(() =>
@@ -63,8 +57,11 @@ export const Routes = () => {
         {/* <Route path={paths['device-detail']} component={DeviceDetail} /> */}
         {/* <Route path={paths.canaries} component={Canaries} /> */}
         <Route exact path={paths['fleet-management']} component={Devices} />
+        <Route
+          path={paths['manage-images-version-details']}
+          component={ImageDetail}
+        />
         <Route path={paths['manage-images-detail']} component={ImageDetail} />
-        <Route path={paths['manage-images-version-detail']} component={ImageVersionDetail} />
         <Route path={paths['manage-images']} component={Images} />
         <Route
           path={paths['fleet-management-detail']}
