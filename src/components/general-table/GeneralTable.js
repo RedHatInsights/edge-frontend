@@ -23,27 +23,27 @@ const filterParams = (chipsArray) => {
   const filterParamsObj =
     chipsArray.length > 0
       ? chipsArray.reduce((acc, filter) => {
-          if (acc[filter.key.toLowerCase()]) {
-            const returnAcc =
-              typeof acc[filter.key.toLowerCase()] === 'string'
-                ? [acc[filter.key.toLowerCase()]]
-                : [...acc[filter.key.toLowerCase()]];
-            return {
-              ...acc,
-              [filter.key.toLowerCase()]: [
-                ...returnAcc,
-                filter.apiName ? filter.apiName : filter.label,
-              ],
-            };
-          } else {
-            return {
-              ...acc,
-              [filter.key.toLowerCase()]: filter.apiName
-                ? filter.apiName
-                : filter.label,
-            };
-          }
-        }, {})
+        if (acc[filter.key.toLowerCase()]) {
+          const returnAcc =
+            typeof acc[filter.key.toLowerCase()] === 'string'
+              ? [acc[filter.key.toLowerCase()]]
+              : [...acc[filter.key.toLowerCase()]];
+          return {
+            ...acc,
+            [filter.key.toLowerCase()]: [
+              ...returnAcc,
+              filter.apiName ? filter.apiName : filter.label,
+            ],
+          };
+        } else {
+          return {
+            ...acc,
+            [filter.key.toLowerCase()]: filter.apiName
+              ? filter.apiName
+              : filter.label,
+          };
+        }
+      }, {})
       : {};
   return filterParamsObj;
 };
@@ -73,14 +73,14 @@ const GeneralTable = ({
   useEffect(() => {
     apiFilterSort
       ? loadTableData(dispatch, {
-          ...filterParams(chipsArray),
-          limit: perPage,
-          offset: (page - 1) * perPage,
-          ...transformSort({
-            direction: sortBy.direction,
-            name: columns[sortBy.index].type,
-          }),
-        })
+        ...filterParams(chipsArray),
+        limit: perPage,
+        offset: (page - 1) * perPage,
+        ...transformSort({
+          direction: sortBy.direction,
+          name: columns[sortBy.index].type,
+        }),
+      })
       : null;
   }, [chipsArray, perPage, page, sortBy]);
 
@@ -126,9 +126,9 @@ const GeneralTable = ({
   const filteredRows = apiFilterSort
     ? rows
     : sortedByDirection(filteredByNameRows).slice(
-        (page - 1) * perPage,
-        (page - 1) * perPage + perPage
-      );
+      (page - 1) * perPage,
+      (page - 1) * perPage + perPage
+    );
 
   const loadingRows = [
     {

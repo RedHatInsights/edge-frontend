@@ -104,25 +104,15 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       });
     }
 
-    if (rowData?.imageStatus === 'SUCCESS') {
-      actionsArray.push({
-        title: 'Update Image',
-        onClick: (_event, _rowId, rowData) => {
-          openUpdateWizard(rowData.id);
-        },
-      });
-    }
-
-    if (rowData?.imageStatus !== 'SUCCESS' && rowData?.id) {
-      actionsArray.push({
-        title: '',
-      });
-    }
-
+    actionsArray.push({
+      title: 'Update Image',
+      onClick: (_event, _rowId, rowData) => {
+        openUpdateWizard(rowData.id);
+      },
+    });
     return actionsArray;
   };
 
-  const areActionsDisabled = (rowData) => rowData?.imageStatus !== 'SUCCESS';
 
   return (
     <GeneralTable
@@ -136,7 +126,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       emptyStateActionMessage="Create new image"
       emptyStateAction={openCreateWizard}
       actionResolver={actionResolver}
-      areActionsDisabled={areActionsDisabled}
+      areActionsDisabled={() => false}
       defaultSort={{ index: 4, direction: 'desc' }}
       toolbarButtons={[
         {
