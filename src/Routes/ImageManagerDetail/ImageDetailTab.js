@@ -14,27 +14,17 @@ import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from './constants';
 import PropTypes from 'prop-types';
 
-<<<<<<< HEAD
 const ImageDetailTab = ({ imageData, isVersionDetails }) => {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    isVersionDetails ? setData(imageData) : setData(imageData?.data);
+    let dataToMerge = isVersionDetails ? imageData : imageData?.data;
+    let mergedData = {
+      ...dataToMerge,
+      ...dataToMerge?.Images[dataToMerge?.Images.length - 1],
+    };
+    setData(mergedData);
   }, [imageData]);
-=======
-
-const ImageDetailTab = () => {
-  const { data } = useSelector(
-    ({ imageDetailReducer }) => ({ data: imageDetailReducer?.data || null }),
-    shallowEqual
-  );
->>>>>>> 2cc1ee8 (Added reducer and connect with backend)
-
-  const { imageSetData } = useSelector(
-    ({ imageSetDetailReducer }) => ({ imageSetData: imageSetDetailReducer?.data || null }),
-    shallowEqual
-  );
-
 
   const dateFormat = () => <DateFormat date={data['CreatedAt']} />;
   const labelsToValueMapperLeftTop = {
@@ -42,18 +32,13 @@ const ImageDetailTab = () => {
     Version: 'Version',
     Created: () => dateFormat(),
     Release: () => distributionMapper[data['Distribution']],
-    'Size': '2.2g',
+    Size: 'Size',
     Description: 'Description',
   };
 
   const labelsToValueMapperLeftBottom = {
-<<<<<<< HEAD
     Username: data?.Images?.[data?.Images?.length - 1]?.Installer?.Username,
     'SSH Key': data?.Images?.[data?.Images?.length - 1]?.Installer?.SshKey,
-=======
-    'Username': 'Andarberkwine',
-    'SSH Key': 'SSH-RSA asnauidnsdfoigdfgntohi hnoihtoirhrdngdion',
->>>>>>> 2cc1ee8 (Added reducer and connect with backend)
   };
 
   const labelsToValueMapperRightTop = {
@@ -97,7 +82,7 @@ const ImageDetailTab = () => {
           </TextList>
           <Text component={TextVariants.h3}>User Information </Text>
           <TextList component={TextListVariants.dl}>
-            {imageSetData
+            {data
               ? Object.entries(labelsToValueMapperLeftBottom).map(
                   ([label, value]) => {
                     return (
