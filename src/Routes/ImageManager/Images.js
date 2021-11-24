@@ -30,7 +30,7 @@ const UpdateImageWizard = React.lazy(() =>
 
 const Images = () => {
   const { getRegistry } = useContext(RegistryContext);
-  const [isCreateWizardOpen, setIsCreateWizardOpen] = useState(false);
+  const [isCreateWizardOpen, setIsCreateWizardOpen] = useState(true);
   const [UpdateWizard, setUpdateWizard] = useState({
     isOpen: false,
     imageId: null,
@@ -67,10 +67,10 @@ const Images = () => {
 
   return (
     <Fragment>
-      <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Manage images" />
+      <PageHeader className='pf-m-light'>
+        <PageHeaderTitle title='Manage images' />
       </PageHeader>
-      <Main className="edge-devices">
+      <Main className='edge-devices'>
         <ImageTable
           openCreateWizard={openCreateWizard}
           openUpdateWizard={openUpdateWizard}
