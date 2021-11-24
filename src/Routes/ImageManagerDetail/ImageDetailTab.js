@@ -23,7 +23,12 @@ const ImageDetailTab = ({
   const [packageData, setPackageData] = useState({});
 
   useEffect(() => {
-    isVersionDetails ? setData(imageData) : setData(imageData?.data);
+    let dataToMerge = isVersionDetails ? imageData : imageData?.data;
+    let mergedData = {
+      ...dataToMerge,
+      ...dataToMerge?.Images[dataToMerge?.Images.length - 1],
+    };
+    setData(mergedData);
   }, [imageData]);
 
   useEffect(() => {
@@ -36,8 +41,8 @@ const ImageDetailTab = ({
     Version: 'Version',
     Created: () => dateFormat(),
     Release: () => distributionMapper[data['Distribution']],
-    Size: '',
-    Description: '',
+    Size: 'Size',
+    Description: 'Description',
   };
 
   const labelsToValueMapperLeftBottom = {
