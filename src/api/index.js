@@ -415,6 +415,11 @@ export const getImageSet = ({
   const query = getTableParams(q);
   return instance.get(`${EDGE_API}/image-sets/${id}?${query}`);
 };
+
+export const getImagePackageMetadata = (id) => {
+  return instance.get(`${EDGE_API}/images/${id}/metadata`);
+};
+
 export const editCustomRepository = (payload) => {
   return instance.put(`${EDGE_API}/thirdpartyrepo/${payload.id}`, {
     Name: payload.name,

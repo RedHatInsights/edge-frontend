@@ -168,7 +168,10 @@ const GeneralTable = ({
   const filteredRows = apiFilterSort
     ? rows
     : rows.length > 0
-    ? sortedByDirection(filteredByNameRows)
+    ? sortedByDirection(filteredByNameRows).slice(
+        (page - 1) * perPage,
+        (page - 1) * perPage + perPage
+      )
     : rows;
 
   const loadingRows = [

@@ -11,6 +11,7 @@ import {
   LOAD_ACTIVE_IMAGES,
   LOAD_EDGE_IMAGES,
   LOAD_EDGE_IMAGE_SETS,
+  LOAD_EDGE_IMAGE_PACKAGES,
   LOAD_DEVICE_SUMMARY,
   LOAD_IMAGE_STATUS,
   LOAD_IMAGE_DETAIL,
@@ -31,6 +32,7 @@ import {
   fetchImage,
   fetchEdgeImages,
   fetchEdgeImageSets,
+  getImagePackageMetadata,
   createImage,
   getImageSet,
 } from '../api';
@@ -190,5 +192,12 @@ export const loadImageSetDetail = (dispatch, urlParam, query) => {
   dispatch({
     type: LOAD_IMAGE_SET_DETAIL,
     payload: getImageSet({ id: urlParam, q: query }),
+  }).catch(() => null);
+};
+
+export const loadImagePackageMetadata = (dispatch, imageId) => {
+  dispatch({
+    type: LOAD_EDGE_IMAGE_PACKAGES,
+    payload: getImagePackageMetadata(imageId),
   }).catch(() => null);
 };

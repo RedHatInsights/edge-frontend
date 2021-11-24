@@ -1,145 +1,87 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import {
-  EmptyState,
-  Title,
-  Bullseye,
-  Text,
-  TextContent,
-  TextVariants,
-} from '@patternfly/react-core';
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  sortable,
-  SortByDirection,
-} from '@patternfly/react-table';
-import { shallowEqual, useSelector } from 'react-redux';
-import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
-import flatten from 'lodash/flatten';
+import React, { useState, useEffect } from 'react';
+import { Button } from '@patternfly/react-core';
+import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import GeneralTable from '../../components/general-table/GeneralTable';
+import { loadImagePackageMetadata } from '../../store/actions';
+import PropTypes from 'prop-types';
 
-const ImagePackagesTab = () => {
-  const [perPage, setPerPage] = useState(10);
-  const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState({});
-  const [rows, setRows] = useState([]);
-  const { data, imageName } = useSelector(
-    ({ imageDetailReducer }) => ({
-      data: imageDetailReducer?.data?.Packages || null,
-      imageName: imageDetailReducer?.data?.Name || null,
-    }),
-    shallowEqual
-  );
+const defaultFilters = [{ label: 'Name', type: 'text' }];
 
-  const columns = [
-    {
-      title: 'Name',
-      type: 'name',
-      transforms: [sortable],
-    },
-  ];
+const columnNames = [
+  { title: 'Name', type: 'name', sort: true },
+  { title: 'Version', type: 'version', sort: false },
+  { title: 'Release', type: 'release', sort: false },
+  { title: 'Type', type: 'type', sort: false },
+];
 
-  const parserRows = (rows) => {
-    return rows.map((pack) => [
+const createRows = (data) => {
+  return data.map((packageData) => ({
+    noApiSortFilter: [
+      packageData?.name,
+      packageData?.version,
+      packageData?.release,
+      packageData?.type,
+    ],
+    cells: [
+      packageData?.name,
+      packageData?.version,
+      packageData?.release,
+      packageData?.type,
       {
-        id: pack?.ID,
-        rowArray: [pack.Name],
-        cells: [
-          {
-            title: (
-              <TextContent>
-                <Text component={TextVariants.p}>{pack?.Name}</Text>
-              </TextContent>
-            ),
-          },
-        ],
+        title: (
+          <a
+            href={`https://access.redhat.com/downloads/content/rhel---8/x86_64/7416/${packageData?.name}/${packageData?.version}-${packageData?.release}/${packageData?.arch}/fd431d51/package`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button
+              variant="link"
+              isSmall
+              icon={<ExternalLinkAltIcon />}
+              iconPosition="right"
+            >
+              More information
+            </Button>
+          </a>
+        ),
       },
-    ]);
-  };
+    ],
+  }));
+};
 
-  const handleSetPage = (_evt, newPage, perPage, startIdx, endIdx) => {
-    setPage(newPage);
-    setRows(flatten(parserRows(data.slice(startIdx, endIdx))));
-  };
-
-  const handlePerPage = (_evt, newPerPage, newPage, startIdx, endIdx) => {
-    setPerPage(newPerPage);
-    setPage(newPage);
-    setRows(flatten(parserRows(data.slice(startIdx, endIdx))));
-  };
+const ImagePackagesTab = ({ imagePackageMetadata }) => {
+  const [packageMetadata, setPackageMetadata] = useState({});
 
   useEffect(() => {
-    setRows(
-      data !== null && data.length > 0
-        ? flatten(parserRows(data.slice(0, perPage)))
-        : [
-            {
-              heightAuto: true,
-              cells: [
-                {
-                  props: { colSpan: 8 },
-                  title: (
-                    <Bullseye>
-                      <EmptyState variant="small">
-                        <Title headingLevel="h2" size="lg">
-                          {imageName} has no packages
-                        </Title>
-                      </EmptyState>
-                    </Bullseye>
-                  ),
-                },
-              ],
-            },
-          ]
-    );
-  }, [data]);
-
-  const handleSort = (_event, index, direction) => {
-    const sortedRows = data.sort((a, b) =>
-      a.Name < b.Name ? -1 : a.Name > b.Name ? 1 : 0
-    );
-    setSortBy({
-      index,
-      direction,
-    });
-    setRows(
-      flatten(
-        parserRows(
-          direction === SortByDirection.asc ? sortedRows : sortedRows.reverse()
-        ).slice(0, perPage)
-      )
-    );
-    setPage(0);
-  };
+    setPackageMetadata(imagePackageMetadata);
+  }, [imagePackageMetadata]);
 
   return (
-    <Fragment>
-      {data ? (
-        <PrimaryToolbar
-          pagination={{
-            itemCount: data?.length || 0,
-            page,
-            perPage,
-            onSetPage: handleSetPage,
-            onPerPageSelect: handlePerPage,
-            isCompact: true,
-          }}
-        />
-      ) : null}
-      <Table
-        aria-label="Image packages table"
-        ariaLabel="packages table"
-        variant="compact"
-        sortBy={sortBy}
-        onSort={handleSort}
-        cells={columns}
-        rows={rows}
-      >
-        <TableHeader />
-        <TableBody />
-      </Table>
-    </Fragment>
+    <GeneralTable
+      apiFilterSort={false}
+      filters={defaultFilters}
+      loadTableData={loadImagePackageMetadata}
+      tableData={{
+        count: packageMetadata?.Commit?.InstalledPackages?.length,
+        data: packageMetadata?.Commit?.InstalledPackages,
+        isLoading: false,
+        hasError: false,
+      }}
+      columnNames={columnNames}
+      rows={
+        packageMetadata?.Commit?.InstalledPackages
+          ? createRows(packageMetadata?.Commit?.InstalledPackages)
+          : []
+      }
+      actionResolver={[]}
+      areActionsDisabled={true}
+      defaultSort={{ index: 0, direction: 'asc' }}
+    />
   );
+};
+
+ImagePackagesTab.propTypes = {
+  imagePackageMetadata: PropTypes.object,
 };
 
 export default ImagePackagesTab;

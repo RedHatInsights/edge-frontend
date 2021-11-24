@@ -66,9 +66,8 @@ const DetailsHead = ({ imageData, isVersionDetails, imageSetName }) => {
                 {data?.Name}
               </TextListItem>
               <TextListItem component="dd">
-                {isVersionDetails ? (
-                  data?.Status
-                ) : data?.Images?.[data?.Images?.length - 1].Status ? (
+                {data?.Status ||
+                data?.Images?.[data?.Images?.length - 1].Status ? (
                   <StatusLabel
                     status={
                       isVersionDetails

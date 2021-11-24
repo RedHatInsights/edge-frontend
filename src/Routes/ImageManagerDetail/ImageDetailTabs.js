@@ -11,6 +11,7 @@ const ImageDetailTabs = ({
   urlParam,
   openUpdateWizard,
   isVersionDetails,
+  imagePackageMetadata,
 }) => {
   const [activeTabKey, setActiveTabkey] = useState(0);
   const handleTabClick = (_event, tabIndex) => setActiveTabkey(tabIndex);
@@ -25,6 +26,7 @@ const ImageDetailTabs = ({
           <ImageDetailTab
             imageData={imageData}
             isVersionDetails={isVersionDetails || false}
+            imagePackageMetadata={imagePackageMetadata}
           />
         </Tab>
         {isVersionDetails ? (
@@ -33,6 +35,7 @@ const ImageDetailTabs = ({
               imageData={imageData}
               urlParam={urlParam}
               openUpdateWizard={openUpdateWizard}
+              imagePackageMetadata={imagePackageMetadata}
             />
           </Tab>
         ) : (
@@ -54,6 +57,7 @@ ImageDetailTabs.propTypes = {
   urlParam: PropTypes.string,
   openUpdateWizard: PropTypes.func,
   isVersionDetails: PropTypes.bool,
+  imagePackageMetadata: PropTypes.object,
 };
 
 export default ImageDetailTabs;

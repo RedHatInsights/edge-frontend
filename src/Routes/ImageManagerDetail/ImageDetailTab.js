@@ -14,12 +14,21 @@ import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from './constants';
 import PropTypes from 'prop-types';
 
-const ImageDetailTab = ({ imageData, isVersionDetails }) => {
+const ImageDetailTab = ({
+  imageData,
+  isVersionDetails,
+  imagePackageMetadata,
+}) => {
   const [data, setData] = useState({});
+  const [packageData, setPackageData] = useState({});
 
   useEffect(() => {
     isVersionDetails ? setData(imageData) : setData(imageData?.data);
   }, [imageData]);
+
+  useEffect(() => {
+    setPackageData(imagePackageMetadata);
+  }, [imagePackageMetadata]);
 
   const dateFormat = () => <DateFormat date={data['CreatedAt']} />;
   const labelsToValueMapperLeftTop = {
@@ -38,7 +47,7 @@ const ImageDetailTab = ({ imageData, isVersionDetails }) => {
 
   const labelsToValueMapperRightTop = {
     'Total Additional Packages': '8',
-    'Total Packages': '2456',
+    'Total Packages': packageData?.Commit?.InstalledPackages?.length,
   };
 
   const labelsToValueMapperRightBottom = {
@@ -143,6 +152,7 @@ const ImageDetailTab = ({ imageData, isVersionDetails }) => {
 ImageDetailTab.propTypes = {
   imageData: PropTypes.object,
   isVersionDetails: PropTypes.bool,
+  imagePackageMetadata: PropTypes.object,
 };
 
 export default ImageDetailTab;

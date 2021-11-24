@@ -19,7 +19,7 @@ const UpdateImageWizard = React.lazy(() =>
   )
 );
 
-const ImageSetDetail = ({ data }) => {
+const ImageSetDetail = ({ data, imagePackageMetadata }) => {
   const { imageId } = useParams();
   const history = useHistory();
   const [updateWizard, setUpdateWizard] = useState({
@@ -65,6 +65,7 @@ const ImageSetDetail = ({ data }) => {
         imageData={imageData}
         urlParam={imageId}
         openUpdateWizard={openUpdateWizard}
+        imagePackageMetadata={imagePackageMetadata}
       />
       {updateWizard.isOpen && (
         <Suspense
@@ -89,6 +90,7 @@ const ImageSetDetail = ({ data }) => {
 
 ImageSetDetail.propTypes = {
   data: PropTypes.object,
+  imagePackageMetadata: PropTypes.object,
 };
 
 export default ImageSetDetail;
