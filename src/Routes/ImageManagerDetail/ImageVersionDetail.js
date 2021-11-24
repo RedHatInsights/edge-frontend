@@ -29,7 +29,7 @@ const UpdateImageWizard = React.lazy(() =>
   )
 );
 
-const ImageVersionDetail = ({ data, imageSetName }) => {
+const ImageVersionDetail = ({ data, imageSetName, imagePackageMetadata }) => {
   const { imageVersionId } = useParams();
   const { getRegistry } = useContext(RegistryContext);
   const dispatch = useDispatch();
@@ -76,7 +76,11 @@ const ImageVersionDetail = ({ data, imageSetName }) => {
           <Text>{data?.Description}</Text>
         </StackItem>
       </PageHeader>
-      <ImageDetailTabs imageData={imageData} isVersionDetails={true} />
+      <ImageDetailTabs
+        imageData={imageData}
+        isVersionDetails={true}
+        imagePackageMetadata={imagePackageMetadata}
+      />
       {isUpdateWizardOpen && (
         <Suspense
           fallback={
@@ -101,6 +105,7 @@ const ImageVersionDetail = ({ data, imageSetName }) => {
 ImageVersionDetail.propTypes = {
   data: PropTypes.object,
   imageSetName: PropTypes.string,
+  imagePackageMetadata: PropTypes.string,
 };
 
 export default ImageVersionDetail;
