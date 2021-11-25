@@ -353,6 +353,10 @@ export const getEdgeImageStatus = (id) => {
   return instance.get(`${EDGE_API}/images/${id}/status`);
 };
 
+export const retryImage = (id) => {
+  return instance.post(`${EDGE_API}/images/${id}/retry`);
+};
+
 export const getDeviceHasUpdate = async (id) => {
   try {
     return await instance.get(`${EDGE_API}/devices/${id}`);

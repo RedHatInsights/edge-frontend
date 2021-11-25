@@ -72,7 +72,11 @@ const createRows = (data) => {
   }));
 };
 
-const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
+const ImageTable = ({
+  openCreateWizard,
+  openUpdateWizard,
+  retryImageBuild,
+}) => {
   const { count, data, isLoading, hasError } = useSelector(
     ({ edgeImagesReducer }) => ({
       count: edgeImagesReducer?.data?.count || 0,
@@ -85,6 +89,8 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     }),
     shallowEqual
   );
+
+  const isFinalStatus = (status) => status === 'SUCCESS' || status === 'ERROR';
 
   const actionResolver = (rowData) => {
     const actionsArray = [];
@@ -103,15 +109,32 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
         ),
       });
     }
+    if (isFinalStatus(rowData.imageStatus)) {
+      actionsArray.push({
+        title: 'Update Image',
+        onClick: (_event, _rowId, rowData) => {
+          openUpdateWizard(rowData.id);
+        },
+      });
+    } else {
+      actionsArray.push({
+        title: '',
+      });
+    }
 
-    actionsArray.push({
-      title: 'Update Image',
-      onClick: (_event, _rowId, rowData) => {
-        openUpdateWizard(rowData.id);
-      },
-    });
+    if (rowData.imageStatus == 'ERROR') {
+      actionsArray.push({
+        title: 'Retry',
+        onClick: (_event, _rowId, rowData) => {
+          retryImageBuild(rowData.id);
+        },
+      });
+    }
+
     return actionsArray;
   };
+
+  const areActionsDisabled = (rowData) => !isFinalStatus(rowData.imageStatus);
 
   return (
     <GeneralTable
@@ -125,7 +148,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       emptyStateActionMessage="Create new image"
       emptyStateAction={openCreateWizard}
       actionResolver={actionResolver}
-      areActionsDisabled={() => false}
+      areActionsDisabled={areActionsDisabled}
       defaultSort={{ index: 4, direction: 'desc' }}
       toolbarButtons={[
         {
@@ -141,6 +164,7 @@ ImageTable.propTypes = {
   clearFilters: PropTypes.func.isRequired,
   openCreateWizard: PropTypes.func.isRequired,
   openUpdateWizard: PropTypes.func.isRequired,
+  retryImageBuild: PropTypes.func.isRequired,
   filters: PropTypes.array.isRequired,
   pagination: PropTypes.shape({
     page: PropTypes.number,

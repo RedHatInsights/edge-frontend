@@ -15,6 +15,7 @@ import { useHistory } from 'react-router-dom';
 import { RegistryContext } from '../../store';
 import { edgeImagesReducer } from '../../store/reducers';
 import ImageTable from './ImageTable';
+import { retryImage } from '../../api';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -60,6 +61,10 @@ const Images = () => {
     });
   };
 
+  const retryImageBuild = (id) => {
+    retryImage(id);
+  };
+
   useEffect(() => {
     const registered = getRegistry().register({ edgeImagesReducer });
     return () => registered();
@@ -74,6 +79,7 @@ const Images = () => {
         <ImageTable
           openCreateWizard={openCreateWizard}
           openUpdateWizard={openUpdateWizard}
+          retryImageBuild={retryImageBuild}
         />
       </Main>
       {isCreateWizardOpen && (
