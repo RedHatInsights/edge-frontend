@@ -75,7 +75,6 @@ const createRows = (data) => {
 const ImageTable = ({
   openCreateWizard,
   openUpdateWizard,
-  retryImageBuild,
 }) => {
   const { count, data, isLoading, hasError } = useSelector(
     ({ edgeImagesReducer }) => ({
@@ -122,15 +121,6 @@ const ImageTable = ({
       });
     }
 
-    if (rowData.imageStatus == 'ERROR') {
-      actionsArray.push({
-        title: 'Retry',
-        onClick: (_event, _rowId, rowData) => {
-          retryImageBuild(rowData.id);
-        },
-      });
-    }
-
     return actionsArray;
   };
 
@@ -164,7 +154,6 @@ ImageTable.propTypes = {
   clearFilters: PropTypes.func.isRequired,
   openCreateWizard: PropTypes.func.isRequired,
   openUpdateWizard: PropTypes.func.isRequired,
-  retryImageBuild: PropTypes.func.isRequired,
   filters: PropTypes.array.isRequired,
   pagination: PropTypes.shape({
     page: PropTypes.number,

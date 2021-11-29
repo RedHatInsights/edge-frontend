@@ -60,11 +60,6 @@ const Images = () => {
       imageId: id,
     });
   };
-
-  const retryImageBuild = (id) => {
-    retryImage(id);
-  };
-
   useEffect(() => {
     const registered = getRegistry().register({ edgeImagesReducer });
     return () => registered();
@@ -79,7 +74,6 @@ const Images = () => {
         <ImageTable
           openCreateWizard={openCreateWizard}
           openUpdateWizard={openUpdateWizard}
-          retryImageBuild={retryImageBuild}
         />
       </Main>
       {isCreateWizardOpen && (
