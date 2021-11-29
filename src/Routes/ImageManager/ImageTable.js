@@ -72,10 +72,7 @@ const createRows = (data) => {
   }));
 };
 
-const ImageTable = ({
-  openCreateWizard,
-  openUpdateWizard,
-}) => {
+const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
   const { count, data, isLoading, hasError } = useSelector(
     ({ edgeImagesReducer }) => ({
       count: edgeImagesReducer?.data?.count || 0,

@@ -15,7 +15,6 @@ import { useHistory } from 'react-router-dom';
 import { RegistryContext } from '../../store';
 import { edgeImagesReducer } from '../../store/reducers';
 import ImageTable from './ImageTable';
-import { retryImage } from '../../api';
 
 const CreateImageWizard = React.lazy(() =>
   import(
