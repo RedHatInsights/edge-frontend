@@ -23,12 +23,9 @@ const ImageDetailTab = ({
   const [packageData, setPackageData] = useState({});
 
   useEffect(() => {
-    let dataToMerge = isVersionDetails ? imageData : imageData?.data;
-    let mergedData = {
-      ...dataToMerge,
-      ...dataToMerge?.Images[dataToMerge?.Images.length - 1],
-    };
-    setData(mergedData);
+    setData(
+      isVersionDetails ? imageData : imageData?.data ? imageData?.data[0] : []
+    );
   }, [imageData]);
 
   useEffect(() => {
