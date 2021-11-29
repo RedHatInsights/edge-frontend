@@ -86,6 +86,8 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     shallowEqual
   );
 
+  const isFinalStatus = (status) => status === 'SUCCESS' || status === 'ERROR';
+
   const actionResolver = (rowData) => {
     const actionsArray = [];
     if (rowData?.isoURL) {
@@ -103,17 +105,14 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
         ),
       });
     }
-
-    if (rowData?.imageStatus === 'SUCCESS') {
+    if (isFinalStatus(rowData.imageStatus)) {
       actionsArray.push({
         title: 'Update Image',
         onClick: (_event, _rowId, rowData) => {
           openUpdateWizard(rowData.id);
         },
       });
-    }
-
-    if (rowData?.imageStatus !== 'SUCCESS' && rowData?.id) {
+    } else {
       actionsArray.push({
         title: '',
       });
@@ -122,7 +121,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     return actionsArray;
   };
 
-  const areActionsDisabled = (rowData) => rowData?.imageStatus !== 'SUCCESS';
+  const areActionsDisabled = (rowData) => !isFinalStatus(rowData.imageStatus);
 
   return (
     <GeneralTable
