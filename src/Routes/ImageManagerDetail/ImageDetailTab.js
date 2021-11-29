@@ -26,7 +26,7 @@ const ImageDetailTab = ({
     let dataToMerge = isVersionDetails ? imageData : imageData?.data;
     let mergedData = {
       ...dataToMerge,
-      ...dataToMerge?.Images[dataToMerge?.Images.length - 1],
+      ...dataToMerge?.Images?.[dataToMerge?.Images.length - 1],
     };
     setData(mergedData);
   }, [imageData]);
