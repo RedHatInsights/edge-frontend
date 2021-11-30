@@ -63,6 +63,9 @@ const GeneralTable = ({
   emptyStateMessage,
   emptyStateAction,
   emptyStateActionMessage,
+  toggleButton,
+  toggleAction,
+  toggleState,
 }) => {
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
@@ -207,6 +210,9 @@ const GeneralTable = ({
         setPerPage={setPerPage}
         page={page}
         setPage={setPage}
+        toggleButton={toggleButton}
+        toggleAction={toggleAction}
+        toggleState={toggleState}
       />
       {!isLoading && !count > 0 ? (
         <CustomEmptyState
@@ -278,6 +284,9 @@ GeneralTable.propTypes = {
   emptyStateMessage: PropTypes.string,
   emptyStateActionMessage: PropTypes.string,
   emptyStateAction: PropTypes.func,
+  toggleButton: PropTypes.array,
+  toggleAction: PropTypes.func,
+  toggleState: PropTypes.number,
 };
 
 export default GeneralTable;

@@ -114,8 +114,8 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
       filters={defaultFilters}
       loadTableData={loadImageSetDetail}
       tableData={{
-        count: imageData?.data?.Images?.length,
-        data: imageData?.data?.Images,
+        count: imageData?.data?.length,
+        data: imageData?.data,
         isLoading: imageData?.isLoading,
         hasError: imageData?.hasError,
       }}

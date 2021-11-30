@@ -14,8 +14,16 @@ const columnNames = [
   { title: 'Type', type: 'type', sort: false },
 ];
 
-const createRows = (data) => {
-  return data.map((packageData) => ({
+const createRows = (data, imageData, toggleTable) => {
+  const rowData =
+    toggleTable === 0
+      ? data.filter(
+          (pack) =>
+            imageData?.Packages.filter((image) => pack.name === image.Name)
+              .length > 0
+        )
+      : data;
+  return rowData.map((packageData) => ({
     noApiSortFilter: [
       packageData?.name,
       packageData?.version,
@@ -49,8 +57,9 @@ const createRows = (data) => {
   }));
 };
 
-const ImagePackagesTab = ({ imagePackageMetadata }) => {
+const ImagePackagesTab = ({ imagePackageMetadata, imageData }) => {
   const [packageMetadata, setPackageMetadata] = useState({});
+  const [toggleTable, setToggleTable] = useState(1);
 
   useEffect(() => {
     setPackageMetadata(imagePackageMetadata);
@@ -70,18 +79,29 @@ const ImagePackagesTab = ({ imagePackageMetadata }) => {
       columnNames={columnNames}
       rows={
         packageMetadata?.Commit?.InstalledPackages
-          ? createRows(packageMetadata?.Commit?.InstalledPackages)
+          ? createRows(
+              packageMetadata?.Commit?.InstalledPackages,
+              imageData,
+              toggleTable
+            )
           : []
       }
       actionResolver={[]}
       areActionsDisabled={true}
       defaultSort={{ index: 0, direction: 'asc' }}
+      toggleButton={[
+        { title: 'Additional', key: 0 },
+        { title: 'All', key: 1 },
+      ]}
+      toggleAction={setToggleTable}
+      toggleState={toggleTable}
     />
   );
 };
 
 ImagePackagesTab.propTypes = {
   imagePackageMetadata: PropTypes.object,
+  imageData: PropTypes.object,
 };
 
 export default ImagePackagesTab;
