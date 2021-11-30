@@ -5,6 +5,8 @@ import {
   ToolbarItem,
   ToolbarContent,
   Button,
+  ToggleGroup,
+  ToggleGroupItem,
 } from '@patternfly/react-core';
 import {
   Skeleton,
@@ -37,6 +39,9 @@ const ToolbarHeader = ({
   setPerPage,
   page,
   setPage,
+  toggleButton,
+  toggleAction,
+  toggleState,
 }) => {
   return (
     <Toolbar id="toolbar" data-testid="toolbar-header-testid">
@@ -47,6 +52,18 @@ const ToolbarHeader = ({
           setFilterValues={setFilterValues}
         />
         {toolbarButtons && <ToolbarButtons buttons={toolbarButtons} />}
+        {toggleButton && (
+          <ToggleGroup>
+            {toggleButton.map((btn) => (
+              <ToggleGroupItem
+                key={btn.key}
+                text={btn.title}
+                isSelected={toggleState === btn.key}
+                onChange={() => toggleAction(btn.key)}
+              />
+            ))}
+          </ToggleGroup>
+        )}
         <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
           {isLoading ? (
             <Skeleton size={SkeletonSize.xs} />
@@ -92,5 +109,8 @@ ToolbarHeader.propTypes = {
   chipsArray: PropTypes.array,
   setChipsArray: PropTypes.func,
   isLoading: PropTypes.bool,
+  toggleButton: PropTypes.array,
+  toggleAction: PropTypes.func,
+  toggleState: PropTypes.number,
 };
 export default ToolbarHeader;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../../package.json';
@@ -30,7 +30,7 @@ const columnNames = [
 ];
 
 const createRows = (data) => {
-  return data.Images.map((image) => ({
+  return data.map((image) => ({
     id: image.ID,
     noApiSortFilter: [
       image?.Version,
@@ -62,6 +62,13 @@ const createRows = (data) => {
 };
 
 const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
+    if (imageData?.data) {
+      setRows(createRows(imageData?.data));
+    }
+  }, [imageData]);
+
   const actionResolver = (rowData) => {
     const actionsArray = [];
     if (rowData?.isoURL) {
@@ -107,13 +114,13 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
       filters={defaultFilters}
       loadTableData={loadImageSetDetail}
       tableData={{
-        count: imageData?.data?.Images?.length,
-        data: imageData?.data?.Images,
+        count: imageData?.data?.length,
+        data: imageData?.data,
         isLoading: imageData?.isLoading,
         hasError: imageData?.hasError,
       }}
       columnNames={columnNames}
-      rows={imageData?.data ? createRows(imageData?.data) : []}
+      rows={rows}
       actionResolver={actionResolver}
       areActionsDisabled={areActionsDisabled}
       defaultSort={{ index: 2, direction: 'desc' }}
