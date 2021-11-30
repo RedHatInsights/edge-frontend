@@ -64,8 +64,8 @@ const createRows = (data) => {
 const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
   const [rows, setRows] = useState([]);
   useEffect(() => {
-    if (imageData?.data) {
-      setRows(createRows(imageData?.data));
+    if (imageData?.data?.Images) {
+      setRows(createRows(imageData?.data?.Images));
     }
   }, [imageData]);
 
@@ -114,8 +114,8 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
       filters={defaultFilters}
       loadTableData={loadImageSetDetail}
       tableData={{
-        count: imageData?.data?.length,
-        data: imageData?.data,
+        count: imageData?.data?.Images?.length,
+        data: imageData?.data?.Images,
         isLoading: imageData?.isLoading,
         hasError: imageData?.hasError,
       }}

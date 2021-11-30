@@ -36,7 +36,7 @@ const DetailsHead = ({ imageData, isVersionDetails, imageSetName }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState({});
   useEffect(() => {
-    isVersionDetails ? setData(imageData) : setData(imageData?.data?.[0]);
+    isVersionDetails ? setData(imageData) : setData(imageData?.data);
   }, [imageData]);
   return (
     <>
@@ -68,7 +68,13 @@ const DetailsHead = ({ imageData, isVersionDetails, imageSetName }) => {
               <TextListItem component="dd">
                 {data?.Status ||
                 data?.Images?.[data?.Images?.length - 1].Status ? (
-                  <StatusLabel status={data?.Status} />
+                  <StatusLabel
+                    status={
+                      isVersionDetails
+                        ? data?.Status
+                        : data?.Images[data?.Images.length - 1].Status
+                    }
+                  />
                 ) : (
                   <Skeleton />
                 )}
