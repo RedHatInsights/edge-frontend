@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../../package.json';
