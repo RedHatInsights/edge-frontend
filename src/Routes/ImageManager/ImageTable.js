@@ -112,7 +112,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
           openUpdateWizard(rowData.id);
         },
       });
-    } else {
+    } else if (rowData?.id) {
       actionsArray.push({
         title: '',
       });
