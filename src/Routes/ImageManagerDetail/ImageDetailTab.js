@@ -37,6 +37,10 @@ const ImageDetailTab = ({
     'Image name': 'Name',
     Version: 'Version',
     Created: () => dateFormat(),
+    'Type(s)': () =>
+      data['OutputTypes']?.map((outputType, index) => (
+        <div key={index}>{outputType}</div>
+      )),
     Release: () => distributionMapper[data['Distribution']],
     Size: 'Size',
     Description: 'Description',
