@@ -24,7 +24,7 @@ const ImageDetailTab = ({
 
   useEffect(() => {
     setData(
-      isVersionDetails ? imageData : imageData?.data ? imageData?.data[0] : []
+      isVersionDetails ? imageData : imageData?.data ? imageData?.data?.Images?.[0] : []
     );
   }, [imageData]);
 

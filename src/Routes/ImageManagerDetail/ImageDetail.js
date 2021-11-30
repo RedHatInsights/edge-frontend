@@ -54,8 +54,12 @@ const ImageDetail = () => {
     });
     imageVersionId
       ? loadImagePackageMetadata(dispatch, imageVersionId)
-      : imageSetData?.data
-      ? loadImagePackageMetadata(dispatch, imageSetData?.data?.[0]?.ID)
+      : imageSetData?.data?.Images
+      ? loadImagePackageMetadata(
+          dispatch,
+          imageSetData?.data?.Images?.[imageSetData?.data?.Images?.length - 1]
+            ?.ID
+        )
       : null;
     return () => registered();
   }, [dispatch, imageSetData]);
@@ -71,7 +75,7 @@ const ImageDetail = () => {
       {imageVersionId && (
         <ImageVersionDetail
           data={imageVersionData?.data}
-          imageSetName={imageSetData?.data?.[0]?.Name}
+          imageSetName={imageSetData?.data?.Name}
           imagePackageMetadata={imagePackageMetadata?.data}
         />
       )}

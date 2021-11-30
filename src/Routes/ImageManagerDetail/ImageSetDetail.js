@@ -29,6 +29,7 @@ const ImageSetDetail = ({ data, imagePackageMetadata }) => {
   const [imageData, setImageData] = useState({});
 
   useEffect(() => {
+    console.log(data)
     setImageData(data);
   }, [data]);
 
