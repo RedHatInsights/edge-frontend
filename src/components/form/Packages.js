@@ -4,6 +4,7 @@ import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import { getPackages } from '../../api';
 import PropTypes from 'prop-types';
 import {
+  TextContent,
   Text,
   Button,
   DualListSelector,
@@ -32,6 +33,13 @@ const EmptyText = ({ text }) => (
   </Text>
 );
 
+const NoResultsText = ({ heading, body }) => (
+  <TextContent className='pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl'>
+    <Text component='h3'>{heading}</Text>
+    <Text component='small'>{body}</Text>
+  </TextContent>
+);
+
 const mapPackagesToOptions = (pkgs) =>
   pkgs.map((pkg) => ({
     selected: false,
@@ -48,6 +56,7 @@ const Packages = ({ defaultArch, ...props }) => {
   const [chosenFilter, setChosenFilter] = React.useState('');
   const [enterPressed, setEnterPressed] = useState(false);
   const [hasMoreResults, setHasMoreResults] = useState(false);
+  const [hasNoSearchResults, setHasNoSearchResults] = useState(false);
 
   useEffect(() => {
     const loadedPackages = getState()?.values?.[input.name] || [];
@@ -70,11 +79,22 @@ const Packages = ({ defaultArch, ...props }) => {
   }, [enterPressed]);
 
   const handlePackageSearch = async () => {
+    if (availableFilter === '') {
+      return;
+    }
+
     const { data, meta } = await getPackages(
       getState()?.values?.release || 'rhel-84',
       getState()?.values?.architecture || defaultArch,
       availableFilter
     );
+
+    if (!data) {
+      setHasNoSearchResults(true);
+      setHasMoreResults(false);
+      setAvailableOptions([]);
+      return;
+    }
 
     if (meta.count > 100) {
       setHasMoreResults(true);
@@ -85,6 +105,8 @@ const Packages = ({ defaultArch, ...props }) => {
         !chosenOptions.find((chosenPkg) => chosenPkg.name === newPkg.name)
     );
     setAvailableOptions(mapPackagesToOptions(removeChosenPackages));
+
+    setHasNoSearchResults(false);
   };
 
   const handleSearchOnEnter = (e) => {
@@ -131,7 +153,7 @@ const Packages = ({ defaultArch, ...props }) => {
     }
   };
 
-  const onOptionSelect = (event, index, isChosen) => {
+  const onOptionSelect = (_event, index, isChosen) => {
     if (isChosen) {
       const newChosen = [...chosenOptions];
       newChosen[index].selected = !chosenOptions[index].selected;
@@ -146,22 +168,24 @@ const Packages = ({ defaultArch, ...props }) => {
   const buildSearchInput = (isAvailable) => {
     const onChange = (value) => {
       isAvailable ? setAvailableFilter(value) : setChosenFilter(value);
-      const toFilter = isAvailable ? [...availableOptions] : [...chosenOptions];
-      toFilter.forEach((option) => {
-        option.isVisible =
-          value === '' ||
-          option.name.toLowerCase().includes(value.toLowerCase());
-      });
+      if (!isAvailable) {
+        const toFilter = [...chosenOptions];
+        toFilter.forEach((option) => {
+          option.isVisible =
+            value === '' ||
+            option.name.toLowerCase().includes(value.toLowerCase());
+        });
+      }
     };
-
     return (
       <>
         <InputGroup>
           <TextInput
             name='textInput1'
-            id='textInput1'
+            id={`${isAvailable ? 'available' : 'chosen'}-textinput`}
             type='search'
             onChange={onChange}
+            placeholder='Search for packages'
             validated={hasMoreResults && isAvailable ? 'warning' : ''}
             aria-label={
               isAvailable ? 'available search input' : 'chosen search input'
@@ -192,14 +216,17 @@ const Packages = ({ defaultArch, ...props }) => {
       </>
     );
   };
-  const selectedStatus = (options) =>
-    options.filter((x) => x.selected && x.isVisible).length > 0
-      ? `${options.filter((x) => x.selected && x.isVisible).length} of ${
-          options.filter((x) => x.isVisible).length
-        } items selected`
-      : `${options.filter((x) => x.isVisible).length} item`;
 
-  // builds a sort control - passed to both dual list selector panes
+  const selectedStatus = (options) => {
+    const totalItemNum = options.filter((x) => x.isVisible).length;
+    const selectedItemNum = options.filter(
+      (x) => x.selected && x.isVisible
+    ).length;
+    return selectedItemNum > 0
+      ? `${selectedItemNum} of ${totalItemNum} items selected`
+      : `${totalItemNum} ${totalItemNum > 1 ? 'items' : 'item'}`;
+  };
+
   const buildSort = (isAvailable) => {
     const onSort = () => {
       const toSort = isAvailable ? [...availableOptions] : [...chosenOptions];
@@ -234,7 +261,7 @@ const Packages = ({ defaultArch, ...props }) => {
         status={selectedStatus(availableOptions)}
         searchInput={buildSearchInput(true)}
       >
-        <DualListSelectorList style={{ minHeight: '315px' }}>
+        <DualListSelectorList style={{ height: '290px' }}>
           {availableOptions.length > 0 ? (
             availableOptions.map((option, index) => {
               return option.isVisible ? (
@@ -248,6 +275,11 @@ const Packages = ({ defaultArch, ...props }) => {
                 </DualListSelectorListItem>
               ) : null;
             })
+          ) : hasNoSearchResults ? (
+            <NoResultsText
+              heading='No Results Found'
+              body='Adjust your search and try again'
+            />
           ) : (
             <EmptyText text='Search above to add additional packages to your image.' />
           )}
@@ -296,8 +328,10 @@ const Packages = ({ defaultArch, ...props }) => {
         searchInput={buildSearchInput(false)}
         isChosen
       >
-        <DualListSelectorList style={{ minHeight: '315px' }}>
-          {chosenOptions.length > 0 ? (
+        <DualListSelectorList>
+          {chosenOptions.length === 0 ? (
+            <EmptyText text='No packages added.' />
+          ) : chosenOptions.filter((option) => option.isVisible).length > 0 ? (
             chosenOptions.map((option, index) => {
               return option.isVisible ? (
                 <DualListSelectorListItem
@@ -311,7 +345,10 @@ const Packages = ({ defaultArch, ...props }) => {
               ) : null;
             })
           ) : (
-            <EmptyText text='No packages added.' />
+            <NoResultsText
+              heading='No Results Found'
+              body='Adjust your search and try again'
+            />
           )}
         </DualListSelectorList>
       </DualListSelectorPane>
