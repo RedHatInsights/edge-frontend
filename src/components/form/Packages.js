@@ -48,6 +48,7 @@ const Packages = ({ defaultArch, ...props }) => {
   const [chosenFilter, setChosenFilter] = React.useState('');
   const [enterPressed, setEnterPressed] = useState(false);
   const [hasMoreResults, setHasMoreResults] = useState(false);
+  const [scrollTo, setScrollTo] = useState(null);
 
   useEffect(() => {
     const loadedPackages = getState()?.values?.[input.name] || [];
@@ -68,6 +69,11 @@ const Packages = ({ defaultArch, ...props }) => {
       setEnterPressed(false);
     }
   }, [enterPressed]);
+
+  useEffect(() => {
+    scrollToAddedPackages();
+    console.log(scrollTo);
+  }, [scrollTo]);
 
   const handlePackageSearch = async () => {
     const { data, meta } = await getPackages(
@@ -94,25 +100,65 @@ const Packages = ({ defaultArch, ...props }) => {
     }
   };
 
+  const scrollToAddedPackages = () => {
+    if (!scrollTo) {
+      return;
+    }
+
+    const destination = document.querySelector(
+      `.pf-m-${scrollTo.pane} .pf-c-dual-list-selector__menu`
+    );
+    console.log(destination);
+    const target = document.querySelector(`#package-${scrollTo.pkg.name}`);
+    target
+      .closest('.pf-c-dual-list-selector__list-item-row')
+      .classList.add('pf-m-selected');
+    setTimeout(() => {
+      target
+        .closest('.pf-c-dual-list-selector__list-item-row')
+        .classList.remove('pf-m-selected');
+    }, 400);
+    destination.scrollTop =
+      target.getBoundingClientRect().y - destination.getBoundingClientRect().y;
+
+    console.log(
+      destination.getBoundingClientRect().y -
+        target.offsetTop -
+        target.offsetHeight
+    );
+    setScrollTo(null);
+  };
+
   const moveSelected = (fromAvailable) => {
     const sourceOptions = fromAvailable ? availableOptions : chosenOptions;
     const destinationOptions = fromAvailable ? chosenOptions : availableOptions;
+
+    const selectedOptions = [];
     for (let i = 0; i < sourceOptions.length; i++) {
       const option = sourceOptions[i];
       if (option.selected && option.isVisible) {
+        selectedOptions.push(option);
         sourceOptions.splice(i, 1);
-        destinationOptions.push(option);
+        //destinationOptions.push(option);
         option.selected = false;
         i--;
       }
     }
+
     if (fromAvailable) {
       setAvailableOptions([...sourceOptions]);
-      setChosenOptions([...destinationOptions]);
+      // alpha this thing
+      setChosenOptions([...destinationOptions, ...selectedOptions]);
     } else {
       setChosenOptions([...sourceOptions]);
-      setAvailableOptions([...destinationOptions]);
+      // alpha this thing
+      setAvailableOptions([...destinationOptions, ...selectedOptions]);
     }
+
+    setScrollTo({
+      pkg: selectedOptions[0],
+      pane: fromAvailable ? 'chosen' : 'available',
+    });
   };
 
   const moveAll = (fromAvailable) => {
@@ -244,7 +290,7 @@ const Packages = ({ defaultArch, ...props }) => {
                   id={`composable-option-${index}`}
                   onOptionSelect={(e) => onOptionSelect(e, index, false)}
                 >
-                  {option.name}
+                  <span id={`package-${option.name}`}>{option.name}</span>
                 </DualListSelectorListItem>
               ) : null;
             })
@@ -306,7 +352,7 @@ const Packages = ({ defaultArch, ...props }) => {
                   id={`composable-option-${index}`}
                   onOptionSelect={(e) => onOptionSelect(e, index, true)}
                 >
-                  {option.name}
+                  <span id={`package-${option.name}`}>{option.name}</span>
                 </DualListSelectorListItem>
               ) : null;
             })
