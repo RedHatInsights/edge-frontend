@@ -12,6 +12,11 @@ node_modules
 # production
 dist
 
+#cypress
+cypress/videos
+cypress/fixtures
+cypress/screenshots
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

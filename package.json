@@ -15,7 +15,11 @@
     "start": "NODE_ENV=development webpack serve --config config/dev.webpack.config.js",
     "start:proxy": "PROXY=true NODE_ENV=development webpack serve --config config/dev.webpack.config.js",
     "test": "jest --verbose",
-    "verify": "npm-run-all build lint test"
+    "cy:headless": "cypress run --env app_env=local",
+    "verify": "npm-run-all build lint test",
+    "cy:local": "cypress open --env app_env=local",
+    "cy:stage": "cypress open --env app_env=stage",
+    "cy:prod": "cypress open --env app_env=prod"
   },
   "jest": {
     "collectCoverage": true,
