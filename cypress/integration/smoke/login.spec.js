@@ -39,5 +39,4 @@ describe('simple login to fleet management', () => {
         cy.url()
             .should('include', '/fleet-management')
     })
-
-})
+});
