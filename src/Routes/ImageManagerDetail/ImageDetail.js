@@ -46,7 +46,7 @@ const ImageDetail = () => {
       ? loadImageSetDetail(dispatch, imageVersionData?.data?.ImageSetID)
       : null;
     return () => registered();
-  }, [dispatch, imageVersionData]);
+  }, [imageVersionData]);
 
   useEffect(() => {
     const registered = getRegistry().register({
@@ -62,7 +62,7 @@ const ImageDetail = () => {
         )
       : null;
     return () => registered();
-  }, [dispatch, imageSetData]);
+  }, [imageSetData]);
 
   return (
     <>

@@ -51,12 +51,12 @@ const ImageDetailTab = ({
   };
 
   const labelsToValueMapperLeftBottom = {
-    Username: data?.Images?.[data?.Images?.length - 1]?.Installer?.Username,
-    'SSH Key': data?.Images?.[data?.Images?.length - 1]?.Installer?.SshKey,
+    Username: isVersionDetails ? data?.Installer?.Username : data?.Images?.[data?.Images?.length - 1]?.Installer?.Username,
+    'SSH Key': isVersionDetails ? data?.Installer?.SshKey : data?.Images?.[data?.Images?.length - 1]?.Installer?.SshKey,
   };
 
   const labelsToValueMapperRightTop = {
-    'Total Additional Packages': '8',
+    'Total Additional Packages': imageData?.Packages?.length,
     'Total Packages': packageData?.Commit?.InstalledPackages?.length,
   };
 
@@ -75,7 +75,7 @@ const ImageDetailTab = ({
     <TextContent className="pf-u-ml-lg pf-u-mt-md">
       <Flex>
         <FlexItem flex={{ default: 'flex_1' }}>
-          <Text component={TextVariants.h3}>Most recent image</Text>
+          <Text component={TextVariants.h3}>{isVersionDetails ? 'Details' : 'Most recent image'}</Text>
           <TextList component={TextListVariants.dl}>
             {data
               ? Object.entries(labelsToValueMapperLeftTop).map(

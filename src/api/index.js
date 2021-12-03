@@ -417,7 +417,11 @@ export const getImageSet = ({
 };
 
 export const getImagePackageMetadata = (id) => {
-  return instance.get(`${EDGE_API}/images/${id}/metadata`);
+  try {
+    return instance.get(`${EDGE_API}/images/${id}/metadata`);
+  } catch (err) {
+    console.log(err)
+  }
 };
 
 export const editCustomRepository = (payload) => {
