@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import { getPackages } from '../../api';
@@ -15,7 +15,6 @@ import {
   DualListSelectorControl,
   HelperText,
   HelperTextItem,
-  SearchInput,
   InputGroup,
   InputGroupText,
   TextInput,
@@ -25,20 +24,28 @@ import AngleDoubleLeftIcon from '@patternfly/react-icons/dist/esm/icons/angle-do
 import AngleLeftIcon from '@patternfly/react-icons/dist/esm/icons/angle-left-icon';
 import AngleDoubleRightIcon from '@patternfly/react-icons/dist/esm/icons/angle-double-right-icon';
 import AngleRightIcon from '@patternfly/react-icons/dist/esm/icons/angle-right-icon';
-import PficonSortCommonAscIcon from '@patternfly/react-icons/dist/esm/icons/pficon-sort-common-asc-icon';
 
 const EmptyText = ({ text }) => (
-  <Text className='pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl'>
+  <Text className="pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl">
     {text}
   </Text>
 );
 
+EmptyText.propTypes = {
+  text: PropTypes.string,
+};
+
 const NoResultsText = ({ heading, body }) => (
-  <TextContent className='pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl'>
-    <Text component='h3'>{heading}</Text>
-    <Text component='small'>{body}</Text>
+  <TextContent className="pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl">
+    <Text component="h3">{heading}</Text>
+    <Text component="small">{body}</Text>
   </TextContent>
 );
+
+NoResultsText.propTypes = {
+  heading: PropTypes.string,
+  body: PropTypes.string,
+};
 
 const mapPackagesToOptions = (pkgs) =>
   pkgs.map((pkg) => ({
@@ -52,15 +59,15 @@ const Packages = ({ defaultArch, ...props }) => {
   const { input } = useFieldApi(props);
   const [availableOptions, setAvailableOptions] = React.useState([]);
   const [chosenOptions, setChosenOptions] = React.useState([]);
-  const [availableFilter, setAvailableFilter] = React.useState('');
-  const [chosenFilter, setChosenFilter] = React.useState('');
+  const [availableInputValue, setAvailableInputValue] = React.useState('');
   const [enterPressed, setEnterPressed] = useState(false);
   const [hasMoreResults, setHasMoreResults] = useState(false);
   const [hasNoSearchResults, setHasNoSearchResults] = useState(false);
 
+  const sortedOptions = (options) => options.sort((a, b) => a.name > b.name);
   useEffect(() => {
     const loadedPackages = getState()?.values?.[input.name] || [];
-    setChosenOptions(mapPackagesToOptions(loadedPackages));
+    setChosenOptions(sortedOptions(mapPackagesToOptions(loadedPackages)));
 
     const availableSearchInput = document.querySelector(
       '[aria-label="available search input"]'
@@ -79,14 +86,14 @@ const Packages = ({ defaultArch, ...props }) => {
   }, [enterPressed]);
 
   const handlePackageSearch = async () => {
-    if (availableFilter === '') {
+    if (availableInputValue === '') {
       return;
     }
 
     const { data, meta } = await getPackages(
       getState()?.values?.release || 'rhel-84',
       getState()?.values?.architecture || defaultArch,
-      availableFilter
+      availableInputValue
     );
 
     if (!data) {
@@ -104,7 +111,9 @@ const Packages = ({ defaultArch, ...props }) => {
       (newPkg) =>
         !chosenOptions.find((chosenPkg) => chosenPkg.name === newPkg.name)
     );
-    setAvailableOptions(mapPackagesToOptions(removeChosenPackages));
+    setAvailableOptions(
+      sortedOptions(mapPackagesToOptions(removeChosenPackages))
+    );
 
     setHasNoSearchResults(false);
   };
@@ -129,45 +138,57 @@ const Packages = ({ defaultArch, ...props }) => {
       }
     }
     if (fromAvailable) {
-      setAvailableOptions([...sourceOptions]);
-      setChosenOptions([...destinationOptions]);
+      setAvailableOptions(sortedOptions([...sourceOptions]));
+      setChosenOptions(sortedOptions([...destinationOptions]));
     } else {
-      setChosenOptions([...sourceOptions]);
-      setAvailableOptions([...destinationOptions]);
+      setChosenOptions(sortedOptions([...sourceOptions]));
+      setAvailableOptions(sortedOptions([...destinationOptions]));
     }
+    change(input.name, chosenOptions);
   };
 
   const moveAll = (fromAvailable) => {
     if (fromAvailable) {
-      setChosenOptions([
-        ...availableOptions.filter((x) => x.isVisible),
-        ...chosenOptions,
-      ]);
-      setAvailableOptions([...availableOptions.filter((x) => !x.isVisible)]);
+      setChosenOptions(
+        sortedOptions([
+          ...availableOptions.filter((x) => x.isVisible),
+          ...chosenOptions,
+        ])
+      );
+      setAvailableOptions(
+        sortedOptions([...availableOptions.filter((x) => !x.isVisible)])
+      );
+      change(input.name, availableOptions);
     } else {
-      setAvailableOptions([
-        ...chosenOptions.filter((x) => x.isVisible),
-        ...availableOptions,
-      ]);
-      setChosenOptions([...chosenOptions.filter((x) => !x.isVisible)]);
+      setAvailableOptions(
+        sortedOptions([
+          ...chosenOptions.filter((x) => x.isVisible),
+          ...availableOptions,
+        ])
+      );
+      setChosenOptions(
+        sortedOptions([...chosenOptions.filter((x) => !x.isVisible)])
+      );
+      change(input.name, []);
     }
+    console.log(chosenOptions);
   };
 
   const onOptionSelect = (_event, index, isChosen) => {
     if (isChosen) {
       const newChosen = [...chosenOptions];
       newChosen[index].selected = !chosenOptions[index].selected;
-      setChosenOptions(newChosen);
+      setChosenOptions(sortedOptions(newChosen));
     } else {
       const newAvailable = [...availableOptions];
       newAvailable[index].selected = !availableOptions[index].selected;
-      setAvailableOptions(newAvailable);
+      setAvailableOptions(sortedOptions(newAvailable));
     }
   };
 
   const buildSearchInput = (isAvailable) => {
     const onChange = (value) => {
-      isAvailable ? setAvailableFilter(value) : setChosenFilter(value);
+      setAvailableInputValue(value);
       if (!isAvailable) {
         const toFilter = [...chosenOptions];
         toFilter.forEach((option) => {
@@ -181,11 +202,10 @@ const Packages = ({ defaultArch, ...props }) => {
       <>
         <InputGroup>
           <TextInput
-            name='textInput1'
             id={`${isAvailable ? 'available' : 'chosen'}-textinput`}
-            type='search'
+            type="search"
             onChange={onChange}
-            placeholder='Search for packages'
+            placeholder="Search for packages"
             validated={hasMoreResults && isAvailable ? 'warning' : ''}
             aria-label={
               isAvailable ? 'available search input' : 'chosen search input'
@@ -195,20 +215,20 @@ const Packages = ({ defaultArch, ...props }) => {
             <Button
               onClick={handlePackageSearch}
               isDisabled={!isAvailable}
-              variant='control'
-              aria-label='search button for search input'
+              variant="control"
+              aria-label="search button for search input"
             >
               <SearchIcon />
             </Button>
           ) : (
             <InputGroupText>
-              <SearchIcon className='pf-u-ml-xs pf-u-mr-xs' />
+              <SearchIcon className="pf-u-ml-xs pf-u-mr-xs" />
             </InputGroupText>
           )}
         </InputGroup>
         {hasMoreResults && isAvailable && (
           <HelperText>
-            <HelperTextItem variant='warning'>
+            <HelperTextItem variant="warning">
               First 100 results displayed. Please, refine your search
             </HelperTextItem>
           </HelperText>
@@ -227,37 +247,10 @@ const Packages = ({ defaultArch, ...props }) => {
       : `${totalItemNum} ${totalItemNum > 1 ? 'items' : 'item'}`;
   };
 
-  const buildSort = (isAvailable) => {
-    const onSort = () => {
-      const toSort = isAvailable ? [...availableOptions] : [...chosenOptions];
-      toSort.sort((a, b) => {
-        if (a.name > b.name) return 1;
-        if (a.name < b.name) return -1;
-        return 0;
-      });
-      if (isAvailable) {
-        setAvailableOptions(toSort);
-      } else {
-        setChosenOptions(toSort);
-      }
-    };
-
-    return (
-      <Button
-        variant='plain'
-        onClick={onSort}
-        aria-label='Sort'
-        key='sortButton'
-      >
-        <PficonSortCommonAscIcon />
-      </Button>
-    );
-  };
-
   return (
     <DualListSelector>
       <DualListSelectorPane
-        title='Available packages'
+        title="Available packages"
         status={selectedStatus(availableOptions)}
         searchInput={buildSearchInput(true)}
       >
@@ -271,66 +264,70 @@ const Packages = ({ defaultArch, ...props }) => {
                   id={`composable-option-${index}`}
                   onOptionSelect={(e) => onOptionSelect(e, index, false)}
                 >
-                  {option.name}
+                  <TextContent>
+                    <span className="pf-c-dual-list-selector__item-text">
+                      {option.name}
+                    </span>
+                    <small>{option.summary}</small>
+                  </TextContent>
                 </DualListSelectorListItem>
               ) : null;
             })
           ) : hasNoSearchResults ? (
             <NoResultsText
-              heading='No Results Found'
-              body='Adjust your search and try again'
+              heading="No Results Found"
+              body="Adjust your search and try again"
             />
           ) : (
-            <EmptyText text='Search above to add additional packages to your image.' />
+            <EmptyText text="Search above to add additional packages to your image." />
           )}
         </DualListSelectorList>
       </DualListSelectorPane>
-      <DualListSelectorControlsWrapper aria-label='Selector controls'>
+
+      <DualListSelectorControlsWrapper aria-label="Selector controls">
         <DualListSelectorControl
           isDisabled={!availableOptions.some((option) => option.selected)}
           onClick={() => moveSelected(true)}
-          aria-label='Add selected'
-          tooltipContent='Add selected'
+          aria-label="Add selected"
+          tooltipContent="Add selected"
         >
           <AngleRightIcon />
         </DualListSelectorControl>
         <DualListSelectorControl
           isDisabled={availableOptions.length === 0}
           onClick={() => moveAll(true)}
-          aria-label='Add all'
-          tooltipContent='Add all'
+          aria-label="Add all"
+          tooltipContent="Add all"
         >
           <AngleDoubleRightIcon />
         </DualListSelectorControl>
         <DualListSelectorControl
           isDisabled={chosenOptions.length === 0}
           onClick={() => moveAll(false)}
-          aria-label='Remove all'
-          tooltipContent='Remove all'
+          aria-label="Remove all"
+          tooltipContent="Remove all"
         >
           <AngleDoubleLeftIcon />
         </DualListSelectorControl>
         <DualListSelectorControl
           onClick={() => moveSelected(false)}
           isDisabled={!chosenOptions.some((option) => option.selected)}
-          aria-label='Remove selected'
-          tooltipContent='Remove selected'
+          aria-label="Remove selected"
+          tooltipContent="Remove selected"
         >
           <AngleLeftIcon />
         </DualListSelectorControl>
       </DualListSelectorControlsWrapper>
 
-      {/* Right Selector Pane */}
-
       <DualListSelectorPane
-        title='Chosen packages'
+        title="Chosen packages"
         status={selectedStatus(chosenOptions)}
         searchInput={buildSearchInput(false)}
         isChosen
       >
         <DualListSelectorList>
           {chosenOptions.length === 0 ? (
-            <EmptyText text='No packages added.' />
+            <EmptyText text="No packages added." />
           ) : chosenOptions.filter((option) => option.isVisible).length > 0 ? (
             chosenOptions.map((option, index) => {
               return option.isVisible ? (
@@ -340,14 +337,19 @@ const Packages = ({ defaultArch, ...props }) => {
                   id={`composable-option-${index}`}
                   onOptionSelect={(e) => onOptionSelect(e, index, true)}
                 >
-                  {option.name}
+                  <TextContent>
+                    <span className="pf-c-dual-list-selector__item-text">
+                      {option.name}
+                    </span>
+                    <small>{option.summary}</small>
+                  </TextContent>
                 </DualListSelectorListItem>
               ) : null;
             })
           ) : (
             <NoResultsText
-              heading='No Results Found'
-              body='Adjust your search and try again'
+              heading="No Results Found"
+              body="Adjust your search and try again"
             />
           )}
         </DualListSelectorList>
