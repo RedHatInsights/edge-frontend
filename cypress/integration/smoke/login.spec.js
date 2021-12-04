@@ -16,7 +16,7 @@ describe('simple login to fleet management', () => {
         const wrongUserName = 'Feed the cat'
         const wrongUserPassword = 'Meow'
         const failedLogin = 'Invalid login or password'
-
+        
         cy.waitFor('#username-verification')
         cy.get('#username-verification').type(`${wrongUserName}{enter}`)
         cy.waitFor('#password')
