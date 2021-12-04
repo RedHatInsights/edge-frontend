@@ -6,8 +6,10 @@ describe('simple login to fleet management', () => {
         // so we must tell it to visit our website with the `cy.visit()` command.
         // Since we want to visit the same URL at the start of all our tests,
         // we include it in our beforeEach function so that it runs before each test
-        cy.visit(Cypress.env('stage_host'))
-    })
+    
+        const APP_ENV = Cypress.env('app_env');
+        cy.visit(Cypress.env(`${APP_ENV}_host`));
+      });
 
     it('displays an error during the initial login page', () => {
         // We use the `cy.get()` command to get all elements that match the selector.
@@ -40,4 +42,4 @@ describe('simple login to fleet management', () => {
             .should('include', '/fleet-management')
     })
 
-})
+});
