@@ -24,6 +24,7 @@ import AngleDoubleLeftIcon from '@patternfly/react-icons/dist/esm/icons/angle-do
 import AngleLeftIcon from '@patternfly/react-icons/dist/esm/icons/angle-left-icon';
 import AngleDoubleRightIcon from '@patternfly/react-icons/dist/esm/icons/angle-double-right-icon';
 import AngleRightIcon from '@patternfly/react-icons/dist/esm/icons/angle-right-icon';
+import { sortByDirection as sortedOptions } from '../../constants';
 
 const EmptyText = ({ text }) => (
   <Text className="pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl">
@@ -64,7 +65,6 @@ const Packages = ({ defaultArch, ...props }) => {
   const [hasMoreResults, setHasMoreResults] = useState(false);
   const [hasNoSearchResults, setHasNoSearchResults] = useState(false);
 
-  const sortedOptions = (options) => options.sort((a, b) => a.name > b.name);
   useEffect(() => {
     const loadedPackages = getState()?.values?.[input.name] || [];
     setChosenOptions(sortedOptions(mapPackagesToOptions(loadedPackages)));
