@@ -33,10 +33,6 @@ const renderPackages = (initialValues = {}) => {
 };
 
 describe('Packages', () => {
-  it('should render correctly', () => {
-    renderPackages();
-  });
-
   it('should render a package when initialValues is populated', () => {
     renderPackages({
       'selected-packages': [{ name: 'my test package' }],
