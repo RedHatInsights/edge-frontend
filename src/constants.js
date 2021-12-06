@@ -49,6 +49,13 @@ export const statusToIcon = {
   },
 };
 
+export const sortByDirection = (data, direction = 'asc') =>
+  data.sort((a, b) =>
+    direction === 'asc'
+      ? a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+      : b.name.toLowerCase().localeCompare(a.name.toLowerCase())
+  );
+
 export const isEmptyFilters = (activeFilters) =>
   Object.values(activeFilters).find(
     (item) => item?.value?.length > 0 || item?.length > 0
