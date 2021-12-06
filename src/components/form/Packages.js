@@ -210,6 +210,9 @@ const Packages = ({ defaultArch, ...props }) => {
             aria-label={
               isAvailable ? 'available search input' : 'chosen search input'
             }
+            data-testid={
+              isAvailable ? 'available-search-input' : 'chosen-search-input'
+            }
           />
           {isAvailable ? (
             <Button
@@ -217,6 +220,7 @@ const Packages = ({ defaultArch, ...props }) => {
               isDisabled={!isAvailable}
               variant="control"
               aria-label="search button for search input"
+              data-testid="package-search"
             >
               <SearchIcon />
             </Button>
@@ -254,7 +258,10 @@ const Packages = ({ defaultArch, ...props }) => {
         status={selectedStatus(availableOptions)}
         searchInput={buildSearchInput(true)}
       >
-        <DualListSelectorList style={{ height: '290px' }}>
+        <DualListSelectorList
+          style={{ height: '290px' }}
+          data-testid="available-packages-list"
+        >
           {availableOptions.length > 0 ? (
             availableOptions.map((option, index) => {
               return option.isVisible ? (
@@ -325,7 +332,7 @@ const Packages = ({ defaultArch, ...props }) => {
         searchInput={buildSearchInput(false)}
         isChosen
       >
-        <DualListSelectorList>
+        <DualListSelectorList data-testid="chosen-packages-list">
           {chosenOptions.length === 0 ? (
             <EmptyText text="No packages added." />
           ) : chosenOptions.filter((option) => option.isVisible).length > 0 ? (
