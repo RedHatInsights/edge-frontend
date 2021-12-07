@@ -332,7 +332,10 @@ const Packages = ({ defaultArch, ...props }) => {
         searchInput={buildSearchInput(false)}
         isChosen
       >
-        <DualListSelectorList data-testid="chosen-packages-list">
+        <DualListSelectorList
+          style={{ height: '290px' }}
+          data-testid="chosen-packages-list"
+        >
           {chosenOptions.length === 0 ? (
             <EmptyText text="No packages added." />
           ) : chosenOptions.filter((option) => option.isVisible).length > 0 ? (
