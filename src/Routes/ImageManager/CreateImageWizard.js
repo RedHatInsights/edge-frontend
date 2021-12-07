@@ -94,7 +94,7 @@ const CreateImage = ({ navigateBack }) => {
           loadEdgeImages(dispatch);
         });
       }}
-      defaultArch='x86_64'
+      defaultArch="x86_64"
       initialValues={{ version: 0 }}
       schema={{
         fields: [
@@ -113,11 +113,11 @@ const CreateImage = ({ navigateBack }) => {
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
             fields: [
-              //imageSetDetails,
-              //imageOutput,
-              //registration,
+              imageSetDetails,
+              imageOutput,
+              registration,
               packages,
-              //review,
+              review,
             ],
           },
         ],

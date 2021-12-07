@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import { getPackages } from '../../api';
 import PropTypes from 'prop-types';
 import {
+  TextContent,
   Text,
   Button,
   DualListSelector,
@@ -14,7 +15,6 @@ import {
   DualListSelectorControl,
   HelperText,
   HelperTextItem,
-  SearchInput,
   InputGroup,
   InputGroupText,
   TextInput,
@@ -24,13 +24,29 @@ import AngleDoubleLeftIcon from '@patternfly/react-icons/dist/esm/icons/angle-do
 import AngleLeftIcon from '@patternfly/react-icons/dist/esm/icons/angle-left-icon';
 import AngleDoubleRightIcon from '@patternfly/react-icons/dist/esm/icons/angle-double-right-icon';
 import AngleRightIcon from '@patternfly/react-icons/dist/esm/icons/angle-right-icon';
-import PficonSortCommonAscIcon from '@patternfly/react-icons/dist/esm/icons/pficon-sort-common-asc-icon';
+import { sortByDirection as sortedOptions } from '../../constants';
 
 const EmptyText = ({ text }) => (
   <Text className='pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl'>
     {text}
   </Text>
 );
+
+EmptyText.propTypes = {
+  text: PropTypes.string,
+};
+
+const NoResultsText = ({ heading, body }) => (
+  <TextContent className='pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl'>
+    <Text component='h3'>{heading}</Text>
+    <Text component='small'>{body}</Text>
+  </TextContent>
+);
+
+NoResultsText.propTypes = {
+  heading: PropTypes.string,
+  body: PropTypes.string,
+};
 
 const mapPackagesToOptions = (pkgs) =>
   pkgs.map((pkg) => ({
@@ -44,15 +60,15 @@ const Packages = ({ defaultArch, ...props }) => {
   const { input } = useFieldApi(props);
   const [availableOptions, setAvailableOptions] = React.useState([]);
   const [chosenOptions, setChosenOptions] = React.useState([]);
-  const [availableFilter, setAvailableFilter] = React.useState('');
-  const [chosenFilter, setChosenFilter] = React.useState('');
+  const [availableInputValue, setAvailableInputValue] = React.useState('');
   const [enterPressed, setEnterPressed] = useState(false);
   const [hasMoreResults, setHasMoreResults] = useState(false);
   const [scrollTo, setScrollTo] = useState(null);
+  const [hasNoSearchResults, setHasNoSearchResults] = useState(false);
 
   useEffect(() => {
     const loadedPackages = getState()?.values?.[input.name] || [];
-    setChosenOptions(mapPackagesToOptions(loadedPackages));
+    setChosenOptions(sortedOptions(mapPackagesToOptions(loadedPackages)));
 
     const availableSearchInput = document.querySelector(
       '[aria-label="available search input"]'
@@ -76,11 +92,22 @@ const Packages = ({ defaultArch, ...props }) => {
   }, [scrollTo]);
 
   const handlePackageSearch = async () => {
+    if (availableInputValue === '') {
+      return;
+    }
+
     const { data, meta } = await getPackages(
       getState()?.values?.release || 'rhel-84',
       getState()?.values?.architecture || defaultArch,
-      availableFilter
+      availableInputValue
     );
+
+    if (!data) {
+      setHasNoSearchResults(true);
+      setHasMoreResults(false);
+      setAvailableOptions([]);
+      return;
+    }
 
     if (meta.count > 100) {
       setHasMoreResults(true);
@@ -90,7 +117,11 @@ const Packages = ({ defaultArch, ...props }) => {
       (newPkg) =>
         !chosenOptions.find((chosenPkg) => chosenPkg.name === newPkg.name)
     );
-    setAvailableOptions(mapPackagesToOptions(removeChosenPackages));
+    setAvailableOptions(
+      sortedOptions(mapPackagesToOptions(removeChosenPackages))
+    );
+
+    setHasNoSearchResults(false);
   };
 
   const handleSearchOnEnter = (e) => {
@@ -146,15 +177,13 @@ const Packages = ({ defaultArch, ...props }) => {
     }
 
     if (fromAvailable) {
-      setAvailableOptions([...sourceOptions]);
-      // alpha this thing
-      setChosenOptions([...destinationOptions, ...selectedOptions]);
+      setAvailableOptions(sortedOptions([...sourceOptions]));
+      setChosenOptions(sortedOptions([...destinationOptions]));
     } else {
-      setChosenOptions([...sourceOptions]);
-      // alpha this thing
-      setAvailableOptions([...destinationOptions, ...selectedOptions]);
+      setChosenOptions(sortedOptions([...sourceOptions]));
+      setAvailableOptions(sortedOptions([...destinationOptions]));
     }
-
+    change(input.name, chosenOptions);
     setScrollTo({
       pkg: selectedOptions[0],
       pane: fromAvailable ? 'chosen' : 'available',
@@ -163,54 +192,69 @@ const Packages = ({ defaultArch, ...props }) => {
 
   const moveAll = (fromAvailable) => {
     if (fromAvailable) {
-      setChosenOptions([
-        ...availableOptions.filter((x) => x.isVisible),
-        ...chosenOptions,
-      ]);
-      setAvailableOptions([...availableOptions.filter((x) => !x.isVisible)]);
+      setChosenOptions(
+        sortedOptions([
+          ...availableOptions.filter((x) => x.isVisible),
+          ...chosenOptions,
+        ])
+      );
+      setAvailableOptions(
+        sortedOptions([...availableOptions.filter((x) => !x.isVisible)])
+      );
+      change(input.name, availableOptions);
     } else {
-      setAvailableOptions([
-        ...chosenOptions.filter((x) => x.isVisible),
-        ...availableOptions,
-      ]);
-      setChosenOptions([...chosenOptions.filter((x) => !x.isVisible)]);
+      setAvailableOptions(
+        sortedOptions([
+          ...chosenOptions.filter((x) => x.isVisible),
+          ...availableOptions,
+        ])
+      );
+      setChosenOptions(
+        sortedOptions([...chosenOptions.filter((x) => !x.isVisible)])
+      );
+      change(input.name, []);
     }
+    console.log(chosenOptions);
   };
 
-  const onOptionSelect = (event, index, isChosen) => {
+  const onOptionSelect = (_event, index, isChosen) => {
     if (isChosen) {
       const newChosen = [...chosenOptions];
       newChosen[index].selected = !chosenOptions[index].selected;
-      setChosenOptions(newChosen);
+      setChosenOptions(sortedOptions(newChosen));
     } else {
       const newAvailable = [...availableOptions];
       newAvailable[index].selected = !availableOptions[index].selected;
-      setAvailableOptions(newAvailable);
+      setAvailableOptions(sortedOptions(newAvailable));
     }
   };
 
   const buildSearchInput = (isAvailable) => {
     const onChange = (value) => {
-      isAvailable ? setAvailableFilter(value) : setChosenFilter(value);
-      const toFilter = isAvailable ? [...availableOptions] : [...chosenOptions];
-      toFilter.forEach((option) => {
-        option.isVisible =
-          value === '' ||
-          option.name.toLowerCase().includes(value.toLowerCase());
-      });
+      setAvailableInputValue(value);
+      if (!isAvailable) {
+        const toFilter = [...chosenOptions];
+        toFilter.forEach((option) => {
+          option.isVisible =
+            value === '' ||
+            option.name.toLowerCase().includes(value.toLowerCase());
+        });
+      }
     };
-
     return (
       <>
         <InputGroup>
           <TextInput
-            name='textInput1'
-            id='textInput1'
+            id={`${isAvailable ? 'available' : 'chosen'}-textinput`}
             type='search'
             onChange={onChange}
+            placeholder='Search for packages'
             validated={hasMoreResults && isAvailable ? 'warning' : ''}
             aria-label={
               isAvailable ? 'available search input' : 'chosen search input'
+            }
+            data-testid={
+              isAvailable ? 'available-search-input' : 'chosen-search-input'
             }
           />
           {isAvailable ? (
@@ -219,6 +263,7 @@ const Packages = ({ defaultArch, ...props }) => {
               isDisabled={!isAvailable}
               variant='control'
               aria-label='search button for search input'
+              data-testid='package-search'
             >
               <SearchIcon />
             </Button>
@@ -238,39 +283,15 @@ const Packages = ({ defaultArch, ...props }) => {
       </>
     );
   };
-  const selectedStatus = (options) =>
-    options.filter((x) => x.selected && x.isVisible).length > 0
-      ? `${options.filter((x) => x.selected && x.isVisible).length} of ${
-          options.filter((x) => x.isVisible).length
-        } items selected`
-      : `${options.filter((x) => x.isVisible).length} item`;
 
-  // builds a sort control - passed to both dual list selector panes
-  const buildSort = (isAvailable) => {
-    const onSort = () => {
-      const toSort = isAvailable ? [...availableOptions] : [...chosenOptions];
-      toSort.sort((a, b) => {
-        if (a.name > b.name) return 1;
-        if (a.name < b.name) return -1;
-        return 0;
-      });
-      if (isAvailable) {
-        setAvailableOptions(toSort);
-      } else {
-        setChosenOptions(toSort);
-      }
-    };
-
-    return (
-      <Button
-        variant='plain'
-        onClick={onSort}
-        aria-label='Sort'
-        key='sortButton'
-      >
-        <PficonSortCommonAscIcon />
-      </Button>
-    );
+  const selectedStatus = (options) => {
+    const totalItemNum = options.filter((x) => x.isVisible).length;
+    const selectedItemNum = options.filter(
+      (x) => x.selected && x.isVisible
+    ).length;
+    return selectedItemNum > 0
+      ? `${selectedItemNum} of ${totalItemNum} items selected`
+      : `${totalItemNum} ${totalItemNum > 1 ? 'items' : 'item'}`;
   };
 
   return (
@@ -280,7 +301,10 @@ const Packages = ({ defaultArch, ...props }) => {
         status={selectedStatus(availableOptions)}
         searchInput={buildSearchInput(true)}
       >
-        <DualListSelectorList style={{ minHeight: '315px' }}>
+        <DualListSelectorList
+          style={{ height: '290px' }}
+          data-testid='available-packages-list'
+        >
           {availableOptions.length > 0 ? (
             availableOptions.map((option, index) => {
               return option.isVisible ? (
@@ -290,15 +314,26 @@ const Packages = ({ defaultArch, ...props }) => {
                   id={`composable-option-${index}`}
                   onOptionSelect={(e) => onOptionSelect(e, index, false)}
                 >
-                  <span id={`package-${option.name}`}>{option.name}</span>
+                  <TextContent>
+                    <span className='pf-c-dual-list-selector__item-text'>
+                      {option.name}
+                    </span>
+                    <small>{option.summary}</small>
+                  </TextContent>
                 </DualListSelectorListItem>
               ) : null;
             })
+          ) : hasNoSearchResults ? (
+            <NoResultsText
+              heading='No Results Found'
+              body='Adjust your search and try again'
+            />
           ) : (
             <EmptyText text='Search above to add additional packages to your image.' />
           )}
         </DualListSelectorList>
       </DualListSelectorPane>
+
       <DualListSelectorControlsWrapper aria-label='Selector controls'>
         <DualListSelectorControl
           isDisabled={!availableOptions.some((option) => option.selected)}
@@ -334,16 +369,16 @@ const Packages = ({ defaultArch, ...props }) => {
         </DualListSelectorControl>
       </DualListSelectorControlsWrapper>
 
-      {/* Right Selector Pane */}
-
       <DualListSelectorPane
         title='Chosen packages'
         status={selectedStatus(chosenOptions)}
         searchInput={buildSearchInput(false)}
         isChosen
       >
-        <DualListSelectorList style={{ minHeight: '315px' }}>
-          {chosenOptions.length > 0 ? (
+        <DualListSelectorList data-testid='chosen-packages-list'>
+          {chosenOptions.length === 0 ? (
+            <EmptyText text='No packages added.' />
+          ) : chosenOptions.filter((option) => option.isVisible).length > 0 ? (
             chosenOptions.map((option, index) => {
               return option.isVisible ? (
                 <DualListSelectorListItem
@@ -352,12 +387,20 @@ const Packages = ({ defaultArch, ...props }) => {
                   id={`composable-option-${index}`}
                   onOptionSelect={(e) => onOptionSelect(e, index, true)}
                 >
-                  <span id={`package-${option.name}`}>{option.name}</span>
+                  <TextContent>
+                    <span className='pf-c-dual-list-selector__item-text'>
+                      {option.name}
+                    </span>
+                    <small>{option.summary}</small>
+                  </TextContent>
                 </DualListSelectorListItem>
               ) : null;
             })
           ) : (
-            <EmptyText text='No packages added.' />
+            <NoResultsText
+              heading='No Results Found'
+              body='Adjust your search and try again'
+            />
           )}
         </DualListSelectorList>
       </DualListSelectorPane>
