@@ -178,10 +178,16 @@ const Packages = ({ defaultArch, ...props }) => {
 
     if (fromAvailable) {
       setAvailableOptions(sortedOptions([...sourceOptions]));
-      setChosenOptions(sortedOptions([...destinationOptions]));
+      //setChosenOptions(sortedOptions([...destinationOptions]));
+      setChosenOptions(
+        sortedOptions([...destinationOptions, ...selectedOptions])
+      );
     } else {
       setChosenOptions(sortedOptions([...sourceOptions]));
-      setAvailableOptions(sortedOptions([...destinationOptions]));
+      //setAvailableOptions(sortedOptions([...destinationOptions]));
+      setAvailableOptions(
+        sortedOptions([...destinationOptions, ...selectedOptions])
+      );
     }
     change(input.name, chosenOptions);
     setScrollTo({
