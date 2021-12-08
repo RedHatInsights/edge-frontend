@@ -10,6 +10,7 @@ import {
   Grid,
   GridItem,
   Tooltip,
+  ClipboardCopy,
 } from '@patternfly/react-core';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from './constants';
@@ -49,7 +50,7 @@ const ImageDetailTab = ({
         <div key={index}>{outputType}</div>
       )),
     Release: () => distributionMapper?.[data?.['Distribution']],
-    Size: 'Size',
+    //Size: 'Size',
     Description: 'Description',
   };
 
@@ -73,11 +74,6 @@ const ImageDetailTab = ({
     detailsMapper['SHA-256 Checksum'] = () => data?.Installer?.Checksum;
   }
 
-  const handleTruncateClick = (value) => {
-    setTruncate((preState) => !preState);
-    navigator.clipboard.writeText(value);
-  };
-
   const buildTextList = (labelsToValueMapper) =>
     data
       ? Object.entries(labelsToValueMapper).map(([label, value]) => {
@@ -89,26 +85,17 @@ const ImageDetailTab = ({
               >
                 {label}
               </TextListItem>
-              {label === 'SHA-256 Checksum' ? (
-                <Tooltip
-                  content={
-                    truncate ? 'Copy to clipboard' : 'Successfully copied'
-                  }
-                >
-                  <TextListItem
-                    className={`${
-                      truncate && 'pf-u-text-truncate'
-                    } cursor-pointer`}
-                    onClick={() => handleTruncateClick(value())}
-                    component={TextListItemVariants.dd}
-                  >
+              {console.log(label)}
+              {label === 'SHA-256 Checksum' || label === 'SSH Key' ? (
+                <ClipboardCopy hoverTip='Copy' clickTip='Copied' variant='inline-compact'>
+                  <TextListItem component={TextListItemVariants.dd}>
                     {typeof value === 'function'
                       ? value() || 'Currently unavailable'
                       : data[value] || 'Currently unavailable'}
                   </TextListItem>
-                </Tooltip>
+                </ClipboardCopy>
               ) : (
-                <TextListItem component={TextListItemVariants.dd}>
+                <TextListItem className="pf-u-text-break-word" component={TextListItemVariants.dd}>
                   {typeof value === 'function'
                     ? value() || 'Currently unavailable'
                     : data[value] || 'Currently unavailable'}
