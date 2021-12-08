@@ -9,7 +9,6 @@ import {
   TextVariants,
   Grid,
   GridItem,
-  Tooltip,
   ClipboardCopy,
 } from '@patternfly/react-core';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
@@ -23,7 +22,6 @@ const ImageDetailTab = ({
 }) => {
   const [data, setData] = useState({});
   const [packageData, setPackageData] = useState({});
-  const [truncate, setTruncate] = useState(true);
 
   useEffect(() => {
     setData(
@@ -87,7 +85,11 @@ const ImageDetailTab = ({
               </TextListItem>
               {console.log(label)}
               {label === 'SHA-256 Checksum' || label === 'SSH Key' ? (
-                <ClipboardCopy hoverTip='Copy' clickTip='Copied' variant='inline-compact'>
+                <ClipboardCopy
+                  hoverTip="Copy"
+                  clickTip="Copied"
+                  variant="inline-compact"
+                >
                   <TextListItem component={TextListItemVariants.dd}>
                     {typeof value === 'function'
                       ? value() || 'Currently unavailable'
@@ -95,7 +97,10 @@ const ImageDetailTab = ({
                   </TextListItem>
                 </ClipboardCopy>
               ) : (
-                <TextListItem className="pf-u-text-break-word" component={TextListItemVariants.dd}>
+                <TextListItem
+                  className="pf-u-text-break-word"
+                  component={TextListItemVariants.dd}
+                >
                   {typeof value === 'function'
                     ? value() || 'Currently unavailable'
                     : data[value] || 'Currently unavailable'}
