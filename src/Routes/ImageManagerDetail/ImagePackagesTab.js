@@ -71,7 +71,10 @@ const ImagePackagesTab = ({ imagePackageMetadata, imageData }) => {
       filters={defaultFilters}
       loadTableData={loadImagePackageMetadata}
       tableData={{
-        count: toggleTable === 0 ? imageData?.Packages?.length : packageMetadata?.Commit?.InstalledPackages?.length,
+        count:
+          toggleTable === 0
+            ? imageData?.Packages?.length
+            : packageMetadata?.Commit?.InstalledPackages?.length,
         isLoading: false,
         hasError: false,
       }}
@@ -94,7 +97,7 @@ const ImagePackagesTab = ({ imagePackageMetadata, imageData }) => {
       ]}
       toggleAction={setToggleTable}
       toggleState={toggleTable}
-      emptyStateMessage='No packages to display'
+      emptyStateMessage="No packages to display"
     />
   );
 };

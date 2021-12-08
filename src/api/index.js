@@ -420,7 +420,7 @@ export const getImagePackageMetadata = (id) => {
   try {
     return instance.get(`${EDGE_API}/images/${id}/metadata`);
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 };
 

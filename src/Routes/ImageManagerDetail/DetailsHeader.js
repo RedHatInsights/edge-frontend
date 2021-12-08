@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import {
+  Text,
   TextList,
   TextListItem,
   TextContent,
@@ -20,19 +21,46 @@ import StatusLabel from './StatusLabel';
 import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 
-const dropdownItems = [
-  <DropdownItem key="action" component="button">
-    Create new version
-  </DropdownItem>,
-  <DropdownItem key="action" component="button">
-    Download instalable .iso for newest image
-  </DropdownItem>,
-  <DropdownItem key="action" component="button">
-    Archive
-  </DropdownItem>,
-];
+const dropdownItems = (data, isVersionDetails, openUpdateWizard) => {
+  const imageData = isVersionDetails
+    ? data
+    : data?.Images?.[data?.Images?.length - 1];
+  const actionsArray = [];
 
-const DetailsHead = ({ imageData, isVersionDetails, imageSetName }) => {
+  imageData?.ID &&
+    actionsArray.push(
+      <DropdownItem
+        key="create-new-version-button"
+        component="button"
+        onClick={() => openUpdateWizard(imageData?.ID)}
+      >
+        Create new version
+      </DropdownItem>
+    );
+
+  imageData?.Installer?.ImageBuildISOURL &&
+    actionsArray.push(
+      <DropdownItem key="download-button" component="button">
+        <Text
+          className="force-text-black remove-underline"
+          component="a"
+          href={imageData?.Installer?.ImageBuildISOURL}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Download installable .iso for newest image
+        </Text>
+      </DropdownItem>
+    );
+  return actionsArray;
+};
+
+const DetailsHead = ({
+  imageData,
+  isVersionDetails,
+  imageSetName,
+  openUpdateWizard,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState({});
   useEffect(() => {
@@ -95,7 +123,11 @@ const DetailsHead = ({ imageData, isVersionDetails, imageSetName }) => {
                 </DropdownToggle>
               }
               isOpen={isOpen}
-              dropdownItems={dropdownItems}
+              dropdownItems={dropdownItems(
+                data,
+                isVersionDetails,
+                openUpdateWizard
+              )}
             />
           </SplitItem>
         </Split>
@@ -108,6 +140,7 @@ DetailsHead.propTypes = {
   imageData: PropTypes.object,
   isVersionDetails: PropTypes.bool,
   imageSetName: PropTypes.object,
+  openUpdateWizard: PropTypes.func,
 };
 
 export default DetailsHead;

@@ -43,7 +43,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
     const registered = getRegistry().register({
       imageDetailReducer,
     });
-    loadImageDetail(dispatch, updateImageID);
+    updateImageID && loadImageDetail(dispatch, updateImageID);
     return () => registered();
   }, [dispatch]);
 

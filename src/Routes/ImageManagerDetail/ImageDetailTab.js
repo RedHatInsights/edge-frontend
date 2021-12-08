@@ -7,8 +7,9 @@ import {
   TextListVariants,
   Text,
   TextVariants,
-  Flex,
-  FlexItem,
+  Grid,
+  GridItem,
+  Tooltip,
 } from '@patternfly/react-core';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from './constants';
@@ -21,6 +22,7 @@ const ImageDetailTab = ({
 }) => {
   const [data, setData] = useState({});
   const [packageData, setPackageData] = useState({});
+  const [truncate, setTruncate] = useState(true);
 
   useEffect(() => {
     setData(
@@ -37,124 +39,112 @@ const ImageDetailTab = ({
   }, [imagePackageMetadata]);
 
   const dateFormat = () => <DateFormat date={data['CreatedAt']} />;
-  const labelsToValueMapperLeftTop = {
+
+  const detailsMapper = {
     'Image name': 'Name',
     Version: 'Version',
     Created: () => dateFormat(),
     'Type(s)': () =>
-      data['OutputTypes']?.map((outputType, index) => (
+      data?.['OutputTypes']?.map((outputType, index) => (
         <div key={index}>{outputType}</div>
       )),
-    Release: () => distributionMapper[data['Distribution']],
+    Release: () => distributionMapper?.[data?.['Distribution']],
     Size: 'Size',
     Description: 'Description',
   };
 
-  const labelsToValueMapperLeftBottom = {
-    Username: isVersionDetails ? data?.Installer?.Username : data?.Images?.[data?.Images?.length - 1]?.Installer?.Username,
-    'SSH Key': isVersionDetails ? data?.Installer?.SshKey : data?.Images?.[data?.Images?.length - 1]?.Installer?.SshKey,
+  const userInfoMapper = {
+    Username: () => data?.Installer?.Username,
+    'SSH Key': () => data?.Installer?.SshKey,
   };
 
-  const labelsToValueMapperRightTop = {
-    'Total Additional Packages': imageData?.Packages?.length,
-    'Total Packages': packageData?.Commit?.InstalledPackages?.length,
+  const packageMapper = {
+    'Total Additional Packages': () => data?.Packages?.length,
+    'Total Packages': () => packageData?.Commit?.InstalledPackages?.length,
   };
 
-  const labelsToValueMapperRightBottom = {
-    Added: '0',
-    Removed: '0',
-    Updated: '24',
-  };
+  // const packageDiffMapper = {
+  //   Added: 'Currently unavailable',
+  //   Removed: 'Currently unavailable',
+  //   Updated: 'Currently unavailable',
+  // };
 
   if (data?.Installer?.Checksum) {
-    labelsToValueMapperLeftTop['SHA-256 Checksum'] = () =>
-      data?.Installer?.Checksum;
+    detailsMapper['SHA-256 Checksum'] = () => data?.Installer?.Checksum;
   }
+
+  const handleTruncateClick = (value) => {
+    setTruncate((preState) => !preState);
+    navigator.clipboard.writeText(value);
+  };
+
+  const buildTextList = (labelsToValueMapper) =>
+    data
+      ? Object.entries(labelsToValueMapper).map(([label, value]) => {
+          return (
+            <>
+              <TextListItem
+                className="details-label"
+                component={TextListItemVariants.dt}
+              >
+                {label}
+              </TextListItem>
+              {label === 'SHA-256 Checksum' ? (
+                <Tooltip
+                  content={
+                    truncate ? 'Copy to clipboard' : 'Successfully copied'
+                  }
+                >
+                  <TextListItem
+                    className={`${
+                      truncate && 'pf-u-text-truncate'
+                    } cursor-pointer`}
+                    onClick={() => handleTruncateClick(value())}
+                    component={TextListItemVariants.dd}
+                  >
+                    {typeof value === 'function'
+                      ? value() || 'Currently unavailable'
+                      : data[value] || 'Currently unavailable'}
+                  </TextListItem>
+                </Tooltip>
+              ) : (
+                <TextListItem component={TextListItemVariants.dd}>
+                  {typeof value === 'function'
+                    ? value() || 'Currently unavailable'
+                    : data[value] || 'Currently unavailable'}
+                </TextListItem>
+              )}
+            </>
+          );
+        })
+      : null;
 
   return (
     <TextContent className="pf-u-ml-lg pf-u-mt-md">
-      <Flex>
-        <FlexItem flex={{ default: 'flex_1' }}>
-          <Text component={TextVariants.h3}>{isVersionDetails ? 'Details' : 'Most recent image'}</Text>
+      <Grid span={12}>
+        <GridItem span={6}>
+          <Text component={TextVariants.h2}>
+            {isVersionDetails ? 'Details' : 'Most recent image'}
+          </Text>
           <TextList component={TextListVariants.dl}>
-            {data
-              ? Object.entries(labelsToValueMapperLeftTop).map(
-                  ([label, value]) => {
-                    return (
-                      <>
-                        <TextListItem component={TextListItemVariants.dt}>
-                          {label}
-                        </TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>
-                          {typeof value === 'function' ? value() : data[value]}
-                        </TextListItem>
-                      </>
-                    );
-                  }
-                )
-              : null}
+            {buildTextList(detailsMapper)}
           </TextList>
-          <Text component={TextVariants.h3}>User Information </Text>
+          <Text component={TextVariants.h2}>User Information </Text>
           <TextList component={TextListVariants.dl}>
-            {data
-              ? Object.entries(labelsToValueMapperLeftBottom).map(
-                  ([label, value]) => {
-                    return (
-                      <>
-                        <TextListItem component={TextListItemVariants.dt}>
-                          {label}
-                        </TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>
-                          {typeof value === 'function' ? value() : value}
-                        </TextListItem>
-                      </>
-                    );
-                  }
-                )
-              : null}
+            {buildTextList(userInfoMapper)}
           </TextList>
-        </FlexItem>
-        <FlexItem flex={{ default: 'flex_1' }}>
-          <Text component={TextVariants.h3}>Packages </Text>
+        </GridItem>
+        <GridItem span={6}>
+          <Text component={TextVariants.h2}>Packages </Text>
           <TextList component={TextListVariants.dl}>
-            {data
-              ? Object.entries(labelsToValueMapperRightTop).map(
-                  ([label, value]) => {
-                    return (
-                      <>
-                        <TextListItem component={TextListItemVariants.dt}>
-                          {label}
-                        </TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>
-                          {typeof value === 'function' ? value() : value}
-                        </TextListItem>
-                      </>
-                    );
-                  }
-                )
-              : null}
+            {buildTextList(packageMapper)}
           </TextList>
-          <Text component={TextVariants.h3}>Changes from previous version</Text>
+          {/* <Text component={TextVariants.h2}>Changes from previous version</Text>
           <TextList component={TextListVariants.dl}>
-            {data
-              ? Object.entries(labelsToValueMapperRightBottom).map(
-                  ([label, value]) => {
-                    return (
-                      <>
-                        <TextListItem component={TextListItemVariants.dt}>
-                          {label}
-                        </TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>
-                          {typeof value === 'function' ? value() : value}
-                        </TextListItem>
-                      </>
-                    );
-                  }
-                )
-              : null}
-          </TextList>
-        </FlexItem>
-      </Flex>
+            {buildTextList(packageDiffMapper)}
+          </TextList> */}
+        </GridItem>
+      </Grid>
     </TextContent>
   );
 };
@@ -163,6 +153,7 @@ ImageDetailTab.propTypes = {
   imageData: PropTypes.object,
   isVersionDetails: PropTypes.bool,
   imagePackageMetadata: PropTypes.object,
+  labelsToValueMapper: PropTypes.object,
 };
 
 export default ImageDetailTab;
