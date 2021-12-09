@@ -63,6 +63,7 @@ const Packages = ({ defaultArch, ...props }) => {
   const [availableInputValue, setAvailableInputValue] = React.useState('');
   const [enterPressed, setEnterPressed] = useState(false);
   const [hasMoreResults, setHasMoreResults] = useState(false);
+  const [scrollTo, setScrollTo] = useState(null);
   const [hasNoSearchResults, setHasNoSearchResults] = useState(false);
 
   useEffect(() => {
@@ -84,6 +85,10 @@ const Packages = ({ defaultArch, ...props }) => {
       setEnterPressed(false);
     }
   }, [enterPressed]);
+
+  useEffect(() => {
+    scrollToAddedPackages();
+  }, [scrollTo]);
 
   const handlePackageSearch = async () => {
     if (availableInputValue === '') {
@@ -125,26 +130,72 @@ const Packages = ({ defaultArch, ...props }) => {
     }
   };
 
+  const scrollToAddedPackages = () => {
+    if (!scrollTo) {
+      return;
+    }
+
+    const destination = document.querySelector(
+      `.pf-m-${scrollTo.pane} .pf-c-dual-list-selector__menu`
+    );
+    scrollTo.pkgs.forEach((pkg) =>
+      document
+        .querySelector(`#package-${pkg.name}`)
+        .closest('.pf-c-dual-list-selector__list-item-row')
+        .classList.add('pf-u-background-color-disabled-color-300')
+    );
+    setTimeout(() => {
+      scrollTo.pkgs.forEach((pkg) =>
+        document
+          .querySelector(`#package-${pkg.name}`)
+          .closest('.pf-c-dual-list-selector__list-item-row')
+          .classList.remove('pf-u-background-color-disabled-color-300')
+      );
+    }, 400);
+    destination.scrollTop = scrollTo.scrollHeight;
+
+    setScrollTo(null);
+  };
+
   const moveSelected = (fromAvailable) => {
     const sourceOptions = fromAvailable ? availableOptions : chosenOptions;
-    const destinationOptions = fromAvailable ? chosenOptions : availableOptions;
+    let destinationOptions = fromAvailable ? chosenOptions : availableOptions;
+
+    const selectedOptions = [];
     for (let i = 0; i < sourceOptions.length; i++) {
       const option = sourceOptions[i];
       if (option.selected && option.isVisible) {
+        selectedOptions.push(option);
         sourceOptions.splice(i, 1);
-        destinationOptions.push(option);
         option.selected = false;
         i--;
       }
     }
+
+    destinationOptions = sortedOptions([
+      ...destinationOptions,
+      ...selectedOptions,
+    ]);
+
+    const packageHeight = 61;
+    const scrollHeight =
+      destinationOptions.findIndex(
+        (pkg) => pkg.name === selectedOptions[0].name
+      ) * packageHeight;
+
     if (fromAvailable) {
       setAvailableOptions(sortedOptions([...sourceOptions]));
-      setChosenOptions(sortedOptions([...destinationOptions]));
+      setChosenOptions(destinationOptions);
     } else {
       setChosenOptions(sortedOptions([...sourceOptions]));
-      setAvailableOptions(sortedOptions([...destinationOptions]));
+      setAvailableOptions(destinationOptions);
     }
     change(input.name, chosenOptions);
+    setScrollTo({
+      pkgs: selectedOptions,
+      pane: fromAvailable ? 'chosen' : 'available',
+      scrollHeight,
+    });
   };
 
   const moveAll = (fromAvailable) => {
@@ -171,7 +222,6 @@ const Packages = ({ defaultArch, ...props }) => {
       );
       change(input.name, []);
     }
-    console.log(chosenOptions);
   };
 
   const onOptionSelect = (_event, index, isChosen) => {
@@ -198,6 +248,7 @@ const Packages = ({ defaultArch, ...props }) => {
         });
       }
     };
+
     return (
       <>
         <InputGroup>
@@ -272,7 +323,10 @@ const Packages = ({ defaultArch, ...props }) => {
                   onOptionSelect={(e) => onOptionSelect(e, index, false)}
                 >
                   <TextContent>
-                    <span className="pf-c-dual-list-selector__item-text">
+                    <span
+                      id={`package-${option.name}`}
+                      className="pf-c-dual-list-selector__item-text"
+                    >
                       {option.name}
                     </span>
                     <small>{option.summary}</small>
@@ -348,7 +402,10 @@ const Packages = ({ defaultArch, ...props }) => {
                   onOptionSelect={(e) => onOptionSelect(e, index, true)}
                 >
                   <TextContent>
-                    <span className="pf-c-dual-list-selector__item-text">
+                    <span
+                      id={`package-${option.name}`}
+                      className="pf-c-dual-list-selector__item-text"
+                    >
                       {option.name}
                     </span>
                     <small>{option.summary}</small>
