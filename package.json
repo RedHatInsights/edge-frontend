@@ -56,7 +56,7 @@
     "@redhat-cloud-services/frontend-components-inventory-general-info": "^3.2.5",
     "@redhat-cloud-services/frontend-components-notifications": "^3.2.4",
     "@redhat-cloud-services/frontend-components-utilities": "3.2.3",
-    "@redhat-cloud-services/host-inventory-client": "^1.0.101",
+    "@redhat-cloud-services/host-inventory-client": "^1.0.104",
     "babel-plugin-transform-imports": "^2.0.0",
     "classnames": "2.3.1",
     "lodash": "^4.17.21",
