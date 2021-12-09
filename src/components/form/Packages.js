@@ -27,7 +27,7 @@ import AngleRightIcon from '@patternfly/react-icons/dist/esm/icons/angle-right-i
 import { sortByDirection as sortedOptions } from '../../constants';
 
 const EmptyText = ({ text }) => (
-  <Text className='pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl'>
+  <Text className="pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl">
     {text}
   </Text>
 );
@@ -37,9 +37,9 @@ EmptyText.propTypes = {
 };
 
 const NoResultsText = ({ heading, body }) => (
-  <TextContent className='pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl'>
-    <Text component='h3'>{heading}</Text>
-    <Text component='small'>{body}</Text>
+  <TextContent className="pf-u-text-align-center pf-u-pr-xl pf-u-pl-xl pf-u-pt-xl">
+    <Text component="h3">{heading}</Text>
+    <Text component="small">{body}</Text>
   </TextContent>
 );
 
@@ -138,18 +138,13 @@ const Packages = ({ defaultArch, ...props }) => {
     const destination = document.querySelector(
       `.pf-m-${scrollTo.pane} .pf-c-dual-list-selector__menu`
     );
-    //const target = document.querySelector(`#package-${scrollTo.pkg.name}`);
     scrollTo.pkgs.forEach((pkg) =>
       document
         .querySelector(`#package-${pkg.name}`)
         .closest('.pf-c-dual-list-selector__list-item-row')
         .classList.add('pf-u-background-color-disabled-color-300')
     );
-    //target
-    //  .closest('.pf-c-dual-list-selector__list-item-row')
-    //  .classList.add('pf-m-selected');
     setTimeout(() => {
-      //target
       scrollTo.pkgs.forEach((pkg) =>
         document
           .querySelector(`#package-${pkg.name}`)
@@ -158,7 +153,6 @@ const Packages = ({ defaultArch, ...props }) => {
       );
     }, 400);
     destination.scrollTop = scrollTo.scrollHeight;
-    //target.getBoundingClientRect().y - destination.getBoundingClientRect().y;
 
     setScrollTo(null);
   };
@@ -182,25 +176,19 @@ const Packages = ({ defaultArch, ...props }) => {
       ...destinationOptions,
       ...selectedOptions,
     ]);
+
+    const packageHeight = 61;
     const scrollHeight =
-      (destinationOptions.findIndex(
+      destinationOptions.findIndex(
         (pkg) => pkg.name === selectedOptions[0].name
-      ) +
-        1) *
-      57;
+      ) * packageHeight;
 
     if (fromAvailable) {
       setAvailableOptions(sortedOptions([...sourceOptions]));
-      setChosenOptions(
-        destinationOptions
-        //sortedOptions([...destinationOptions, ...selectedOptions])
-      );
+      setChosenOptions(destinationOptions);
     } else {
       setChosenOptions(sortedOptions([...sourceOptions]));
-      setAvailableOptions(
-        destinationOptions
-        //sortedOptions([...destinationOptions, ...selectedOptions])
-      );
+      setAvailableOptions(destinationOptions);
     }
     change(input.name, chosenOptions);
     setScrollTo({
@@ -260,14 +248,15 @@ const Packages = ({ defaultArch, ...props }) => {
         });
       }
     };
+
     return (
       <>
         <InputGroup>
           <TextInput
             id={`${isAvailable ? 'available' : 'chosen'}-textinput`}
-            type='search'
+            type="search"
             onChange={onChange}
-            placeholder='Search for packages'
+            placeholder="Search for packages"
             validated={hasMoreResults && isAvailable ? 'warning' : ''}
             aria-label={
               isAvailable ? 'available search input' : 'chosen search input'
@@ -280,21 +269,21 @@ const Packages = ({ defaultArch, ...props }) => {
             <Button
               onClick={handlePackageSearch}
               isDisabled={!isAvailable}
-              variant='control'
-              aria-label='search button for search input'
-              data-testid='package-search'
+              variant="control"
+              aria-label="search button for search input"
+              data-testid="package-search"
             >
               <SearchIcon />
             </Button>
           ) : (
             <InputGroupText>
-              <SearchIcon className='pf-u-ml-xs pf-u-mr-xs' />
+              <SearchIcon className="pf-u-ml-xs pf-u-mr-xs" />
             </InputGroupText>
           )}
         </InputGroup>
         {hasMoreResults && isAvailable && (
           <HelperText>
-            <HelperTextItem variant='warning'>
+            <HelperTextItem variant="warning">
               First 100 results displayed. Please, refine your search
             </HelperTextItem>
           </HelperText>
@@ -316,13 +305,13 @@ const Packages = ({ defaultArch, ...props }) => {
   return (
     <DualListSelector>
       <DualListSelectorPane
-        title='Available packages'
+        title="Available packages"
         status={selectedStatus(availableOptions)}
         searchInput={buildSearchInput(true)}
       >
         <DualListSelectorList
           style={{ height: '290px' }}
-          data-testid='available-packages-list'
+          data-testid="available-packages-list"
         >
           {availableOptions.length > 0 ? (
             availableOptions.map((option, index) => {
@@ -336,7 +325,7 @@ const Packages = ({ defaultArch, ...props }) => {
                   <TextContent>
                     <span
                       id={`package-${option.name}`}
-                      className='pf-c-dual-list-selector__item-text'
+                      className="pf-c-dual-list-selector__item-text"
                     >
                       {option.name}
                     </span>
@@ -347,59 +336,59 @@ const Packages = ({ defaultArch, ...props }) => {
             })
           ) : hasNoSearchResults ? (
             <NoResultsText
-              heading='No Results Found'
-              body='Adjust your search and try again'
+              heading="No Results Found"
+              body="Adjust your search and try again"
             />
           ) : (
-            <EmptyText text='Search above to add additional packages to your image.' />
+            <EmptyText text="Search above to add additional packages to your image." />
           )}
         </DualListSelectorList>
       </DualListSelectorPane>
 
-      <DualListSelectorControlsWrapper aria-label='Selector controls'>
+      <DualListSelectorControlsWrapper aria-label="Selector controls">
         <DualListSelectorControl
           isDisabled={!availableOptions.some((option) => option.selected)}
           onClick={() => moveSelected(true)}
-          aria-label='Add selected'
-          tooltipContent='Add selected'
+          aria-label="Add selected"
+          tooltipContent="Add selected"
         >
           <AngleRightIcon />
         </DualListSelectorControl>
         <DualListSelectorControl
           isDisabled={availableOptions.length === 0}
           onClick={() => moveAll(true)}
-          aria-label='Add all'
-          tooltipContent='Add all'
+          aria-label="Add all"
+          tooltipContent="Add all"
         >
           <AngleDoubleRightIcon />
         </DualListSelectorControl>
         <DualListSelectorControl
           isDisabled={chosenOptions.length === 0}
           onClick={() => moveAll(false)}
-          aria-label='Remove all'
-          tooltipContent='Remove all'
+          aria-label="Remove all"
+          tooltipContent="Remove all"
         >
           <AngleDoubleLeftIcon />
         </DualListSelectorControl>
         <DualListSelectorControl
           onClick={() => moveSelected(false)}
           isDisabled={!chosenOptions.some((option) => option.selected)}
-          aria-label='Remove selected'
-          tooltipContent='Remove selected'
+          aria-label="Remove selected"
+          tooltipContent="Remove selected"
         >
           <AngleLeftIcon />
         </DualListSelectorControl>
       </DualListSelectorControlsWrapper>
 
       <DualListSelectorPane
-        title='Chosen packages'
+        title="Chosen packages"
         status={selectedStatus(chosenOptions)}
         searchInput={buildSearchInput(false)}
         isChosen
       >
-        <DualListSelectorList data-testid='chosen-packages-list'>
+        <DualListSelectorList data-testid="chosen-packages-list">
           {chosenOptions.length === 0 ? (
-            <EmptyText text='No packages added.' />
+            <EmptyText text="No packages added." />
           ) : chosenOptions.filter((option) => option.isVisible).length > 0 ? (
             chosenOptions.map((option, index) => {
               return option.isVisible ? (
@@ -412,7 +401,7 @@ const Packages = ({ defaultArch, ...props }) => {
                   <TextContent>
                     <span
                       id={`package-${option.name}`}
-                      className='pf-c-dual-list-selector__item-text'
+                      className="pf-c-dual-list-selector__item-text"
                     >
                       {option.name}
                     </span>
@@ -423,8 +412,8 @@ const Packages = ({ defaultArch, ...props }) => {
             })
           ) : (
             <NoResultsText
-              heading='No Results Found'
-              body='Adjust your search and try again'
+              heading="No Results Found"
+              body="Adjust your search and try again"
             />
           )}
         </DualListSelectorList>
