@@ -17,6 +17,7 @@ cypress/config
 cypress/videos
 cypress/fixtures
 cypress/screenshots
+cypress/config
 
 npm-debug.log*
 yarn-debug.log*
