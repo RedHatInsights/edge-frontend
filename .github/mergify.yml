@@ -33,6 +33,14 @@ pull_request_rules:
       label:
         remove:
           - conflict
+  - name: warn stale after 15 days
+    conditions:
+      - base=master
+      - -closed
+      - updated-at<15 days ago
+    actions:
+      comment:
+        message: "This pull request is now 15 days old. Please revist, PR will be closed in 15 more days. @{{author}}?"
   - name: close stale pull request
     conditions:
       - base=master
