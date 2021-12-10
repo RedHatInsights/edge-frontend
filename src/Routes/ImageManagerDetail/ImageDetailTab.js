@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   TextContent,
   TextList,
@@ -12,7 +12,9 @@ import { distributionMapper, imageTypeMapper } from './constants';
 
 const ImageDetailTab = () => {
   const { data } = useSelector(
-    ({ imageDetailReducer }) => ({ data: imageDetailReducer?.data?.image || null }),
+    ({ imageDetailReducer }) => ({
+      data: imageDetailReducer?.data?.image || null,
+    }),
     shallowEqual
   );
 
