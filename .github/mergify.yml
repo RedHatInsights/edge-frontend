@@ -37,7 +37,7 @@ pull_request_rules:
     conditions:
       - base=master
       - -closed
-      - updated-at<14 days ago
+      - updated-at<30 days ago
     actions:
       close:
         message: |
@@ -125,3 +125,4 @@ pull_request_rules:
       label:
         add:
           - ready
+          
