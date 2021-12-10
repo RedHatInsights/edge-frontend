@@ -120,8 +120,9 @@ const DetailsHead = ({
                   onToggle={(newState) => setIsOpen(newState)}
                   isDisabled={
                     (isVersionDetails
-                    ? data?.Status
-                    : data?.Images?.[data?.Images?.length - 1]?.Status) === 'BUILDING' || false
+                      ? data?.Status
+                      : data?.Images?.[data?.Images?.length - 1]?.Status) ===
+                      'BUILDING' || false
                   }
                 >
                   Actions

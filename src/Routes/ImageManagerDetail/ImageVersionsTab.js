@@ -87,7 +87,10 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
       });
     }
 
-    if (rowData?.imageStatus === 'SUCCESS' || rowData?.imageStatus === 'ERROR') {
+    if (
+      rowData?.imageStatus === 'SUCCESS' ||
+      rowData?.imageStatus === 'ERROR'
+    ) {
       actionsArray.push({
         title: 'Update Image',
         onClick: (_event, _rowId, rowData) => {
