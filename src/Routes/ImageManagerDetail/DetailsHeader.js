@@ -95,12 +95,12 @@ const DetailsHead = ({
               </TextListItem>
               <TextListItem component="dd">
                 {data?.Status ||
-                data?.Images?.[data?.Images?.length - 1].Status ? (
+                data?.Images?.[data?.Images?.length - 1]?.Status ? (
                   <StatusLabel
                     status={
                       isVersionDetails
                         ? data?.Status
-                        : data?.Images[data?.Images.length - 1].Status
+                        : data?.Images?.[data?.Images?.length - 1]?.Status
                     }
                   />
                 ) : (
@@ -118,6 +118,11 @@ const DetailsHead = ({
                   id="image-set-details-dropdown"
                   toggleIndicator={CaretDownIcon}
                   onToggle={(newState) => setIsOpen(newState)}
+                  isDisabled={
+                    (isVersionDetails
+                    ? data?.Status
+                    : data?.Images?.[data?.Images?.length - 1]?.Status) === 'BUILDING' || false
+                  }
                 >
                   Actions
                 </DropdownToggle>

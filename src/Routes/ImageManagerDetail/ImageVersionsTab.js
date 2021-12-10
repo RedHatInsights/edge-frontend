@@ -87,7 +87,7 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
       });
     }
 
-    if (rowData?.imageStatus === 'SUCCESS') {
+    if (rowData?.imageStatus === 'SUCCESS' || rowData?.imageStatus === 'ERROR') {
       actionsArray.push({
         title: 'Update Image',
         onClick: (_event, _rowId, rowData) => {
@@ -96,7 +96,7 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
       });
     }
 
-    if (rowData?.imageStatus !== 'SUCCESS' && rowData?.id) {
+    if (rowData?.imageStatus === 'BUILDING' && rowData?.id) {
       actionsArray.push({
         title: '',
       });
@@ -105,7 +105,7 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
     return actionsArray;
   };
 
-  const areActionsDisabled = (rowData) => rowData?.imageStatus !== 'SUCCESS';
+  const areActionsDisabled = (rowData) => rowData?.imageStatus === 'BUILDING';
 
   return (
     <GeneralTable
