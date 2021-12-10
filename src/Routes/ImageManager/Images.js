@@ -59,7 +59,6 @@ const Images = () => {
       imageId: id,
     });
   };
-
   useEffect(() => {
     const registered = getRegistry().register({ edgeImageSetsReducer });
     return () => registered();
