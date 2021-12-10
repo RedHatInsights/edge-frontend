@@ -35,7 +35,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
 
   const { getRegistry } = useContext(RegistryContext);
   const { data } = useSelector(
-    ({ imageDetailReducer }) => ({ data: imageDetailReducer?.data || null }),
+    ({ imageDetailReducer }) => ({ data: imageDetailReducer?.data?.image || null }),
     shallowEqual
   );
 

@@ -38,7 +38,7 @@ const ImageDetail = () => {
   const [imageData, setImageData] = useState({});
 
   const { data } = useSelector(
-    ({ imageDetailReducer }) => ({ data: imageDetailReducer?.data || null }),
+    ({ imageDetailReducer }) => ({ data: imageDetailReducer?.data?.image || null }),
     shallowEqual
   );
 
