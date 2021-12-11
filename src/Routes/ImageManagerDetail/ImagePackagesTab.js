@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import GeneralTable from '../../components/general-table/GeneralTable';
-import { loadImagePackageMetadata } from '../../store/actions';
 import PropTypes from 'prop-types';
 
 const defaultFilters = [{ label: 'Name', type: 'text' }];
@@ -57,33 +56,33 @@ const createRows = (data, imageData, toggleTable) => {
   }));
 };
 
-const ImagePackagesTab = ({ imagePackageMetadata, imageData }) => {
-  const [packageMetadata, setPackageMetadata] = useState({});
+const ImagePackagesTab = ({ imageVersion }) => {
+  const [packageData, setPackageData] = useState({});
   const [toggleTable, setToggleTable] = useState(1);
 
   useEffect(() => {
-    setPackageMetadata(imagePackageMetadata);
-  }, [imagePackageMetadata]);
+    setPackageData(imageVersion);
+  }, [imageVersion]);
 
   return (
     <GeneralTable
       apiFilterSort={false}
       filters={defaultFilters}
-      loadTableData={loadImagePackageMetadata}
+      //loadTableData={loadImagePackageMetadata}
       tableData={{
         count:
           toggleTable === 0
-            ? imageData?.Packages?.length
-            : packageMetadata?.Commit?.InstalledPackages?.length,
+            ? packageData?.aditional_packages
+            : packageData?.packages,
         isLoading: false,
         hasError: false,
       }}
       columnNames={columnNames}
       rows={
-        packageMetadata?.Commit?.InstalledPackages
+        packageData?.image?.Commit?.InstalledPackages
           ? createRows(
-              packageMetadata?.Commit?.InstalledPackages,
-              imageData,
+              packageData?.image?.Commit?.InstalledPackages,
+              packageData?.image?.packages,
               toggleTable
             )
           : []
@@ -103,8 +102,7 @@ const ImagePackagesTab = ({ imagePackageMetadata, imageData }) => {
 };
 
 ImagePackagesTab.propTypes = {
-  imagePackageMetadata: PropTypes.object,
-  imageData: PropTypes.object,
+  imageVersion: PropTypes.object,
 };
 
 export default ImagePackagesTab;

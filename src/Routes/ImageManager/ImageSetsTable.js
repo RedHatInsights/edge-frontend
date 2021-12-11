@@ -41,7 +41,6 @@ const createRows = (data) => {
         title: <Link to={`${paths['manage-images']}/${ID}`}>{Name}</Link>,
       },
       Version,
-
       {
         title: <DateFormat date={UpdatedAt} />,
       },

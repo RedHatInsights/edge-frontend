@@ -21,8 +21,8 @@ import StatusLabel from './StatusLabel';
 import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 
-const dropdownItems = (data, isVersionDetails, openUpdateWizard) => {
-  const imageData = isVersionDetails
+const dropdownItems = (data, imageVersion, openUpdateWizard) => {
+  const imageData = imageVersion
     ? data
     : data?.Images?.[data?.Images?.length - 1];
   const actionsArray = [];
@@ -55,34 +55,33 @@ const dropdownItems = (data, isVersionDetails, openUpdateWizard) => {
   return actionsArray;
 };
 
-const DetailsHead = ({
-  imageData,
-  isVersionDetails,
-  imageSetName,
-  openUpdateWizard,
-}) => {
+const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState({});
+
   useEffect(() => {
-    isVersionDetails ? setData(imageData) : setData(imageData?.data);
+    setData(imageData?.data?.Data);
   }, [imageData]);
+
   return (
     <>
       <Breadcrumb>
         <BreadcrumbItem>
           <Link to={paths['manage-images']}>Manage Images</Link>
         </BreadcrumbItem>
-        {isVersionDetails ? (
+        {imageVersion ? (
           <BreadcrumbItem>
-            <Link to={`${paths['manage-images']}/${data?.ImageSetID}`}>
-              {imageSetName}
+            <Link to={`${paths['manage-images']}/${data?.image_set?.ID}`}>
+              {data?.image_set?.Name}
             </Link>
           </BreadcrumbItem>
         ) : (
-          <BreadcrumbItem isActive>{data?.Name}</BreadcrumbItem>
+          <BreadcrumbItem isActive>{data?.image_set?.Name}</BreadcrumbItem>
         )}
-        {isVersionDetails && (
-          <BreadcrumbItem isActive>{data?.Version}</BreadcrumbItem>
+        {imageVersion && (
+          <BreadcrumbItem isActive>
+            {imageVersion?.image?.Version}
+          </BreadcrumbItem>
         )}
       </Breadcrumb>
 
@@ -91,16 +90,14 @@ const DetailsHead = ({
           <SplitItem>
             <TextList component="dl">
               <TextListItem component="h1" className="grid-align-center">
-                {data?.Name}
+                {data?.image_set?.Name}
               </TextListItem>
               <TextListItem component="dd">
                 {data?.Status ||
-                data?.Images?.[data?.Images?.length - 1]?.Status ? (
+                data?.images?.[data?.images?.length - 1]?.image?.Status ? (
                   <StatusLabel
                     status={
-                      isVersionDetails
-                        ? data?.Status
-                        : data?.Images?.[data?.Images?.length - 1]?.Status
+                      data?.images?.[data?.images?.length - 1]?.image?.Status
                     }
                   />
                 ) : (
@@ -119,8 +116,8 @@ const DetailsHead = ({
                   toggleIndicator={CaretDownIcon}
                   onToggle={(newState) => setIsOpen(newState)}
                   isDisabled={
-                    (isVersionDetails
-                      ? data?.Status
+                    (imageVersion
+                      ? imageVersion?.image?.Status
                       : data?.Images?.[data?.Images?.length - 1]?.Status) ===
                       'BUILDING' || false
                   }
@@ -131,7 +128,7 @@ const DetailsHead = ({
               isOpen={isOpen}
               dropdownItems={dropdownItems(
                 data,
-                isVersionDetails,
+                imageVersion,
                 openUpdateWizard
               )}
             />
@@ -144,8 +141,7 @@ const DetailsHead = ({
 
 DetailsHead.propTypes = {
   imageData: PropTypes.object,
-  isVersionDetails: PropTypes.bool,
-  imageSetName: PropTypes.object,
+  imageVersion: PropTypes.object,
   openUpdateWizard: PropTypes.func,
 };
 

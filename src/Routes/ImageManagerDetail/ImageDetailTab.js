@@ -15,61 +15,52 @@ import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from './constants';
 import PropTypes from 'prop-types';
 
-const ImageDetailTab = ({
-  imageData,
-  isVersionDetails,
-  imagePackageMetadata,
-}) => {
+const ImageDetailTab = ({ imageData, imageVersion }) => {
   const [data, setData] = useState({});
-  const [packageData, setPackageData] = useState({});
 
   useEffect(() => {
-    setData(
-      isVersionDetails
-        ? imageData
-        : imageData?.data
-        ? imageData?.data?.Images?.[0]
-        : []
-    );
-  }, [imageData]);
+    imageVersion
+      ? setData(imageVersion)
+      : setData(
+          imageData?.data?.Data?.images?.[
+            imageData?.data?.Data?.images?.length - 1
+          ]
+        );
+  }, [imageData, imageVersion]);
 
-  useEffect(() => {
-    setPackageData(imagePackageMetadata);
-  }, [imagePackageMetadata]);
-
-  const dateFormat = () => <DateFormat date={data['CreatedAt']} />;
+  const dateFormat = () => <DateFormat date={data?.image?.['CreatedAt']} />;
 
   const detailsMapper = {
     'Image name': 'Name',
     Version: 'Version',
     Created: () => dateFormat(),
     'Type(s)': () =>
-      data?.['OutputTypes']?.map((outputType, index) => (
+      data?.image?.['OutputTypes']?.map((outputType, index) => (
         <div key={index}>{outputType}</div>
       )),
-    Release: () => distributionMapper?.[data?.['Distribution']],
+    Release: () => distributionMapper?.[data?.image?.['Distribution']],
     //Size: 'Size',
     Description: 'Description',
   };
 
   const userInfoMapper = {
-    Username: () => data?.Installer?.Username,
-    'SSH Key': () => data?.Installer?.SshKey,
+    Username: () => data?.image?.Installer?.Username,
+    'SSH Key': () => data?.image?.Installer?.SshKey,
   };
 
   const packageMapper = {
-    'Total Additional Packages': () => data?.Packages?.length,
-    'Total Packages': () => packageData?.Commit?.InstalledPackages?.length,
+    'Total Additional Packages': () => data?.aditional_packages,
+    'Total Packages': () => data?.packages,
   };
 
-  // const packageDiffMapper = {
-  //   Added: 'Currently unavailable',
-  //   Removed: 'Currently unavailable',
-  //   Updated: 'Currently unavailable',
-  // };
+  const packageDiffMapper = {
+    Added: () => data?.update_added,
+    Removed: () => data?.update_removed,
+    Updated: () => data?.update_updated,
+  };
 
   if (data?.Installer?.Checksum) {
-    detailsMapper['SHA-256 Checksum'] = () => data?.Installer?.Checksum;
+    detailsMapper['SHA-256 Checksum'] = () => data?.image?.Installer?.Checksum;
   }
 
   const buildTextList = (labelsToValueMapper) =>
@@ -83,8 +74,8 @@ const ImageDetailTab = ({
               >
                 {label}
               </TextListItem>
-              {console.log(label)}
-              {label === 'SHA-256 Checksum' || label === 'SSH Key' ? (
+              {label === 'SHA-256 Checksum' ||
+              (label === 'SSH Key' && value()) ? (
                 <ClipboardCopy
                   hoverTip="Copy"
                   clickTip="Copied"
@@ -92,8 +83,8 @@ const ImageDetailTab = ({
                 >
                   <TextListItem component={TextListItemVariants.dd}>
                     {typeof value === 'function'
-                      ? value() || 'Currently unavailable'
-                      : data[value] || 'Currently unavailable'}
+                      ? value() || 'Unavailable'
+                      : data?.image?.[value] || 'Unavailable'}
                   </TextListItem>
                 </ClipboardCopy>
               ) : (
@@ -102,8 +93,10 @@ const ImageDetailTab = ({
                   component={TextListItemVariants.dd}
                 >
                   {typeof value === 'function'
-                    ? value() || 'Currently unavailable'
-                    : data[value] || 'Currently unavailable'}
+                    ? value() === 0
+                      ? 0
+                      : value() || 'Unavailable'
+                    : data?.image?.[value] || 'Unavailable'}
                 </TextListItem>
               )}
             </>
@@ -116,7 +109,7 @@ const ImageDetailTab = ({
       <Grid span={12}>
         <GridItem span={6}>
           <Text component={TextVariants.h2}>
-            {isVersionDetails ? 'Details' : 'Most recent image'}
+            {imageVersion ? 'Details' : 'Most recent image'}
           </Text>
           <TextList component={TextListVariants.dl}>
             {buildTextList(detailsMapper)}
@@ -131,10 +124,10 @@ const ImageDetailTab = ({
           <TextList component={TextListVariants.dl}>
             {buildTextList(packageMapper)}
           </TextList>
-          {/* <Text component={TextVariants.h2}>Changes from previous version</Text>
+          <Text component={TextVariants.h2}>Changes from previous version</Text>
           <TextList component={TextListVariants.dl}>
             {buildTextList(packageDiffMapper)}
-          </TextList> */}
+          </TextList>
         </GridItem>
       </Grid>
     </TextContent>
@@ -143,9 +136,7 @@ const ImageDetailTab = ({
 
 ImageDetailTab.propTypes = {
   imageData: PropTypes.object,
-  isVersionDetails: PropTypes.bool,
-  imagePackageMetadata: PropTypes.object,
-  labelsToValueMapper: PropTypes.object,
+  imageVersion: PropTypes.object,
 };
 
 export default ImageDetailTab;

@@ -29,9 +29,9 @@ const columnNames = [
   { title: 'Status', type: 'status', sort: false },
 ];
 
-const createRows = (data) => {
-  return data.map((image) => ({
-    id: image.ID,
+const createRows = (data, imageSetId) => {
+  return data?.map(({ image }) => ({
+    id: image?.ID,
     noApiSortFilter: [
       image?.Version,
       imageTypeMapper[image?.ImageType],
@@ -41,7 +41,7 @@ const createRows = (data) => {
     cells: [
       {
         title: (
-          <Link to={`${paths['manage-images-version']}/${image.ID}`}>
+          <Link to={`${paths['manage-images']}/${imageSetId}/${image.ID}`}>
             {image?.Version}
           </Link>
         ),
@@ -64,8 +64,13 @@ const createRows = (data) => {
 const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
   const [rows, setRows] = useState([]);
   useEffect(() => {
-    if (imageData?.data?.Images) {
-      setRows(createRows(imageData?.data?.Images));
+    if (imageData?.data) {
+      setRows(
+        createRows(
+          imageData?.data?.Data?.images,
+          imageData?.data?.Data?.image_set?.ID
+        )
+      );
     }
   }, [imageData]);
 
@@ -113,17 +118,15 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
   return (
     <GeneralTable
       apiFilterSort={false}
-      //urlParam={urlParam}
       filters={defaultFilters}
       loadTableData={loadImageSetDetail}
       tableData={{
-        count: imageData?.data?.Images?.length,
-        data: imageData?.data?.Images,
+        count: imageData?.data?.Count,
         isLoading: imageData?.isLoading,
         hasError: imageData?.hasError,
       }}
       columnNames={columnNames}
-      rows={rows}
+      rows={rows || []}
       actionResolver={actionResolver}
       areActionsDisabled={areActionsDisabled}
       defaultSort={{ index: 2, direction: 'desc' }}

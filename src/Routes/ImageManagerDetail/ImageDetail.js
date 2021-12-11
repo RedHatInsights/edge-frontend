@@ -1,85 +1,128 @@
-import React, { useEffect, useContext } from 'react';
+import React, {
+  Fragment,
+  Suspense,
+  useEffect,
+  useContext,
+  useState,
+} from 'react';
+import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
+import {
+  Stack,
+  StackItem,
+  Text,
+  Spinner,
+  Bullseye,
+} from '@patternfly/react-core';
 import { useDispatch } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { loadImageSetDetail } from '../../store/actions';
 import { imageSetDetailReducer } from '../../store/reducers';
-import { imagePackageMetadataReducer } from '../../store/reducers';
-import { loadImagePackageMetadata } from '../../store/actions';
-import { useParams } from 'react-router-dom';
-import ImageSetDetail from './ImageSetDetail';
-import ImageVersionDetail from './ImageVersionDetail';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, shallowEqual } from 'react-redux';
+import DetailsHead from './DetailsHeader';
+import ImageDetailTabs from './ImageDetailTabs';
+import UpdateImageWizard from '../ImageManager/UpdateImageWizard';
 
 const ImageDetail = () => {
   const { imageId, imageVersionId } = useParams();
   const { getRegistry } = useContext(RegistryContext);
   const dispatch = useDispatch();
-
-  const imageVersionData = useSelector(
-    ({ imageDetailReducer }) => ({ data: imageDetailReducer?.data || null }),
-    shallowEqual
-  );
-
-  const imagePackageMetadata = useSelector(
-    ({ imagePackageMetadataReducer }) => ({
-      data: imagePackageMetadataReducer?.data || null,
-    }),
-    shallowEqual
-  );
+  const history = useHistory();
+  const [updateWizard, setUpdateWizard] = useState({
+    isOpen: false,
+    updateId: null,
+  });
+  const [imageVersion, setImageVersion] = useState(null);
 
   const imageSetData = useSelector(
     ({ imageSetDetailReducer }) => ({
-      data: imageSetDetailReducer?.data?.Data || null,
+      data: imageSetDetailReducer?.data || null,
       isLoading: imageSetDetailReducer?.isLoading,
       hasError: imageSetDetailReducer?.hasError,
     }),
     shallowEqual
   );
 
+  const openUpdateWizard = (id) => {
+    history.push({
+      pathname: history.location.pathname,
+      search: new URLSearchParams({
+        update_image: true,
+      }).toString(),
+    });
+    setUpdateWizard((prevState) => ({
+      ...prevState,
+      isOpen: !prevState.isLoading,
+      updateId: id,
+    }));
+  };
+
+  useEffect(() => {
+    imageVersionId
+      ? setImageVersion(
+          imageSetData?.data?.Data?.images?.[
+            imageSetData?.data?.Data?.images?.findIndex(
+              (image) => image?.image?.ID == imageVersionId
+            )
+          ]
+        )
+      : setImageVersion(null);
+  }, [imageSetData, imageVersionId]);
+
   useEffect(() => {
     const registered = getRegistry().register({
       imageSetDetailReducer,
     });
-    imageId
-      ? loadImageSetDetail(dispatch, imageId)
-      : imageVersionData?.data?.ImageSetID
-      ? loadImageSetDetail(dispatch, imageVersionData?.data?.ImageSetID)
-      : null;
+    loadImageSetDetail(dispatch, imageId);
     return () => registered();
-  }, [imageVersionData]);
-
-  useEffect(() => {
-    const registered = getRegistry().register({
-      imagePackageMetadataReducer,
-    });
-    imageVersionId
-      ? loadImagePackageMetadata(dispatch, imageVersionId)
-      : imageSetData?.data?.Images
-      ? loadImagePackageMetadata(
-          dispatch,
-          imageSetData?.data?.Images?.[imageSetData?.data?.Images?.length - 1]
-            ?.ID
-        )
-      : null;
-    return () => registered();
-  }, [imageSetData]);
+  }, [imageId]);
 
   return (
-    <>
-      {imageId && (
-        <ImageSetDetail
-          data={imageSetData}
-          imagePackageMetadata={imagePackageMetadata?.data}
-        />
+    <Fragment>
+      <PageHeader className="pf-m-light">
+        <Stack hasGutter>
+          <StackItem>
+            <DetailsHead
+              imageData={imageSetData}
+              imageVersion={imageVersion}
+              openUpdateWizard={openUpdateWizard}
+            />
+          </StackItem>
+        </Stack>
+        <StackItem>
+          <Text>
+            {imageVersion
+              ? imageVersion?.image?.Description
+              : imageSetData?.data?.Data?.images?.[
+                  imageSetData?.data?.Data?.images?.length - 1
+                ].image?.Description}
+          </Text>
+        </StackItem>
+      </PageHeader>
+      <ImageDetailTabs
+        imageData={imageSetData}
+        urlParam={imageId}
+        imageVersion={imageVersion}
+        openUpdateWizard={openUpdateWizard}
+      />
+      {updateWizard.isOpen && (
+        <Suspense
+          fallback={
+            <Bullseye>
+              <Spinner />
+            </Bullseye>
+          }
+        >
+          <UpdateImageWizard
+            navigateBack={() => {
+              history.push({ pathname: history.location.pathname });
+              setUpdateWizard((prevState) => ({ ...prevState, isOpen: false }));
+            }}
+            updateImageID={updateWizard.updateId}
+          />
+        </Suspense>
       )}
-      {imageVersionId && (
-        <ImageVersionDetail
-          data={imageVersionData?.data}
-          imageSetName={imageSetData?.data?.Name}
-          imagePackageMetadata={imagePackageMetadata?.data}
-        />
-      )}
-    </>
+    </Fragment>
   );
 };
 
