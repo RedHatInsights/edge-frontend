@@ -186,11 +186,12 @@ const Packages = ({ defaultArch, ...props }) => {
     if (fromAvailable) {
       setAvailableOptions(sortedOptions([...sourceOptions]));
       setChosenOptions(destinationOptions);
+      change(input.name, destinationOptions);
     } else {
       setChosenOptions(sortedOptions([...sourceOptions]));
       setAvailableOptions(destinationOptions);
+      change(input.name, [...sourceOptions]);
     }
-    change(input.name, chosenOptions);
     setScrollTo({
       pkgs: selectedOptions,
       pane: fromAvailable ? 'chosen' : 'available',
@@ -209,7 +210,7 @@ const Packages = ({ defaultArch, ...props }) => {
       setAvailableOptions(
         sortedOptions([...availableOptions.filter((x) => !x.isVisible)])
       );
-      change(input.name, availableOptions);
+      change(input.name, [...availableOptions, ...chosenOptions]);
     } else {
       setAvailableOptions(
         sortedOptions([
