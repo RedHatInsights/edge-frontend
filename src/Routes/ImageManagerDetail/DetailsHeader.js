@@ -23,28 +23,29 @@ import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-ico
 
 const dropdownItems = (data, imageVersion, openUpdateWizard) => {
   const imageData = imageVersion
-    ? data
-    : data?.Images?.[data?.Images?.length - 1];
+    ? imageVersion
+    : data?.images?.[data?.images?.length - 1]; 
+
   const actionsArray = [];
 
-  imageData?.ID &&
+  imageData?.image?.ID &&
     actionsArray.push(
       <DropdownItem
         key="create-new-version-button"
         component="button"
-        onClick={() => openUpdateWizard(imageData?.ID)}
+        onClick={() => openUpdateWizard(imageData?.image?.ID)}
       >
         Create new version
       </DropdownItem>
     );
 
-  imageData?.Installer?.ImageBuildISOURL &&
+  imageData?.image?.Installer?.ImageBuildISOURL &&
     actionsArray.push(
       <DropdownItem key="download-button" component="button">
         <Text
           className="force-text-black remove-underline"
           component="a"
-          href={imageData?.Installer?.ImageBuildISOURL}
+          href={imageData?.image?.Installer?.ImageBuildISOURL}
           rel="noopener noreferrer"
           target="_blank"
         >
