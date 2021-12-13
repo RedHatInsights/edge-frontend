@@ -76,17 +76,18 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
               </TextListItem>
               {label === 'SHA-256 Checksum' ||
               (label === 'SSH Key' && value()) ? (
-                <ClipboardCopy
-                  hoverTip="Copy"
-                  clickTip="Copied"
-                  variant="inline-compact"
-                >
-                  <TextListItem component={TextListItemVariants.dd}>
+                <TextListItem component={TextListItemVariants.dd}>
+                  <ClipboardCopy
+                    hoverTip="Copy"
+                    clickTip="Copied"
+                    variant="expansion"
+                    className="pf-u-text-break-word"
+                  >
                     {typeof value === 'function'
                       ? value() || 'Unavailable'
                       : data?.image?.[value] || 'Unavailable'}
-                  </TextListItem>
-                </ClipboardCopy>
+                  </ClipboardCopy>
+                </TextListItem>
               ) : (
                 <TextListItem
                   className="pf-u-text-break-word"
