@@ -24,7 +24,7 @@ import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-ico
 const dropdownItems = (data, imageVersion, openUpdateWizard) => {
   const imageData = imageVersion
     ? imageVersion
-    : data?.images?.[data?.images?.length - 1]; 
+    : data?.images?.[data?.images?.length - 1];
 
   const actionsArray = [];
 
