@@ -45,12 +45,12 @@ const createRows = (data) => {
         title: <DateFormat date={UpdatedAt} />,
       },
       {
-        title: <StatusLabel status={Images[Images.length - 1].Status} />,
+        title: <StatusLabel status={Images[0].Status} />,
       },
     ],
-    imageStatus: Images[Images.length - 1].Status,
+    imageStatus: Images[0].Status,
     //isoURL: ,
-    latestImageID: Images[Images.length - 1].ID,
+    latestImageID: Images[0].ID,
   }));
 };
 
