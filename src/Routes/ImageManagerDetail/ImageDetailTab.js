@@ -7,162 +7,137 @@ import {
   TextListVariants,
   Text,
   TextVariants,
-  Flex,
-  FlexItem,
+  Grid,
+  GridItem,
+  ClipboardCopy,
 } from '@patternfly/react-core';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from './constants';
 import PropTypes from 'prop-types';
 
-const ImageDetailTab = ({
-  imageData,
-  isVersionDetails,
-  imagePackageMetadata,
-}) => {
+const ImageDetailTab = ({ imageData, imageVersion }) => {
   const [data, setData] = useState({});
-  const [packageData, setPackageData] = useState({});
 
   useEffect(() => {
-    setData(
-      isVersionDetails
-        ? imageData
-        : imageData?.data
-        ? imageData?.data?.Images?.[0]
-        : []
-    );
-  }, [imageData]);
+    imageVersion
+      ? setData(imageVersion)
+      : setData(
+          imageData?.data?.Data?.images?.[
+            imageData?.data?.Data?.images?.length - 1
+          ]
+        );
+  }, [imageData, imageVersion]);
 
-  useEffect(() => {
-    setPackageData(imagePackageMetadata);
-  }, [imagePackageMetadata]);
+  const dateFormat = () => <DateFormat date={data?.image?.['CreatedAt']} />;
 
-  const dateFormat = () => <DateFormat date={data['CreatedAt']} />;
-  const labelsToValueMapperLeftTop = {
+  const detailsMapper = {
     'Image name': 'Name',
     Version: 'Version',
     Created: () => dateFormat(),
     'Type(s)': () =>
-      data['OutputTypes']?.map((outputType, index) => (
+      data?.image?.['OutputTypes']?.map((outputType, index) => (
         <div key={index}>{outputType}</div>
       )),
-    Release: () => distributionMapper[data['Distribution']],
-    Size: 'Size',
+    Release: () => distributionMapper?.[data?.image?.['Distribution']],
+    //Size: 'Size',
     Description: 'Description',
   };
 
-  const labelsToValueMapperLeftBottom = {
-    Username: data?.Images?.[data?.Images?.length - 1]?.Installer?.Username,
-    'SSH Key': data?.Images?.[data?.Images?.length - 1]?.Installer?.SshKey,
+  const userInfoMapper = {
+    Username: () => data?.image?.Installer?.Username,
+    'SSH Key': () => data?.image?.Installer?.SshKey,
   };
 
-  const labelsToValueMapperRightTop = {
-    'Total Additional Packages': '8',
-    'Total Packages': packageData?.Commit?.InstalledPackages?.length,
+  const packageMapper = {
+    'Total Additional Packages': () => data?.aditional_packages,
+    'Total Packages': () => data?.packages,
   };
 
-  const labelsToValueMapperRightBottom = {
-    Added: '0',
-    Removed: '0',
-    Updated: '24',
+  const packageDiffMapper = {
+    Added: () => data?.update_added,
+    Removed: () => data?.update_removed,
+    Updated: () => data?.update_updated,
   };
 
   if (data?.Installer?.Checksum) {
-    labelsToValueMapperLeftTop['SHA-256 Checksum'] = () =>
-      data?.Installer?.Checksum;
+    detailsMapper['SHA-256 Checksum'] = () => data?.image?.Installer?.Checksum;
   }
+
+  const buildTextList = (labelsToValueMapper) =>
+    data
+      ? Object.entries(labelsToValueMapper).map(([label, value]) => {
+          return (
+            <>
+              <TextListItem
+                className="details-label"
+                component={TextListItemVariants.dt}
+              >
+                {label}
+              </TextListItem>
+              {label === 'SHA-256 Checksum' ||
+              (label === 'SSH Key' && value()) ? (
+                <TextListItem component={TextListItemVariants.dd}>
+                  <ClipboardCopy
+                    hoverTip="Copy"
+                    clickTip="Copied"
+                    variant="expansion"
+                    className="pf-u-text-break-word"
+                  >
+                    {typeof value === 'function'
+                      ? value() || 'Unavailable'
+                      : data?.image?.[value] || 'Unavailable'}
+                  </ClipboardCopy>
+                </TextListItem>
+              ) : (
+                <TextListItem
+                  className="pf-u-text-break-word"
+                  component={TextListItemVariants.dd}
+                >
+                  {typeof value === 'function'
+                    ? value() === 0
+                      ? 0
+                      : value() || 'Unavailable'
+                    : data?.image?.[value] || 'Unavailable'}
+                </TextListItem>
+              )}
+            </>
+          );
+        })
+      : null;
 
   return (
     <TextContent className="pf-u-ml-lg pf-u-mt-md">
-      <Flex>
-        <FlexItem flex={{ default: 'flex_1' }}>
-          <Text component={TextVariants.h3}>Most recent image</Text>
+      <Grid span={12}>
+        <GridItem span={6}>
+          <Text component={TextVariants.h2}>
+            {imageVersion ? 'Details' : 'Most recent image'}
+          </Text>
           <TextList component={TextListVariants.dl}>
-            {data
-              ? Object.entries(labelsToValueMapperLeftTop).map(
-                  ([label, value]) => {
-                    return (
-                      <>
-                        <TextListItem component={TextListItemVariants.dt}>
-                          {label}
-                        </TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>
-                          {typeof value === 'function' ? value() : data[value]}
-                        </TextListItem>
-                      </>
-                    );
-                  }
-                )
-              : null}
+            {buildTextList(detailsMapper)}
           </TextList>
-          <Text component={TextVariants.h3}>User Information </Text>
+          <Text component={TextVariants.h2}>User Information </Text>
           <TextList component={TextListVariants.dl}>
-            {data
-              ? Object.entries(labelsToValueMapperLeftBottom).map(
-                  ([label, value]) => {
-                    return (
-                      <>
-                        <TextListItem component={TextListItemVariants.dt}>
-                          {label}
-                        </TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>
-                          {typeof value === 'function' ? value() : value}
-                        </TextListItem>
-                      </>
-                    );
-                  }
-                )
-              : null}
+            {buildTextList(userInfoMapper)}
           </TextList>
-        </FlexItem>
-        <FlexItem flex={{ default: 'flex_1' }}>
-          <Text component={TextVariants.h3}>Packages </Text>
+        </GridItem>
+        <GridItem span={6}>
+          <Text component={TextVariants.h2}>Packages </Text>
           <TextList component={TextListVariants.dl}>
-            {data
-              ? Object.entries(labelsToValueMapperRightTop).map(
-                  ([label, value]) => {
-                    return (
-                      <>
-                        <TextListItem component={TextListItemVariants.dt}>
-                          {label}
-                        </TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>
-                          {typeof value === 'function' ? value() : value}
-                        </TextListItem>
-                      </>
-                    );
-                  }
-                )
-              : null}
+            {buildTextList(packageMapper)}
           </TextList>
-          <Text component={TextVariants.h3}>Changes from previous version</Text>
+          <Text component={TextVariants.h2}>Changes from previous version</Text>
           <TextList component={TextListVariants.dl}>
-            {data
-              ? Object.entries(labelsToValueMapperRightBottom).map(
-                  ([label, value]) => {
-                    return (
-                      <>
-                        <TextListItem component={TextListItemVariants.dt}>
-                          {label}
-                        </TextListItem>
-                        <TextListItem component={TextListItemVariants.dd}>
-                          {typeof value === 'function' ? value() : value}
-                        </TextListItem>
-                      </>
-                    );
-                  }
-                )
-              : null}
+            {buildTextList(packageDiffMapper)}
           </TextList>
-        </FlexItem>
-      </Flex>
+        </GridItem>
+      </Grid>
     </TextContent>
   );
 };
 
 ImageDetailTab.propTypes = {
   imageData: PropTypes.object,
-  isVersionDetails: PropTypes.bool,
-  imagePackageMetadata: PropTypes.object,
+  imageVersion: PropTypes.object,
 };
 
 export default ImageDetailTab;

@@ -1,12 +1,5 @@
-import React, {
-  Fragment,
-  useContext,
-  useEffect,
-  useState,
-  Suspense,
-} from 'react';
+import React, { Fragment, useEffect, useState, Suspense } from 'react';
 import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { useParams } from 'react-router-dom';
 import {
   Stack,
   StackItem,
@@ -14,10 +7,6 @@ import {
   Spinner,
   Bullseye,
 } from '@patternfly/react-core';
-import { useDispatch } from 'react-redux';
-import { RegistryContext } from '../../store';
-import { loadImageDetail } from '../../store/actions';
-import { imageDetailReducer } from '../../store/reducers';
 import { useHistory } from 'react-router-dom';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
@@ -29,10 +18,7 @@ const UpdateImageWizard = React.lazy(() =>
   )
 );
 
-const ImageVersionDetail = ({ data, imageSetName, imagePackageMetadata }) => {
-  const { imageVersionId } = useParams();
-  const { getRegistry } = useContext(RegistryContext);
-  const dispatch = useDispatch();
+const ImageVersionDetail = ({ data, imageVersion }) => {
   const history = useHistory();
   const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState(false);
   const [imageData, setImageData] = useState({});
@@ -40,14 +26,6 @@ const ImageVersionDetail = ({ data, imageSetName, imagePackageMetadata }) => {
   useEffect(() => {
     setImageData(data);
   }, [data]);
-
-  useEffect(() => {
-    const registered = getRegistry().register({
-      imageDetailReducer,
-    });
-    loadImageDetail(dispatch, imageVersionId);
-    return () => registered();
-  }, [dispatch]);
 
   const openUpdateWizard = () => {
     history.push({
@@ -66,8 +44,7 @@ const ImageVersionDetail = ({ data, imageSetName, imagePackageMetadata }) => {
           <StackItem>
             <DetailsHead
               imageData={imageData}
-              isVersionDetails={true}
-              imageSetName={imageSetName}
+              imageVersion={imageVersion}
               openUpdateWizard={openUpdateWizard}
             />
           </StackItem>
@@ -76,11 +53,7 @@ const ImageVersionDetail = ({ data, imageSetName, imagePackageMetadata }) => {
           <Text>{data?.Description}</Text>
         </StackItem>
       </PageHeader>
-      <ImageDetailTabs
-        imageData={imageData}
-        isVersionDetails={true}
-        imagePackageMetadata={imagePackageMetadata}
-      />
+      <ImageDetailTabs imageData={imageData} imageVersion={imageVersion} />
       {isUpdateWizardOpen && (
         <Suspense
           fallback={
@@ -104,8 +77,7 @@ const ImageVersionDetail = ({ data, imageSetName, imagePackageMetadata }) => {
 
 ImageVersionDetail.propTypes = {
   data: PropTypes.object,
-  imageSetName: PropTypes.string,
-  imagePackageMetadata: PropTypes.string,
+  imageVersion: PropTypes.object,
 };
 
 export default ImageVersionDetail;

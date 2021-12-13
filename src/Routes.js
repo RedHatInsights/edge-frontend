@@ -58,7 +58,7 @@ export const Routes = () => {
         {/* <Route path={paths.canaries} component={Canaries} /> */}
         <Route exact path={paths['fleet-management']} component={Devices} />
         <Route
-          path={paths['manage-images-version-details']}
+          path={paths['manage-images-detail-version']}
           component={ImageDetail}
         />
         <Route path={paths['manage-images-detail']} component={ImageDetail} />

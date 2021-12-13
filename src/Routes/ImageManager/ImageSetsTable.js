@@ -41,17 +41,16 @@ const createRows = (data) => {
         title: <Link to={`${paths['manage-images']}/${ID}`}>{Name}</Link>,
       },
       Version,
-
       {
         title: <DateFormat date={UpdatedAt} />,
       },
       {
-        title: <StatusLabel status={Images[Images.length - 1].Status} />,
+        title: <StatusLabel status={Images[0].Status} />,
       },
     ],
-    imageStatus: Images[Images.length - 1].Status,
+    imageStatus: Images[0].Status,
     //isoURL: ,
-    latestImageID: Images[Images.length - 1].ID,
+    latestImageID: Images[0].ID,
   }));
 };
 
@@ -87,7 +86,10 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       });
     }
 
-    if (rowData?.imageStatus === 'SUCCESS') {
+    if (
+      rowData?.imageStatus === 'SUCCESS' ||
+      rowData?.imageStatus === 'ERROR'
+    ) {
       actionsArray.push({
         title: 'Update Image',
         onClick: (_event, _rowId, rowData) => {
@@ -96,7 +98,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       });
     }
 
-    if (rowData?.imageStatus !== 'SUCCESS' && rowData?.id) {
+    if (rowData?.imageStatus === 'BUILDING' && rowData?.id) {
       actionsArray.push({
         title: '',
       });
@@ -105,7 +107,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     return actionsArray;
   };
 
-  const areActionsDisabled = (rowData) => rowData?.imageStatus !== 'SUCCESS';
+  const areActionsDisabled = (rowData) => rowData?.imageStatus === 'BUILDING';
 
   return (
     <GeneralTable

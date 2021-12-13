@@ -22,10 +22,8 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   const dispatch = useDispatch();
   const imageData =
     updateModal.deviceData?.system_profile?.image_data?.ImageInfo
-      ?.UpdatesAvailable[
-      updateModal.deviceData?.system_profile?.image_data?.ImageInfo
-        ?.UpdatesAvailable.length - 1
-    ];
+      ?.UpdatesAvailable[0];
+
   const handleUpdateModal = async () => {
     try {
       await updateDeviceLatestImage({
