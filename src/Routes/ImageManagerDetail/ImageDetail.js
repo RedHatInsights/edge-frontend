@@ -1,12 +1,11 @@
 import React, {
   Fragment,
-  useContext,
-  useEffect,
-  useState,
   Suspense,
+  useEffect,
+  useContext,
+  useState,
 } from 'react';
 import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { useParams } from 'react-router-dom';
 import {
   Stack,
   StackItem,
@@ -16,55 +15,67 @@ import {
 } from '@patternfly/react-core';
 import { useDispatch } from 'react-redux';
 import { RegistryContext } from '../../store';
-import { loadImageDetail } from '../../store/actions';
-import { imageDetailReducer } from '../../store/reducers';
-import { useHistory } from 'react-router-dom';
+import { loadImageSetDetail } from '../../store/actions';
+import { imageSetDetailReducer } from '../../store/reducers';
+import { useParams, useHistory } from 'react-router-dom';
+import { useSelector, shallowEqual } from 'react-redux';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
-import { useSelector, shallowEqual } from 'react-redux';
-
-const UpdateImageWizard = React.lazy(() =>
-  import(
-    /* webpackChunkName: "UpdateImageWizard" */ '../ImageManager/UpdateImageWizard'
-  )
-);
+import UpdateImageWizard from '../ImageManager/UpdateImageWizard';
 
 const ImageDetail = () => {
-  const { imageId } = useParams();
+  const { imageId, imageVersionId } = useParams();
   const { getRegistry } = useContext(RegistryContext);
   const dispatch = useDispatch();
   const history = useHistory();
-  const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState(false);
-  const [imageData, setImageData] = useState({});
+  const [updateWizard, setUpdateWizard] = useState({
+    isOpen: false,
+    updateId: null,
+  });
+  const [imageVersion, setImageVersion] = useState(null);
 
-  const { data } = useSelector(
-    ({ imageDetailReducer }) => ({
-      data: imageDetailReducer?.data?.image || null,
+  const imageSetData = useSelector(
+    ({ imageSetDetailReducer }) => ({
+      data: imageSetDetailReducer?.data || null,
+      isLoading: imageSetDetailReducer?.isLoading,
+      hasError: imageSetDetailReducer?.hasError,
     }),
     shallowEqual
   );
 
-  useEffect(() => {
-    setImageData(data);
-  }, [data]);
-
-  useEffect(() => {
-    const registered = getRegistry().register({
-      imageDetailReducer,
-    });
-    loadImageDetail(dispatch, imageId);
-    return () => registered();
-  }, [dispatch]);
-
-  const openUpdateWizard = () => {
+  const openUpdateWizard = (id) => {
     history.push({
       pathname: history.location.pathname,
       search: new URLSearchParams({
         update_image: true,
       }).toString(),
     });
-    setIsUpdateWizardOpen(true);
+    setUpdateWizard((prevState) => ({
+      ...prevState,
+      isOpen: !prevState.isLoading,
+      updateId: id,
+    }));
   };
+
+  useEffect(() => {
+    imageVersionId
+      ? setImageVersion(
+          imageSetData?.data?.Data?.images?.[
+            imageSetData?.data?.Data?.images?.findIndex(
+              (image) => image?.image?.ID == imageVersionId
+            )
+          ]
+        )
+      : setImageVersion(null);
+  }, [imageSetData, imageVersionId]);
+
+  useEffect(() => {
+    const registered = getRegistry().register({
+      imageSetDetailReducer,
+    });
+    loadImageSetDetail(dispatch, imageId);
+    return () => registered();
+  }, [imageId]);
 
   return (
     <Fragment>
@@ -72,17 +83,29 @@ const ImageDetail = () => {
         <Stack hasGutter>
           <StackItem>
             <DetailsHead
-              imageData={imageData}
+              imageData={imageSetData}
+              imageVersion={imageVersion}
               openUpdateWizard={openUpdateWizard}
             />
           </StackItem>
         </Stack>
         <StackItem>
-          <Text>{data?.Description}</Text>
+          <Text>
+            {imageVersion
+              ? imageVersion?.image?.Description
+              : imageSetData?.data?.Data?.images?.[
+                  imageSetData?.data?.Data?.images?.length - 1
+                ].image?.Description}
+          </Text>
         </StackItem>
       </PageHeader>
-      <ImageDetailTabs />
-      {isUpdateWizardOpen && (
+      <ImageDetailTabs
+        imageData={imageSetData}
+        urlParam={imageId}
+        imageVersion={imageVersion}
+        openUpdateWizard={openUpdateWizard}
+      />
+      {updateWizard.isOpen && (
         <Suspense
           fallback={
             <Bullseye>
@@ -93,9 +116,9 @@ const ImageDetail = () => {
           <UpdateImageWizard
             navigateBack={() => {
               history.push({ pathname: history.location.pathname });
-              setIsUpdateWizardOpen(false);
+              setUpdateWizard((prevState) => ({ ...prevState, isOpen: false }));
             }}
-            updateImageID={data?.ID}
+            updateImageID={updateWizard.updateId}
           />
         </Suspense>
       )}

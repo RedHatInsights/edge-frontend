@@ -34,7 +34,7 @@ export const imageStatusMapper = {
   CREATED: 'CREATED',
   BUILDING: 'Image build in progress',
   ERROR: 'ERROR',
-  SUCCESS: 'SUCCESS',
+  SUCCESS: 'Ready',
 };
 
 export const distributionMapper = {

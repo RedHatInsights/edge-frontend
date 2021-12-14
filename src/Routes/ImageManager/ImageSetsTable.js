@@ -7,21 +7,12 @@ import { Link } from 'react-router-dom';
 import { Text } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
-import {
-  imageTypeMapper,
-  distributionMapper,
-} from '../ImageManagerDetail/constants';
-import { loadEdgeImages } from '../../store/actions';
+import { loadEdgeImageSets } from '../../store/actions';
 
 const defaultFilters = [
   {
     label: 'Name',
     type: 'text',
-  },
-  {
-    label: 'Distribution',
-    type: 'checkbox',
-    options: [{ option: 'RHEL 8.4', optionApiName: 'rhel-84' }],
   },
   {
     label: 'Status',
@@ -37,58 +28,45 @@ const defaultFilters = [
 
 const columnNames = [
   { title: 'Name', type: 'name', sort: true },
-  { title: 'Version', type: 'version', sort: false },
-  { title: 'Distribution', type: 'distribution', sort: true },
-  { title: 'Type', type: 'image_type', sort: false },
-  { title: 'Created', type: 'created_at', sort: true },
-  { title: 'Status', type: 'status', sort: true },
+  { title: 'Current Version', type: 'version', sort: false },
+  { title: 'Last Updated', type: 'updated_at', sort: true },
+  { title: 'Status', type: 'status', sort: false },
 ];
 
 const createRows = (data) => {
-  return data.map((image) => ({
-    id: image.ID,
+  return data.map(({ ID, Name, Version, UpdatedAt, Images }) => ({
+    id: ID,
     cells: [
       {
-        title: (
-          <Link to={`${paths['manage-images-detail']}/${image.ID}`}>
-            {image.Name}
-          </Link>
-        ),
+        title: <Link to={`${paths['manage-images']}/${ID}`}>{Name}</Link>,
       },
-      image?.Version,
+      Version,
       {
-        title: distributionMapper[image?.Distribution],
+        title: <DateFormat date={UpdatedAt} />,
       },
       {
-        title: imageTypeMapper[image?.ImageType],
-      },
-      {
-        title: <DateFormat date={image?.CreatedAt} />,
-      },
-      {
-        title: <StatusLabel status={image?.Status} />,
+        title: <StatusLabel status={Images[0].Status} />,
       },
     ],
-    imageStatus: image?.Status,
-    isoURL: image?.Installer?.ImageBuildISOURL,
+    imageStatus: Images[0].Status,
+    //isoURL: ,
+    latestImageID: Images[0].ID,
   }));
 };
 
 const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
   const { count, data, isLoading, hasError } = useSelector(
-    ({ edgeImagesReducer }) => ({
-      count: edgeImagesReducer?.data?.count || 0,
-      data: edgeImagesReducer?.data?.data || null,
+    ({ edgeImageSetsReducer }) => ({
+      count: edgeImageSetsReducer?.data?.Count || 0,
+      data: edgeImageSetsReducer?.data?.Data || null,
       isLoading:
-        edgeImagesReducer?.isLoading === undefined
+        edgeImageSetsReducer?.isLoading === undefined
           ? true
-          : edgeImagesReducer.isLoading,
-      hasError: edgeImagesReducer?.hasError,
+          : edgeImageSetsReducer.isLoading,
+      hasError: edgeImageSetsReducer?.hasError,
     }),
     shallowEqual
   );
-
-  const isFinalStatus = (status) => status === 'SUCCESS' || status === 'ERROR';
 
   const actionResolver = (rowData) => {
     const actionsArray = [];
@@ -107,14 +85,20 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
         ),
       });
     }
-    if (isFinalStatus(rowData.imageStatus)) {
+
+    if (
+      rowData?.imageStatus === 'SUCCESS' ||
+      rowData?.imageStatus === 'ERROR'
+    ) {
       actionsArray.push({
         title: 'Update Image',
         onClick: (_event, _rowId, rowData) => {
-          openUpdateWizard(rowData.id);
+          openUpdateWizard(rowData.latestImageID);
         },
       });
-    } else if (rowData?.id) {
+    }
+
+    if (rowData?.imageStatus === 'BUILDING' && rowData?.id) {
       actionsArray.push({
         title: '',
       });
@@ -123,13 +107,13 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     return actionsArray;
   };
 
-  const areActionsDisabled = (rowData) => !isFinalStatus(rowData.imageStatus);
+  const areActionsDisabled = (rowData) => rowData?.imageStatus === 'BUILDING';
 
   return (
     <GeneralTable
       apiFilterSort={true}
       filters={defaultFilters}
-      loadTableData={loadEdgeImages}
+      loadTableData={loadEdgeImageSets}
       tableData={{ count, data, isLoading, hasError }}
       columnNames={columnNames}
       rows={data ? createRows(data) : []}
@@ -138,7 +122,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       emptyStateAction={openCreateWizard}
       actionResolver={actionResolver}
       areActionsDisabled={areActionsDisabled}
-      defaultSort={{ index: 4, direction: 'desc' }}
+      defaultSort={{ index: 2, direction: 'desc' }}
       toolbarButtons={[
         {
           title: 'Create new image',

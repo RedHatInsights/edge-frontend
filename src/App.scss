@@ -59,6 +59,11 @@
   padding-left: 0;
 }
 
+[aria-labelledby="image-set-details-dropdown"] {
+  list-style-type: none;
+  padding-left: 0;
+}
+
 .ins-c-general-information dt {
   width: 175px;
 }
@@ -74,4 +79,12 @@
 
 .pf-u-danger-color-200 {
   color: var(--pf-global--danger-color--200);
+}
+
+.details-label {
+  width: 160px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

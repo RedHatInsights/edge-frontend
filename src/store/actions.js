@@ -10,9 +10,12 @@ import {
   CLEAN_ENTITIES,
   LOAD_ACTIVE_IMAGES,
   LOAD_EDGE_IMAGES,
+  LOAD_EDGE_IMAGE_SETS,
+  LOAD_EDGE_IMAGE_PACKAGES,
   LOAD_DEVICE_SUMMARY,
   LOAD_IMAGE_STATUS,
   LOAD_IMAGE_DETAIL,
+  LOAD_IMAGE_SET_DETAIL,
   CREATE_NEW_IMAGE,
   POLLING_IMAGES,
 } from './action-types';
@@ -28,7 +31,10 @@ import {
   fetchImageStatus,
   fetchImage,
   fetchEdgeImages,
+  fetchEdgeImageSets,
+  getImagePackageMetadata,
   createImage,
+  getImageSet,
 } from '../api';
 
 export const loadGroups = (perPage = 50, page = 1) => ({
@@ -149,6 +155,13 @@ export const loadEdgeImages = (dispatch, query) => {
   }).catch(() => null);
 };
 
+export const loadEdgeImageSets = (dispatch, query) => {
+  dispatch({
+    type: LOAD_EDGE_IMAGE_SETS,
+    payload: fetchEdgeImageSets(query),
+  }).catch(() => null);
+};
+
 export const setPolling = (toStart, interval) => {
   const subAction = toStart ? 'START' : 'END';
   const payload = toStart ? { interval } : {};
@@ -173,4 +186,18 @@ export const removeImagesToPoll = (ids) => {
     type: `${POLLING_IMAGES}_REMOVE`,
     ids,
   };
+};
+
+export const loadImageSetDetail = (dispatch, urlParam, query) => {
+  dispatch({
+    type: LOAD_IMAGE_SET_DETAIL,
+    payload: getImageSet({ id: urlParam, q: query }),
+  }).catch(() => null);
+};
+
+export const loadImagePackageMetadata = (dispatch, imageId) => {
+  dispatch({
+    type: LOAD_EDGE_IMAGE_PACKAGES,
+    payload: getImagePackageMetadata(imageId),
+  }).catch(() => null);
 };

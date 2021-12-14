@@ -36,7 +36,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
   const { getRegistry } = useContext(RegistryContext);
   const { data } = useSelector(
     ({ imageDetailReducer }) => ({
-      data: imageDetailReducer?.data?.image || null,
+      data: imageDetailReducer?.data || null,
     }),
     shallowEqual
   );
@@ -45,7 +45,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
     const registered = getRegistry().register({
       imageDetailReducer,
     });
-    loadImageDetail(dispatch, updateImageID);
+    updateImageID && loadImageDetail(dispatch, updateImageID);
     return () => registered();
   }, [dispatch]);
 
@@ -66,16 +66,16 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         setIsSaving(() => true);
         const payload = {
           ...values,
-          Id: data?.ID,
-          name: data?.Name,
-          version: data?.Version + 1,
+          Id: data?.image?.ID,
+          name: data?.image?.Name,
+          version: data?.image?.Version + 1,
           architecture: 'x86_64',
           credentials: values.credentials
             ? values.credentials
-            : data?.Installer.SshKey,
+            : data?.image?.Installer.SshKey,
           username: values.username
             ? values.username
-            : data?.Installer.Username,
+            : data?.image?.Installer.Username,
         };
 
         createNewImage(dispatch, payload, (resp) => {
@@ -134,15 +134,15 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       }}
       defaultArch="x86_64"
       initialValues={{
-        name: data?.Name,
+        name: data?.image?.Name,
         isUpdate: true,
-        description: data?.Description,
-        credentials: data?.Installer.SshKey,
-        username: data?.Installer.Username,
-        version: data?.Version,
-        release: data?.Distribution,
+        description: data?.image?.Description,
+        credentials: data?.image?.Installer.SshKey,
+        username: data?.image?.Installer.Username,
+        version: data?.image?.Version,
+        release: data?.image?.Distribution,
         imageType: ['rhel-edge-commit'],
-        'selected-packages': data?.Packages.map((pkg) => ({
+        'selected-packages': data?.image?.Packages.map((pkg) => ({
           ...pkg,
           name: pkg.Name,
         })),
@@ -159,7 +159,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
               submit: 'Create image',
             },
             showTitles: true,
-            title: `Update image: ${data?.Name}`,
+            title: `Update image: ${data?.image?.Name}`,
             crossroads: ['target-environment', 'release', 'imageType'],
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
