@@ -49,12 +49,16 @@ const createRows = (data) => {
         title: <DateFormat date={image_set?.UpdatedAt} />,
       },
       {
-        title: <StatusLabel status={image_set?.Images[0].Status} />,
+        title: (
+          <StatusLabel
+            status={image_set?.Images[image_set?.Images?.length - 1].Status}
+          />
+        ),
       },
     ],
-    imageStatus: image_set?.Images[0].Status,
+    imageStatus: image_set?.Images[image_set?.Images?.length - 1].Status,
     isoURL: image_build_iso_url || null,
-    latestImageID: image_set?.Images[0].ID,
+    latestImageID: image_set?.Images[image_set?.Images?.length - 1].ID,
   }));
 };
 
