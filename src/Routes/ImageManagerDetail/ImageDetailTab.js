@@ -10,6 +10,7 @@ import {
   Grid,
   GridItem,
   ClipboardCopy,
+  Skeleton,
 } from '@patternfly/react-core';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from './constants';
@@ -27,6 +28,9 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
           ]
         );
   }, [imageData, imageVersion]);
+
+  const createSkeleton = (rows) =>
+    [...Array(rows * 2)].map((key) => <Skeleton width="180px" key={key} />);
 
   const dateFormat = () => <DateFormat date={data?.image?.['CreatedAt']} />;
 
@@ -113,21 +117,21 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
             {imageVersion ? 'Details' : 'Most recent image'}
           </Text>
           <TextList component={TextListVariants.dl}>
-            {buildTextList(detailsMapper)}
+            {buildTextList(detailsMapper) || createSkeleton(6)}
           </TextList>
           <Text component={TextVariants.h2}>User Information </Text>
           <TextList component={TextListVariants.dl}>
-            {buildTextList(userInfoMapper)}
+            {buildTextList(userInfoMapper) || createSkeleton(2)}
           </TextList>
         </GridItem>
         <GridItem span={6}>
           <Text component={TextVariants.h2}>Packages </Text>
           <TextList component={TextListVariants.dl}>
-            {buildTextList(packageMapper)}
+            {buildTextList(packageMapper) || createSkeleton(3)}
           </TextList>
           <Text component={TextVariants.h2}>Changes from previous version</Text>
           <TextList component={TextListVariants.dl}>
-            {buildTextList(packageDiffMapper)}
+            {buildTextList(packageDiffMapper) || createSkeleton(3)}
           </TextList>
         </GridItem>
       </Grid>

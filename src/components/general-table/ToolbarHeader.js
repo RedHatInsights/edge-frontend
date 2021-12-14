@@ -7,11 +7,8 @@ import {
   Button,
   ToggleGroup,
   ToggleGroupItem,
-} from '@patternfly/react-core';
-import {
   Skeleton,
-  SkeletonSize,
-} from '@redhat-cloud-services/frontend-components/Skeleton';
+} from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import FilterControls from './FilterControls';
 import FilterChip from './FilterChips';
@@ -66,8 +63,8 @@ const ToolbarHeader = ({
         )}
         <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
           {isLoading ? (
-            <Skeleton size={SkeletonSize.xs} />
-          ) : (
+            <Skeleton width="200px" />
+          ) : count > 0 ? (
             <Pagination
               data-testid="pagination-header-test-id"
               itemCount={count}
@@ -78,7 +75,7 @@ const ToolbarHeader = ({
               onPerPageSelect={(_e, perPage) => setPerPage(perPage)}
               isCompact
             />
-          )}
+          ) : null}
         </ToolbarItem>
       </ToolbarContent>
       <ToolbarContent>
