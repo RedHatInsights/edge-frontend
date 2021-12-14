@@ -22,6 +22,7 @@ import { useSelector, shallowEqual } from 'react-redux';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
 import UpdateImageWizard from '../ImageManager/UpdateImageWizard';
+import Main from '@redhat-cloud-services/frontend-components/Main';
 
 const ImageDetail = () => {
   const { imageId, imageVersionId } = useParams();
@@ -99,12 +100,14 @@ const ImageDetail = () => {
           </Text>
         </StackItem>
       </PageHeader>
-      <ImageDetailTabs
-        imageData={imageSetData}
-        urlParam={imageId}
-        imageVersion={imageVersion}
-        openUpdateWizard={openUpdateWizard}
-      />
+      <Main>
+        <ImageDetailTabs
+          imageData={imageSetData}
+          urlParam={imageId}
+          imageVersion={imageVersion}
+          openUpdateWizard={openUpdateWizard}
+        />
+      </Main>
       {updateWizard.isOpen && (
         <Suspense
           fallback={

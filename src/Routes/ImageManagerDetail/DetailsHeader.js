@@ -77,7 +77,9 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
             </Link>
           </BreadcrumbItem>
         ) : (
-          <BreadcrumbItem isActive>{data?.image_set?.Name}</BreadcrumbItem>
+          <BreadcrumbItem isActive>
+            {data?.image_set?.Name || <Skeleton width="100px" />}
+          </BreadcrumbItem>
         )}
         {imageVersion && (
           <BreadcrumbItem isActive>
@@ -91,7 +93,7 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
           <SplitItem>
             <TextList component="dl">
               <TextListItem component="h1" className="grid-align-center">
-                {data?.image_set?.Name}
+                {data?.image_set?.Name || <Skeleton width="150px" />}
               </TextListItem>
               <TextListItem component="dd">
                 {data?.Status ||
@@ -102,7 +104,7 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
                     }
                   />
                 ) : (
-                  <Skeleton />
+                  <Skeleton width="100px" />
                 )}
               </TextListItem>
             </TextList>

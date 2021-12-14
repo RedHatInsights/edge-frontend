@@ -8,12 +8,7 @@ import {
   TableBody,
   sortable,
 } from '@patternfly/react-table';
-import {
-  Bullseye,
-  EmptyState,
-  EmptyStateIcon,
-  Spinner,
-} from '@patternfly/react-core';
+import { Skeleton } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
@@ -177,23 +172,10 @@ const GeneralTable = ({
       )
     : rows;
 
-  const loadingRows = [
-    {
-      heightAuto: true,
-      cells: [
-        {
-          props: { colSpan: 8 },
-          title: (
-            <Bullseye>
-              <EmptyState variant="small">
-                <EmptyStateIcon icon={Spinner} />
-              </EmptyState>
-            </Bullseye>
-          ),
-        },
-      ],
-    },
-  ];
+  const loadingRows = (perPage) =>
+    [...Array(perPage)].map(() => ({
+      cells: columnNames.map(() => ({ title: <Skeleton width="100%" /> })),
+    }));
 
   return (
     <>
@@ -214,9 +196,9 @@ const GeneralTable = ({
         toggleAction={toggleAction}
         toggleState={toggleState}
       />
-      {!isLoading && !count > 0 ? (
+      {!isLoading && count < 1 ? (
         <CustomEmptyState
-          data-testid="general-table-empty-state-no-data"
+          data-testid="general-table-empty-state-no-match"
           bgColor="white"
           icon="search"
           title={emptyStateMessage}
@@ -250,7 +232,7 @@ const GeneralTable = ({
           actionResolver={actionResolver ? actionResolver : null}
           areActionsDisabled={areActionsDisabled}
           cells={columns}
-          rows={isLoading ? loadingRows : filteredRows}
+          rows={isLoading ? loadingRows(perPage) : filteredRows}
         >
           <TableHeader />
           <TableBody />
@@ -258,6 +240,7 @@ const GeneralTable = ({
       )}
 
       <ToolbarFooter
+        isLoading={isLoading}
         count={apiFilterSort ? count : nonApiCount}
         setFilterValues={setFilterValues}
         perPage={perPage}
