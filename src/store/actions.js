@@ -29,7 +29,7 @@ import {
   fetchActiveImages,
   fetchDeviceSummary,
   fetchImageStatus,
-  fetchImage,
+  getImageById,
   fetchEdgeImages,
   fetchEdgeImageSets,
   getImagePackageMetadata,
@@ -135,7 +135,7 @@ export const loadImageStatus = (dispatch, imageId) => {
 export const loadImageDetail = (dispatch, imageId) => {
   dispatch({
     type: LOAD_IMAGE_DETAIL,
-    payload: fetchImage({ id: imageId }),
+    payload: getImageById({ id: imageId }),
   }).catch(() => null);
 };
 
