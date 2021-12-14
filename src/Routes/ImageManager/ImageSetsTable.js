@@ -34,23 +34,27 @@ const columnNames = [
 ];
 
 const createRows = (data) => {
-  return data.map(({ ID, Name, Version, UpdatedAt, Images }) => ({
-    id: ID,
+  return data.map(({ image_set, image_build_iso_url }) => ({
+    id: image_set?.ID,
     cells: [
       {
-        title: <Link to={`${paths['manage-images']}/${ID}`}>{Name}</Link>,
+        title: (
+          <Link to={`${paths['manage-images']}/${image_set?.ID}`}>
+            {image_set?.Name}
+          </Link>
+        ),
       },
-      Version,
+      image_set?.Version,
       {
-        title: <DateFormat date={UpdatedAt} />,
+        title: <DateFormat date={image_set?.UpdatedAt} />,
       },
       {
-        title: <StatusLabel status={Images[0].Status} />,
+        title: <StatusLabel status={image_set?.Images[0].Status} />,
       },
     ],
-    imageStatus: Images[0].Status,
-    //isoURL: ,
-    latestImageID: Images[0].ID,
+    imageStatus: image_set?.Images[0].Status,
+    isoURL: image_build_iso_url || null,
+    latestImageID: image_set?.Images[0].ID,
   }));
 };
 
