@@ -182,8 +182,8 @@ export const fetchImageStatus = ({ id }) => {
   return instance.get(`${EDGE_API}/images/${id}/status`);
 };
 
-export const fetchImage = ({ id }) => {
-  return instance.get(`${EDGE_API}/images/${id}`);
+export const getImageById = ({ id }) => {
+  return instance.get(`${EDGE_API}/images/${id}/details`);
 };
 
 export const fetchDeviceSummary = async () => {
