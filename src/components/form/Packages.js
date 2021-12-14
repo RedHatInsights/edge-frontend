@@ -65,6 +65,7 @@ const Packages = ({ defaultArch, ...props }) => {
   const [hasMoreResults, setHasMoreResults] = useState(false);
   const [scrollTo, setScrollTo] = useState(null);
   const [hasNoSearchResults, setHasNoSearchResults] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
 
   useEffect(() => {
     const loadedPackages = getState()?.values?.[input.name] || [];
@@ -110,6 +111,7 @@ const Packages = ({ defaultArch, ...props }) => {
 
     if (meta.count > 100) {
       setHasMoreResults(true);
+      return;
     } else setHasMoreResults(false);
 
     const removeChosenPackages = data.filter(
@@ -258,7 +260,11 @@ const Packages = ({ defaultArch, ...props }) => {
             type="search"
             onChange={onChange}
             placeholder="Search for packages"
-            validated={hasMoreResults && isAvailable ? 'warning' : ''}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+            validated={
+              hasMoreResults && isAvailable && !searchFocused ? 'warning' : ''
+            }
             aria-label={
               isAvailable ? 'available search input' : 'chosen search input'
             }
@@ -285,7 +291,7 @@ const Packages = ({ defaultArch, ...props }) => {
         {hasMoreResults && isAvailable && (
           <HelperText>
             <HelperTextItem variant="warning">
-              First 100 results displayed. Please, refine your search
+              First 100 results displayed. Refine your search
             </HelperTextItem>
           </HelperText>
         )}
@@ -339,6 +345,11 @@ const Packages = ({ defaultArch, ...props }) => {
             <NoResultsText
               heading="No Results Found"
               body="Adjust your search and try again"
+            />
+          ) : hasMoreResults ? (
+            <NoResultsText
+              heading="Too many results to display"
+              body="Please make the search more specific and try again"
             />
           ) : (
             <EmptyText text="Search above to add additional packages to your image." />
