@@ -34,7 +34,6 @@ const columnNames = [
 ];
 
 const createRows = (data) => {
-  console.log(data);
   return data.map(({ image_set, image_build_iso_url }) => ({
     id: image_set?.ID,
     cells: [
