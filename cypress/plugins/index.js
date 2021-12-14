@@ -20,15 +20,18 @@ const fs = require('fs-extra');
 const path = require('path');
 
 function getConfigurationByFile(file) {
-    const pathToConfigFile = path.resolve('cypress/config', `${file}.env.json`);
+  const pathToConfigFile = path.resolve('cypress/config', `${file}.env.json`);
+  // check if file exists
+  if (!fs.existsSync(pathToConfigFile)) {
+    throw new Error(`Config file ${pathToConfigFile} does not exist`);
+  }
 
-    return fs.readJson(pathToConfigFile)
+  return fs.readJson(pathToConfigFile);
 }
 
 // plugins file
 module.exports = (on, config) => {
-    // accept a configFile value or use local by default
-    const file = config.env.configFile || 'local';
-
-    return getConfigurationByFile(file)
-}
+  // accept a configFile value or use local by default
+  const file = config.env.configFile || 'local';
+  return getConfigurationByFile(file);
+};
