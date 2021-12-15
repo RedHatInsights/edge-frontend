@@ -110,7 +110,9 @@ const Packages = ({ defaultArch, ...props }) => {
     }
 
     if (meta.count > 100) {
+      setHasNoSearchResults(false);
       setHasMoreResults(true);
+      setAvailableOptions([]);
       return;
     } else setHasMoreResults(false);
 
