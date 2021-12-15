@@ -293,7 +293,7 @@ const Packages = ({ defaultArch, ...props }) => {
         {hasMoreResults && isAvailable && (
           <HelperText>
             <HelperTextItem variant="warning">
-              First 100 results displayed. Refine your search
+              Over 100 results found. Refine your search.
             </HelperTextItem>
           </HelperText>
         )}
