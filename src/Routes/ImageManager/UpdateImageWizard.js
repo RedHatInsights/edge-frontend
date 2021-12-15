@@ -8,7 +8,7 @@ import {
   registration,
   imageOutput,
 } from './steps';
-import { Spinner } from '@patternfly/react-core';
+import { Bullseye, Backdrop, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
 import {
@@ -56,7 +56,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
     })();
   }, []);
 
-  return user ? (
+  return user && data ? (
     <ImageCreator
       onClose={closeAction}
       customComponentMapper={{
@@ -175,7 +175,11 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
       }}
     />
   ) : (
-    <Spinner />
+    <Backdrop>
+      <Bullseye>
+        <Spinner isSVG diameter="100px" />
+      </Bullseye>
+    </Backdrop>
   );
 };
 
