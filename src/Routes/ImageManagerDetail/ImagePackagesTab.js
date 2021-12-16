@@ -18,8 +18,7 @@ const createRows = (data, imageData, toggleTable) => {
     toggleTable === 0
       ? data.filter(
           (pack) =>
-            imageData?.Packages.filter((image) => pack.name === image.Name)
-              .length > 0
+            imageData.filter((image) => pack.name === image.Name).length > 0
         )
       : data;
   return rowData.map((packageData) => ({
@@ -72,7 +71,7 @@ const ImagePackagesTab = ({ imageVersion }) => {
       tableData={{
         count:
           toggleTable === 0
-            ? packageData?.aditional_packages
+            ? packageData?.additional_packages
             : packageData?.packages,
         isLoading: false,
         hasError: false,
@@ -82,7 +81,7 @@ const ImagePackagesTab = ({ imageVersion }) => {
         packageData?.image?.Commit?.InstalledPackages
           ? createRows(
               packageData?.image?.Commit?.InstalledPackages,
-              packageData?.image?.packages,
+              packageData?.image?.Packages,
               toggleTable
             )
           : []
