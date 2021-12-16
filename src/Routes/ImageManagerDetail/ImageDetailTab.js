@@ -53,7 +53,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   };
 
   const packageMapper = {
-    'Total Additional Packages': () => data?.aditional_packages,
+    'Total Additional Packages': () => data?.additional_packages,
     'Total Packages': () => data?.packages,
   };
 
