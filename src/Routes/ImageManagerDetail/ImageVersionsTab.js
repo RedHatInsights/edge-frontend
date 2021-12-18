@@ -8,25 +8,26 @@ import { DateFormat } from '@redhat-cloud-services/frontend-components/DateForma
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import { imageTypeMapper } from '../ImageManagerDetail/constants';
 import { loadImageSetDetail } from '../../store/actions';
+import { cellWidth } from '@patternfly/react-table';
 
 const defaultFilters = [
   {
     label: 'Status',
     type: 'checkbox',
     options: [
-      { option: 'CREATED' },
-      { option: 'BUILDING' },
-      { option: 'ERROR' },
-      { option: 'SUCCESS' },
+      { option: 'Building', value: 'BUILDING' },
+      { option: 'Created', value: 'CREATED' },
+      { option: 'Error', value: 'ERROR' },
+      { option: 'Ready', value: 'SUCCESS' },
     ],
   },
 ];
 
 const columnNames = [
-  { title: 'Version', type: 'version', sort: true },
-  { title: 'Output', type: 'image_type', sort: false },
-  { title: 'Created', type: 'created_at', sort: true },
-  { title: 'Status', type: 'status', sort: false },
+  { title: 'Version', type: 'version', sort: true, columnTransforms: [cellWidth(15)] },
+  { title: 'Output', type: 'image_type', sort: false, columnTransforms: [cellWidth(35)] },
+  { title: 'Created', type: 'created_at', sort: true, columnTransforms: [cellWidth(25)] },
+  { title: 'Status', type: 'status', sort: false, columnTransforms: [cellWidth(35)] },
 ];
 
 const createRows = (data, imageSetId) => {

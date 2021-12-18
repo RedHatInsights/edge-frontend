@@ -3,14 +3,15 @@ import { Button } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
+import { cellWidth } from '@patternfly/react-table';
 
 const defaultFilters = [{ label: 'Name', type: 'text' }];
 
 const columnNames = [
-  { title: 'Name', type: 'name', sort: true },
-  { title: 'Version', type: 'version', sort: false },
-  { title: 'Release', type: 'release', sort: false },
-  { title: 'Type', type: 'type', sort: false },
+  { title: 'Name', type: 'name', sort: true, columnTransforms: [cellWidth(35)] },
+  { title: 'Version', type: 'version', sort: false, columnTransforms: [cellWidth(25)] },
+  { title: 'Release', type: 'release', sort: false, columnTransforms: [cellWidth(35)] },
+  //{ title: 'Type', type: 'type', sort: false, columnTransforms: [cellWidth(35)] },
 ];
 
 const createRows = (data, imageData, toggleTable) => {
@@ -26,13 +27,13 @@ const createRows = (data, imageData, toggleTable) => {
       packageData?.name,
       packageData?.version,
       packageData?.release,
-      packageData?.type,
+      //packageData?.type,
     ],
     cells: [
       packageData?.name,
       packageData?.version,
       packageData?.release,
-      packageData?.type,
+      //packageData?.type,
       {
         title: (
           <a

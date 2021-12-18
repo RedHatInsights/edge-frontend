@@ -21,7 +21,7 @@ import { useDispatch } from 'react-redux';
 import { useSelector, shallowEqual } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
-import { loadImageDetail } from '../../store/actions';
+import { loadImageDetail, loadEdgeImageSets } from '../../store/actions';
 import { getEdgeImageStatus } from '../../api';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 
@@ -119,14 +119,14 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
                           description: `${resp.value.Name} image build is completed`,
                         })
                       ),
-                    (dispatch) => loadEdgeImages(dispatch),
+                    (dispatch) => loadEdgeImageSets(dispatch),
                   ],
                 },
               },
             },
           });
           closeAction();
-          loadEdgeImages(dispatch);
+          loadEdgeImageSets(dispatch);
           dispatch(
             addImageToPoll({ name: data.value.Name, id: data.value.ID })
           );

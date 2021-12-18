@@ -11,7 +11,7 @@ import {
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import { createNewImage, loadEdgeImages } from '../../store/actions';
+import { createNewImage, loadEdgeImageSets } from '../../store/actions';
 import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
 import { useDispatch } from 'react-redux';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
@@ -84,14 +84,14 @@ const CreateImage = ({ navigateBack }) => {
                           description: `${resp.value.Name} image build is completed`,
                         })
                       ),
-                    (dispatch) => loadEdgeImages(dispatch),
+                    (dispatch) =>loadEdgeImageSets(dispatch),
                   ],
                 },
               },
             },
           });
+          loadEdgeImageSets(dispatch);
           closeAction();
-          loadEdgeImages(dispatch);
         });
       }}
       defaultArch="x86_64"

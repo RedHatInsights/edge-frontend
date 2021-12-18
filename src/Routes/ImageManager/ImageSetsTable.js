@@ -8,6 +8,7 @@ import { Text } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import { loadEdgeImageSets } from '../../store/actions';
+import { cellWidth } from '@patternfly/react-table';
 
 const defaultFilters = [
   {
@@ -18,19 +19,19 @@ const defaultFilters = [
     label: 'Status',
     type: 'checkbox',
     options: [
-      { option: 'CREATED' },
-      { option: 'BUILDING' },
-      { option: 'ERROR' },
-      { option: 'SUCCESS' },
+      { option: 'Building', value: 'BUILDING' },
+      { option: 'Created', value: 'CREATED' },
+      { option: 'Error', value: 'ERROR' },
+      { option: 'Ready', value: 'SUCCESS' },
     ],
   },
 ];
 
 const columnNames = [
-  { title: 'Name', type: 'name', sort: true },
-  { title: 'Current Version', type: 'version', sort: false },
-  { title: 'Last Updated', type: 'updated_at', sort: true },
-  { title: 'Status', type: 'status', sort: false },
+  { title: 'Name', type: 'name', sort: true, columnTransforms: [cellWidth(35)] },
+  { title: 'Current Version', type: 'version', sort: false, columnTransforms: [cellWidth(15)] },
+  { title: 'Last Updated', type: 'updated_at', sort: true, columnTransforms: [cellWidth(25)] },
+  { title: 'Status', type: 'status', sort: false, columnTransforms: [cellWidth(30)] },
 ];
 
 const createRows = (data) => {

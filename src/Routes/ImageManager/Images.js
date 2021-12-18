@@ -67,7 +67,7 @@ const Images = () => {
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Manage images" />
+        <PageHeaderTitle title="Images" />
       </PageHeader>
       <Main className="edge-devices">
         <ImageSetsTable

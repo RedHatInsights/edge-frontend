@@ -27,7 +27,7 @@ const filterParams = (chipsArray) => {
               ...acc,
               [filter.key.toLowerCase()]: [
                 ...returnAcc,
-                filter.apiName ? filter.apiName : filter.label,
+                filter.apiName ? filter.apiName : filter.value,
               ],
             };
           } else {
@@ -35,7 +35,7 @@ const filterParams = (chipsArray) => {
               ...acc,
               [filter.key.toLowerCase()]: filter.apiName
                 ? filter.apiName
-                : filter.label,
+                : filter.value || filter.label,
             };
           }
         }, {})
@@ -113,7 +113,7 @@ const GeneralTable = ({
                 value.isChecked &&
                 row.noApiSortFilter[
                   columnNames.findIndex((row) => row.title === filter.label)
-                ].toLowerCase() === value.option.toLowerCase()
+                ].toLowerCase() === value.value.toLowerCase()
             );
           }
         });
@@ -161,6 +161,7 @@ const GeneralTable = ({
     title: columnName.title,
     type: columnName.type,
     transforms: toShowSort ? [] : columnName.sort ? [sortable] : [],
+    columnTransforms : columnName.columnTransforms ? columnName.columnTransforms : [],
   }));
 
   const filteredRows = apiFilterSort
