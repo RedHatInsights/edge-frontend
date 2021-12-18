@@ -22,7 +22,7 @@ import { useSelector, shallowEqual } from 'react-redux';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
 import UpdateImageWizard from '../ImageManager/UpdateImageWizard';
-import Main from '@redhat-cloud-services/frontend-components/Main';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 
 const ImageDetail = () => {
   const { imageId, imageVersionId } = useParams();
@@ -91,23 +91,24 @@ const ImageDetail = () => {
           </StackItem>
         </Stack>
         <StackItem>
-          <Text>
-            {imageVersion
-              ? imageVersion?.image?.Description
-              : imageSetData?.data?.Data?.images?.[
-                  imageSetData?.data?.Data?.images?.length - 1
-                ].image?.Description}
-          </Text>
+            {imageSetData?.data?.Data && 
+            <Text>{`Last updated `}
+              <DateFormat 
+              date={imageVersion
+                ? imageVersion?.image?.UpdatedAt
+                : imageSetData?.data?.Data?.images?.[
+                    imageSetData?.data?.Data?.images?.length - 1
+                  ].image?.UpdatedAt}
+              />
+            </Text>}
         </StackItem>
       </PageHeader>
-      <Main>
-        <ImageDetailTabs
-          imageData={imageSetData}
-          urlParam={imageId}
-          imageVersion={imageVersion}
-          openUpdateWizard={openUpdateWizard}
-        />
-      </Main>
+      <ImageDetailTabs
+        imageData={imageSetData}
+        urlParam={imageId}
+        imageVersion={imageVersion}
+        openUpdateWizard={openUpdateWizard}
+      />
       {updateWizard.isOpen && (
         <Suspense
           fallback={
