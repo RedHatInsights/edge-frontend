@@ -8,9 +8,24 @@ import { cellWidth } from '@patternfly/react-table';
 const defaultFilters = [{ label: 'Name', type: 'text' }];
 
 const columnNames = [
-  { title: 'Name', type: 'name', sort: true, columnTransforms: [cellWidth(35)] },
-  { title: 'Version', type: 'version', sort: false, columnTransforms: [cellWidth(25)] },
-  { title: 'Release', type: 'release', sort: false, columnTransforms: [cellWidth(35)] },
+  {
+    title: 'Name',
+    type: 'name',
+    sort: true,
+    columnTransforms: [cellWidth(35)],
+  },
+  {
+    title: 'Version',
+    type: 'version',
+    sort: false,
+    columnTransforms: [cellWidth(25)],
+  },
+  {
+    title: 'Release',
+    type: 'release',
+    sort: false,
+    columnTransforms: [cellWidth(35)],
+  },
   //{ title: 'Type', type: 'type', sort: false, columnTransforms: [cellWidth(35)] },
 ];
 

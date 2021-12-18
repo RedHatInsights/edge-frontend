@@ -24,10 +24,30 @@ const defaultFilters = [
 ];
 
 const columnNames = [
-  { title: 'Version', type: 'version', sort: true, columnTransforms: [cellWidth(15)] },
-  { title: 'Output', type: 'image_type', sort: false, columnTransforms: [cellWidth(35)] },
-  { title: 'Created', type: 'created_at', sort: true, columnTransforms: [cellWidth(25)] },
-  { title: 'Status', type: 'status', sort: false, columnTransforms: [cellWidth(35)] },
+  {
+    title: 'Version',
+    type: 'version',
+    sort: true,
+    columnTransforms: [cellWidth(15)],
+  },
+  {
+    title: 'Output',
+    type: 'image_type',
+    sort: false,
+    columnTransforms: [cellWidth(35)],
+  },
+  {
+    title: 'Created',
+    type: 'created_at',
+    sort: true,
+    columnTransforms: [cellWidth(25)],
+  },
+  {
+    title: 'Status',
+    type: 'status',
+    sort: false,
+    columnTransforms: [cellWidth(35)],
+  },
 ];
 
 const createRows = (data, imageSetId) => {

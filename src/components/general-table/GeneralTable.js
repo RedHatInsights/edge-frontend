@@ -161,7 +161,9 @@ const GeneralTable = ({
     title: columnName.title,
     type: columnName.type,
     transforms: toShowSort ? [] : columnName.sort ? [sortable] : [],
-    columnTransforms : columnName.columnTransforms ? columnName.columnTransforms : [],
+    columnTransforms: columnName.columnTransforms
+      ? columnName.columnTransforms
+      : [],
   }));
 
   const filteredRows = apiFilterSort

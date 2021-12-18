@@ -11,11 +11,7 @@ import {
 import { Bullseye, Backdrop, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import {
-  createNewImage,
-  addImageToPoll,
-  loadEdgeImages,
-} from '../../store/actions';
+import { createNewImage, addImageToPoll } from '../../store/actions';
 import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
 import { useDispatch } from 'react-redux';
 import { useSelector, shallowEqual } from 'react-redux';

@@ -28,10 +28,30 @@ const defaultFilters = [
 ];
 
 const columnNames = [
-  { title: 'Name', type: 'name', sort: true, columnTransforms: [cellWidth(35)] },
-  { title: 'Current Version', type: 'version', sort: false, columnTransforms: [cellWidth(15)] },
-  { title: 'Last Updated', type: 'updated_at', sort: true, columnTransforms: [cellWidth(25)] },
-  { title: 'Status', type: 'status', sort: false, columnTransforms: [cellWidth(30)] },
+  {
+    title: 'Name',
+    type: 'name',
+    sort: true,
+    columnTransforms: [cellWidth(35)],
+  },
+  {
+    title: 'Current Version',
+    type: 'version',
+    sort: false,
+    columnTransforms: [cellWidth(15)],
+  },
+  {
+    title: 'Last Updated',
+    type: 'updated_at',
+    sort: true,
+    columnTransforms: [cellWidth(25)],
+  },
+  {
+    title: 'Status',
+    type: 'status',
+    sort: false,
+    columnTransforms: [cellWidth(30)],
+  },
 ];
 
 const createRows = (data) => {

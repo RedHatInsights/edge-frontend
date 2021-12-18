@@ -84,7 +84,7 @@ const CreateImage = ({ navigateBack }) => {
                           description: `${resp.value.Name} image build is completed`,
                         })
                       ),
-                    (dispatch) =>loadEdgeImageSets(dispatch),
+                    (dispatch) => loadEdgeImageSets(dispatch),
                   ],
                 },
               },

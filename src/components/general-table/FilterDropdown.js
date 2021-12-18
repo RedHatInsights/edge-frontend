@@ -21,7 +21,7 @@ const FilterDropdown = ({ filters, dropdown, setDropdown }) => {
   return (
     <>
       {filters.length > 1 ? (
-        <ToolbarItem data-testid="filter-dropdown-testid" className='pf-u-mr-0' >
+        <ToolbarItem data-testid="filter-dropdown-testid" className="pf-u-mr-0">
           <Select
             variant="single"
             aria-label="Select input for filters"
