@@ -91,16 +91,20 @@ const ImageDetail = () => {
           </StackItem>
         </Stack>
         <StackItem>
-            {imageSetData?.data?.Data && 
-            <Text>{`Last updated `}
-              <DateFormat 
-              date={imageVersion
-                ? imageVersion?.image?.UpdatedAt
-                : imageSetData?.data?.Data?.images?.[
-                    imageSetData?.data?.Data?.images?.length - 1
-                  ].image?.UpdatedAt}
+          {imageSetData?.data?.Data && (
+            <Text>
+              {`Last updated `}
+              <DateFormat
+                date={
+                  imageVersion
+                    ? imageVersion?.image?.UpdatedAt
+                    : imageSetData?.data?.Data?.images?.[
+                        imageSetData?.data?.Data?.images?.length - 1
+                      ].image?.UpdatedAt
+                }
               />
-            </Text>}
+            </Text>
+          )}
         </StackItem>
       </PageHeader>
       <ImageDetailTabs
