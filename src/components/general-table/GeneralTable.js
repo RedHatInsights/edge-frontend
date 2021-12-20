@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
 import { transformSort } from '../../Routes/ImageManager/constants';
+import { useLocation } from 'react-router-dom';
 
 const filterParams = (chipsArray) => {
   const filterParamsObj =
@@ -43,6 +44,62 @@ const filterParams = (chipsArray) => {
   return filterParamsObj;
 };
 
+const paramFilters = (filters, searchURL) => {
+  const params = searchURL.slice(1).split('&');
+  let obj = {};
+  params.forEach((param) => {
+    const [key, val] = param.split('=');
+    const lowerKey = key.toLowerCase();
+    const lowerVal = val.toLowerCase();
+    if (obj[key]) {
+      obj = {
+        ...obj,
+        [lowerKey]:
+          typeof obj[lowerKey] === 'string'
+            ? [obj[lowerKey], lowerVal]
+            : [...obj[lowerKey], lowerVal],
+      };
+    } else {
+      obj = {
+        ...obj,
+        [lowerKey]: lowerVal,
+      };
+    }
+  });
+  console.log(obj);
+
+  return filters.map((filter) => {
+    const name = filter.label.toLowerCase();
+    if (filter.type === 'text') {
+      if (obj[name]) {
+        return {
+          ...filter,
+          value: obj[name],
+        };
+      }
+    }
+
+    if (filter.type === 'checkbox' && obj[name]) {
+      return {
+        ...filter,
+        options: filter.options.map((option) => {
+          const value = option.value.toLowerCase();
+          if (typeof obj[name] === 'string') obj[name] = [obj[name]];
+
+          if (obj[name].find((item) => item === value)) {
+            console.log('yup');
+            return {
+              ...option,
+              isChecked: true,
+            };
+          } else return option;
+        }),
+      };
+    }
+    return filter;
+  });
+};
+
 const GeneralTable = ({
   apiFilterSort,
   urlParam,
@@ -62,7 +119,13 @@ const GeneralTable = ({
   toggleAction,
   toggleState,
 }) => {
-  const [filterValues, setFilterValues] = useState(createFilterValues(filters));
+  const { search } = useLocation();
+  const [filterValues, setFilterValues] = useState(
+    search[0] === '?'
+      ? createFilterValues(paramFilters(filters, search))
+      : createFilterValues(filters)
+  );
+
   const [chipsArray, setChipsArray] = useState([]);
   const [sortBy, setSortBy] = useState(defaultSort);
   const [perPage, setPerPage] = useState(20);

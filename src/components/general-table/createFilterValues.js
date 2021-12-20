@@ -6,12 +6,13 @@ const createFilterValues = (filters) =>
     };
 
     if (filter.type === 'text') config.value = filter.value || '';
-    if (filter.type === 'checkbox')
+    if (filter.type === 'checkbox') {
       config.value = filter.options.map((option, index) => ({
         ...option,
         id: 'option' + index,
         isChecked: option.isChecked || false,
       }));
+    }
     return config;
   });
 
