@@ -18,6 +18,7 @@ import {
   InputGroup,
   InputGroupText,
   TextInput,
+  Divider,
 } from '@patternfly/react-core';
 import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
 import AngleDoubleLeftIcon from '@patternfly/react-icons/dist/esm/icons/angle-double-left-icon';
@@ -384,6 +385,12 @@ const Packages = ({ defaultArch, ...props }) => {
                 </HelperText>
               )}
               {exactMatch && displayPackagesFrom(availableOptions, false)}
+              {exactMatch && (
+                <Divider
+                  className="pf-u-mt-md"
+                  inset={{ default: 'insetMd' }}
+                />
+              )}
               <NoResultsText
                 heading="Too many results to display"
                 body="Please make the search more specific and try again"
