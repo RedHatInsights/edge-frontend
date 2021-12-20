@@ -88,3 +88,9 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+.pf-c-table__action {
+  display: flex;
+  justify-content: right;
+  margin-right: 10px;
+}
