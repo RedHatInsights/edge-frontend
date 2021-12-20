@@ -18,6 +18,7 @@ import {
   InputGroup,
   InputGroupText,
   TextInput,
+  Divider,
 } from '@patternfly/react-core';
 import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
 import AngleDoubleLeftIcon from '@patternfly/react-icons/dist/esm/icons/angle-double-left-icon';
@@ -66,6 +67,7 @@ const Packages = ({ defaultArch, ...props }) => {
   const [scrollTo, setScrollTo] = useState(null);
   const [hasNoSearchResults, setHasNoSearchResults] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+  const [exactMatch, setExactMatch] = useState(false);
 
   useEffect(() => {
     const loadedPackages = getState()?.values?.[input.name] || [];
@@ -112,9 +114,25 @@ const Packages = ({ defaultArch, ...props }) => {
     if (meta.count > 100) {
       setHasNoSearchResults(false);
       setHasMoreResults(true);
+
+      const isNotChosen = !chosenOptions.find(
+        (option) => option.name === data[0].name
+      );
+
+      if (data[0].name === availableInputValue && isNotChosen) {
+        setExactMatch(true);
+        setAvailableOptions(mapPackagesToOptions([data[0]]));
+        return;
+      }
+
+      setExactMatch(false);
       setAvailableOptions([]);
       return;
-    } else setHasMoreResults(false);
+    } else {
+      setHasMoreResults(false);
+
+      setExactMatch(false);
+    }
 
     const removeChosenPackages = data.filter(
       (newPkg) =>
@@ -144,14 +162,14 @@ const Packages = ({ defaultArch, ...props }) => {
     );
     scrollTo.pkgs.forEach((pkg) =>
       document
-        .querySelector(`#package-${pkg.name}`)
+        .getElementById(`package-${pkg.name}`)
         .closest('.pf-c-dual-list-selector__list-item-row')
         .classList.add('pf-u-background-color-disabled-color-300')
     );
     setTimeout(() => {
       scrollTo.pkgs.forEach((pkg) =>
         document
-          .querySelector(`#package-${pkg.name}`)
+          .getElementById(`package-${pkg.name}`)
           .closest('.pf-c-dual-list-selector__list-item-row')
           .classList.remove('pf-u-background-color-disabled-color-300')
       );
@@ -201,6 +219,7 @@ const Packages = ({ defaultArch, ...props }) => {
       pane: fromAvailable ? 'chosen' : 'available',
       scrollHeight,
     });
+    setExactMatch(false);
   };
 
   const moveAll = (fromAvailable) => {
@@ -227,6 +246,7 @@ const Packages = ({ defaultArch, ...props }) => {
       );
       change(input.name, []);
     }
+    setExactMatch(false);
   };
 
   const onOptionSelect = (_event, index, isChosen) => {
@@ -301,6 +321,29 @@ const Packages = ({ defaultArch, ...props }) => {
     );
   };
 
+  const displayPackagesFrom = (options, isChosen) => {
+    return options.map((option, index) => {
+      return option.isVisible ? (
+        <DualListSelectorListItem
+          key={index}
+          isSelected={option.selected}
+          id={`composable-option-${index}`}
+          onOptionSelect={(e) => onOptionSelect(e, index, isChosen)}
+        >
+          <TextContent>
+            <span
+              id={`package-${option.name}`}
+              className="pf-c-dual-list-selector__item-text"
+            >
+              {option.name}
+            </span>
+            <small>{option.summary}</small>
+          </TextContent>
+        </DualListSelectorListItem>
+      ) : null;
+    });
+  };
+
   const selectedStatus = (options) => {
     const totalItemNum = options.filter((x) => x.isVisible).length;
     const selectedItemNum = options.filter(
@@ -322,37 +365,37 @@ const Packages = ({ defaultArch, ...props }) => {
           style={{ height: '290px' }}
           data-testid="available-packages-list"
         >
-          {availableOptions.length > 0 ? (
-            availableOptions.map((option, index) => {
-              return option.isVisible ? (
-                <DualListSelectorListItem
-                  key={index}
-                  isSelected={option.selected}
-                  id={`composable-option-${index}`}
-                  onOptionSelect={(e) => onOptionSelect(e, index, false)}
-                >
-                  <TextContent>
-                    <span
-                      id={`package-${option.name}`}
-                      className="pf-c-dual-list-selector__item-text"
-                    >
-                      {option.name}
-                    </span>
-                    <small>{option.summary}</small>
-                  </TextContent>
-                </DualListSelectorListItem>
-              ) : null;
-            })
+          {availableOptions.length > 0 && !exactMatch ? (
+            displayPackagesFrom(availableOptions, false)
           ) : hasNoSearchResults ? (
             <NoResultsText
               heading="No Results Found"
               body="Adjust your search and try again"
             />
           ) : hasMoreResults ? (
-            <NoResultsText
-              heading="Too many results to display"
-              body="Please make the search more specific and try again"
-            />
+            <>
+              {exactMatch && (
+                <HelperText>
+                  <HelperTextItem
+                    className="pf-u-ml-md pf-u-mt-md"
+                    variant="indeterminate"
+                  >
+                    Exact match
+                  </HelperTextItem>
+                </HelperText>
+              )}
+              {exactMatch && displayPackagesFrom(availableOptions, false)}
+              {exactMatch && (
+                <Divider
+                  className="pf-u-mt-md"
+                  inset={{ default: 'insetMd' }}
+                />
+              )}
+              <NoResultsText
+                heading="Too many results to display"
+                body="Please make the search more specific and try again"
+              />
+            </>
           ) : (
             <EmptyText text="Search above to add additional packages to your image." />
           )}
@@ -407,26 +450,7 @@ const Packages = ({ defaultArch, ...props }) => {
           {chosenOptions.length === 0 ? (
             <EmptyText text="No packages added." />
           ) : chosenOptions.filter((option) => option.isVisible).length > 0 ? (
-            chosenOptions.map((option, index) => {
-              return option.isVisible ? (
-                <DualListSelectorListItem
-                  key={index}
-                  isSelected={option.selected}
-                  id={`composable-option-${index}`}
-                  onOptionSelect={(e) => onOptionSelect(e, index, true)}
-                >
-                  <TextContent>
-                    <span
-                      id={`package-${option.name}`}
-                      className="pf-c-dual-list-selector__item-text"
-                    >
-                      {option.name}
-                    </span>
-                    <small>{option.summary}</small>
-                  </TextContent>
-                </DualListSelectorListItem>
-              ) : null;
-            })
+            displayPackagesFrom(chosenOptions, true)
           ) : (
             <NoResultsText
               heading="No Results Found"
