@@ -3,7 +3,7 @@ import { Tabs, Tab, TabTitleText } from '@patternfly/react-core';
 import { AppInfo } from '@redhat-cloud-services/frontend-components/Inventory';
 import VulnerabilityTab from './Vulnerability';
 
-const DeviceDetailTabs = () => {
+const DeviceDetailTabs = ({imageId}) => {
   const [activeTabKey, setActiveTabkey] = useState(0);
   const handleTabClick = (_event, tabIndex) => setActiveTabkey(tabIndex);
   return (
@@ -17,7 +17,7 @@ const DeviceDetailTabs = () => {
           <AppInfo showTags fallback="" />
         </Tab>
         <Tab eventKey={1} title={<TabTitleText>Vulnerability</TabTitleText>}>
-          <VulnerabilityTab />
+          <VulnerabilityTab imageId={imageId} />
         </Tab>
       </Tabs>
     </div>

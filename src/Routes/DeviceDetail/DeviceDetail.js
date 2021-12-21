@@ -36,6 +36,7 @@ const UpdateDeviceModal = React.lazy(() =>
 );
 
 const DeviceDetail = () => {
+  const [imageId, setImageId] = useState(null)
   const { getRegistry } = useContext(RegistryContext);
   const { inventoryId, uuid } = useParams();
   const entity = useSelector(({ entityDetails }) => entityDetails?.entity);
@@ -78,6 +79,7 @@ const DeviceDetail = () => {
           },
         },
       }));
+      setImageId(image_data?.ImageInfo?.Image?.ID)
     })();
   }, [entity]);
 
@@ -182,7 +184,7 @@ const DeviceDetail = () => {
         <Main className="edge-c-device--detail">
           <Grid gutter="md">
             <GridItem span={12}>
-              <DeviceDetailTabs />
+              <DeviceDetailTabs imageId={imageId} />
             </GridItem>
           </Grid>
         </Main>
