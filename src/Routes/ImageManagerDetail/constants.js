@@ -6,7 +6,7 @@ import QuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/question-c
 
 export const composeStatus = ['CREATED', 'BUILDING', 'ERROR', 'SUCCESS'];
 
-export const DEFAULT_RELEASE = 'rhel-84';
+export const DEFAULT_RELEASE = 'rhel-85';
 
 //For this object, it's need to sisable lint once this is not a react component
 export const statusIcons = {
@@ -34,14 +34,16 @@ export const imageStatusMapper = {
   CREATED: 'CREATED',
   BUILDING: 'Image build in progress',
   ERROR: 'ERROR',
-  SUCCESS: 'SUCCESS',
+  SUCCESS: 'Ready',
 };
 
 export const distributionMapper = {
   'rhel-84': 'RHEL 8.4',
+  'rhel-85': 'RHEL 8.5',
 };
 
 export const releaseMapper = {
+  'rhel-85': 'Red Hat Enterprise Linux (RHEL) 8.5',
   'rhel-84': 'Red Hat Enterprise Linux (RHEL) 8.4',
 };
 

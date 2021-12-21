@@ -32,7 +32,6 @@ export default {
       initialValue: DEFAULT_RELEASE,
       validate: [{ type: validatorTypes.REQUIRED }],
       isRequired: true,
-      isDisabled: true,
     },
     {
       component: 'image-output-checkbox',

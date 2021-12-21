@@ -4,7 +4,7 @@ import { createCustomRepository } from '../../../api/index';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 
-const AddModal = ({ isOpen, toggle, reloadData }) => {
+const AddModal = ({ isOpen, openModal, reloadData }) => {
   const addSchema = {
     fields: [
       {
@@ -30,7 +30,10 @@ const AddModal = ({ isOpen, toggle, reloadData }) => {
         placeholder: 'https://',
         helperText: 'Enter the baseURL for the custom repository.',
         isRequired: true,
-        validate: [{ type: validatorTypes.REQUIRED }],
+        validate: [
+          { type: validatorTypes.REQUIRED },
+          { type: validatorTypes.URL, message: 'Must be a valid url' },
+        ],
       },
     ],
   };
@@ -39,7 +42,7 @@ const AddModal = ({ isOpen, toggle, reloadData }) => {
     <Modal
       title="Add Repository"
       isOpen={isOpen}
-      toggle={() => toggle({ type: 'add' })}
+      openModal={() => openModal({ type: 'add' })}
       submitLabel="Add"
       schema={addSchema}
       onSubmit={(values) => createCustomRepository(values)}
@@ -49,7 +52,7 @@ const AddModal = ({ isOpen, toggle, reloadData }) => {
 };
 
 AddModal.propTypes = {
-  toggle: PropTypes.func,
+  openModal: PropTypes.func,
   reloadData: PropTypes.func,
   isOpen: PropTypes.boo,
 };

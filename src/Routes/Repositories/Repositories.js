@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import EmptyState from './Empty';
+import EmptyState from '../../components/Empty';
 import AddModal from './modals/AddModal';
 import EditModal from './modals/EditModal';
 import RemoveModal from './modals/RemoveModal';
@@ -24,7 +24,7 @@ const Repository = () => {
     baseURL: '',
   });
 
-  const toggle = ({ type, id = null, name = '', baseURL = '' }) => {
+  const openModal = ({ type, id = null, name = '', baseURL = '' }) => {
     setModalDetails((prevState) => ({
       ...prevState,
       id,
@@ -60,17 +60,7 @@ const Repository = () => {
           data.length > 0 ? (
             <>
               <TableHeader />
-              <RepositoryTable
-                data={data}
-                columns={['Name']}
-                toolbarButtons={[
-                  {
-                    title: 'Add repository',
-                    click: () => toggle({ type: 'add' }),
-                  },
-                ]}
-                toggle={toggle}
-              />
+              <RepositoryTable data={data} openModal={openModal} />
             </>
           ) : (
             <EmptyState
@@ -79,7 +69,7 @@ const Repository = () => {
               body="Add custom repositories to build RHEL for Edge images with additional packages."
               primaryAction={{
                 text: 'Add Repository',
-                click: () => toggle({ type: 'add' }),
+                click: () => openModal({ type: 'add' }),
               }}
               secondaryActions={
                 [
@@ -97,7 +87,7 @@ const Repository = () => {
         )}
         <AddModal
           isOpen={modalDetails.isOpen.add}
-          toggle={toggle}
+          openModal={openModal}
           reloadData={reloadData}
         />
         <EditModal
@@ -105,7 +95,7 @@ const Repository = () => {
           id={modalDetails.id}
           name={modalDetails.name}
           baseURL={modalDetails.baseURL}
-          toggle={toggle}
+          openModal={openModal}
           reloadData={reloadData}
         />
         <RemoveModal
@@ -113,7 +103,7 @@ const Repository = () => {
           id={modalDetails.id}
           name={modalDetails.name}
           baseURL={modalDetails.baseURL}
-          toggle={toggle}
+          openModal={openModal}
           reloadData={reloadData}
         />
       </Main>
