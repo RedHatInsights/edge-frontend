@@ -36,7 +36,7 @@ const UpdateDeviceModal = React.lazy(() =>
 );
 
 const DeviceDetail = () => {
-  const [imageId, setImageId] = useState(null)
+  const [imageId, setImageId] = useState(null);
   const { getRegistry } = useContext(RegistryContext);
   const { inventoryId, uuid } = useParams();
   const entity = useSelector(({ entityDetails }) => entityDetails?.entity);
@@ -79,7 +79,7 @@ const DeviceDetail = () => {
           },
         },
       }));
-      setImageId(image_data?.ImageInfo?.Image?.ID)
+      setImageId(image_data?.ImageInfo?.Image?.ID);
     })();
   }, [entity]);
 

@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Tabs, Tab, TabTitleText } from '@patternfly/react-core';
 import { AppInfo } from '@redhat-cloud-services/frontend-components/Inventory';
 import VulnerabilityTab from './Vulnerability';
+import PropTypes from 'prop-types';
 
-const DeviceDetailTabs = ({imageId}) => {
+const DeviceDetailTabs = ({ imageId }) => {
   const [activeTabKey, setActiveTabkey] = useState(0);
   const handleTabClick = (_event, tabIndex) => setActiveTabkey(tabIndex);
   return (
@@ -22,6 +23,10 @@ const DeviceDetailTabs = ({imageId}) => {
       </Tabs>
     </div>
   );
+};
+
+DeviceDetailTabs.propTypes = {
+  imageId: PropTypes.string,
 };
 
 export default DeviceDetailTabs;
