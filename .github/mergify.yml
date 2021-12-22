@@ -40,7 +40,10 @@ pull_request_rules:
       - updated-at<15 days ago
     actions:
       comment:
-        message: "This pull request is now 15 days old. Please revist, PR will be closed in 15 more days. @{{author}}?"
+        message: "This pull request is now 15 days old. Please revist, PR will be closed in 15 more days. @{{author}}"
+      label:
+        add:
+          - stale warning  
   - name: close stale pull request
     conditions:
       - base=master
@@ -48,12 +51,12 @@ pull_request_rules:
       - updated-at<30 days ago
     actions:
       close:
-        message: |
-          This pull request looks stale. Feel free to reopen it if you think it's a mistake.
+        message: "This pull request looks stale. Feel free to reopen it if you think it's a mistake."
   - name: waiting for review
     conditions:
       - "#approved-reviews-by<1"
       - created-at<1 days ago
+      - -draft
     actions:
       label:
         add:
