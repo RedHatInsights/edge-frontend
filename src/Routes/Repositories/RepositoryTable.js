@@ -8,15 +8,16 @@ const filters = [{ label: 'Name', type: 'text' }];
 
 const RepositoryTable = ({ data, openModal }) => {
   const actionResolver = (rowData) => {
+    const { id, repoName, repoBaseURL } = rowData;
     return [
       {
         title: 'Edit',
         onClick: () =>
           openModal({
             type: 'edit',
-            id: rowData.id,
-            name: rowData.rowName,
-            baseURL: rowData.baseURL,
+            id: id,
+            name: repoName,
+            baseURL: repoBaseURL,
           }),
       },
       {
@@ -24,9 +25,9 @@ const RepositoryTable = ({ data, openModal }) => {
         onClick: () =>
           openModal({
             type: 'remove',
-            id: rowData.id,
-            name: rowData.rowName,
-            baseURL: rowData.baseURL,
+            id: id,
+            name: repoName,
+            baseURL: repoBaseURL,
           }),
       },
     ];
@@ -35,6 +36,8 @@ const RepositoryTable = ({ data, openModal }) => {
   const buildRows = data.map(({ id, name, baseURL }) => {
     return {
       id: id,
+      repoName: name,
+      repoBaseURL: baseURL,
       noApiSortFilter: [name, baseURL],
       cells: [
         {
