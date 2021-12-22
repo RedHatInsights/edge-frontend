@@ -45,6 +45,23 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
     });
   };
 
+  const handleDeleteTextInput = () => {
+    const filterLabelIndex = filterValues.findIndex(
+      (value) => value.type === 'text'
+    );
+    setFilterValues((prevState) => {
+      const changedValue = prevState[filterLabelIndex];
+      if (changedValue.type === 'text') {
+        return [
+          ...prevState.slice(0, filterLabelIndex),
+          { ...prevState[filterLabelIndex], value: '' },
+          ...prevState.slice(filterLabelIndex + 1, prevState.length),
+        ];
+      }
+      return prevState;
+    });
+  };
+
   if (selectedFilter.type === 'text') {
     return (
       <ToolbarItem data-testid="filter-input-testid">
@@ -56,6 +73,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
             aria-label={`Select input for ${selectedFilter.label}`}
             placeholder={`Filter by ${selectedFilter.label}`}
             onChange={debounce(handleFilterChange(), 500)}
+            onClear={handleDeleteTextInput}
             value={filterValues.find((filter) => filter.type === 'text').value}
           />
         </InputGroup>
