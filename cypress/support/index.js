@@ -13,6 +13,22 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
+// Choosing to ignore Pendo errors for now
+Cypress.on('uncaught:exception', (err, runnable, promise) => {
+    if (err) {
+        console.log('Cypress is ignoring the following error:')
+        console.log(err)
+        return false;
+    }
+
+    if (promise) {
+        console.log('Cypress is ignoring the following promise:')
+        console.log(promise)
+        return false
+    }
+    // return false;
+});
+
 // Import commands.js using ES2015 syntax:
 import './commands'
 
