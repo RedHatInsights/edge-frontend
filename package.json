@@ -48,10 +48,10 @@
     "@patternfly/patternfly": "4.132.2",
     "@patternfly/react-charts": "^6.28.4",
     "@patternfly/react-core": "4.175.4",
-    "@patternfly/react-icons": "^4.11.14",
+    "@patternfly/react-icons": "^4.32.1",
     "@patternfly/react-styles": "^4.11.13",
     "@patternfly/react-table": "4.29.58",
-    "@patternfly/react-tokens": "^4.12.15",
+    "@patternfly/react-tokens": "^4.33.1",
     "@redhat-cloud-services/frontend-components": "3.4.1",
     "@redhat-cloud-services/frontend-components-inventory-general-info": "^3.3.0",
     "@redhat-cloud-services/frontend-components-notifications": "^3.2.5",
@@ -67,7 +67,7 @@
     "redux": "4.1.1",
     "redux-logger": "3.0.6",
     "redux-promise-middleware": "6.1.2",
-    "sass-loader": "^12.3.0"
+    "sass-loader": "^12.4.0"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
