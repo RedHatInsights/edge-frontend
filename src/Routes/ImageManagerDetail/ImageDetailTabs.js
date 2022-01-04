@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, TabTitleText, Skeleton } from '@patternfly/react-core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import ImageDetailTab from './ImageDetailTab';
 import ImageVersionTab from './ImageVersionsTab';
@@ -20,15 +20,24 @@ const ImageDetailTabs = ({
   imageVersion,
   isLoading,
 }) => {
-  const { location } = useHistory();
+  const location = useLocation();
+  const history = useHistory();
   const [activeTabKey, setActiveTabkey] = useState(tabs.details);
-  const handleTabClick = (_event, tabIndex) => setActiveTabkey(tabIndex);
+
+  const paramIndex = imageVersion ? 4 : 3;
+  const url = location.pathname.split('/');
+
+  const handleTabClick = (_event, tabIndex) => {
+    const selectedTab =
+      tabIndex === 0 ? 'details' : imageVersion ? 'packages' : 'versions';
+
+    url[paramIndex] = selectedTab;
+    history.push(url.join('/'));
+
+    setActiveTabkey(tabIndex);
+  };
 
   useEffect(() => {
-    console.log(activeTabKey);
-    const paramIndex = imageVersion ? 4 : 3;
-    const url = location.pathname.split('/');
-
     if (paramIndex > url.length - 1) {
       setActiveTabkey(tabs.details);
       return;
