@@ -6,6 +6,7 @@ import { init, RegistryContext } from '../../store';
 import { render } from '@testing-library/react';
 import logger from 'redux-logger';
 
+import { MemoryRouter } from 'react-router-dom';
 describe('General table', () => {
   it('should render correctly', async () => {
     const filters = [
@@ -69,7 +70,8 @@ describe('General table', () => {
             ]}
           />
         </Provider>
-      </RegistryContext.Provider>
+      </RegistryContext.Provider>,
+      { wrapper: MemoryRouter }
     );
 
     const generalTableHeader = await findByTestId('toolbar-header-testid');
