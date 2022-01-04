@@ -35,7 +35,6 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   const dateFormat = () => <DateFormat date={data?.image?.['CreatedAt']} />;
 
   const detailsMapper = {
-    'Image name': 'Name',
     Version: 'Version',
     Created: () => dateFormat(),
     'Type(s)': () =>
