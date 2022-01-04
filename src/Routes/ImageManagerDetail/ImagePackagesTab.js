@@ -4,6 +4,7 @@ import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { cellWidth } from '@patternfly/react-table';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const defaultFilters = [{ label: 'Name', type: 'text' }];
 
@@ -71,13 +72,29 @@ const createRows = (data, imageData, toggleTable) => {
   }));
 };
 
+const tabs = {
+  0: 'additional',
+  1: 'all',
+};
+
 const ImagePackagesTab = ({ imageVersion }) => {
   const [packageData, setPackageData] = useState({});
   const [toggleTable, setToggleTable] = useState(1);
 
+  const location = useLocation();
+  const history = useHistory();
+
   useEffect(() => {
     setPackageData(imageVersion);
   }, [imageVersion]);
+
+  useEffect(() => {
+    const splitUrl = location.pathname.split('/');
+    splitUrl.length === 6
+      ? (splitUrl[5] = tabs[toggleTable])
+      : splitUrl.push(tabs[toggleTable]);
+    history.push(splitUrl.join('/'));
+  }, [toggleTable]);
 
   return (
     <GeneralTable

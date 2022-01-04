@@ -25,24 +25,24 @@ const ImageDetailTabs = ({
   const [activeTabKey, setActiveTabkey] = useState(tabs.details);
 
   const paramIndex = imageVersion ? 4 : 3;
-  const url = location.pathname.split('/');
+  const splitUrl = location.pathname.split('/');
 
   const handleTabClick = (_event, tabIndex) => {
     const selectedTab =
       tabIndex === 0 ? 'details' : imageVersion ? 'packages' : 'versions';
 
-    url[paramIndex] = selectedTab;
-    history.push(url.join('/'));
+    splitUrl[paramIndex] = selectedTab;
+    history.push(splitUrl.join('/'));
 
     setActiveTabkey(tabIndex);
   };
 
   useEffect(() => {
-    if (paramIndex > url.length - 1) {
+    if (paramIndex > splitUrl.length - 1) {
       setActiveTabkey(tabs.details);
       return;
     }
-    const lowerTab = url[paramIndex].toLowerCase();
+    const lowerTab = splitUrl[paramIndex].toLowerCase();
     setActiveTabkey(tabs[lowerTab] || tabs.details);
   }, [imageVersion]);
 
