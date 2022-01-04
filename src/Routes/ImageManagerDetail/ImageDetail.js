@@ -112,6 +112,7 @@ const ImageDetail = () => {
         urlParam={imageId}
         imageVersion={imageVersion}
         openUpdateWizard={openUpdateWizard}
+        isLoading={imageSetData.isLoading}
       />
       {updateWizard.isOpen && (
         <Suspense
