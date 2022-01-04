@@ -32,7 +32,12 @@ const ImageDetailTabs = ({
       tabIndex === 0 ? 'details' : imageVersion ? 'packages' : 'versions';
 
     splitUrl[paramIndex] = selectedTab;
-    history.push(splitUrl.join('/'));
+
+    if (selectedTab === 'details') {
+      history.push(splitUrl.splice(0, 5).join('/'));
+    } else {
+      history.push(splitUrl.join('/'));
+    }
 
     setActiveTabkey(tabIndex);
   };

@@ -90,9 +90,16 @@ const ImagePackagesTab = ({ imageVersion }) => {
 
   useEffect(() => {
     const splitUrl = location.pathname.split('/');
-    splitUrl.length === 6
-      ? (splitUrl[5] = tabs[toggleTable])
-      : splitUrl.push(tabs[toggleTable]);
+    const currentTab = splitUrl[4].toLowerCase();
+
+    if (currentTab === 'packages') {
+      if (splitUrl.length === 6) {
+        splitUrl[5] = tabs[toggleTable];
+      } else {
+        splitUrl.push(tabs[toggleTable]);
+      }
+    }
+
     history.push(splitUrl.join('/'));
   }, [toggleTable]);
 
