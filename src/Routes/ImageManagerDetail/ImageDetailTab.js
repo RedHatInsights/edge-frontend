@@ -111,7 +111,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   return (
     <TextContent className="pf-u-ml-lg pf-u-mt-md">
       <Grid span={12}>
-        <GridItem span={6}>
+        <GridItem span={5}>
           <Text component={TextVariants.h2}>
             {imageVersion ? 'Details' : 'Most recent image'}
           </Text>
@@ -123,6 +123,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
             {buildTextList(userInfoMapper) || createSkeleton(2)}
           </TextList>
         </GridItem>
+        <GridItem span={1} />
         <GridItem span={6}>
           <Text component={TextVariants.h2}>Packages </Text>
           <TextList component={TextListVariants.dl}>
