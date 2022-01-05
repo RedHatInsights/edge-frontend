@@ -22,11 +22,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   useEffect(() => {
     imageVersion
       ? setData(imageVersion)
-      : setData(
-          imageData?.data?.Data?.images?.[
-            imageData?.data?.Data?.images?.length - 1
-          ]
-        );
+      : setData(imageData?.data?.Data?.images?.[0]);
   }, [imageData, imageVersion]);
 
   const createSkeleton = (rows) =>
