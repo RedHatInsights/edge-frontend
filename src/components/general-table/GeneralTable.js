@@ -44,7 +44,7 @@ const filterParams = (chipsArray) => {
   return filterParamsObj;
 };
 
-const paramFilters = (filters, searchURL) => {
+const getParams = (searchURL) => {
   const params = searchURL.slice(1).split('&');
   let obj = {};
   params.forEach((param) => {
@@ -66,8 +66,10 @@ const paramFilters = (filters, searchURL) => {
       };
     }
   });
-  console.log(obj);
+  return obj;
+};
 
+const paramFilters = (filters, obj) => {
   return filters.map((filter) => {
     const name = filter.label.toLowerCase();
     if (filter.type === 'text') {
@@ -102,7 +104,6 @@ const paramFilters = (filters, searchURL) => {
 
 const GeneralTable = ({
   apiFilterSort,
-  urlParam,
   filters,
   loadTableData,
   tableData,
@@ -120,16 +121,17 @@ const GeneralTable = ({
   toggleState,
 }) => {
   const { search } = useLocation();
+  const [urlParams] = useState(getParams(search));
   const [filterValues, setFilterValues] = useState(
     search[0] === '?'
-      ? createFilterValues(paramFilters(filters, search))
+      ? createFilterValues(paramFilters(filters, urlParams))
       : createFilterValues(filters)
   );
 
   const [chipsArray, setChipsArray] = useState([]);
   const [sortBy, setSortBy] = useState(defaultSort);
-  const [perPage, setPerPage] = useState(20);
-  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(urlParams['limit'] || 20);
+  const [page, setPage] = useState(urlParams['offset'] || 1);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -144,8 +146,8 @@ const GeneralTable = ({
           }),
         }
       : null;
-    apiFilterSort && urlParam
-      ? loadTableData(dispatch, urlParam, query)
+    apiFilterSort && urlParams
+      ? loadTableData(dispatch, urlParams, query)
       : apiFilterSort
       ? loadTableData(dispatch, query)
       : null;
@@ -321,7 +323,6 @@ const GeneralTable = ({
 GeneralTable.propTypes = {
   apiFilterSort: PropTypes.bool,
   filters: PropTypes.array,
-  urlParam: PropTypes.string,
   loadTableData: PropTypes.func,
   tableData: PropTypes.object,
   columnNames: PropTypes.array,
