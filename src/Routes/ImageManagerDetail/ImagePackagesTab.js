@@ -72,31 +72,37 @@ const createRows = (data, imageData, toggleTable) => {
   }));
 };
 
-const tabs = {
+const indexToTabs = {
   0: 'additional',
   1: 'all',
 };
 
-const ImagePackagesTab = ({ imageVersion }) => {
-  const [packageData, setPackageData] = useState({});
-  const [toggleTable, setToggleTable] = useState(1);
+const tabsToIndex = {
+  additional: 0,
+  all: 1,
+};
 
+const ImagePackagesTab = ({ imageVersion }) => {
   const location = useLocation();
   const history = useHistory();
+  const splitUrl = location.pathname.split('/');
+  const defaultToggle = splitUrl.length === 6 ? tabsToIndex[splitUrl[5]] : 1;
+
+  const [packageData, setPackageData] = useState({});
+  const [toggleTable, setToggleTable] = useState(defaultToggle);
 
   useEffect(() => {
     setPackageData(imageVersion);
   }, [imageVersion]);
 
   useEffect(() => {
-    const splitUrl = location.pathname.split('/');
     const currentTab = splitUrl[4].toLowerCase();
 
     if (currentTab === 'packages') {
       if (splitUrl.length === 6) {
-        splitUrl[5] = tabs[toggleTable];
+        splitUrl[5] = indexToTabs[toggleTable];
       } else {
-        splitUrl.push(tabs[toggleTable]);
+        splitUrl.push(indexToTabs[toggleTable]);
       }
     }
 
