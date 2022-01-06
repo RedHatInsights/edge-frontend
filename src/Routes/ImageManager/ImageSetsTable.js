@@ -80,7 +80,7 @@ const createRows = (data) => {
           </Link>
         ),
       },
-      image_set?.Version,
+      image_set?.Images[0].Version, // remove when image_set.Version is accurate
       {
         title: <DateFormat date={image_set?.UpdatedAt} />,
       },
@@ -89,16 +89,14 @@ const createRows = (data) => {
           <>
             {/* workaround for tooltip on kebab*/}
             <TooltipSelectorRef index={index} />
-            <StatusLabel
-              status={image_set?.Images[image_set?.Images?.length - 1].Status}
-            />
+            <StatusLabel status={image_set?.Images[0].Status} />
           </>
         ),
       },
     ],
-    imageStatus: image_set?.Images[image_set?.Images?.length - 1].Status,
+    imageStatus: image_set?.Images[0].Status,
     isoURL: image_build_iso_url || null,
-    latestImageID: image_set?.Images[image_set?.Images?.length - 1].ID,
+    latestImageID: image_set?.Images[0].ID,
   }));
 };
 
