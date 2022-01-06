@@ -43,6 +43,7 @@
   ],
   "dependencies": {
     "@babel/runtime": "7.15.4",
+    "@data-driven-forms/common": "^3.16.0",
     "@data-driven-forms/pf4-component-mapper": "^3.16.0",
     "@data-driven-forms/react-form-renderer": "^3.16.0",
     "@patternfly/patternfly": "4.132.2",
