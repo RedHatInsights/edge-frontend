@@ -14,6 +14,7 @@ import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
 import { transformSort } from '../../Routes/ImageManager/constants';
 import { useLocation } from 'react-router-dom';
+import { isEqual } from 'lodash';
 
 const filterParams = (chipsArray) => {
   const filterParamsObj =
@@ -47,6 +48,11 @@ const filterParams = (chipsArray) => {
 const getParams = (searchURL) => {
   const params = searchURL.slice(1).split('&');
   let obj = {};
+
+  if (params[0] === '') {
+    return obj;
+  }
+
   params.forEach((param) => {
     const [key, val] = param.split('=');
     const lowerKey = key.toLowerCase();
@@ -89,7 +95,6 @@ const paramFilters = (filters, obj) => {
           if (typeof obj[name] === 'string') obj[name] = [obj[name]];
 
           if (obj[name].find((item) => item === value)) {
-            console.log('yup');
             return {
               ...option,
               isChecked: true,
@@ -135,9 +140,24 @@ const GeneralTable = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const upperUrlParams = {
+      status: urlParams?.status?.map((p) => p.toUpperCase()),
+    };
+    const filteredParamChips = filterParams(chipsArray);
+
+    const isUrlAndChipsEqual = isEqual(
+      upperUrlParams,
+      typeof filteredParamChips.status === 'string'
+        ? { status: [filteredParamChips.status] }
+        : filteredParamChips
+    );
+
+    const additionalParams =
+      search[0] === '?' ? upperUrlParams : filteredParamChips;
+
     const query = apiFilterSort
       ? {
-          ...filterParams(chipsArray),
+          ...additionalParams,
           limit: perPage,
           offset: (page - 1) * perPage,
           ...transformSort({
@@ -146,9 +166,8 @@ const GeneralTable = ({
           }),
         }
       : null;
-    apiFilterSort && urlParams
-      ? loadTableData(dispatch, urlParams, query)
-      : apiFilterSort
+
+    apiFilterSort && !isUrlAndChipsEqual
       ? loadTableData(dispatch, query)
       : null;
   }, [chipsArray, perPage, page, sortBy]);
