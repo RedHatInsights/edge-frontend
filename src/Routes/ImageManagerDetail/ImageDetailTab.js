@@ -15,6 +15,8 @@ import {
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from './constants';
 import PropTypes from 'prop-types';
+import { routes as paths } from '../../../package.json';
+import { Link } from 'react-router-dom';
 
 const ImageDetailTab = ({ imageData, imageVersion }) => {
   const [data, setData] = useState({});
@@ -46,10 +48,29 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
     Username: () => data?.image?.Installer?.Username,
     'SSH Key': () => data?.image?.Installer?.SshKey,
   };
+  const renderAdditionalPackageLink = () => {
+    return (
+      <Link
+        to={`${paths['manage-images']}/${data?.image?.ImageSetID}/${data?.image?.ID}/packages/additional`}
+      >
+        {data?.additional_packages}
+      </Link>
+    );
+  };
+
+  const renderTotalPackageLink = () => {
+    return (
+      <Link
+        to={`${paths['manage-images']}/${data?.image?.ImageSetID}/${data?.image?.ID}/packages/all`}
+      >
+        {data?.packages}
+      </Link>
+    );
+  };
 
   const packageMapper = {
-    'Total Additional Packages': () => data?.additional_packages,
-    'Total Packages': () => data?.packages,
+    'Total Additional Packages': renderAdditionalPackageLink,
+    'Total Packages': renderTotalPackageLink,
   };
 
   const packageDiffMapper = {
