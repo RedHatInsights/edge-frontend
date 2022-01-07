@@ -96,22 +96,22 @@ const ImagePackagesTab = ({ imageVersion }) => {
   }, [imageVersion]);
 
   useEffect(() => {
-    splitUrl[5] !== indexToTabs[toggleTable] && setToggleTable(defaultToggle)
-  },[splitUrl])
+    splitUrl[5] !== indexToTabs[toggleTable] && setToggleTable(defaultToggle);
+  }, [splitUrl]);
 
   const handleToggleTable = (toggleIndex) => {
     const currentTab = splitUrl[4].toLowerCase();
-    setToggleTable(toggleIndex)
+    setToggleTable(toggleIndex);
     if (currentTab === 'packages') {
       if (splitUrl.length === 6) {
         splitUrl[5] = indexToTabs[toggleIndex];
       } else {
         splitUrl.push(indexToTabs[toggleIndex]);
       }
-  
+
       history.push(splitUrl.join('/'));
     }
-  }
+  };
 
   return (
     <GeneralTable
