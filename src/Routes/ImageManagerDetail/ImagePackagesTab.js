@@ -96,18 +96,22 @@ const ImagePackagesTab = ({ imageVersion }) => {
   }, [imageVersion]);
 
   useEffect(() => {
-    const currentTab = splitUrl[4].toLowerCase();
+    splitUrl[5] !== indexToTabs[toggleTable] && setToggleTable(defaultToggle);
+  }, [splitUrl]);
 
+  const handleToggleTable = (toggleIndex) => {
+    const currentTab = splitUrl[4].toLowerCase();
+    setToggleTable(toggleIndex);
     if (currentTab === 'packages') {
       if (splitUrl.length === 6) {
-        splitUrl[5] = indexToTabs[toggleTable];
+        splitUrl[5] = indexToTabs[toggleIndex];
       } else {
-        splitUrl.push(indexToTabs[toggleTable]);
+        splitUrl.push(indexToTabs[toggleIndex]);
       }
-    }
 
-    history.push(splitUrl.join('/'));
-  }, [toggleTable]);
+      history.push(splitUrl.join('/'));
+    }
+  };
 
   return (
     <GeneralTable
@@ -139,7 +143,7 @@ const ImagePackagesTab = ({ imageVersion }) => {
         { title: 'Additional', key: 0 },
         { title: 'All', key: 1 },
       ]}
-      toggleAction={setToggleTable}
+      toggleAction={handleToggleTable}
       toggleState={toggleTable}
       emptyStateMessage="No packages to display"
     />
