@@ -43,6 +43,10 @@ const ImageDetailTabs = ({
   };
 
   useEffect(() => {
+    tabs[splitUrl[3]] !== activeTabKey && setActiveTabkey(tabs[splitUrl[4]])
+  },[splitUrl])
+
+  useEffect(() => {
     if (paramIndex > splitUrl.length - 1) {
       setActiveTabkey(tabs.details);
       return;
