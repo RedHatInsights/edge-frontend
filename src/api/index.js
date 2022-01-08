@@ -42,7 +42,7 @@ const rowGroupDetailCreator = (uuid, version, status) => {
   };
 };
 
-const getTableParams = (q) => {
+export const getTableParams = (q) => {
   const query = Object.keys(q).reduce((acc, curr) => {
     let value = undefined;
     if (

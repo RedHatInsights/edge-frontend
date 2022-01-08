@@ -13,8 +13,9 @@ import PropTypes from 'prop-types';
 import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
 import { transformSort } from '../../Routes/ImageManager/constants';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { isEqual } from 'lodash';
+import { getTableParams } from '../../api/index';
 
 const filterParams = (chipsArray) => {
   const filterParamsObj =
@@ -126,6 +127,8 @@ const GeneralTable = ({
   toggleState,
 }) => {
   const { search } = useLocation();
+  const history = useHistory();
+
   const [urlParams] = useState(getParams(search));
   const [filterValues, setFilterValues] = useState(
     search[0] === '?'
@@ -139,11 +142,18 @@ const GeneralTable = ({
   const [page, setPage] = useState(urlParams['offset'] || 1);
   const dispatch = useDispatch();
 
+  const writeToUrl = (search) => {
+    console.log(history.location.pathname);
+    history.push({ pathname: '/manage-images', search });
+  };
+
   useEffect(() => {
     const upperUrlParams = {
       status: urlParams?.status?.map((p) => p.toUpperCase()),
     };
+    console.log('UPPER URL PARAMS', upperUrlParams);
     const filteredParamChips = filterParams(chipsArray);
+    console.log('FILTERED PARAM CHIPS', filteredParamChips);
 
     const isUrlAndChipsEqual = isEqual(
       upperUrlParams,
@@ -152,8 +162,12 @@ const GeneralTable = ({
         : filteredParamChips
     );
 
+    console.log('IS URL CHIPS EQUAL', isUrlAndChipsEqual);
+
     const additionalParams =
       search[0] === '?' ? upperUrlParams : filteredParamChips;
+
+    console.log('ADDITIONAL PARAMS', additionalParams);
 
     const query = apiFilterSort
       ? {
@@ -166,6 +180,8 @@ const GeneralTable = ({
           }),
         }
       : null;
+
+    writeToUrl(getTableParams(query));
 
     apiFilterSort && !isUrlAndChipsEqual
       ? loadTableData(dispatch, query)
