@@ -151,8 +151,8 @@ const ImagePackagesTab = ({ imageVersion }) => {
   ) : (
     <Empty
       bgColor="white"
-      title="Package data unavailable"
-      body="Image is currently being built. Once finished packages will be displayed."
+      title="Package data currently unavailable"
+      body="Packages will be displayed as soon as the image is finished being built."
       primaryAction={null}
       secondaryActions={[]}
     />
