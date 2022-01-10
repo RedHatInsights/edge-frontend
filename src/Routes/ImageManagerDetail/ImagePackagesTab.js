@@ -5,6 +5,7 @@ import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { cellWidth } from '@patternfly/react-table';
 import { useHistory, useLocation } from 'react-router-dom';
+import Empty from '../../components/Empty';
 
 const defaultFilters = [{ label: 'Name', type: 'text' }];
 
@@ -113,7 +114,7 @@ const ImagePackagesTab = ({ imageVersion }) => {
     }
   };
 
-  return (
+  return imageVersion?.image?.Commit?.Status === 'SUCCESS' ? (
     <GeneralTable
       apiFilterSort={false}
       filters={defaultFilters}
@@ -146,6 +147,14 @@ const ImagePackagesTab = ({ imageVersion }) => {
       toggleAction={handleToggleTable}
       toggleState={toggleTable}
       emptyStateMessage="No packages to display"
+    />
+  ) : (
+    <Empty
+      bgColor="white"
+      title="Package data unavailable"
+      body="Image is currently being built. Once finished packages will be displayed."
+      primaryAction={null}
+      secondaryActions={[]}
     />
   );
 };

@@ -26,7 +26,7 @@ const Empty = ({
   secondaryActions,
 }) => (
   <EmptyState style={{ backgroundColor: bgColor || '' }}>
-    <EmptyStateIcon icon={emptyStateIconMapper[icon]} />
+    {icon && <EmptyStateIcon icon={emptyStateIconMapper[icon]} />}
     <Title headingLevel="h4" size="lg">
       {title}
     </Title>
