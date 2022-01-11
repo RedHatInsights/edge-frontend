@@ -87,7 +87,7 @@ const ImagePackagesTab = ({ imageVersion }) => {
   const location = useLocation();
   const history = useHistory();
   const splitUrl = location.pathname.split('/');
-  const defaultToggle = splitUrl.length === 6 ? tabsToIndex[splitUrl[5]] : 1;
+  const defaultToggle = splitUrl.length === 7 ? tabsToIndex[splitUrl[6]] : 1;
 
   const [packageData, setPackageData] = useState({});
   const [toggleTable, setToggleTable] = useState(defaultToggle);
@@ -101,11 +101,11 @@ const ImagePackagesTab = ({ imageVersion }) => {
   }, [splitUrl]);
 
   const handleToggleTable = (toggleIndex) => {
-    const currentTab = splitUrl[4].toLowerCase();
+    const currentTab = splitUrl[5].toLowerCase();
     setToggleTable(toggleIndex);
     if (currentTab === 'packages') {
-      if (splitUrl.length === 6) {
-        splitUrl[5] = indexToTabs[toggleIndex];
+      if (splitUrl.length === 7) {
+        splitUrl[6] = indexToTabs[toggleIndex];
       } else {
         splitUrl.push(indexToTabs[toggleIndex]);
       }
