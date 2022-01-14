@@ -13,7 +13,6 @@ import {
   SkeletonSize,
 } from '@redhat-cloud-services/frontend-components/Skeleton';
 import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import {
   InventoryDetailHead,
   DetailWrapper,
@@ -181,37 +180,38 @@ const DeviceDetail = () => {
             </Label>
           )}
         </PageHeader>
-        <Main className="edge-c-device--detail">
-          <Grid gutter="md">
-            <GridItem span={12}>
-              <DeviceDetailTabs imageId={imageId} />
-            </GridItem>
-          </Grid>
-        </Main>
+        <Grid gutter="md">
+          <GridItem span={12}>
+            <DeviceDetailTabs
+              systemProfile={updateModal?.deviceData?.system_profile}
+              imageId={imageId}
+            />
+          </GridItem>
+        </Grid>
+        {updateModal.isOpen && (
+          <Suspense
+            fallback={
+              <Bullseye>
+                <Spinner />
+              </Bullseye>
+            }
+          >
+            <UpdateDeviceModal
+              navigateBack={() => {
+                history.push({ pathname: history.location.pathname });
+                setUpdateModal((prevState) => {
+                  return {
+                    ...prevState,
+                    isOpen: false,
+                  };
+                });
+              }}
+              setUpdateModal={setUpdateModal}
+              updateModal={updateModal}
+            />
+          </Suspense>
+        )}
       </DetailWrapper>
-      {updateModal.isOpen && (
-        <Suspense
-          fallback={
-            <Bullseye>
-              <Spinner />
-            </Bullseye>
-          }
-        >
-          <UpdateDeviceModal
-            navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
-              setUpdateModal((prevState) => {
-                return {
-                  ...prevState,
-                  isOpen: false,
-                };
-              });
-            }}
-            setUpdateModal={setUpdateModal}
-            updateModal={updateModal}
-          />
-        </Suspense>
-      )}
     </>
   );
 };
