@@ -24,7 +24,7 @@ const ImageDetailTabs = ({
   const history = useHistory();
   const [activeTabKey, setActiveTabkey] = useState(tabs.details);
 
-  const paramIndex = imageVersion ? 5 : 4;
+  const paramIndex = imageVersion ? 4 : 3;
   const splitUrl = location.pathname.split('/');
 
   const handleTabClick = (_event, tabIndex) => {
@@ -43,7 +43,7 @@ const ImageDetailTabs = ({
   };
 
   useEffect(() => {
-    tabs[splitUrl[4]] !== activeTabKey && setActiveTabkey(tabs[splitUrl[5]]);
+    tabs[splitUrl[3]] !== activeTabKey && setActiveTabkey(tabs[splitUrl[4]]);
   }, [splitUrl]);
 
   useEffect(() => {
