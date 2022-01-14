@@ -20,6 +20,7 @@ import {
 import StatusLabel from './StatusLabel';
 import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 
 const dropdownItems = (data, imageVersion, openUpdateWizard) => {
   const imageData = imageVersion ? imageVersion : data?.images?.[0];
@@ -90,7 +91,10 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
         <Split>
           <SplitItem>
             <TextList component="dl">
-              <TextListItem component="h1" className="grid-align-center">
+              <TextListItem
+                component="h1"
+                className="grid-align-center pf-u-mb-0"
+              >
                 {data?.image_set?.Name || <Skeleton width="150px" />}
               </TextListItem>
               <TextListItem component="dd">
@@ -99,6 +103,16 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
                 ) : (
                   <Skeleton width="100px" />
                 )}
+              </TextListItem>
+              <TextListItem component="p">
+                {`Last updated `}
+                <DateFormat
+                  date={
+                    imageVersion
+                      ? imageVersion?.image?.UpdatedAt
+                      : data?.images?.[0].image?.UpdatedAt
+                  }
+                />
               </TextListItem>
             </TextList>
           </SplitItem>
