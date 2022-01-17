@@ -13,6 +13,8 @@ import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color
 import successColor from '@patternfly/react-tokens/dist/esm/global_success_color_100';
 import infoColor from '@patternfly/react-tokens/dist/esm/global_info_color_100';
 
+import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
+
 export const statusMapper = [
   'done',
   'error',
@@ -116,4 +118,11 @@ export const imageDistributionMapper = {
 export const imageArchMapper = {
   x86_64: '64bit',
   arm: 'Arm',
+};
+
+export const nameValidator = {
+  type: validatorTypes.PATTERN,
+  pattern: /^[A-Za-z0-9]+[A-Za-z0-9_-\s]*$/,
+  message:
+    'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
 };
