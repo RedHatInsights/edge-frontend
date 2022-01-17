@@ -51,7 +51,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   const renderAdditionalPackageLink = () => {
     return (
       <Link
-        to={`${paths['manage-images']}/${data?.image?.ImageSetID}/${data?.image?.ID}/packages/additional`}
+        to={`${paths['manage-images']}/${data?.image?.ImageSetID}/versions/${data?.image?.ID}/packages/additional`}
       >
         {data?.additional_packages}
       </Link>
@@ -61,7 +61,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   const renderTotalPackageLink = () => {
     return (
       <Link
-        to={`${paths['manage-images']}/${data?.image?.ImageSetID}/${data?.image?.ID}/packages/all`}
+        to={`${paths['manage-images']}/${data?.image?.ImageSetID}/versions/${data?.image?.ID}/packages/all`}
       >
         {data?.packages}
       </Link>
