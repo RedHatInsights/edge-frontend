@@ -7,6 +7,8 @@ import ImageVersionTab from './ImageVersionsTab';
 import ImagePackagesTab from './ImagePackagesTab';
 import PropTypes from 'prop-types';
 
+import { mapUrlToObj } from '../../constants';
+
 // conditional render for same index
 const tabs = {
   details: 0,
@@ -23,37 +25,34 @@ const ImageDetailTabs = ({
   const location = useLocation();
   const history = useHistory();
   const [activeTabKey, setActiveTabkey] = useState(tabs.details);
+  const activeTab = imageVersion ? 'imageTab' : 'imageSetTab';
 
-  const paramIndex = imageVersion ? 5 : 3;
-  const splitUrl = location.pathname.split('/');
+  const keys = [
+    'baseURL',
+    'imageSetVersion',
+    'imageSetTab',
+    'imageVersion',
+    'imageTab',
+    'packagesToggle',
+  ];
+  const imageUrlMapper = mapUrlToObj(location.pathname, keys);
 
   const handleTabClick = (_event, tabIndex) => {
     const selectedTab =
       tabIndex === 0 ? 'details' : imageVersion ? 'packages' : 'versions';
 
-    splitUrl[paramIndex] = selectedTab;
+    imageUrlMapper[activeTab] = selectedTab;
 
-    if (selectedTab === 'details') {
-      history.push(splitUrl.splice(0, 6).join('/'));
-    } else {
-      history.push(splitUrl.join('/'));
-    }
+    history.push(imageUrlMapper.buildUrl());
 
     setActiveTabkey(tabIndex);
   };
 
   useEffect(() => {
-    tabs[splitUrl[3]] !== activeTabKey && setActiveTabkey(tabs[splitUrl[4]]);
-  }, [splitUrl]);
-
-  useEffect(() => {
-    if (paramIndex > splitUrl.length - 1) {
-      setActiveTabkey(tabs.details);
-      return;
-    }
-    const lowerTab = splitUrl[paramIndex].toLowerCase();
-    setActiveTabkey(tabs[lowerTab] || tabs.details);
-  }, [imageVersion]);
+    imageUrlMapper['imageTab']
+      ? setActiveTabkey(tabs[imageUrlMapper['imageTab']])
+      : setActiveTabkey(tabs[imageUrlMapper['imageSetTab']]);
+  }, [location.pathname]);
 
   return (
     <div className="edge-c-device--detail add-100vh">
