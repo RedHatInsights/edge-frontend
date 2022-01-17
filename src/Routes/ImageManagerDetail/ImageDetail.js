@@ -6,13 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
-import {
-  Stack,
-  StackItem,
-  Text,
-  Spinner,
-  Bullseye,
-} from '@patternfly/react-core';
+import { Stack, StackItem, Spinner, Bullseye } from '@patternfly/react-core';
 import { useDispatch } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { loadImageSetDetail } from '../../store/actions';
@@ -22,7 +16,6 @@ import { useSelector, shallowEqual } from 'react-redux';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
 import UpdateImageWizard from '../ImageManager/UpdateImageWizard';
-import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 
 const ImageDetail = () => {
   const { imageId, imageVersionId } = useParams();
@@ -90,20 +83,6 @@ const ImageDetail = () => {
             />
           </StackItem>
         </Stack>
-        <StackItem>
-          {imageSetData?.data?.Data && (
-            <Text>
-              {`Last updated `}
-              <DateFormat
-                date={
-                  imageVersion
-                    ? imageVersion?.image?.UpdatedAt
-                    : imageSetData?.data?.Data?.images?.[0].image?.UpdatedAt
-                }
-              />
-            </Text>
-          )}
-        </StackItem>
       </PageHeader>
       <ImageDetailTabs
         imageData={imageSetData}
