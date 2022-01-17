@@ -44,8 +44,8 @@
   "dependencies": {
     "@babel/runtime": "7.15.4",
     "@data-driven-forms/common": "^3.16.2",
-    "@data-driven-forms/pf4-component-mapper": "^3.16.0",
-    "@data-driven-forms/react-form-renderer": "^3.16.0",
+    "@data-driven-forms/pf4-component-mapper": "^3.16.2",
+    "@data-driven-forms/react-form-renderer": "^3.16.2",
     "@patternfly/patternfly": "4.132.2",
     "@patternfly/react-charts": "^6.28.4",
     "@patternfly/react-core": "4.175.4",
