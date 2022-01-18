@@ -51,6 +51,7 @@ const DeviceDetail = () => {
     deviceData: null,
   });
   const [isDeviceStatusLoading, setIsDeviceStatusLoading] = useState(true);
+  const [reload, setReload] = useState(false);
   useEffect(() => {
     insights.chrome.registerModule('inventory');
     insights.chrome?.hideGlobalFilter?.(true);
@@ -80,7 +81,7 @@ const DeviceDetail = () => {
       }));
       setImageId(image_data?.ImageInfo?.Image?.ID);
     })();
-  }, [entity]);
+  }, [entity, reload]);
 
   useEffect(() => {
     insights?.chrome?.appObjectId?.(inventoryId);
@@ -186,6 +187,7 @@ const DeviceDetail = () => {
               systemProfile={updateModal?.deviceData}
               imageId={imageId}
               setUpdateModal={setUpdateModal}
+              setReload={setReload}
             />
           </GridItem>
         </Grid>
@@ -209,6 +211,7 @@ const DeviceDetail = () => {
               }}
               setUpdateModal={setUpdateModal}
               updateModal={updateModal}
+              refreshTable={() => setReload(true)}
             />
           </Suspense>
         )}

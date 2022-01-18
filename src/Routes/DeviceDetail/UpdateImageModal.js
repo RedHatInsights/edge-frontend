@@ -27,7 +27,7 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 import { createNewImage, addImageToPoll } from '../../store/actions';
 import { getEdgeImageStatus } from '../../api';
 
-const UpdateImageModal = ({ updateCveModal, setUpdateCveModal }) => {
+const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
   const dispatch = useDispatch();
 
   const { getRegistry } = useContext(RegistryContext);
@@ -49,18 +49,23 @@ const UpdateImageModal = ({ updateCveModal, setUpdateCveModal }) => {
 
   const handleUpdateModal = () => {
     const payload = {
-      ...data.image,
+      //...data.image,
       Id: data?.image?.ID,
+      description: data?.image?.Description,
       name: data?.image?.Name,
       version: data?.image?.Version + 1,
       architecture: 'x86_64',
       credentials: data?.image?.Installer.SshKey,
       username: data?.image?.Installer.Username,
       imageType: data?.image?.OutputTypes,
-      'selected-packages': data?.image?.Packages,
+      'selected-packages': data?.image?.Packages?.map((pack) => ({
+        name: pack.Name,
+      })),
       release: data?.image?.Distribution,
     };
+    console.log(payload);
     handleClose();
+    setReload(true);
     createNewImage(dispatch, payload, (resp) => {
       dispatch({
         ...addNotification({
@@ -207,6 +212,7 @@ UpdateImageModal.propTypes = {
     cveCount: PropTypes.number,
   }).isRequired,
   setUpdateCveModal: PropTypes.func.isRequired,
+  setReload: PropTypes.bool,
 };
 
 export default UpdateImageModal;
