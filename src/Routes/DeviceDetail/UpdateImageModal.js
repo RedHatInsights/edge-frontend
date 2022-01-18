@@ -13,10 +13,7 @@ import {
   Bullseye,
   Spinner,
 } from '@patternfly/react-core';
-import { ExclamationTriangleIcon } from '@patternfly/react-icons';
-import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import {
-  distributionMapper,
   imageTypeMapper,
   releaseMapper,
 } from '../ImageManagerDetail/constants';
@@ -27,14 +24,11 @@ import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail, loadEdgeImageSets } from '../../store/actions';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
+import { createNewImage, addImageToPoll } from '../../store/actions';
+import { getEdgeImageStatus } from '../../api';
 
-const UpdateImageModal = ({
-  updateCveModal,
-  setUpdateCveModal,
-  refreshTable,
-}) => {
+const UpdateImageModal = ({ updateCveModal, setUpdateCveModal }) => {
   const dispatch = useDispatch();
-  console.log(updateCveModal);
 
   const { getRegistry } = useContext(RegistryContext);
   const { data } = useSelector(
@@ -45,10 +39,6 @@ const UpdateImageModal = ({
   );
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
-
-  useEffect(() => {
     const registered = getRegistry().register({
       imageDetailReducer,
     });
@@ -57,12 +47,72 @@ const UpdateImageModal = ({
     return () => registered();
   }, [dispatch]);
 
-  const handleUpdateModal = async () => {
+  const handleUpdateModal = () => {
     const payload = {
       ...data.image,
-      Version: data?.image?.Version + 1,
+      Id: data?.image?.ID,
+      name: data?.image?.Name,
+      version: data?.image?.Version + 1,
+      architecture: 'x86_64',
+      credentials: data?.image?.Installer.SshKey,
+      username: data?.image?.Installer.Username,
+      imageType: data?.image?.OutputTypes,
+      'selected-packages': data?.image?.Packages,
+      release: data?.image?.Distribution,
     };
-    console.log(payload);
+    handleClose();
+    createNewImage(dispatch, payload, (resp) => {
+      dispatch({
+        ...addNotification({
+          variant: 'info',
+          title: 'Update image',
+          description: `${resp.value.Name} image was added to the queue.`,
+        }),
+        meta: {
+          polling: {
+            id: `FETCH_IMAGE_${resp.value.ID}_BUILD_STATUS`,
+            fetcher: () => getEdgeImageStatus(resp.value.ID),
+            condition: (resp) => {
+              switch (resp.Status) {
+                case 'BUILDING':
+                  return [true, ''];
+                case 'ERROR':
+                  return [false, 'failure'];
+                default:
+                  return [false, 'success'];
+              }
+            },
+            onEvent: {
+              failure: [
+                (dispatch) =>
+                  dispatch(
+                    addNotification({
+                      variant: 'danger',
+                      title: 'Image build failed',
+                      description: `${resp.value.Name} image build is completed unsuccessfully`,
+                    })
+                  ),
+              ],
+              success: [
+                (dispatch) =>
+                  dispatch(
+                    addNotification({
+                      variant: 'success',
+                      title: 'Image is ready',
+                      description: `${resp.value.Name} image build is completed`,
+                    })
+                  ),
+                (dispatch) => loadEdgeImageSets(dispatch),
+              ],
+            },
+          },
+        },
+      });
+      loadEdgeImageSets(dispatch);
+      dispatch(
+        addImageToPoll({ name: data?.image?.Name, id: data?.image?.ID })
+      );
+    });
   };
 
   const handleClose = () => {
@@ -76,6 +126,7 @@ const UpdateImageModal = ({
       description="Review the information and click Create image to start the build process"
       isOpen={updateCveModal.isOpen}
       onClose={handleClose}
+      //onSubmit={handleUpdateModal}
       actions={[
         <Button key="confirm" variant="primary" onClick={handleUpdateModal}>
           Create Image
@@ -150,12 +201,12 @@ const UpdateImageModal = ({
 };
 
 UpdateImageModal.propTypes = {
-  refreshTable: PropTypes.func,
-  updateModal: PropTypes.shape({
+  updateCveModal: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
-    deviceData: PropTypes.object.isRequired,
+    imageId: PropTypes.string,
+    cveCount: PropTypes.number,
   }).isRequired,
-  setUpdateModal: PropTypes.func.isRequired,
+  setUpdateCveModal: PropTypes.func.isRequired,
 };
 
 export default UpdateImageModal;

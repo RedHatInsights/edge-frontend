@@ -183,8 +183,9 @@ const DeviceDetail = () => {
         <Grid gutter="md">
           <GridItem span={12}>
             <DeviceDetailTabs
-              systemProfile={updateModal?.deviceData?.system_profile}
+              systemProfile={updateModal?.deviceData}
               imageId={imageId}
+              setUpdateModal={setUpdateModal}
             />
           </GridItem>
         </Grid>
