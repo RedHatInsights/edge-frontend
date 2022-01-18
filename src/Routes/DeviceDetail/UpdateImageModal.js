@@ -63,7 +63,6 @@ const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
       })),
       release: data?.image?.Distribution,
     };
-    console.log(payload);
     handleClose();
     setReload(true);
     createNewImage(dispatch, payload, (resp) => {
