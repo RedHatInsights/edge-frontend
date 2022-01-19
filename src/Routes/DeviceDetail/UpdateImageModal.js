@@ -49,7 +49,6 @@ const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
 
   const handleUpdateModal = () => {
     const payload = {
-      //...data.image,
       Id: data?.image?.ID,
       description: data?.image?.Description,
       name: data?.image?.Name,
