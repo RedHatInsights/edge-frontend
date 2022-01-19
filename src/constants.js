@@ -126,3 +126,23 @@ export const nameValidator = {
   message:
     'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
 };
+
+export const mapUrlToObj = (url, keys) => {
+  const splitUrl = url.split('/');
+  const obj = {};
+
+  for (let i = 1; i < splitUrl.length; i++) {
+    if (splitUrl[i]) {
+      obj[keys[i - 1]] = splitUrl[i];
+    }
+  }
+
+  obj.buildUrl = function () {
+    return Object.values(this).reduce(
+      (acc, curr) => (typeof curr !== 'function' ? `${acc}/${curr}` : acc),
+      ''
+    );
+  };
+
+  return obj;
+};
