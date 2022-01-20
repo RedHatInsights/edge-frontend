@@ -32,6 +32,7 @@ const RepositoryHeader = () => {
             <QuestionCircleIcon
               style={{ cursor: 'pointer' }}
               className="pf-u-ml-xs"
+              data-testid="test-pop-over"
             />
           </Popover>
         </p>
