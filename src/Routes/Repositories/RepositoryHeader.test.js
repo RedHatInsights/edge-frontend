@@ -15,10 +15,10 @@ describe('RepositoryHeader', () => {
       )
     ).toThrow();
     fireEvent.click(screen.getByTestId('test-pop-over'));
-    waitFor(() =>
+    await waitFor(() =>
       expect(screen.getByText('About Fleet Management')).toBeDefined()
     );
-    waitFor(() =>
+    await waitFor(() =>
       expect(
         screen.getByText(
           'Fleet Management is a service that allows you to provision, update and maintain edge systems.'
