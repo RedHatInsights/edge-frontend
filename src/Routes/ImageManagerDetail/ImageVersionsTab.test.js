@@ -64,8 +64,12 @@ describe('ImageVersionsTab', () => {
     );
 
     expect(screen.getByRole('button', { name: 'Options menu' })).toBeDefined();
-    expect(screen.getByRole('cell', { name: '1' }).firstChild.getAttribute('href')).toEqual('/manage-images/101/versions/100/details');
-    expect(screen.getByRole('cell', { name: '2' }).firstChild.getAttribute('href')).toEqual('/manage-images/101/versions/200/details');
+    expect(
+      screen.getByRole('cell', { name: '1' }).firstChild.getAttribute('href')
+    ).toEqual('/manage-images/101/versions/100/details');
+    expect(
+      screen.getByRole('cell', { name: '2' }).firstChild.getAttribute('href')
+    ).toEqual('/manage-images/101/versions/200/details');
     expect(
       screen.getAllByRole('cell', { name: 'RHEL for Edge Installer (.iso)' })
     ).toHaveLength(2);
@@ -74,8 +78,8 @@ describe('ImageVersionsTab', () => {
       screen.getByRole('cell', { name: 'Image build in progress' })
     ).toBeDefined();
     expect(screen.getByRole('cell', { name: 'Ready' })).toBeDefined();
-    fireEvent.click(screen.getAllByRole('button', {name: /actions/i})[1])
-    fireEvent.click(screen.getByRole('button', {name: /update image/i}))
-    expect(openUpdateWizard).toBeCalled()
+    fireEvent.click(screen.getAllByRole('button', { name: /actions/i })[1]);
+    fireEvent.click(screen.getByRole('button', { name: /update image/i }));
+    expect(openUpdateWizard).toBeCalled();
   });
 });
