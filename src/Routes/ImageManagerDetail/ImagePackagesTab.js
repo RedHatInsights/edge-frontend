@@ -101,7 +101,7 @@ const ImagePackagesTab = ({ imageVersion }) => {
   }, [splitUrl]);
 
   const handleToggleTable = (toggleIndex) => {
-    const currentTab = splitUrl[5].toLowerCase();
+    const currentTab = splitUrl[5]?.toLowerCase();
     setToggleTable(toggleIndex);
     if (currentTab === 'packages') {
       if (splitUrl.length === 7) {
@@ -137,8 +137,8 @@ const ImagePackagesTab = ({ imageVersion }) => {
             )
           : []
       }
-      actionResolver={[]}
-      areActionsDisabled={true}
+      actionResolver={() => []}
+      areActionsDisabled={() => true}
       defaultSort={{ index: 0, direction: 'asc' }}
       toggleButton={[
         { title: 'Additional', key: 0 },

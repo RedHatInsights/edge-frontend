@@ -229,7 +229,7 @@ const GeneralTable = ({
         <Table
           data-testid="general-table-testid"
           variant="compact"
-          aria-label="Manage Images table"
+          aria-label="General Table Component"
           sortBy={sortBy}
           onSort={handleSort}
           actionResolver={actionResolver ? actionResolver : null}
