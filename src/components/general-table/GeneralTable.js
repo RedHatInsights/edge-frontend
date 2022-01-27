@@ -261,14 +261,17 @@ const GeneralTable = ({
           }
           onSelect={
             hasCheckbox
-              ? (_event, isSelecting, rowIndex) =>
-                  setCheckedRows((prevState) =>
-                    isSelecting
-                      ? [...prevState, rowIndex]
-                      : rowIndex === -1
-                      ? []
-                      : prevState.filter((index) => index !== rowIndex)
-                  )
+              ? (_event, isSelecting, rowIndex) => {
+                  rowIndex === -1 && !isSelecting
+                    ? setCheckedRows([])
+                    : rowIndex === -1
+                    ? setCheckedRows(filteredRows.map((_v, index) => index))
+                    : setCheckedRows((prevState) =>
+                        isSelecting
+                          ? [...prevState, rowIndex]
+                          : prevState.filter((index) => index !== rowIndex)
+                      );
+                }
               : null
           }
           canSelectAll={hasCheckbox}
