@@ -58,6 +58,7 @@ export default {
       component: componentTypes.TEXTAREA,
       style: {
         paddingRight: '32px',
+        height: '25vh',
       },
       name: 'description',
       label: (
