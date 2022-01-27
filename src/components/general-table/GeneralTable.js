@@ -61,12 +61,14 @@ const GeneralTable = ({
   toggleButton,
   toggleAction,
   toggleState,
+  hasCheckbox = false,
 }) => {
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
   const [sortBy, setSortBy] = useState(defaultSort);
   const [perPage, setPerPage] = useState(20);
   const [page, setPage] = useState(1);
+  const [checkedRows, setCheckedRows] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -175,6 +177,21 @@ const GeneralTable = ({
       )
     : rows;
 
+  const selectedRows = () =>
+    filteredRows.map((row, index) =>
+      checkedRows.includes(-1)
+        ? { ...row, selected: true }
+        : checkedRows.includes(index)
+        ? {
+            ...row,
+            selected: true,
+          }
+        : {
+            ...row,
+            selected: false,
+          }
+    );
+
   const loadingRows = (perPage) =>
     [...Array(perPage)].map(() => ({
       cells: columnNames.map(() => ({ title: <Skeleton width="100%" /> })),
@@ -235,7 +252,26 @@ const GeneralTable = ({
           actionResolver={actionResolver ? actionResolver : null}
           areActionsDisabled={areActionsDisabled}
           cells={columns}
-          rows={isLoading ? loadingRows(perPage) : filteredRows}
+          rows={
+            isLoading
+              ? loadingRows(perPage)
+              : hasCheckbox
+              ? selectedRows()
+              : filteredRows
+          }
+          onSelect={
+            hasCheckbox
+              ? (_event, isSelecting, rowIndex) =>
+                  setCheckedRows((prevState) =>
+                    isSelecting
+                      ? [...prevState, rowIndex]
+                      : rowIndex === -1
+                      ? []
+                      : prevState.filter((index) => index !== rowIndex)
+                  )
+              : null
+          }
+          canSelectAll={hasCheckbox}
         >
           <TableHeader />
           <TableBody />
@@ -273,6 +309,7 @@ GeneralTable.propTypes = {
   toggleButton: PropTypes.array,
   toggleAction: PropTypes.func,
   toggleState: PropTypes.number,
+  hasCheckbox: PropTypes.bool,
 };
 
 export default GeneralTable;
