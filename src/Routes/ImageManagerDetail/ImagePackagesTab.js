@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { cellWidth } from '@patternfly/react-table';
 import { useHistory, useLocation } from 'react-router-dom';
 import Empty from '../../components/Empty';
+import Main from '@redhat-cloud-services/frontend-components/Main';
 
 const defaultFilters = [{ label: 'Name', type: 'text' }];
 
@@ -115,47 +116,51 @@ const ImagePackagesTab = ({ imageVersion }) => {
   };
 
   return imageVersion?.image?.Commit?.Status === 'SUCCESS' ? (
-    <GeneralTable
-      apiFilterSort={false}
-      filters={defaultFilters}
-      //loadTableData={loadImagePackageMetadata}
-      tableData={{
-        count:
-          toggleTable === 0
-            ? packageData?.additional_packages
-            : packageData?.packages,
-        isLoading: false,
-        hasError: false,
-      }}
-      columnNames={columnNames}
-      rows={
-        packageData?.image?.Commit?.InstalledPackages
-          ? createRows(
-              packageData?.image?.Commit?.InstalledPackages,
-              packageData?.image?.Packages,
-              toggleTable
-            )
-          : []
-      }
-      actionResolver={() => []}
-      areActionsDisabled={() => true}
-      defaultSort={{ index: 0, direction: 'asc' }}
-      toggleButton={[
-        { title: 'Additional', key: 0 },
-        { title: 'All', key: 1 },
-      ]}
-      toggleAction={handleToggleTable}
-      toggleState={toggleTable}
-      emptyStateMessage="No packages to display"
-    />
+    <Main className="add-100vh">
+      <GeneralTable
+        apiFilterSort={false}
+        filters={defaultFilters}
+        //loadTableData={loadImagePackageMetadata}
+        tableData={{
+          count:
+            toggleTable === 0
+              ? packageData?.additional_packages
+              : packageData?.packages,
+          isLoading: false,
+          hasError: false,
+        }}
+        columnNames={columnNames}
+        rows={
+          packageData?.image?.Commit?.InstalledPackages
+            ? createRows(
+                packageData?.image?.Commit?.InstalledPackages,
+                packageData?.image?.Packages,
+                toggleTable
+              )
+            : []
+        }
+        actionResolver={() => []}
+        areActionsDisabled={() => true}
+        defaultSort={{ index: 0, direction: 'asc' }}
+        toggleButton={[
+          { title: 'Additional', key: 0 },
+          { title: 'All', key: 1 },
+        ]}
+        toggleAction={handleToggleTable}
+        toggleState={toggleTable}
+        emptyStateMessage="No packages to display"
+      />
+    </Main>
   ) : (
-    <Empty
-      bgColor="white"
-      title="Package data currently unavailable"
-      body="Packages will be displayed as soon as the image is finished being built."
-      primaryAction={null}
-      secondaryActions={[]}
-    />
+    <Main className="add-100vh">
+      <Empty
+        bgColor="white"
+        title="Package data currently unavailable"
+        body="Packages will be displayed as soon as the image is finished being built."
+        primaryAction={null}
+        secondaryActions={[]}
+      />
+    </Main>
   );
 };
 

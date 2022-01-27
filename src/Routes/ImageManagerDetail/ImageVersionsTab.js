@@ -9,6 +9,7 @@ import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import { imageTypeMapper } from '../ImageManagerDetail/constants';
 import { loadImageSetDetail } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
+import Main from '@redhat-cloud-services/frontend-components/Main';
 
 const defaultFilters = [
   {
@@ -139,21 +140,23 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
   const areActionsDisabled = (rowData) => rowData?.imageStatus === 'BUILDING';
 
   return (
-    <GeneralTable
-      apiFilterSort={false}
-      filters={defaultFilters}
-      loadTableData={loadImageSetDetail}
-      tableData={{
-        count: imageData?.data?.Count,
-        isLoading: imageData?.isLoading,
-        hasError: imageData?.hasError,
-      }}
-      columnNames={columnNames}
-      rows={rows || []}
-      actionResolver={actionResolver}
-      areActionsDisabled={areActionsDisabled}
-      defaultSort={{ index: 2, direction: 'desc' }}
-    />
+    <Main className="add-100vh">
+      <GeneralTable
+        apiFilterSort={false}
+        filters={defaultFilters}
+        loadTableData={loadImageSetDetail}
+        tableData={{
+          count: imageData?.data?.Count,
+          isLoading: imageData?.isLoading,
+          hasError: imageData?.hasError,
+        }}
+        columnNames={columnNames}
+        rows={rows || []}
+        actionResolver={actionResolver}
+        areActionsDisabled={areActionsDisabled}
+        defaultSort={{ index: 2, direction: 'desc' }}
+      />
+    </Main>
   );
 };
 ImageVersionsTab.propTypes = {
