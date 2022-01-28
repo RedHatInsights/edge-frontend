@@ -16,6 +16,7 @@ const RepoModal = ({
   reloadData,
   size,
   onSubmit,
+  additionalMappers,
 }) => {
   return (
     <Modal
@@ -37,7 +38,11 @@ const RepoModal = ({
           />
         )}
         initialValues={initialValues}
-        componentMapper={componentMapper}
+        componentMapper={
+          additionalMappers
+            ? { ...additionalMappers, ...componentMapper }
+            : componentMapper
+        }
         onSubmit={async (values) => {
           await onSubmit(values);
           openModal();

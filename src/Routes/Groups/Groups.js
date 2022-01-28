@@ -30,23 +30,23 @@ const Groups = () => {
 
   return (
     <>
-      <PageHeader className='pf-m-light'>
+      <PageHeader className="pf-m-light">
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
           <FlexItem>
-            <PageHeaderTitle title='Fleet management' />
+            <PageHeaderTitle title="Fleet management" />
           </FlexItem>
           <FlexItem>
-            <Button variant='secondary'>View entire inventory</Button>
+            <Button variant="secondary">View entire inventory</Button>
           </FlexItem>
         </Flex>
       </PageHeader>
-      <Main className='edge-devices'>
+      <Main className="edge-devices">
         {true ? (
           <GroupTable data={data} openModal={() => setIsModalOpen(true)} />
         ) : (
           <Bullseye>
             <Empty
-              title='No groups yet!'
+              title="No groups yet!"
               primaryAction={{
                 text: 'Create group',
                 click: () => setIsModalOpen(true),
@@ -60,8 +60,8 @@ const Groups = () => {
       <Modal
         isOpen={isModalOpen}
         openModal={() => setIsModalOpen(false)}
-        title='Create group'
-        submitLabel='Save'
+        title="Create group"
+        submitLabel="Save"
         schema={{
           fields: [
             { component: 'text-field', name: 'name', label: 'Group name' },

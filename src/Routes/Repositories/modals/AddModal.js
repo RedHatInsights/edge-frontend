@@ -41,10 +41,10 @@ const AddModal = ({ isOpen, openModal, reloadData }) => {
 
   return (
     <Modal
-      title='Add Repository'
+      title="Add Repository"
       isOpen={isOpen}
       openModal={() => openModal({ type: 'add' })}
-      submitLabel='Add'
+      submitLabel="Add"
       schema={addSchema}
       onSubmit={(values) => createCustomRepository(values)}
       reloadData={reloadData}

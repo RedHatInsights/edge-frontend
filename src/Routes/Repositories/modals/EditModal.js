@@ -30,7 +30,7 @@ const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
         placeholder: 'https://',
         helperText: (
           <HelperText hasIcon>
-            <HelperTextItem className='pf-u-pb-md' variant='warning' hasIcon>
+            <HelperTextItem className="pf-u-pb-md" variant="warning" hasIcon>
               If you change the repo URL, you may not have access to the
               packages that were used to build images that reference this
               repository.
@@ -49,10 +49,10 @@ const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
 
   return (
     <Modal
-      title='Edit Repository'
+      title="Edit Repository"
       isOpen={isOpen}
       openModal={() => openModal({ type: 'edit' })}
-      submitLabel='Update'
+      submitLabel="Update"
       schema={editSchema}
       initialValues={{ id, name, baseURL }}
       onSubmit={(values) => editCustomRepository(values)}
