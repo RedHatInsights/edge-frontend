@@ -435,7 +435,5 @@ export const removeCustomRepository = (id) =>
   instance.delete(`${EDGE_API}/thirdpartyrepo/${id}`);
 
 export const getInventory = async () => {
-  return await instance.get(
-    '/api/inventory/v1/hosts?hostname_or_id=&per_page=50&page=1&order_by=updated&order_how=DESC&staleness=fresh&staleness=stale&&filter[system_profile][host_type]=edge&fields[system_profile][]=host_type&fields[system_profile][]=operating_system&fields[system_profile][]=greenboot_status&fields[system_profile][]=greenboot_fallback_detected&fields[system_profile][]=rpm_ostree_deployments'
-  );
+  return await instance.get(`${EDGE_API}/devices`);
 };

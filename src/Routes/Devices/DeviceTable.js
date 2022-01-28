@@ -6,11 +6,15 @@ import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
+import { Label } from '@patternfly/react-core';
 import { shallowEqual, useSelector } from 'react-redux';
 import { loadDeviceTable } from '../../store/actions';
 import { RegistryContext } from '../../store';
 import { deviceTableReducer } from '../../store/reducers';
-import { TagIcon } from '@patternfly/react-icons';
+import {
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+} from '@patternfly/react-icons';
 
 const defaultFilters = [
   {
@@ -37,12 +41,6 @@ const columnNames = [
     columnTransforms: [cellWidth(35)],
   },
   {
-    title: 'Tags',
-    type: 'tags',
-    sort: false,
-    columnTransforms: [cellWidth(10)],
-  },
-  {
     title: 'Groups',
     type: 'groups',
     sort: false,
@@ -58,7 +56,7 @@ const columnNames = [
     title: 'Image',
     type: 'image',
     sort: false,
-    columnTransforms: [cellWidth(15)],
+    columnTransforms: [cellWidth(20)],
   },
   {
     title: 'Status',
@@ -68,38 +66,74 @@ const columnNames = [
   },
 ];
 
+const DeviceStatus = ({ ImageInfo }) => {
+  const statusType = {
+    running: (
+      <Label
+        className="pf-u-mt-sm"
+        color="green"
+        icon={<CheckCircleIcon color="green" />}
+      >
+        Running
+      </Label>
+    ),
+    updateAvailable: (
+      <Label
+        className="pf-u-mt-sm"
+        color="orange"
+        icon={<ExclamationTriangleIcon />}
+      >
+        Update Available
+      </Label>
+    ),
+  };
+
+  return ImageInfo?.UpdatesAvailable
+    ? statusType['updateAvailable']
+    : statusType['running'];
+};
+
 const createRows = (devices) => {
   return devices?.map((device) => ({
-    id: device.id,
-    noApiSortFilter: [device?.display_name, '', '', device?.updated, '', ''],
+    id: device?.Device?.UUID,
+    display_name: device?.Device?.DeviceName,
+    deviceStatus: device?.ImageInfo?.UpdatesAvailable
+      ? 'updateAvailable'
+      : 'running',
+    noApiSortFilter: [
+      device?.Device?.DeviceName || '',
+      '',
+      device?.Device?.UpdatedAt || '',
+      device?.ImageInfo?.Image?.Name,
+      device?.ImageInfo?.UpdatesAvailable ? 'updateAvailable' : 'running',
+    ],
     cells: [
       {
         title: (
+          <Link to={`${paths['fleet-management']}/${device?.Device?.UUID}`}>
+            {device?.Device?.DeviceName}
+          </Link>
+        ),
+      },
+      {
+        title: '-',
+      },
+      {
+        title: <DateFormat date={device?.Device?.UpdatedAt} />,
+      },
+      {
+        title: (
           <Link
-            to={`${paths['fleet-management-detail']}/${device?.insights_id}`}
+            to={`${paths['manage-images']}/${device?.ImageInfo?.Image?.ImageSetID}/versions/${device?.ImageInfo?.Image?.ID}/details`}
           >
-            {device?.display_name}
+            {device?.ImageInfo?.Image?.Name}
           </Link>
         ),
       },
       {
         title: (
-          <>
-            <TagIcon /> -
-          </>
+          <DeviceStatus Device={device?.Device} ImageInfo={device?.ImageInfo} />
         ),
-      },
-      {
-        title: '-',
-      },
-      {
-        title: <DateFormat date={device?.updated} />,
-      },
-      {
-        title: '-',
-      },
-      {
-        title: '-',
       },
     ],
   }));
@@ -113,17 +147,11 @@ const DeviceTable = () => {
   const { count, data, isLoading, hasError } = useSelector(
     ({ deviceTableReducer }) => ({
       count: deviceTableReducer?.data?.count || 0,
-      data: deviceTableReducer?.data?.results || null,
+      data: deviceTableReducer?.data?.data || null,
       isLoading: deviceTableReducer?.isLoading,
       hasError: deviceTableReducer?.hasError,
     }),
     shallowEqual
-  );
-
-  const UpdateDeviceModal = React.lazy(() =>
-    import(
-      /* webpackChunkName: "CreateImageWizard" */ '../Devices/UpdateDeviceModal'
-    )
   );
 
   useEffect(() => {
@@ -140,14 +168,22 @@ const DeviceTable = () => {
     return [
       {
         title: 'Update Device',
-        onClick: (_event, _rowId, rowData) => {
-          UpdateDeviceModal(rowData.id);
+        onClick: () => {
+          console.log('connect update device modal');
+          // setUpdateModal((prevState) => {
+          //   return {
+          //     ...prevState,
+          //     isOpen: true,
+          //     deviceData: rowData,
+          //   };
+          // });
         },
       },
     ];
   };
 
-  //const areActionsDisabled = (rowData) => rowData?.imageStatus === 'BUILDING';
+  const areActionsDisabled = (rowData) =>
+    rowData?.deviceStatus !== 'updateAvailable';
 
   return (
     <GeneralTable
@@ -162,8 +198,8 @@ const DeviceTable = () => {
       columnNames={columnNames}
       rows={rows || []}
       actionResolver={actionResolver}
-      areActionsDisabled={() => false}
-      defaultSort={{ index: 3, direction: 'desc' }}
+      areActionsDisabled={areActionsDisabled}
+      defaultSort={{ index: 2, direction: 'desc' }}
       toolbarButtons={[
         {
           title: 'Group Selected',
