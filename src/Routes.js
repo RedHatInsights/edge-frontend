@@ -24,8 +24,10 @@ const DeviceDetail = React.lazy(() =>
 //   )
 // );
 
-const Devices = React.lazy(() =>
-  import(/* webpackChunkName: "GroupsDetailPage" */ './Routes/Devices/Devices')
+const Groups = React.lazy(() =>
+  //const Devices = React.lazy(() =>
+  //import(/* webpackChunkName: "GroupsDetailPage" */ './Routes/Devices/Devices')
+  import(/* webpackChunkName: "GroupsDetailPage" */ './Routes/Groups/Groups')
 );
 
 const Images = React.lazy(() =>
@@ -47,7 +49,7 @@ export const Routes = () => {
     <Suspense
       fallback={
         <Bullseye>
-          <Spinner size="xl" />
+          <Spinner size='xl' />
         </Bullseye>
       }
     >
@@ -56,7 +58,12 @@ export const Routes = () => {
         {/* <Route exact path={paths['groups-detail']} component={GroupsDetail} /> */}
         {/* <Route path={paths['device-detail']} component={DeviceDetail} /> */}
         {/* <Route path={paths.canaries} component={Canaries} /> */}
-        <Route exact path={paths['fleet-management']} component={Devices} />
+        <Route exact path={paths['fleet-management']} component={Groups} />
+        <Route
+          exact
+          path={paths['fleet-management-detail']}
+          component={() => <h1>hj</h1>}
+        />
         <Route
           path={paths['manage-images-detail-version']}
           component={ImageDetail}

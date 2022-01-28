@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from './Modal';
+import Modal from '../../../components/Modal';
 import { TextContent, Text } from '@patternfly/react-core';
 import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-triangle-icon';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
@@ -32,12 +32,12 @@ const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
       {
         component: 'plain-text',
         name: 'name',
-        label: <LabelWithText label="Name" text={name} />,
+        label: <LabelWithText label='Name' text={name} />,
       },
       {
         component: 'plain-text',
         name: 'baseURL',
-        label: <LabelWithText label="baseURL" text={baseURL} />,
+        label: <LabelWithText label='baseURL' text={baseURL} />,
       },
     ],
   };
@@ -48,17 +48,17 @@ const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
         <>
           <ExclamationTriangleIcon
             color={warningColor.value}
-            className="pf-u-mr-md"
+            className='pf-u-mr-md'
           />
           Remove Repository
         </>
       }
       isOpen={isOpen}
       openModal={() => openModal({ type: 'remove' })}
-      submitLabel="Remove"
+      submitLabel='Remove'
       schema={addSchema}
       initialValues={{ id }}
-      variant="danger"
+      variant='danger'
       onSubmit={({ id }) => removeCustomRepository(id)}
       reloadData={reloadData}
     />

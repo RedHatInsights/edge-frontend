@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from './Modal';
+import Modal from '../../../components/Modal';
 import { createCustomRepository } from '../../../api/index';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
@@ -41,10 +41,10 @@ const AddModal = ({ isOpen, openModal, reloadData }) => {
 
   return (
     <Modal
-      title="Add Repository"
+      title='Add Repository'
       isOpen={isOpen}
       openModal={() => openModal({ type: 'add' })}
-      submitLabel="Add"
+      submitLabel='Add'
       schema={addSchema}
       onSubmit={(values) => createCustomRepository(values)}
       reloadData={reloadData}

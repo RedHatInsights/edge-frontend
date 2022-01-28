@@ -14,10 +14,16 @@ const RepoModal = ({
   initialValues,
   variant,
   reloadData,
+  size,
   onSubmit,
 }) => {
   return (
-    <Modal variant="small" title={title} isOpen={isOpen} onClose={openModal}>
+    <Modal
+      variant={size ?? 'small'}
+      title={title}
+      isOpen={isOpen}
+      onClose={openModal}
+    >
       <FormRenderer
         schema={schema}
         FormTemplate={(props) => (
