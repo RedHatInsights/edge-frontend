@@ -108,7 +108,13 @@ const Devices = () => {
                           return {
                             ...prevState,
                             isOpen: true,
-                            deviceData: rowData,
+                            deviceData: {
+                              id: rowData?.id,
+                              display_name: rowData?.display_name,
+                            },
+                            imageData:
+                              rowData?.system_profile?.image_data?.ImageInfo
+                                ?.UpdatesAvailable?.[0],
                           };
                         });
                       },

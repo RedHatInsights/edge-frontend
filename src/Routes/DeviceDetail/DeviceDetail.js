@@ -78,6 +78,7 @@ const DeviceDetail = () => {
               ]?.Status,
           },
         },
+        imageData: image_data?.ImageInfo?.UpdatesAvailable?.[0],
       }));
       setImageId(image_data?.ImageInfo?.Image?.ID);
     })();

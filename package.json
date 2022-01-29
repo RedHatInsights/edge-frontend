@@ -125,6 +125,7 @@
     "canaries": "/canaries",
     "fleet-management": "/fleet-management",
     "fleet-management-detail": "/fleet-management/:inventoryId",
+    "inventory": "/inventory",
     "manage-images": "/manage-images",
     "manage-images-detail": "/manage-images/:imageId",
     "manage-images-detail-version": "/manage-images/:imageId/versions/:imageVersionId",
