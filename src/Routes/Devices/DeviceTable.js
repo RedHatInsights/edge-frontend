@@ -139,7 +139,7 @@ const createRows = (devices) => {
   }));
 };
 
-const DeviceTable = () => {
+const DeviceTable = ({ skeletonRowQuantity }) => {
   const { getRegistry } = useContext(RegistryContext);
   const [rows, setRows] = useState([]);
   const dispatch = useDispatch();
@@ -207,6 +207,7 @@ const DeviceTable = () => {
         },
       ]}
       hasCheckbox={true}
+      skeletonRowQuantity={skeletonRowQuantity}
     />
   );
 };
@@ -214,6 +215,7 @@ DeviceTable.propTypes = {
   imageData: PropTypes.object,
   urlParam: PropTypes.string,
   openUpdateWizard: PropTypes.func,
+  skeletonRowQuantity: PropTypes.number,
 };
 
 export default DeviceTable;

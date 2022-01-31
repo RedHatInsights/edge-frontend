@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
@@ -13,7 +14,7 @@ const columns = [
 ];
 
 const GroupTable = ({ data, openModal }) => {
-  const actionResolver = (rowData) => {
+  const actionResolver = () => {
     return [
       {
         title: 'Update',
@@ -71,6 +72,11 @@ const GroupTable = ({ data, openModal }) => {
       ]}
     />
   );
+};
+
+GroupTable.propTypes = {
+  data: PropTypes.array,
+  openModal: PropTypes.func,
 };
 
 export default GroupTable;

@@ -62,6 +62,7 @@ const GeneralTable = ({
   toggleAction,
   toggleState,
   hasCheckbox = false,
+  skeletonRowQuantity,
 }) => {
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
@@ -193,7 +194,7 @@ const GeneralTable = ({
     );
 
   const loadingRows = (perPage) =>
-    [...Array(perPage)].map(() => ({
+    [...Array(skeletonRowQuantity ?? perPage)].map(() => ({
       cells: columnNames.map(() => ({ title: <Skeleton width="100%" /> })),
     }));
 
@@ -313,6 +314,7 @@ GeneralTable.propTypes = {
   toggleAction: PropTypes.func,
   toggleState: PropTypes.number,
   hasCheckbox: PropTypes.bool,
+  skeletonRowQuantity: PropTypes.number,
 };
 
 export default GeneralTable;

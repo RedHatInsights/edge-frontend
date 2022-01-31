@@ -8,6 +8,8 @@ import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import GroupTable from './GroupTable';
 import Empty from '../../components/Empty';
 import Modal from '../../components/Modal';
+import { Link } from 'react-router-dom';
+import { routes as paths } from '../../../package.json';
 
 const Groups = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,12 +38,14 @@ const Groups = () => {
             <PageHeaderTitle title="Fleet management" />
           </FlexItem>
           <FlexItem>
-            <Button variant="secondary">View entire inventory</Button>
+            <Button variant="secondary">
+              <Link to="/inventory"> View entire inventory</Link>
+            </Button>
           </FlexItem>
         </Flex>
       </PageHeader>
       <Main className="edge-devices">
-        {true ? (
+        {false ? (
           <GroupTable data={data} openModal={() => setIsModalOpen(true)} />
         ) : (
           <Bullseye>

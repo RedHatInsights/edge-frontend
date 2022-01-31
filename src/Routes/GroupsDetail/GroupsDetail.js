@@ -20,6 +20,7 @@ import Modal from '../../components/Modal';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
+import DeviceTable from '../Devices/DeviceTable';
 
 const GroupsDetail = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -58,7 +59,7 @@ const GroupsDetail = () => {
       </PageHeader>
       <Main className="edge-devices">
         {false ? (
-          <p>table</p>
+          <DeviceTable />
         ) : (
           <Bullseye>
             <Empty
@@ -78,12 +79,15 @@ const GroupsDetail = () => {
         openModal={() => setIsModalOpen(false)}
         title="Add systems"
         submitLabel="Add selected"
-        additionalMappers={{ 'device-table': () => <p>device table</p> }}
+        additionalMappers={{
+          'device-table': { component: DeviceTable, skeletonRowQuantity: 15 },
+        }}
         schema={{
           fields: [{ component: 'device-table', name: 'device-table' }],
         }}
         onSubmit={() => console.log('submitted')}
         reloadData={() => console.log('data reloaded')}
+        size="large"
       />
     </>
   );
