@@ -25,6 +25,8 @@ import DeviceTable from '../Devices/DeviceTable';
 const GroupsDetail = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const data = [];
+
   return (
     <>
       <PageHeader className="pf-m-light">
@@ -52,13 +54,17 @@ const GroupsDetail = () => {
                 </DropdownToggle>
               }
               isOpen={isDropdownOpen}
-              dropdownItems={[<DropdownItem>Update all devices</DropdownItem>]}
+              dropdownItems={[
+                <DropdownItem key="update-all-devices">
+                  Update all devices
+                </DropdownItem>,
+              ]}
             />
           </FlexItem>
         </Flex>
       </PageHeader>
       <Main className="edge-devices">
-        {false ? (
+        {data?.length > 0 ? (
           <DeviceTable />
         ) : (
           <Bullseye>

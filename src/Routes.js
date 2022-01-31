@@ -59,7 +59,7 @@ export const Routes = () => {
     <Suspense
       fallback={
         <Bullseye>
-          <Spinner size='xl' />
+          <Spinner size="xl" />
         </Bullseye>
       }
     >

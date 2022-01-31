@@ -74,17 +74,17 @@ const DeviceStatus = ({ ImageInfo }) => {
   const statusType = {
     running: (
       <Label
-        className='pf-u-mt-sm'
-        color='green'
-        icon={<CheckCircleIcon color='green' />}
+        className="pf-u-mt-sm"
+        color="green"
+        icon={<CheckCircleIcon color="green" />}
       >
         Running
       </Label>
     ),
     updateAvailable: (
       <Label
-        className='pf-u-mt-sm'
-        color='orange'
+        className="pf-u-mt-sm"
+        color="orange"
         icon={<ExclamationTriangleIcon />}
       >
         Update Available

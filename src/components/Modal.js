@@ -64,6 +64,8 @@ RepoModal.propTypes = {
   initialValues: PropTypes.object,
   variant: PropTypes.string,
   onSubmit: PropTypes.func,
+  size: PropTypes.string,
+  additionalMappers: PropTypes.object,
 };
 
 export default RepoModal;

@@ -9,11 +9,10 @@ import GroupTable from './GroupTable';
 import Empty from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { Link } from 'react-router-dom';
-import { routes as paths } from '../../../package.json';
 
 const Groups = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [data, setData] = useState([
+  const data = [
     {
       id: 1,
       name: 'group1',
@@ -28,7 +27,7 @@ const Groups = () => {
       image: 'golden image',
       status: '50%',
     },
-  ]);
+  ];
 
   return (
     <>
@@ -39,13 +38,15 @@ const Groups = () => {
           </FlexItem>
           <FlexItem>
             <Button variant="secondary">
-              <Link to="/inventory"> View entire inventory</Link>
+              <Link style={{ textDecoration: 'none' }} to="/inventory">
+                View entire inventory
+              </Link>
             </Button>
           </FlexItem>
         </Flex>
       </PageHeader>
       <Main className="edge-devices">
-        {false ? (
+        {data?.length > 0 ? (
           <GroupTable data={data} openModal={() => setIsModalOpen(true)} />
         ) : (
           <Bullseye>
