@@ -34,6 +34,12 @@ const GroupsDetail = React.lazy(() =>
   )
 );
 
+const Inventory = React.lazy(() =>
+  import(
+    /* webpackChunkName: "GroupsDetailPage" */ './Routes/Devices/Inventory'
+  )
+);
+
 const Images = React.lazy(() =>
   import(
     /* webpackChunkName: "GroupsDetailPage" */ './Routes/ImageManager/Images'
@@ -53,7 +59,7 @@ export const Routes = () => {
     <Suspense
       fallback={
         <Bullseye>
-          <Spinner size="xl" />
+          <Spinner size='xl' />
         </Bullseye>
       }
     >
@@ -68,6 +74,7 @@ export const Routes = () => {
           path={paths['fleet-management-detail']}
           component={GroupsDetail}
         />
+        <Route exact path={paths['inventory']} component={Inventory} />
         <Route
           path={paths['manage-images-detail-version']}
           component={ImageDetail}
