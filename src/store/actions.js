@@ -18,6 +18,7 @@ import {
   LOAD_IMAGE_SET_DETAIL,
   CREATE_NEW_IMAGE,
   POLLING_IMAGES,
+  LOAD_DEVICE_TABLE,
 } from './action-types';
 import {
   fetchGroups,
@@ -35,6 +36,7 @@ import {
   getImagePackageMetadata,
   createImage,
   getImageSet,
+  getInventory,
 } from '../api';
 
 export const loadGroups = (perPage = 50, page = 1) => ({
@@ -199,5 +201,12 @@ export const loadImagePackageMetadata = (dispatch, imageId) => {
   dispatch({
     type: LOAD_EDGE_IMAGE_PACKAGES,
     payload: getImagePackageMetadata(imageId),
+  }).catch(() => null);
+};
+
+export const loadDeviceTable = (dispatch) => {
+  dispatch({
+    type: LOAD_DEVICE_TABLE,
+    payload: getInventory(),
   }).catch(() => null);
 };
