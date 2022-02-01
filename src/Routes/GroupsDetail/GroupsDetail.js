@@ -25,7 +25,7 @@ import DeviceTable from '../Devices/DeviceTable';
 const GroupsDetail = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const data = [];
+  const data = ['test'];
 
   return (
     <>

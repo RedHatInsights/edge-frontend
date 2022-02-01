@@ -115,7 +115,7 @@ const createRows = (devices) => {
     cells: [
       {
         title: (
-          <Link to={`${paths['fleet-management']}/${device?.Device?.UUID}`}>
+          <Link to={`${paths['inventory']}/${device?.Device?.UUID}`}>
             {device?.Device?.DeviceName}
           </Link>
         ),
