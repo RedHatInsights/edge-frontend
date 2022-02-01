@@ -358,7 +358,7 @@ export const fetchEdgeImageSets = (
   q = {
     limit: 100,
     offset: 0,
-    sort_by: '-updated_at',
+    sort_by: '-created_at',
   }
 ) => {
   const query = getTableParams(q);
@@ -409,7 +409,7 @@ export const getImageSet = ({
   q = {
     limit: 100,
     offset: 0,
-    sort_by: '-updated_at',
+    sort_by: '-created_at',
   },
 }) => {
   const query = getTableParams(q);
@@ -433,3 +433,7 @@ export const editCustomRepository = (payload) => {
 
 export const removeCustomRepository = (id) =>
   instance.delete(`${EDGE_API}/thirdpartyrepo/${id}`);
+
+export const getInventory = async () => {
+  return await instance.get(`${EDGE_API}/devices`);
+};

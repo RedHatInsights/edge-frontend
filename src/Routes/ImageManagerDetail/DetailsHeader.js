@@ -20,11 +20,10 @@ import {
 import StatusLabel from './StatusLabel';
 import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
+import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 
 const dropdownItems = (data, imageVersion, openUpdateWizard) => {
-  const imageData = imageVersion
-    ? imageVersion
-    : data?.images?.[data?.images?.length - 1];
+  const imageData = imageVersion ? imageVersion : data?.images?.[0];
 
   const actionsArray = [];
 
@@ -92,21 +91,34 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
         <Split>
           <SplitItem>
             <TextList component="dl">
-              <TextListItem component="h1" className="grid-align-center">
+              <TextListItem
+                component="h1"
+                className="grid-align-center pf-u-mb-0"
+              >
                 {data?.image_set?.Name || <Skeleton width="150px" />}
               </TextListItem>
               <TextListItem component="dd">
-                {data?.Status ||
-                data?.images?.[data?.images?.length - 1]?.image?.Status ? (
-                  <StatusLabel
-                    status={
-                      data?.images?.[data?.images?.length - 1]?.image?.Status
-                    }
-                  />
+                {data?.Status || data?.images?.[0]?.image?.Status ? (
+                  <StatusLabel status={data?.images?.[0]?.image?.Status} />
                 ) : (
                   <Skeleton width="100px" />
                 )}
               </TextListItem>
+              {imageVersion?.image?.UpdatedAt ||
+              data?.images?.[0].image?.UpdatedAt ? (
+                <TextListItem component="p">
+                  {`Last updated `}
+                  <DateFormat
+                    date={
+                      imageVersion
+                        ? imageVersion?.image?.UpdatedAt
+                        : data?.images?.[0].image?.UpdatedAt
+                    }
+                  />
+                </TextListItem>
+              ) : (
+                <Skeleton width="200px" />
+              )}
             </TextList>
           </SplitItem>
           <SplitItem isFilled></SplitItem>
@@ -121,8 +133,7 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
                   isDisabled={
                     (imageVersion
                       ? imageVersion?.image?.Status
-                      : data?.Images?.[data?.Images?.length - 1]?.Status) ===
-                      'BUILDING' || false
+                      : data?.Images?.[0]?.Status) === 'BUILDING' || false
                   }
                 >
                   Actions

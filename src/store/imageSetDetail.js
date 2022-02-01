@@ -18,10 +18,10 @@ const loadImageSetDetailFulfilled = (state, { payload }) => {
   };
 };
 
-const loadImageSetDetailRejected = () => ({
+const loadImageSetDetailRejected = (state, { payload }) => ({
   isLoading: false,
   hasError: true,
-  data: 'No image set detail to view',
+  data: payload,
 });
 
 export default applyReducerHash(

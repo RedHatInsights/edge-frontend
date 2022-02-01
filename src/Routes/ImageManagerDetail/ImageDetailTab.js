@@ -15,6 +15,8 @@ import {
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from './constants';
 import PropTypes from 'prop-types';
+import { routes as paths } from '../../../package.json';
+import { Link } from 'react-router-dom';
 
 const ImageDetailTab = ({ imageData, imageVersion }) => {
   const [data, setData] = useState({});
@@ -22,11 +24,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   useEffect(() => {
     imageVersion
       ? setData(imageVersion)
-      : setData(
-          imageData?.data?.Data?.images?.[
-            imageData?.data?.Data?.images?.length - 1
-          ]
-        );
+      : setData(imageData?.data?.Data?.images?.[0]);
   }, [imageData, imageVersion]);
 
   const createSkeleton = (rows) =>
@@ -35,7 +33,6 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   const dateFormat = () => <DateFormat date={data?.image?.['CreatedAt']} />;
 
   const detailsMapper = {
-    'Image name': 'Name',
     Version: 'Version',
     Created: () => dateFormat(),
     'Type(s)': () =>
@@ -51,10 +48,29 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
     Username: () => data?.image?.Installer?.Username,
     'SSH Key': () => data?.image?.Installer?.SshKey,
   };
+  const renderAdditionalPackageLink = () => {
+    return (
+      <Link
+        to={`${paths['manage-images']}/${data?.image?.ImageSetID}/versions/${data?.image?.ID}/packages/additional`}
+      >
+        {data?.additional_packages}
+      </Link>
+    );
+  };
+
+  const renderTotalPackageLink = () => {
+    return (
+      <Link
+        to={`${paths['manage-images']}/${data?.image?.ImageSetID}/versions/${data?.image?.ID}/packages/all`}
+      >
+        {data?.packages}
+      </Link>
+    );
+  };
 
   const packageMapper = {
-    'Total Additional Packages': () => data?.additional_packages,
-    'Total Packages': () => data?.packages,
+    'Total Additional Packages': renderAdditionalPackageLink,
+    'Total Packages': renderTotalPackageLink,
   };
 
   const packageDiffMapper = {
@@ -112,7 +128,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   return (
     <TextContent className="pf-u-ml-lg pf-u-mt-md">
       <Grid span={12}>
-        <GridItem span={6}>
+        <GridItem span={5}>
           <Text component={TextVariants.h2}>
             {imageVersion ? 'Details' : 'Most recent image'}
           </Text>
@@ -124,6 +140,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
             {buildTextList(userInfoMapper) || createSkeleton(2)}
           </TextList>
         </GridItem>
+        <GridItem span={1} />
         <GridItem span={6}>
           <Text component={TextVariants.h2}>Packages </Text>
           <TextList component={TextListVariants.dl}>

@@ -4,11 +4,26 @@ import PropTypes from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
 import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
-import { Text } from '@patternfly/react-core';
+import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import { loadEdgeImageSets } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
+
+const TooltipSelectorRef = ({ index }) => (
+  <div>
+    <Tooltip
+      content={<div>More options</div>}
+      reference={() =>
+        document.getElementById(`pf-dropdown-toggle-id-${index}`)
+      }
+    />
+  </div>
+);
+
+TooltipSelectorRef.propTypes = {
+  index: PropTypes.number,
+};
 
 const defaultFilters = [
   {
@@ -55,7 +70,7 @@ const columnNames = [
 ];
 
 const createRows = (data) => {
-  return data.map(({ image_set, image_build_iso_url }) => ({
+  return data.map(({ image_set, image_build_iso_url }, index) => ({
     id: image_set?.ID,
     cells: [
       {
@@ -65,21 +80,23 @@ const createRows = (data) => {
           </Link>
         ),
       },
-      image_set?.Version,
+      image_set?.Images[0].Version, // remove when image_set.Version is accurate
       {
         title: <DateFormat date={image_set?.UpdatedAt} />,
       },
       {
         title: (
-          <StatusLabel
-            status={image_set?.Images[image_set?.Images?.length - 1].Status}
-          />
+          <>
+            {/* workaround for tooltip on kebab*/}
+            <TooltipSelectorRef index={index} />
+            <StatusLabel status={image_set?.Images[0].Status} />
+          </>
         ),
       },
     ],
-    imageStatus: image_set?.Images[image_set?.Images?.length - 1].Status,
+    imageStatus: image_set?.Images[0].Status,
     isoURL: image_build_iso_url || null,
-    latestImageID: image_set?.Images[image_set?.Images?.length - 1].ID,
+    latestImageID: image_set?.Images[0].ID,
   }));
 };
 

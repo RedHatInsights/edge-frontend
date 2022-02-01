@@ -16,7 +16,10 @@ export default {
       ),
     },
     {
-      component: componentTypes.TEXT_FIELD,
+      component: componentTypes.TEXTAREA,
+      style: {
+        height: '25vh',
+      },
       name: 'description',
       label: 'Description',
       placeholder: 'Add description',

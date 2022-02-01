@@ -20,21 +20,21 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 
 const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   const dispatch = useDispatch();
-  const imageData =
-    updateModal.deviceData?.system_profile?.image_data?.ImageInfo
-      ?.UpdatesAvailable[0];
+  const imageData = updateModal?.imageData;
+  const deviceId = updateModal?.deviceData?.id;
+  const deviceName = updateModal?.deviceData?.display_name;
 
   const handleUpdateModal = async () => {
     try {
       await updateDeviceLatestImage({
-        DeviceUUID: updateModal.deviceData?.id,
-        CommitId: imageData?.Image.CommitID,
+        DeviceUUID: deviceId,
+        CommitId: imageData?.Image?.CommitID,
       });
       dispatch({
         ...addNotification({
           variant: 'info',
           title: 'Updating device',
-          description: ` ${updateModal.deviceData.display_name} was added to the queue.`,
+          description: ` ${deviceName} was added to the queue.`,
         }),
       });
     } catch (err) {
@@ -63,7 +63,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   return (
     <Modal
       variant="medium"
-      title={`Update ${updateModal.deviceData?.display_name} to latest image`}
+      title={`Update ${deviceName} to latest image`}
       description="Update this device to use the latest version of the image linked to it."
       isOpen={updateModal.isOpen}
       onClose={handleClose}
@@ -146,6 +146,7 @@ UpdateDeviceModal.propTypes = {
   updateModal: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
     deviceData: PropTypes.object.isRequired,
+    imageData: PropTypes.object,
   }).isRequired,
   setUpdateModal: PropTypes.func.isRequired,
 };
