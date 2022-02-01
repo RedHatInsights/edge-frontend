@@ -29,7 +29,6 @@ const GroupTable = ({ data, openModal }) => {
 
   const buildRows = data.map((rowData) => {
     const { id, name, systems, image, status } = rowData;
-    console.log(rowData);
     return {
       noApiSortFilter: [name],
       cells: [
