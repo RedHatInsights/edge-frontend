@@ -4,22 +4,22 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { RegistryContext } from '../../store';
+import { init, RegistryContext } from '../../store';
+import logger from 'redux-logger';
 
 describe('Groups', () => {
   const mockStore = configureStore();
   it('should render correctly', () => {
+    const registry = init(logger);
     const { container } = render(
       <RegistryContext.Provider
         value={{
-          getRegistry: () => ({
-            register: jest.fn(),
-          }),
+          getRegistry: () => registry,
         }}
       >
-        <Provider store={mockStore({})}>
-          <MemoryRouter initialEntries={['/groups/some-id']}>
-            <Route path="/groups/:uuid">
+        <Provider store={registry.getStore()}>
+          <MemoryRouter initialEntries={['/fleet-managment/some-id']}>
+            <Route path='/fleet-managment/:uuid'>
               <GroupsDetail />
             </Route>
           </MemoryRouter>
