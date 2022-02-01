@@ -5,11 +5,10 @@ import {
   ToolbarItem,
   ToolbarContent,
   Button,
-} from '@patternfly/react-core';
-import {
+  ToggleGroup,
+  ToggleGroupItem,
   Skeleton,
-  SkeletonSize,
-} from '@redhat-cloud-services/frontend-components/Skeleton';
+} from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import FilterControls from './FilterControls';
 import FilterChip from './FilterChips';
@@ -37,6 +36,9 @@ const ToolbarHeader = ({
   setPerPage,
   page,
   setPage,
+  toggleButton,
+  toggleAction,
+  toggleState,
 }) => {
   return (
     <Toolbar id="toolbar" data-testid="toolbar-header-testid">
@@ -46,11 +48,23 @@ const ToolbarHeader = ({
           filterValues={filterValues}
           setFilterValues={setFilterValues}
         />
-        <ToolbarButtons buttons={toolbarButtons} />
+        {toolbarButtons && <ToolbarButtons buttons={toolbarButtons} />}
+        {toggleButton && (
+          <ToggleGroup>
+            {toggleButton.map((btn) => (
+              <ToggleGroupItem
+                key={btn.key}
+                text={btn.title}
+                isSelected={toggleState === btn.key}
+                onChange={() => toggleAction(btn.key)}
+              />
+            ))}
+          </ToggleGroup>
+        )}
         <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
           {isLoading ? (
-            <Skeleton size={SkeletonSize.xs} />
-          ) : (
+            <Skeleton width="200px" />
+          ) : count > 0 ? (
             <Pagination
               data-testid="pagination-header-test-id"
               itemCount={count}
@@ -61,7 +75,7 @@ const ToolbarHeader = ({
               onPerPageSelect={(_e, perPage) => setPerPage(perPage)}
               isCompact
             />
-          )}
+          ) : null}
         </ToolbarItem>
       </ToolbarContent>
       <ToolbarContent>
@@ -92,5 +106,8 @@ ToolbarHeader.propTypes = {
   chipsArray: PropTypes.array,
   setChipsArray: PropTypes.func,
   isLoading: PropTypes.bool,
+  toggleButton: PropTypes.array,
+  toggleAction: PropTypes.func,
+  toggleState: PropTypes.number,
 };
 export default ToolbarHeader;

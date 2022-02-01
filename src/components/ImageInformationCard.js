@@ -39,7 +39,9 @@ const ImageInformationCard = () => {
           value: isImageInfoLoading ? (
             <Skeleton size={SkeletonSize.sm} />
           ) : imageData ? (
-            <Link to={`${paths['manage-images']}/${imageData?.Image?.ID}`}>
+            <Link
+              to={`${paths['manage-images']}/${imageData?.Image?.ImageSetID}`}
+            >
               {imageData?.Image?.Name}
             </Link>
           ) : (
@@ -51,7 +53,9 @@ const ImageInformationCard = () => {
           value: isImageInfoLoading ? (
             <Skeleton size={SkeletonSize.sm} />
           ) : imageData ? (
-            <Link to={`${paths['manage-images']}/${imageData?.Image?.ID}`}>
+            <Link
+              to={`${paths['manage-images']}/${imageData?.Image?.ImageSetID}/${imageData?.Image?.ID}`}
+            >
               {imageData?.Image?.Version}
             </Link>
           ) : (
@@ -64,7 +68,7 @@ const ImageInformationCard = () => {
             <Skeleton size={SkeletonSize.sm} />
           ) : imageData?.UpdatesAvailable ? (
             <Link
-              to={`${paths['manage-images']}/${imageData?.UpdatesAvailable[0]?.Image?.ID}`}
+              to={`${paths['manage-images']}/${imageData?.UpdatesAvailable[0]?.Image?.ImageSetID}/${imageData?.UpdatesAvailable[0]?.Image?.ID}`}
             >
               {imageData?.UpdatesAvailable[0]?.Image?.Version}
             </Link>

@@ -13,7 +13,6 @@ import {
   SkeletonSize,
 } from '@redhat-cloud-services/frontend-components/Skeleton';
 import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import {
   InventoryDetailHead,
   DetailWrapper,
@@ -36,6 +35,7 @@ const UpdateDeviceModal = React.lazy(() =>
 );
 
 const DeviceDetail = () => {
+  const [imageId, setImageId] = useState(null);
   const { getRegistry } = useContext(RegistryContext);
   const { inventoryId, uuid } = useParams();
   const entity = useSelector(({ entityDetails }) => entityDetails?.entity);
@@ -51,6 +51,7 @@ const DeviceDetail = () => {
     deviceData: null,
   });
   const [isDeviceStatusLoading, setIsDeviceStatusLoading] = useState(true);
+  const [reload, setReload] = useState(false);
   useEffect(() => {
     insights.chrome.registerModule('inventory');
     insights.chrome?.hideGlobalFilter?.(true);
@@ -77,9 +78,11 @@ const DeviceDetail = () => {
               ]?.Status,
           },
         },
+        imageData: image_data?.ImageInfo?.UpdatesAvailable?.[0],
       }));
+      setImageId(image_data?.ImageInfo?.Image?.ID);
     })();
-  }, [entity]);
+  }, [entity, reload]);
 
   useEffect(() => {
     insights?.chrome?.appObjectId?.(inventoryId);
@@ -179,37 +182,41 @@ const DeviceDetail = () => {
             </Label>
           )}
         </PageHeader>
-        <Main className="edge-c-device--detail">
-          <Grid gutter="md">
-            <GridItem span={12}>
-              <DeviceDetailTabs />
-            </GridItem>
-          </Grid>
-        </Main>
+        <Grid gutter="md">
+          <GridItem span={12}>
+            <DeviceDetailTabs
+              systemProfile={updateModal?.deviceData}
+              imageId={imageId}
+              setUpdateModal={setUpdateModal}
+              setReload={setReload}
+            />
+          </GridItem>
+        </Grid>
+        {updateModal.isOpen && (
+          <Suspense
+            fallback={
+              <Bullseye>
+                <Spinner />
+              </Bullseye>
+            }
+          >
+            <UpdateDeviceModal
+              navigateBack={() => {
+                history.push({ pathname: history.location.pathname });
+                setUpdateModal((prevState) => {
+                  return {
+                    ...prevState,
+                    isOpen: false,
+                  };
+                });
+              }}
+              setUpdateModal={setUpdateModal}
+              updateModal={updateModal}
+              refreshTable={() => setReload(true)}
+            />
+          </Suspense>
+        )}
       </DetailWrapper>
-      {updateModal.isOpen && (
-        <Suspense
-          fallback={
-            <Bullseye>
-              <Spinner />
-            </Bullseye>
-          }
-        >
-          <UpdateDeviceModal
-            navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
-              setUpdateModal((prevState) => {
-                return {
-                  ...prevState,
-                  isOpen: false,
-                };
-              });
-            }}
-            setUpdateModal={setUpdateModal}
-            updateModal={updateModal}
-          />
-        </Suspense>
-      )}
     </>
   );
 };

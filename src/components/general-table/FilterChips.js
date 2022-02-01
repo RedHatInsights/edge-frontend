@@ -21,6 +21,7 @@ const FilterChips = ({
               ...prevState,
               {
                 label: filterOption.option,
+                value: filterOption.value || filterOption.option,
                 apiName: filterOption.optionApiName,
                 key: filter.label,
               },
