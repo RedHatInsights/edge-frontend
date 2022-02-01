@@ -33,7 +33,7 @@ describe('ImagePackagesTab', () => {
 
     const registry = init(logger);
 
-    render(
+    const { container } = render(
       <RegistryContext.Provider
         value={{
           getRegistry: () => registry,
@@ -60,5 +60,7 @@ describe('ImagePackagesTab', () => {
         .getByRole('link', { name: /more information/i })
         .getAttribute('href')
     ).toContain('Test package 2');
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

@@ -49,7 +49,7 @@ describe('DetailsHeader', () => {
 
     const registry = init(logger);
 
-    render(
+    const { container } = render(
       <RegistryContext.Provider
         value={{
           getRegistry: () => registry,
@@ -80,5 +80,7 @@ describe('DetailsHeader', () => {
       screen.getByRole('button', { name: /create new version/i })
     );
     expect(openUpdateWizard).toBeCalled();
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

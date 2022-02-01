@@ -20,7 +20,7 @@ describe('Filter controls', () => {
     ];
     const setFilterValues = jest.fn();
 
-    const { findByTestId, findByPlaceholderText } = render(
+    const { container, findByTestId, findByPlaceholderText } = render(
       <FilterControls
         filters={filters}
         filterValues={filterValues}
@@ -35,5 +35,7 @@ describe('Filter controls', () => {
     expect(filterInput).toBeDefined();
     expect(filterDropdown).toBeDefined();
     expect(filterInputValue.value).toEqual('test-label');
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

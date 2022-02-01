@@ -56,8 +56,8 @@ describe('General table', () => {
             }}
             columnNames={columnNames}
             rows={rows}
-            emptyStateMessage='No data found'
-            emptyStateActionMessage='Do something'
+            emptyStateMessage="No data found"
+            emptyStateActionMessage="Do something"
             emptyStateAction={emptyStateAction}
             actionResolver={actionResolver}
             areActionsDisabled={() => false}

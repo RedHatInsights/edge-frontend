@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 
 const ReviewSection = ({ title, data, testid }) => {
   return (
-    <Grid className='pf-u-pb-xl' data-testid={testid} hasGutter>
+    <Grid className="pf-u-pb-xl" data-testid={testid} hasGutter>
       <GridItem span={12}>
         <Text component={TextVariants.h2}>{title}</Text>
       </GridItem>

@@ -4,7 +4,7 @@ import TableHeader from './TableHeader';
 
 describe('TableHeader', () => {
   it('renders correctly', () => {
-    render(<TableHeader />);
+    const { container } = render(<TableHeader />);
 
     expect(screen.getByRole('heading', 'Custom repositories')).toBeDefined();
     expect(
@@ -12,5 +12,6 @@ describe('TableHeader', () => {
         'Add custom repositories to build RHEL for Edge images with additional packages.'
       )
     ).toBeDefined();
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

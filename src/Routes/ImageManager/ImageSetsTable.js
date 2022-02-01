@@ -120,11 +120,11 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       actionsArray.push({
         title: (
           <Text
-            className='force-text-black remove-underline'
-            component='a'
+            className="force-text-black remove-underline"
+            component="a"
             href={rowData.isoURL}
-            rel='noopener noreferrer'
-            target='_blank'
+            rel="noopener noreferrer"
+            target="_blank"
           >
             Download
           </Text>
@@ -163,8 +163,8 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       tableData={{ count, data, isLoading, hasError }}
       columnNames={columnNames}
       rows={data ? createRows(data) : []}
-      emptyStateMessage='No images found'
-      emptyStateActionMessage='Create new image'
+      emptyStateMessage="No images found"
+      emptyStateActionMessage="Create new image"
       emptyStateAction={openCreateWizard}
       actionResolver={actionResolver}
       areActionsDisabled={areActionsDisabled}

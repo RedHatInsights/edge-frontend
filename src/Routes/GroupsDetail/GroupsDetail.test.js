@@ -1,14 +1,12 @@
 import React from 'react';
 import GroupsDetail from './GroupsDetail';
 import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { init, RegistryContext } from '../../store';
 import logger from 'redux-logger';
 
 describe('Groups', () => {
-  const mockStore = configureStore();
   it('should render correctly', () => {
     const registry = init(logger);
     const { container } = render(
@@ -19,7 +17,7 @@ describe('Groups', () => {
       >
         <Provider store={registry.getStore()}>
           <MemoryRouter initialEntries={['/fleet-managment/some-id']}>
-            <Route path='/fleet-managment/:uuid'>
+            <Route path="/fleet-managment/:uuid">
               <GroupsDetail />
             </Route>
           </MemoryRouter>
