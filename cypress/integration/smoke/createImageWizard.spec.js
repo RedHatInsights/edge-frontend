@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('simple login to fleet management', () => {
+describe('Create image wizard', () => {
   beforeEach(() => {
 
     const userName = Cypress.env('username');
@@ -17,7 +17,7 @@ describe('simple login to fleet management', () => {
 
 });
 
-  it('opens images management page', () => {
+  it('should send the correct data when the wizard is submitted.', () => {
     const releaseMapper = {
       'rhel-85': 'Red Hat Enterprise Linux (RHEL) 8.5',
       'rhel-84': 'Red Hat Enterprise Linux (RHEL) 8.4',
