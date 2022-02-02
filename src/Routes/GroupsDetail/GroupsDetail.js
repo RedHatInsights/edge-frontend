@@ -46,7 +46,7 @@ const GroupsDetail = () => {
           <BreadcrumbItem>
             <Link to={`${paths['fleet-management']}`}>Fleet Management</Link>
           </BreadcrumbItem>
-          <BreadcrumbItem to="/">POS group</BreadcrumbItem>
+          <BreadcrumbItem>Group 1</BreadcrumbItem>
         </Breadcrumb>
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
           <FlexItem>

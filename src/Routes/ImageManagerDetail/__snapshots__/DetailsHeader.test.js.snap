@@ -57,7 +57,7 @@ exports[`DetailsHeader renders correctly 1`] = `
         >
           Last updated 
           <span>
-            8 days ago
+            Just now
           </span>
         </p>
       </dl>

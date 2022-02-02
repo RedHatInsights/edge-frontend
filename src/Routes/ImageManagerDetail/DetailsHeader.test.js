@@ -19,7 +19,7 @@ describe('DetailsHeader', () => {
                 Version: 1,
                 ImageType: 'rhel-edge-installer',
                 CreatedAt: '2022-01-24T18:27:24.331554Z',
-                UpdatedAt: '2022-01-24T18:27:24.331554Z',
+                UpdatedAt: Date.now(),
                 Status: 'BUILDING',
                 Installer: {
                   ImageBuildISOURL: '',
@@ -73,7 +73,7 @@ describe('DetailsHeader', () => {
     );
     expect(screen.getByRole('heading', { name: /test image/i })).toBeDefined();
     expect(screen.getByText(/last updated/i).children[0].innerHTML).toContain(
-      'ago'
+      'Just now'
     );
     fireEvent.click(screen.getByRole('button', { name: /actions/i }));
     fireEvent.click(
