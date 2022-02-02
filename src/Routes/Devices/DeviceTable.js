@@ -186,10 +186,6 @@ const DeviceTable = () => {
     data && setRows(createRows(data));
   }, [data]);
 
-  useEffect(() => {
-    console.log(rows);
-  }, [rows]);
-
   const actionResolver = () => {
     return [
       {
