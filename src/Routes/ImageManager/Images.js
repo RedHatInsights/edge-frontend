@@ -13,8 +13,8 @@ import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { Spinner, Bullseye } from '@patternfly/react-core';
 import { useHistory } from 'react-router-dom';
 import { RegistryContext } from '../../store';
-import { edgeImagesReducer } from '../../store/reducers';
-import ImageTable from './ImageTable';
+import { edgeImageSetsReducer } from '../../store/reducers';
+import ImageSetsTable from './ImageSetsTable';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -60,17 +60,17 @@ const Images = () => {
     });
   };
   useEffect(() => {
-    const registered = getRegistry().register({ edgeImagesReducer });
+    const registered = getRegistry().register({ edgeImageSetsReducer });
     return () => registered();
   }, []);
 
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Manage images" />
+        <PageHeaderTitle title="Images" />
       </PageHeader>
       <Main className="edge-devices">
-        <ImageTable
+        <ImageSetsTable
           openCreateWizard={openCreateWizard}
           openUpdateWizard={openUpdateWizard}
         />

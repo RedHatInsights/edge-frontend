@@ -4,8 +4,10 @@ import { Flex, FlexItem, Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { checkImageName } from '../../../api';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
+import { nameValidator } from '../../../constants';
+
 const helperText =
-  'Can only contain letters, numbers, spaces, hyphens(-), and underscores(_).';
+  'Can only contain letters, numbers, spaces, hyphens( - ), and underscores( _ ).';
 
 const asyncImageNameValidation = (value) =>
   checkImageName(value)
@@ -47,11 +49,7 @@ export default {
       validate: [
         asyncImageNameValidation,
         { type: validatorTypes.REQUIRED },
-        {
-          type: validatorTypes.PATTERN,
-          pattern: /^[A-Za-z0-9]+[A-Za-z0-9_-\s]*$/,
-          message: helperText,
-        },
+        nameValidator,
         { type: validatorTypes.MAX_LENGTH, threshold: 50 },
       ],
       isRequired: true,
@@ -60,6 +58,7 @@ export default {
       component: componentTypes.TEXTAREA,
       style: {
         paddingRight: '32px',
+        height: '25vh',
       },
       name: 'description',
       label: (

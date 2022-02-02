@@ -13,6 +13,8 @@ import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color
 import successColor from '@patternfly/react-tokens/dist/esm/global_success_color_100';
 import infoColor from '@patternfly/react-tokens/dist/esm/global_info_color_100';
 
+import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
+
 export const statusMapper = [
   'done',
   'error',
@@ -48,6 +50,13 @@ export const statusToIcon = {
     title: 'Delivering',
   },
 };
+
+export const sortByDirection = (data, direction = 'asc') =>
+  data.sort((a, b) =>
+    direction === 'asc'
+      ? a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+      : b.name.toLowerCase().localeCompare(a.name.toLowerCase())
+  );
 
 export const isEmptyFilters = (activeFilters) =>
   Object.values(activeFilters).find(
@@ -109,4 +118,31 @@ export const imageDistributionMapper = {
 export const imageArchMapper = {
   x86_64: '64bit',
   arm: 'Arm',
+};
+
+export const nameValidator = {
+  type: validatorTypes.PATTERN,
+  pattern: /^[A-Za-z0-9]+[A-Za-z0-9_-\s]*$/,
+  message:
+    'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
+};
+
+export const mapUrlToObj = (url, keys) => {
+  const splitUrl = url.split('/');
+  const obj = {};
+
+  for (let i = 1; i < splitUrl.length; i++) {
+    if (splitUrl[i]) {
+      obj[keys[i - 1]] = splitUrl[i];
+    }
+  }
+
+  obj.buildUrl = function () {
+    return Object.values(this).reduce(
+      (acc, curr) => (typeof curr !== 'function' ? `${acc}/${curr}` : acc),
+      ''
+    );
+  };
+
+  return obj;
 };

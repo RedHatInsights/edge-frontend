@@ -10,11 +10,15 @@ import {
   CLEAN_ENTITIES,
   LOAD_ACTIVE_IMAGES,
   LOAD_EDGE_IMAGES,
+  LOAD_EDGE_IMAGE_SETS,
+  LOAD_EDGE_IMAGE_PACKAGES,
   LOAD_DEVICE_SUMMARY,
   LOAD_IMAGE_STATUS,
   LOAD_IMAGE_DETAIL,
+  LOAD_IMAGE_SET_DETAIL,
   CREATE_NEW_IMAGE,
   POLLING_IMAGES,
+  LOAD_DEVICE_TABLE,
 } from './action-types';
 import {
   fetchGroups,
@@ -26,9 +30,13 @@ import {
   fetchActiveImages,
   fetchDeviceSummary,
   fetchImageStatus,
-  fetchImage,
+  getImageById,
   fetchEdgeImages,
+  fetchEdgeImageSets,
+  getImagePackageMetadata,
   createImage,
+  getImageSet,
+  getInventory,
 } from '../api';
 
 export const loadGroups = (perPage = 50, page = 1) => ({
@@ -129,7 +137,7 @@ export const loadImageStatus = (dispatch, imageId) => {
 export const loadImageDetail = (dispatch, imageId) => {
   dispatch({
     type: LOAD_IMAGE_DETAIL,
-    payload: fetchImage({ id: imageId }),
+    payload: getImageById({ id: imageId }),
   }).catch(() => null);
 };
 
@@ -146,6 +154,13 @@ export const loadEdgeImages = (dispatch, query) => {
   dispatch({
     type: LOAD_EDGE_IMAGES,
     payload: fetchEdgeImages(query),
+  }).catch(() => null);
+};
+
+export const loadEdgeImageSets = (dispatch, query) => {
+  dispatch({
+    type: LOAD_EDGE_IMAGE_SETS,
+    payload: fetchEdgeImageSets(query),
   }).catch(() => null);
 };
 
@@ -173,4 +188,25 @@ export const removeImagesToPoll = (ids) => {
     type: `${POLLING_IMAGES}_REMOVE`,
     ids,
   };
+};
+
+export const loadImageSetDetail = (dispatch, urlParam, query) => {
+  dispatch({
+    type: LOAD_IMAGE_SET_DETAIL,
+    payload: getImageSet({ id: urlParam, q: query }),
+  }).catch(() => null);
+};
+
+export const loadImagePackageMetadata = (dispatch, imageId) => {
+  dispatch({
+    type: LOAD_EDGE_IMAGE_PACKAGES,
+    payload: getImagePackageMetadata(imageId),
+  }).catch(() => null);
+};
+
+export const loadDeviceTable = (dispatch) => {
+  dispatch({
+    type: LOAD_DEVICE_TABLE,
+    payload: getInventory(),
+  }).catch(() => null);
 };

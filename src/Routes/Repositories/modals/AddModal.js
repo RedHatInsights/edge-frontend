@@ -3,6 +3,7 @@ import Modal from './Modal';
 import { createCustomRepository } from '../../../api/index';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
+import { nameValidator } from '../../../constants';
 
 const AddModal = ({ isOpen, openModal, reloadData }) => {
   const addSchema = {
@@ -21,7 +22,7 @@ const AddModal = ({ isOpen, openModal, reloadData }) => {
         helperText:
           'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
         isRequired: true,
-        validate: [{ type: validatorTypes.REQUIRED }],
+        validate: [{ type: validatorTypes.REQUIRED }, nameValidator],
       },
       {
         component: 'textarea',
