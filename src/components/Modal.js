@@ -14,10 +14,17 @@ const RepoModal = ({
   initialValues,
   variant,
   reloadData,
+  size,
   onSubmit,
+  additionalMappers,
 }) => {
   return (
-    <Modal variant="small" title={title} isOpen={isOpen} onClose={openModal}>
+    <Modal
+      variant={size ?? 'small'}
+      title={title}
+      isOpen={isOpen}
+      onClose={openModal}
+    >
       <FormRenderer
         schema={schema}
         FormTemplate={(props) => (
@@ -31,7 +38,11 @@ const RepoModal = ({
           />
         )}
         initialValues={initialValues}
-        componentMapper={componentMapper}
+        componentMapper={
+          additionalMappers
+            ? { ...additionalMappers, ...componentMapper }
+            : componentMapper
+        }
         onSubmit={async (values) => {
           await onSubmit(values);
           openModal();
@@ -53,6 +64,8 @@ RepoModal.propTypes = {
   initialValues: PropTypes.object,
   variant: PropTypes.string,
   onSubmit: PropTypes.func,
+  size: PropTypes.string,
+  additionalMappers: PropTypes.object,
 };
 
 export default RepoModal;

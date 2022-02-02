@@ -37,7 +37,7 @@ describe('General table', () => {
     const actionResolver = jest.fn();
     const registry = init(logger);
 
-    const { findByTestId, findByPlaceholderText } = render(
+    const { container, findByTestId, findByPlaceholderText } = render(
       <RegistryContext.Provider
         value={{
           getRegistry: () => registry,
@@ -86,5 +86,7 @@ describe('General table', () => {
     expect(generalTableFooter.children[0].innerHTML).toEqual(
       '<b>1 - 1</b> of <b>1</b> '
     );
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

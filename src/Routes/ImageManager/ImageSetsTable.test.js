@@ -11,7 +11,7 @@ describe('ImageSets table', () => {
     const openUpdateWizard = jest.fn();
     const registry = init(logger);
 
-    const { debug } = render(
+    const { container } = render(
       <RegistryContext.Provider
         value={{
           getRegistry: () => registry,
@@ -26,6 +26,6 @@ describe('ImageSets table', () => {
       </RegistryContext.Provider>
     );
 
-    debug();
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

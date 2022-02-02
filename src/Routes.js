@@ -24,8 +24,14 @@ const DeviceDetail = React.lazy(() =>
 //   )
 // );
 
-const Devices = React.lazy(() =>
-  import(/* webpackChunkName: "GroupsDetailPage" */ './Routes/Devices/Devices')
+const Groups = React.lazy(() =>
+  import(/* webpackChunkName: "GroupsDetailPage" */ './Routes/Groups/Groups')
+);
+
+const GroupsDetail = React.lazy(() =>
+  import(
+    /* webpackChunkName: "GroupsDetailPage" */ './Routes/GroupsDetail/GroupsDetail'
+  )
 );
 
 const Inventory = React.lazy(() =>
@@ -58,22 +64,24 @@ export const Routes = () => {
       }
     >
       <Switch>
-        {/* <Route exact path={paths.groups} component={Groups} /> */}
-        {/* <Route exact path={paths['groups-detail']} component={GroupsDetail} /> */}
+        <Route exact path={paths.groups} component={Groups} />
+        <Route exact path={paths['groups-detail']} component={GroupsDetail} />
         {/* <Route path={paths['device-detail']} component={DeviceDetail} /> */}
         {/* <Route path={paths.canaries} component={Canaries} /> */}
-        <Route exact path={paths['fleet-management']} component={Devices} />
+        <Route exact path={paths['fleet-management']} component={Groups} />
+        <Route
+          exact
+          path={paths['fleet-management-detail']}
+          component={GroupsDetail}
+        />
         <Route exact path={paths['inventory']} component={Inventory} />
+        <Route path={paths['inventory-detail']} component={DeviceDetail} />
         <Route
           path={paths['manage-images-detail-version']}
           component={ImageDetail}
         />
         <Route path={paths['manage-images-detail']} component={ImageDetail} />
         <Route path={paths['manage-images']} component={Images} />
-        <Route
-          path={paths['fleet-management-detail']}
-          component={DeviceDetail}
-        />
         <Route exact path={paths['repositories']} component={Repositories} />
         <Route>
           <Redirect to={paths['fleet-management']} />

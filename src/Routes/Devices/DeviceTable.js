@@ -14,6 +14,7 @@ import { deviceTableReducer } from '../../store/reducers';
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
+  InProgressIcon,
 } from '@patternfly/react-icons';
 
 const UpdateDeviceModal = React.lazy(() =>
@@ -70,8 +71,18 @@ const columnNames = [
   },
 ];
 
-const DeviceStatus = ({ ImageInfo }) => {
+const DeviceStatus = ({ Device }) => {
+  const status = getDeviceStatus(Device);
   const statusType = {
+    booting: (
+      <Label
+        className="pf-u-mt-sm"
+        color="blue"
+        icon={<InProgressIcon color="blue" />}
+      >
+        Booting
+      </Label>
+    ),
     running: (
       <Label
         className="pf-u-mt-sm"
@@ -92,30 +103,33 @@ const DeviceStatus = ({ ImageInfo }) => {
     ),
   };
 
-  return ImageInfo?.UpdatesAvailable
-    ? statusType['updateAvailable']
-    : statusType['running'];
+  return statusType[status];
 };
 
-const createRows = (devices) => {
-  return devices?.map((device) => ({
+const getDeviceStatus = (deviceData) =>
+  deviceData?.ImageInfo?.UpdatesAvailable
+    ? 'updateAvailable'
+    : deviceData?.Device?.Booted
+    ? 'running'
+    : 'booting';
+
+const createRows = (devices) =>
+  devices?.map((device) => ({
     id: device?.Device?.UUID,
     display_name: device?.Device?.DeviceName,
     updateImageData: device?.ImageInfo?.UpdatesAvailable?.[0],
-    deviceStatus: device?.ImageInfo?.UpdatesAvailable
-      ? 'updateAvailable'
-      : 'running',
+    deviceStatus: getDeviceStatus(device),
     noApiSortFilter: [
-      device?.Device?.DeviceName || '',
+      device?.Device?.DeviceName,
       '',
-      device?.Device?.UpdatedAt || '',
-      device?.ImageInfo?.Image?.Name,
-      device?.ImageInfo?.UpdatesAvailable ? 'updateAvailable' : 'running',
+      device?.Device?.LastSeen,
+      device?.ImageInfo?.Image?.Name || '',
+      getDeviceStatus(device),
     ],
     cells: [
       {
         title: (
-          <Link to={`${paths['fleet-management']}/${device?.Device?.UUID}`}>
+          <Link to={`${paths['inventory']}/${device?.Device?.UUID}`}>
             {device?.Device?.DeviceName}
           </Link>
         ),
@@ -124,7 +138,7 @@ const createRows = (devices) => {
         title: '-',
       },
       {
-        title: <DateFormat date={device?.Device?.UpdatedAt} />,
+        title: <DateFormat date={device?.Device?.LastSeen} />,
       },
       {
         title: (
@@ -136,15 +150,12 @@ const createRows = (devices) => {
         ),
       },
       {
-        title: (
-          <DeviceStatus Device={device?.Device} ImageInfo={device?.ImageInfo} />
-        ),
+        title: <DeviceStatus Device={device} />,
       },
     ],
   }));
-};
 
-const DeviceTable = () => {
+const DeviceTable = ({ skeletonRowQuantity }) => {
   const { getRegistry } = useContext(RegistryContext);
   const [rows, setRows] = useState([]);
   const [reload, setReload] = useState([]);
@@ -222,6 +233,7 @@ const DeviceTable = () => {
         //   },
         // ]}
         hasCheckbox={true}
+        skeletonRowQuantity={skeletonRowQuantity}
       />
       {updateModal.isOpen && (
         <Suspense
@@ -254,6 +266,7 @@ DeviceTable.propTypes = {
   imageData: PropTypes.object,
   urlParam: PropTypes.string,
   openUpdateWizard: PropTypes.func,
+  skeletonRowQuantity: PropTypes.number,
 };
 
 export default DeviceTable;
