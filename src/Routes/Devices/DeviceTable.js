@@ -72,7 +72,7 @@ const columnNames = [
 ];
 
 const DeviceStatus = ({ Device }) => {
-  const status = getDeviceStatus(Device)
+  const status = getDeviceStatus(Device);
   const statusType = {
     booting: (
       <Label
@@ -103,12 +103,17 @@ const DeviceStatus = ({ Device }) => {
     ),
   };
 
-  return statusType[status]
+  return statusType[status];
 };
 
-const getDeviceStatus = (deviceData) => deviceData?.ImageInfo?.UpdatesAvailable ? 'updateAvailable' : deviceData?.Device?.Booted ? 'running' : 'booting'
+const getDeviceStatus = (deviceData) =>
+  deviceData?.ImageInfo?.UpdatesAvailable
+    ? 'updateAvailable'
+    : deviceData?.Device?.Booted
+    ? 'running'
+    : 'booting';
 
-const createRows = (devices) => (
+const createRows = (devices) =>
   devices?.map((device) => ({
     id: device?.Device?.UUID,
     display_name: device?.Device?.DeviceName,
@@ -145,13 +150,10 @@ const createRows = (devices) => (
         ),
       },
       {
-        title: (
-          <DeviceStatus Device={device}  />
-        ),
+        title: <DeviceStatus Device={device} />,
       },
     ],
-  }))
-);
+  }));
 
 const DeviceTable = () => {
   const { getRegistry } = useContext(RegistryContext);
@@ -185,8 +187,8 @@ const DeviceTable = () => {
   }, [data]);
 
   useEffect(() => {
-    console.log(rows)
-  },[rows])
+    console.log(rows);
+  }, [rows]);
 
   const actionResolver = () => {
     return [
