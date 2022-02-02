@@ -23,3 +23,11 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('clickNextButtonImageWizard', () => {
+  cy.waitFor('.pf-c-wizard__footer > .pf-m-primary')
+  cy.get('.pf-c-wizard__footer > .pf-m-primary')
+    .should('be.enabled')
+  cy.get('.pf-c-wizard__footer > .pf-m-primary').click()
+  cy.waitFor('.pf-c-form > .pf-c-title')
+})
