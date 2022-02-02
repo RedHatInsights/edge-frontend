@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,11 +21,23 @@ import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import DeviceTable from '../Devices/DeviceTable';
+import { useParams } from 'react-router-dom';
+import { getGroupById } from '../../api/index';
 
 const GroupsDetail = () => {
+  const [data, setData] = useState({});
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const data = ['test'];
+  const params = useParams();
+
+  useEffect(() => {
+    (async () => {
+      const { groupId } = params;
+      console.log(groupId);
+      const groupData = await getGroupById(groupId);
+      setData(groupData.data);
+    })();
+  }, []);
 
   return (
     <>
@@ -64,7 +76,7 @@ const GroupsDetail = () => {
         </Flex>
       </PageHeader>
       <Main className="edge-devices">
-        {data?.length > 0 ? (
+        {data?.devices?.length > 0 ? (
           <DeviceTable />
         ) : (
           <Bullseye>

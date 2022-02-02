@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Flex, FlexItem, Bullseye } from '@patternfly/react-core';
 import {
   PageHeader,
@@ -9,26 +9,29 @@ import GroupTable from './GroupTable';
 import Empty from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { Link } from 'react-router-dom';
+import { getGroups } from '../../api/index';
 
 const Groups = () => {
+  const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const data = [
-    {
-      id: 1,
-      name: 'group1',
-      systems: '500',
-      image: 'super golden image',
-      status: '100%',
-    },
-    {
-      id: 2,
-      name: 'group2',
-      systems: '1k',
-      image: 'golden image',
-      status: '50%',
-    },
-  ];
 
+  useEffect(() => {
+    (async () => {
+      const groups = await getGroups();
+      console.log(groups);
+
+      //setData(groups.data);
+      setData([
+        {
+          id: 1,
+          name: 'group1',
+          systems: '500',
+          image: 'super golden image',
+          status: '100%',
+        },
+      ]);
+    })();
+  }, []);
   return (
     <>
       <PageHeader className="pf-m-light">
