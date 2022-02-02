@@ -12,6 +12,8 @@ node_modules
 # production
 dist
 
+cypress/config
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
