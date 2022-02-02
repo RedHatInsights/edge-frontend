@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TableHeader renders correctly 1`] = `
+<div
+  class="pf-c-content"
+  style="padding: 15px; background-color: white;"
+>
+  <h1
+    class=""
+    data-ouia-component-id="OUIA-Generated-Text-1"
+    data-ouia-component-type="PF4/Text"
+    data-ouia-safe="true"
+    data-pf-content="true"
+  >
+    Custom repositories
+  </h1>
+  <p
+    class=""
+    data-ouia-component-id="OUIA-Generated-Text-2"
+    data-ouia-component-type="PF4/Text"
+    data-ouia-safe="true"
+    data-pf-content="true"
+  >
+    Add custom repositories to build RHEL for Edge images with additional packages.
+     
+  </p>
+</div>
+`;

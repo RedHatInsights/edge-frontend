@@ -12,22 +12,22 @@ import PropTypes from 'prop-types';
 const ReviewSection = ({ title, data, testid }) => {
   return (
     <Grid className="pf-u-pb-xl" data-testid={testid} hasGutter>
-      <GridItem span={12} hasGutter>
+      <GridItem span={12}>
         <Text component={TextVariants.h2}>{title}</Text>
       </GridItem>
       {data.map(({ name, value }) => (
-        <>
-          <GridItem span={3} hasGutter>
+        <Grid key={name}>
+          <GridItem span={3}>
             <TextListItem component={TextListItemVariants.dt}>
               {name}
             </TextListItem>
           </GridItem>
-          <GridItem span={9} hasGutter>
+          <GridItem span={9}>
             <TextListItem component={TextListItemVariants.dd}>
               {value}
             </TextListItem>
           </GridItem>
-        </>
+        </Grid>
       ))}
     </Grid>
   );

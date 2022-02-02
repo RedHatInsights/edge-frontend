@@ -4,7 +4,7 @@ import RepositoryHeader from './RepositoryHeader';
 
 describe('RepositoryHeader', () => {
   it('renders correctly', async () => {
-    render(<RepositoryHeader />);
+    const { container } = render(<RepositoryHeader />);
 
     expect(screen.getByRole('heading', 'Applications settings')).toBeDefined();
     expect(screen.getByText('Settings for Fleet Management')).toBeDefined();
@@ -25,5 +25,7 @@ describe('RepositoryHeader', () => {
         )
       ).toBeDefined()
     );
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

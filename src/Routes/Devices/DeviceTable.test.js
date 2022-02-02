@@ -9,7 +9,7 @@ describe('ImageSets table', () => {
   it('to render correctly', async () => {
     const registry = init(logger);
 
-    render(
+    const { container } = render(
       <RegistryContext.Provider
         value={{
           getRegistry: () => registry,
@@ -30,5 +30,6 @@ describe('ImageSets table', () => {
       })
     );
     expect(screen.getByRole('button', { name: 'Options menu' })).toBeDefined();
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

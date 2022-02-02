@@ -22,7 +22,7 @@ describe('Filter input', () => {
     ];
     const setFilterValues = jest.fn();
 
-    const { findByTestId, findByRole, findByText } = render(
+    const { container, findByTestId, findByRole, findByText } = render(
       <FilterInput
         filterValues={filterValues}
         setFilterValues={setFilterValues}
@@ -39,6 +39,8 @@ describe('Filter input', () => {
     expect(await findByText('option 2')).toBeDefined();
     fireEvent.click(await findByRole('checkbox', { name: 'option 2' }));
     expect(setFilterValues).toHaveBeenCalled();
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 
   it('text input should render correctly', async () => {
@@ -47,7 +49,7 @@ describe('Filter input', () => {
     ];
     const setFilterValues = jest.fn();
 
-    const { findByTestId, findByPlaceholderText } = render(
+    const { container, findByTestId, findByPlaceholderText } = render(
       <FilterInput
         filterValues={filterValues}
         setFilterValues={setFilterValues}
@@ -61,5 +63,7 @@ describe('Filter input', () => {
     expect(filterInput.value).toEqual('test-label');
     fireEvent.change(filterInput, { target: { value: 'event-test' } });
     expect(filterInput.value).toEqual('event-test');
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

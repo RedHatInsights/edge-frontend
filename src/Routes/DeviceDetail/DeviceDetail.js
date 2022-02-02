@@ -103,8 +103,8 @@ const DeviceDetail = () => {
         <PageHeader>
           <Breadcrumb ouiaId="systems-list">
             <BreadcrumbItem>
-              <Link to={uuid ? `/groups` : '/fleet-management'}>
-                {uuid ? 'Groups' : 'Fleet management'}
+              <Link to={uuid ? `/groups` : '/inventory'}>
+                {uuid ? 'Groups' : 'Inventory'}
               </Link>
             </BreadcrumbItem>
             {uuid && (

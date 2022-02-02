@@ -129,7 +129,7 @@ const createRows = (devices) =>
     cells: [
       {
         title: (
-          <Link to={`${paths['fleet-management']}/${device?.Device?.UUID}`}>
+          <Link to={`${paths['inventory']}/${device?.Device?.UUID}`}>
             {device?.Device?.DeviceName}
           </Link>
         ),
@@ -155,7 +155,7 @@ const createRows = (devices) =>
     ],
   }));
 
-const DeviceTable = () => {
+const DeviceTable = ({ skeletonRowQuantity }) => {
   const { getRegistry } = useContext(RegistryContext);
   const [rows, setRows] = useState([]);
   const [reload, setReload] = useState([]);
@@ -233,6 +233,7 @@ const DeviceTable = () => {
         //   },
         // ]}
         hasCheckbox={true}
+        skeletonRowQuantity={skeletonRowQuantity}
       />
       {updateModal.isOpen && (
         <Suspense
@@ -265,6 +266,7 @@ DeviceTable.propTypes = {
   imageData: PropTypes.object,
   urlParam: PropTypes.string,
   openUpdateWizard: PropTypes.func,
+  skeletonRowQuantity: PropTypes.number,
 };
 
 export default DeviceTable;

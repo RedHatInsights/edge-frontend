@@ -150,14 +150,14 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
 };
 
 ImageTable.propTypes = {
-  clearFilters: PropTypes.func.isRequired,
-  openCreateWizard: PropTypes.func.isRequired,
-  openUpdateWizard: PropTypes.func.isRequired,
-  filters: PropTypes.array.isRequired,
+  clearFilters: PropTypes.func,
+  openCreateWizard: PropTypes.func,
+  openUpdateWizard: PropTypes.func,
+  filters: PropTypes.array,
   pagination: PropTypes.shape({
     page: PropTypes.number,
     perPage: PropTypes.number,
-  }).isRequired,
+  }),
 };
 
 export default ImageTable;
