@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, TabTitleText, Skeleton } from '@patternfly/react-core';
 import { useHistory, useLocation } from 'react-router-dom';
+import { routes as paths } from '../../../package.json';
 
 import ImageDetailTab from './ImageDetailTab';
 import ImageVersionTab from './ImageVersionsTab';
 import ImagePackagesTab from './ImagePackagesTab';
 import PropTypes from 'prop-types';
+import EmptyState from '../../components/Empty';
 
 import { mapUrlToObj } from '../../constants';
 
@@ -55,6 +57,20 @@ const ImageDetailTabs = ({
   }, [location.pathname]);
 
   return (
+    <>
+      {imageData?.data?.Data?.image_set && !imageData?.data?.Data?.image_set?.Account ? (
+        <EmptyState
+        icon="question"
+        title="Image not found"
+        body="Please check you have the correct link with the correct image Id."
+        primaryAction={{
+          text: 'Back to Manage Images',
+          isLink: true,
+          href: paths['manage-images'],
+        }}
+        secondaryActions={[]}
+      />
+      ):(
     <div className="edge-c-device--detail add-100vh">
       <Tabs
         className="pf-u-ml-md"
@@ -95,8 +111,9 @@ const ImageDetailTabs = ({
           </Tab>
         )}
       </Tabs>
-    </div>
-  );
+    </div>)
+    }
+  </>);
 };
 
 ImageDetailTabs.propTypes = {
