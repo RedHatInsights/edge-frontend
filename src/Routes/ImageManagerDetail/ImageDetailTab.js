@@ -30,7 +30,9 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   const createSkeleton = (rows) =>
     [...Array(rows * 2)].map((key) => <Skeleton width="180px" key={key} />);
 
-  const dateFormat = () => <DateFormat date={data?.image?.['CreatedAt']['Time']} />;
+  const dateFormat = () => (
+    <DateFormat date={data?.image?.['CreatedAt']['Time']} />
+  );
 
   const detailsMapper = {
     Version: 'Version',
