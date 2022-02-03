@@ -104,15 +104,15 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
                   <Skeleton width="100px" />
                 )}
               </TextListItem>
-              {imageVersion?.image?.UpdatedAt ||
-              data?.images?.[0].image?.UpdatedAt ? (
+              {imageVersion?.image?.UpdatedAt.Time ||
+              data?.images?.[0].image?.UpdatedAt.Time ? (
                 <TextListItem component="p">
                   {`Last updated `}
                   <DateFormat
                     date={
                       imageVersion
-                        ? imageVersion?.image?.UpdatedAt
-                        : data?.images?.[0].image?.UpdatedAt
+                        ? imageVersion?.image?.UpdatedAt.Time
+                        : data?.images?.[0].image?.UpdatedAt.Time
                     }
                   />
                 </TextListItem>

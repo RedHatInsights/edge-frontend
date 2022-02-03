@@ -19,7 +19,7 @@ describe('DetailsHeader', () => {
                 Version: 1,
                 ImageType: 'rhel-edge-installer',
                 CreatedAt: { Time: '2022-01-24T18:27:24.331554Z', Valid: true },
-                UpdatedAt: Date.now(),
+                UpdatedAt: { Time: Date.now(), Valid: true },
                 Status: 'BUILDING',
                 Installer: {
                   ImageBuildISOURL: '',

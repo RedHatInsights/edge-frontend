@@ -82,7 +82,7 @@ const createRows = (data) => {
       },
       image_set?.Images[0].Version, // remove when image_set.Version is accurate
       {
-        title: <DateFormat date={image_set?.UpdatedAt} />,
+        title: <DateFormat date={image_set?.UpdatedAt.Time} />,
       },
       {
         title: (
