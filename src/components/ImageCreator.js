@@ -14,6 +14,7 @@ import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComp
 import { registrationCredsValidator } from './form/RegistrationCreds';
 import { reservedUsernameValidator } from './form/validators';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
+import { checkImageName } from '../api';
 
 /**
  * Use this instead of CreateImageWizard once this PR is merged https://github.com/RedHatInsights/image-builder-frontend/pull/230
@@ -28,6 +29,17 @@ export const AsyncCreateImageWizard = (props) => (
     {...props}
   />
 );
+
+const asyncImageNameValidation = () => (value) =>
+  checkImageName(value)
+    .then((result) => {
+      if (result.ImageExists) {
+        throw new Error('Name already exists');
+      }
+    })
+    .catch(({ message }) => {
+      throw message;
+    });
 
 const CreateImageWizard = ({
   schema,
@@ -68,6 +80,7 @@ const CreateImageWizard = ({
       }}
       validatorMapper={{
         ...validatorTypes,
+        asyncImageNameValidation,
         registrationCredsValidator,
         reservedUsernameValidator,
       }}
