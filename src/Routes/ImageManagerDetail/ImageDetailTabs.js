@@ -58,62 +58,67 @@ const ImageDetailTabs = ({
 
   return (
     <>
-      {imageData?.data?.Data?.image_set && !imageData?.data?.Data?.image_set?.Account ? (
+      {imageData?.data?.Data?.image_set &&
+      !imageData?.data?.Data?.image_set?.Account ? (
         <EmptyState
-        icon="question"
-        title="Image not found"
-        body="Please check you have the correct link with the correct image Id."
-        primaryAction={{
-          text: 'Back to Manage Images',
-          isLink: true,
-          href: paths['manage-images'],
-        }}
-        secondaryActions={[]}
-      />
-      ):(
-    <div className="edge-c-device--detail add-100vh">
-      <Tabs
-        className="pf-u-ml-md"
-        activeKey={activeTabKey}
-        onSelect={handleTabClick}
-      >
-        <Tab
-          eventKey={tabs.details}
-          title={<TabTitleText>Details</TabTitleText>}
-        >
-          <ImageDetailTab imageData={imageData} imageVersion={imageVersion} />
-        </Tab>
-        {isLoading ? (
-          <Tab
-            title={
-              <TabTitleText>
-                {' '}
-                <Skeleton width="75px" />
-              </TabTitleText>
-            }
-          ></Tab>
-        ) : imageVersion ? (
-          <Tab
-            eventKey={tabs.packages}
-            title={<TabTitleText>Packages</TabTitleText>}
+          icon="question"
+          title="Image not found"
+          body="Please check you have the correct link with the correct image Id."
+          primaryAction={{
+            text: 'Back to Manage Images',
+            isLink: true,
+            href: paths['manage-images'],
+          }}
+          secondaryActions={[]}
+        />
+      ) : (
+        <div className="edge-c-device--detail add-100vh">
+          <Tabs
+            className="pf-u-ml-md"
+            activeKey={activeTabKey}
+            onSelect={handleTabClick}
           >
-            <ImagePackagesTab imageVersion={imageVersion} />
-          </Tab>
-        ) : (
-          <Tab
-            eventKey={tabs.versions}
-            title={<TabTitleText>Versions</TabTitleText>}
-          >
-            <ImageVersionTab
-              imageData={imageData}
-              openUpdateWizard={openUpdateWizard}
-            />
-          </Tab>
-        )}
-      </Tabs>
-    </div>)
-    }
-  </>);
+            <Tab
+              eventKey={tabs.details}
+              title={<TabTitleText>Details</TabTitleText>}
+            >
+              <ImageDetailTab
+                imageData={imageData}
+                imageVersion={imageVersion}
+              />
+            </Tab>
+            {isLoading ? (
+              <Tab
+                title={
+                  <TabTitleText>
+                    {' '}
+                    <Skeleton width="75px" />
+                  </TabTitleText>
+                }
+              ></Tab>
+            ) : imageVersion ? (
+              <Tab
+                eventKey={tabs.packages}
+                title={<TabTitleText>Packages</TabTitleText>}
+              >
+                <ImagePackagesTab imageVersion={imageVersion} />
+              </Tab>
+            ) : (
+              <Tab
+                eventKey={tabs.versions}
+                title={<TabTitleText>Versions</TabTitleText>}
+              >
+                <ImageVersionTab
+                  imageData={imageData}
+                  openUpdateWizard={openUpdateWizard}
+                />
+              </Tab>
+            )}
+          </Tabs>
+        </div>
+      )}
+    </>
+  );
 };
 
 ImageDetailTabs.propTypes = {

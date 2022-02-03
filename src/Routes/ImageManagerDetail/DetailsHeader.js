@@ -71,7 +71,7 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
             <Link to={paths['manage-images']}>Back to Manage Images</Link>
           </BreadcrumbItem>
         </Breadcrumb>
-      ):(
+      ) : (
         <>
           <Breadcrumb>
             <BreadcrumbItem>
