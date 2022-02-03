@@ -97,7 +97,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
             Created
           </TextListItem>
           <TextListItem component={TextListItemVariants.dd}>
-            <DateFormat date={imageData?.Image.CreatedAt} />
+            <DateFormat date={imageData?.Image.CreatedAt.Time} />
           </TextListItem>
           <TextListItem component={TextListItemVariants.dt}>
             Release

@@ -63,7 +63,7 @@ const createRows = (data) => {
         title: imageTypeMapper[image?.ImageType],
       },
       {
-        title: <DateFormat date={image?.CreatedAt} />,
+        title: <DateFormat date={image?.CreatedAt.Time} />,
       },
       {
         title: <StatusLabel status={image?.Status} />,

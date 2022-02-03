@@ -18,7 +18,7 @@ describe('ImageVersionsTab', () => {
                 ID: 100,
                 Version: 1,
                 ImageType: 'rhel-edge-installer',
-                CreatedAt: '2022-01-24T18:27:24.331554Z',
+                CreatedAt: { Time: '2022-01-24T18:27:24.331554Z', Valid: true },
                 Status: 'BUILDING',
                 Installer: {
                   ImageBuildISOURL: '',
@@ -30,7 +30,7 @@ describe('ImageVersionsTab', () => {
                 ID: 200,
                 Version: 2,
                 ImageType: 'rhel-edge-installer',
-                CreatedAt: '2022-01-24T18:27:24.331554Z',
+                CreatedAt: { Time: '2022-01-24T18:27:24.331554Z', Valid: true },
                 Status: 'SUCCESS',
                 Installer: {
                   ImageBuildISOURL: 'test.com',

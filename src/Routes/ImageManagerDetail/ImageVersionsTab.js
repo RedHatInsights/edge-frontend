@@ -57,7 +57,7 @@ const createRows = (data, imageSetId) => {
     noApiSortFilter: [
       image?.Version,
       imageTypeMapper[image?.ImageType],
-      image?.CreatedAt,
+      image?.CreatedAt.Time,
       image?.Status,
     ],
     cells: [
@@ -74,7 +74,7 @@ const createRows = (data, imageSetId) => {
         title: imageTypeMapper[image?.ImageType],
       },
       {
-        title: <DateFormat date={image?.CreatedAt} />,
+        title: <DateFormat date={image?.CreatedAt.Time} />,
       },
       {
         title: <StatusLabel status={image?.Status} />,
