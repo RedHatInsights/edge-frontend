@@ -42,7 +42,7 @@ describe('DetailsHeader', () => {
           image_set: {
             ID: 101,
             Name: 'test image',
-            Account: '1234'
+            Account: '1234',
           },
         },
       },
