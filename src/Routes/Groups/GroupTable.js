@@ -13,7 +13,7 @@ const columns = [
   { title: 'Status', type: 'name', sort: false },
 ];
 
-const GroupTable = ({ data, openModal }) => {
+const GroupTable = ({ data, isLoading, openModal }) => {
   const actionResolver = () => {
     return [
       {
@@ -28,12 +28,12 @@ const GroupTable = ({ data, openModal }) => {
   };
 
   const buildRows = data.map((rowData) => {
-    const { id, name, systems, image, status } = rowData;
+    const { id, Name, systems, image, status } = rowData;
     return {
       noApiSortFilter: [name],
       cells: [
         {
-          title: <Link to={`${paths['fleet-management']}/${id}`}>{name}</Link>,
+          title: <Link to={`${paths['fleet-management']}/${id}`}>{Name}</Link>,
         },
         {
           title: systems,
@@ -55,7 +55,7 @@ const GroupTable = ({ data, openModal }) => {
       tableData={{
         count: data.length,
         data,
-        isLoading: false,
+        isLoading,
         hasError: false,
       }}
       columnNames={columns}
@@ -76,6 +76,7 @@ const GroupTable = ({ data, openModal }) => {
 GroupTable.propTypes = {
   data: PropTypes.array,
   openModal: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default GroupTable;

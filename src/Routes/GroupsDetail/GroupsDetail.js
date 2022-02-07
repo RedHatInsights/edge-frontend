@@ -33,7 +33,6 @@ const GroupsDetail = () => {
   useEffect(() => {
     (async () => {
       const { groupId } = params;
-      console.log(groupId);
       const groupData = await getGroupById(groupId);
       setData(groupData.data);
     })();
