@@ -7,10 +7,10 @@ import { routes as paths } from '../../../package.json';
 const filters = [{ label: 'Name', type: 'text' }];
 
 const columns = [
-  { title: 'Group name', type: 'name', sort: true },
-  { title: 'Systems', type: 'name', sort: false },
-  { title: 'Image', type: 'name', sort: false },
-  { title: 'Status', type: 'name', sort: false },
+  { title: 'Name', type: 'name', sort: true },
+  //{ title: 'Systems', type: 'name', sort: false },
+  //{ title: 'Image', type: 'name', sort: false },
+  //{ title: 'Status', type: 'name', sort: false },
 ];
 
 const GroupTable = ({ data, isLoading, openModal }) => {
@@ -28,22 +28,22 @@ const GroupTable = ({ data, isLoading, openModal }) => {
   };
 
   const buildRows = data.map((rowData) => {
-    const { id, Name, systems, image, status } = rowData;
+    const { ID, Name } = rowData;
     return {
-      noApiSortFilter: [name],
+      noApiSortFilter: [Name],
       cells: [
         {
-          title: <Link to={`${paths['fleet-management']}/${id}`}>{Name}</Link>,
+          title: <Link to={`${paths['fleet-management']}/${ID}`}>{Name}</Link>,
         },
-        {
-          title: systems,
-        },
-        {
-          title: image,
-        },
-        {
-          title: status,
-        },
+        //{
+        //  title: systems,
+        //},
+        //{
+        //  title: image,
+        //},
+        //{
+        //  title: status,
+        //},
       ],
     };
   });
