@@ -50,7 +50,7 @@ const Groups = () => {
             isLoading={isLoading}
             openModal={() => setIsModalOpen(true)}
           />
-        ) : isLoading ? (
+        ) : (
           <Bullseye>
             <Empty
               title="No groups yet!"
@@ -61,8 +61,6 @@ const Groups = () => {
               secondaryActions={[]}
             />
           </Bullseye>
-        ) : (
-          <p>jkdf</p>
         )}
       </Main>
 
