@@ -21,6 +21,7 @@ import StatusLabel from './StatusLabel';
 import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
+import { isAccountMissing } from './constants';
 
 const dropdownItems = (data, imageVersion, openUpdateWizard) => {
   const imageData = imageVersion ? imageVersion : data?.images?.[0];
@@ -65,90 +66,100 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
 
   return (
     <>
-      <Breadcrumb>
-        <BreadcrumbItem>
-          <Link to={paths['manage-images']}>Manage Images</Link>
-        </BreadcrumbItem>
-        {imageVersion ? (
+      {isAccountMissing(data?.image_set) ? (
+        <Breadcrumb>
           <BreadcrumbItem>
-            <Link to={`${paths['manage-images']}/${data?.image_set?.ID}`}>
-              {data?.image_set?.Name}
-            </Link>
+            <Link to={paths['manage-images']}>Back to Manage Images</Link>
           </BreadcrumbItem>
-        ) : (
-          <BreadcrumbItem isActive>
-            {data?.image_set?.Name || <Skeleton width="100px" />}
-          </BreadcrumbItem>
-        )}
-        {imageVersion && (
-          <BreadcrumbItem isActive>
-            {imageVersion?.image?.Version}
-          </BreadcrumbItem>
-        )}
-      </Breadcrumb>
+        </Breadcrumb>
+      ) : (
+        <>
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link to={paths['manage-images']}>Manage Images</Link>
+            </BreadcrumbItem>
+            {imageVersion ? (
+              <BreadcrumbItem>
+                <Link to={`${paths['manage-images']}/${data?.image_set?.ID}`}>
+                  {data?.image_set?.Name}
+                </Link>
+              </BreadcrumbItem>
+            ) : (
+              <BreadcrumbItem isActive>
+                {data?.image_set?.Name || <Skeleton width="100px" />}
+              </BreadcrumbItem>
+            )}
+            {imageVersion && (
+              <BreadcrumbItem isActive>
+                {imageVersion?.image?.Version}
+              </BreadcrumbItem>
+            )}
+          </Breadcrumb>
 
-      <TextContent>
-        <Split>
-          <SplitItem>
-            <TextList component="dl">
-              <TextListItem
-                component="h1"
-                className="grid-align-center pf-u-mb-0"
-              >
-                {data?.image_set?.Name || <Skeleton width="150px" />}
-              </TextListItem>
-              <TextListItem component="dd">
-                {data?.Status || data?.images?.[0]?.image?.Status ? (
-                  <StatusLabel status={data?.images?.[0]?.image?.Status} />
-                ) : (
-                  <Skeleton width="100px" />
-                )}
-              </TextListItem>
-              {imageVersion?.image?.UpdatedAt ||
-              data?.images?.[0].image?.UpdatedAt ? (
-                <TextListItem component="p">
-                  {`Last updated `}
-                  <DateFormat
-                    date={
-                      imageVersion
-                        ? imageVersion?.image?.UpdatedAt
-                        : data?.images?.[0].image?.UpdatedAt
-                    }
-                  />
-                </TextListItem>
-              ) : (
-                <Skeleton width="200px" />
-              )}
-            </TextList>
-          </SplitItem>
-          <SplitItem isFilled></SplitItem>
-          <SplitItem>
-            <Dropdown
-              position={DropdownPosition.right}
-              toggle={
-                <DropdownToggle
-                  id="image-set-details-dropdown"
-                  toggleIndicator={CaretDownIcon}
-                  onToggle={(newState) => setIsOpen(newState)}
-                  isDisabled={
-                    (imageVersion
-                      ? imageVersion?.image?.Status
-                      : data?.Images?.[0]?.Status) === 'BUILDING' || false
+          <TextContent>
+            <Split>
+              <SplitItem>
+                <TextList component="dl">
+                  <TextListItem
+                    component="h1"
+                    className="grid-align-center pf-u-mb-0"
+                  >
+                    {data?.image_set?.Name || <Skeleton width="150px" />}
+                  </TextListItem>
+                  <TextListItem component="dd">
+                    {data?.Status || data?.images?.[0]?.image?.Status ? (
+                      <StatusLabel status={data?.images?.[0]?.image?.Status} />
+                    ) : (
+                      <Skeleton width="100px" />
+                    )}
+                  </TextListItem>
+                  {imageVersion?.image?.UpdatedAt ||
+                  data?.images?.[0].image?.UpdatedAt ? (
+                    <TextListItem component="p">
+                      {`Last updated `}
+                      <DateFormat
+                        date={
+                          imageVersion
+                            ? imageVersion?.image?.UpdatedAt
+                            : data?.images?.[0].image?.UpdatedAt
+                        }
+                      />
+                    </TextListItem>
+                  ) : (
+                    <Skeleton width="200px" />
+                  )}
+                </TextList>
+              </SplitItem>
+              <SplitItem isFilled></SplitItem>
+              <SplitItem>
+                <Dropdown
+                  position={DropdownPosition.right}
+                  toggle={
+                    <DropdownToggle
+                      id="image-set-details-dropdown"
+                      toggleIndicator={CaretDownIcon}
+                      onToggle={(newState) => setIsOpen(newState)}
+                      isDisabled={
+                        (imageVersion
+                          ? imageVersion?.image?.Status
+                          : data?.Images?.[0]?.Status) === 'BUILDING' || false
+                      }
+                    >
+                      Actions
+                    </DropdownToggle>
                   }
-                >
-                  Actions
-                </DropdownToggle>
-              }
-              isOpen={isOpen}
-              dropdownItems={dropdownItems(
-                data,
-                imageVersion,
-                openUpdateWizard
-              )}
-            />
-          </SplitItem>
-        </Split>
-      </TextContent>
+                  isOpen={isOpen}
+                  dropdownItems={dropdownItems(
+                    data,
+                    imageVersion,
+                    openUpdateWizard
+                  )}
+                />
+              </SplitItem>
+            </Split>
+          </TextContent>
+        </>
+      )}
     </>
   );
 };

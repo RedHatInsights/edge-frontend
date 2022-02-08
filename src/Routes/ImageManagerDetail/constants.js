@@ -51,3 +51,5 @@ export const imageTypeMapper = {
   'rhel-edge-commit': 'RHEL for Edge Commit (.tar)',
   'rhel-edge-installer': 'RHEL for Edge Installer (.iso)',
 };
+
+export const isAccountMissing = (data) => data && !data?.Account;

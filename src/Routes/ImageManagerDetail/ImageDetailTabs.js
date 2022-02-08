@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, TabTitleText, Skeleton } from '@patternfly/react-core';
 import { useHistory, useLocation } from 'react-router-dom';
+import { routes as paths } from '../../../package.json';
 
 import ImageDetailTab from './ImageDetailTab';
 import ImageVersionTab from './ImageVersionsTab';
 import ImagePackagesTab from './ImagePackagesTab';
 import PropTypes from 'prop-types';
+import EmptyState from '../../components/Empty';
 
 import { mapUrlToObj } from '../../constants';
+import { isAccountMissing } from './constants';
 
 // conditional render for same index
 const tabs = {
@@ -55,47 +58,64 @@ const ImageDetailTabs = ({
   }, [location.pathname]);
 
   return (
-    <div className="edge-c-device--detail add-100vh">
-      <Tabs
-        className="pf-u-ml-md"
-        activeKey={activeTabKey}
-        onSelect={handleTabClick}
-      >
-        <Tab
-          eventKey={tabs.details}
-          title={<TabTitleText>Details</TabTitleText>}
-        >
-          <ImageDetailTab imageData={imageData} imageVersion={imageVersion} />
-        </Tab>
-        {isLoading ? (
-          <Tab
-            title={
-              <TabTitleText>
-                {' '}
-                <Skeleton width="75px" />
-              </TabTitleText>
-            }
-          ></Tab>
-        ) : imageVersion ? (
-          <Tab
-            eventKey={tabs.packages}
-            title={<TabTitleText>Packages</TabTitleText>}
+    <>
+      {isAccountMissing(imageData?.data?.Data?.image_set) ? (
+        <EmptyState
+          icon="question"
+          title="Image not found"
+          body="Please check you have the correct link with the correct image Id."
+          primaryAction={{
+            text: 'Back to Manage Images',
+            href: paths['manage-images'],
+          }}
+          secondaryActions={[]}
+        />
+      ) : (
+        <div className="edge-c-device--detail add-100vh">
+          <Tabs
+            className="pf-u-ml-md"
+            activeKey={activeTabKey}
+            onSelect={handleTabClick}
           >
-            <ImagePackagesTab imageVersion={imageVersion} />
-          </Tab>
-        ) : (
-          <Tab
-            eventKey={tabs.versions}
-            title={<TabTitleText>Versions</TabTitleText>}
-          >
-            <ImageVersionTab
-              imageData={imageData}
-              openUpdateWizard={openUpdateWizard}
-            />
-          </Tab>
-        )}
-      </Tabs>
-    </div>
+            <Tab
+              eventKey={tabs.details}
+              title={<TabTitleText>Details</TabTitleText>}
+            >
+              <ImageDetailTab
+                imageData={imageData}
+                imageVersion={imageVersion}
+              />
+            </Tab>
+            {isLoading ? (
+              <Tab
+                title={
+                  <TabTitleText>
+                    <Skeleton width="75px" />
+                  </TabTitleText>
+                }
+              ></Tab>
+            ) : imageVersion ? (
+              <Tab
+                eventKey={tabs.packages}
+                title={<TabTitleText>Packages</TabTitleText>}
+              >
+                <ImagePackagesTab imageVersion={imageVersion} />
+              </Tab>
+            ) : (
+              <Tab
+                eventKey={tabs.versions}
+                title={<TabTitleText>Versions</TabTitleText>}
+              >
+                <ImageVersionTab
+                  imageData={imageData}
+                  openUpdateWizard={openUpdateWizard}
+                />
+              </Tab>
+            )}
+          </Tabs>
+        </div>
+      )}
+    </>
   );
 };
 
