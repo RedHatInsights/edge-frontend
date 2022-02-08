@@ -21,6 +21,7 @@ export default {
   title: 'Additional packages',
   name: 'packages',
   nextStep: 'review',
+  substepOf: 'Add content',
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,
