@@ -35,7 +35,6 @@ const GroupsDetail = () => {
       const { groupId } = params;
       const groupData = await getGroupById(groupId);
       setData(groupData);
-      console.log(groupData);
     })();
   }, []);
 
