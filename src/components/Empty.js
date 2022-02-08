@@ -9,12 +9,17 @@ import {
 } from '@patternfly/react-core';
 import RepositoryIcon from '@patternfly/react-icons/dist/esm/icons/repository-icon';
 import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
-import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import {
+  ExternalLinkAltIcon,
+  QuestionCircleIcon,
+} from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const emptyStateIconMapper = {
   repository: RepositoryIcon,
   search: SearchIcon,
+  question: QuestionCircleIcon,
 };
 
 const Empty = ({
@@ -32,9 +37,17 @@ const Empty = ({
     </Title>
     <EmptyStateBody>{body}</EmptyStateBody>
     {primaryAction && (
-      <Button onClick={primaryAction.click} variant="primary">
-        {primaryAction.text}
-      </Button>
+      <>
+        {primaryAction.href ? (
+          <Button component={Link} to={primaryAction.href}>
+            {primaryAction.text}
+          </Button>
+        ) : (
+          <Button onClick={primaryAction.click} variant="primary">
+            {primaryAction.text}
+          </Button>
+        )}
+      </>
     )}
     <EmptyStateSecondaryActions>
       {secondaryActions.map(({ type, title, link, onClick }, index) => (
