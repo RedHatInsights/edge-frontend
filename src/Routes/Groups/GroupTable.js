@@ -13,15 +13,16 @@ const columns = [
   { title: 'Image', type: 'name', sort: false },
 ];
 
-const GroupTable = ({ data, isLoading, openModal }) => {
-  const actionResolver = () => {
+const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
+  const actionResolver = (rowData) => {
+    const { id, title } = rowData;
     return [
       {
-        title: 'Update',
-        onClick: () => console.log('updating'),
+        title: 'Rename',
+        onClick: () => handleRenameModal(id, { name: title }),
       },
       {
-        title: 'Remove',
+        title: 'Delete',
         onClick: () => console.log('updating'),
       },
     ];
@@ -48,6 +49,8 @@ const GroupTable = ({ data, isLoading, openModal }) => {
     );
 
     return {
+      id: ID,
+      title: Name,
       noApiSortFilter: [Name],
       cells: [
         {
@@ -95,6 +98,7 @@ GroupTable.propTypes = {
   data: PropTypes.array,
   openModal: PropTypes.func,
   isLoading: PropTypes.bool,
+  handleRenameModal: PropTypes.func,
 };
 
 export default GroupTable;

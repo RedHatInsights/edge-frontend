@@ -10,7 +10,7 @@ import Empty from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { Link } from 'react-router-dom';
 import { getGroups } from '../../api/index';
-import { createGroup } from '../../api/index';
+import { createGroup, updateGroupById } from '../../api/index';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { nameValidator } from '../../constants';
 
@@ -18,11 +18,27 @@ const Groups = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalState, setModalState] = useState({
+    title: 'Create group',
+    onSubmit: (values) => createGroup(values),
+    submitLabel: 'Create',
+    initialValues: {},
+  });
 
   const fetchGroups = async () => {
     const groups = await getGroups();
     setData(groups.data);
     setIsLoading(false);
+  };
+
+  const handleRenameModal = (id, initialValues) => {
+    setModalState({
+      title: 'Rename group',
+      onSubmit: (values) => updateGroupById(id, values),
+      submitLabel: 'Save',
+      initialValues,
+    });
+    setIsModalOpen(true);
   };
 
   useEffect(() => {
@@ -52,6 +68,7 @@ const Groups = () => {
           <GroupTable
             data={data}
             isLoading={isLoading}
+            handleRenameModal={handleRenameModal}
             openModal={() => setIsModalOpen(true)}
           />
         ) : (
@@ -79,8 +96,8 @@ const Groups = () => {
       <Modal
         isOpen={isModalOpen}
         openModal={() => setIsModalOpen(false)}
-        title="Create group"
-        submitLabel="Create"
+        title={modalState.title}
+        submitLabel={modalState.submitLabel}
         schema={{
           fields: [
             {
@@ -94,7 +111,8 @@ const Groups = () => {
             },
           ],
         }}
-        onSubmit={(values) => createGroup(values)}
+        initialValues={modalState.initialValues}
+        onSubmit={modalState.onSubmit}
         reloadData={() => fetchGroups()}
       />
     </>
