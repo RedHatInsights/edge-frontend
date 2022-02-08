@@ -8,7 +8,7 @@ import {
   TableBody,
   sortable,
 } from '@patternfly/react-table';
-import { Skeleton } from '@patternfly/react-core';
+import { Checkbox, Skeleton } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
@@ -69,7 +69,12 @@ const GeneralTable = ({
   const [sortBy, setSortBy] = useState(defaultSort);
   const [perPage, setPerPage] = useState(20);
   const [page, setPage] = useState(1);
-  const [checkedRows, setCheckedRows] = useState([]);
+  const [checkBoxState, setCheckBoxState] = useState({
+    hasCheckbox: hasCheckbox,
+    selectAll: false,
+    checkedRows: []
+  });
+  const [selectAll, setSelectAll] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -178,11 +183,9 @@ const GeneralTable = ({
       )
     : rows;
 
-  const selectedRows = () =>
-    filteredRows.map((row, index) =>
-      checkedRows.includes(-1)
-        ? { ...row, selected: true }
-        : checkedRows.includes(index)
+  const selectedRows = () => 
+    filteredRows.map((row, index) => 
+      checkBoxState.checkedRows.some(row => row.rowIndex === index)
         ? {
             ...row,
             selected: true,
@@ -192,6 +195,15 @@ const GeneralTable = ({
             selected: false,
           }
     );
+
+    useEffect(() => {
+      if (checkBoxState.selectAll) {
+        setCheckBoxState(prevState => ({
+          ...prevState,
+          checkedRows: [...filteredRows.map((row, index) => ({ rowIndex: index, id: row?.id }))]
+        }))
+      }
+    },[checkBoxState.selectAll])
 
   const loadingRows = (perPage) =>
     [...Array(skeletonRowQuantity ?? perPage)].map(() => ({
@@ -216,6 +228,8 @@ const GeneralTable = ({
         toggleButton={toggleButton}
         toggleAction={toggleAction}
         toggleState={toggleState}
+        checkBoxState={checkBoxState}
+        setCheckBoxState={setCheckBoxState}
       />
       {!isLoading && count < 1 ? (
         <CustomEmptyState
@@ -256,26 +270,24 @@ const GeneralTable = ({
           rows={
             isLoading
               ? loadingRows(perPage)
-              : hasCheckbox
+              : checkBoxState.hasCheckbox
               ? selectedRows()
               : filteredRows
           }
           onSelect={
-            hasCheckbox
-              ? (_event, isSelecting, rowIndex) => {
-                  rowIndex === -1 && !isSelecting
-                    ? setCheckedRows([])
-                    : rowIndex === -1
-                    ? setCheckedRows(filteredRows.map((_v, index) => index))
-                    : setCheckedRows((prevState) =>
-                        isSelecting
-                          ? [...prevState, rowIndex]
-                          : prevState.filter((index) => index !== rowIndex)
-                      );
-                }
+            checkBoxState.hasCheckbox
+              ? (event, isSelecting, rowIndex) => {
+                setCheckBoxState(prevState => ({
+                  ...prevState,
+                  selectAll: false,
+                  checkedRows: isSelecting
+                  ? [...prevState.checkedRows, {rowIndex: rowIndex, id: filteredRows[rowIndex]?.id}]
+                  : prevState.checkedRows.filter((row) => row.rowIndex !== rowIndex)
+                }))
+              }
               : null
           }
-          canSelectAll={hasCheckbox}
+          canSelectAll={false}
         >
           <TableHeader />
           <TableBody />

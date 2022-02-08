@@ -25,6 +25,8 @@ describe('Filter controls', () => {
         filters={filters}
         filterValues={filterValues}
         setFilterValues={setFilterValues}
+        checkBoxState={{hasCheckbox: false}}
+        setCheckBoxState={() => jest.fn()}
       />
     );
 

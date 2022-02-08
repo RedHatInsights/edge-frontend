@@ -39,6 +39,8 @@ const ToolbarHeader = ({
   toggleButton,
   toggleAction,
   toggleState,
+  checkBoxState,
+  setCheckBoxState,
 }) => {
   return (
     <Toolbar id="toolbar" data-testid="toolbar-header-testid">
@@ -47,6 +49,8 @@ const ToolbarHeader = ({
           filters={filters}
           filterValues={filterValues}
           setFilterValues={setFilterValues}
+          checkBoxState={checkBoxState}
+          setCheckBoxState={setCheckBoxState}
         />
         {toolbarButtons && <ToolbarButtons buttons={toolbarButtons} />}
         {toggleButton && (
