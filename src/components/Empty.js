@@ -38,9 +38,9 @@ const Empty = ({
     <EmptyStateBody>{body}</EmptyStateBody>
     {primaryAction && (
       <>
-        {primaryAction.isLink ? (
+        {primaryAction.href ? (
           <Button component={Link} to={primaryAction.href}>
-            Back to Manage Images
+            {primaryAction.text}
           </Button>
         ) : (
           <Button onClick={primaryAction.click} variant="primary">
