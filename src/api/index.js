@@ -454,7 +454,10 @@ export const getGroupById = (id) => {
 };
 
 export const updateGroupById = (id, payload) => {
-  return instance.post(`${EDGE_API}/device-groups/${id}`, payload);
+  return instance.put(`${EDGE_API}/device-groups/${id}`, {
+    Name: payload.name,
+    Type: 'static',
+  });
 };
 
 export const deleteGroupById = (id) => {
