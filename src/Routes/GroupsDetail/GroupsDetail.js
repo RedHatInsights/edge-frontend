@@ -8,7 +8,7 @@ import {
   DropdownPosition,
   Flex,
   FlexItem,
-  Bullseye,
+  Skeleton,
 } from '@patternfly/react-core';
 import {
   PageHeader,
@@ -34,22 +34,32 @@ const GroupsDetail = () => {
     (async () => {
       const { groupId } = params;
       const groupData = await getGroupById(groupId);
-      setData(groupData.data);
+      setData(groupData);
     })();
   }, []);
 
   return (
     <>
       <PageHeader className="pf-m-light">
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <Link to={`${paths['fleet-management']}`}>Fleet Management</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem>Group 1</BreadcrumbItem>
-        </Breadcrumb>
+        {data?.Name ? (
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link to={`${paths['fleet-management']}`}>Fleet Management</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>{data.Name}</BreadcrumbItem>
+          </Breadcrumb>
+        ) : (
+          <Breadcrumb isActive>
+            <Skeleton width="100px" />
+          </Breadcrumb>
+        )}
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
           <FlexItem>
-            <PageHeaderTitle title="Group 1" />
+            {data?.Name ? (
+              <PageHeaderTitle title={data?.Name} />
+            ) : (
+              <Skeleton width="150px" />
+            )}
           </FlexItem>
           <FlexItem>
             <Dropdown
@@ -66,9 +76,7 @@ const GroupsDetail = () => {
               }
               isOpen={isDropdownOpen}
               dropdownItems={[
-                <DropdownItem key="update-all-devices">
-                  Update all devices
-                </DropdownItem>,
+                <DropdownItem key="update-all-devices">Delete</DropdownItem>,
               ]}
             />
           </FlexItem>
@@ -78,16 +86,24 @@ const GroupsDetail = () => {
         {data?.devices?.length > 0 ? (
           <DeviceTable />
         ) : (
-          <Bullseye>
+          <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
-              title="No systems in group yet!"
+              icon="cube"
+              title="Add systems to the group"
+              body="Create system groups to help manage your devices more effectively"
               primaryAction={{
-                text: 'Add some systems',
+                text: 'Add systems',
                 click: () => setIsModalOpen(true),
               }}
-              secondaryActions={[]}
+              secondaryActions={[
+                {
+                  type: 'link',
+                  title: 'Learn more about system groups',
+                  link: '#',
+                },
+              ]}
             />
-          </Bullseye>
+          </Flex>
         )}
       </Main>
 

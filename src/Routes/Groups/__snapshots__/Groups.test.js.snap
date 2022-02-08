@@ -15,7 +15,7 @@ exports[`Groups should render correctly 1`] = `
       widget-type="InsightsPageHeaderTitle"
     >
        
-      Fleet management
+      Groups
        
     </h1>
   </div>

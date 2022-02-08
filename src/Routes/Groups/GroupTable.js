@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
+import { Tooltip } from '@patternfly/react-core';
 
 const filters = [{ label: 'Name', type: 'text' }];
 
 const columns = [
   { title: 'Name', type: 'name', sort: true },
-  //{ title: 'Systems', type: 'name', sort: false },
-  //{ title: 'Image', type: 'name', sort: false },
-  //{ title: 'Status', type: 'name', sort: false },
+  { title: 'Systems', type: 'name', sort: false },
+  { title: 'Image', type: 'name', sort: false },
 ];
 
 const GroupTable = ({ data, isLoading, openModal }) => {
@@ -28,22 +28,37 @@ const GroupTable = ({ data, isLoading, openModal }) => {
   };
 
   const buildRows = data.map((rowData) => {
-    const { ID, Name } = rowData;
+    const { ID, Name, Devices } = rowData;
+    const systems = Devices ?? [];
+
+    // temp static data to show dif version of mockups
+    const image = (
+      <div>
+        <Tooltip
+          content={
+            <div>
+              <p>Golden Image</p>
+              <p> Super Golden Image</p>
+            </div>
+          }
+        >
+          <span>Multiple images</span>
+        </Tooltip>
+      </div>
+    );
+
     return {
       noApiSortFilter: [Name],
       cells: [
         {
           title: <Link to={`${paths['fleet-management']}/${ID}`}>{Name}</Link>,
         },
-        //{
-        //  title: systems,
-        //},
-        //{
-        //  title: image,
-        //},
-        //{
-        //  title: status,
-        //},
+        {
+          title: systems.length,
+        },
+        {
+          title: ID === 1 ? image : 'Golden image',
+        },
       ],
     };
   });
@@ -60,6 +75,9 @@ const GroupTable = ({ data, isLoading, openModal }) => {
       }}
       columnNames={columns}
       rows={buildRows}
+      emptyFilterIcon=""
+      emptyFilterMessage="No matching groups found"
+      emptyFilterBody="To continue, edit your filter settings and try again"
       actionResolver={actionResolver}
       areActionsDisabled={() => false}
       defaultSort={{ index: 0, direction: 'desc' }}
