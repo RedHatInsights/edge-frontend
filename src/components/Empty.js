@@ -11,7 +11,6 @@ import RepositoryIcon from '@patternfly/react-icons/dist/esm/icons/repository-ic
 import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
 import ModuleIcon from '@patternfly/react-icons/dist/esm/icons/module-icon';
 import CubeIcon from '@patternfly/react-icons/dist/esm/icons/cube-icon';
-import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import {
   ExternalLinkAltIcon,
   QuestionCircleIcon,
