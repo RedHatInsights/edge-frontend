@@ -113,5 +113,7 @@ ToolbarHeader.propTypes = {
   toggleButton: PropTypes.array,
   toggleAction: PropTypes.func,
   toggleState: PropTypes.number,
+  setCheckBoxState: PropTypes.func,
+  checkBoxState: PropTypes.object,
 };
 export default ToolbarHeader;

@@ -40,7 +40,7 @@ describe('Toolbar Header', () => {
           setPerPage={setPerPage}
           page={1}
           setPage={setPage}
-          checkBoxState={{hasCheckbox: false}}
+          checkBoxState={{ hasCheckbox: false }}
           setCheckBoxState={() => jest.fn()}
         />
       );

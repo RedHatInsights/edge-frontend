@@ -8,7 +8,7 @@ import {
   TableBody,
   sortable,
 } from '@patternfly/react-table';
-import { Checkbox, Skeleton } from '@patternfly/react-core';
+import { Skeleton } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
@@ -72,9 +72,8 @@ const GeneralTable = ({
   const [checkBoxState, setCheckBoxState] = useState({
     hasCheckbox: hasCheckbox,
     selectAll: false,
-    checkedRows: []
+    checkedRows: [],
   });
-  const [selectAll, setSelectAll] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -183,9 +182,9 @@ const GeneralTable = ({
       )
     : rows;
 
-  const selectedRows = () => 
-    filteredRows.map((row, index) => 
-      checkBoxState.checkedRows.some(row => row.rowIndex === index)
+  const selectedRows = () =>
+    filteredRows.map((row, index) =>
+      checkBoxState.checkedRows.some((row) => row.rowIndex === index)
         ? {
             ...row,
             selected: true,
@@ -196,14 +195,19 @@ const GeneralTable = ({
           }
     );
 
-    useEffect(() => {
-      if (checkBoxState.selectAll) {
-        setCheckBoxState(prevState => ({
-          ...prevState,
-          checkedRows: [...filteredRows.map((row, index) => ({ rowIndex: index, id: row?.id }))]
-        }))
-      }
-    },[checkBoxState.selectAll])
+  useEffect(() => {
+    if (checkBoxState.selectAll) {
+      setCheckBoxState((prevState) => ({
+        ...prevState,
+        checkedRows: [
+          ...filteredRows.map((row, index) => ({
+            rowIndex: index,
+            id: row?.id,
+          })),
+        ],
+      }));
+    }
+  }, [checkBoxState.selectAll]);
 
   const loadingRows = (perPage) =>
     [...Array(skeletonRowQuantity ?? perPage)].map(() => ({
@@ -277,14 +281,22 @@ const GeneralTable = ({
           onSelect={
             checkBoxState.hasCheckbox
               ? (event, isSelecting, rowIndex) => {
-                setCheckBoxState(prevState => ({
-                  ...prevState,
-                  selectAll: false,
-                  checkedRows: isSelecting
-                  ? [...prevState.checkedRows, {rowIndex: rowIndex, id: filteredRows[rowIndex]?.id}]
-                  : prevState.checkedRows.filter((row) => row.rowIndex !== rowIndex)
-                }))
-              }
+                  setCheckBoxState((prevState) => ({
+                    ...prevState,
+                    selectAll: false,
+                    checkedRows: isSelecting
+                      ? [
+                          ...prevState.checkedRows,
+                          {
+                            rowIndex: rowIndex,
+                            id: filteredRows[rowIndex]?.id,
+                          },
+                        ]
+                      : prevState.checkedRows.filter(
+                          (row) => row.rowIndex !== rowIndex
+                        ),
+                  }));
+                }
               : null
           }
           canSelectAll={false}
