@@ -184,7 +184,7 @@ const GeneralTable = ({
 
   const selectedRows = () =>
     filteredRows.map((row, index) =>
-      checkBoxState.checkedRows.some((row) => row.rowIndex === index)
+      checkBoxState.checkedRows.some((row) => row.id === filteredRows[index].id)
         ? {
             ...row,
             selected: true,
@@ -200,8 +200,7 @@ const GeneralTable = ({
       setCheckBoxState((prevState) => ({
         ...prevState,
         checkedRows: [
-          ...filteredRows.map((row, index) => ({
-            rowIndex: index,
+          ...filteredRows.map((row) => ({
             id: row?.id,
           })),
         ],
@@ -280,7 +279,7 @@ const GeneralTable = ({
           }
           onSelect={
             checkBoxState.hasCheckbox
-              ? (event, isSelecting, rowIndex) => {
+              ? (_event, isSelecting, rowIndex) => {
                   setCheckBoxState((prevState) => ({
                     ...prevState,
                     selectAll: false,
@@ -288,12 +287,11 @@ const GeneralTable = ({
                       ? [
                           ...prevState.checkedRows,
                           {
-                            rowIndex: rowIndex,
                             id: filteredRows[rowIndex]?.id,
                           },
                         ]
                       : prevState.checkedRows.filter(
-                          (row) => row.rowIndex !== rowIndex
+                          (row) => row.id !== filteredRows[rowIndex].id
                         ),
                   }));
                 }
