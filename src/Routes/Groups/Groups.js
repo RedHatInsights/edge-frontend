@@ -10,28 +10,23 @@ import Empty from '../../components/Empty';
 import Modal from '../../components/Modal';
 import { Link } from 'react-router-dom';
 import { getGroups } from '../../api/index';
+import { createGroup } from '../../api/index';
 
 const Groups = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchGroups = async () => {
+    const groups = await getGroups();
+    setData(groups.data);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    (async () => {
-      const groups = await getGroups();
-      console.log(groups);
-
-      //setData(groups.data);
-      setData([
-        {
-          id: 1,
-          name: 'group1',
-          systems: '500',
-          image: 'super golden image',
-          status: '100%',
-        },
-      ]);
-    })();
+    fetchGroups();
   }, []);
+
   return (
     <>
       <PageHeader className="pf-m-light">
@@ -49,8 +44,12 @@ const Groups = () => {
         </Flex>
       </PageHeader>
       <Main className="edge-devices">
-        {data?.length > 0 ? (
-          <GroupTable data={data} openModal={() => setIsModalOpen(true)} />
+        {data?.length > 0 || isLoading ? (
+          <GroupTable
+            data={data}
+            isLoading={isLoading}
+            openModal={() => setIsModalOpen(true)}
+          />
         ) : (
           <Bullseye>
             <Empty
@@ -75,8 +74,8 @@ const Groups = () => {
             { component: 'text-field', name: 'name', label: 'Group name' },
           ],
         }}
-        onSubmit={() => console.log('submitted')}
-        reloadData={() => console.log('data reloaded')}
+        onSubmit={(values) => createGroup(values)}
+        reloadData={() => fetchGroups()}
       />
     </>
   );

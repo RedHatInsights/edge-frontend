@@ -439,7 +439,10 @@ export const getInventory = async () => {
 };
 
 export const createGroup = (payload) => {
-  return instance.post(`${EDGE_API}/device-groups/`, payload);
+  return instance.post(`${EDGE_API}/device-groups/`, {
+    Name: payload.name,
+    Type: 'static',
+  });
 };
 
 export const getGroups = () => {
