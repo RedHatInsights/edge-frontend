@@ -60,6 +60,9 @@ const GroupTable = ({ data, isLoading, openModal }) => {
       }}
       columnNames={columns}
       rows={buildRows}
+      emptyFilterIcon=""
+      emptyFilterMessage="No matching groups found"
+      emptyFilterBody="To continue, edit your filter settings and try again"
       actionResolver={actionResolver}
       areActionsDisabled={() => false}
       defaultSort={{ index: 0, direction: 'desc' }}

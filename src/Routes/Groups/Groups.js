@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, FlexItem, Bullseye } from '@patternfly/react-core';
+import { Skeleton, Button, Flex, FlexItem } from '@patternfly/react-core';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -11,6 +11,8 @@ import Modal from '../../components/Modal';
 import { Link } from 'react-router-dom';
 import { getGroups } from '../../api/index';
 import { createGroup } from '../../api/index';
+import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
+import { nameValidator } from '../../constants';
 
 const Groups = () => {
   const [data, setData] = useState([]);
@@ -32,7 +34,7 @@ const Groups = () => {
       <PageHeader className="pf-m-light">
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
           <FlexItem>
-            <PageHeaderTitle title="Fleet management" />
+            <PageHeaderTitle title="Groups" />
           </FlexItem>
           <FlexItem>
             <Button variant="secondary">
@@ -44,23 +46,33 @@ const Groups = () => {
         </Flex>
       </PageHeader>
       <Main className="edge-devices">
-        {data?.length > 0 || isLoading ? (
+        {isLoading ? (
+          <Skeleton />
+        ) : data?.length > 0 ? (
           <GroupTable
             data={data}
             isLoading={isLoading}
             openModal={() => setIsModalOpen(true)}
           />
         ) : (
-          <Bullseye>
+          <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
-              title="No groups yet!"
+              icon="module"
+              title="Create a system group"
+              body="Create system groups to help manage your devices more effectively"
               primaryAction={{
                 text: 'Create group',
                 click: () => setIsModalOpen(true),
               }}
-              secondaryActions={[]}
+              secondaryActions={[
+                {
+                  type: 'link',
+                  title: 'Learn more about system groups',
+                  link: '#',
+                },
+              ]}
             />
-          </Bullseye>
+          </Flex>
         )}
       </Main>
 
@@ -68,10 +80,18 @@ const Groups = () => {
         isOpen={isModalOpen}
         openModal={() => setIsModalOpen(false)}
         title="Create group"
-        submitLabel="Save"
+        submitLabel="Create"
         schema={{
           fields: [
-            { component: 'text-field', name: 'name', label: 'Group name' },
+            {
+              component: 'text-field',
+              name: 'name',
+              label: 'Group name',
+              helperText:
+                'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
+              isRequired: true,
+              validate: [{ type: validatorTypes.REQUIRED }, nameValidator],
+            },
           ],
         }}
         onSubmit={(values) => createGroup(values)}
