@@ -8,6 +8,7 @@ import {
   repositories,
   imageSetDetails,
   imageOutput,
+  customPackages,
 } from './steps';
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -120,6 +121,7 @@ const CreateImage = ({ navigateBack }) => {
               repositories,
               packages,
               review,
+              customPackages,
             ],
           },
         ],

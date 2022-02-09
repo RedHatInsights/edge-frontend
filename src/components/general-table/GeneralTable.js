@@ -85,7 +85,7 @@ const GeneralTable = ({
   const history = useHistory();
 
   useEffect(() => {
-    if (!history.location.search.includes('add_system_modal=true')) {
+    if (!history.location.search.includes('add_system_modal=true') && !history.location.search.includes('create_image=true')) {
       history.push({
         pathname: history.location.pathname,
         search: stateToUrlSearch('has_filters=true', chipsArray.length > 0),
