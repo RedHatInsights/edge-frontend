@@ -58,10 +58,14 @@ const GeneralTable = ({
   emptyStateMessage,
   emptyStateAction,
   emptyStateActionMessage,
+  emptyFilterMessage,
+  emptyFilterBody,
+  emptyFilterIcon,
   toggleButton,
   toggleAction,
   toggleState,
   hasCheckbox = false,
+  skeletonRowQuantity,
 }) => {
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
@@ -193,7 +197,7 @@ const GeneralTable = ({
     );
 
   const loadingRows = (perPage) =>
-    [...Array(perPage)].map(() => ({
+    [...Array(skeletonRowQuantity ?? perPage)].map(() => ({
       cells: columnNames.map(() => ({ title: <Skeleton width="100%" /> })),
     }));
 
@@ -233,8 +237,9 @@ const GeneralTable = ({
         <CustomEmptyState
           data-testid="general-table-empty-state-no-match"
           bgColor="white"
-          icon="search"
-          title="No match found"
+          icon={emptyFilterIcon ?? 'search'}
+          title={emptyFilterMessage ?? 'No match found'}
+          body={emptyFilterBody ?? ''}
           secondaryActions={[
             {
               title: 'Clear all filters',
@@ -313,6 +318,10 @@ GeneralTable.propTypes = {
   toggleAction: PropTypes.func,
   toggleState: PropTypes.number,
   hasCheckbox: PropTypes.bool,
+  skeletonRowQuantity: PropTypes.number,
+  emptyFilterMessage: PropTypes.string,
+  emptyFilterBody: PropTypes.string,
+  emptyFilterIcon: PropTypes.string,
 };
 
 export default GeneralTable;

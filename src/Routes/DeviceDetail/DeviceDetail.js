@@ -78,6 +78,7 @@ const DeviceDetail = () => {
               ]?.Status,
           },
         },
+        imageData: image_data?.ImageInfo?.UpdatesAvailable?.[0],
       }));
       setImageId(image_data?.ImageInfo?.Image?.ID);
     })();
@@ -102,8 +103,8 @@ const DeviceDetail = () => {
         <PageHeader>
           <Breadcrumb ouiaId="systems-list">
             <BreadcrumbItem>
-              <Link to={uuid ? `/groups` : '/fleet-management'}>
-                {uuid ? 'Groups' : 'Fleet management'}
+              <Link to={uuid ? `/groups` : '/inventory'}>
+                {uuid ? 'Groups' : 'Inventory'}
               </Link>
             </BreadcrumbItem>
             {uuid && (

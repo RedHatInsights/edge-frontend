@@ -29,7 +29,7 @@ describe('RepositoryTable', () => {
 
     const openModal = jest.fn();
 
-    render(
+    const { container } = render(
       <RegistryContext.Provider
         value={{
           getRegistry: () => registry,
@@ -50,5 +50,7 @@ describe('RepositoryTable', () => {
     expect(screen.findByRole('button', 'Name')).toBeDefined();
     expect(screen.getAllByText(/test name/i)).toHaveLength(3);
     expect(screen.getAllByRole('link', /test url/i)).toHaveLength(3);
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

@@ -47,7 +47,7 @@ describe('ImageVersionsTab', () => {
 
     const registry = init(logger);
 
-    render(
+    const { container } = render(
       <RegistryContext.Provider
         value={{
           getRegistry: () => registry,
@@ -81,5 +81,7 @@ describe('ImageVersionsTab', () => {
     fireEvent.click(screen.getAllByRole('button', { name: /actions/i })[1]);
     fireEvent.click(screen.getByRole('button', { name: /update image/i }));
     expect(openUpdateWizard).toBeCalled();
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

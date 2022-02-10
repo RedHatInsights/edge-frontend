@@ -11,7 +11,7 @@ describe('Filter chips', () => {
     const setFilterValues = jest.fn();
     const setChipsArray = jest.fn();
 
-    const { findByTestId, findByText } = render(
+    const { container, findByTestId, findByText } = render(
       <FilterChips
         filterValues={filterValues}
         setFilterValues={setFilterValues}
@@ -31,5 +31,7 @@ describe('Filter chips', () => {
     expect(FilterChipsClearFilters).toBeDefined();
     expect(setFilterValues).not.toHaveBeenCalled();
     expect(setChipsArray).toHaveBeenCalled();
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

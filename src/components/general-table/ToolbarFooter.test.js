@@ -6,7 +6,7 @@ describe('Repository Footer', () => {
   it('should render correctly', async () => {
     const setPage = jest.fn();
     const setPerPage = jest.fn();
-    const { findByTestId, findByRole, findByText } = render(
+    const { container, findByTestId, findByRole, findByText } = render(
       <ToolbarFooter
         count={100}
         perPage={20}
@@ -33,5 +33,7 @@ describe('Repository Footer', () => {
     fireEvent.click(paginationPerPage);
     fireEvent.click(await findByText('50 per page'));
     expect(setPerPage).toHaveBeenCalled();
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });

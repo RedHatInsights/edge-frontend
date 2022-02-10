@@ -433,3 +433,33 @@ export const editCustomRepository = (payload) => {
 
 export const removeCustomRepository = (id) =>
   instance.delete(`${EDGE_API}/thirdpartyrepo/${id}`);
+
+export const getInventory = async () => {
+  return await instance.get(`${EDGE_API}/devices`);
+};
+
+export const createGroup = (payload) => {
+  return instance.post(`${EDGE_API}/device-groups/`, {
+    Name: payload.name,
+    Type: 'static',
+  });
+};
+
+export const getGroups = () => {
+  return instance.get(`${EDGE_API}/device-groups`);
+};
+
+export const getGroupById = (id) => {
+  return instance.get(`${EDGE_API}/device-groups/${id}`);
+};
+
+export const updateGroupById = (id, payload) => {
+  return instance.put(`${EDGE_API}/device-groups/${id}`, {
+    Name: payload.name,
+    Type: 'static',
+  });
+};
+
+export const deleteGroupById = (id) => {
+  return instance.post(`${EDGE_API}/device-groups/${id}`);
+};

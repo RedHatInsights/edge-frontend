@@ -1,249 +1,121 @@
-import React, {
-  useEffect,
-  Fragment,
-  useState,
-  lazy,
-  Suspense,
-  useContext,
-} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createNewGroup } from '../../api/';
-import { loadGroups } from '../../store/actions';
-import {
-  groupsReducer,
-  thresholdReducer,
-  devicesInfoReducer,
-  canariesInfoReducer,
-} from '../../store/reducers';
-import {
-  statusMapper,
-  isEmptyFilters,
-  constructActiveFilters,
-  onDeleteFilter,
-} from '../../constants';
+import React, { useEffect, useState } from 'react';
+import { Skeleton, Button, Flex, FlexItem } from '@patternfly/react-core';
 import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
-import { SkeletonTable } from '@redhat-cloud-services/frontend-components/SkeletonTable';
-import { PrimaryToolbar } from '@redhat-cloud-services/frontend-components/PrimaryToolbar';
-import { TableToolbar } from '@redhat-cloud-services/frontend-components/TableToolbar';
-import {
-  Stack,
-  StackItem,
-  Pagination,
-  Skeleton,
-  Button,
-} from '@patternfly/react-core';
-import GroupsInfo from './GroupsInfo';
-import GroupsTable from './GroupsTable';
-const InventoryForm = lazy(() => import('../../components/InventoryForm'));
-import schema from './newGroupSchema';
-import { RegistryContext } from '../../store';
-
-const defaultFilters = {
-  name: {
-    label: 'Name',
-    value: '',
-  },
-  security: {
-    label: 'Security',
-    value: [],
-  },
-  status: {
-    label: 'Status',
-    value: [],
-  },
-};
+import GroupTable from './GroupTable';
+import Empty from '../../components/Empty';
+import Modal from '../../components/Modal';
+import { Link } from 'react-router-dom';
+import { getGroups } from '../../api/index';
+import { createGroup, updateGroupById } from '../../api/index';
+import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
+import { nameValidator } from '../../constants';
 
 const Groups = () => {
-  const { getRegistry } = useContext(RegistryContext);
-  const [activeFilters, setActiveFilters] = useState(defaultFilters);
-  const [isNewGroupOpen, setIsNewGroupOpen] = useState(false);
-  const dispatch = useDispatch();
-  const isLoading = useSelector(
-    ({ groupsReducer }) => groupsReducer?.isLoading
-  );
-  const systemsCount = useSelector(({ groupsReducer }) =>
-    groupsReducer?.groups?.reduce(
-      (acc, { sensors } = {}) => acc + (sensors?.length || 0),
-      0
-    )
-  );
-  const meta = useSelector(
-    ({ groupsReducer }) =>
-      groupsReducer?.meta || {
-        page: 1,
-      }
-  );
-  useEffect(() => {
-    const registered = getRegistry().register({
-      groupsReducer,
-      thresholdReducer,
-      devicesInfoReducer,
-      canariesInfoReducer,
+  const [data, setData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [modalState, setModalState] = useState({
+    title: 'Create group',
+    onSubmit: (values) => createGroup(values),
+    submitLabel: 'Create',
+    initialValues: {},
+  });
+
+  const fetchGroups = async () => {
+    const groups = await getGroups();
+    setData(groups.data);
+    setIsLoading(false);
+  };
+
+  const handleRenameModal = (id, initialValues) => {
+    setModalState({
+      title: 'Rename group',
+      onSubmit: (values) => updateGroupById(id, values),
+      submitLabel: 'Save',
+      initialValues,
     });
-    dispatch(loadGroups());
-    () => registered();
+    setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    fetchGroups();
   }, []);
 
   return (
-    <Fragment>
+    <>
       <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Available groups" />
+        <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
+          <FlexItem>
+            <PageHeaderTitle title="Groups" />
+          </FlexItem>
+          <FlexItem>
+            <Button variant="secondary">
+              <Link style={{ textDecoration: 'none' }} to="/inventory">
+                View entire inventory
+              </Link>
+            </Button>
+          </FlexItem>
+        </Flex>
       </PageHeader>
-      <Main className="edge-groups">
-        <Stack hasGutter>
-          <StackItem className="edge-groups__info">
-            <GroupsInfo numberOfSystems={systemsCount} />
-          </StackItem>
-          <StackItem isFilled>
-            <PrimaryToolbar
-              {...(isLoading === false
-                ? {
-                    pagination: {
-                      itemCount: meta?.count,
-                      page: meta?.offset / meta?.limit + 1,
-                      perPage: Number(meta?.limit),
-                      isCompact: true,
-                    },
-                    dedicatedAction: (
-                      <Button
-                        onClick={() => setIsNewGroupOpen(true)}
-                        isDisabled={isLoading !== false}
-                      >
-                        Add group
-                      </Button>
-                    ),
-                    filterConfig: {
-                      items: [
-                        {
-                          label: defaultFilters.name.label,
-                          type: 'text',
-                          filterValues: {
-                            key: 'text-filter',
-                            onChange: (event, value) =>
-                              setActiveFilters(() => ({
-                                ...activeFilters,
-                                name: {
-                                  ...(activeFilters?.name || {}),
-                                  value,
-                                },
-                              })),
-                            value: activeFilters?.name?.value || '',
-                            placeholder: 'Filter by name',
-                          },
-                        },
-                        {
-                          label: defaultFilters.security.label,
-                          type: 'checkbox',
-                          filterValues: {
-                            key: 'security-filter',
-                            onChange: (event, value) =>
-                              setActiveFilters({
-                                ...(activeFilters || {}),
-                                security: {
-                                  ...(activeFilters?.security || {}),
-                                  value,
-                                },
-                              }),
-                            items: [
-                              {
-                                value: 'isSecure',
-                                label: 'Secure',
-                              },
-                              {
-                                value: 'nonSecure',
-                                label: 'Not secure',
-                              },
-                            ],
-                            value: activeFilters?.security?.value || [],
-                          },
-                        },
-                        {
-                          label: defaultFilters.status.label,
-                          type: 'checkbox',
-                          filterValues: {
-                            key: 'status-filter',
-                            onChange: (event, value) =>
-                              setActiveFilters({
-                                ...(activeFilters || {}),
-                                status: {
-                                  ...(activeFilters?.status || {}),
-                                  value,
-                                },
-                              }),
-                            items: statusMapper.map((item) => ({
-                              value: item,
-                              label: `${item
-                                .charAt(0)
-                                .toUpperCase()}${item.slice(1)}`,
-                            })),
-                            value: activeFilters?.status?.value || [],
-                          },
-                        },
-                      ],
-                    },
-                    activeFiltersConfig: {
-                      filters: isEmptyFilters(activeFilters)
-                        ? constructActiveFilters(activeFilters)
-                        : [],
-                      onDelete: (event, itemsToRemove, isAll) => {
-                        if (isAll) {
-                          setActiveFilters(defaultFilters);
-                        } else {
-                          setActiveFilters(() =>
-                            onDeleteFilter(activeFilters, itemsToRemove)
-                          );
-                        }
-                      },
-                    },
-                  }
-                : {
-                    pagination: <Skeleton />,
-                  })}
-            />
-            {isLoading === false ? (
-              <GroupsTable onAddNewGroup={() => setIsNewGroupOpen(true)} />
-            ) : (
-              <SkeletonTable colSize={5} rowSize={15} />
-            )}
-            <TableToolbar isFooter>
-              {isLoading === false && (
-                <Pagination
-                  itemCount={meta?.count}
-                  page={meta?.offset / meta?.limit + 1}
-                  perPage={Number(meta?.limit)}
-                  dropDirection="up"
-                />
-              )}
-            </TableToolbar>
-          </StackItem>
-        </Stack>
-      </Main>
-      {isNewGroupOpen && (
-        <Suspense fallback="">
-          <InventoryForm
-            schema={schema}
-            isOpened={isNewGroupOpen}
-            onAction={(isSubmit, values) => {
-              if (isSubmit) {
-                (async () => {
-                  await createNewGroup({
-                    groupName: values['group-name'],
-                    isSecure: values['is-secure'],
-                    systemIDs: values.selected,
-                  });
-                  dispatch(loadGroups());
-                })();
-              }
-              setIsNewGroupOpen(false);
-            }}
+      <Main className="edge-devices">
+        {isLoading ? (
+          <Skeleton />
+        ) : data?.length > 0 ? (
+          <GroupTable
+            data={data}
+            isLoading={isLoading}
+            handleRenameModal={handleRenameModal}
+            openModal={() => setIsModalOpen(true)}
           />
-        </Suspense>
-      )}
-    </Fragment>
+        ) : (
+          <Flex justifyContent={{ default: 'justifyContentCenter' }}>
+            <Empty
+              icon="module"
+              title="Create a system group"
+              body="Create system groups to help manage your devices more effectively"
+              primaryAction={{
+                text: 'Create group',
+                click: () => setIsModalOpen(true),
+              }}
+              secondaryActions={[
+                {
+                  type: 'link',
+                  title: 'Learn more about system groups',
+                  link: '#',
+                },
+              ]}
+            />
+          </Flex>
+        )}
+      </Main>
+
+      <Modal
+        isOpen={isModalOpen}
+        openModal={() => setIsModalOpen(false)}
+        title={modalState.title}
+        submitLabel={modalState.submitLabel}
+        schema={{
+          fields: [
+            {
+              component: 'text-field',
+              name: 'name',
+              label: 'Group name',
+              helperText:
+                'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
+              isRequired: true,
+              validate: [{ type: validatorTypes.REQUIRED }, nameValidator],
+            },
+          ],
+        }}
+        initialValues={modalState.initialValues}
+        onSubmit={modalState.onSubmit}
+        reloadData={() => fetchGroups()}
+      />
+    </>
   );
 };
 

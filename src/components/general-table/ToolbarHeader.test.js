@@ -25,22 +25,23 @@ describe('Toolbar Header', () => {
     const setPage = jest.fn();
     const setPerPage = jest.fn();
 
-    const { findByTestId, findByPlaceholderText, findByRole } = render(
-      <ToolbarHeader
-        count={100}
-        toolbarButtons={toolbarButtons}
-        filters={filters}
-        filterValues={filterValues}
-        setFilterValues={setFilterValues}
-        chipsArray={chipsArray}
-        setChipsArray={setChipsArray}
-        isLoading={false}
-        perPage={20}
-        setPerPage={setPerPage}
-        page={1}
-        setPage={setPage}
-      />
-    );
+    const { container, findByTestId, findByPlaceholderText, findByRole } =
+      render(
+        <ToolbarHeader
+          count={100}
+          toolbarButtons={toolbarButtons}
+          filters={filters}
+          filterValues={filterValues}
+          setFilterValues={setFilterValues}
+          chipsArray={chipsArray}
+          setChipsArray={setChipsArray}
+          isLoading={false}
+          perPage={20}
+          setPerPage={setPerPage}
+          page={1}
+          setPage={setPage}
+        />
+      );
 
     const headerElement = await findByTestId('toolbar-header-testid');
     const headerInput = await findByPlaceholderText('Filter by Test 1');
@@ -55,5 +56,7 @@ describe('Toolbar Header', () => {
     expect(paginationElement.children[0].innerHTML).toEqual(
       '<b>1 - 20</b> of <b>100</b> '
     );
+
+    expect(container.querySelector('div')).toMatchSnapshot();
   });
 });
