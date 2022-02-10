@@ -39,6 +39,6 @@ describe('Packages', () => {
     });
     expect(
       screen.getByTestId('chosen-packages-list').children[0].textContent
-    ).toEqual('my test package');
+    ).toEqual('my test package')
   });
 });
