@@ -183,8 +183,8 @@ const GeneralTable = ({
     : rows;
 
   const selectedRows = () =>
-    filteredRows.map((row, index) =>
-      checkBoxState.checkedRows.some((row) => row.id === filteredRows[index].id)
+    filteredRows.map(row =>
+      checkBoxState.checkedRows.some(checkedRow => checkedRow.id === row.id)
         ? {
             ...row,
             selected: true,
@@ -194,6 +194,32 @@ const GeneralTable = ({
             selected: false,
           }
     );
+
+  const handleSelect = (_event, isSelecting, rowIndex) => {
+    setCheckBoxState((prevState) => ({
+      ...prevState,
+      selectAll: false,
+      checkedRows: isSelecting
+        ? [
+            ...prevState.checkedRows,
+            {
+              id: filteredRows[rowIndex].id,
+            },
+          ]
+        : prevState.checkedRows.filter(
+            (row) => row.id !== filteredRows[rowIndex].id
+          ),
+    }));
+  }
+
+  useEffect(() => {
+    if (checkBoxState.checkedRows.length > 0 && checkBoxState.checkedRows.length === filteredRows.length) {
+      setCheckBoxState(prevState => ({
+        ...prevState,
+        selectAll: true,
+      }))
+    }
+  },[checkBoxState.checkedRows])
 
   useEffect(() => {
     if (checkBoxState.selectAll) {
@@ -277,26 +303,7 @@ const GeneralTable = ({
               ? selectedRows()
               : filteredRows
           }
-          onSelect={
-            checkBoxState.hasCheckbox
-              ? (_event, isSelecting, rowIndex) => {
-                  setCheckBoxState((prevState) => ({
-                    ...prevState,
-                    selectAll: false,
-                    checkedRows: isSelecting
-                      ? [
-                          ...prevState.checkedRows,
-                          {
-                            id: filteredRows[rowIndex]?.id,
-                          },
-                        ]
-                      : prevState.checkedRows.filter(
-                          (row) => row.id !== filteredRows[rowIndex].id
-                        ),
-                  }));
-                }
-              : null
-          }
+          onSelect={checkBoxState.hasCheckbox && handleSelect}
           canSelectAll={false}
         >
           <TableHeader />
