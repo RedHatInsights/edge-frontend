@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Skeleton, Button, Flex, FlexItem } from '@patternfly/react-core';
+import { Skeleton, Flex } from '@patternfly/react-core';
 import {
   PageHeader,
   PageHeaderTitle,
