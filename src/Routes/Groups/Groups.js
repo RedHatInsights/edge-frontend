@@ -12,22 +12,28 @@ import { getGroups } from '../../api/index';
 import { createGroup, updateGroupById } from '../../api/index';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { nameValidator } from '../../constants';
+const createModalState = {
+  title: 'Create group',
+  onSubmit: (values) => createGroup(values),
+  submitLabel: 'Create',
+  initialValues: {},
+};
 
 const Groups = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [modalState, setModalState] = useState({
-    title: 'Create group',
-    onSubmit: (values) => createGroup(values),
-    submitLabel: 'Create',
-    initialValues: {},
-  });
+  const [modalState, setModalState] = useState(createModalState);
 
   const fetchGroups = async () => {
     const groups = await getGroups();
     setData(groups.data);
     setIsLoading(false);
+  };
+
+  const handleCreateModal = () => {
+    setModalState(createModalState);
+    setIsModalOpen(true);
   };
 
   const handleRenameModal = (id, initialValues) => {
@@ -57,7 +63,7 @@ const Groups = () => {
             data={data}
             isLoading={isLoading}
             handleRenameModal={handleRenameModal}
-            openModal={() => setIsModalOpen(true)}
+            openModal={handleCreateModal}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 const RepoModal = ({
   isOpen,
   title,
-  openModal,
+  openModal, // should be closeModal, update here and other places that use it
   submitLabel,
   schema,
   initialValues,
