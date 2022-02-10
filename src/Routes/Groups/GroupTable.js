@@ -3,10 +3,15 @@ import PropTypes from 'prop-types';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
+import { Tooltip } from '@patternfly/react-core';
 
 const filters = [{ label: 'Name', type: 'text' }];
 
-const columns = [{ title: 'Name', type: 'name', sort: true }];
+const columns = [
+  { title: 'Name', type: 'name', sort: true },
+  { title: 'Systems', type: 'name', sort: false },
+  { title: 'Image', type: 'name', sort: false },
+];
 
 const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
   const actionResolver = (rowData) => {
@@ -16,11 +21,32 @@ const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
         title: 'Rename',
         onClick: () => handleRenameModal(id, { name: title }),
       },
+      {
+        title: 'Delete',
+        onClick: () => console.log('updating'),
+      },
     ];
   };
 
   const buildRows = data.map((rowData) => {
-    const { ID, Name } = rowData;
+    const { ID, Name, Devices } = rowData;
+    const systems = Devices ?? [];
+
+    // temp static data to show dif version of mockups
+    const image = (
+      <div>
+        <Tooltip
+          content={
+            <div>
+              <p>Golden Image</p>
+              <p> Super Golden Image</p>
+            </div>
+          }
+        >
+          <span>Multiple images</span>
+        </Tooltip>
+      </div>
+    );
 
     return {
       id: ID,
@@ -29,6 +55,12 @@ const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
       cells: [
         {
           title: <Link to={`${paths['fleet-management']}/${ID}`}>{Name}</Link>,
+        },
+        {
+          title: systems.length,
+        },
+        {
+          title: ID === 1 ? image : 'Golden image',
         },
       ],
     };

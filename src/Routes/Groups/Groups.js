@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Skeleton, Flex } from '@patternfly/react-core';
+import { Skeleton, Button, Flex, FlexItem } from '@patternfly/react-core';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -8,6 +8,7 @@ import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import GroupTable from './GroupTable';
 import Empty from '../../components/Empty';
 import Modal from '../../components/Modal';
+import { Link } from 'react-router-dom';
 import { getGroups } from '../../api/index';
 import { createGroup, updateGroupById } from '../../api/index';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
@@ -53,7 +54,18 @@ const Groups = () => {
   return (
     <>
       <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Groups" />
+        <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
+          <FlexItem>
+            <PageHeaderTitle title="Groups" />
+          </FlexItem>
+          <FlexItem>
+            <Button variant="secondary">
+              <Link style={{ textDecoration: 'none' }} to="/inventory">
+                View entire inventory
+              </Link>
+            </Button>
+          </FlexItem>
+        </Flex>
       </PageHeader>
       <Main className="edge-devices">
         {isLoading ? (
