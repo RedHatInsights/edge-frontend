@@ -5,32 +5,35 @@ import { Text, TextVariants } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 
 const filters = [{ label: 'Name', type: 'text' }];
+const modeSelection = 'selection';
 
-const RepositoryTable = ({ data, openModal }) => {
+const RepositoryTable = ({ data, openModal, mode }) => {
   const actionResolver = (rowData) => {
     const { id, repoName, repoBaseURL } = rowData;
-    return [
-      {
-        title: 'Edit',
-        onClick: () =>
-          openModal({
-            type: 'edit',
-            id: id,
-            name: repoName,
-            baseURL: repoBaseURL,
-          }),
-      },
-      {
-        title: 'Remove',
-        onClick: () =>
-          openModal({
-            type: 'remove',
-            id: id,
-            name: repoName,
-            baseURL: repoBaseURL,
-          }),
-      },
-    ];
+    return mode === modeSelection
+      ? []
+      : [
+          {
+            title: 'Edit',
+            onClick: () =>
+              openModal({
+                type: 'edit',
+                id: id,
+                name: repoName,
+                baseURL: repoBaseURL,
+              }),
+          },
+          {
+            title: 'Remove',
+            onClick: () =>
+              openModal({
+                type: 'remove',
+                id: id,
+                name: repoName,
+                baseURL: repoBaseURL,
+              }),
+          },
+        ];
   };
 
   const buildRows = data.map(({ id, name, baseURL }) => {
@@ -76,18 +79,23 @@ const RepositoryTable = ({ data, openModal }) => {
       actionResolver={actionResolver}
       areActionsDisabled={() => false}
       defaultSort={{ index: 0, direction: 'desc' }}
-      toolbarButtons={[
-        {
-          title: 'Add repository',
-          click: () => openModal({ type: 'add' }),
-        },
-      ]}
+      toolbarButtons={
+        mode === modeSelection
+          ? []
+          : [
+              {
+                title: 'Add repository',
+                click: () => openModal({ type: 'add' }),
+              },
+            ]
+      }
     />
   );
 };
 RepositoryTable.propTypes = {
   data: PropTypes.array,
   openModal: PropTypes.func,
+  mode: PropTypes.string,
 };
 
 export default RepositoryTable;

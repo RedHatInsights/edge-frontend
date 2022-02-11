@@ -5,6 +5,7 @@ import {
   registration,
   review,
   packages,
+  repositories,
   imageSetDetails,
   imageOutput,
 } from './steps';
@@ -116,6 +117,7 @@ const CreateImage = ({ navigateBack }) => {
               imageSetDetails,
               imageOutput,
               registration,
+              repositories,
               packages,
               review,
             ],
