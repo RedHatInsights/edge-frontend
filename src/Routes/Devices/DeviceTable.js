@@ -232,6 +232,7 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
         //     click: () => console.log('Group Selected'),
         //   },
         // ]}
+        hasCheckbox={true}
         skeletonRowQuantity={skeletonRowQuantity}
       />
       {updateModal.isOpen && (
