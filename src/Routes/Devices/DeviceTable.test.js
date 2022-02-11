@@ -21,14 +21,7 @@ describe('ImageSets table', () => {
       </RegistryContext.Provider>
     );
 
-    const headerArray = ['', 'Name', 'Groups', 'Last Seen', 'Image', 'Status'];
-
     expect(screen.getByLabelText('Select row 0').checked).toBeFalsy();
-    expect(
-      screen.getAllByRole('columnheader').forEach((header, i) => {
-        expect(header.innerHTML).toEqual(headerArray[i]);
-      })
-    );
     expect(screen.getByRole('button', { name: 'Options menu' })).toBeDefined();
     expect(container.querySelector('div')).toMatchSnapshot();
   });
