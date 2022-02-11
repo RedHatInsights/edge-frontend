@@ -15,7 +15,8 @@
     "start": "NODE_ENV=development webpack serve --config config/dev.webpack.config.js",
     "start:proxy": "PROXY=true NODE_ENV=development webpack serve --config config/dev.webpack.config.js",
     "test": "jest --verbose",
-    "verify": "npm-run-all build lint test"
+    "verify": "npm-run-all build lint test",
+    "prepare": "husky install"
   },
   "jest": {
     "collectCoverage": true,
@@ -109,7 +110,8 @@
     "webpack": "5.57.1",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "4.9.1",
-    "webpack-dev-server": "^4.6.0"
+    "webpack-dev-server": "^4.6.0",
+    "husky": "^7.0.0"
   },
   "engines": {
     "node": ">=16.13.0 <= 16.13.1",
