@@ -183,8 +183,8 @@ const GeneralTable = ({
     : rows;
 
   const selectedRows = () =>
-    filteredRows.map(row =>
-      checkBoxState.checkedRows.some(checkedRow => checkedRow.id === row.id)
+    filteredRows.map((row) =>
+      checkBoxState.checkedRows.some((checkedRow) => checkedRow.id === row.id)
         ? {
             ...row,
             selected: true,
@@ -210,16 +210,19 @@ const GeneralTable = ({
             (row) => row.id !== filteredRows[rowIndex].id
           ),
     }));
-  }
+  };
 
   useEffect(() => {
-    if (checkBoxState.checkedRows.length > 0 && checkBoxState.checkedRows.length === filteredRows.length) {
-      setCheckBoxState(prevState => ({
+    if (
+      checkBoxState.checkedRows.length > 0 &&
+      checkBoxState.checkedRows.length === filteredRows.length
+    ) {
+      setCheckBoxState((prevState) => ({
         ...prevState,
         selectAll: true,
-      }))
+      }));
     }
-  },[checkBoxState.checkedRows])
+  }, [checkBoxState.checkedRows]);
 
   useEffect(() => {
     if (checkBoxState.selectAll) {
