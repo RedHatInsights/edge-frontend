@@ -2,7 +2,7 @@
 
 exports[`Empty renders correctly 1`] = `
 <div
-  class="pf-c-empty-state"
+  class="pf-c-empty-state pf-m-lg"
 >
   <div
     class="pf-c-empty-state__content"

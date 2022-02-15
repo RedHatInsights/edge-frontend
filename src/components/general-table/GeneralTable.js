@@ -55,12 +55,8 @@ const GeneralTable = ({
   actionResolver,
   areActionsDisabled,
   defaultSort,
-  emptyStateMessage,
-  emptyStateAction,
-  emptyStateActionMessage,
-  emptyFilterMessage,
-  emptyFilterBody,
-  emptyFilterIcon,
+  emptyState,
+  emptyFilterState,
   toggleButton,
   toggleAction,
   toggleState,
@@ -201,100 +197,124 @@ const GeneralTable = ({
       cells: columnNames.map(() => ({ title: <Skeleton width="100%" /> })),
     }));
 
+  const emptyFilterView = [
+    {
+      heightAuto: true,
+      cells: [
+        {
+          props: {
+            colSpan: 8,
+          },
+          title: (
+            <CustomEmptyState
+              data-testid="general-table-empty-state-no-match"
+              bgColor="white"
+              icon={emptyFilterState?.icon ?? 'search'}
+              title={emptyFilterState?.title ?? 'No match found'}
+              body={emptyFilterState?.body ?? ''}
+              secondaryActions={
+                toggleAction
+                  ? []
+                  : [
+                      {
+                        title: 'Clear all filters',
+                        onClick: () =>
+                          setFilterValues(createFilterValues(filters)),
+                      },
+                    ]
+              }
+            />
+          ),
+        },
+      ],
+    },
+  ];
+
+  const tableRows = isLoading
+    ? loadingRows(perPage)
+    : !filteredRows?.length > 0
+    ? emptyFilterView
+    : hasCheckbox
+    ? selectedRows()
+    : filteredRows;
+
   return (
     <>
-      <ToolbarHeader
-        count={apiFilterSort ? count : nonApiCount}
-        toolbarButtons={toolbarButtons}
-        filters={filters}
-        filterValues={filterValues}
-        setFilterValues={setFilterValues}
-        chipsArray={chipsArray}
-        setChipsArray={setChipsArray}
-        isLoading={isLoading}
-        perPage={perPage}
-        setPerPage={setPerPage}
-        page={page}
-        setPage={setPage}
-        toggleButton={toggleButton}
-        toggleAction={toggleAction}
-        toggleState={toggleState}
-      />
-      {!isLoading && count < 1 ? (
-        <CustomEmptyState
-          data-testid="general-table-empty-state-no-match"
-          bgColor="white"
-          icon="search"
-          title={emptyStateMessage}
-          secondaryActions={[
-            {
-              title: emptyStateActionMessage,
-              onClick: () => emptyStateAction(),
-            },
-          ]}
-        />
-      ) : !isLoading && !filteredRows?.length > 0 ? (
-        <CustomEmptyState
-          data-testid="general-table-empty-state-no-match"
-          bgColor="white"
-          icon={emptyFilterIcon ?? 'search'}
-          title={emptyFilterMessage ?? 'No match found'}
-          body={emptyFilterBody ?? ''}
-          secondaryActions={[
-            {
-              title: 'Clear all filters',
-              onClick: () => setFilterValues(createFilterValues(filters)),
-            },
-          ]}
-        />
-      ) : (
-        <Table
-          data-testid="general-table-testid"
-          variant="compact"
-          aria-label="General Table Component"
-          sortBy={sortBy}
-          onSort={handleSort}
-          actionResolver={actionResolver ? actionResolver : null}
-          areActionsDisabled={areActionsDisabled}
-          cells={columns}
-          rows={
-            isLoading
-              ? loadingRows(perPage)
-              : hasCheckbox
-              ? selectedRows()
-              : filteredRows
-          }
-          onSelect={
-            hasCheckbox
-              ? (_event, isSelecting, rowIndex) => {
-                  rowIndex === -1 && !isSelecting
-                    ? setCheckedRows([])
-                    : rowIndex === -1
-                    ? setCheckedRows(filteredRows.map((_v, index) => index))
-                    : setCheckedRows((prevState) =>
-                        isSelecting
-                          ? [...prevState, rowIndex]
-                          : prevState.filter((index) => index !== rowIndex)
-                      );
-                }
-              : null
-          }
-          canSelectAll={hasCheckbox}
-        >
-          <TableHeader />
-          <TableBody />
-        </Table>
-      )}
+      {isLoading !== false ||
+      count > 0 ||
+      chipsArray?.length > 0 ||
+      toggleAction ? (
+        <>
+          <ToolbarHeader
+            count={apiFilterSort ? count : nonApiCount}
+            toolbarButtons={toolbarButtons}
+            filters={filters}
+            filterValues={filterValues}
+            setFilterValues={setFilterValues}
+            chipsArray={chipsArray}
+            setChipsArray={setChipsArray}
+            isLoading={isLoading}
+            perPage={perPage}
+            setPerPage={setPerPage}
+            page={page}
+            setPage={setPage}
+            toggleButton={toggleButton}
+            toggleAction={toggleAction}
+            toggleState={toggleState}
+          />
+          <Table
+            data-testid="general-table-testid"
+            variant="compact"
+            aria-label="General Table Component"
+            sortBy={sortBy}
+            onSort={handleSort}
+            actionResolver={
+              actionResolver && filteredRows.length > 0 ? actionResolver : null
+            }
+            areActionsDisabled={areActionsDisabled}
+            cells={columns}
+            rows={tableRows}
+            onSelect={
+              hasCheckbox && filteredRows?.length > 0
+                ? (_event, isSelecting, rowIndex) => {
+                    rowIndex === -1 && !isSelecting
+                      ? setCheckedRows([])
+                      : rowIndex === -1
+                      ? setCheckedRows(filteredRows.map((_v, index) => index))
+                      : setCheckedRows((prevState) =>
+                          isSelecting
+                            ? [...prevState, rowIndex]
+                            : prevState.filter((index) => index !== rowIndex)
+                        );
+                  }
+                : null
+            }
+            canSelectAll={hasCheckbox}
+          >
+            <TableHeader />
+            <TableBody />
+          </Table>
 
-      <ToolbarFooter
-        isLoading={isLoading}
-        count={apiFilterSort ? count : nonApiCount}
-        setFilterValues={setFilterValues}
-        perPage={perPage}
-        setPerPage={setPerPage}
-        page={page}
-        setPage={setPage}
-      />
+          <ToolbarFooter
+            isLoading={isLoading}
+            count={apiFilterSort ? count : nonApiCount}
+            setFilterValues={setFilterValues}
+            perPage={perPage}
+            setPerPage={setPerPage}
+            page={page}
+            setPage={setPage}
+          />
+        </>
+      ) : (
+        <CustomEmptyState
+          data-testid="general-table-empty-state-no-data"
+          icon={emptyState?.icon ?? 'plus'}
+          title={emptyState?.title ?? 'Add items to display'}
+          body={emptyState?.body ?? ''}
+          primaryAction={emptyState?.primaryAction}
+          secondaryActions={emptyState?.secondaryActions ?? []}
+        />
+      )}
     </>
   );
 };
@@ -311,17 +331,13 @@ GeneralTable.propTypes = {
   areActionsDisabled: PropTypes.func,
   defaultSort: PropTypes.object,
   toolbarButtons: PropTypes.array,
-  emptyStateMessage: PropTypes.string,
-  emptyStateActionMessage: PropTypes.string,
-  emptyStateAction: PropTypes.func,
+  emptyState: PropTypes.object,
   toggleButton: PropTypes.array,
   toggleAction: PropTypes.func,
   toggleState: PropTypes.number,
   hasCheckbox: PropTypes.bool,
   skeletonRowQuantity: PropTypes.number,
-  emptyFilterMessage: PropTypes.string,
-  emptyFilterBody: PropTypes.string,
-  emptyFilterIcon: PropTypes.string,
+  emptyFilterState: PropTypes.object,
 };
 
 export default GeneralTable;

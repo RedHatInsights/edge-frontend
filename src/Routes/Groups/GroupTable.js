@@ -13,7 +13,13 @@ const columns = [
   { title: 'Image', type: 'name', sort: false },
 ];
 
-const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
+const GroupTable = ({
+  data,
+  isLoading,
+  openModal,
+  setIsModalOpen,
+  handleRenameModal,
+}) => {
   const actionResolver = (rowData) => {
     const { id, title } = rowData;
     return [
@@ -72,15 +78,24 @@ const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
       filters={filters}
       tableData={{
         count: data.length,
-        data,
         isLoading,
         hasError: false,
       }}
       columnNames={columns}
       rows={buildRows}
-      emptyFilterIcon=""
-      emptyFilterMessage="No matching groups found"
-      emptyFilterBody="To continue, edit your filter settings and try again"
+      emptyState={{
+        icon: 'module',
+        title: 'Create a system group',
+        body: 'Create system groups to help manage your devices more effectively',
+        primaryAction: {
+          text: 'Create group',
+          click: () => setIsModalOpen(true),
+        },
+      }}
+      emptyFilterState={{
+        message: 'No matching groups found',
+        body: 'To continue, edit your filter settings and try again',
+      }}
       actionResolver={actionResolver}
       areActionsDisabled={() => false}
       defaultSort={{ index: 0, direction: 'desc' }}
@@ -97,6 +112,7 @@ const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
 GroupTable.propTypes = {
   data: PropTypes.array,
   openModal: PropTypes.func,
+  setIsModalOpen: PropTypes.func,
   isLoading: PropTypes.bool,
   handleRenameModal: PropTypes.func,
 };

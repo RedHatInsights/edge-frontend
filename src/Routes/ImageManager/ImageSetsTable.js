@@ -104,7 +104,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
   const { count, data, isLoading, hasError } = useSelector(
     ({ edgeImageSetsReducer }) => ({
       count: edgeImageSetsReducer?.data?.Count || 0,
-      data: edgeImageSetsReducer?.data?.Data || null,
+      data: edgeImageSetsReducer?.data?.Data || [],
       isLoading:
         edgeImageSetsReducer?.isLoading === undefined
           ? true
@@ -163,9 +163,6 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       tableData={{ count, data, isLoading, hasError }}
       columnNames={columnNames}
       rows={data ? createRows(data) : []}
-      emptyStateMessage="No images found"
-      emptyStateActionMessage="Create new image"
-      emptyStateAction={openCreateWizard}
       actionResolver={actionResolver}
       areActionsDisabled={areActionsDisabled}
       defaultSort={{ index: 2, direction: 'desc' }}
@@ -175,6 +172,14 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
           click: () => openCreateWizard(),
         },
       ]}
+      emptyState={{
+        icon: 'plus',
+        title: 'No images found',
+        primaryAction: {
+          click: openCreateWizard,
+          text: 'Create new image',
+        },
+      }}
     />
   );
 };

@@ -27,7 +27,7 @@ const Groups = () => {
 
   const fetchGroups = async () => {
     const groups = await getGroups();
-    setData(groups.data);
+    setData(groups.data || []);
     setIsLoading(false);
   };
 
@@ -64,6 +64,7 @@ const Groups = () => {
             isLoading={isLoading}
             handleRenameModal={handleRenameModal}
             openModal={handleCreateModal}
+            setIsModalOpen={setIsModalOpen}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>

@@ -157,7 +157,6 @@ const createRows = (devices) =>
 
 const DeviceTable = ({ skeletonRowQuantity }) => {
   const { getRegistry } = useContext(RegistryContext);
-  const [rows, setRows] = useState([]);
   const [reload, setReload] = useState([]);
   const dispatch = useDispatch();
   const [updateModal, setUpdateModal] = useState({
@@ -169,7 +168,7 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
   const { count, data, isLoading, hasError } = useSelector(
     ({ deviceTableReducer }) => ({
       count: deviceTableReducer?.data?.count || 0,
-      data: deviceTableReducer?.data?.data || null,
+      data: deviceTableReducer?.data?.data || [],
       isLoading: deviceTableReducer?.isLoading,
       hasError: deviceTableReducer?.hasError,
     }),
@@ -181,10 +180,6 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
     loadDeviceTable(dispatch);
     return () => registered();
   }, [reload]);
-
-  useEffect(() => {
-    data && setRows(createRows(data));
-  }, [data]);
 
   const actionResolver = () => {
     return [
@@ -222,7 +217,7 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
           hasError: hasError,
         }}
         columnNames={columnNames}
-        rows={rows || []}
+        rows={createRows(data) || []}
         actionResolver={actionResolver}
         areActionsDisabled={areActionsDisabled}
         defaultSort={{ index: 2, direction: 'desc' }}
@@ -234,6 +229,18 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
         // ]}
         hasCheckbox={true}
         skeletonRowQuantity={skeletonRowQuantity}
+        emptyState={{
+          icon: 'plus',
+          title: 'Connect edge devices',
+          body: 'Connect and manage edge devices here after registering them via the console. To start, create a RHEL for Edge image and install it to your target device.',
+          secondaryActions: [
+            {
+              title: 'How to connect a device',
+              link: '/',
+              type: 'link',
+            },
+          ],
+        }}
       />
       {updateModal.isOpen && (
         <Suspense
