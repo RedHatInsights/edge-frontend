@@ -30,10 +30,10 @@ const defaultFilters = [
     label: 'Status',
     type: 'checkbox',
     options: [
-      { option: 'Building', value: 'BUILDING' },
-      { option: 'Created', value: 'CREATED' },
-      { option: 'Error', value: 'ERROR' },
-      { option: 'Ready', value: 'SUCCESS' },
+      { option: 'Booting', value: 'booting' },
+      { option: 'Running', value: 'running' },
+      { option: 'Update Available', value: 'updateAvailable' },
+      { option: 'Updating', value: 'updating' },
     ],
   },
 ];
