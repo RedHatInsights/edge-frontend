@@ -39,6 +39,9 @@ const ToolbarHeader = ({
   toggleButton,
   toggleAction,
   toggleState,
+  checkBoxState,
+  setCheckBoxState,
+  children,
 }) => {
   return (
     <Toolbar id="toolbar" data-testid="toolbar-header-testid">
@@ -47,7 +50,11 @@ const ToolbarHeader = ({
           filters={filters}
           filterValues={filterValues}
           setFilterValues={setFilterValues}
-        />
+          checkBoxState={checkBoxState}
+          setCheckBoxState={setCheckBoxState}
+        >
+          {children}
+        </FilterControls>
         {toolbarButtons && <ToolbarButtons buttons={toolbarButtons} />}
         {toggleButton && (
           <ToggleGroup>
@@ -109,5 +116,8 @@ ToolbarHeader.propTypes = {
   toggleButton: PropTypes.array,
   toggleAction: PropTypes.func,
   toggleState: PropTypes.number,
+  setCheckBoxState: PropTypes.func,
+  checkBoxState: PropTypes.object,
+  children: PropTypes.element,
 };
 export default ToolbarHeader;

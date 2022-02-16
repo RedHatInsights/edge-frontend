@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
 import { transformSort } from '../../Routes/ImageManager/constants';
+import BulkSelect from './BulkSelect';
 
 const filterParams = (chipsArray) => {
   const filterParamsObj =
@@ -72,7 +73,11 @@ const GeneralTable = ({
   const [sortBy, setSortBy] = useState(defaultSort);
   const [perPage, setPerPage] = useState(20);
   const [page, setPage] = useState(1);
-  const [checkedRows, setCheckedRows] = useState([]);
+  const [checkBoxState, setCheckBoxState] = useState({
+    hasCheckbox: hasCheckbox,
+    selectAll: false,
+    checkedRows: [],
+  });
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -182,10 +187,8 @@ const GeneralTable = ({
     : rows;
 
   const selectedRows = () =>
-    filteredRows.map((row, index) =>
-      checkedRows.includes(-1)
-        ? { ...row, selected: true }
-        : checkedRows.includes(index)
+    filteredRows.map((row) =>
+      checkBoxState.checkedRows.some((checkedRow) => checkedRow.id === row.id)
         ? {
             ...row,
             selected: true,
@@ -195,6 +198,48 @@ const GeneralTable = ({
             selected: false,
           }
     );
+
+  const handleSelect = (_event, isSelecting, rowIndex) => {
+    setCheckBoxState((prevState) => ({
+      ...prevState,
+      selectAll: false,
+      checkedRows: isSelecting
+        ? [
+            ...prevState.checkedRows,
+            {
+              id: filteredRows[rowIndex].id,
+            },
+          ]
+        : prevState.checkedRows.filter(
+            (row) => row.id !== filteredRows[rowIndex].id
+          ),
+    }));
+  };
+
+  useEffect(() => {
+    if (
+      checkBoxState.checkedRows.length > 0 &&
+      checkBoxState.checkedRows.length === filteredRows.length
+    ) {
+      setCheckBoxState((prevState) => ({
+        ...prevState,
+        selectAll: true,
+      }));
+    }
+  }, [checkBoxState.checkedRows]);
+
+  useEffect(() => {
+    if (checkBoxState.selectAll) {
+      setCheckBoxState((prevState) => ({
+        ...prevState,
+        checkedRows: [
+          ...filteredRows.map((row) => ({
+            id: row?.id,
+          })),
+        ],
+      }));
+    }
+  }, [checkBoxState.selectAll]);
 
   const loadingRows = (perPage) =>
     [...Array(skeletonRowQuantity ?? perPage)].map(() => ({
@@ -219,7 +264,14 @@ const GeneralTable = ({
         toggleButton={toggleButton}
         toggleAction={toggleAction}
         toggleState={toggleState}
-      />
+      >
+        {!isLoading && (
+          <BulkSelect
+            checkBoxState={checkBoxState}
+            setCheckBoxState={setCheckBoxState}
+          />
+        )}
+      </ToolbarHeader>
       {!isLoading && count < 1 ? (
         <CustomEmptyState
           data-testid="general-table-empty-state-no-match"
@@ -260,26 +312,12 @@ const GeneralTable = ({
           rows={
             isLoading
               ? loadingRows(perPage)
-              : hasCheckbox
+              : checkBoxState.hasCheckbox
               ? selectedRows()
               : filteredRows
           }
-          onSelect={
-            hasCheckbox
-              ? (_event, isSelecting, rowIndex) => {
-                  rowIndex === -1 && !isSelecting
-                    ? setCheckedRows([])
-                    : rowIndex === -1
-                    ? setCheckedRows(filteredRows.map((_v, index) => index))
-                    : setCheckedRows((prevState) =>
-                        isSelecting
-                          ? [...prevState, rowIndex]
-                          : prevState.filter((index) => index !== rowIndex)
-                      );
-                }
-              : null
-          }
-          canSelectAll={hasCheckbox}
+          onSelect={!isLoading && checkBoxState.hasCheckbox && handleSelect}
+          canSelectAll={false}
         >
           <TableHeader />
           <TableBody />
