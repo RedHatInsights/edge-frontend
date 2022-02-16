@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, FlexItem, Bullseye } from '@patternfly/react-core';
+import { Skeleton, Flex } from '@patternfly/react-core';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -8,19 +8,42 @@ import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import GroupTable from './GroupTable';
 import Empty from '../../components/Empty';
 import Modal from '../../components/Modal';
-import { Link } from 'react-router-dom';
 import { getGroups } from '../../api/index';
-import { createGroup } from '../../api/index';
+import { createGroup, updateGroupById } from '../../api/index';
+import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
+import { nameValidator } from '../../constants';
+const createModalState = {
+  title: 'Create group',
+  onSubmit: (values) => createGroup(values),
+  submitLabel: 'Create',
+  initialValues: {},
+};
 
 const Groups = () => {
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalState, setModalState] = useState(createModalState);
 
   const fetchGroups = async () => {
     const groups = await getGroups();
     setData(groups.data);
     setIsLoading(false);
+  };
+
+  const handleCreateModal = () => {
+    setModalState(createModalState);
+    setIsModalOpen(true);
+  };
+
+  const handleRenameModal = (id, initialValues) => {
+    setModalState({
+      title: 'Rename group',
+      onSubmit: (values) => updateGroupById(id, values),
+      submitLabel: 'Save',
+      initialValues,
+    });
+    setIsModalOpen(true);
   };
 
   useEffect(() => {
@@ -30,51 +53,60 @@ const Groups = () => {
   return (
     <>
       <PageHeader className="pf-m-light">
-        <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
-          <FlexItem>
-            <PageHeaderTitle title="Fleet management" />
-          </FlexItem>
-          <FlexItem>
-            <Button variant="secondary">
-              <Link style={{ textDecoration: 'none' }} to="/inventory">
-                View entire inventory
-              </Link>
-            </Button>
-          </FlexItem>
-        </Flex>
+        <PageHeaderTitle title="Groups" />
       </PageHeader>
       <Main className="edge-devices">
-        {data?.length > 0 || isLoading ? (
+        {isLoading ? (
+          <Skeleton />
+        ) : data?.length > 0 ? (
           <GroupTable
             data={data}
             isLoading={isLoading}
-            openModal={() => setIsModalOpen(true)}
+            handleRenameModal={handleRenameModal}
+            openModal={handleCreateModal}
           />
         ) : (
-          <Bullseye>
+          <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
-              title="No groups yet!"
+              icon="module"
+              title="Create a system group"
+              body="Create system groups to help manage your devices more effectively"
               primaryAction={{
                 text: 'Create group',
                 click: () => setIsModalOpen(true),
               }}
-              secondaryActions={[]}
+              secondaryActions={[
+                {
+                  type: 'link',
+                  title: 'Learn more about system groups',
+                  link: '#',
+                },
+              ]}
             />
-          </Bullseye>
+          </Flex>
         )}
       </Main>
 
       <Modal
         isOpen={isModalOpen}
         openModal={() => setIsModalOpen(false)}
-        title="Create group"
-        submitLabel="Save"
+        title={modalState.title}
+        submitLabel={modalState.submitLabel}
         schema={{
           fields: [
-            { component: 'text-field', name: 'name', label: 'Group name' },
+            {
+              component: 'text-field',
+              name: 'name',
+              label: 'Group name',
+              helperText:
+                'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
+              isRequired: true,
+              validate: [{ type: validatorTypes.REQUIRED }, nameValidator],
+            },
           ],
         }}
-        onSubmit={(values) => createGroup(values)}
+        initialValues={modalState.initialValues}
+        onSubmit={modalState.onSubmit}
         reloadData={() => fetchGroups()}
       />
     </>
