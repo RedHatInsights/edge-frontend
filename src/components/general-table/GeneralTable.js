@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
 import { transformSort } from '../../Routes/ImageManager/constants';
+import BulkSelect from './BulkSelect';
 
 const filterParams = (chipsArray) => {
   const filterParamsObj =
@@ -260,9 +261,12 @@ const GeneralTable = ({
         toggleButton={toggleButton}
         toggleAction={toggleAction}
         toggleState={toggleState}
-        checkBoxState={checkBoxState}
-        setCheckBoxState={setCheckBoxState}
-      />
+      >
+        <BulkSelect
+          checkBoxState={checkBoxState}
+          setCheckBoxState={setCheckBoxState}
+        />
+      </ToolbarHeader>
       {!isLoading && count < 1 ? (
         <CustomEmptyState
           data-testid="general-table-empty-state-no-match"
