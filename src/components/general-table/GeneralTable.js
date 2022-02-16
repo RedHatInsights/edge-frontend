@@ -262,10 +262,10 @@ const GeneralTable = ({
         toggleAction={toggleAction}
         toggleState={toggleState}
       >
-        <BulkSelect
+        {!isLoading && <BulkSelect
           checkBoxState={checkBoxState}
           setCheckBoxState={setCheckBoxState}
-        />
+        />}
       </ToolbarHeader>
       {!isLoading && count < 1 ? (
         <CustomEmptyState
@@ -310,7 +310,7 @@ const GeneralTable = ({
               ? selectedRows()
               : filteredRows
           }
-          onSelect={checkBoxState.hasCheckbox && handleSelect}
+          onSelect={!isLoading && checkBoxState.hasCheckbox && handleSelect}
           canSelectAll={false}
         >
           <TableHeader />
