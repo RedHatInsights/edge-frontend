@@ -70,7 +70,9 @@ const GeneralTable = ({
 }) => {
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
-  const [sortBy, setSortBy] = useState(defaultSort);
+  const [sortBy, setSortBy] = useState(
+    hasCheckbox ? { ...defaultSort, index: defaultSort.index + 1 } : defaultSort
+  );
   const [perPage, setPerPage] = useState(20);
   const [page, setPage] = useState(1);
   const [checkBoxState, setCheckBoxState] = useState({
@@ -139,23 +141,24 @@ const GeneralTable = ({
 
   //non-api sort function
   const sortedByDirection = (rows) =>
-    rows.sort((a, b) =>
-      typeof a?.noApiSortFilter[sortBy.index] === 'number'
+    rows.sort((a, b) => {
+      const index = hasCheckbox ? sortBy.index - 1 : sortBy.index;
+      return typeof a?.noApiSortFilter[index] === 'number'
         ? sortBy.direction === 'asc'
-          ? a?.noApiSortFilter[sortBy.index] - b?.noApiSortFilter[sortBy.index]
-          : b?.noApiSortFilter[sortBy.index] - a?.noApiSortFilter[sortBy.index]
+          ? a?.noApiSortFilter[index] - b?.noApiSortFilter[index]
+          : b?.noApiSortFilter[index] - a?.noApiSortFilter[index]
         : sortBy.direction === 'asc'
-        ? a?.noApiSortFilter[sortBy.index].localeCompare(
-            b?.noApiSortFilter[sortBy.index],
+        ? a?.noApiSortFilter[index].localeCompare(
+            b?.noApiSortFilter[index],
             undefined,
             { sensitivity: 'base' }
           )
-        : b?.noApiSortFilter[sortBy.index].localeCompare(
-            a?.noApiSortFilter[sortBy.index],
+        : b?.noApiSortFilter[index].localeCompare(
+            a?.noApiSortFilter[index],
             undefined,
             { sensitivity: 'base' }
-          )
-    );
+          );
+    });
 
   const nonApiCount = !apiFilterSort
     ? sortedByDirection(filteredByNameRows)?.length
