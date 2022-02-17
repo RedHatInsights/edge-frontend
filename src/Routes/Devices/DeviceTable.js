@@ -118,9 +118,9 @@ const createRows = (devices) =>
     deviceStatus: getDeviceStatus(device),
     noApiSortFilter: [
       device?.Device?.DeviceName,
+      device?.ImageInfo?.Image?.Name || '',
       '',
       device?.Device?.LastSeen,
-      device?.ImageInfo?.Image?.Name || '',
       getDeviceStatus(device),
     ],
     cells: [
@@ -224,7 +224,7 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
         rows={rows || []}
         actionResolver={actionResolver}
         areActionsDisabled={areActionsDisabled}
-        defaultSort={{ index: 4, direction: 'desc' }}
+        defaultSort={{ index: 3, direction: 'desc' }}
         // toolbarButtons={[
         //   {
         //     title: 'Group Selected',
