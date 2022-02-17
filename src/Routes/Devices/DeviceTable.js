@@ -6,7 +6,7 @@ import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
-import { Label, Bullseye, Spinner } from '@patternfly/react-core';
+import { Bullseye, Spinner, Split, SplitItem } from '@patternfly/react-core';
 import { shallowEqual, useSelector } from 'react-redux';
 import { loadDeviceTable } from '../../store/actions';
 import { RegistryContext } from '../../store';
@@ -43,7 +43,13 @@ const columnNames = [
     title: 'Name',
     type: 'name',
     sort: true,
-    columnTransforms: [cellWidth(35)],
+    columnTransforms: [cellWidth(30)],
+  },
+  {
+    title: 'Image',
+    type: 'image',
+    sort: false,
+    columnTransforms: [cellWidth(20)],
   },
   {
     title: 'Groups',
@@ -58,16 +64,10 @@ const columnNames = [
     columnTransforms: [cellWidth(15)],
   },
   {
-    title: 'Image',
-    type: 'image',
-    sort: false,
-    columnTransforms: [cellWidth(20)],
-  },
-  {
     title: 'Status',
     type: 'status',
     sort: false,
-    columnTransforms: [cellWidth(15)],
+    columnTransforms: [cellWidth(25)],
   },
 ];
 
@@ -75,31 +75,28 @@ const DeviceStatus = ({ Device }) => {
   const status = getDeviceStatus(Device);
   const statusType = {
     booting: (
-      <Label
-        className="pf-u-mt-sm"
-        color="blue"
-        icon={<InProgressIcon color="blue" />}
-      >
-        Booting
-      </Label>
+      <Split className="pf-u-info-color-100">
+        <SplitItem className="pf-u-mr-sm">
+          <InProgressIcon />
+        </SplitItem>
+        <SplitItem>Booting</SplitItem>
+      </Split>
     ),
     running: (
-      <Label
-        className="pf-u-mt-sm"
-        color="green"
-        icon={<CheckCircleIcon color="green" />}
-      >
-        Running
-      </Label>
+      <Split className="pf-u-success-color-100">
+        <SplitItem className="pf-u-mr-sm">
+          <CheckCircleIcon />
+        </SplitItem>
+        <SplitItem>Running</SplitItem>
+      </Split>
     ),
     updateAvailable: (
-      <Label
-        className="pf-u-mt-sm"
-        color="orange"
-        icon={<ExclamationTriangleIcon />}
-      >
-        Update Available
-      </Label>
+      <Split className="pf-u-warning-color-100">
+        <SplitItem className="pf-u-mr-sm">
+          <ExclamationTriangleIcon />
+        </SplitItem>
+        <SplitItem>Update Available</SplitItem>
+      </Split>
     ),
   };
 
@@ -135,19 +132,21 @@ const createRows = (devices) =>
         ),
       },
       {
-        title: '-',
-      },
-      {
-        title: <DateFormat date={device?.Device?.LastSeen} />,
-      },
-      {
-        title: (
+        title: device?.ImageInfo?.Image?.Name ? (
           <Link
             to={`${paths['manage-images']}/${device?.ImageInfo?.Image?.ImageSetID}/versions/${device?.ImageInfo?.Image?.ID}/details`}
           >
             {device?.ImageInfo?.Image?.Name}
           </Link>
+        ) : (
+          'unavailable'
         ),
+      },
+      {
+        title: '-',
+      },
+      {
+        title: <DateFormat date={device?.Device?.LastSeen} />,
       },
       {
         title: <DeviceStatus Device={device} />,
@@ -225,7 +224,7 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
         rows={rows || []}
         actionResolver={actionResolver}
         areActionsDisabled={areActionsDisabled}
-        defaultSort={{ index: 2, direction: 'desc' }}
+        defaultSort={{ index: 4, direction: 'desc' }}
         // toolbarButtons={[
         //   {
         //     title: 'Group Selected',
