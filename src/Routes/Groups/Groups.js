@@ -101,7 +101,12 @@ const Groups = () => {
               helperText:
                 'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
               isRequired: true,
-              validate: [{ type: validatorTypes.REQUIRED }, nameValidator],
+              validate: [
+                { type: validatorTypes.REQUIRED },
+
+                { type: validatorTypes.MAX_LENGTH, threshold: 50 },
+                nameValidator,
+              ],
             },
           ],
         }}
