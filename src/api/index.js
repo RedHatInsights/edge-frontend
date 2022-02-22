@@ -345,7 +345,7 @@ export const createImage = ({
 
 export const fetchEdgeImages = (
   q = {
-    limit: 100,
+    limit: 20,
     offset: 0,
     sort_by: '-created_at',
   }
@@ -356,7 +356,7 @@ export const fetchEdgeImages = (
 
 export const fetchEdgeImageSets = (
   q = {
-    limit: 100,
+    limit: 20,
     offset: 0,
     sort_by: '-created_at',
   }
@@ -407,7 +407,7 @@ export const createCustomRepository = (payload) => {
 export const getImageSet = ({
   id,
   q = {
-    limit: 100,
+    limit: 20,
     offset: 0,
     sort_by: '-created_at',
   },
