@@ -89,6 +89,7 @@ const RepositoryTable = ({ data, openModal, mode }) => {
               },
             ]
       }
+      hasCheckbox={mode === modeSelection}
     />
   );
 };
