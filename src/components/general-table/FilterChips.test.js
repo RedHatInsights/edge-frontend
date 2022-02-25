@@ -10,6 +10,7 @@ describe('Filter chips', () => {
     const chipsArray = [{ key: 'test-key', label: 'test-label' }];
     const setFilterValues = jest.fn();
     const setChipsArray = jest.fn();
+    const setPage = jest.fn();
 
     const { container, findByTestId, findByText } = render(
       <FilterChips
@@ -17,6 +18,7 @@ describe('Filter chips', () => {
         setFilterValues={setFilterValues}
         chipsArray={chipsArray}
         setChipsArray={setChipsArray}
+        setPage={setPage}
       />
     );
 
