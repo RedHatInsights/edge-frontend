@@ -8,6 +8,7 @@ const FilterChips = ({
   setFilterValues,
   chipsArray,
   setChipsArray,
+  setPage,
 }) => {
   const buildChipsArray = () => {
     filterValues.forEach((filter) => {
@@ -72,6 +73,7 @@ const FilterChips = ({
 
   useEffect(() => {
     buildChipsArray();
+    setPage(1);
   }, [filterValues]);
 
   const handleResetFilters = () => {
@@ -161,6 +163,7 @@ FilterChips.propTypes = {
   setFilterValues: PropTypes.func,
   chipsArray: PropTypes.array,
   setChipsArray: PropTypes.func,
+  setPage: PropTypes.func,
 };
 
 export default FilterChips;

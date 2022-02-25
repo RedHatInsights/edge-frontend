@@ -92,6 +92,7 @@ const ToolbarHeader = ({
             setFilterValues={setFilterValues}
             chipsArray={chipsArray}
             setChipsArray={setChipsArray}
+            setPage={setPage}
           />
         </ToolbarItem>
       </ToolbarContent>
