@@ -75,24 +75,24 @@ const DeviceStatus = ({ Device }) => {
   const status = getDeviceStatus(Device);
   const statusType = {
     booting: (
-      <Split className="pf-u-info-color-100">
-        <SplitItem className="pf-u-mr-sm">
+      <Split className='pf-u-info-color-100'>
+        <SplitItem className='pf-u-mr-sm'>
           <InProgressIcon />
         </SplitItem>
         <SplitItem>Booting</SplitItem>
       </Split>
     ),
     running: (
-      <Split className="pf-u-success-color-100">
-        <SplitItem className="pf-u-mr-sm">
+      <Split className='pf-u-success-color-100'>
+        <SplitItem className='pf-u-mr-sm'>
           <CheckCircleIcon />
         </SplitItem>
         <SplitItem>Running</SplitItem>
       </Split>
     ),
     updateAvailable: (
-      <Split className="pf-u-warning-color-100">
-        <SplitItem className="pf-u-mr-sm">
+      <Split className='pf-u-warning-color-100'>
+        <SplitItem className='pf-u-mr-sm'>
           <ExclamationTriangleIcon />
         </SplitItem>
         <SplitItem>Update Available</SplitItem>
@@ -233,6 +233,7 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
         // ]}
         hasCheckbox={true}
         skeletonRowQuantity={skeletonRowQuantity}
+        selectedItems={(values) => console.log(values)}
       />
       {updateModal.isOpen && (
         <Suspense

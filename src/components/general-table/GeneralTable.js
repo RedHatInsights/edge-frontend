@@ -67,6 +67,7 @@ const GeneralTable = ({
   toggleState,
   hasCheckbox = false,
   skeletonRowQuantity,
+  selectedItems,
 }) => {
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
@@ -203,50 +204,55 @@ const GeneralTable = ({
     );
 
   const handleSelect = (_event, isSelecting, rowIndex) => {
-    setCheckBoxState((prevState) => ({
-      ...prevState,
-      selectAll: false,
-      checkedRows: isSelecting
-        ? [
-            ...prevState.checkedRows,
-            {
-              id: filteredRows[rowIndex].id,
-            },
-          ]
-        : prevState.checkedRows.filter(
-            (row) => row.id !== filteredRows[rowIndex].id
-          ),
-    }));
+    setCheckBoxState((prevState) => {
+      const state = {
+        ...prevState,
+        selectAll: prevState.checkedRows.length + 1 === filteredRows.length,
+        checkedRows: isSelecting
+          ? [
+              ...prevState.checkedRows,
+              {
+                id: filteredRows[rowIndex].id,
+              },
+            ]
+          : prevState.checkedRows.filter(
+              (row) => row.id !== filteredRows[rowIndex].id
+            ),
+      };
+
+      selectedItems && selectedItems(state);
+      return state;
+    });
   };
 
-  useEffect(() => {
-    if (
-      checkBoxState.checkedRows.length > 0 &&
-      checkBoxState.checkedRows.length === filteredRows.length
-    ) {
-      setCheckBoxState((prevState) => ({
-        ...prevState,
-        selectAll: true,
-      }));
-    }
-  }, [checkBoxState.checkedRows]);
-
-  useEffect(() => {
-    if (checkBoxState.selectAll) {
-      setCheckBoxState((prevState) => ({
-        ...prevState,
-        checkedRows: [
-          ...filteredRows.map((row) => ({
-            id: row?.id,
-          })),
-        ],
-      }));
-    }
-  }, [checkBoxState.selectAll]);
+  const handleBulkSelect = () => {
+    setCheckBoxState((prevState) => {
+      let state = prevState;
+      if (prevState.selectAll) {
+        state = {
+          ...prevState,
+          checkedRows: [],
+          selectAll: false,
+        };
+      } else {
+        state = {
+          ...prevState,
+          checkedRows: [
+            ...filteredRows.map((row) => ({
+              id: row?.id,
+            })),
+          ],
+          selectAll: true,
+        };
+      }
+      selectedItems && selectedItems(state);
+      return state;
+    });
+  };
 
   const loadingRows = (perPage) =>
     [...Array(skeletonRowQuantity ?? perPage)].map(() => ({
-      cells: columnNames.map(() => ({ title: <Skeleton width="100%" /> })),
+      cells: columnNames.map(() => ({ title: <Skeleton width='100%' /> })),
     }));
 
   return (
@@ -271,15 +277,15 @@ const GeneralTable = ({
         {!isLoading && (
           <BulkSelect
             checkBoxState={checkBoxState}
-            setCheckBoxState={setCheckBoxState}
+            handleBulkSelect={handleBulkSelect}
           />
         )}
       </ToolbarHeader>
       {!isLoading && count < 1 ? (
         <CustomEmptyState
-          data-testid="general-table-empty-state-no-match"
-          bgColor="white"
-          icon="search"
+          data-testid='general-table-empty-state-no-match'
+          bgColor='white'
+          icon='search'
           title={emptyStateMessage}
           secondaryActions={[
             {
@@ -290,8 +296,8 @@ const GeneralTable = ({
         />
       ) : !isLoading && !filteredRows?.length > 0 ? (
         <CustomEmptyState
-          data-testid="general-table-empty-state-no-match"
-          bgColor="white"
+          data-testid='general-table-empty-state-no-match'
+          bgColor='white'
           icon={emptyFilterIcon ?? 'search'}
           title={emptyFilterMessage ?? 'No match found'}
           body={emptyFilterBody ?? ''}
@@ -304,9 +310,9 @@ const GeneralTable = ({
         />
       ) : (
         <Table
-          data-testid="general-table-testid"
-          variant="compact"
-          aria-label="General Table Component"
+          data-testid='general-table-testid'
+          variant='compact'
+          aria-label='General Table Component'
           sortBy={sortBy}
           onSort={handleSort}
           actionResolver={actionResolver ? actionResolver : null}
@@ -363,6 +369,7 @@ GeneralTable.propTypes = {
   emptyFilterMessage: PropTypes.string,
   emptyFilterBody: PropTypes.string,
   emptyFilterIcon: PropTypes.string,
+  selectedItems: PropTypes.func,
 };
 
 export default GeneralTable;
