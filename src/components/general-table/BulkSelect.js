@@ -8,68 +8,67 @@ import {
 } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 
-const BulkSelect = ({ checkBoxState, setCheckBoxState }) => {
+const BulkSelect = ({
+  checkBoxState,
+  handleBulkSelect,
+  handlePageSelect,
+  handleNoneSelect,
+}) => {
   const [selectAllToggle, setSelectAllToggle] = useState(false);
-
-  const handleChange = () => {
-    setCheckBoxState((prevState) => {
-      if (prevState.selectAll) {
-        return {
-          ...prevState,
-          checkedRows: [],
-          selectAll: false,
-        };
-      }
-      return {
-        ...prevState,
-        selectAll: true,
-      };
-    });
-  };
 
   return (
     <>
-      {checkBoxState.hasCheckbox && (
-        <ToolbarItem variant="bulk-select">
-          <Dropdown
-            onSelect={handleChange}
-            toggle={
-              <DropdownToggle
-                id="stacked-example-toggle"
-                splitButtonItems={[
-                  <DropdownToggleCheckbox
-                    id="example-checkbox-2"
-                    key="split-checkbox"
-                    aria-label="Select all"
-                    isChecked={checkBoxState.selectAll}
-                    onChange={handleChange}
-                  >
-                    {checkBoxState.checkedRows.length > 0 &&
-                      `${checkBoxState.checkedRows.length} selected`}
-                  </DropdownToggleCheckbox>,
-                ]}
-                onToggle={() => setSelectAllToggle((prevState) => !prevState)}
-              />
-            }
-            isOpen={selectAllToggle}
-            dropdownItems={[
-              //<DropdownItem key='all'>Select all</DropdownItem>,
-              <DropdownItem key="page" isDisabled={checkBoxState.selectAll}>
-                Select page
-              </DropdownItem>,
-              <DropdownItem key="none" isDisabled={!checkBoxState.selectAll}>
-                Select none
-              </DropdownItem>,
-            ]}
-          />
-        </ToolbarItem>
-      )}
+      <ToolbarItem variant="bulk-select">
+        <Dropdown
+          // onSelect={handlePageSelect}
+          toggle={
+            <DropdownToggle
+              id="stacked-example-toggle"
+              splitButtonItems={[
+                <DropdownToggleCheckbox
+                  id="example-checkbox-2"
+                  key="split-checkbox"
+                  aria-label="Select all"
+                  isChecked={checkBoxState.selectAll}
+                  onChange={handlePageSelect}
+                >
+                  {checkBoxState.checkedRows.length > 0 &&
+                    `${checkBoxState.checkedRows.length} selected`}
+                </DropdownToggleCheckbox>,
+              ]}
+              onToggle={() => setSelectAllToggle((prevState) => !prevState)}
+            />
+          }
+          isOpen={selectAllToggle}
+          dropdownItems={[
+            <DropdownItem key="all" onClick={handleBulkSelect}>
+              Select all
+            </DropdownItem>,
+            <DropdownItem
+              key="page"
+              onClick={handlePageSelect}
+              isDisabled={checkBoxState.selectAll}
+            >
+              Select page
+            </DropdownItem>,
+            <DropdownItem
+              key="none"
+              onClick={handleNoneSelect}
+              isDisabled={checkBoxState.checkedRows.length === 0}
+            >
+              Select none
+            </DropdownItem>,
+          ]}
+        />
+      </ToolbarItem>
     </>
   );
 };
 BulkSelect.propTypes = {
-  setCheckBoxState: PropTypes.func,
   checkBoxState: PropTypes.object,
+  handleBulkSelect: PropTypes.func,
+  handleNoneSelect: PropTypes.func,
+  handlePageSelect: PropTypes.func,
 };
 
 export default BulkSelect;
