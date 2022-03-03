@@ -146,3 +146,28 @@ export const mapUrlToObj = (url, keys) => {
 
   return obj;
 };
+
+//urlString is the string added to the url search param
+//state is a boolean that adds or removes the urlString from the url
+export const stateToUrlSearch = (urlString, state) => {
+  var searchArray = [];
+  const currentSearchArray =
+    location.search.length > 0
+      ? location.search.includes('&')
+        ? location.search.split('?')[1].split('&')
+        : location.search.split('?').slice(1)
+      : [];
+  console.log(state);
+  if (state) {
+    currentSearchArray.includes(urlString)
+      ? currentSearchArray
+      : currentSearchArray.push(urlString);
+    searchArray = currentSearchArray;
+  } else {
+    searchArray = currentSearchArray.includes(urlString)
+      ? currentSearchArray.filter((e) => e !== urlString)
+      : currentSearchArray;
+  }
+
+  return searchArray.join('&');
+};

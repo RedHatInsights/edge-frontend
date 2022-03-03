@@ -13,13 +13,7 @@ const columns = [
   { title: 'Image', type: 'name', sort: false },
 ];
 
-const GroupTable = ({
-  data,
-  isLoading,
-  openModal,
-  setIsModalOpen,
-  handleRenameModal,
-}) => {
+const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
   const actionResolver = (rowData) => {
     const { id, title } = rowData;
     return [
@@ -83,15 +77,6 @@ const GroupTable = ({
       }}
       columnNames={columns}
       rows={buildRows}
-      emptyState={{
-        icon: 'module',
-        title: 'Create a system group',
-        body: 'Create system groups to help manage your devices more effectively',
-        primaryAction: {
-          text: 'Create group',
-          click: () => setIsModalOpen(true),
-        },
-      }}
       emptyFilterState={{
         message: 'No matching groups found',
         body: 'To continue, edit your filter settings and try again',

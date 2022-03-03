@@ -151,10 +151,6 @@ const ImagePackagesTab = ({ imageVersion }) => {
           icon: 'search',
           title: 'No packages to display',
         }}
-        emptyState={{
-          icon: 'search',
-          title: 'No packages to display',
-        }}
       />
     </Main>
   ) : (

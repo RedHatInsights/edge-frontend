@@ -4,6 +4,7 @@ import RepositoryTable from './RepositoryTable';
 import { init, RegistryContext } from '../../store';
 import logger from 'redux-logger';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('RepositoryTable', () => {
   it('renders correctly', () => {
@@ -38,7 +39,8 @@ describe('RepositoryTable', () => {
         <Provider store={registry.getStore()}>
           <RepositoryTable data={data} openModal={openModal} />
         </Provider>
-      </RegistryContext.Provider>
+      </RegistryContext.Provider>,
+      { wrapper: MemoryRouter }
     );
 
     expect(

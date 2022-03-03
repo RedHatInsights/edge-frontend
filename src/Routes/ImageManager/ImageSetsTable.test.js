@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { init, RegistryContext } from '../../store';
 import { render } from '@testing-library/react';
 import logger from 'redux-logger';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('ImageSets table', () => {
   it('to render correctly', () => {
@@ -23,7 +24,8 @@ describe('ImageSets table', () => {
             openUpdateWizard={openUpdateWizard}
           />
         </Provider>
-      </RegistryContext.Provider>
+      </RegistryContext.Provider>,
+      { wrapper: MemoryRouter }
     );
 
     expect(container.querySelector('div')).toMatchSnapshot();

@@ -5,8 +5,8 @@ import { Provider } from 'react-redux';
 import { init, RegistryContext } from '../../store';
 import { render } from '@testing-library/react';
 import logger from 'redux-logger';
-
 import { MemoryRouter } from 'react-router-dom';
+
 describe('General table', () => {
   it('should render correctly', async () => {
     const filters = [

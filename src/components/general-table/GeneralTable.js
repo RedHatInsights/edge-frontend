@@ -13,6 +13,8 @@ import PropTypes from 'prop-types';
 import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
 import { transformSort } from '../../Routes/ImageManager/constants';
+import { useHistory } from 'react-router-dom';
+import { stateToUrlSearch } from '../../constants';
 
 const filterParams = (chipsArray) => {
   const filterParamsObj =
@@ -55,7 +57,6 @@ const GeneralTable = ({
   actionResolver,
   areActionsDisabled,
   defaultSort,
-  emptyState,
   emptyFilterState,
   toggleButton,
   toggleAction,
@@ -70,8 +71,14 @@ const GeneralTable = ({
   const [page, setPage] = useState(1);
   const [checkedRows, setCheckedRows] = useState([]);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
+    history.push({
+      pathname: history.location.pathname,
+      search: stateToUrlSearch('has_filters=true', chipsArray.length > 0),
+    });
+
     const query = apiFilterSort
       ? {
           ...filterParams(chipsArray),
@@ -240,81 +247,65 @@ const GeneralTable = ({
 
   return (
     <>
-      {isLoading !== false ||
-      count > 0 ||
-      chipsArray?.length > 0 ||
-      toggleAction ? (
-        <>
-          <ToolbarHeader
-            count={apiFilterSort ? count : nonApiCount}
-            toolbarButtons={toolbarButtons}
-            filters={filters}
-            filterValues={filterValues}
-            setFilterValues={setFilterValues}
-            chipsArray={chipsArray}
-            setChipsArray={setChipsArray}
-            isLoading={isLoading}
-            perPage={perPage}
-            setPerPage={setPerPage}
-            page={page}
-            setPage={setPage}
-            toggleButton={toggleButton}
-            toggleAction={toggleAction}
-            toggleState={toggleState}
-          />
-          <Table
-            data-testid="general-table-testid"
-            variant="compact"
-            aria-label="General Table Component"
-            sortBy={sortBy}
-            onSort={handleSort}
-            actionResolver={
-              actionResolver && filteredRows.length > 0 ? actionResolver : null
-            }
-            areActionsDisabled={areActionsDisabled}
-            cells={columns}
-            rows={tableRows}
-            onSelect={
-              hasCheckbox && filteredRows?.length > 0
-                ? (_event, isSelecting, rowIndex) => {
-                    rowIndex === -1 && !isSelecting
-                      ? setCheckedRows([])
-                      : rowIndex === -1
-                      ? setCheckedRows(filteredRows.map((_v, index) => index))
-                      : setCheckedRows((prevState) =>
-                          isSelecting
-                            ? [...prevState, rowIndex]
-                            : prevState.filter((index) => index !== rowIndex)
-                        );
-                  }
-                : null
-            }
-            canSelectAll={hasCheckbox}
-          >
-            <TableHeader />
-            <TableBody />
-          </Table>
+      <ToolbarHeader
+        count={apiFilterSort ? count : nonApiCount}
+        toolbarButtons={toolbarButtons}
+        filters={filters}
+        filterValues={filterValues}
+        setFilterValues={setFilterValues}
+        chipsArray={chipsArray}
+        setChipsArray={setChipsArray}
+        isLoading={isLoading}
+        perPage={perPage}
+        setPerPage={setPerPage}
+        page={page}
+        setPage={setPage}
+        toggleButton={toggleButton}
+        toggleAction={toggleAction}
+        toggleState={toggleState}
+      />
+      <Table
+        data-testid="general-table-testid"
+        variant="compact"
+        aria-label="General Table Component"
+        sortBy={sortBy}
+        onSort={handleSort}
+        actionResolver={
+          actionResolver && filteredRows.length > 0 ? actionResolver : null
+        }
+        areActionsDisabled={areActionsDisabled}
+        cells={columns}
+        rows={tableRows}
+        onSelect={
+          hasCheckbox && filteredRows?.length > 0
+            ? (_event, isSelecting, rowIndex) => {
+                rowIndex === -1 && !isSelecting
+                  ? setCheckedRows([])
+                  : rowIndex === -1
+                  ? setCheckedRows(filteredRows.map((_v, index) => index))
+                  : setCheckedRows((prevState) =>
+                      isSelecting
+                        ? [...prevState, rowIndex]
+                        : prevState.filter((index) => index !== rowIndex)
+                    );
+              }
+            : null
+        }
+        canSelectAll={hasCheckbox}
+      >
+        <TableHeader />
+        <TableBody />
+      </Table>
 
-          <ToolbarFooter
-            isLoading={isLoading}
-            count={apiFilterSort ? count : nonApiCount}
-            setFilterValues={setFilterValues}
-            perPage={perPage}
-            setPerPage={setPerPage}
-            page={page}
-            setPage={setPage}
-          />
-        </>
-      ) : (
-        <CustomEmptyState
-          data-testid="general-table-empty-state-no-data"
-          icon={emptyState?.icon ?? 'plus'}
-          title={emptyState?.title ?? 'Add items to display'}
-          body={emptyState?.body ?? ''}
-          primaryAction={emptyState?.primaryAction}
-          secondaryActions={emptyState?.secondaryActions ?? []}
-        />
-      )}
+      <ToolbarFooter
+        isLoading={isLoading}
+        count={apiFilterSort ? count : nonApiCount}
+        setFilterValues={setFilterValues}
+        perPage={perPage}
+        setPerPage={setPerPage}
+        page={page}
+        setPage={setPage}
+      />
     </>
   );
 };

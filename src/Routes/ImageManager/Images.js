@@ -15,6 +15,7 @@ import { useHistory } from 'react-router-dom';
 import { RegistryContext } from '../../store';
 import { edgeImageSetsReducer } from '../../store/reducers';
 import ImageSetsTable from './ImageSetsTable';
+import { stateToUrlSearch } from '../../constants';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -38,21 +39,17 @@ const Images = () => {
   const history = useHistory();
 
   const openCreateWizard = () => {
+    setIsCreateWizardOpen(true);
     history.push({
       pathname: history.location.pathname,
-      search: new URLSearchParams({
-        create_image: true,
-      }).toString(),
+      search: stateToUrlSearch('create_image=true', true),
     });
-    setIsCreateWizardOpen(true);
   };
 
   const openUpdateWizard = (id) => {
     history.push({
       pathname: history.location.pathname,
-      search: new URLSearchParams({
-        update_image: true,
-      }).toString(),
+      search: stateToUrlSearch('update_image=true', true),
     });
     setUpdateWizard({
       isOpen: true,
@@ -85,7 +82,10 @@ const Images = () => {
         >
           <CreateImageWizard
             navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
+              history.push({
+                pathname: history.location.pathname,
+                search: stateToUrlSearch('create_image=true', false),
+              });
               setIsCreateWizardOpen(false);
             }}
           />
@@ -101,7 +101,10 @@ const Images = () => {
         >
           <UpdateImageWizard
             navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
+              history.push({
+                pathname: history.location.pathname,
+                search: stateToUrlSearch('update_image=true', false),
+              });
               setUpdateWizard((prevState) => {
                 return {
                   ...prevState,
