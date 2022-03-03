@@ -11,6 +11,7 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { loadDeviceTable } from '../../store/actions';
 import { RegistryContext } from '../../store';
 import { deviceTableReducer } from '../../store/reducers';
+import CustomEmptyState from '../../components/Empty';
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
@@ -207,41 +208,47 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
 
   return (
     <>
-      <GeneralTable
-        apiFilterSort={false}
-        filters={defaultFilters}
-        loadTableData={loadDeviceTable}
-        tableData={{
-          count: count,
-          isLoading: isLoading,
-          hasError: hasError,
-        }}
-        columnNames={columnNames}
-        rows={createRows(data) || []}
-        actionResolver={actionResolver}
-        areActionsDisabled={areActionsDisabled}
-        defaultSort={{ index: 2, direction: 'desc' }}
-        // toolbarButtons={[
-        //   {
-        //     title: 'Group Selected',
-        //     click: () => console.log('Group Selected'),
-        //   },
-        // ]}
-        hasCheckbox={true}
-        skeletonRowQuantity={skeletonRowQuantity}
-        emptyState={{
-          icon: 'plus',
-          title: 'Connect edge devices',
-          body: 'Connect and manage edge devices here after registering them via the console. To start, create a RHEL for Edge image and install it to your target device.',
-          secondaryActions: [
+      {!isLoading && !count > 0 ? (
+        <CustomEmptyState
+          data-testid="general-table-empty-state-no-data"
+          icon={'plus'}
+          title={'Connect edge devices'}
+          body={
+            'Connect and manage edge devices here after registering them via the console. To start, create a RHEL for Edge image and install it to your target device.'
+          }
+          secondaryActions={[
             {
               title: 'How to connect a device',
               link: '/',
               type: 'link',
             },
-          ],
-        }}
-      />
+          ]}
+        />
+      ) : (
+        <GeneralTable
+          apiFilterSort={false}
+          filters={defaultFilters}
+          loadTableData={loadDeviceTable}
+          tableData={{
+            count: count,
+            isLoading: isLoading,
+            hasError: hasError,
+          }}
+          columnNames={columnNames}
+          rows={createRows(data) || []}
+          actionResolver={actionResolver}
+          areActionsDisabled={areActionsDisabled}
+          defaultSort={{ index: 2, direction: 'desc' }}
+          // toolbarButtons={[
+          //   {
+          //     title: 'Group Selected',
+          //     click: () => console.log('Group Selected'),
+          //   },
+          // ]}
+          hasCheckbox={true}
+          skeletonRowQuantity={skeletonRowQuantity}
+        />
+      )}
       {updateModal.isOpen && (
         <Suspense
           fallback={
