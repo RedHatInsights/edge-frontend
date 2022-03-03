@@ -75,24 +75,24 @@ const DeviceStatus = ({ Device }) => {
   const status = getDeviceStatus(Device);
   const statusType = {
     booting: (
-      <Split className='pf-u-info-color-100'>
-        <SplitItem className='pf-u-mr-sm'>
+      <Split className="pf-u-info-color-100">
+        <SplitItem className="pf-u-mr-sm">
           <InProgressIcon />
         </SplitItem>
         <SplitItem>Booting</SplitItem>
       </Split>
     ),
     running: (
-      <Split className='pf-u-success-color-100'>
-        <SplitItem className='pf-u-mr-sm'>
+      <Split className="pf-u-success-color-100">
+        <SplitItem className="pf-u-mr-sm">
           <CheckCircleIcon />
         </SplitItem>
         <SplitItem>Running</SplitItem>
       </Split>
     ),
     updateAvailable: (
-      <Split className='pf-u-warning-color-100'>
-        <SplitItem className='pf-u-mr-sm'>
+      <Split className="pf-u-warning-color-100">
+        <SplitItem className="pf-u-mr-sm">
           <ExclamationTriangleIcon />
         </SplitItem>
         <SplitItem>Update Available</SplitItem>
@@ -112,6 +112,7 @@ const getDeviceStatus = (deviceData) =>
 
 const createRows = (devices) =>
   devices?.map((device) => ({
+    deviceID: device?.Device?.ID,
     id: device?.Device?.UUID,
     display_name: device?.Device?.DeviceName,
     updateImageData: device?.ImageInfo?.UpdatesAvailable?.[0],
@@ -154,10 +155,17 @@ const createRows = (devices) =>
     ],
   }));
 
-const DeviceTable = ({ skeletonRowQuantity }) => {
+const DeviceTable = ({
+  temp = false,
+  hasCheckbox = true,
+  setIsModalOpen,
+  selectedItems,
+  skeletonRowQuantity,
+  reload,
+  setReload,
+}) => {
   const { getRegistry } = useContext(RegistryContext);
   const [rows, setRows] = useState([]);
-  const [reload, setReload] = useState([]);
   const dispatch = useDispatch();
   const [updateModal, setUpdateModal] = useState({
     isOpen: false,
@@ -221,19 +229,26 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
           hasError: hasError,
         }}
         columnNames={columnNames}
-        rows={rows || []}
+        rows={
+          (temp ? rows.filter((row) => temp.includes(row.deviceID)) : rows) ||
+          []
+        }
         actionResolver={actionResolver}
         areActionsDisabled={areActionsDisabled}
         defaultSort={{ index: 3, direction: 'desc' }}
-        // toolbarButtons={[
-        //   {
-        //     title: 'Group Selected',
-        //     click: () => console.log('Group Selected'),
-        //   },
-        // ]}
-        hasCheckbox={true}
+        toolbarButtons={
+          setIsModalOpen
+            ? [
+                {
+                  title: 'Add systems',
+                  click: () => setIsModalOpen(true),
+                },
+              ]
+            : []
+        }
+        hasCheckbox={hasCheckbox}
         skeletonRowQuantity={skeletonRowQuantity}
-        selectedItems={(values) => console.log(values)}
+        selectedItems={selectedItems}
       />
       {updateModal.isOpen && (
         <Suspense
@@ -267,6 +282,13 @@ DeviceTable.propTypes = {
   urlParam: PropTypes.string,
   openUpdateWizard: PropTypes.func,
   skeletonRowQuantity: PropTypes.number,
+  // possibly remove some of these
+  temp: PropTypes.func,
+  hasCheckbox: PropTypes.bool,
+  setIsModalOpen: PropTypes.func,
+  selectedItems: PropTypes.array,
+  reload: PropTypes.bool,
+  setReload: PropTypes.func,
 };
 
 export default DeviceTable;

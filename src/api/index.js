@@ -465,5 +465,8 @@ export const deleteGroupById = (id) => {
 };
 
 export const addDevicesToGroup = (groupId, devices) => {
-  return instance.post(`${EDGE_API}/device-groups/${id}`, {});
+  return instance.post(`${EDGE_API}/device-groups/${groupId}/devices`, {
+    ID: groupId,
+    Devices: devices,
+  });
 };

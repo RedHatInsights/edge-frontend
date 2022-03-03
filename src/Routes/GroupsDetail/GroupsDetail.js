@@ -16,27 +16,30 @@ import {
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import Empty from '../../components/Empty';
-import Modal from '../../components/Modal';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import DeviceTable from '../Devices/DeviceTable';
 import { useParams } from 'react-router-dom';
 import { getGroupById } from '../../api/index';
+import DeviceModal from '../Devices/DeviceModal';
 
 const GroupsDetail = () => {
   const [data, setData] = useState({});
+  const [reload, setReload] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const params = useParams();
+  const { groupId } = params;
 
   useEffect(() => {
-    (async () => {
-      const { groupId } = params;
-      const groupData = await getGroupById(groupId);
-      setData(groupData);
-    })();
+    reloadData();
   }, []);
+
+  const reloadData = async () => {
+    const groupData = await getGroupById(groupId);
+    setData(groupData);
+  };
 
   return (
     <>
@@ -83,8 +86,13 @@ const GroupsDetail = () => {
         </Flex>
       </PageHeader>
       <Main className="edge-devices">
-        {data?.devices?.length > 0 ? (
-          <DeviceTable />
+        {data?.Devices?.length > 0 ? (
+          <DeviceTable
+            temp={data?.Devices.map((device) => device.ID)}
+            reload={reload}
+            setReload={setReload}
+            setIsModalOpen={setIsModalOpen}
+          />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
@@ -106,21 +114,11 @@ const GroupsDetail = () => {
           </Flex>
         )}
       </Main>
-
-      <Modal
+      <DeviceModal
+        groupId={groupId}
+        closeModal={() => setIsModalOpen(false)}
         isOpen={isModalOpen}
-        openModal={() => setIsModalOpen(false)}
-        title="Add systems"
-        submitLabel="Add selected"
-        additionalMappers={{
-          'device-table': { component: DeviceTable, skeletonRowQuantity: 15 },
-        }}
-        schema={{
-          fields: [{ component: 'device-table', name: 'device-table' }],
-        }}
-        onSubmit={() => console.log('submitted')}
-        reloadData={() => console.log('data reloaded')}
-        size="large"
+        reloadData={() => setReload(true)}
       />
     </>
   );

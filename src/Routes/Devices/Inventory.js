@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -7,13 +7,18 @@ import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import DeviceTable from './DeviceTable';
 
 const Inventory = () => {
+  const [reload, setReload] = useState([]);
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
         <PageHeaderTitle title="Inventory" />
       </PageHeader>
       <Main className="edge-devices">
-        <DeviceTable />
+        <DeviceTable
+          reload={reload}
+          setReload={setReload}
+          hasCheckbox={false}
+        />
       </Main>
     </Fragment>
   );
