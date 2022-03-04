@@ -16,13 +16,14 @@ import {
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import Empty from '../../components/Empty';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import DeviceTable from '../Devices/DeviceTable';
 import { useParams } from 'react-router-dom';
 import { getGroupById } from '../../api/index';
 import DeviceModal from '../Devices/DeviceModal';
+import { stateToUrlSearch } from '../../constants';
 
 const GroupsDetail = () => {
   const [data, setData] = useState({});
@@ -31,10 +32,18 @@ const GroupsDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const params = useParams();
   const { groupId } = params;
+  const history = useHistory();
 
   useEffect(() => {
     reloadData();
   }, []);
+
+  useEffect(() => {
+    history.push({
+      pathname: history.location.pathname,
+      search: stateToUrlSearch('add_system_modal=true', isModalOpen),
+    });
+  }, [isModalOpen]);
 
   const reloadData = async () => {
     const groupData = await getGroupById(groupId);

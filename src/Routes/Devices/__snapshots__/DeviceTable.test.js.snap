@@ -30,9 +30,9 @@ exports[`ImageSets table to render correctly 1`] = `
             aria-expanded="false"
             aria-haspopup="listbox"
             aria-label="Options menu"
-            aria-labelledby=" pf-select-toggle-id-1"
+            aria-labelledby=" pf-select-toggle-id-0"
             class="pf-c-select__toggle"
-            id="pf-select-toggle-id-1"
+            id="pf-select-toggle-id-0"
             type="button"
           >
             <div
@@ -149,7 +149,7 @@ exports[`ImageSets table to render correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-expandable-content-3"
+      id="toolbar-expandable-content-0"
     >
       <div
         class="pf-c-toolbar__group"
@@ -168,7 +168,7 @@ exports[`ImageSets table to render correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-expandable-content-4"
+      id="toolbar-expandable-content-1"
     >
       <div
         class="pf-c-toolbar__group"

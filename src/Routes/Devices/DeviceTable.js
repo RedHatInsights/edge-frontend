@@ -11,11 +11,14 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { loadDeviceTable } from '../../store/actions';
 import { RegistryContext } from '../../store';
 import { deviceTableReducer } from '../../store/reducers';
+import CustomEmptyState from '../../components/Empty';
+import { useHistory } from 'react-router-dom';
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
   InProgressIcon,
 } from '@patternfly/react-icons';
+import { emptyStateNoFliters } from '../../constants';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(/* webpackChunkName: "CreateImageWizard" */ './UpdateDeviceModal')
@@ -183,6 +186,8 @@ const DeviceTable = ({
     shallowEqual
   );
 
+  const history = useHistory();
+
   useEffect(() => {
     const registered = getRegistry().register({ deviceTableReducer });
     loadDeviceTable(dispatch);
@@ -193,25 +198,27 @@ const DeviceTable = ({
     data && setRows(createRows(data));
   }, [data]);
 
-  const actionResolver = () => {
-    return [
-      {
-        title: 'Update Device',
-        onClick: (_event, _rowId, rowData) => {
-          setUpdateModal((prevState) => {
-            return {
-              ...prevState,
-              isOpen: true,
-              deviceData: {
-                id: rowData?.id,
-                display_name: rowData?.display_name,
-              },
-              imageData: rowData?.updateImageData,
-            };
-          });
+  const actionResolver = (rowData) => {
+    return (
+      rowData.id && [
+        {
+          title: 'Update Device',
+          onClick: (_event, _rowId, rowData) => {
+            setUpdateModal((prevState) => {
+              return {
+                ...prevState,
+                isOpen: true,
+                deviceData: {
+                  id: rowData?.id,
+                  display_name: rowData?.display_name,
+                },
+                imageData: rowData?.updateImageData,
+              };
+            });
+          },
         },
-      },
-    ];
+      ]
+    );
   };
 
   const areActionsDisabled = (rowData) =>
@@ -219,37 +226,55 @@ const DeviceTable = ({
 
   return (
     <>
-      <GeneralTable
-        apiFilterSort={false}
-        filters={defaultFilters}
-        loadTableData={loadDeviceTable}
-        tableData={{
-          count: count,
-          isLoading: isLoading,
-          hasError: hasError,
-        }}
-        columnNames={columnNames}
-        rows={
-          (temp ? rows.filter((row) => temp.includes(row.deviceID)) : rows) ||
-          []
-        }
-        actionResolver={actionResolver}
-        areActionsDisabled={areActionsDisabled}
-        defaultSort={{ index: 3, direction: 'desc' }}
-        toolbarButtons={
-          setIsModalOpen
-            ? [
-                {
-                  title: 'Add systems',
-                  click: () => setIsModalOpen(true),
-                },
-              ]
-            : []
-        }
-        hasCheckbox={hasCheckbox}
-        skeletonRowQuantity={skeletonRowQuantity}
-        selectedItems={selectedItems}
-      />
+      {emptyStateNoFliters(isLoading, count, history) ? (
+        <CustomEmptyState
+          data-testid="general-table-empty-state-no-data"
+          icon={'plus'}
+          title={'Connect edge devices'}
+          body={
+            'Connect and manage edge devices here after registering them via the console. To start, create a RHEL for Edge image and install it to your target device.'
+          }
+          secondaryActions={[
+            {
+              title: 'How to connect a device',
+              link: '/',
+              type: 'link',
+            },
+          ]}
+        />
+      ) : (
+        <GeneralTable
+          apiFilterSort={false}
+          filters={defaultFilters}
+          loadTableData={loadDeviceTable}
+          tableData={{
+            count: count,
+            isLoading: isLoading,
+            hasError: hasError,
+          }}
+          columnNames={columnNames}
+          rows={
+            (temp ? rows.filter((row) => temp.includes(row.deviceID)) : rows) ||
+            []
+          }
+          actionResolver={actionResolver}
+          areActionsDisabled={areActionsDisabled}
+          defaultSort={{ index: 3, direction: 'desc' }}
+          toolbarButtons={
+            setIsModalOpen
+              ? [
+                  {
+                    title: 'Add systems',
+                    click: () => setIsModalOpen(true),
+                  },
+                ]
+              : []
+          }
+          hasCheckbox={hasCheckbox}
+          skeletonRowQuantity={skeletonRowQuantity}
+          selectedItems={selectedItems}
+        />
+      )}
       {updateModal.isOpen && (
         <Suspense
           fallback={

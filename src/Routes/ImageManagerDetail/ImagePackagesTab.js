@@ -120,7 +120,6 @@ const ImagePackagesTab = ({ imageVersion }) => {
       <GeneralTable
         apiFilterSort={false}
         filters={defaultFilters}
-        //loadTableData={loadImagePackageMetadata}
         tableData={{
           count:
             toggleTable === 0
@@ -148,7 +147,10 @@ const ImagePackagesTab = ({ imageVersion }) => {
         ]}
         toggleAction={handleToggleTable}
         toggleState={toggleTable}
-        emptyStateMessage="No packages to display"
+        emptyFilterState={{
+          icon: 'search',
+          title: 'No packages to display',
+        }}
       />
     </Main>
   ) : (
