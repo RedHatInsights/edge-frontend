@@ -14,6 +14,7 @@ import CubeIcon from '@patternfly/react-icons/dist/esm/icons/cube-icon';
 import {
   ExternalLinkAltIcon,
   QuestionCircleIcon,
+  PlusCircleIcon,
 } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -24,6 +25,7 @@ const emptyStateIconMapper = {
   module: ModuleIcon,
   cube: CubeIcon,
   question: QuestionCircleIcon,
+  plus: PlusCircleIcon,
 };
 
 const Empty = ({
@@ -34,7 +36,7 @@ const Empty = ({
   primaryAction,
   secondaryActions,
 }) => (
-  <EmptyState style={{ backgroundColor: bgColor || '' }}>
+  <EmptyState variant="large" style={{ backgroundColor: bgColor || '' }}>
     {icon && <EmptyStateIcon icon={emptyStateIconMapper[icon]} />}
     <Title headingLevel="h4" size="lg">
       {title}

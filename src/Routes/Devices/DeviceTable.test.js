@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { init, RegistryContext } from '../../store';
 import { render, screen } from '@testing-library/react';
 import logger from 'redux-logger';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('ImageSets table', () => {
   it('to render correctly', async () => {
@@ -18,7 +19,8 @@ describe('ImageSets table', () => {
         <Provider store={registry.getStore()}>
           <DeviceTable />
         </Provider>
-      </RegistryContext.Provider>
+      </RegistryContext.Provider>,
+      { wrapper: MemoryRouter }
     );
 
     // expect(screen.getByLabelText('Select row 0').checked).toBeFalsy();
