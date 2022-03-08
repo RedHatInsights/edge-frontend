@@ -44,16 +44,16 @@ const RepositoryTable = ({ data, openModal }) => {
         {
           title: (
             <>
-              <Text className='pf-u-mb-xs' component={TextVariants.p}>
+              <Text className="pf-u-mb-xs" component={TextVariants.p}>
                 {name}
               </Text>
               <Text
                 component={TextVariants.a}
                 href={baseURL}
-                target='_blank'
-                rel='noopener noreferrer'
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                {baseURL} <ExternalLinkAltIcon className='pf-u-ml-sm' />
+                {baseURL} <ExternalLinkAltIcon className="pf-u-ml-sm" />
               </Text>
             </>
           ),
