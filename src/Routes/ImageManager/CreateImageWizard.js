@@ -20,6 +20,7 @@ import { getEdgeImageStatus } from '../../api';
 
 const CreateImage = ({ navigateBack }) => {
   const [user, setUser] = useState();
+  const [repositoriesScreen, setRepositoriesScreen] = useState([]);
   const dispatch = useDispatch();
   const closeAction = () => {
     navigateBack();
@@ -27,12 +28,14 @@ const CreateImage = ({ navigateBack }) => {
   };
   useEffect(() => {
     (async () => {
-      const userData = (await insights?.chrome?.auth?.getUser()) || {};
-      setUser(() => userData);
+      repositories().then((result) => setRepositoriesScreen(result));
+      insights?.chrome?.auth
+        ?.getUser()
+        .then((result) => setUser(result != undefined ? result : {}));
     })();
   }, []);
 
-  return user ? (
+  return user && repositoriesScreen ? (
     <ImageCreator
       onClose={closeAction}
       customComponentMapper={{
@@ -117,7 +120,7 @@ const CreateImage = ({ navigateBack }) => {
               imageSetDetails,
               imageOutput,
               registration,
-              repositories,
+              repositoriesScreen,
               packages,
               review,
             ],
