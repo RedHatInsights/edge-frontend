@@ -40,7 +40,7 @@ const App = (props) => {
         <Routes childProps={props} />
       ) : (
         <Bullseye>
-          <Spinner size="xl" />
+          <Spinner size='xl' />
         </Bullseye>
       )}
     </Fragment>

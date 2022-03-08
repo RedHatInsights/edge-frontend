@@ -10,10 +10,10 @@ const Inventory = () => {
   const [reload, setReload] = useState([]);
   return (
     <Fragment>
-      <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Inventory" />
+      <PageHeader className='pf-m-light'>
+        <PageHeaderTitle title='Inventory' />
       </PageHeader>
-      <Main className="edge-devices">
+      <Main className='edge-devices'>
         <DeviceTable
           reload={reload}
           setReload={setReload}

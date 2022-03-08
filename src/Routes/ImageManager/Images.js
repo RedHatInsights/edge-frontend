@@ -16,6 +16,7 @@ import { RegistryContext } from '../../store';
 import { edgeImageSetsReducer } from '../../store/reducers';
 import ImageSetsTable from './ImageSetsTable';
 import { stateToUrlSearch } from '../../constants';
+import Test from '../../Test';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -63,10 +64,11 @@ const Images = () => {
 
   return (
     <Fragment>
-      <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Images" />
+      <Test />
+      <PageHeader className='pf-m-light'>
+        <PageHeaderTitle title='Images' />
       </PageHeader>
-      <Main className="edge-devices">
+      <Main className='edge-devices'>
         <ImageSetsTable
           openCreateWizard={openCreateWizard}
           openUpdateWizard={openUpdateWizard}
