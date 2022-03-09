@@ -24,7 +24,6 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 
 const UpdateImage = ({ navigateBack, updateImageID }) => {
   const [user, setUser] = useState();
-  const [repositoriesScreen, setRepositoriesScreen] = useState([]);
   const dispatch = useDispatch();
   const closeAction = () => {
     navigateBack();
@@ -49,7 +48,6 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
 
   useEffect(() => {
     (async () => {
-      repositories().then((result) => setRepositoriesScreen(result));
       insights?.chrome?.auth
         ?.getUser()
         .then((result) => setUser(result != undefined ? result : {}));
@@ -168,7 +166,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
               imageOutput,
               registration,
               packages,
-              repositoriesScreen,
+              repositories,
               review,
             ],
           },
