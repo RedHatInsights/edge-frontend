@@ -45,8 +45,8 @@ const RepoModal = ({
         }
         onSubmit={async (values) => {
           await onSubmit(values);
+          setTimeout(async () => await reloadData(), 500);
           openModal();
-          reloadData();
         }}
         onCancel={() => openModal()}
       />

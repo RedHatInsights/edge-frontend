@@ -9,12 +9,10 @@ import Main from '@redhat-cloud-services/frontend-components/Main';
 import RepositoryHeader from './RepositoryHeader';
 import { getCustomRepositories } from '../../api/index';
 import { Skeleton } from '@patternfly/react-core';
-import useApi from '../../hooks/useApi';
 
 const Repository = () => {
-  const { data, isLoading: loaded, hasError } = useApi(getCustomRepositories);
-  //const [data, setData] = useState([]);
-  //const [loaded, setLoaded] = useState(false);
+  const [data, setData] = useState([]);
+  const [loaded, setLoaded] = useState(false);
   const [modalDetails, setModalDetails] = useState({
     isOpen: {
       add: false,
@@ -25,8 +23,6 @@ const Repository = () => {
     name: '',
     baseURL: '',
   });
-
-  console.log(data);
 
   const openModal = ({ type, id = null, name = '', baseURL = '' }) => {
     setModalDetails((prevState) => ({
@@ -51,34 +47,26 @@ const Repository = () => {
         ...repo,
       }))
     );
-    //setLoaded(true);
+    setLoaded(true);
   };
 
-  //useEffect(() => reloadData(), []);
+  useEffect(() => reloadData(), []);
 
   return (
     <>
       <RepositoryHeader />
       <Main>
-        {!loaded ? (
-          data?.data?.length > 0 ? (
+        {loaded ? (
+          data.length > 0 ? (
             <>
               <TableHeader />
-              <RepositoryTable
-                data={data?.data?.map((repo) => ({
-                  id: repo.ID,
-                  name: repo.Name,
-                  baseURL: repo.URL,
-                  ...repo,
-                }))}
-                openModal={openModal}
-              />
+              <RepositoryTable data={data} openModal={openModal} />
             </>
           ) : (
             <EmptyState
-              icon="repository"
-              title="Add a custom repository"
-              body="Add custom repositories to build RHEL for Edge images with additional packages."
+              icon='repository'
+              title='Add a custom repository'
+              body='Add custom repositories to build RHEL for Edge images with additional packages.'
               primaryAction={{
                 text: 'Add Repository',
                 click: () => openModal({ type: 'add' }),

@@ -20,9 +20,44 @@ import {
 } from '@patternfly/react-icons';
 import { emptyStateNoFliters } from '../../constants';
 
-const UpdateDeviceModal = React.lazy(() =>
-  import(/* webpackChunkName: "CreateImageWizard" */ './UpdateDeviceModal')
-);
+const getDeviceStatus = (deviceData) =>
+  deviceData?.ImageInfo?.UpdatesAvailable
+    ? 'updateAvailable'
+    : deviceData?.Device?.Booted
+    ? 'running'
+    : 'booting';
+
+const DeviceStatus = ({ Device }) => {
+  const status = getDeviceStatus(Device);
+  const statusType = {
+    booting: (
+      <Split className='pf-u-info-color-100'>
+        <SplitItem className='pf-u-mr-sm'>
+          <InProgressIcon />
+        </SplitItem>
+        <SplitItem>Booting</SplitItem>
+      </Split>
+    ),
+    running: (
+      <Split className='pf-u-success-color-100'>
+        <SplitItem className='pf-u-mr-sm'>
+          <CheckCircleIcon />
+        </SplitItem>
+        <SplitItem>Running</SplitItem>
+      </Split>
+    ),
+    updateAvailable: (
+      <Split className='pf-u-warning-color-100'>
+        <SplitItem className='pf-u-mr-sm'>
+          <ExclamationTriangleIcon />
+        </SplitItem>
+        <SplitItem>Update Available</SplitItem>
+      </Split>
+    ),
+  };
+
+  return statusType[status];
+};
 
 const defaultFilters = [
   {
@@ -74,45 +109,6 @@ const columnNames = [
   },
 ];
 
-const DeviceStatus = ({ Device }) => {
-  const status = getDeviceStatus(Device);
-  const statusType = {
-    booting: (
-      <Split className="pf-u-info-color-100">
-        <SplitItem className="pf-u-mr-sm">
-          <InProgressIcon />
-        </SplitItem>
-        <SplitItem>Booting</SplitItem>
-      </Split>
-    ),
-    running: (
-      <Split className="pf-u-success-color-100">
-        <SplitItem className="pf-u-mr-sm">
-          <CheckCircleIcon />
-        </SplitItem>
-        <SplitItem>Running</SplitItem>
-      </Split>
-    ),
-    updateAvailable: (
-      <Split className="pf-u-warning-color-100">
-        <SplitItem className="pf-u-mr-sm">
-          <ExclamationTriangleIcon />
-        </SplitItem>
-        <SplitItem>Update Available</SplitItem>
-      </Split>
-    ),
-  };
-
-  return statusType[status];
-};
-
-const getDeviceStatus = (deviceData) =>
-  deviceData?.ImageInfo?.UpdatesAvailable
-    ? 'updateAvailable'
-    : deviceData?.Device?.Booted
-    ? 'running'
-    : 'booting';
-
 const createRows = (devices) =>
   devices?.map((device) => ({
     deviceID: device?.Device?.ID,
@@ -121,10 +117,10 @@ const createRows = (devices) =>
     updateImageData: device?.ImageInfo?.UpdatesAvailable?.[0],
     deviceStatus: getDeviceStatus(device),
     noApiSortFilter: [
-      device?.Device?.DeviceName,
+      device?.Device?.DeviceName || '',
       device?.ImageInfo?.Image?.Name || '',
       '',
-      device?.Device?.LastSeen,
+      device?.Device?.LastSeen || '',
       getDeviceStatus(device),
     ],
     cells: [
@@ -159,66 +155,51 @@ const createRows = (devices) =>
   }));
 
 const DeviceTable = ({
-  temp = false,
-  hasCheckbox = true,
+  hasCheckbox = false,
   setIsModalOpen,
   selectedItems,
   skeletonRowQuantity,
-  reload,
-  setReload,
+  data,
+  count,
+  isLoading,
+  hasError,
+  setUpdateModal,
 }) => {
-  const { getRegistry } = useContext(RegistryContext);
-  const [rows, setRows] = useState([]);
-  const dispatch = useDispatch();
-  const [updateModal, setUpdateModal] = useState({
-    isOpen: false,
-    deviceData: null,
-    imageData: null,
-  });
-
-  const { count, data, isLoading, hasError } = useSelector(
-    ({ deviceTableReducer }) => ({
-      count: deviceTableReducer?.data?.count || 0,
-      data: deviceTableReducer?.data?.data || null,
-      isLoading: deviceTableReducer?.isLoading,
-      hasError: deviceTableReducer?.hasError,
-    }),
-    shallowEqual
-  );
-
+  console.log(data);
   const history = useHistory();
 
-  useEffect(() => {
-    const registered = getRegistry().register({ deviceTableReducer });
-    loadDeviceTable(dispatch);
-    return () => registered();
-  }, [reload]);
-
-  useEffect(() => {
-    data && setRows(createRows(data));
-  }, [data]);
-
   const actionResolver = (rowData) => {
-    return (
-      rowData.id && [
-        {
-          title: 'Update Device',
-          onClick: (_event, _rowId, rowData) => {
-            setUpdateModal((prevState) => {
-              return {
-                ...prevState,
-                isOpen: true,
-                deviceData: {
-                  id: rowData?.id,
-                  display_name: rowData?.display_name,
-                },
-                imageData: rowData?.updateImageData,
-              };
-            });
-          },
+    // if (!rowData.id) return [];
+    const actions = [];
+
+    if (!areActionsDisabled(rowData)) {
+      actions.push({
+        title: 'Update device',
+        onClick: (_event, _rowId, rowData) => {
+          setUpdateModal((prevState) => {
+            return {
+              ...prevState,
+              isOpen: true,
+              deviceData: {
+                id: rowData?.id,
+                display_name: rowData?.display_name,
+              },
+              imageData: rowData?.updateImageData,
+            };
+          });
         },
-      ]
-    );
+      });
+    }
+
+    if (setIsModalOpen) {
+      console.log('yup');
+      actions.push({
+        title: 'Remove device',
+        onClick: () => console.log('stuff'),
+      });
+    }
+
+    return actions;
   };
 
   const areActionsDisabled = (rowData) =>
@@ -228,7 +209,7 @@ const DeviceTable = ({
     <>
       {emptyStateNoFliters(isLoading, count, history) ? (
         <CustomEmptyState
-          data-testid="general-table-empty-state-no-data"
+          data-testid='general-table-empty-state-no-data'
           icon={'plus'}
           title={'Connect edge devices'}
           body={
@@ -253,12 +234,9 @@ const DeviceTable = ({
             hasError: hasError,
           }}
           columnNames={columnNames}
-          rows={
-            (temp ? rows.filter((row) => temp.includes(row.deviceID)) : rows) ||
-            []
-          }
+          rows={createRows(data || [])}
           actionResolver={actionResolver}
-          areActionsDisabled={areActionsDisabled}
+          areActionsDisabled={setIsModalOpen ? false : areActionsDisabled}
           defaultSort={{ index: 3, direction: 'desc' }}
           toolbarButtons={
             setIsModalOpen
@@ -274,30 +252,6 @@ const DeviceTable = ({
           skeletonRowQuantity={skeletonRowQuantity}
           selectedItems={selectedItems}
         />
-      )}
-      {updateModal.isOpen && (
-        <Suspense
-          fallback={
-            <Bullseye>
-              <Spinner />
-            </Bullseye>
-          }
-        >
-          <UpdateDeviceModal
-            navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
-              setUpdateModal((prevState) => {
-                return {
-                  ...prevState,
-                  isOpen: false,
-                };
-              });
-            }}
-            setUpdateModal={setUpdateModal}
-            updateModal={updateModal}
-            refreshTable={() => setReload(true)}
-          />
-        </Suspense>
       )}
     </>
   );

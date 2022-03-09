@@ -1,28 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Modal from '../../components/Modal';
 import DeviceTable from '../Devices/DeviceTable';
 import PropTypes from 'prop-types';
 import { addDevicesToGroup } from '../../api/index';
+import { getInventory } from '../../api';
+import useApi from '../../hooks/useApi';
 
 const DeviceModal = ({ groupId, closeModal, isOpen, reloadData }) => {
-  let stuff = [];
-  const fn = (values) => {
-    stuff = values;
+  const [response, fetchData] = useApi(getInventory);
+  const { data, isLoading, hasError } = response;
+  let deviceIds = [];
+  const getDeviceIds = (values) => {
+    deviceIds = values;
   };
 
   return (
     <Modal
       isOpen={isOpen}
       openModal={closeModal}
-      title="Add systems"
-      submitLabel="Add systems"
+      title='Add systems'
+      submitLabel='Add systems'
       additionalMappers={{
         'device-table': {
           component: DeviceTable,
-          //selectedItems: (values) => setSelectedItems(values),
-          selectedItems: fn,
-          // addSystemsHandler: ,
+          selectedItems: getDeviceIds,
           skeletonRowQuantity: 15,
+          hasCheckbox: true,
+          isLoading,
+          hasError,
+          count: data?.count,
+          data: data?.data || [],
         },
       }}
       schema={{
@@ -31,11 +38,11 @@ const DeviceModal = ({ groupId, closeModal, isOpen, reloadData }) => {
       onSubmit={() => {
         addDevicesToGroup(
           parseInt(groupId),
-          stuff.map((device) => ({ ID: device.deviceID }))
+          deviceIds.map((device) => ({ ID: device.deviceID }))
         );
       }}
       reloadData={reloadData}
-      size="large"
+      size='large'
     />
   );
 };

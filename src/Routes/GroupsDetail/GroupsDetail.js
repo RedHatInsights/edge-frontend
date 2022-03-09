@@ -24,19 +24,18 @@ import { useParams } from 'react-router-dom';
 import { getGroupById } from '../../api/index';
 import DeviceModal from '../Devices/DeviceModal';
 import { stateToUrlSearch } from '../../constants';
+import useApi from '../../hooks/useApi';
 
 const GroupsDetail = () => {
-  const [data, setData] = useState({});
-  const [reload, setReload] = useState([]);
+  const params = useParams();
+  const [response, fetchData] = useApi(() => getGroupById(groupId));
+  const { data, isLoading, hasError } = response;
+  console.log(data);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const params = useParams();
   const { groupId } = params;
   const history = useHistory();
-
-  useEffect(() => {
-    reloadData();
-  }, []);
 
   useEffect(() => {
     history.push({
@@ -45,24 +44,19 @@ const GroupsDetail = () => {
     });
   }, [isModalOpen]);
 
-  const reloadData = async () => {
-    const groupData = await getGroupById(groupId);
-    setData(groupData);
-  };
-
   return (
     <>
-      <PageHeader className="pf-m-light">
+      <PageHeader className='pf-m-light'>
         {data?.Name ? (
           <Breadcrumb>
             <BreadcrumbItem>
-              <Link to={`${paths['fleet-management']}`}>Fleet Management</Link>
+              <Link to={`${paths['fleet-management']}`}>Groups</Link>
             </BreadcrumbItem>
             <BreadcrumbItem>{data.Name}</BreadcrumbItem>
           </Breadcrumb>
         ) : (
           <Breadcrumb isActive>
-            <Skeleton width="100px" />
+            <Skeleton width='100px' />
           </Breadcrumb>
         )}
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
@@ -70,7 +64,7 @@ const GroupsDetail = () => {
             {data?.Name ? (
               <PageHeaderTitle title={data?.Name} />
             ) : (
-              <Skeleton width="150px" />
+              <Skeleton width='150px' />
             )}
           </FlexItem>
           <FlexItem>
@@ -78,7 +72,7 @@ const GroupsDetail = () => {
               position={DropdownPosition.right}
               toggle={
                 <DropdownToggle
-                  id="image-set-details-dropdown"
+                  id='image-set-details-dropdown'
                   toggleIndicator={CaretDownIcon}
                   onToggle={(newState) => setIsDropdownOpen(newState)}
                   isDisabled={false}
@@ -88,26 +82,28 @@ const GroupsDetail = () => {
               }
               isOpen={isDropdownOpen}
               dropdownItems={[
-                <DropdownItem key="update-all-devices">Delete</DropdownItem>,
+                <DropdownItem key='update-all-devices'>Delete</DropdownItem>,
               ]}
             />
           </FlexItem>
         </Flex>
       </PageHeader>
-      <Main className="edge-devices">
+      <Main className='edge-devices'>
         {data?.Devices?.length > 0 ? (
           <DeviceTable
-            temp={data?.Devices.map((device) => device.ID)}
-            reload={reload}
-            setReload={setReload}
+            data={data?.Devices || []}
+            count={data?.Devices.length}
+            isLoading={isLoading}
+            hasError={hasError}
+            hasCheckbox={true}
             setIsModalOpen={setIsModalOpen}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
-              icon="cube"
-              title="Add systems to the group"
-              body="Create system groups to help manage your devices more effectively"
+              icon='cube'
+              title='Add systems to the group'
+              body='Create system groups to help manage your devices more effectively'
               primaryAction={{
                 text: 'Add systems',
                 click: () => setIsModalOpen(true),
@@ -123,12 +119,14 @@ const GroupsDetail = () => {
           </Flex>
         )}
       </Main>
-      <DeviceModal
-        groupId={groupId}
-        closeModal={() => setIsModalOpen(false)}
-        isOpen={isModalOpen}
-        reloadData={() => setReload(true)}
-      />
+      {isModalOpen && (
+        <DeviceModal
+          groupId={groupId}
+          closeModal={() => setIsModalOpen(false)}
+          isOpen={isModalOpen}
+          reloadData={fetchData}
+        />
+      )}
     </>
   );
 };

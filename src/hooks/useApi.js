@@ -4,20 +4,16 @@ import { useDispatch } from 'react-redux';
 
 const useApi = (api) => {
   const dispatch = useDispatch();
-  const [response, setResponse] = useState({
-    data: [],
-    isLoading: true,
-    hasError: false,
-  });
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   const fetchData = async () => {
+    setIsLoading(true);
+
     try {
       const data = await api();
-      setResponse({
-        ...response,
-        data,
-        isLoading: false,
-      });
+      setData(data);
 
       dispatch({
         ...addNotification({
@@ -27,12 +23,7 @@ const useApi = (api) => {
         }),
       });
     } catch (err) {
-      console.log(err);
-      setResponse({
-        ...response,
-        isLoading: false,
-        hasError: true,
-      });
+      setHasError(true);
 
       dispatch({
         ...addNotification({
@@ -41,6 +32,8 @@ const useApi = (api) => {
           description: 'An error occurred requesting data',
         }),
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -48,7 +41,7 @@ const useApi = (api) => {
     fetchData();
   }, []);
 
-  return response;
+  return [{ data, isLoading, hasError }, fetchData];
 };
 
 export default useApi;
