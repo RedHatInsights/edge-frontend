@@ -1,14 +1,8 @@
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
-import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 
-const useApi = (api, statusMessages) => {
-  const dispatch = useDispatch();
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-
+const apiWithToast = (dispatch, api, statusMessages) => {
   const hasSuccess = statusMessages?.onSuccess;
+
   if (!statusMessages) {
     statusMessages = {
       onSuccess: {
@@ -23,11 +17,8 @@ const useApi = (api, statusMessages) => {
   }
 
   const fetchData = async () => {
-    setIsLoading(true);
-
     try {
-      const data = await api();
-      setData(data);
+      await api();
 
       if (hasSuccess) {
         dispatch({
@@ -38,24 +29,16 @@ const useApi = (api, statusMessages) => {
         });
       }
     } catch (err) {
-      setHasError(true);
-
       dispatch({
         ...addNotification({
           variant: 'danger',
           ...statusMessages.onError,
         }),
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  return [{ data, isLoading, hasError }, fetchData];
+  fetchData();
 };
 
-export default useApi;
+export default apiWithToast;

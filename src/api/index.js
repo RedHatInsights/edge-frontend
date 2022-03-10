@@ -470,3 +470,14 @@ export const addDevicesToGroup = (groupId, devices) => {
     Devices: devices,
   });
 };
+
+export const removeDevicesFromGroup = (groupId, devices) => {
+  return instance.delete(`${EDGE_API}/device-groups/${groupId}/devices`, {
+    ID: groupId,
+    Devices: devices,
+  });
+};
+
+export const removeDeviceFromGroupById = (groupId, id) => {
+  return instance.delete(`${EDGE_API}/device-groups/${groupId}/devices/${id}`);
+};

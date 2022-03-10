@@ -63,10 +63,10 @@ const Images = () => {
 
   return (
     <Fragment>
-      <PageHeader className='pf-m-light'>
-        <PageHeaderTitle title='Images' />
+      <PageHeader className="pf-m-light">
+        <PageHeaderTitle title="Images" />
       </PageHeader>
-      <Main className='edge-devices'>
+      <Main className="edge-devices">
         <ImageSetsTable
           openCreateWizard={openCreateWizard}
           openUpdateWizard={openUpdateWizard}

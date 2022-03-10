@@ -21,21 +21,32 @@ import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import DeviceTable from '../Devices/DeviceTable';
 import { useParams } from 'react-router-dom';
-import { getGroupById } from '../../api/index';
+import {
+  getGroupById,
+  removeDeviceFromGroupById,
+  removeDevicesFromGroup,
+} from '../../api/index';
 import DeviceModal from '../Devices/DeviceModal';
 import { stateToUrlSearch } from '../../constants';
 import useApi from '../../hooks/useApi';
+import apiWithToast from '../../utils/apiWithToast';
+import { useDispatch } from 'react-redux';
 
 const GroupsDetail = () => {
+  const dispatch = useDispatch();
   const params = useParams();
-  const [response, fetchData] = useApi(() => getGroupById(groupId));
-  const { data, isLoading, hasError } = response;
-  console.log(data);
+  const history = useHistory();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [response, fetchData] = useApi(() => getGroupById(groupId));
+  const { data, isLoading, hasError } = response;
   const { groupId } = params;
-  const history = useHistory();
+
+  let deviceIds = [];
+  const getDeviceIds = (values) => {
+    deviceIds = values;
+  };
 
   useEffect(() => {
     history.push({
@@ -44,9 +55,47 @@ const GroupsDetail = () => {
     });
   }, [isModalOpen]);
 
+  const handleSingleDeviceRemoval = (deviceId) => {
+    console.log('removed');
+    console.log(groupId);
+    console.log(deviceId);
+    const statusMessages = {
+      onSuccess: {
+        title: 'Success',
+        description: 'Device has been removed successfully',
+      },
+      onError: { title: 'Error', description: 'Failed to remove device' },
+    };
+    apiWithToast(
+      dispatch,
+      () => removeDeviceFromGroupById(groupId, deviceId),
+      statusMessages
+    );
+  };
+
+  const handleBulkDeviceRemoval = () => {
+    console.log('removed bulk');
+    console.log(groupId);
+    console.log(deviceIds);
+    const statusMessages = {
+      onSuccess: {
+        title: 'Success',
+        description: 'devices have been removed successfully',
+      },
+      onError: { title: 'Error', description: 'failed to remove devices' },
+    };
+    apiWithToast(
+      removeDevicesFromGroup(
+        parseInt(groupId),
+        deviceIds.map((device) => ({ ID: device.deviceID }))
+      ),
+      statusMessages
+    );
+  };
+
   return (
     <>
-      <PageHeader className='pf-m-light'>
+      <PageHeader className="pf-m-light">
         {data?.Name ? (
           <Breadcrumb>
             <BreadcrumbItem>
@@ -56,7 +105,7 @@ const GroupsDetail = () => {
           </Breadcrumb>
         ) : (
           <Breadcrumb isActive>
-            <Skeleton width='100px' />
+            <Skeleton width="100px" />
           </Breadcrumb>
         )}
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
@@ -64,7 +113,7 @@ const GroupsDetail = () => {
             {data?.Name ? (
               <PageHeaderTitle title={data?.Name} />
             ) : (
-              <Skeleton width='150px' />
+              <Skeleton width="150px" />
             )}
           </FlexItem>
           <FlexItem>
@@ -72,7 +121,7 @@ const GroupsDetail = () => {
               position={DropdownPosition.right}
               toggle={
                 <DropdownToggle
-                  id='image-set-details-dropdown'
+                  id="image-set-details-dropdown"
                   toggleIndicator={CaretDownIcon}
                   onToggle={(newState) => setIsDropdownOpen(newState)}
                   isDisabled={false}
@@ -82,13 +131,13 @@ const GroupsDetail = () => {
               }
               isOpen={isDropdownOpen}
               dropdownItems={[
-                <DropdownItem key='update-all-devices'>Delete</DropdownItem>,
+                <DropdownItem key="update-all-devices">Delete</DropdownItem>,
               ]}
             />
           </FlexItem>
         </Flex>
       </PageHeader>
-      <Main className='edge-devices'>
+      <Main className="edge-devices">
         {data?.Devices?.length > 0 ? (
           <DeviceTable
             data={data?.Devices || []}
@@ -97,13 +146,21 @@ const GroupsDetail = () => {
             hasError={hasError}
             hasCheckbox={true}
             setIsModalOpen={setIsModalOpen}
+            handleSingleDeviceRemoval={handleSingleDeviceRemoval}
+            kebabItems={[
+              {
+                title: 'Remove from group',
+                onClick: handleBulkDeviceRemoval,
+              },
+            ]}
+            selectedItems={getDeviceIds}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
-              icon='cube'
-              title='Add systems to the group'
-              body='Create system groups to help manage your devices more effectively'
+              icon="cube"
+              title="Add systems to the group"
+              body="Create system groups to help manage your devices more effectively"
               primaryAction={{
                 text: 'Add systems',
                 click: () => setIsModalOpen(true),

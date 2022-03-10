@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Modal from '../../components/Modal';
 import DeviceTable from '../Devices/DeviceTable';
 import PropTypes from 'prop-types';
@@ -7,7 +7,7 @@ import { getInventory } from '../../api';
 import useApi from '../../hooks/useApi';
 
 const DeviceModal = ({ groupId, closeModal, isOpen, reloadData }) => {
-  const [response, fetchData] = useApi(getInventory);
+  const [response] = useApi(getInventory);
   const { data, isLoading, hasError } = response;
   let deviceIds = [];
   const getDeviceIds = (values) => {
@@ -18,8 +18,8 @@ const DeviceModal = ({ groupId, closeModal, isOpen, reloadData }) => {
     <Modal
       isOpen={isOpen}
       openModal={closeModal}
-      title='Add systems'
-      submitLabel='Add systems'
+      title="Add systems"
+      submitLabel="Add systems"
       additionalMappers={{
         'device-table': {
           component: DeviceTable,
@@ -42,7 +42,7 @@ const DeviceModal = ({ groupId, closeModal, isOpen, reloadData }) => {
         );
       }}
       reloadData={reloadData}
-      size='large'
+      size="large"
     />
   );
 };

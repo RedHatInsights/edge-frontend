@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import DeviceTable from './DeviceTable';
 import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api';
-import { Bullseye, Spinner, Split, SplitItem } from '@patternfly/react-core';
+import { Bullseye, Spinner } from '@patternfly/react-core';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(/* webpackChunkName: "CreateImageWizard" */ './UpdateDeviceModal')
@@ -29,10 +29,10 @@ const Inventory = () => {
   console.log(data);
   return (
     <Fragment>
-      <PageHeader className='pf-m-light'>
-        <PageHeaderTitle title='Inventory' />
+      <PageHeader className="pf-m-light">
+        <PageHeaderTitle title="Inventory" />
       </PageHeader>
-      <Main className='edge-devices'>
+      <Main className="edge-devices">
         <DeviceTable
           data={data?.data}
           count={data?.count}

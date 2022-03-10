@@ -1,16 +1,12 @@
-import React, { useEffect, useState, useContext, Suspense } from 'react';
+import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
-import { Bullseye, Spinner, Split, SplitItem } from '@patternfly/react-core';
-import { shallowEqual, useSelector } from 'react-redux';
+import { Split, SplitItem } from '@patternfly/react-core';
 import { loadDeviceTable } from '../../store/actions';
-import { RegistryContext } from '../../store';
-import { deviceTableReducer } from '../../store/reducers';
 import CustomEmptyState from '../../components/Empty';
 import { useHistory } from 'react-router-dom';
 import {
@@ -31,24 +27,24 @@ const DeviceStatus = ({ Device }) => {
   const status = getDeviceStatus(Device);
   const statusType = {
     booting: (
-      <Split className='pf-u-info-color-100'>
-        <SplitItem className='pf-u-mr-sm'>
+      <Split className="pf-u-info-color-100">
+        <SplitItem className="pf-u-mr-sm">
           <InProgressIcon />
         </SplitItem>
         <SplitItem>Booting</SplitItem>
       </Split>
     ),
     running: (
-      <Split className='pf-u-success-color-100'>
-        <SplitItem className='pf-u-mr-sm'>
+      <Split className="pf-u-success-color-100">
+        <SplitItem className="pf-u-mr-sm">
           <CheckCircleIcon />
         </SplitItem>
         <SplitItem>Running</SplitItem>
       </Split>
     ),
     updateAvailable: (
-      <Split className='pf-u-warning-color-100'>
-        <SplitItem className='pf-u-mr-sm'>
+      <Split className="pf-u-warning-color-100">
+        <SplitItem className="pf-u-mr-sm">
           <ExclamationTriangleIcon />
         </SplitItem>
         <SplitItem>Update Available</SplitItem>
@@ -164,6 +160,8 @@ const DeviceTable = ({
   isLoading,
   hasError,
   setUpdateModal,
+  handleSingleDeviceRemoval,
+  kebabItems,
 }) => {
   console.log(data);
   const history = useHistory();
@@ -195,7 +193,7 @@ const DeviceTable = ({
       console.log('yup');
       actions.push({
         title: 'Remove device',
-        onClick: () => console.log('stuff'),
+        onClick: () => handleSingleDeviceRemoval(2),
       });
     }
 
@@ -209,7 +207,7 @@ const DeviceTable = ({
     <>
       {emptyStateNoFliters(isLoading, count, history) ? (
         <CustomEmptyState
-          data-testid='general-table-empty-state-no-data'
+          data-testid="general-table-empty-state-no-data"
           icon={'plus'}
           title={'Connect edge devices'}
           body={
@@ -251,6 +249,7 @@ const DeviceTable = ({
           hasCheckbox={hasCheckbox}
           skeletonRowQuantity={skeletonRowQuantity}
           selectedItems={selectedItems}
+          kebabItems={kebabItems}
         />
       )}
     </>
@@ -268,6 +267,13 @@ DeviceTable.propTypes = {
   selectedItems: PropTypes.array,
   reload: PropTypes.bool,
   setReload: PropTypes.func,
+  data: PropTypes.array,
+  count: PropTypes.number,
+  isLoading: PropTypes.bool,
+  hasError: PropTypes.bool,
+  setUpdateModal: PropTypes.func,
+  handleSingleDeviceRemoval: PropTypes.func,
+  kebabItems: PropTypes.array,
 };
 
 export default DeviceTable;

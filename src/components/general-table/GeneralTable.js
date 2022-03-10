@@ -65,6 +65,7 @@ const GeneralTable = ({
   hasCheckbox = false,
   skeletonRowQuantity,
   selectedItems,
+  kebabItems,
 }) => {
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
@@ -348,6 +349,7 @@ const GeneralTable = ({
         toggleButton={toggleButton}
         toggleAction={toggleAction}
         toggleState={toggleState}
+        kebabItems={kebabItems}
       >
         {!isLoading && hasCheckbox && (
           <BulkSelect
@@ -406,6 +408,7 @@ GeneralTable.propTypes = {
   skeletonRowQuantity: PropTypes.number,
   emptyFilterState: PropTypes.object,
   selectedItems: PropTypes.func,
+  kebabItems: PropTypes.array,
 };
 
 export default GeneralTable;
