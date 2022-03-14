@@ -20,6 +20,10 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 
+const WarningIcon = () => (
+  <ExclamationTriangleIcon color={warningColor.value} />
+);
+
 const createModalState = {
   title: 'Create group',
   icon: null,
@@ -101,9 +105,7 @@ const Groups = () => {
       submitLabel: 'Delete',
       initialValues: {},
       variant: 'danger',
-      icon: function () {
-        <ExclamationTriangleIcon color={warningColor.value} />;
-      },
+      icon: WarningIcon,
     });
     setIsModalOpen(true);
   };
