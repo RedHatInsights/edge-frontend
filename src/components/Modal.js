@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 const RepoModal = ({
   isOpen,
   title,
+  titleIconVariant,
   openModal, // should be closeModal, update here and other places that use it
   submitLabel,
   schema,
@@ -22,6 +23,7 @@ const RepoModal = ({
     <Modal
       variant={size ?? 'small'}
       title={title}
+      titleIconVariant={titleIconVariant ?? null}
       isOpen={isOpen}
       onClose={openModal}
     >

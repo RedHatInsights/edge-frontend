@@ -461,7 +461,7 @@ export const updateGroupById = (id, payload) => {
 };
 
 export const deleteGroupById = (id) => {
-  return instance.post(`${EDGE_API}/device-groups/${id}`);
+  return instance.delete(`${EDGE_API}/device-groups/${id}`);
 };
 
 export const addDevicesToGroup = (groupId, devices) => {
