@@ -110,6 +110,7 @@ GroupTable.propTypes = {
   openModal: PropTypes.func,
   isLoading: PropTypes.bool,
   handleRenameModal: PropTypes.func,
+  handleDeleteModal: PropTypes.func,
 };
 
 export default GroupTable;

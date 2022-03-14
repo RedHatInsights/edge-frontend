@@ -68,6 +68,7 @@ RepoModal.propTypes = {
   onSubmit: PropTypes.func,
   size: PropTypes.string,
   additionalMappers: PropTypes.object,
+  titleIconVariant: PropTypes.any,
 };
 
 export default RepoModal;

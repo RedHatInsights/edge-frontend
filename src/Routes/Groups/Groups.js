@@ -97,11 +97,13 @@ const Groups = () => {
   const handleDeleteModal = (id, name) => {
     setModalState({
       title: `Delete ${name}?`,
-      onSubmit: (values) => deleteGroupById(id),
+      onSubmit: () => deleteGroupById(id),
       submitLabel: 'Delete',
       initialValues: {},
       variant: 'danger',
-      icon: () => <ExclamationTriangleIcon color={warningColor.value} />,
+      icon: function () {
+        <ExclamationTriangleIcon color={warningColor.value} />;
+      },
     });
     setIsModalOpen(true);
   };
