@@ -13,7 +13,13 @@ const columns = [
   { title: 'Image', type: 'name', sort: false },
 ];
 
-const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
+const GroupTable = ({
+  data,
+  isLoading,
+  openModal,
+  handleRenameModal,
+  handleDeleteModal,
+}) => {
   const actionResolver = (rowData) => {
     const { id, title } = rowData;
     return (
@@ -24,7 +30,7 @@ const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
         },
         {
           title: 'Delete',
-          onClick: () => console.log('updating'),
+          onClick: () => handleDeleteModal(id, title),
         },
       ]
     );
@@ -104,6 +110,7 @@ GroupTable.propTypes = {
   openModal: PropTypes.func,
   isLoading: PropTypes.bool,
   handleRenameModal: PropTypes.func,
+  handleDeleteModal: PropTypes.func,
 };
 
 export default GroupTable;
