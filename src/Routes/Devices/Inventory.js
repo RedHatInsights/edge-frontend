@@ -27,10 +27,10 @@ const Inventory = () => {
 
   return (
     <Fragment>
-      <PageHeader className='pf-m-light'>
-        <PageHeaderTitle title='Inventory' />
+      <PageHeader className="pf-m-light">
+        <PageHeaderTitle title="Inventory" />
       </PageHeader>
-      <Main className='edge-devices'>
+      <Main className="edge-devices">
         <DeviceTable
           data={data?.data}
           count={data?.count}

@@ -27,24 +27,24 @@ const DeviceStatus = ({ Device }) => {
   const status = getDeviceStatus(Device);
   const statusType = {
     booting: (
-      <Split className='pf-u-info-color-100'>
-        <SplitItem className='pf-u-mr-sm'>
+      <Split className="pf-u-info-color-100">
+        <SplitItem className="pf-u-mr-sm">
           <InProgressIcon />
         </SplitItem>
         <SplitItem>Booting</SplitItem>
       </Split>
     ),
     running: (
-      <Split className='pf-u-success-color-100'>
-        <SplitItem className='pf-u-mr-sm'>
+      <Split className="pf-u-success-color-100">
+        <SplitItem className="pf-u-mr-sm">
           <CheckCircleIcon />
         </SplitItem>
         <SplitItem>Running</SplitItem>
       </Split>
     ),
     updateAvailable: (
-      <Split className='pf-u-warning-color-100'>
-        <SplitItem className='pf-u-mr-sm'>
+      <Split className="pf-u-warning-color-100">
+        <SplitItem className="pf-u-mr-sm">
           <ExclamationTriangleIcon />
         </SplitItem>
         <SplitItem>Update Available</SplitItem>
@@ -168,9 +168,9 @@ const DeviceTable = ({
   const history = useHistory();
 
   const actionResolver = (rowData) => {
-    // if (!rowData.id) return [];
     const actions = [];
     if (isLoading) return actions;
+    if (!rowData.id) return actions;
 
     if (!areActionsDisabled(rowData)) {
       actions.push({
@@ -190,7 +190,6 @@ const DeviceTable = ({
         },
       });
     }
-    // stopped here set is modal fix
 
     if (canBeRemoved) {
       actions.push({
@@ -214,7 +213,7 @@ const DeviceTable = ({
     <>
       {emptyStateNoFliters(isLoading, count, history) ? (
         <CustomEmptyState
-          data-testid='general-table-empty-state-no-data'
+          data-testid="general-table-empty-state-no-data"
           icon={'plus'}
           title={'Connect edge devices'}
           body={
@@ -281,6 +280,8 @@ DeviceTable.propTypes = {
   setUpdateModal: PropTypes.func,
   handleSingleDeviceRemoval: PropTypes.func,
   kebabItems: PropTypes.array,
+  setRemoveModal: PropTypes.func,
+  setIsAddModalOpen: PropTypes.func,
 };
 
 export default DeviceTable;

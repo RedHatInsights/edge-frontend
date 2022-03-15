@@ -117,7 +117,7 @@ const GroupsDetail = () => {
 
   return (
     <>
-      <PageHeader className='pf-m-light'>
+      <PageHeader className="pf-m-light">
         {groupName ? (
           <Breadcrumb>
             <BreadcrumbItem>
@@ -127,7 +127,7 @@ const GroupsDetail = () => {
           </Breadcrumb>
         ) : (
           <Breadcrumb isActive>
-            <Skeleton width='100px' />
+            <Skeleton width="100px" />
           </Breadcrumb>
         )}
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
@@ -135,7 +135,7 @@ const GroupsDetail = () => {
             {groupName ? (
               <PageHeaderTitle title={groupName} />
             ) : (
-              <Skeleton width='150px' />
+              <Skeleton width="150px" />
             )}
           </FlexItem>
           <FlexItem>
@@ -143,7 +143,7 @@ const GroupsDetail = () => {
               position={DropdownPosition.right}
               toggle={
                 <DropdownToggle
-                  id='image-set-details-dropdown'
+                  id="image-set-details-dropdown"
                   toggleIndicator={CaretDownIcon}
                   onToggle={(newState) => setIsDropdownOpen(newState)}
                   isDisabled={false}
@@ -153,13 +153,13 @@ const GroupsDetail = () => {
               }
               isOpen={isDropdownOpen}
               dropdownItems={[
-                <DropdownItem key='update-all-devices'>Delete</DropdownItem>,
+                <DropdownItem key="update-all-devices">Delete</DropdownItem>,
               ]}
             />
           </FlexItem>
         </Flex>
       </PageHeader>
-      <Main className='edge-devices'>
+      <Main className="edge-devices">
         {isLoading || data?.Devices?.count > 0 ? (
           <DeviceTable
             data={data?.Devices?.data || []}
@@ -167,17 +167,16 @@ const GroupsDetail = () => {
             isLoading={isLoading}
             hasError={hasError}
             hasCheckbox={true}
-            setIsAddModalOpen={setIsAddModalOpen}
             handleSingleDeviceRemoval={handleSingleDeviceRemoval}
             kebabItems={[
               {
                 title: 'Remove from group',
                 onClick: () =>
-                  setRemoveModal((prev) => ({
+                  setRemoveModal({
                     name: '',
                     deviceId: null,
                     isOpen: true,
-                  })),
+                  }),
               },
             ]}
             selectedItems={getDeviceIds}
@@ -188,9 +187,9 @@ const GroupsDetail = () => {
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
-              icon='cube'
-              title='Add systems to the group'
-              body='Create system groups to help manage your devices more effectively'
+              icon="cube"
+              title="Add systems to the group"
+              body="Create system groups to help manage your devices more effectively"
               primaryAction={{
                 text: 'Add systems',
                 click: () => setIsAddModalOpen(true),
