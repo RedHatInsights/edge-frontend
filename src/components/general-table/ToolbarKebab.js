@@ -10,11 +10,17 @@ import React, { useState } from 'react';
 const ToolbarKebab = ({ kebabItems }) => {
   const [kebabIsOpen, setKebabIsOpen] = useState(false);
 
-  const dropdownItems = kebabItems.map(({ title, onClick }, index) => (
-    <DropdownItem key={index} onClick={onClick ? onClick : () => {}}>
-      {title}
-    </DropdownItem>
-  ));
+  const dropdownItems = kebabItems.map(
+    ({ title, isDisabled, onClick }, index) => (
+      <DropdownItem
+        key={index}
+        onClick={onClick ? onClick : () => {}}
+        isDisabled={isDisabled}
+      >
+        {title}
+      </DropdownItem>
+    )
+  );
 
   return (
     <ToolbarItem>

@@ -61,16 +61,12 @@ const GroupsDetail = () => {
   const { groupId } = params;
   const groupName = data?.DeviceGroup?.Name;
   const [deviceIds, getDeviceIds] = useState([]);
-
-  // let deviceIds = [];
-  // const getDeviceIds = (values) => {
-  //   deviceIds = values;
-  // };
+  console.log(deviceIds);
 
   const removeDeviceLabel = () =>
     `Do you want to remove ${
-      deviceIds.length > 1
-        ? `${deviceIds.length} systems`
+      deviceIds.length > 0
+        ? `${deviceIds.length} system${deviceIds.length === 1 ? '' : 's'}`
         : `${removeModal.name}`
     } from ${groupName}?`;
 
@@ -170,6 +166,7 @@ const GroupsDetail = () => {
             handleSingleDeviceRemoval={handleSingleDeviceRemoval}
             kebabItems={[
               {
+                isDisabled: !(deviceIds.length > 0),
                 title: 'Remove from group',
                 onClick: () =>
                   setRemoveModal({
