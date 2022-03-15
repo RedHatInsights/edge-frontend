@@ -3,14 +3,6 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import { Text } from '@patternfly/react-core';
 import RepositoryTable from '../../Repositories/RepositoryTable';
 
-const mockRepositories = [
-  {
-    id: 1,
-    name: 'AWS repository',
-    baseURL: 'rh.aws.com',
-  },
-];
-
 export default {
   title: 'Custom repositories',
   name: 'repositories',
@@ -30,7 +22,7 @@ export default {
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'repository-table',
-      label: <RepositoryTable data={mockRepositories} mode="selection" />,
+      label: <RepositoryTable mode="selection" />,
     },
   ],
 };
