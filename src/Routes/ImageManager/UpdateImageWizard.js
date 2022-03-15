@@ -8,6 +8,7 @@ import {
   registration,
   repositories,
   imageOutput,
+  customPackages,
 } from './steps';
 import { Bullseye, Backdrop, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -168,6 +169,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
               packages,
               repositories,
               review,
+              customPackages,
             ],
           },
         ],
