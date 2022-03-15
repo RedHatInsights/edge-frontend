@@ -11,7 +11,7 @@ const modeSelection = 'selection';
 
 const RepositoryTable = ({ data, openModal, mode }) => {
   const [internalData, setInternalData] = useState([]);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(data !== undefined);
   const actionResolver = (rowData) => {
     const { id, repoName, repoBaseURL } = rowData;
     return mode === modeSelection
