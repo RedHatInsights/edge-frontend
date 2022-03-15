@@ -450,7 +450,7 @@ export const getGroups = () => {
 };
 
 export const getGroupById = (id) => {
-  return instance.get(`${EDGE_API}/device-groups/${id}`);
+  return instance.get(`${EDGE_API}/device-groups/${id}/details`);
 };
 
 export const updateGroupById = (id, payload) => {
@@ -472,9 +472,12 @@ export const addDevicesToGroup = (groupId, devices) => {
 };
 
 export const removeDevicesFromGroup = (groupId, devices) => {
+  console.log(groupId, devices);
   return instance.delete(`${EDGE_API}/device-groups/${groupId}/devices`, {
-    ID: groupId,
-    Devices: devices,
+    data: {
+      ID: groupId,
+      Devices: devices,
+    },
   });
 };
 

@@ -18,19 +18,22 @@ const BulkSelect = ({
 
   return (
     <>
-      <ToolbarItem variant="bulk-select">
+      <ToolbarItem variant='bulk-select'>
         <Dropdown
-          // onSelect={handlePageSelect}
           toggle={
             <DropdownToggle
-              id="stacked-example-toggle"
+              id='stacked-example-toggle'
               splitButtonItems={[
                 <DropdownToggleCheckbox
-                  id="example-checkbox-2"
-                  key="split-checkbox"
-                  aria-label="Select all"
+                  id='example-checkbox-2'
+                  key='split-checkbox'
+                  aria-label='Select all'
                   isChecked={checkBoxState.selectAll}
-                  onChange={handlePageSelect}
+                  onChange={
+                    checkBoxState.selectAll
+                      ? handleNoneSelect
+                      : handlePageSelect
+                  }
                 >
                   {checkBoxState.checkedRows.length > 0 &&
                     `${checkBoxState.checkedRows.length} selected`}
@@ -41,18 +44,18 @@ const BulkSelect = ({
           }
           isOpen={selectAllToggle}
           dropdownItems={[
-            <DropdownItem key="all" onClick={handleBulkSelect}>
+            <DropdownItem key='all' onClick={handleBulkSelect}>
               Select all
             </DropdownItem>,
             <DropdownItem
-              key="page"
+              key='page'
               onClick={handlePageSelect}
               isDisabled={checkBoxState.selectAll}
             >
               Select page
             </DropdownItem>,
             <DropdownItem
-              key="none"
+              key='none'
               onClick={handleNoneSelect}
               isDisabled={checkBoxState.checkedRows.length === 0}
             >

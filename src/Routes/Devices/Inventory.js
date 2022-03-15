@@ -17,7 +17,6 @@ const UpdateDeviceModal = React.lazy(() =>
 const Inventory = () => {
   const [response, fetchData] = useApi(getInventory);
   const { data, isLoading, hasError } = response;
-  console.log(isLoading);
   const [updateModal, setUpdateModal] = useState({
     isOpen: false,
     deviceData: null,
@@ -26,13 +25,12 @@ const Inventory = () => {
 
   const history = useHistory();
 
-  console.log(data);
   return (
     <Fragment>
-      <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Inventory" />
+      <PageHeader className='pf-m-light'>
+        <PageHeaderTitle title='Inventory' />
       </PageHeader>
-      <Main className="edge-devices">
+      <Main className='edge-devices'>
         <DeviceTable
           data={data?.data}
           count={data?.count}

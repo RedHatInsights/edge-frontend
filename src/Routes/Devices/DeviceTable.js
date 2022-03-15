@@ -27,24 +27,24 @@ const DeviceStatus = ({ Device }) => {
   const status = getDeviceStatus(Device);
   const statusType = {
     booting: (
-      <Split className="pf-u-info-color-100">
-        <SplitItem className="pf-u-mr-sm">
+      <Split className='pf-u-info-color-100'>
+        <SplitItem className='pf-u-mr-sm'>
           <InProgressIcon />
         </SplitItem>
         <SplitItem>Booting</SplitItem>
       </Split>
     ),
     running: (
-      <Split className="pf-u-success-color-100">
-        <SplitItem className="pf-u-mr-sm">
+      <Split className='pf-u-success-color-100'>
+        <SplitItem className='pf-u-mr-sm'>
           <CheckCircleIcon />
         </SplitItem>
         <SplitItem>Running</SplitItem>
       </Split>
     ),
     updateAvailable: (
-      <Split className="pf-u-warning-color-100">
-        <SplitItem className="pf-u-mr-sm">
+      <Split className='pf-u-warning-color-100'>
+        <SplitItem className='pf-u-mr-sm'>
           <ExclamationTriangleIcon />
         </SplitItem>
         <SplitItem>Update Available</SplitItem>
@@ -152,7 +152,6 @@ const createRows = (devices) =>
 
 const DeviceTable = ({
   hasCheckbox = false,
-  setIsModalOpen,
   selectedItems,
   skeletonRowQuantity,
   data,
@@ -160,15 +159,18 @@ const DeviceTable = ({
   isLoading,
   hasError,
   setUpdateModal,
-  handleSingleDeviceRemoval,
   kebabItems,
+  setRemoveModal,
+  setIsAddModalOpen,
 }) => {
-  console.log(data);
+  const canBeRemoved = setRemoveModal;
+  const canBeAdded = setIsAddModalOpen;
   const history = useHistory();
 
   const actionResolver = (rowData) => {
     // if (!rowData.id) return [];
     const actions = [];
+    if (isLoading) return actions;
 
     if (!areActionsDisabled(rowData)) {
       actions.push({
@@ -188,12 +190,17 @@ const DeviceTable = ({
         },
       });
     }
+    // stopped here set is modal fix
 
-    if (setIsModalOpen) {
-      console.log('yup');
+    if (canBeRemoved) {
       actions.push({
         title: 'Remove device',
-        onClick: () => handleSingleDeviceRemoval(2),
+        onClick: () =>
+          setRemoveModal({
+            name: rowData?.display_name,
+            isOpen: true,
+            deviceId: rowData?.deviceID,
+          }),
       });
     }
 
@@ -207,7 +214,7 @@ const DeviceTable = ({
     <>
       {emptyStateNoFliters(isLoading, count, history) ? (
         <CustomEmptyState
-          data-testid="general-table-empty-state-no-data"
+          data-testid='general-table-empty-state-no-data'
           icon={'plus'}
           title={'Connect edge devices'}
           body={
@@ -234,14 +241,14 @@ const DeviceTable = ({
           columnNames={columnNames}
           rows={createRows(data || [])}
           actionResolver={actionResolver}
-          areActionsDisabled={setIsModalOpen ? false : areActionsDisabled}
+          areActionsDisabled={canBeRemoved ? false : areActionsDisabled}
           defaultSort={{ index: 3, direction: 'desc' }}
           toolbarButtons={
-            setIsModalOpen
+            canBeAdded
               ? [
                   {
                     title: 'Add systems',
-                    click: () => setIsModalOpen(true),
+                    click: () => setIsAddModalOpen(true),
                   },
                 ]
               : []
