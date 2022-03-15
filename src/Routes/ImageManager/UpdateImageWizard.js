@@ -6,7 +6,9 @@ import {
   packages,
   updateDetails,
   registration,
+  repositories,
   imageOutput,
+  customPackages,
 } from './steps';
 import { Bullseye, Backdrop, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -47,8 +49,9 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
 
   useEffect(() => {
     (async () => {
-      const userData = (await insights?.chrome?.auth?.getUser()) || {};
-      setUser(() => userData);
+      insights?.chrome?.auth
+        ?.getUser()
+        .then((result) => setUser(result != undefined ? result : {}));
     })();
   }, []);
 
@@ -164,7 +167,9 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
               imageOutput,
               registration,
               packages,
+              repositories,
               review,
+              customPackages,
             ],
           },
         ],

@@ -1,7 +1,7 @@
 import React from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-import RepositoryTable from '../../Repositories/RepositoryTable';
 import { Text } from '@patternfly/react-core';
+import RepositoryTable from '../../Repositories/RepositoryTable';
 
 const mockRepositories = [
   {
@@ -14,7 +14,7 @@ const mockRepositories = [
 export default {
   title: 'Custom repositories',
   name: 'repositories',
-  nextStep: 'packages',
+  nextStep: 'customPackages',
   substepOf: 'Add content',
   fields: [
     {

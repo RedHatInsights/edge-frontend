@@ -8,6 +8,7 @@ import {
   repositories,
   imageSetDetails,
   imageOutput,
+  customPackages,
 } from './steps';
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -27,8 +28,9 @@ const CreateImage = ({ navigateBack }) => {
   };
   useEffect(() => {
     (async () => {
-      const userData = (await insights?.chrome?.auth?.getUser()) || {};
-      setUser(() => userData);
+      insights?.chrome?.auth
+        ?.getUser()
+        .then((result) => setUser(result != undefined ? result : {}));
     })();
   }, []);
 
@@ -120,6 +122,7 @@ const CreateImage = ({ navigateBack }) => {
               repositories,
               packages,
               review,
+              customPackages,
             ],
           },
         ],
