@@ -162,6 +162,8 @@ const DeviceTable = ({
   kebabItems,
   setRemoveModal,
   setIsAddModalOpen,
+  hasModalSubmitted,
+  setHasModalSubmitted,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -256,6 +258,8 @@ const DeviceTable = ({
           skeletonRowQuantity={skeletonRowQuantity}
           selectedItems={selectedItems}
           kebabItems={kebabItems}
+          hasModalSubmitted={hasModalSubmitted}
+          setHasModalSubmitted={setHasModalSubmitted}
         />
       )}
     </>
@@ -282,6 +286,8 @@ DeviceTable.propTypes = {
   kebabItems: PropTypes.array,
   setRemoveModal: PropTypes.func,
   setIsAddModalOpen: PropTypes.func,
+  hasModalSubmitted: PropTypes.bool,
+  setHasModalSubmitted: PropTypes.func,
 };
 
 export default DeviceTable;

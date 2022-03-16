@@ -61,7 +61,7 @@ const GroupsDetail = () => {
   const { groupId } = params;
   const groupName = data?.DeviceGroup?.Name;
   const [deviceIds, getDeviceIds] = useState([]);
-  console.log(deviceIds);
+  const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
 
   const removeDeviceLabel = () =>
     `Do you want to remove ${
@@ -90,6 +90,7 @@ const GroupsDetail = () => {
       () => removeDeviceFromGroupById(groupId, removeModal.deviceId),
       statusMessages
     );
+    setTimeout(() => setHasModalSubmitted(true), 800);
   };
 
   const handleBulkDeviceRemoval = () => {
@@ -109,6 +110,7 @@ const GroupsDetail = () => {
         ),
       statusMessages
     );
+    setTimeout(() => setHasModalSubmitted(true), 800);
   };
 
   return (
@@ -180,6 +182,8 @@ const GroupsDetail = () => {
             setRemoveModal={setRemoveModal}
             setIsAddModalOpen={setIsAddModalOpen}
             setUpdateModal={setUpdateModal}
+            hasModalSubmitted={hasModalSubmitted}
+            setHasModalSubmitted={setHasModalSubmitted}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
