@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { Text, TextVariants } from '@patternfly/react-core';
+import { getCustomRepositories } from '../../api/index';
 import PropTypes from 'prop-types';
+import { Skeleton } from '@patternfly/react-core';
 
 const filters = [{ label: 'Name', type: 'text' }];
 const modeSelection = 'selection';
 
 const RepositoryTable = ({ data, openModal, mode }) => {
+  const [internalData, setInternalData] = useState([]);
+  const [loaded, setLoaded] = useState(data !== undefined);
   const actionResolver = (rowData) => {
     const { id, repoName, repoBaseURL } = rowData;
     return mode === modeSelection
@@ -36,7 +40,33 @@ const RepositoryTable = ({ data, openModal, mode }) => {
         ];
   };
 
-  const buildRows = data.map(({ id, name, baseURL }) => {
+  const reloadData = async () => {
+    const repos = await getCustomRepositories();
+    setInternalData(
+      repos.data.map((repo) => ({
+        id: repo.ID,
+        name: repo.Name,
+        baseURL: repo.URL,
+        ...repo,
+      }))
+    );
+    setLoaded(true);
+  };
+
+  const getDataSource = () => (data ? data : internalData ? internalData : []);
+
+  const getTableData = () => {
+    return {
+      count: getDataSource().length,
+      data: getDataSource(),
+      isLoading: false,
+      hasError: false,
+    };
+  };
+
+  useEffect(() => reloadData(), []);
+
+  const buildRows = getDataSource().map(({ id, name, baseURL }) => {
     return {
       id: id,
       repoName: name,
@@ -64,16 +94,11 @@ const RepositoryTable = ({ data, openModal, mode }) => {
     };
   });
 
-  return (
+  return loaded ? (
     <GeneralTable
       apiFilterSort={false}
       filters={filters}
-      tableData={{
-        count: data.length,
-        data,
-        isLoading: false,
-        hasError: false,
-      }}
+      tableData={getTableData()}
       columnNames={[{ title: 'Name', type: 'name', sort: true }]}
       rows={buildRows}
       actionResolver={actionResolver}
@@ -91,6 +116,8 @@ const RepositoryTable = ({ data, openModal, mode }) => {
       }
       hasCheckbox={mode === modeSelection}
     />
+  ) : (
+    <Skeleton />
   );
 };
 RepositoryTable.propTypes = {
