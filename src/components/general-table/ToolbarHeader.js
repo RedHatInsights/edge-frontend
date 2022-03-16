@@ -12,6 +12,7 @@ import {
 import PropTypes from 'prop-types';
 import FilterControls from './FilterControls';
 import FilterChip from './FilterChips';
+import ToolbarKebab from './ToolbarKebab';
 
 const ToolbarButtons = ({ buttons }) => {
   return buttons.map(({ title, click }, index) => (
@@ -42,6 +43,7 @@ const ToolbarHeader = ({
   checkBoxState,
   setCheckBoxState,
   children,
+  kebabItems,
 }) => {
   return (
     <Toolbar id="toolbar" data-testid="toolbar-header-testid">
@@ -68,6 +70,7 @@ const ToolbarHeader = ({
             ))}
           </ToggleGroup>
         )}
+        {kebabItems && <ToolbarKebab kebabItems={kebabItems} />}
         <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
           {isLoading ? (
             <Skeleton width="200px" />
@@ -120,5 +123,6 @@ ToolbarHeader.propTypes = {
   setCheckBoxState: PropTypes.func,
   checkBoxState: PropTypes.object,
   children: PropTypes.element,
+  kebabItems: PropTypes.array,
 };
 export default ToolbarHeader;

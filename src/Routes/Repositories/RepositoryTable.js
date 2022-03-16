@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 const filters = [{ label: 'Name', type: 'text' }];
 
 const RepositoryTable = ({ data, openModal }) => {
+  console.log(data);
   const actionResolver = (rowData) => {
     const { id, repoName, repoBaseURL } = rowData;
     return [

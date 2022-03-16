@@ -1,16 +1,12 @@
-import React, { useEffect, useState, useContext, Suspense } from 'react';
+import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
-import { Bullseye, Spinner, Split, SplitItem } from '@patternfly/react-core';
-import { shallowEqual, useSelector } from 'react-redux';
+import { Split, SplitItem } from '@patternfly/react-core';
 import { loadDeviceTable } from '../../store/actions';
-import { RegistryContext } from '../../store';
-import { deviceTableReducer } from '../../store/reducers';
 import CustomEmptyState from '../../components/Empty';
 import { useHistory } from 'react-router-dom';
 import {
@@ -20,9 +16,44 @@ import {
 } from '@patternfly/react-icons';
 import { emptyStateNoFliters } from '../../constants';
 
-const UpdateDeviceModal = React.lazy(() =>
-  import(/* webpackChunkName: "CreateImageWizard" */ './UpdateDeviceModal')
-);
+const getDeviceStatus = (deviceData) =>
+  deviceData?.ImageInfo?.UpdatesAvailable
+    ? 'updateAvailable'
+    : deviceData?.Device?.Booted
+    ? 'running'
+    : 'booting';
+
+const DeviceStatus = ({ Device }) => {
+  const status = getDeviceStatus(Device);
+  const statusType = {
+    booting: (
+      <Split className="pf-u-info-color-100">
+        <SplitItem className="pf-u-mr-sm">
+          <InProgressIcon />
+        </SplitItem>
+        <SplitItem>Booting</SplitItem>
+      </Split>
+    ),
+    running: (
+      <Split className="pf-u-success-color-100">
+        <SplitItem className="pf-u-mr-sm">
+          <CheckCircleIcon />
+        </SplitItem>
+        <SplitItem>Running</SplitItem>
+      </Split>
+    ),
+    updateAvailable: (
+      <Split className="pf-u-warning-color-100">
+        <SplitItem className="pf-u-mr-sm">
+          <ExclamationTriangleIcon />
+        </SplitItem>
+        <SplitItem>Update Available</SplitItem>
+      </Split>
+    ),
+  };
+
+  return statusType[status];
+};
 
 const defaultFilters = [
   {
@@ -74,45 +105,6 @@ const columnNames = [
   },
 ];
 
-const DeviceStatus = ({ Device }) => {
-  const status = getDeviceStatus(Device);
-  const statusType = {
-    booting: (
-      <Split className="pf-u-info-color-100">
-        <SplitItem className="pf-u-mr-sm">
-          <InProgressIcon />
-        </SplitItem>
-        <SplitItem>Booting</SplitItem>
-      </Split>
-    ),
-    running: (
-      <Split className="pf-u-success-color-100">
-        <SplitItem className="pf-u-mr-sm">
-          <CheckCircleIcon />
-        </SplitItem>
-        <SplitItem>Running</SplitItem>
-      </Split>
-    ),
-    updateAvailable: (
-      <Split className="pf-u-warning-color-100">
-        <SplitItem className="pf-u-mr-sm">
-          <ExclamationTriangleIcon />
-        </SplitItem>
-        <SplitItem>Update Available</SplitItem>
-      </Split>
-    ),
-  };
-
-  return statusType[status];
-};
-
-const getDeviceStatus = (deviceData) =>
-  deviceData?.ImageInfo?.UpdatesAvailable
-    ? 'updateAvailable'
-    : deviceData?.Device?.Booted
-    ? 'running'
-    : 'booting';
-
 const createRows = (devices) =>
   devices?.map((device) => ({
     deviceID: device?.Device?.ID,
@@ -121,10 +113,10 @@ const createRows = (devices) =>
     updateImageData: device?.ImageInfo?.UpdatesAvailable?.[0],
     deviceStatus: getDeviceStatus(device),
     noApiSortFilter: [
-      device?.Device?.DeviceName,
+      device?.Device?.DeviceName || '',
       device?.ImageInfo?.Image?.Name || '',
       '',
-      device?.Device?.LastSeen,
+      device?.Device?.LastSeen || '',
       getDeviceStatus(device),
     ],
     cells: [
@@ -159,66 +151,61 @@ const createRows = (devices) =>
   }));
 
 const DeviceTable = ({
-  temp = false,
-  hasCheckbox = true,
-  setIsModalOpen,
+  hasCheckbox = false,
   selectedItems,
   skeletonRowQuantity,
-  reload,
-  setReload,
+  data,
+  count,
+  isLoading,
+  hasError,
+  setUpdateModal,
+  kebabItems,
+  setRemoveModal,
+  setIsAddModalOpen,
+  hasModalSubmitted,
+  setHasModalSubmitted,
 }) => {
-  const { getRegistry } = useContext(RegistryContext);
-  const [rows, setRows] = useState([]);
-  const dispatch = useDispatch();
-  const [updateModal, setUpdateModal] = useState({
-    isOpen: false,
-    deviceData: null,
-    imageData: null,
-  });
-
-  const { count, data, isLoading, hasError } = useSelector(
-    ({ deviceTableReducer }) => ({
-      count: deviceTableReducer?.data?.count || 0,
-      data: deviceTableReducer?.data?.data || null,
-      isLoading: deviceTableReducer?.isLoading,
-      hasError: deviceTableReducer?.hasError,
-    }),
-    shallowEqual
-  );
-
+  const canBeRemoved = setRemoveModal;
+  const canBeAdded = setIsAddModalOpen;
   const history = useHistory();
 
-  useEffect(() => {
-    const registered = getRegistry().register({ deviceTableReducer });
-    loadDeviceTable(dispatch);
-    return () => registered();
-  }, [reload]);
-
-  useEffect(() => {
-    data && setRows(createRows(data));
-  }, [data]);
-
   const actionResolver = (rowData) => {
-    return (
-      rowData.id && [
-        {
-          title: 'Update Device',
-          onClick: (_event, _rowId, rowData) => {
-            setUpdateModal((prevState) => {
-              return {
-                ...prevState,
-                isOpen: true,
-                deviceData: {
-                  id: rowData?.id,
-                  display_name: rowData?.display_name,
-                },
-                imageData: rowData?.updateImageData,
-              };
-            });
-          },
+    const actions = [];
+    if (isLoading) return actions;
+    if (!rowData.id) return actions;
+
+    if (!areActionsDisabled(rowData)) {
+      actions.push({
+        title: 'Update device',
+        onClick: (_event, _rowId, rowData) => {
+          setUpdateModal((prevState) => {
+            return {
+              ...prevState,
+              isOpen: true,
+              deviceData: {
+                id: rowData?.id,
+                display_name: rowData?.display_name,
+              },
+              imageData: rowData?.updateImageData,
+            };
+          });
         },
-      ]
-    );
+      });
+    }
+
+    if (canBeRemoved) {
+      actions.push({
+        title: 'Remove device',
+        onClick: () =>
+          setRemoveModal({
+            name: rowData?.display_name,
+            isOpen: true,
+            deviceId: rowData?.deviceID,
+          }),
+      });
+    }
+
+    return actions;
   };
 
   const areActionsDisabled = (rowData) =>
@@ -253,19 +240,16 @@ const DeviceTable = ({
             hasError: hasError,
           }}
           columnNames={columnNames}
-          rows={
-            (temp ? rows.filter((row) => temp.includes(row.deviceID)) : rows) ||
-            []
-          }
+          rows={createRows(data || [])}
           actionResolver={actionResolver}
-          areActionsDisabled={areActionsDisabled}
+          areActionsDisabled={canBeRemoved ? false : areActionsDisabled}
           defaultSort={{ index: 3, direction: 'desc' }}
           toolbarButtons={
-            setIsModalOpen
+            canBeAdded
               ? [
                   {
                     title: 'Add systems',
-                    click: () => setIsModalOpen(true),
+                    click: () => setIsAddModalOpen(true),
                   },
                 ]
               : []
@@ -273,31 +257,10 @@ const DeviceTable = ({
           hasCheckbox={hasCheckbox}
           skeletonRowQuantity={skeletonRowQuantity}
           selectedItems={selectedItems}
+          kebabItems={kebabItems}
+          hasModalSubmitted={hasModalSubmitted}
+          setHasModalSubmitted={setHasModalSubmitted}
         />
-      )}
-      {updateModal.isOpen && (
-        <Suspense
-          fallback={
-            <Bullseye>
-              <Spinner />
-            </Bullseye>
-          }
-        >
-          <UpdateDeviceModal
-            navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
-              setUpdateModal((prevState) => {
-                return {
-                  ...prevState,
-                  isOpen: false,
-                };
-              });
-            }}
-            setUpdateModal={setUpdateModal}
-            updateModal={updateModal}
-            refreshTable={() => setReload(true)}
-          />
-        </Suspense>
       )}
     </>
   );
@@ -314,6 +277,17 @@ DeviceTable.propTypes = {
   selectedItems: PropTypes.array,
   reload: PropTypes.bool,
   setReload: PropTypes.func,
+  data: PropTypes.array,
+  count: PropTypes.number,
+  isLoading: PropTypes.bool,
+  hasError: PropTypes.bool,
+  setUpdateModal: PropTypes.func,
+  handleSingleDeviceRemoval: PropTypes.func,
+  kebabItems: PropTypes.array,
+  setRemoveModal: PropTypes.func,
+  setIsAddModalOpen: PropTypes.func,
+  hasModalSubmitted: PropTypes.bool,
+  setHasModalSubmitted: PropTypes.func,
 };
 
 export default DeviceTable;

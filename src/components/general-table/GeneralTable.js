@@ -65,7 +65,14 @@ const GeneralTable = ({
   hasCheckbox = false,
   skeletonRowQuantity,
   selectedItems,
+  kebabItems,
+  hasModalSubmitted,
+  setHasModalSubmitted,
 }) => {
+  const checkboxDefault = {
+    selectAll: false,
+    checkedRows: [],
+  };
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
   const [sortBy, setSortBy] = useState(
@@ -73,10 +80,7 @@ const GeneralTable = ({
   );
   const [perPage, setPerPage] = useState(20);
   const [page, setPage] = useState(1);
-  const [checkBoxState, setCheckBoxState] = useState({
-    selectAll: false,
-    checkedRows: [],
-  });
+  const [checkBoxState, setCheckBoxState] = useState(checkboxDefault);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -107,7 +111,12 @@ const GeneralTable = ({
   }, [chipsArray, perPage, page, sortBy]);
 
   useEffect(() => {
+    setCheckBoxState(checkboxDefault);
+  }, [hasModalSubmitted]);
+
+  useEffect(() => {
     selectedItems && selectedItems(checkBoxState.checkedRows);
+    hasModalSubmitted && setHasModalSubmitted(false);
   }, [checkBoxState.checkedRows]);
 
   const { count, isLoading, hasError } = tableData;
@@ -348,6 +357,7 @@ const GeneralTable = ({
         toggleButton={toggleButton}
         toggleAction={toggleAction}
         toggleState={toggleState}
+        kebabItems={kebabItems}
       >
         {!isLoading && hasCheckbox && (
           <BulkSelect
@@ -406,6 +416,14 @@ GeneralTable.propTypes = {
   skeletonRowQuantity: PropTypes.number,
   emptyFilterState: PropTypes.object,
   selectedItems: PropTypes.func,
+  kebabItems: PropTypes.array,
+  hasModalSubmitted: PropTypes.bool,
+  setHasModalSubmitted: PropTypes.func,
+};
+
+GeneralTable.defaultProps = {
+  hasModalSubmitted: false,
+  setHasModalSubmitted: () => {},
 };
 
 export default GeneralTable;
