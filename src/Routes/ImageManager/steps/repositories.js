@@ -10,6 +10,7 @@ export default {
     values?.['third-party-repositories']?.length > 0
       ? 'customPackages'
       : 'packages',
+
   substepOf: 'Add content',
   fields: [
     {

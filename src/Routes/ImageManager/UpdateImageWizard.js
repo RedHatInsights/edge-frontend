@@ -178,6 +178,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
               registration,
               repositories,
               packages,
+              repositories,
               review,
               customPackages,
             ],
