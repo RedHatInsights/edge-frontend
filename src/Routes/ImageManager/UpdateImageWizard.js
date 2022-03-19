@@ -141,7 +141,12 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         version: data?.image?.Version,
         release: data?.image?.Distribution,
         imageType: ['rhel-edge-commit'],
-        'selected-packages': data?.image?.Packages.map((pkg) => ({
+        'selected-packages': data?.image?.Packages?.map((pkg) => ({
+          ...pkg,
+          name: pkg.Name,
+        })),
+        'third-party-repositories': data?.image?.ThirdPartyRepositories,
+        'custom-packages': data?.image?.CustomPackages?.map((pkg) => ({
           ...pkg,
           name: pkg.Name,
         })),
@@ -159,15 +164,20 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
             },
             showTitles: true,
             title: `Update image: ${data?.image?.Name}`,
-            crossroads: ['target-environment', 'release', 'imageType'],
+            crossroads: [
+              'target-environment',
+              'release',
+              'imageType',
+              'third-party-repositories',
+            ],
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
             fields: [
               updateDetails,
               imageOutput,
               registration,
-              packages,
               repositories,
+              packages,
               review,
               customPackages,
             ],

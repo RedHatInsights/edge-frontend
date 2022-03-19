@@ -112,7 +112,12 @@ const CreateImage = ({ navigateBack }) => {
             },
             showTitles: true,
             title: 'Create image',
-            crossroads: ['target-environment', 'release', 'imageType'],
+            crossroads: [
+              'target-environment',
+              'release',
+              'imageType',
+              'third-party-repositories',
+            ],
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
             fields: [

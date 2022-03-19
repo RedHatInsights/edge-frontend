@@ -1,30 +1,45 @@
-import React, { useEffect } from 'react';
-import GeneralTable from '../../components/general-table/GeneralTable';
+import React, { useEffect, useState } from 'react';
+import GeneralTable from '../general-table/GeneralTable';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { Text, TextVariants } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
-import EmptyState from '../../components/Empty';
+import EmptyState from '../Empty';
 import { routes as paths } from '../../../package.json';
 import { getCustomRepositories } from '../../api/index';
 import useApi from '../../hooks/useApi';
+import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
+import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 
 const filters = [{ label: 'Name', type: 'text' }];
 
-const WizardRepositoryTable = () => {
+const WizardRepositoryTable = ({ ...props }) => {
+  const [selectedRepos, setSelectedRepos] = useState([]);
   const [response] = useApi(getCustomRepositories);
   const { data, isLoading, hasError } = response;
+  const { change, getState } = useFormApi();
+  const { input } = useFieldApi(props);
+  const wizardState = getState()?.values?.[input.name];
 
   useEffect(() => {
-    console.log(response);
-  }, [response]);
+    change(input.name, selectedRepos);
+  }, [selectedRepos]);
+
+  const getRepoIds = (checked) => {
+    const checkedRepos = checked?.map((repo) => ({
+      id: repo?.id,
+      name: repo?.name,
+      URL: repo?.URL,
+    }));
+    setSelectedRepos(checkedRepos);
+  };
 
   const buildRows = ({ data }) =>
     data.map(({ ID, Name, URL }) => {
       return {
         id: ID,
-        repoName: Name,
-        repoBaseURL: URL,
-        noApiSortFilter: [Name, URL],
+        name: Name,
+        URL: URL,
+        noApiSortFilter: [Name],
         cells: [
           {
             title: (
@@ -82,6 +97,8 @@ const WizardRepositoryTable = () => {
           rows={isLoading ? [] : buildRows(data)}
           defaultSort={{ index: 0, direction: 'desc' }}
           hasCheckbox={true}
+          selectedItems={getRepoIds}
+          initSelectedItems={wizardState}
         />
       )}
     </>

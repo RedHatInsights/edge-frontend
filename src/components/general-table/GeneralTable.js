@@ -65,13 +65,14 @@ const GeneralTable = ({
   hasCheckbox = false,
   skeletonRowQuantity,
   selectedItems,
+  initSelectedItems,
   kebabItems,
   hasModalSubmitted,
   setHasModalSubmitted,
 }) => {
   const checkboxDefault = {
     selectAll: false,
-    checkedRows: [],
+    checkedRows: initSelectedItems ? initSelectedItems : [],
   };
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
@@ -85,7 +86,11 @@ const GeneralTable = ({
   const history = useHistory();
 
   useEffect(() => {
-    if (!history.location.search.includes('add_system_modal=true') && !history.location.search.includes('create_image=true')) {
+    if (
+      !history.location.search.includes('add_system_modal=true') &&
+      !history.location.search.includes('create_image=true') &&
+      !history.location.search.includes('update_image=true')
+    ) {
       history.push({
         pathname: history.location.pathname,
         search: stateToUrlSearch('has_filters=true', chipsArray.length > 0),
@@ -109,6 +114,20 @@ const GeneralTable = ({
       ? loadTableData(dispatch, query)
       : null;
   }, [chipsArray, perPage, page, sortBy]);
+
+  useEffect(() => {
+    if ((initSelectedItems?.length === rows?.length) & (rows?.length > 0)) {
+      setCheckBoxState((prevState) => ({
+        ...prevState,
+        selectAll: true,
+      }));
+    } else {
+      setCheckBoxState((prevState) => ({
+        ...prevState,
+        selectAll: false,
+      }));
+    }
+  }, [rows]);
 
   useEffect(() => {
     setCheckBoxState(checkboxDefault);
@@ -232,6 +251,8 @@ const GeneralTable = ({
               {
                 id: filteredRows[rowIndex].id,
                 deviceID: filteredRows[rowIndex].deviceID,
+                name: filteredRows[rowIndex].name,
+                URL: filteredRows[rowIndex].URL,
               },
             ]
           : prevState.checkedRows.filter(
@@ -255,6 +276,8 @@ const GeneralTable = ({
           newRows.push({
             id: filtered.id,
             deviceID: filtered.deviceID,
+            name: filtered.name,
+            URL: filtered.URL,
           });
         }
       });
@@ -274,6 +297,8 @@ const GeneralTable = ({
       checkedRows: rows.map((row) => ({
         id: row.id,
         deviceID: row.deviceID,
+        name: row.name,
+        URL: row.URL,
       })),
       selectAll: true,
     };
@@ -419,6 +444,7 @@ GeneralTable.propTypes = {
   kebabItems: PropTypes.array,
   hasModalSubmitted: PropTypes.bool,
   setHasModalSubmitted: PropTypes.func,
+  initSelectedItems: PropTypes.array,
 };
 
 GeneralTable.defaultProps = {

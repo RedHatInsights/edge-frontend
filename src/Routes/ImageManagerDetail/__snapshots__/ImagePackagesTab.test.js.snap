@@ -112,7 +112,7 @@ exports[`ImagePackagesTab renders correctly 1`] = `
           data-ouia-component-type="PF4/Pagination"
           data-ouia-safe="true"
           data-testid="pagination-header-test-id"
-          id="pagination-options-menu-top-0"
+          id="pagination-options-menu-top-2"
           style="--pf-c-pagination__nav-page-select--c-form-control--width-chars: 2;"
         >
           <div
@@ -164,7 +164,7 @@ exports[`ImagePackagesTab renders correctly 1`] = `
                 data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
                 data-ouia-component-type="PF4/DropdownToggle"
                 data-ouia-safe="true"
-                id="pagination-options-menu-top-toggle-0"
+                id="pagination-options-menu-top-toggle-2"
                 type="button"
               >
                 <span
@@ -255,7 +255,7 @@ exports[`ImagePackagesTab renders correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-expandable-content-3"
+      id="toolbar-expandable-content-6"
     >
       <div
         class="pf-c-toolbar__group"
@@ -274,7 +274,7 @@ exports[`ImagePackagesTab renders correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-expandable-content-4"
+      id="toolbar-expandable-content-7"
     >
       <div
         class="pf-c-toolbar__group"

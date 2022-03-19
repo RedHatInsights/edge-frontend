@@ -7,6 +7,7 @@ import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import Review from './form/ReviewStep';
 import Packages from './form/Packages';
+import WizardRepositoryTable from './form/WizardRepositoryTable';
 import RegistrationCreds from './form/RegistrationCreds';
 import ImageOutputCheckbox from './form/ImageOutputCheckbox';
 import SSHInputField from './form/SSHInputField';
@@ -14,6 +15,7 @@ import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComp
 import { registrationCredsValidator } from './form/RegistrationCreds';
 import { reservedUsernameValidator } from './form/validators';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
+import CustomPackageTextArea from './form/CustomPackageTextArea';
 
 /**
  * Use this instead of CreateImageWizard once this PR is merged https://github.com/RedHatInsights/image-builder-frontend/pull/230
@@ -63,6 +65,12 @@ const CreateImageWizard = ({
         'package-selector': {
           component: Packages,
           defaultArch,
+        },
+        'custom-repo-table': {
+          component: WizardRepositoryTable,
+        },
+        'custom-package-text-area': {
+          component: CustomPackageTextArea,
         },
         ...customComponentMapper,
       }}
