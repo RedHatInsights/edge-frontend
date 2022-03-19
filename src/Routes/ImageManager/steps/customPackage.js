@@ -65,14 +65,12 @@ export default {
       label: <b> Packages </b>,
       initialValue: [],
       clearedValue: [],
-
     },
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
       label: (
         <Text className="pf-u-warning-color-200">
-
           <ExclamationTriangleIcon class="pf-u-warning-color-100" />
           &nbsp; Packages names that do not have exact name and casing will not
           be included in the image.
