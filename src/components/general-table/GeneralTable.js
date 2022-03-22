@@ -70,6 +70,7 @@ const GeneralTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
 }) => {
+  const defaultCheckedRows = initSelectedItems ? initSelectedItems : [];
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
   const [sortBy, setSortBy] = useState(
@@ -77,9 +78,7 @@ const GeneralTable = ({
   );
   const [perPage, setPerPage] = useState(20);
   const [page, setPage] = useState(1);
-  const [checkedRows, setCheckedRows] = useState(
-    initSelectedItems ? initSelectedItems : []
-  );
+  const [checkedRows, setCheckedRows] = useState(defaultCheckedRows);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -114,7 +113,7 @@ const GeneralTable = ({
   }, [chipsArray, perPage, page, sortBy]);
 
   useEffect(() => {
-    setCheckedRows([]);
+    setCheckedRows(defaultCheckedRows);
   }, [hasModalSubmitted]);
 
   useEffect(() => {

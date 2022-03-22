@@ -35,8 +35,6 @@ FilterControls.propTypes = {
   filters: PropTypes.array,
   filterValues: PropTypes.array,
   setFilterValues: PropTypes.func,
-  setCheckBoxState: PropTypes.func,
-  checkBoxState: PropTypes.object,
   children: PropTypes.element,
 };
 

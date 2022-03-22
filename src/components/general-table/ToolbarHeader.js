@@ -40,8 +40,6 @@ const ToolbarHeader = ({
   toggleButton,
   toggleAction,
   toggleState,
-  checkBoxState,
-  setCheckBoxState,
   children,
   kebabItems,
 }) => {
@@ -52,8 +50,6 @@ const ToolbarHeader = ({
           filters={filters}
           filterValues={filterValues}
           setFilterValues={setFilterValues}
-          checkBoxState={checkBoxState}
-          setCheckBoxState={setCheckBoxState}
         >
           {children}
         </FilterControls>
@@ -120,8 +116,6 @@ ToolbarHeader.propTypes = {
   toggleButton: PropTypes.array,
   toggleAction: PropTypes.func,
   toggleState: PropTypes.number,
-  setCheckBoxState: PropTypes.func,
-  checkBoxState: PropTypes.object,
   children: PropTypes.element,
   kebabItems: PropTypes.array,
 };
