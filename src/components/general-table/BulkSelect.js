@@ -9,11 +9,13 @@ import {
 import PropTypes from 'prop-types';
 
 const BulkSelect = ({
-  checkBoxState,
+  checkedRows,
   handleBulkSelect,
   handlePageSelect,
   handleNoneSelect,
+  displayedRowsLength,
 }) => {
+  const isAllSelected = checkedRows.length === displayedRowsLength;
   const [selectAllToggle, setSelectAllToggle] = useState(false);
 
   return (
@@ -28,15 +30,10 @@ const BulkSelect = ({
                   id="example-checkbox-2"
                   key="split-checkbox"
                   aria-label="Select all"
-                  isChecked={checkBoxState.selectAll}
-                  onChange={
-                    checkBoxState.selectAll
-                      ? handleNoneSelect
-                      : handlePageSelect
-                  }
+                  isChecked={isAllSelected}
+                  onChange={isAllSelected ? handleNoneSelect : handlePageSelect}
                 >
-                  {checkBoxState.checkedRows.length > 0 &&
-                    `${checkBoxState.checkedRows.length} selected`}
+                  {checkedRows.length > 0 && `${checkedRows.length} selected`}
                 </DropdownToggleCheckbox>,
               ]}
               onToggle={() => setSelectAllToggle((prevState) => !prevState)}
@@ -50,14 +47,14 @@ const BulkSelect = ({
             <DropdownItem
               key="page"
               onClick={handlePageSelect}
-              isDisabled={checkBoxState.selectAll}
+              isDisabled={isAllSelected}
             >
               Select page
             </DropdownItem>,
             <DropdownItem
               key="none"
               onClick={handleNoneSelect}
-              isDisabled={checkBoxState.checkedRows.length === 0}
+              isDisabled={checkedRows.length === 0}
             >
               Select none
             </DropdownItem>,
@@ -68,10 +65,11 @@ const BulkSelect = ({
   );
 };
 BulkSelect.propTypes = {
-  checkBoxState: PropTypes.object,
+  checkedRows: PropTypes.array,
   handleBulkSelect: PropTypes.func,
   handleNoneSelect: PropTypes.func,
   handlePageSelect: PropTypes.func,
+  displayedRowsLength: PropTypes.number,
 };
 
 export default BulkSelect;
