@@ -5,8 +5,10 @@ import {
   registration,
   review,
   packages,
+  repositories,
   imageSetDetails,
   imageOutput,
+  customPackages,
 } from './steps';
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -26,8 +28,9 @@ const CreateImage = ({ navigateBack }) => {
   };
   useEffect(() => {
     (async () => {
-      const userData = (await insights?.chrome?.auth?.getUser()) || {};
-      setUser(() => userData);
+      insights?.chrome?.auth
+        ?.getUser()
+        .then((result) => setUser(result != undefined ? result : {}));
     })();
   }, []);
 
@@ -109,15 +112,22 @@ const CreateImage = ({ navigateBack }) => {
             },
             showTitles: true,
             title: 'Create image',
-            crossroads: ['target-environment', 'release', 'imageType'],
+            crossroads: [
+              'target-environment',
+              'release',
+              'imageType',
+              'third-party-repositories',
+            ],
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
             fields: [
               imageSetDetails,
               imageOutput,
               registration,
+              repositories,
               packages,
               review,
+              customPackages,
             ],
           },
         ],

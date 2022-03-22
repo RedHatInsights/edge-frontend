@@ -65,14 +65,12 @@ const GeneralTable = ({
   hasCheckbox = false,
   skeletonRowQuantity,
   selectedItems,
+  initSelectedItems,
   kebabItems,
   hasModalSubmitted,
   setHasModalSubmitted,
 }) => {
-  const checkboxDefault = {
-    selectAll: false,
-    checkedRows: [],
-  };
+  const defaultCheckedRows = initSelectedItems ? initSelectedItems : [];
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
   const [sortBy, setSortBy] = useState(
@@ -80,12 +78,16 @@ const GeneralTable = ({
   );
   const [perPage, setPerPage] = useState(20);
   const [page, setPage] = useState(1);
-  const [checkBoxState, setCheckBoxState] = useState(checkboxDefault);
+  const [checkedRows, setCheckedRows] = useState(defaultCheckedRows);
   const dispatch = useDispatch();
   const history = useHistory();
 
   useEffect(() => {
-    if (!history.location.search.includes('add_system_modal=true')) {
+    if (
+      !history.location.search.includes('add_system_modal=true') &&
+      !history.location.search.includes('create_image=true') &&
+      !history.location.search.includes('update_image=true')
+    ) {
       history.push({
         pathname: history.location.pathname,
         search: stateToUrlSearch('has_filters=true', chipsArray.length > 0),
@@ -111,13 +113,13 @@ const GeneralTable = ({
   }, [chipsArray, perPage, page, sortBy]);
 
   useEffect(() => {
-    setCheckBoxState(checkboxDefault);
+    setCheckedRows(defaultCheckedRows);
   }, [hasModalSubmitted]);
 
   useEffect(() => {
-    selectedItems && selectedItems(checkBoxState.checkedRows);
+    selectedItems && selectedItems(checkedRows);
     hasModalSubmitted && setHasModalSubmitted(false);
-  }, [checkBoxState.checkedRows]);
+  }, [checkedRows]);
 
   const { count, isLoading, hasError } = tableData;
 
@@ -209,7 +211,7 @@ const GeneralTable = ({
 
   const checkboxRows = () =>
     filteredRows.map((row) =>
-      checkBoxState.checkedRows.some((checkedRow) => checkedRow.id === row.id)
+      checkedRows.some((checkedRow) => checkedRow.id === row.id)
         ? {
             ...row,
             selected: true,
@@ -221,32 +223,24 @@ const GeneralTable = ({
     );
 
   const handleSelect = (_event, isSelecting, rowIndex) => {
-    setCheckBoxState((prevState) => {
-      const state = {
-        selectAll: isSelecting
-          ? checkBoxState.checkedRows.length + 1 === rows.length
-          : checkBoxState.checkedRows.length - 1 === rows.length,
-        checkedRows: isSelecting
-          ? [
-              ...prevState.checkedRows,
-              {
-                id: filteredRows[rowIndex].id,
-                deviceID: filteredRows[rowIndex].deviceID,
-              },
-            ]
-          : prevState.checkedRows.filter(
-              (row) => row.id !== filteredRows[rowIndex].id
-            ),
-      };
-
-      // selectedItems && selectedItems(state);
-      return state;
+    setCheckedRows((prevState) => {
+      return isSelecting
+        ? [
+            ...prevState,
+            {
+              id: filteredRows[rowIndex].id,
+              deviceID: filteredRows[rowIndex].deviceID,
+              name: filteredRows[rowIndex].name,
+              URL: filteredRows[rowIndex].URL,
+            },
+          ]
+        : prevState.filter((row) => row.id !== filteredRows[rowIndex].id);
     });
   };
 
   const handlePageSelect = () => {
-    setCheckBoxState((prevState) => {
-      const checkedIds = prevState.checkedRows.map((row) => row.id);
+    setCheckedRows((prevState) => {
+      const checkedIds = prevState.map((row) => row.id);
       const rowIsNotIncluded = (id) => !checkedIds.includes(id);
 
       const newRows = [];
@@ -255,39 +249,29 @@ const GeneralTable = ({
           newRows.push({
             id: filtered.id,
             deviceID: filtered.deviceID,
+            name: filtered.name,
+            URL: filtered.URL,
           });
         }
       });
 
-      const state = {
-        checkedRows: [...prevState.checkedRows, ...newRows],
-        selectAll:
-          prevState.checkedRows.length + newRows.length === rows.length,
-      };
-      // selectedItems && selectedItems(state);
-      return state;
+      return [...prevState, ...newRows];
     });
   };
 
   const handleBulkSelect = () => {
-    const state = {
-      checkedRows: rows.map((row) => ({
+    setCheckedRows(
+      rows.map((row) => ({
         id: row.id,
         deviceID: row.deviceID,
-      })),
-      selectAll: true,
-    };
-    setCheckBoxState(state);
-    // selectedItems && selectedItems(state);
+        name: row.name,
+        URL: row.URL,
+      }))
+    );
   };
 
   const handleNoneSelect = () => {
-    const state = {
-      checkedRows: [],
-      selectAll: false,
-    };
-    setCheckBoxState(state);
-    // selectedItems && selectedItems(state);
+    setCheckedRows([]);
   };
 
   const loadingRows = (perPage) =>
@@ -361,10 +345,11 @@ const GeneralTable = ({
       >
         {!isLoading && hasCheckbox && (
           <BulkSelect
-            checkBoxState={checkBoxState}
+            checkedRows={checkedRows}
             handleBulkSelect={handleBulkSelect}
             handlePageSelect={handlePageSelect}
             handleNoneSelect={handleNoneSelect}
+            displayedRowsLength={filteredRows.length}
           />
         )}
       </ToolbarHeader>
@@ -419,6 +404,7 @@ GeneralTable.propTypes = {
   kebabItems: PropTypes.array,
   hasModalSubmitted: PropTypes.bool,
   setHasModalSubmitted: PropTypes.func,
+  initSelectedItems: PropTypes.array,
 };
 
 GeneralTable.defaultProps = {

@@ -64,8 +64,11 @@ const ReviewStep = () => {
     { name: 'ssh-key', value: getState().values.credentials },
   ];
 
-  const before = getState().initialValues['selected-packages'];
-  const after = getState().values['selected-packages'];
+  const RHELPackageBefore = getState().initialValues['selected-packages'];
+  const RHELPackageAfter = getState().values['selected-packages'];
+  const customPackageBefore = getState().initialValues['custom-packages'];
+  const customPackageAfter = getState().values['custom-packages'];
+
   const calcPkgDiff = (arr1, arr2) =>
     arr1.reduce(
       (acc, { name }) => acc + (!arr2.some((pkg) => pkg.name === name) ? 1 : 0),
@@ -75,17 +78,15 @@ const ReviewStep = () => {
   const packages = () => {
     const pkgs = [
       {
-        name: 'Added',
-        value: calcPkgDiff(after, before),
+        name: isUpdate ? 'Custom Updated' : 'Custom Added',
+        value: calcPkgDiff(customPackageAfter, customPackageBefore),
+      },
+      {
+        name: isUpdate ? 'Supported Updated' : 'Supported Added',
+        value: calcPkgDiff(RHELPackageAfter, RHELPackageBefore),
       },
     ];
-    return isUpdate
-      ? [
-          ...pkgs,
-          { name: 'Removed', value: calcPkgDiff(before, after) },
-          { name: 'Updated', value: 0 },
-        ]
-      : pkgs;
+    return pkgs;
   };
 
   return (

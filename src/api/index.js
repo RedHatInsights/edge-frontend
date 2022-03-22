@@ -312,6 +312,8 @@ export const createImage = ({
   credentials,
   imageType: imageTypes,
   'selected-packages': packages,
+  'third-party-repositories': thirdPartyRepositories,
+  'custom-packages': customPackages,
 }) => {
   let [imageType] = imageTypes || [];
   if (imageTypes.length > 1) {
@@ -332,6 +334,12 @@ export const createImage = ({
       username,
       sshkey: credentials,
     },
+    thirdPartyRepositories: thirdPartyRepositories.map((repo) => ({
+      ID: repo.id,
+      Name: repo.name,
+      URL: repo.URL,
+    })),
+    customPackages: customPackages.map((repo) => ({ Name: repo.name })),
   };
 
   let endpoint = `${EDGE_API}/images`;
@@ -472,7 +480,6 @@ export const addDevicesToGroup = (groupId, devices) => {
 };
 
 export const removeDevicesFromGroup = (groupId, devices) => {
-  console.log(groupId, devices);
   return instance.delete(`${EDGE_API}/device-groups/${groupId}/devices`, {
     data: {
       ID: groupId,
