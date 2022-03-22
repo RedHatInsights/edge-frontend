@@ -237,24 +237,6 @@ const GeneralTable = ({
         : prevState.filter((row) => row.id !== filteredRows[rowIndex].id);
     });
   };
-  // setCheckedRows((prevState) => {
-  //   const state = {
-  //     checkedRows: isSelecting
-  //       ? [
-  //           ...prevState.checkedRows,
-  //           {
-  //             id: filteredRows[rowIndex].id,
-  //             deviceID: filteredRows[rowIndex].deviceID,
-  //             name: filteredRows[rowIndex].name,
-  //             URL: filteredRows[rowIndex].URL,
-  //           },
-  //         ]
-  //       : prevState.checkedRows.filter(
-  //           (row) => row.id !== filteredRows[rowIndex].id
-  //         ),
-  //   };
-  //   return state;
-  // });
 
   const handlePageSelect = () => {
     setCheckedRows((prevState) => {
@@ -278,14 +260,6 @@ const GeneralTable = ({
   };
 
   const handleBulkSelect = () => {
-    // const state = {
-    //   checkedRows: rows.map((row) => ({
-    //     id: row.id,
-    //     deviceID: row.deviceID,
-    //     name: row.name,
-    //     URL: row.URL,
-    //   })),
-    // };
     setCheckedRows(
       rows.map((row) => ({
         id: row.id,
@@ -294,7 +268,6 @@ const GeneralTable = ({
         URL: row.URL,
       }))
     );
-    // selectedItems && selectedItems(state);
   };
 
   const handleNoneSelect = () => {
