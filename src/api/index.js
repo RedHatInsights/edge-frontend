@@ -312,6 +312,8 @@ export const createImage = ({
   credentials,
   imageType: imageTypes,
   'selected-packages': packages,
+  'third-party-repositories': thirdPartyRepositories,
+  'custom-packages': customPackages,
 }) => {
   let [imageType] = imageTypes || [];
   if (imageTypes.length > 1) {
@@ -332,6 +334,12 @@ export const createImage = ({
       username,
       sshkey: credentials,
     },
+    thirdPartyRepositories: thirdPartyRepositories.map((repo) => ({
+      ID: repo.id,
+      Name: repo.name,
+      URL: repo.URL,
+    })),
+    customPackages: customPackages.map((repo) => ({ Name: repo.name })),
   };
 
   let endpoint = `${EDGE_API}/images`;
@@ -345,7 +353,7 @@ export const createImage = ({
 
 export const fetchEdgeImages = (
   q = {
-    limit: 100,
+    limit: 20,
     offset: 0,
     sort_by: '-created_at',
   }
@@ -356,7 +364,7 @@ export const fetchEdgeImages = (
 
 export const fetchEdgeImageSets = (
   q = {
-    limit: 100,
+    limit: 20,
     offset: 0,
     sort_by: '-created_at',
   }
@@ -407,7 +415,7 @@ export const createCustomRepository = (payload) => {
 export const getImageSet = ({
   id,
   q = {
-    limit: 100,
+    limit: 20,
     offset: 0,
     sort_by: '-created_at',
   },
@@ -450,7 +458,7 @@ export const getGroups = () => {
 };
 
 export const getGroupById = (id) => {
-  return instance.get(`${EDGE_API}/device-groups/${id}`);
+  return instance.get(`${EDGE_API}/device-groups/${id}/details`);
 };
 
 export const updateGroupById = (id, payload) => {
@@ -461,5 +469,25 @@ export const updateGroupById = (id, payload) => {
 };
 
 export const deleteGroupById = (id) => {
-  return instance.post(`${EDGE_API}/device-groups/${id}`);
+  return instance.delete(`${EDGE_API}/device-groups/${id}`);
+};
+
+export const addDevicesToGroup = (groupId, devices) => {
+  return instance.post(`${EDGE_API}/device-groups/${groupId}/devices`, {
+    ID: groupId,
+    Devices: devices,
+  });
+};
+
+export const removeDevicesFromGroup = (groupId, devices) => {
+  return instance.delete(`${EDGE_API}/device-groups/${groupId}/devices`, {
+    data: {
+      ID: groupId,
+      Devices: devices,
+    },
+  });
+};
+
+export const removeDeviceFromGroupById = (groupId, id) => {
+  return instance.delete(`${EDGE_API}/device-groups/${groupId}/devices/${id}`);
 };

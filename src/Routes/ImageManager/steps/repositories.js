@@ -1,12 +1,16 @@
 import React from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import { Text } from '@patternfly/react-core';
-import RepositoryTable from '../../Repositories/RepositoryTable';
+import WizardRepositoryTable from '../../../components/form/WizardRepositoryTable';
 
 export default {
   title: 'Custom repositories',
   name: 'repositories',
-  nextStep: 'customPackages',
+  nextStep: ({ values }) =>
+    values?.['third-party-repositories']?.length > 0
+      ? 'customPackages'
+      : 'packages',
+
   substepOf: 'Add content',
   fields: [
     {
@@ -20,9 +24,11 @@ export default {
       ),
     },
     {
-      component: componentTypes.PLAIN_TEXT,
-      name: 'repository-table',
-      label: <RepositoryTable mode="selection" />,
+      component: 'custom-repo-table',
+      name: 'third-party-repositories',
+      label: <WizardRepositoryTable />,
+      initialValue: [],
+      clearedValue: [],
     },
   ],
 };

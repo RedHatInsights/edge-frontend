@@ -13,19 +13,27 @@ const columns = [
   { title: 'Image', type: 'name', sort: false },
 ];
 
-const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
+const GroupTable = ({
+  data,
+  isLoading,
+  openModal,
+  handleRenameModal,
+  handleDeleteModal,
+}) => {
   const actionResolver = (rowData) => {
     const { id, title } = rowData;
-    return [
-      {
-        title: 'Rename',
-        onClick: () => handleRenameModal(id, { name: title }),
-      },
-      {
-        title: 'Delete',
-        onClick: () => console.log('updating'),
-      },
-    ];
+    return (
+      id && [
+        {
+          title: 'Rename',
+          onClick: () => handleRenameModal(id, { name: title }),
+        },
+        {
+          title: 'Delete',
+          onClick: () => handleDeleteModal(id, title),
+        },
+      ]
+    );
   };
 
   const buildRows = data.map((rowData) => {
@@ -67,30 +75,33 @@ const GroupTable = ({ data, isLoading, openModal, handleRenameModal }) => {
   });
 
   return (
-    <GeneralTable
-      apiFilterSort={false}
-      filters={filters}
-      tableData={{
-        count: data.length,
-        data,
-        isLoading,
-        hasError: false,
-      }}
-      columnNames={columns}
-      rows={buildRows}
-      emptyFilterIcon=""
-      emptyFilterMessage="No matching groups found"
-      emptyFilterBody="To continue, edit your filter settings and try again"
-      actionResolver={actionResolver}
-      areActionsDisabled={() => false}
-      defaultSort={{ index: 0, direction: 'desc' }}
-      toolbarButtons={[
-        {
-          title: 'Create group',
-          click: openModal,
-        },
-      ]}
-    />
+    <>
+      <GeneralTable
+        apiFilterSort={false}
+        filters={filters}
+        tableData={{
+          count: data.length,
+          data,
+          isLoading,
+          hasError: false,
+        }}
+        columnNames={columns}
+        rows={buildRows}
+        actionResolver={actionResolver}
+        areActionsDisabled={() => false}
+        defaultSort={{ index: 0, direction: 'desc' }}
+        emptyFilterState={{
+          title: 'No matching groups found',
+          body: 'To continue, edit your filter settings and try again',
+        }}
+        toolbarButtons={[
+          {
+            title: 'Create group',
+            click: openModal,
+          },
+        ]}
+      />
+    </>
   );
 };
 
@@ -99,6 +110,7 @@ GroupTable.propTypes = {
   openModal: PropTypes.func,
   isLoading: PropTypes.bool,
   handleRenameModal: PropTypes.func,
+  handleDeleteModal: PropTypes.func,
 };
 
 export default GroupTable;

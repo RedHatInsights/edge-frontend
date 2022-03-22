@@ -71,7 +71,7 @@ const RepositoryTable = ({ data, openModal, mode }) => {
       id: id,
       repoName: name,
       repoBaseURL: baseURL,
-      noApiSortFilter: [name, baseURL],
+      noApiSortFilter: [name],
       cells: [
         {
           title: (

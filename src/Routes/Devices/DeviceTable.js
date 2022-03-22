@@ -1,25 +1,59 @@
-import React, { useEffect, useState, useContext, Suspense } from 'react';
+import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
-import { Label, Bullseye, Spinner } from '@patternfly/react-core';
-import { shallowEqual, useSelector } from 'react-redux';
+import { Split, SplitItem } from '@patternfly/react-core';
 import { loadDeviceTable } from '../../store/actions';
-import { RegistryContext } from '../../store';
-import { deviceTableReducer } from '../../store/reducers';
+import CustomEmptyState from '../../components/Empty';
+import { useHistory } from 'react-router-dom';
 import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
   InProgressIcon,
 } from '@patternfly/react-icons';
+import { emptyStateNoFliters } from '../../constants';
 
-const UpdateDeviceModal = React.lazy(() =>
-  import(/* webpackChunkName: "CreateImageWizard" */ './UpdateDeviceModal')
-);
+const getDeviceStatus = (deviceData) =>
+  deviceData?.ImageInfo?.UpdatesAvailable
+    ? 'updateAvailable'
+    : deviceData?.Device?.Booted
+    ? 'running'
+    : 'booting';
+
+const DeviceStatus = ({ Device }) => {
+  const status = getDeviceStatus(Device);
+  const statusType = {
+    booting: (
+      <Split className="pf-u-info-color-100">
+        <SplitItem className="pf-u-mr-sm">
+          <InProgressIcon />
+        </SplitItem>
+        <SplitItem>Booting</SplitItem>
+      </Split>
+    ),
+    running: (
+      <Split className="pf-u-success-color-100">
+        <SplitItem className="pf-u-mr-sm">
+          <CheckCircleIcon />
+        </SplitItem>
+        <SplitItem>Running</SplitItem>
+      </Split>
+    ),
+    updateAvailable: (
+      <Split className="pf-u-warning-color-100">
+        <SplitItem className="pf-u-mr-sm">
+          <ExclamationTriangleIcon />
+        </SplitItem>
+        <SplitItem>Update Available</SplitItem>
+      </Split>
+    ),
+  };
+
+  return statusType[status];
+};
 
 const defaultFilters = [
   {
@@ -30,10 +64,10 @@ const defaultFilters = [
     label: 'Status',
     type: 'checkbox',
     options: [
-      { option: 'Building', value: 'BUILDING' },
-      { option: 'Created', value: 'CREATED' },
-      { option: 'Error', value: 'ERROR' },
-      { option: 'Ready', value: 'SUCCESS' },
+      { option: 'Booting', value: 'booting' },
+      { option: 'Running', value: 'running' },
+      { option: 'Update Available', value: 'updateAvailable' },
+      { option: 'Updating', value: 'updating' },
     ],
   },
 ];
@@ -43,7 +77,13 @@ const columnNames = [
     title: 'Name',
     type: 'name',
     sort: true,
-    columnTransforms: [cellWidth(35)],
+    columnTransforms: [cellWidth(30)],
+  },
+  {
+    title: 'Image',
+    type: 'image',
+    sort: false,
+    columnTransforms: [cellWidth(20)],
   },
   {
     title: 'Groups',
@@ -58,72 +98,25 @@ const columnNames = [
     columnTransforms: [cellWidth(15)],
   },
   {
-    title: 'Image',
-    type: 'image',
-    sort: false,
-    columnTransforms: [cellWidth(20)],
-  },
-  {
     title: 'Status',
     type: 'status',
     sort: false,
-    columnTransforms: [cellWidth(15)],
+    columnTransforms: [cellWidth(25)],
   },
 ];
 
-const DeviceStatus = ({ Device }) => {
-  const status = getDeviceStatus(Device);
-  const statusType = {
-    booting: (
-      <Label
-        className="pf-u-mt-sm"
-        color="blue"
-        icon={<InProgressIcon color="blue" />}
-      >
-        Booting
-      </Label>
-    ),
-    running: (
-      <Label
-        className="pf-u-mt-sm"
-        color="green"
-        icon={<CheckCircleIcon color="green" />}
-      >
-        Running
-      </Label>
-    ),
-    updateAvailable: (
-      <Label
-        className="pf-u-mt-sm"
-        color="orange"
-        icon={<ExclamationTriangleIcon />}
-      >
-        Update Available
-      </Label>
-    ),
-  };
-
-  return statusType[status];
-};
-
-const getDeviceStatus = (deviceData) =>
-  deviceData?.ImageInfo?.UpdatesAvailable
-    ? 'updateAvailable'
-    : deviceData?.Device?.Booted
-    ? 'running'
-    : 'booting';
-
 const createRows = (devices) =>
   devices?.map((device) => ({
+    deviceID: device?.Device?.ID,
     id: device?.Device?.UUID,
     display_name: device?.Device?.DeviceName,
     updateImageData: device?.ImageInfo?.UpdatesAvailable?.[0],
     deviceStatus: getDeviceStatus(device),
     noApiSortFilter: [
-      device?.Device?.DeviceName,
-      '',
-      device?.Device?.LastSeen,
+      device?.Device?.DeviceName || '',
       device?.ImageInfo?.Image?.Name || '',
+      '',
+      device?.Device?.LastSeen || '',
       getDeviceStatus(device),
     ],
     cells: [
@@ -135,19 +128,21 @@ const createRows = (devices) =>
         ),
       },
       {
-        title: '-',
-      },
-      {
-        title: <DateFormat date={device?.Device?.LastSeen} />,
-      },
-      {
-        title: (
+        title: device?.ImageInfo?.Image?.Name ? (
           <Link
             to={`${paths['manage-images']}/${device?.ImageInfo?.Image?.ImageSetID}/versions/${device?.ImageInfo?.Image?.ID}/details`}
           >
             {device?.ImageInfo?.Image?.Name}
           </Link>
+        ) : (
+          'unavailable'
         ),
+      },
+      {
+        title: '-',
+      },
+      {
+        title: <DateFormat date={device?.Device?.LastSeen} />,
       },
       {
         title: <DeviceStatus Device={device} />,
@@ -155,41 +150,33 @@ const createRows = (devices) =>
     ],
   }));
 
-const DeviceTable = ({ skeletonRowQuantity }) => {
-  const { getRegistry } = useContext(RegistryContext);
-  const [rows, setRows] = useState([]);
-  const [reload, setReload] = useState([]);
-  const dispatch = useDispatch();
-  const [updateModal, setUpdateModal] = useState({
-    isOpen: false,
-    deviceData: null,
-    imageData: null,
-  });
+const DeviceTable = ({
+  hasCheckbox = false,
+  selectedItems,
+  skeletonRowQuantity,
+  data,
+  count,
+  isLoading,
+  hasError,
+  setUpdateModal,
+  kebabItems,
+  setRemoveModal,
+  setIsAddModalOpen,
+  hasModalSubmitted,
+  setHasModalSubmitted,
+}) => {
+  const canBeRemoved = setRemoveModal;
+  const canBeAdded = setIsAddModalOpen;
+  const history = useHistory();
 
-  const { count, data, isLoading, hasError } = useSelector(
-    ({ deviceTableReducer }) => ({
-      count: deviceTableReducer?.data?.count || 0,
-      data: deviceTableReducer?.data?.data || null,
-      isLoading: deviceTableReducer?.isLoading,
-      hasError: deviceTableReducer?.hasError,
-    }),
-    shallowEqual
-  );
+  const actionResolver = (rowData) => {
+    const actions = [];
+    if (isLoading) return actions;
+    if (!rowData.id) return actions;
 
-  useEffect(() => {
-    const registered = getRegistry().register({ deviceTableReducer });
-    loadDeviceTable(dispatch);
-    return () => registered();
-  }, [reload]);
-
-  useEffect(() => {
-    data && setRows(createRows(data));
-  }, [data]);
-
-  const actionResolver = () => {
-    return [
-      {
-        title: 'Update Device',
+    if (!areActionsDisabled(rowData)) {
+      actions.push({
+        title: 'Update device',
         onClick: (_event, _rowId, rowData) => {
           setUpdateModal((prevState) => {
             return {
@@ -203,8 +190,22 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
             };
           });
         },
-      },
-    ];
+      });
+    }
+
+    if (canBeRemoved) {
+      actions.push({
+        title: 'Remove device',
+        onClick: () =>
+          setRemoveModal({
+            name: rowData?.display_name,
+            isOpen: true,
+            deviceId: rowData?.deviceID,
+          }),
+      });
+    }
+
+    return actions;
   };
 
   const areActionsDisabled = (rowData) =>
@@ -212,52 +213,54 @@ const DeviceTable = ({ skeletonRowQuantity }) => {
 
   return (
     <>
-      <GeneralTable
-        apiFilterSort={false}
-        filters={defaultFilters}
-        loadTableData={loadDeviceTable}
-        tableData={{
-          count: count,
-          isLoading: isLoading,
-          hasError: hasError,
-        }}
-        columnNames={columnNames}
-        rows={rows || []}
-        actionResolver={actionResolver}
-        areActionsDisabled={areActionsDisabled}
-        defaultSort={{ index: 2, direction: 'desc' }}
-        // toolbarButtons={[
-        //   {
-        //     title: 'Group Selected',
-        //     click: () => console.log('Group Selected'),
-        //   },
-        // ]}
-        hasCheckbox={true}
-        skeletonRowQuantity={skeletonRowQuantity}
-      />
-      {updateModal.isOpen && (
-        <Suspense
-          fallback={
-            <Bullseye>
-              <Spinner />
-            </Bullseye>
+      {emptyStateNoFliters(isLoading, count, history) ? (
+        <CustomEmptyState
+          data-testid="general-table-empty-state-no-data"
+          icon={'plus'}
+          title={'Connect edge devices'}
+          body={
+            'Connect and manage edge devices here after registering them via the console. To start, create a RHEL for Edge image and install it to your target device.'
           }
-        >
-          <UpdateDeviceModal
-            navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
-              setUpdateModal((prevState) => {
-                return {
-                  ...prevState,
-                  isOpen: false,
-                };
-              });
-            }}
-            setUpdateModal={setUpdateModal}
-            updateModal={updateModal}
-            refreshTable={() => setReload(true)}
-          />
-        </Suspense>
+          secondaryActions={[
+            {
+              title: 'How to connect a device',
+              link: '/',
+              type: 'link',
+            },
+          ]}
+        />
+      ) : (
+        <GeneralTable
+          apiFilterSort={false}
+          filters={defaultFilters}
+          loadTableData={loadDeviceTable}
+          tableData={{
+            count: count,
+            isLoading: isLoading,
+            hasError: hasError,
+          }}
+          columnNames={columnNames}
+          rows={createRows(data || [])}
+          actionResolver={actionResolver}
+          areActionsDisabled={canBeRemoved ? false : areActionsDisabled}
+          defaultSort={{ index: 3, direction: 'desc' }}
+          toolbarButtons={
+            canBeAdded
+              ? [
+                  {
+                    title: 'Add systems',
+                    click: () => setIsAddModalOpen(true),
+                  },
+                ]
+              : []
+          }
+          hasCheckbox={hasCheckbox}
+          skeletonRowQuantity={skeletonRowQuantity}
+          selectedItems={selectedItems}
+          kebabItems={kebabItems}
+          hasModalSubmitted={hasModalSubmitted}
+          setHasModalSubmitted={setHasModalSubmitted}
+        />
       )}
     </>
   );
@@ -267,6 +270,24 @@ DeviceTable.propTypes = {
   urlParam: PropTypes.string,
   openUpdateWizard: PropTypes.func,
   skeletonRowQuantity: PropTypes.number,
+  // possibly remove some of these
+  temp: PropTypes.func,
+  hasCheckbox: PropTypes.bool,
+  setIsModalOpen: PropTypes.func,
+  selectedItems: PropTypes.array,
+  reload: PropTypes.bool,
+  setReload: PropTypes.func,
+  data: PropTypes.array,
+  count: PropTypes.number,
+  isLoading: PropTypes.bool,
+  hasError: PropTypes.bool,
+  setUpdateModal: PropTypes.func,
+  handleSingleDeviceRemoval: PropTypes.func,
+  kebabItems: PropTypes.array,
+  setRemoveModal: PropTypes.func,
+  setIsAddModalOpen: PropTypes.func,
+  hasModalSubmitted: PropTypes.bool,
+  setHasModalSubmitted: PropTypes.func,
 };
 
 export default DeviceTable;

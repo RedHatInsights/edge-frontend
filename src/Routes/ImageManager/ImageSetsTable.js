@@ -9,6 +9,9 @@ import { DateFormat } from '@redhat-cloud-services/frontend-components/DateForma
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import { loadEdgeImageSets } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
+import CustomEmptyState from '../../components/Empty';
+import { useHistory } from 'react-router-dom';
+import { emptyStateNoFliters } from '../../constants';
 
 const TooltipSelectorRef = ({ index }) => (
   <div>
@@ -104,7 +107,7 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
   const { count, data, isLoading, hasError } = useSelector(
     ({ edgeImageSetsReducer }) => ({
       count: edgeImageSetsReducer?.data?.Count || 0,
-      data: edgeImageSetsReducer?.data?.Data || null,
+      data: edgeImageSetsReducer?.data?.Data || [],
       isLoading:
         edgeImageSetsReducer?.isLoading === undefined
           ? true
@@ -113,6 +116,8 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     }),
     shallowEqual
   );
+
+  const history = useHistory();
 
   const actionResolver = (rowData) => {
     const actionsArray = [];
@@ -156,26 +161,39 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
   const areActionsDisabled = (rowData) => rowData?.imageStatus === 'BUILDING';
 
   return (
-    <GeneralTable
-      apiFilterSort={true}
-      filters={defaultFilters}
-      loadTableData={loadEdgeImageSets}
-      tableData={{ count, data, isLoading, hasError }}
-      columnNames={columnNames}
-      rows={data ? createRows(data) : []}
-      emptyStateMessage="No images found"
-      emptyStateActionMessage="Create new image"
-      emptyStateAction={openCreateWizard}
-      actionResolver={actionResolver}
-      areActionsDisabled={areActionsDisabled}
-      defaultSort={{ index: 2, direction: 'desc' }}
-      toolbarButtons={[
-        {
-          title: 'Create new image',
-          click: () => openCreateWizard(),
-        },
-      ]}
-    />
+    <>
+      {emptyStateNoFliters(isLoading, count, history) ? (
+        <CustomEmptyState
+          data-testid="general-table-empty-state-no-data"
+          icon={'plus'}
+          title={'No images found'}
+          body={''}
+          primaryAction={{
+            click: openCreateWizard,
+            text: 'Create new image',
+          }}
+          secondaryActions={[]}
+        />
+      ) : (
+        <GeneralTable
+          apiFilterSort={true}
+          filters={defaultFilters}
+          loadTableData={loadEdgeImageSets}
+          tableData={{ count, data, isLoading, hasError }}
+          columnNames={columnNames}
+          rows={data ? createRows(data) : []}
+          actionResolver={actionResolver}
+          areActionsDisabled={areActionsDisabled}
+          defaultSort={{ index: 2, direction: 'desc' }}
+          toolbarButtons={[
+            {
+              title: 'Create new image',
+              click: () => openCreateWizard(),
+            },
+          ]}
+        />
+      )}
+    </>
   );
 };
 
