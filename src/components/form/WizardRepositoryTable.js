@@ -73,15 +73,6 @@ const WizardRepositoryTable = ({ ...props }) => {
             text: 'Custom repositories',
             href: paths['repositories'],
           }}
-          secondaryActions={
-            [
-              //{
-              //  title: 'Learn more about custom repositories',
-              //  type: 'link',
-              //  link: '#',
-              //},
-            ]
-          }
         />
       ) : (
         <GeneralTable
