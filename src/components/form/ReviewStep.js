@@ -64,10 +64,10 @@ const ReviewStep = () => {
     { name: 'ssh-key', value: getState().values.credentials },
   ];
 
-  const RHELPackageBefore = getState().initialValues['selected-packages'];
-  const RHELPackageAfter = getState().values['selected-packages'];
-  const customPackageBefore = getState().initialValues['custom-packages'];
-  const customPackageAfter = getState().values['custom-packages'];
+  const RHELPackageBefore = getState().initialValues['selected-packages'] || [];
+  const RHELPackageAfter = getState().values['selected-packages'] || [];
+  const customPackageBefore = getState().initialValues['custom-packages'] || [];
+  const customPackageAfter = getState().values['custom-packages'] || [];
 
   const calcPkgDiff = (arr1, arr2) =>
     arr1.reduce(

@@ -334,12 +334,12 @@ export const createImage = ({
       username,
       sshkey: credentials,
     },
-    thirdPartyRepositories: thirdPartyRepositories.map((repo) => ({
+    thirdPartyRepositories: thirdPartyRepositories?.map((repo) => ({
       ID: repo.id,
       Name: repo.name,
       URL: repo.URL,
     })),
-    customPackages: customPackages.map((repo) => ({ Name: repo.name })),
+    customPackages: customPackages?.map((repo) => ({ Name: repo.name })),
   };
 
   let endpoint = `${EDGE_API}/images`;
