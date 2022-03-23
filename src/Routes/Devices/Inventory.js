@@ -28,7 +28,7 @@ const Inventory = () => {
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Inventory" />
+        <PageHeaderTitle title="Systems" />
       </PageHeader>
       <Main className="edge-devices">
         <DeviceTable
