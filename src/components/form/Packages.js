@@ -115,13 +115,20 @@ const Packages = ({ defaultArch, ...props }) => {
       setHasNoSearchResults(false);
       setHasMoreResults(true);
 
+      let exactMatchIndex = null;
+      data.forEach(({ name }, index) => {
+        if (name === availableInputValue) {
+          exactMatchIndex = index;
+        }
+      });
+
       const isNotChosen = !chosenOptions.find(
-        (option) => option.name === data[0].name
+        (option) => option.name === data[exactMatchIndex].name
       );
 
-      if (data[0].name === availableInputValue && isNotChosen) {
+      if (exactMatchIndex && isNotChosen) {
         setExactMatch(true);
-        setAvailableOptions(mapPackagesToOptions([data[0]]));
+        setAvailableOptions(mapPackagesToOptions([data[exactMatchIndex]]));
         return;
       }
 
