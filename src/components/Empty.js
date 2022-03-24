@@ -81,4 +81,8 @@ Empty.propTypes = {
   secondaryActions: PropTypes.array,
 };
 
+Empty.defaultProps = {
+  secondaryActions: [],
+};
+
 export default Empty;
