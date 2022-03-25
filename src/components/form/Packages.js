@@ -119,6 +119,7 @@ const Packages = ({ defaultArch, ...props }) => {
       data.forEach(({ name }, index) => {
         if (name === availableInputValue) {
           exactMatchIndex = index;
+          return;
         }
       });
 
@@ -126,7 +127,7 @@ const Packages = ({ defaultArch, ...props }) => {
         (option) => option.name === data[exactMatchIndex].name
       );
 
-      if (exactMatchIndex && isNotChosen) {
+      if (exactMatchIndex !== null && isNotChosen) {
         setExactMatch(true);
         setAvailableOptions(mapPackagesToOptions([data[exactMatchIndex]]));
         return;
