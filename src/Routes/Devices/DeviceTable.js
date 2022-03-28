@@ -107,11 +107,15 @@ const columnNames = [
 
 const createRows = (devices) =>
   devices?.map((device) => ({
-    deviceID: device?.Device?.ID,
-    id: device?.Device?.UUID,
-    display_name: device?.Device?.DeviceName,
-    updateImageData: device?.ImageInfo?.UpdatesAvailable?.[0],
-    deviceStatus: getDeviceStatus(device),
+    rowInfo: {
+      deviceID: device?.Device?.ID,
+      id: device?.Device?.UUID,
+      display_name: device?.Device?.DeviceName,
+      updateImageData: device?.ImageInfo?.UpdatesAvailable?.[0],
+      deviceStatus: getDeviceStatus(device),
+      imageSetId: device?.ImageInfo?.Image?.ImageSetID,
+      imageName: device?.ImageInfo?.Image?.Name,
+    },
     noApiSortFilter: [
       device?.Device?.DeviceName || '',
       device?.ImageInfo?.Image?.Name || '',
@@ -172,7 +176,7 @@ const DeviceTable = ({
   const actionResolver = (rowData) => {
     const actions = [];
     if (isLoading) return actions;
-    if (!rowData.id) return actions;
+    if (!rowData.rowInfo.id) return actions;
 
     if (!areActionsDisabled(rowData)) {
       actions.push({
@@ -183,10 +187,10 @@ const DeviceTable = ({
               ...prevState,
               isOpen: true,
               deviceData: {
-                id: rowData?.id,
-                display_name: rowData?.display_name,
+                id: rowData.rowInfo.id,
+                display_name: rowData.rowInfo.display_name,
               },
-              imageData: rowData?.updateImageData,
+              imageData: rowData.rowInfo.updateImageData,
             };
           });
         },
@@ -198,9 +202,9 @@ const DeviceTable = ({
         title: 'Remove device',
         onClick: () =>
           setRemoveModal({
-            name: rowData?.display_name,
+            name: rowData.rowInfo.display_name,
             isOpen: true,
-            deviceId: rowData?.deviceID,
+            deviceId: rowData.rowInfo.deviceID,
           }),
       });
     }
@@ -209,7 +213,7 @@ const DeviceTable = ({
   };
 
   const areActionsDisabled = (rowData) =>
-    rowData?.deviceStatus !== 'updateAvailable';
+    rowData.rowInfo?.deviceStatus !== 'updateAvailable';
 
   return (
     <>
