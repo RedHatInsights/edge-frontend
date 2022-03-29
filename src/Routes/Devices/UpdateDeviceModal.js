@@ -14,8 +14,13 @@ import { distributionMapper } from '../ImageManagerDetail/constants';
 const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   const dispatch = useDispatch();
   const imageData = updateModal?.imageData;
-  const deviceId = updateModal?.deviceData?.id;
-  const deviceName = updateModal?.deviceData?.display_name;
+  const isMultiple = Array.isArray(updateModal.deviceData);
+  const deviceId = isMultiple
+    ? updateModal.deviceData.map((device) => device.id)
+    : updateModal?.deviceData?.id;
+  const deviceName = isMultiple
+    ? updateModal.deviceData.map((device) => device.display_name)
+    : updateModal?.deviceData?.display_name;
 
   const handleUpdateModal = async () => {
     try {
@@ -27,7 +32,9 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
         ...addNotification({
           variant: 'info',
           title: 'Updating device',
-          description: ` ${deviceName} was added to the queue.`,
+          description: isMultiple
+            ? ` ${deviceName.length} devices were added to the queue.`
+            : ` ${deviceName} was added to the queue.`,
         }),
       });
     } catch (err) {
@@ -95,8 +102,11 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
       {
         component: componentTypes.PLAIN_TEXT,
         name: 'description',
-        label:
-          'Update this device to use the latest version of the image linked to it.',
+        label: `Update ${
+          deviceName.length > 1 ? 'these devices' : 'this device'
+        } to use the latest version of the image linked to ${
+          deviceName.length > 1 ? 'them' : 'it'
+        }.`,
       },
       {
         component: componentTypes.PLAIN_TEXT,
@@ -119,7 +129,11 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   return (
     <Modal
       size="medium"
-      title={`Update ${deviceName} to latest image`}
+      title={
+        deviceName.length > 1
+          ? `Update ${deviceName.length} devices to the latest image`
+          : `Update ${deviceName} to latest image`
+      }
       isOpen={updateModal.isOpen}
       openModal={() =>
         setUpdateModal((prevState) => ({ ...prevState, isOpen: false }))

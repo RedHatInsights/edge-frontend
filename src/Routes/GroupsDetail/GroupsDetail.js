@@ -27,7 +27,7 @@ import {
   removeDevicesFromGroup,
 } from '../../api/index';
 import DeviceModal from '../Devices/DeviceModal';
-import { stateToUrlSearch } from '../../constants';
+import { canUpdateSelectedDevices, stateToUrlSearch } from '../../constants';
 import useApi from '../../hooks/useApi';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
@@ -176,6 +176,20 @@ const GroupsDetail = () => {
                     deviceId: null,
                     isOpen: true,
                   }),
+              },
+              {
+                isDisabled: canUpdateSelectedDevices({
+                  deviceData: deviceIds,
+                  imageData: deviceIds[0]?.updateImageData,
+                }),
+                title: 'Update selected',
+                onClick: () =>
+                  setUpdateModal((prevState) => ({
+                    ...prevState,
+                    isOpen: true,
+                    deviceData: [...deviceIds],
+                    imageData: deviceIds[0].updateImageData,
+                  })),
               },
             ]}
             selectedItems={getDeviceIds}
