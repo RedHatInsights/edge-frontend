@@ -6,14 +6,23 @@ import Modal from '../../components/Modal';
 import { deleteGroupById } from '../../api';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
+import { Text } from '@patternfly/react-core';
+import apiWithToast from '../../utils/apiWithToast';
+import { useDispatch } from 'react-redux';
 
-const deleteGroupSchema = {
+const description = (name) => (
+  <Text>
+    <strong>{name} </strong>and all its data will be permanently deleted.
+    Associated systems will be removed from the group but will not be deleted.
+  </Text>
+);
+
+const schema = (name) => ({
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'warning-message',
-      label:
-        'This action will delete the group and its data. Associated systems will be removed from the group, but will not be deleted.',
+      label: description(name),
     },
     {
       component: componentTypes.CHECKBOX,
@@ -22,7 +31,7 @@ const deleteGroupSchema = {
       validate: [{ type: validatorTypes.REQUIRED }],
     },
   ],
-};
+});
 
 const WarningIcon = () => (
   <ExclamationTriangleIcon color={warningColor.value} />
@@ -35,17 +44,29 @@ const DeleteGroupModal = ({
   modalState,
 }) => {
   const { id, name } = modalState;
-  console.log(id, name);
+  const dispatch = useDispatch();
+
+  const handleDeleteGroup = () => {
+    const statusMessages = {
+      onSuccess: {
+        title: 'Success',
+        description: `${name} has been removed successfully`,
+      },
+      onError: { title: 'Error', description: 'Failed to delete group' },
+    };
+    apiWithToast(dispatch, () => deleteGroupById(id), statusMessages);
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
       openModal={() => setIsModalOpen(false)}
-      title={`Delete ${name}`}
+      title="Delete group"
       titleIconVariant={WarningIcon}
       variant="danger"
       submitLabel="Delete"
-      schema={deleteGroupSchema}
-      onSubmit={(values) => deleteGroupById(id, values)}
+      schema={schema(name)}
+      onSubmit={handleDeleteGroup}
       reloadData={reloadData}
     />
   );

@@ -5,6 +5,8 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import Modal from '../../components/Modal';
 import { updateGroupById } from '../../api';
 import { nameValidator } from '../../constants';
+import apiWithToast from '../../utils/apiWithToast';
+import { useDispatch } from 'react-redux';
 
 const createGroupSchema = {
   fields: [
@@ -32,7 +34,18 @@ const RenameGroupModal = ({
   modalState,
 }) => {
   const { id, name } = modalState;
-  console.log(id, name);
+  const dispatch = useDispatch();
+
+  const handleRenameModal = (values) => {
+    const statusMessages = {
+      onSuccess: {
+        title: 'Success',
+        description: `${name} has been renamed to ${values.name} successfully`,
+      },
+      onError: { title: 'Error', description: 'Failed to rename group' },
+    };
+    apiWithToast(dispatch, () => updateGroupById(id, values), statusMessages);
+  };
   return (
     <Modal
       isOpen={isModalOpen}
@@ -41,7 +54,7 @@ const RenameGroupModal = ({
       submitLabel="Save"
       schema={createGroupSchema}
       initialValues={modalState}
-      onSubmit={(values) => updateGroupById(id, values)}
+      onSubmit={handleRenameModal}
       reloadData={reloadData}
     />
   );

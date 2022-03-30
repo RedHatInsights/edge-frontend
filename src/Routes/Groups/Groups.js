@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Skeleton, Flex } from '@patternfly/react-core';
+import React, { useState } from 'react';
+import { Flex } from '@patternfly/react-core';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -11,22 +11,16 @@ import { getGroups } from '../../api/index';
 import CreateGroupModal from './CreateGroupModal';
 import RenameGroupModal from './RenameGroupModal';
 import DeleteGroupModal from './DeleteGroupModal';
-
-// LEFT OFF ON SPLITTING GROUP MODALS
+import useApi from '../../hooks/useApi';
 
 const Groups = () => {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [response, fetchData] = useApi(getGroups);
+  const { data, isLoading, hasError } = response;
+
   const [modalState, setModalState] = useState({ id: null, name: '' });
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  const fetchGroups = async () => {
-    const groups = await getGroups();
-    setData(groups.data);
-    setIsLoading(false);
-  };
 
   const handleRenameModal = (id, name) => {
     setModalState({ id, name });
@@ -38,22 +32,18 @@ const Groups = () => {
     setIsDeleteModalOpen(true);
   };
 
-  useEffect(() => {
-    fetchGroups();
-  }, []);
-
   return (
     <>
       <PageHeader className="pf-m-light">
         <PageHeaderTitle title="Groups" />
       </PageHeader>
       <Main className="edge-devices">
-        {isLoading ? (
-          <Skeleton />
-        ) : data?.length > 0 ? (
+        {isLoading || data?.count > 0 ? (
           <GroupTable
-            data={data}
+            data={data?.data || []}
+            count={data?.count}
             isLoading={isLoading}
+            hasError={hasError}
             handleRenameModal={handleRenameModal}
             handleDeleteModal={handleDeleteModal}
             handleCreateModal={() => setIsCreateModalOpen(true)}
@@ -84,14 +74,14 @@ const Groups = () => {
         <CreateGroupModal
           isModalOpen={isCreateModalOpen}
           setIsModalOpen={setIsCreateModalOpen}
-          reloadData={fetchGroups}
+          reloadData={fetchData}
         />
       )}
       {isRenameModalOpen && (
         <RenameGroupModal
           isModalOpen={isRenameModalOpen}
           setIsModalOpen={setIsRenameModalOpen}
-          reloadData={fetchGroups}
+          reloadData={fetchData}
           modalState={modalState}
         />
       )}
@@ -99,7 +89,7 @@ const Groups = () => {
         <DeleteGroupModal
           isModalOpen={isDeleteModalOpen}
           setIsModalOpen={setIsDeleteModalOpen}
-          reloadData={fetchGroups}
+          reloadData={fetchData}
           modalState={modalState}
         />
       )}

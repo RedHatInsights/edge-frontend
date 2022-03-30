@@ -5,6 +5,8 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import Modal from '../../components/Modal';
 import { createGroup } from '../../api';
 import { nameValidator } from '../../constants';
+import apiWithToast from '../../utils/apiWithToast';
+import { useDispatch } from 'react-redux';
 
 const createGroupSchema = {
   fields: [
@@ -26,6 +28,18 @@ const createGroupSchema = {
 };
 
 const CreateGroupModal = ({ isModalOpen, setIsModalOpen, reloadData }) => {
+  const dispatch = useDispatch();
+
+  const handleCreateGroup = (values) => {
+    const statusMessages = {
+      onSuccess: {
+        title: 'Success',
+        description: `${values.name} has been created successfully`,
+      },
+      onError: { title: 'Error', description: 'Failed to create group' },
+    };
+    apiWithToast(dispatch, () => createGroup(values), statusMessages);
+  };
   return (
     <Modal
       isOpen={isModalOpen}
@@ -33,7 +47,7 @@ const CreateGroupModal = ({ isModalOpen, setIsModalOpen, reloadData }) => {
       title="Create Group"
       submitLabel="Create"
       schema={createGroupSchema}
-      onSubmit={(values) => createGroup(values)}
+      onSubmit={handleCreateGroup}
       reloadData={reloadData}
     />
   );

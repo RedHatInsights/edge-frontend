@@ -15,7 +15,9 @@ const columns = [
 
 const GroupTable = ({
   data,
+  count,
   isLoading,
+  hasError,
   handleCreateModal,
   handleRenameModal,
   handleDeleteModal,
@@ -36,7 +38,7 @@ const GroupTable = ({
     );
   };
 
-  const buildRows = data.map((rowData) => {
+  const buildRows = data?.map((rowData) => {
     const { ID, Name, Devices } = rowData;
     const systems = Devices ?? [];
 
@@ -80,10 +82,10 @@ const GroupTable = ({
         apiFilterSort={false}
         filters={filters}
         tableData={{
-          count: data.length,
+          count,
           data,
           isLoading,
-          hasError: false,
+          hasError,
         }}
         columnNames={columns}
         rows={buildRows}
@@ -107,8 +109,10 @@ const GroupTable = ({
 
 GroupTable.propTypes = {
   data: PropTypes.array,
+  count: PropTypes.number,
   openModal: PropTypes.func,
   isLoading: PropTypes.bool,
+  hasError: PropTypes.bool,
   handleRenameModal: PropTypes.func,
   handleDeleteModal: PropTypes.func,
   handleCreateModal: PropTypes.func,
