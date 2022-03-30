@@ -16,7 +16,7 @@ const columns = [
 const GroupTable = ({
   data,
   isLoading,
-  openModal,
+  handleCreateModal,
   handleRenameModal,
   handleDeleteModal,
 }) => {
@@ -26,7 +26,7 @@ const GroupTable = ({
       id && [
         {
           title: 'Rename',
-          onClick: () => handleRenameModal(id, { name: title }),
+          onClick: () => handleRenameModal(id, title),
         },
         {
           title: 'Delete',
@@ -97,7 +97,7 @@ const GroupTable = ({
         toolbarButtons={[
           {
             title: 'Create group',
-            click: openModal,
+            click: handleCreateModal,
           },
         ]}
       />
@@ -111,6 +111,7 @@ GroupTable.propTypes = {
   isLoading: PropTypes.bool,
   handleRenameModal: PropTypes.func,
   handleDeleteModal: PropTypes.func,
+  handleCreateModal: PropTypes.func,
 };
 
 export default GroupTable;

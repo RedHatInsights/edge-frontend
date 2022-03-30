@@ -7,73 +7,20 @@ import {
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import GroupTable from './GroupTable';
 import Empty from '../../components/Empty';
-import Modal from '../../components/Modal';
-import {
-  getGroups,
-  createGroup,
-  updateGroupById,
-  deleteGroupById,
-} from '../../api/index';
-import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
-import { nameValidator } from '../../constants';
-import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-import { ExclamationTriangleIcon } from '@patternfly/react-icons';
-import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
+import { getGroups } from '../../api/index';
+import CreateGroupModal from './CreateGroupModal';
+import RenameGroupModal from './RenameGroupModal';
+import DeleteGroupModal from './DeleteGroupModal';
 
-const WarningIcon = () => (
-  <ExclamationTriangleIcon color={warningColor.value} />
-);
-
-const createModalState = {
-  title: 'Create group',
-  icon: null,
-  onSubmit: (values) => createGroup(values),
-  submitLabel: 'Create',
-  initialValues: {},
-  variant: 'primary',
-};
-
-const createGroupSchema = {
-  fields: [
-    {
-      component: componentTypes.TEXT_FIELD,
-      name: 'name',
-      label: 'Group name',
-      helperText:
-        'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
-      isRequired: true,
-      validate: [
-        { type: validatorTypes.REQUIRED },
-
-        { type: validatorTypes.MAX_LENGTH, threshold: 50 },
-        nameValidator,
-      ],
-    },
-  ],
-};
-
-const deleteGroupSchema = {
-  fields: [
-    {
-      component: componentTypes.PLAIN_TEXT,
-      name: 'warning-message',
-      label:
-        'This action will delete the group and its data. Associated systems will be removed from the group, but will not be deleted.',
-    },
-    {
-      component: componentTypes.CHECKBOX,
-      name: 'confirmation',
-      label: 'I understand that this action cannot be undone.',
-      validate: [{ type: validatorTypes.REQUIRED }],
-    },
-  ],
-};
+// LEFT OFF ON SPLITTING GROUP MODALS
 
 const Groups = () => {
   const [data, setData] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [modalState, setModalState] = useState(createModalState);
+  const [modalState, setModalState] = useState({ id: null, name: '' });
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const fetchGroups = async () => {
     const groups = await getGroups();
@@ -81,33 +28,14 @@ const Groups = () => {
     setIsLoading(false);
   };
 
-  const handleCreateModal = () => {
-    setModalState(createModalState);
-    setIsModalOpen(true);
-  };
-
-  const handleRenameModal = (id, initialValues) => {
-    setModalState({
-      title: 'Rename group',
-      onSubmit: (values) => updateGroupById(id, values),
-      submitLabel: 'Save',
-      initialValues,
-      variant: 'primary',
-      icon: null,
-    });
-    setIsModalOpen(true);
+  const handleRenameModal = (id, name) => {
+    setModalState({ id, name });
+    setIsRenameModalOpen(true);
   };
 
   const handleDeleteModal = (id, name) => {
-    setModalState({
-      title: `Delete ${name}?`,
-      onSubmit: () => deleteGroupById(id),
-      submitLabel: 'Delete',
-      initialValues: {},
-      variant: 'danger',
-      icon: WarningIcon,
-    });
-    setIsModalOpen(true);
+    setModalState({ id, name });
+    setIsDeleteModalOpen(true);
   };
 
   useEffect(() => {
@@ -128,7 +56,7 @@ const Groups = () => {
             isLoading={isLoading}
             handleRenameModal={handleRenameModal}
             handleDeleteModal={handleDeleteModal}
-            openModal={handleCreateModal}
+            handleCreateModal={() => setIsCreateModalOpen(true)}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
@@ -138,7 +66,7 @@ const Groups = () => {
               body="Create system groups to help manage your devices more effectively"
               primaryAction={{
                 text: 'Create group',
-                click: () => setIsModalOpen(true),
+                click: () => setIsCreateModalOpen(true),
               }}
               secondaryActions={[
                 {
@@ -152,22 +80,29 @@ const Groups = () => {
         )}
       </Main>
 
-      <Modal
-        isOpen={isModalOpen}
-        openModal={() => setIsModalOpen(false)}
-        title={modalState.title}
-        titleIconVariant={modalState.icon}
-        submitLabel={modalState.submitLabel}
-        variant={modalState.variant}
-        schema={
-          modalState.submitLabel === 'Delete'
-            ? deleteGroupSchema
-            : createGroupSchema
-        }
-        initialValues={modalState.initialValues}
-        onSubmit={modalState.onSubmit}
-        reloadData={() => fetchGroups()}
-      />
+      {isCreateModalOpen && (
+        <CreateGroupModal
+          isModalOpen={isCreateModalOpen}
+          setIsModalOpen={setIsCreateModalOpen}
+          reloadData={fetchGroups}
+        />
+      )}
+      {isRenameModalOpen && (
+        <RenameGroupModal
+          isModalOpen={isRenameModalOpen}
+          setIsModalOpen={setIsRenameModalOpen}
+          reloadData={fetchGroups}
+          modalState={modalState}
+        />
+      )}
+      {isDeleteModalOpen && (
+        <DeleteGroupModal
+          isModalOpen={isDeleteModalOpen}
+          setIsModalOpen={setIsDeleteModalOpen}
+          reloadData={fetchGroups}
+          modalState={modalState}
+        />
+      )}
     </>
   );
 };
