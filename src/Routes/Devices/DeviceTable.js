@@ -180,7 +180,7 @@ const DeviceTable = ({
 
     if (!areActionsDisabled(rowData)) {
       actions.push({
-        title: 'Update device',
+        title: 'Update',
         onClick: (_event, _rowId, rowData) => {
           setUpdateModal((prevState) => {
             return {
@@ -199,7 +199,7 @@ const DeviceTable = ({
 
     if (canBeRemoved) {
       actions.push({
-        title: 'Remove device',
+        title: 'Remove from group',
         onClick: () =>
           setRemoveModal({
             name: rowData.rowInfo.display_name,
