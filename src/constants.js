@@ -175,3 +175,10 @@ export const emptyStateNoFliters = (isLoading, count, history) =>
   isLoading !== true &&
   !count > 0 &&
   !history.location.search.includes('has_filters=true');
+
+export const canUpdateSelectedDevices = ({ deviceData, imageData }) =>
+  deviceData.length > 0 && imageData
+    ? deviceData?.some(
+        (device) => device.imageSetId !== deviceData[0].imageSetId
+      )
+    : true;

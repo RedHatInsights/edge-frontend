@@ -14,8 +14,13 @@ import { distributionMapper } from '../ImageManagerDetail/constants';
 const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   const dispatch = useDispatch();
   const imageData = updateModal?.imageData;
-  const deviceId = updateModal?.deviceData?.id;
-  const deviceName = updateModal?.deviceData?.display_name;
+  const isMultiple = updateModal.deviceData.length > 1;
+  const deviceId = isMultiple
+    ? updateModal.deviceData.map((device) => device.id)
+    : updateModal?.deviceData[0]?.id;
+  const deviceName = isMultiple
+    ? updateModal.deviceData.map((device) => device.display_name)
+    : updateModal?.deviceData[0]?.display_name;
 
   const handleUpdateModal = async () => {
     try {
@@ -27,7 +32,9 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
         ...addNotification({
           variant: 'info',
           title: 'Updating device',
-          description: ` ${deviceName} was added to the queue.`,
+          description: isMultiple
+            ? ` ${deviceName.length} devices were added to the queue.`
+            : ` ${deviceName} was added to the queue.`,
         }),
       });
     } catch (err) {
@@ -65,8 +72,20 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
     </TextContent>
   );
 
+  const Description = () => (
+    <TextContent>
+      <Text>
+        Update{' '}
+        <span className="pf-u-font-weight-bold pf-u-font-size-md">
+          {isMultiple ? `${deviceName.length} systems` : deviceName}
+        </span>{' '}
+        to latest version of the image linked to it.
+      </Text>
+    </TextContent>
+  );
+
   const updateToDetails = {
-    title: 'Update to',
+    title: `Update to version ${imageData?.Image.Version}`,
     rows: [
       { title: 'Image Name', value: imageData?.Image.Name },
       { title: 'Version', value: imageData?.Image.Version },
@@ -82,7 +101,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   };
 
   const packageDetails = {
-    title: 'Package Details',
+    title: `Changes from version ${imageData?.Image.Version - 1}`,
     rows: [
       { title: 'Added', value: imageData?.PackageDiff?.Added?.length || 0 },
       { title: 'Removed', value: imageData?.PackageDiff?.Removed?.length || 0 },
@@ -95,18 +114,23 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
       {
         component: componentTypes.PLAIN_TEXT,
         name: 'description',
-        label:
-          'Update this device to use the latest version of the image linked to it.',
+        label: Description(),
       },
       {
         component: componentTypes.PLAIN_TEXT,
         name: 'update-details',
-        label: BuildModalReview({ reviewObject: updateToDetails }),
+        label: BuildModalReview({
+          reviewObject: updateToDetails,
+          key: 'update-details',
+        }),
       },
       {
         component: componentTypes.PLAIN_TEXT,
-        name: 'update-details',
-        label: BuildModalReview({ reviewObject: packageDetails }),
+        name: 'package-details',
+        label: BuildModalReview({
+          reviewObject: packageDetails,
+          key: 'package-details',
+        }),
       },
       {
         component: componentTypes.PLAIN_TEXT,
@@ -119,7 +143,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   return (
     <Modal
       size="medium"
-      title={`Update ${deviceName} to latest image`}
+      title={`Update system${isMultiple ? 's' : ''} to latest image version`}
       isOpen={updateModal.isOpen}
       openModal={() =>
         setUpdateModal((prevState) => ({ ...prevState, isOpen: false }))
@@ -136,7 +160,7 @@ UpdateDeviceModal.propTypes = {
   refreshTable: PropTypes.func,
   updateModal: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
-    deviceData: PropTypes.object.isRequired,
+    deviceData: PropTypes.array.isRequired,
     imageData: PropTypes.object,
   }).isRequired,
   setUpdateModal: PropTypes.func.isRequired,

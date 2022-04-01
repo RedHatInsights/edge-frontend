@@ -211,7 +211,7 @@ const GeneralTable = ({
 
   const checkboxRows = () =>
     filteredRows.map((row) =>
-      checkedRows.some((checkedRow) => checkedRow.id === row.id)
+      checkedRows.some((checkedRow) => checkedRow.id === row.rowInfo.id)
         ? {
             ...row,
             selected: true,
@@ -225,16 +225,10 @@ const GeneralTable = ({
   const handleSelect = (_event, isSelecting, rowIndex) => {
     setCheckedRows((prevState) => {
       return isSelecting
-        ? [
-            ...prevState,
-            {
-              id: filteredRows[rowIndex].id,
-              deviceID: filteredRows[rowIndex].deviceID,
-              name: filteredRows[rowIndex].name,
-              URL: filteredRows[rowIndex].URL,
-            },
-          ]
-        : prevState.filter((row) => row.id !== filteredRows[rowIndex].id);
+        ? [...prevState, { ...filteredRows[rowIndex].rowInfo }]
+        : prevState.filter(
+            (row) => row.id !== filteredRows[rowIndex].rowInfo.id
+          );
     });
   };
 
@@ -247,10 +241,7 @@ const GeneralTable = ({
       filteredRows.forEach((filtered) => {
         if (rowIsNotIncluded(filtered.id)) {
           newRows.push({
-            id: filtered.id,
-            deviceID: filtered.deviceID,
-            name: filtered.name,
-            URL: filtered.URL,
+            ...filtered.rowInfo,
           });
         }
       });
@@ -262,10 +253,7 @@ const GeneralTable = ({
   const handleBulkSelect = () => {
     setCheckedRows(
       rows.map((row) => ({
-        id: row.id,
-        deviceID: row.deviceID,
-        name: row.name,
-        URL: row.URL,
+        ...row.rowInfo,
       }))
     );
   };

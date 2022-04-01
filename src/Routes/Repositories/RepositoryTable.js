@@ -8,7 +8,7 @@ const filters = [{ label: 'Name', type: 'text' }];
 
 const RepositoryTable = ({ data, openModal }) => {
   const actionResolver = (rowData) => {
-    const { id, repoName, repoBaseURL } = rowData;
+    const { id, repoName, repoBaseURL } = rowData.rowInfo;
     return [
       {
         title: 'Edit',
@@ -35,9 +35,11 @@ const RepositoryTable = ({ data, openModal }) => {
 
   const buildRows = data.map(({ id, name, baseURL }) => {
     return {
-      id: id,
-      repoName: name,
-      repoBaseURL: baseURL,
+      rowInfo: {
+        id: id,
+        repoName: name,
+        repoBaseURL: baseURL,
+      },
       noApiSortFilter: [name, baseURL],
       cells: [
         {

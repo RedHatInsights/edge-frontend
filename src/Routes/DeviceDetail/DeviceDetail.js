@@ -67,17 +67,20 @@ const DeviceDetail = () => {
       setIsDeviceStatusLoading(false);
       setUpdateModal((prevState) => ({
         ...prevState,
-        deviceData: {
-          display_name: entity.display_name,
-          id: entity.id,
-          system_profile: {
-            image_data,
-            status:
-              image_data?.UpdateTransactions?.[
-                image_data.UpdateTransactions.length - 1
-              ]?.Status,
+        deviceData: [
+          ...prevState.deviceData,
+          {
+            display_name: entity.display_name,
+            id: entity.id,
+            system_profile: {
+              image_data,
+              status:
+                image_data?.UpdateTransactions?.[
+                  image_data.UpdateTransactions.length - 1
+                ]?.Status,
+            },
           },
-        },
+        ],
         imageData: image_data?.ImageInfo?.UpdatesAvailable?.[0],
       }));
       setImageId(image_data?.ImageInfo?.Image?.ID);
