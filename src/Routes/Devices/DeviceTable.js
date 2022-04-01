@@ -17,11 +17,7 @@ import {
 import { emptyStateNoFliters } from '../../constants';
 
 const getDeviceStatus = (deviceData) =>
-  deviceData?.ImageInfo?.UpdatesAvailable
-    ? 'updateAvailable'
-    : deviceData?.Device?.Booted
-    ? 'running'
-    : 'booting';
+  deviceData?.UpdateAvailable ? 'updateAvailable' : deviceData?.Status;
 
 const DeviceStatus = ({ Device }) => {
   const status = getDeviceStatus(Device);
@@ -108,35 +104,34 @@ const columnNames = [
 const createRows = (devices) =>
   devices?.map((device) => ({
     rowInfo: {
-      deviceID: device?.Device?.ID,
-      id: device?.Device?.UUID,
-      display_name: device?.Device?.DeviceName,
-      updateImageData: device?.ImageInfo?.UpdatesAvailable?.[0],
+      deviceID: device?.DeviceId,
+      id: device?.DeviceUUID,
+      display_name: device?.DeviceName,
+      updateImageData: device?.UpdateAvailable,
       deviceStatus: getDeviceStatus(device),
-      imageSetId: device?.ImageInfo?.Image?.ImageSetID,
-      imageName: device?.ImageInfo?.Image?.Name,
+      imageSetId: device?.ImageSetID,
+      imageName: device?.ImageName,
     },
     noApiSortFilter: [
-      device?.Device?.DeviceName || '',
-      device?.ImageInfo?.Image?.Name || '',
+      device?.DeviceName || '',
       '',
-      device?.Device?.LastSeen || '',
+      device?.LastSeen || '',
       getDeviceStatus(device),
     ],
     cells: [
       {
         title: (
-          <Link to={`${paths['inventory']}/${device?.Device?.UUID}`}>
-            {device?.Device?.DeviceName}
+          <Link to={`${paths['inventory']}/${device?.DeviceUUID}`}>
+            {device?.DeviceName}
           </Link>
         ),
       },
       {
-        title: device?.ImageInfo?.Image?.Name ? (
+        title: device?.ImageName ? (
           <Link
-            to={`${paths['manage-images']}/${device?.ImageInfo?.Image?.ImageSetID}/versions/${device?.ImageInfo?.Image?.ID}/details`}
+            to={`${paths['manage-images']}/${device?.ImageSetID}/versions/${device?.ImageID}/details`}
           >
-            {device?.ImageInfo?.Image?.Name}
+            {device?.ImageName}
           </Link>
         ) : (
           'unavailable'
@@ -146,7 +141,7 @@ const createRows = (devices) =>
         title: '-',
       },
       {
-        title: <DateFormat date={device?.Device?.LastSeen} />,
+        title: <DateFormat date={device?.LastSeen} />,
       },
       {
         title: <DeviceStatus Device={device} />,
@@ -176,7 +171,7 @@ const DeviceTable = ({
   const actionResolver = (rowData) => {
     const actions = [];
     if (isLoading) return actions;
-    if (!rowData.rowInfo.id) return actions;
+    if (!rowData.rowInfo?.id) return actions;
 
     if (!areActionsDisabled(rowData)) {
       actions.push({
@@ -244,7 +239,7 @@ const DeviceTable = ({
             hasError: hasError,
           }}
           columnNames={columnNames}
-          rows={createRows(data || [])}
+          rows={createRows(data) || []}
           actionResolver={actionResolver}
           areActionsDisabled={canBeRemoved ? false : areActionsDisabled}
           defaultSort={{ index: 3, direction: 'desc' }}

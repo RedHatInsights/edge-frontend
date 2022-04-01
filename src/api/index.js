@@ -443,7 +443,7 @@ export const removeCustomRepository = (id) =>
   instance.delete(`${EDGE_API}/thirdpartyrepo/${id}`);
 
 export const getInventory = async () => {
-  return await instance.get(`${EDGE_API}/devices`);
+  return await instance.get(`${EDGE_API}/devices/devicesview`);
 };
 
 export const createGroup = (payload) => {

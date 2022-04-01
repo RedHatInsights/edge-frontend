@@ -31,13 +31,17 @@ const Inventory = () => {
         <PageHeaderTitle title="Systems" />
       </PageHeader>
       <Main className="edge-devices">
-        <DeviceTable
-          data={data?.data}
-          count={data?.count}
-          isLoading={isLoading}
-          hasError={hasError}
-          setUpdateModal={setUpdateModal}
-        />
+        {data ? (
+          <DeviceTable
+            data={data?.data?.devices}
+            count={data?.count}
+            isLoading={isLoading}
+            hasError={hasError}
+            setUpdateModal={setUpdateModal}
+          />
+        ) : (
+          <Fragment />
+        )}
       </Main>
       {updateModal.isOpen && (
         <Suspense
