@@ -15,8 +15,10 @@ const columns = [
 
 const GroupTable = ({
   data,
+  count,
   isLoading,
-  openModal,
+  hasError,
+  handleCreateModal,
   handleRenameModal,
   handleDeleteModal,
 }) => {
@@ -26,7 +28,7 @@ const GroupTable = ({
       id && [
         {
           title: 'Rename',
-          onClick: () => handleRenameModal(id, { name: title }),
+          onClick: () => handleRenameModal(id, title),
         },
         {
           title: 'Delete',
@@ -36,7 +38,7 @@ const GroupTable = ({
     );
   };
 
-  const buildRows = data.map((rowData) => {
+  const buildRows = data?.map((rowData) => {
     const { ID, Name, Devices } = rowData;
     const systems = Devices ?? [];
 
@@ -80,10 +82,10 @@ const GroupTable = ({
         apiFilterSort={false}
         filters={filters}
         tableData={{
-          count: data.length,
+          count,
           data,
           isLoading,
-          hasError: false,
+          hasError,
         }}
         columnNames={columns}
         rows={buildRows}
@@ -97,7 +99,7 @@ const GroupTable = ({
         toolbarButtons={[
           {
             title: 'Create group',
-            click: openModal,
+            click: handleCreateModal,
           },
         ]}
       />
@@ -107,10 +109,13 @@ const GroupTable = ({
 
 GroupTable.propTypes = {
   data: PropTypes.array,
+  count: PropTypes.number,
   openModal: PropTypes.func,
   isLoading: PropTypes.bool,
+  hasError: PropTypes.bool,
   handleRenameModal: PropTypes.func,
   handleDeleteModal: PropTypes.func,
+  handleCreateModal: PropTypes.func,
 };
 
 export default GroupTable;
