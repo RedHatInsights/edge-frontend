@@ -34,6 +34,7 @@ import { useDispatch } from 'react-redux';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import Modal from '../../components/Modal';
+import DeleteGroupModal from '../Groups/DeleteGroupModal';
 
 const UpdateDeviceModal = React.lazy(() =>
   import('../Devices/UpdateDeviceModal')
@@ -62,6 +63,13 @@ const GroupsDetail = () => {
   const groupName = data?.DeviceGroup?.Name;
   const [deviceIds, getDeviceIds] = useState([]);
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
+  const [modalState, setModalState] = useState({ id: null, name: '' });
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const handleDeleteModal = (id, name) => {
+    setModalState({ id, name });
+    setIsDeleteModalOpen(true);
+  };
 
   const removeDeviceLabel = () =>
     `Do you want to remove ${
@@ -113,6 +121,13 @@ const GroupsDetail = () => {
     setTimeout(() => setHasModalSubmitted(true), 800);
   };
 
+  const getDeviceStatus = (deviceData) =>
+    deviceData?.ImageInfo?.UpdatesAvailable
+      ? 'updateAvailable'
+      : deviceData?.Device?.Booted
+      ? 'running'
+      : 'booting';
+
   return (
     <>
       <PageHeader className="pf-m-light">
@@ -151,7 +166,42 @@ const GroupsDetail = () => {
               }
               isOpen={isDropdownOpen}
               dropdownItems={[
-                <DropdownItem key="update-all-devices">Delete</DropdownItem>,
+                <DropdownItem
+                  key="delete-device-group"
+                  onClick={() => handleDeleteModal(groupId, groupName)}
+                >
+                  Delete Group
+                </DropdownItem>,
+                <DropdownItem
+                  key="update-all-devices"
+                  isDisabled={canUpdateSelectedDevices({
+                    deviceData: data?.Devices?.data?.map((device) => ({
+                      imageSetId: device?.ImageInfo?.Image.ImageSetID,
+                    })),
+                    imageData:
+                      data?.Devices?.data[0].ImageInfo.UpdatesAvailable?.[0],
+                  })}
+                  onClick={() =>
+                    setUpdateModal((prevState) => ({
+                      ...prevState,
+                      isOpen: true,
+                      deviceData: data?.Devices?.data?.map((device) => ({
+                        deviceID: device?.Device?.ID,
+                        id: device?.Device?.UUID,
+                        display_name: device?.Device?.DeviceName,
+                        updateImageData:
+                          device?.ImageInfo?.UpdatesAvailable?.[0],
+                        deviceStatus: getDeviceStatus(device),
+                        imageSetId: device?.ImageInfo?.Image?.ImageSetID,
+                        imageName: device?.ImageInfo?.Image?.Name,
+                      })),
+                      imageData:
+                        data?.Devices?.data[0].ImageInfo.UpdatesAvailable?.[0],
+                    }))
+                  }
+                >
+                  Update
+                </DropdownItem>,
               ]}
             />
           </FlexItem>
@@ -275,6 +325,14 @@ const GroupsDetail = () => {
             refreshTable={fetchData}
           />
         </Suspense>
+      )}
+      {isDeleteModalOpen && (
+        <DeleteGroupModal
+          isModalOpen={isDeleteModalOpen}
+          setIsModalOpen={setIsDeleteModalOpen}
+          reloadData={() => history.push(paths['fleet-management'])}
+          modalState={modalState}
+        />
       )}
     </>
   );
