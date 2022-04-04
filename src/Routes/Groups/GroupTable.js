@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
-import { Tooltip } from '@patternfly/react-core';
+import { Bullseye, Spinner, Tooltip } from '@patternfly/react-core';
+
+const UpdateDeviceModal = React.lazy(() =>
+  import('../Devices/UpdateDeviceModal')
+);
 
 const filters = [
   {
@@ -30,7 +34,14 @@ const GroupTable = ({
   handleCreateModal,
   handleRenameModal,
   handleDeleteModal,
+  fetchGroups,
 }) => {
+  const [updateModal, setUpdateModal] = useState({
+    isOpen: false,
+    deviceData: null,
+    imageData: null,
+  });
+
   const actionResolver = (rowData) => {
     if (!rowData?.rowInfo) return [];
     const { id, title } = rowData?.rowInfo;
@@ -43,6 +54,13 @@ const GroupTable = ({
         {
           title: 'Delete',
           onClick: () => handleDeleteModal(id, title),
+        },
+        {
+          title: 'Update',
+          onClick: () => setUpdateModal((prevState) => ({
+            ...prevState,
+            isOpen: true,
+          })),
         },
       ]
     );
@@ -137,6 +155,30 @@ const GroupTable = ({
           },
         ]}
       />
+      {updateModal.isOpen && (
+        <Suspense
+          fallback={
+            <Bullseye>
+              <Spinner />
+            </Bullseye>
+          }
+        >
+          <UpdateDeviceModal
+            navigateBack={() => {
+              history.push({ pathname: history.location.pathname });
+              setUpdateModal((prevState) => {
+                return {
+                  ...prevState,
+                  isOpen: false,
+                };
+              });
+            }}
+            setUpdateModal={setUpdateModal}
+            updateModal={updateModal}
+            refreshTable={fetchGroups}
+          />
+        </Suspense>
+      )}
     </>
   );
 };
@@ -150,6 +192,7 @@ GroupTable.propTypes = {
   handleRenameModal: PropTypes.func,
   handleDeleteModal: PropTypes.func,
   handleCreateModal: PropTypes.func,
+  fetchGroups: PropTypes.func,
 };
 
 export default GroupTable;
