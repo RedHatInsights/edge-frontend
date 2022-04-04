@@ -74,7 +74,12 @@ const columnNames = [
 
 const createRows = (data) => {
   return data.map(({ image_set, image_build_iso_url }, index) => ({
-    id: image_set?.ID,
+    rowInfo: {
+      id: image_set?.ID,
+      imageStatus: image_set?.Images[0].Status,
+      isoURL: image_build_iso_url || null,
+      latestImageID: image_set?.Images[0].ID,
+    },
     cells: [
       {
         title: (
@@ -97,9 +102,6 @@ const createRows = (data) => {
         ),
       },
     ],
-    imageStatus: image_set?.Images[0].Status,
-    isoURL: image_build_iso_url || null,
-    latestImageID: image_set?.Images[0].ID,
   }));
 };
 
@@ -121,13 +123,13 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
 
   const actionResolver = (rowData) => {
     const actionsArray = [];
-    if (rowData?.isoURL) {
+    if (rowData.rowInfo?.isoURL) {
       actionsArray.push({
         title: (
           <Text
             className="force-text-black remove-underline"
             component="a"
-            href={rowData.isoURL}
+            href={rowData.rowInfo?.isoURL}
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -138,18 +140,18 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     }
 
     if (
-      rowData?.imageStatus === 'SUCCESS' ||
-      rowData?.imageStatus === 'ERROR'
+      rowData.rowInfo?.imageStatus === 'SUCCESS' ||
+      rowData.rowInfo?.imageStatus === 'ERROR'
     ) {
       actionsArray.push({
         title: 'Update Image',
         onClick: (_event, _rowId, rowData) => {
-          openUpdateWizard(rowData.latestImageID);
+          openUpdateWizard(rowData.rowInfo?.latestImageID);
         },
       });
     }
 
-    if (rowData?.imageStatus === 'BUILDING' && rowData?.id) {
+    if (rowData.rowInfo?.imageStatus === 'BUILDING' && rowData.rowInfo?.id) {
       actionsArray.push({
         title: '',
       });
@@ -158,7 +160,8 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     return actionsArray;
   };
 
-  const areActionsDisabled = (rowData) => rowData?.imageStatus === 'BUILDING';
+  const areActionsDisabled = (rowData) =>
+    rowData.rowInfo?.imageStatus === 'BUILDING';
 
   return (
     <>

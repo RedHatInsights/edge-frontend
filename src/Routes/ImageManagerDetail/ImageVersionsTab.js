@@ -53,7 +53,11 @@ const columnNames = [
 
 const createRows = (data, imageSetId) => {
   return data?.map(({ image }) => ({
-    id: image?.ID,
+    rowInfo: {
+      id: image?.ID,
+      imageStatus: image?.Status,
+      isoURL: image?.Installer?.ImageBuildISOURL,
+    },
     noApiSortFilter: [
       image?.Version,
       imageTypeMapper[image?.ImageType],
@@ -80,8 +84,6 @@ const createRows = (data, imageSetId) => {
         title: <StatusLabel status={image?.Status} />,
       },
     ],
-    imageStatus: image?.Status,
-    isoURL: image?.Installer?.ImageBuildISOURL,
   }));
 };
 
@@ -100,13 +102,13 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
 
   const actionResolver = (rowData) => {
     const actionsArray = [];
-    if (rowData?.isoURL) {
+    if (rowData.rowInfo?.isoURL) {
       actionsArray.push({
         title: (
           <Text
             className="force-text-black remove-underline"
             component="a"
-            href={rowData.isoURL}
+            href={rowData.rowInfo.isoURL}
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -117,18 +119,18 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
     }
 
     if (
-      rowData?.imageStatus === 'SUCCESS' ||
-      rowData?.imageStatus === 'ERROR'
+      rowData.rowInfo?.imageStatus === 'SUCCESS' ||
+      rowData.rowInfo?.imageStatus === 'ERROR'
     ) {
       actionsArray.push({
         title: 'Update Image',
         onClick: (_event, _rowId, rowData) => {
-          openUpdateWizard(rowData.id);
+          openUpdateWizard(rowData.rowInfo.id);
         },
       });
     }
 
-    if (rowData?.imageStatus === 'BUILDING' && rowData?.id) {
+    if (rowData.rowInfo?.imageStatus === 'BUILDING' && rowData.rowInfo?.id) {
       actionsArray.push({
         title: '',
       });
@@ -137,7 +139,8 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
     return actionsArray;
   };
 
-  const areActionsDisabled = (rowData) => rowData?.imageStatus === 'BUILDING';
+  const areActionsDisabled = (rowData) =>
+    rowData.rowInfo?.imageStatus === 'BUILDING';
 
   return (
     <Main className="add-100vh">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Title,
   Text,
@@ -10,7 +10,7 @@ import {
 } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 
-const BuildModalReview = ({ reviewObject }) => {
+const BuildModalReview = ({ reviewObject, key }) => {
   return (
     <TextContent>
       <Title headingLevel="h3">
@@ -18,14 +18,14 @@ const BuildModalReview = ({ reviewObject }) => {
       </Title>
       <TextList component={TextListVariants.dl}>
         {reviewObject.rows.map((row) => (
-          <>
+          <Fragment key={row.title + key}>
             <TextListItem component={TextListItemVariants.dt}>
               {row.title}
             </TextListItem>
             <TextListItem component={TextListItemVariants.dd}>
               {row.value}
             </TextListItem>
-          </>
+          </Fragment>
         ))}
       </TextList>
     </TextContent>
@@ -34,6 +34,7 @@ const BuildModalReview = ({ reviewObject }) => {
 
 BuildModalReview.propTypes = {
   reviewObject: PropTypes.object,
+  key: PropTypes.string,
 };
 
 export default BuildModalReview;
