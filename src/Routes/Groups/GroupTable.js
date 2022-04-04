@@ -45,8 +45,6 @@ const GroupTable = ({
       DevicesImageInfo = [];
     }
     const systems = Devices ?? [];
-    console.log(DevicesImageInfo);
-    // temp static data to show dif version of mockups
     const image = (
       <div>
         <Tooltip
