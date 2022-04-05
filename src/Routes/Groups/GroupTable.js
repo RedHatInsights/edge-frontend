@@ -74,12 +74,21 @@ const GroupTable = ({
       rowInfo: {
         id: ID,
         title: Name,
-        image: ID === 3448 ? 'Multiple images' : 'Golden image',
+        image:
+          DevicesImageInfo.length === 0
+            ? '-'
+            : DevicesImageInfo.length > 1
+            ? 'Multiple images'
+            : DevicesImageInfo[0]?.Name,
       },
       noApiSortFilter: [
         Name,
         '',
-        ID === 3448 ? 'Multiple images' : 'Golden image',
+        DevicesImageInfo.length === 0
+          ? '-'
+          : DevicesImageInfo.length > 1
+          ? 'Multiple images'
+          : DevicesImageInfo[0]?.Name,
       ],
       cells: [
         {
