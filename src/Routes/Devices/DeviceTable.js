@@ -176,7 +176,7 @@ const DeviceTable = ({
   const actionResolver = (rowData) => {
     const actions = [];
     if (isLoading) return actions;
-    if (!rowData.rowInfo.id) return actions;
+    if (!rowData?.rowInfo?.id) return actions;
 
     if (!areActionsDisabled(rowData)) {
       actions.push({
