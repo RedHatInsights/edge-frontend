@@ -18,7 +18,7 @@ const apiWithToast = (dispatch, api, statusMessages) => {
 
   const fetchData = async () => {
     try {
-      await api();
+      const response = await api();
 
       if (hasSuccess) {
         dispatch({
@@ -28,6 +28,7 @@ const apiWithToast = (dispatch, api, statusMessages) => {
           }),
         });
       }
+      return response;
     } catch (err) {
       dispatch({
         ...addNotification({
@@ -35,10 +36,11 @@ const apiWithToast = (dispatch, api, statusMessages) => {
           ...statusMessages.onError,
         }),
       });
+      return err;
     }
   };
 
-  fetchData();
+  return fetchData();
 };
 
 export default apiWithToast;

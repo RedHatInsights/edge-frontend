@@ -6,6 +6,8 @@ import {
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { useHistory } from 'react-router-dom';
 import DeviceTable from './DeviceTable';
+import AddDeviceModal from './AddDeviceModal';
+import CreateGroupModal from '../Groups/CreateGroupModal';
 import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api';
 import { Bullseye, Spinner } from '@patternfly/react-core';
@@ -17,6 +19,10 @@ const UpdateDeviceModal = React.lazy(() =>
 const Inventory = () => {
   const [response, fetchData] = useApi(getInventory);
   const { data, isLoading, hasError } = response;
+  const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
+  const [deviceIds, setDeviceIds] = useState([]);
+  const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
+  const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
   const [updateModal, setUpdateModal] = useState({
     isOpen: false,
     deviceData: null,
@@ -24,6 +30,11 @@ const Inventory = () => {
   });
 
   const history = useHistory();
+
+  const handleAddDevicesToGroup = (ids) => {
+    setIsAddDeviceModalOpen(true);
+    setDeviceIds(ids);
+  };
 
   return (
     <Fragment>
@@ -37,6 +48,24 @@ const Inventory = () => {
           isLoading={isLoading}
           hasError={hasError}
           setUpdateModal={setUpdateModal}
+          handleAddDevicesToGroup={handleAddDevicesToGroup}
+          hasCheckbox={true}
+          selectedItems={setDeviceIds}
+          kebabItems={[
+            {
+              isDisabled: !(deviceIds.length > 0),
+              title: 'Add to group',
+              onClick: () =>
+                handleAddDevicesToGroup(
+                  deviceIds.map((device) => ({
+                    ID: device.deviceID,
+                    name: device.display_name,
+                  }))
+                ),
+            },
+          ]}
+          hasModalSubmitted={hasModalSubmitted}
+          setHasModalSubmitted={setHasModalSubmitted}
         />
       </Main>
       {updateModal.isOpen && (
@@ -62,6 +91,29 @@ const Inventory = () => {
             refreshTable={fetchData}
           />
         </Suspense>
+      )}
+      {isAddDeviceModalOpen && (
+        <AddDeviceModal
+          isModalOpen={isAddDeviceModalOpen}
+          setIsModalOpen={setIsAddDeviceModalOpen}
+          setIsCreateGroupModalOpen={setIsCreateGroupModalOpen}
+          reloadData={() => {
+            fetchData();
+            setTimeout(() => setHasModalSubmitted(true), 800);
+          }}
+          deviceIds={deviceIds}
+        />
+      )}
+      {isCreateGroupModalOpen && (
+        <CreateGroupModal
+          isModalOpen={isCreateGroupModalOpen}
+          setIsModalOpen={setIsCreateGroupModalOpen}
+          reloadData={() => {
+            fetchData();
+            setTimeout(() => setHasModalSubmitted(true), 800);
+          }}
+          deviceIds={deviceIds}
+        />
       )}
     </Fragment>
   );
