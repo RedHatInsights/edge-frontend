@@ -48,20 +48,17 @@ const GroupTable = ({
   };
 
   const buildRows = data?.map((rowData) => {
-    const { ID, Name, Devices } = rowData?.DeviceGroup;
-    let { DevicesImageInfo } = rowData;
-    if (!DevicesImageInfo) {
-      DevicesImageInfo = [];
-    }
+    const { ID, Name, Devices } = rowData;
     const systems = Devices ?? [];
+
+    // temp static data to show dif version of mockups
     const image = (
       <div>
         <Tooltip
           content={
             <div>
-              {DevicesImageInfo.map((device, index) => (
-                <p key={index}>{device.Name}</p>
-              ))}
+              <p>Golden Image</p>
+              <p> Super Golden Image</p>
             </div>
           }
         >
@@ -89,12 +86,7 @@ const GroupTable = ({
           title: systems.length,
         },
         {
-          title:
-            DevicesImageInfo.length === 0
-              ? '-'
-              : DevicesImageInfo.length > 1
-              ? image
-              : DevicesImageInfo[0]?.Name,
+          title: ID === 1 ? image : 'Golden image',
         },
       ],
     };
