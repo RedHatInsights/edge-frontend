@@ -82,7 +82,7 @@ const ReviewStep = () => {
         value: calcPkgDiff(customPackageAfter, customPackageBefore),
       },
       {
-        name: isUpdate ? 'Supported Updated' : 'Supported Added',
+        name: isUpdate ? 'RHEL Updated' : 'RHEL Added',
         value: calcPkgDiff(RHELPackageAfter, RHELPackageBefore),
       },
     ];
