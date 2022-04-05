@@ -61,6 +61,10 @@ const defaultFilters = [
     type: 'text',
   },
   {
+    label: 'Image',
+    type: 'text',
+  },
+  {
     label: 'Status',
     type: 'checkbox',
     options: [
@@ -176,7 +180,7 @@ const DeviceTable = ({
   const actionResolver = (rowData) => {
     const actions = [];
     if (isLoading) return actions;
-    if (!rowData.rowInfo.id) return actions;
+    if (!rowData?.rowInfo?.id) return actions;
 
     if (!areActionsDisabled(rowData)) {
       actions.push({
