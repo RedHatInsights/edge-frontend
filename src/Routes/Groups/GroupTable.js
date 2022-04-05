@@ -5,7 +5,16 @@ import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import { Tooltip } from '@patternfly/react-core';
 
-const filters = [{ label: 'Name', type: 'text' }];
+const filters = [
+  {
+    label: 'Name',
+    type: 'text',
+  },
+  {
+    label: 'Image',
+    type: 'text',
+  },
+];
 
 const columns = [
   { title: 'Name', type: 'name', sort: true },
@@ -62,9 +71,16 @@ const GroupTable = ({
     );
 
     return {
-      id: ID,
-      title: Name,
-      noApiSortFilter: [Name],
+      rowInfo: {
+        id: ID,
+        title: Name,
+        image: ID === 3448 ? 'Multiple images' : 'Golden image',
+      },
+      noApiSortFilter: [
+        Name,
+        '',
+        ID === 3448 ? 'Multiple images' : 'Golden image',
+      ],
       cells: [
         {
           title: <Link to={`${paths['fleet-management']}/${ID}`}>{Name}</Link>,
