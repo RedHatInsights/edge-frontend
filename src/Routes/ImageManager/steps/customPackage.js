@@ -60,15 +60,31 @@ export default {
       label: <CustomPackageLabel />,
     },
     {
-      component: 'custom-package-text-area',
+      component: componentTypes.TEXTAREA,
+      style: {
+        paddingRight: '32px',
+        height: '25vh',
+      },
       name: 'custom-packages',
+      placeholder:
+        'Enter or paste packages from linked repositories, one entry per line.\nExamplePackage\nexample-package\nexamplapackage',
       label: <b> Packages </b>,
       initialValue: [],
       clearedValue: [],
     },
     {
       component: componentTypes.PLAIN_TEXT,
-      name: 'description',
+      name: 'packageDetails',
+      label: (
+        <Text>
+          Specify individual packages by exact name and casing, with no
+          whitespace, one entry to a line, and can include hyphens ( - ).
+        </Text>
+      ),
+    },
+    {
+      component: componentTypes.PLAIN_TEXT,
+      name: 'warning',
       label: (
         <Text className="pf-u-warning-color-200">
           <ExclamationTriangleIcon class="pf-u-warning-color-100" />
