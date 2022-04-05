@@ -54,12 +54,16 @@ const Repositories = React.lazy(() =>
   import('./Routes/Repositories/Repositories')
 );
 
+const LearningResources = React.lazy(() =>
+  import('./Routes/LearningResources/LearningResources')
+);
+
 export const Routes = () => {
   return (
     <Suspense
       fallback={
         <Bullseye>
-          <Spinner size="xl" />
+          <Spinner size='xl' />
         </Bullseye>
       }
     >
@@ -82,7 +86,11 @@ export const Routes = () => {
         />
         <Route path={paths['manage-images-detail']} component={ImageDetail} />
         <Route path={paths['manage-images']} component={Images} />
-        <Route exact path={paths['repositories']} component={Repositories} />
+        <Route
+          exact
+          path={paths['repositories']}
+          component={LearningResources}
+        />
         <Route>
           <Redirect to={paths['fleet-management']} />
         </Route>
