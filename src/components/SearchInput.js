@@ -41,11 +41,16 @@ const SelectInput = ({ defaultOptions }) => {
         aria-labelledby="typeahead-select-id-1"
         placeholderText="Type or click select group"
       >
-        {options?.map((option, index) => (
+        {options?.map(({ DeviceGroup }, index) => (
           <SelectOption
             key={index}
-            value={{ toString: () => option.Name, groupId: option.ID }}
-            {...(option.description && { description: option.description })}
+            value={{
+              toString: () => DeviceGroup.Name,
+              groupId: DeviceGroup.ID,
+            }}
+            {...(DeviceGroup.description && {
+              description: DeviceGroup.description,
+            })}
           />
         ))}
       </Select>
