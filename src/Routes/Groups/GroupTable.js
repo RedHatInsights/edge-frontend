@@ -32,7 +32,9 @@ const GroupTable = ({
   handleDeleteModal,
 }) => {
   const actionResolver = (rowData) => {
-    const { id, title } = rowData;
+    if (!rowData?.rowInfo) return [];
+    console.log(rowData);
+    const { id, title } = rowData?.rowInfo;
     return (
       id && [
         {

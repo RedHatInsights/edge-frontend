@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import Modal from '../../components/Modal';
-import { createGroup } from '../../api';
+import { createGroup, addDevicesToGroup } from '../../api';
 import { nameValidator } from '../../constants';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
@@ -27,7 +27,12 @@ const createGroupSchema = {
   ],
 };
 
-const CreateGroupModal = ({ isModalOpen, setIsModalOpen, reloadData }) => {
+const CreateGroupModal = ({
+  isModalOpen,
+  setIsModalOpen,
+  deviceIds,
+  reloadData,
+}) => {
   const dispatch = useDispatch();
 
   const handleCreateGroup = (values) => {
@@ -38,8 +43,27 @@ const CreateGroupModal = ({ isModalOpen, setIsModalOpen, reloadData }) => {
       },
       onError: { title: 'Error', description: 'Failed to create group' },
     };
-    apiWithToast(dispatch, () => createGroup(values), statusMessages);
+    return apiWithToast(dispatch, () => createGroup(values), statusMessages);
   };
+
+  const handleAddDevicesToNewGroup = async (values) => {
+    const { ID } = await handleCreateGroup(values);
+
+    const statusMessages = {
+      onSuccess: {
+        title: 'Success',
+        description: `Device(s) have been added to ${values.name} successfully`,
+      },
+      onError: { title: 'Error', description: 'Failed to add device to group' },
+    };
+
+    apiWithToast(
+      dispatch,
+      () => addDevicesToGroup(parseInt(ID), deviceIds),
+      statusMessages
+    );
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
@@ -47,7 +71,7 @@ const CreateGroupModal = ({ isModalOpen, setIsModalOpen, reloadData }) => {
       title="Create Group"
       submitLabel="Create"
       schema={createGroupSchema}
-      onSubmit={handleCreateGroup}
+      onSubmit={deviceIds ? handleAddDevicesToNewGroup : handleCreateGroup}
       reloadData={reloadData}
     />
   );
@@ -59,4 +83,5 @@ CreateGroupModal.propTypes = {
   isModalOpen: PropTypes.bool,
   setIsModalOpen: PropTypes.func,
   reloadData: PropTypes.func,
+  deviceIds: PropTypes.array,
 };
