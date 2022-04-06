@@ -52,7 +52,7 @@ const CreateGroupModal = ({
     const statusMessages = {
       onSuccess: {
         title: 'Success',
-        description: `Device(s) has been added to ${values.name} successfully`,
+        description: `Device(s) have been added to ${values.name} successfully`,
       },
       onError: { title: 'Error', description: 'Failed to add device to group' },
     };

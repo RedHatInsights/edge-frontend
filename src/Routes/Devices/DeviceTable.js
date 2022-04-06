@@ -187,12 +187,15 @@ const DeviceTable = ({
       actions.push({
         title: 'Add to group',
         onClick: () =>
-          handleAddDevicesToGroup([
-            {
-              ID: rowData.rowInfo.deviceID,
-              name: rowData.rowInfo.display_name,
-            },
-          ]),
+          handleAddDevicesToGroup(
+            [
+              {
+                ID: rowData.rowInfo.deviceID,
+                name: rowData.rowInfo.display_name,
+              },
+            ],
+            true
+          ),
       });
     }
 

@@ -20,7 +20,9 @@ const Inventory = () => {
   const [response, fetchData] = useApi(getInventory);
   const { data, isLoading, hasError } = response;
   const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
-  const [deviceIds, setDeviceIds] = useState([]);
+  const [deviceId, setDeviceId] = useState([]);
+  const [checkedDeviceIds, setCheckedDeviceIds] = useState([]);
+  const [isRowSelected, setIsRowSelected] = useState(false);
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
   const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
   const [updateModal, setUpdateModal] = useState({
@@ -29,11 +31,13 @@ const Inventory = () => {
     imageData: null,
   });
 
+  console.log(deviceId, checkedDeviceIds);
   const history = useHistory();
 
-  const handleAddDevicesToGroup = (ids) => {
+  const handleAddDevicesToGroup = (ids, isRow) => {
     setIsAddDeviceModalOpen(true);
-    setDeviceIds(ids);
+    isRow ? setDeviceId(ids) : setCheckedDeviceIds(ids);
+    setIsRowSelected(isRow);
   };
 
   return (
@@ -50,17 +54,18 @@ const Inventory = () => {
           setUpdateModal={setUpdateModal}
           handleAddDevicesToGroup={handleAddDevicesToGroup}
           hasCheckbox={true}
-          selectedItems={setDeviceIds}
+          selectedItems={setCheckedDeviceIds}
           kebabItems={[
             {
-              isDisabled: !(deviceIds.length > 0),
+              isDisabled: !(checkedDeviceIds.length > 0),
               title: 'Add to group',
               onClick: () =>
                 handleAddDevicesToGroup(
-                  deviceIds.map((device) => ({
+                  checkedDeviceIds.map((device) => ({
                     ID: device.deviceID,
                     name: device.display_name,
-                  }))
+                  })),
+                  false
                 ),
             },
           ]}
@@ -101,7 +106,7 @@ const Inventory = () => {
             fetchData();
             setTimeout(() => setHasModalSubmitted(true), 800);
           }}
-          deviceIds={deviceIds}
+          deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
         />
       )}
       {isCreateGroupModalOpen && (
@@ -112,7 +117,7 @@ const Inventory = () => {
             fetchData();
             setTimeout(() => setHasModalSubmitted(true), 800);
           }}
-          deviceIds={deviceIds}
+          deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
         />
       )}
     </Fragment>
