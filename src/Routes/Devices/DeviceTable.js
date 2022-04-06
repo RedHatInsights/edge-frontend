@@ -207,10 +207,12 @@ const DeviceTable = ({
             return {
               ...prevState,
               isOpen: true,
-              deviceData: {
-                id: rowData.rowInfo.id,
-                display_name: rowData.rowInfo.display_name,
-              },
+              deviceData: [
+                {
+                  id: rowData.rowInfo.id,
+                  display_name: rowData.rowInfo.display_name,
+                },
+              ],
               imageData: rowData.rowInfo.updateImageData,
             };
           });
