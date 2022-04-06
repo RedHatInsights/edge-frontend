@@ -5,7 +5,16 @@ import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import { Tooltip } from '@patternfly/react-core';
 
-const filters = [{ label: 'Name', type: 'text' }];
+const filters = [
+  {
+    label: 'Name',
+    type: 'text',
+  },
+  {
+    label: 'Image',
+    type: 'text',
+  },
+];
 
 const columns = [
   { title: 'Name', type: 'name', sort: true },
@@ -39,17 +48,20 @@ const GroupTable = ({
   };
 
   const buildRows = data?.map((rowData) => {
-    const { ID, Name, Devices } = rowData;
+    const { ID, Name, Devices } = rowData?.DeviceGroup;
+    let { DevicesImageInfo } = rowData;
+    if (!DevicesImageInfo) {
+      DevicesImageInfo = [];
+    }
     const systems = Devices ?? [];
-
-    // temp static data to show dif version of mockups
     const image = (
       <div>
         <Tooltip
           content={
             <div>
-              <p>Golden Image</p>
-              <p> Super Golden Image</p>
+              {DevicesImageInfo.map((device, index) => (
+                <p key={index}>{device.Name}</p>
+              ))}
             </div>
           }
         >
@@ -59,9 +71,25 @@ const GroupTable = ({
     );
 
     return {
-      id: ID,
-      title: Name,
-      noApiSortFilter: [Name],
+      rowInfo: {
+        id: ID,
+        title: Name,
+        image:
+          DevicesImageInfo.length === 0
+            ? '-'
+            : DevicesImageInfo.length > 1
+            ? 'Multiple images'
+            : DevicesImageInfo[0]?.Name,
+      },
+      noApiSortFilter: [
+        Name,
+        '',
+        DevicesImageInfo.length === 0
+          ? '-'
+          : DevicesImageInfo.length > 1
+          ? 'Multiple images'
+          : DevicesImageInfo[0]?.Name,
+      ],
       cells: [
         {
           title: <Link to={`${paths['fleet-management']}/${ID}`}>{Name}</Link>,
@@ -70,7 +98,12 @@ const GroupTable = ({
           title: systems.length,
         },
         {
-          title: ID === 1 ? image : 'Golden image',
+          title:
+            DevicesImageInfo.length === 0
+              ? '-'
+              : DevicesImageInfo.length > 1
+              ? image
+              : DevicesImageInfo[0]?.Name,
         },
       ],
     };
