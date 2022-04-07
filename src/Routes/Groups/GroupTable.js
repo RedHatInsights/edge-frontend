@@ -33,6 +33,7 @@ const GroupTable = ({
 }) => {
   const actionResolver = (rowData) => {
     if (!rowData?.rowInfo) return [];
+    console.log(rowData);
     const { id, title } = rowData?.rowInfo;
     return (
       id && [

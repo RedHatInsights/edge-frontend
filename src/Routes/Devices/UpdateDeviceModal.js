@@ -15,7 +15,9 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   const dispatch = useDispatch();
   const imageData = updateModal?.imageData;
   const isMultiple = updateModal.deviceData.length > 1;
-  const deviceId = updateModal.deviceData.map((device) => device.id);
+  const deviceId = isMultiple
+    ? updateModal.deviceData.map((device) => device.id)
+    : updateModal?.deviceData[0]?.id;
   const deviceName = isMultiple
     ? updateModal.deviceData.map((device) => device.display_name)
     : updateModal?.deviceData[0]?.display_name;
@@ -23,7 +25,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   const handleUpdateModal = async () => {
     try {
       await updateDeviceLatestImage({
-        DevicesUUID: deviceId,
+        DeviceUUID: deviceId,
         CommitId: imageData?.Image?.CommitID,
       });
       dispatch({
