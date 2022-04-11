@@ -239,7 +239,7 @@ const GeneralTable = ({
 
       const newRows = [];
       filteredRows.forEach((filtered) => {
-        if (rowIsNotIncluded(filtered.id)) {
+        if (rowIsNotIncluded(filtered.rowInfo.id)) {
           newRows.push({
             ...filtered.rowInfo,
           });
