@@ -12,13 +12,15 @@ const CustomPackageTextArea = ({ ...props }) => {
   );
 
   useEffect(() => {
-    const customRepoArray = value.split(' ').reduce((acc, repo) => {
-      const onlyText = repo.replace(/[/ /\n\r\s\t]+/g, '');
-      if (onlyText !== '' && onlyText !== '\n') {
-        return (acc = [...acc, { name: `${onlyText}` }]);
-      }
-      return acc;
-    }, []);
+    const customRepoArray = value
+      .split(/[/,/\n\r\s\t]+/g)
+      .reduce((acc, repo) => {
+        const onlyText = repo.replace(/[/ /\n\r\s\t]+/g, '');
+        if (onlyText !== '' && onlyText !== '\n') {
+          return (acc = [...acc, { name: `${onlyText}` }]);
+        }
+        return acc;
+      }, []);
     change(input.name, customRepoArray);
   }, [value]);
 
