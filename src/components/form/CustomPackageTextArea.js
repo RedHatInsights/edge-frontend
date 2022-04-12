@@ -8,11 +8,11 @@ const CustomPackageTextArea = ({ ...props }) => {
   const { input } = useFieldApi(props);
   const wizardState = getState()?.values?.[input.name];
   const [value, setValue] = useState(
-    wizardState?.map((repo) => repo.name).join(',\n')
+    wizardState?.map((repo) => repo.name).join('\n')
   );
 
   useEffect(() => {
-    const customRepoArray = value.split(',').reduce((acc, repo) => {
+    const customRepoArray = value.split(' ').reduce((acc, repo) => {
       const onlyText = repo.replace(/[/ /\n\r\s\t]+/g, '');
       if (onlyText !== '' && onlyText !== '\n') {
         return (acc = [...acc, { name: `${onlyText}` }]);

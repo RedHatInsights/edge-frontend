@@ -60,14 +60,12 @@ export default {
       label: <CustomPackageLabel />,
     },
     {
-      component: componentTypes.TEXTAREA,
+      component: 'custom-package-text-area',
       style: {
         paddingRight: '32px',
         height: '25vh',
       },
       name: 'custom-packages',
-      placeholder:
-        'Enter or paste packages from linked repositories, one entry per line.\nExamplePackage\nexample-package\nexamplapackage',
       label: <b> Packages </b>,
       initialValue: [],
       clearedValue: [],
