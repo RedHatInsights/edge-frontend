@@ -18,10 +18,15 @@ import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
 import { useDispatch } from 'react-redux';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { getEdgeImageStatus } from '../../api';
+import { useFeatureFlags } from '../../constants';
 
 const CreateImage = ({ navigateBack }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
+  const customRepoFlag = useFeatureFlags('fleet-management.custom-repos');
+
+  console.log(customRepoFlag);
+
   const closeAction = () => {
     navigateBack();
     dispatch({ type: CREATE_NEW_IMAGE_RESET });
