@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { HelperText, TextArea } from '@patternfly/react-core';
+import { FormGroup, TextArea } from '@patternfly/react-core';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 
@@ -39,21 +39,18 @@ const CustomPackageTextArea = ({ ...props }) => {
   };
 
   return (
-    <>
+    <FormGroup label="Packages" type="string">
       <TextArea
         aria-label="custom-package-wizard-step"
+        placeholder="Enter or paste packages from linked repositories, one entry per line.&#13;ExamplePackage&#13;example-package&#13;examplapackage"
         value={value}
         onChange={(newValue) => setValue(newValue)}
         style={{
           paddingRight: '32px',
-          height: '30vh',
+          height: '25vh',
         }}
       ></TextArea>
-      <HelperText>
-        Specify individual packages by exact name and casing, with no
-        whitespace. one entry to a line, and can include hyphens ( - ).
-      </HelperText>
-    </>
+    </FormGroup>
   );
 };
 

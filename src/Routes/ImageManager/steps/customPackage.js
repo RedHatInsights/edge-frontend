@@ -66,7 +66,6 @@ export default {
         height: '25vh',
       },
       name: 'custom-packages',
-      label: <b> Packages </b>,
       initialValue: [],
       clearedValue: [],
     },
