@@ -62,8 +62,8 @@ const getTableParams = (q) => {
     return value === undefined
       ? acc
       : acc === ''
-        ? `${value}`
-        : `${acc}&${value}`;
+      ? `${value}`
+      : `${acc}&${value}`;
   }, '');
 
   return query;
