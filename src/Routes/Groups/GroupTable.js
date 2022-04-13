@@ -4,6 +4,7 @@ import GeneralTable from '../../components/general-table/GeneralTable';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import { Bullseye, Spinner, Tooltip } from '@patternfly/react-core';
+import { validateImage } from '../../api';
 
 const UpdateDeviceModal = React.lazy(() =>
   import('../Devices/UpdateDeviceModal')
@@ -44,7 +45,7 @@ const GroupTable = ({
 
   const actionResolver = (rowData) => {
     if (!rowData?.rowInfo) return [];
-    const { id, title } = rowData?.rowInfo;
+    const { id, title, devices, devicesImageInfo } = rowData?.rowInfo;
     return (
       id && [
         {
@@ -59,8 +60,25 @@ const GroupTable = ({
           title: 'Update',
           onClick: () => setUpdateModal((prevState) => ({
             ...prevState,
+            deviceData: devices.map(device => ({
+              id: device.ID,
+              display_name: device.Name,
+            })),
+            imageData: {
+              Image: {
+                Name: devicesImageInfo[0].Name,
+                Version: devicesImageInfo[0].Version,
+                CreatedAt: devicesImageInfo[0].CreatedAt,
+                Distribution: devicesImageInfo[0].Distribution
+              },
+              PackageDiff: devicesImageInfo[0].PackageDiff
+            },
             isOpen: true,
           })),
+          isDisabled: (devices[0]?.ImageID ? !validateImage(devices.map(device => ({
+            ID: device.ImageID
+          }))) : true
+          )
         },
       ]
     );
@@ -97,8 +115,10 @@ const GroupTable = ({
           DevicesImageInfo.length === 0
             ? '-'
             : DevicesImageInfo.length > 1
-            ? 'Multiple images'
-            : DevicesImageInfo[0]?.Name,
+              ? 'Multiple images'
+              : DevicesImageInfo[0]?.Name,
+        devicesImageInfo: rowData.DevicesImageInfo,
+        devices: Devices
       },
       noApiSortFilter: [
         Name,
@@ -106,8 +126,8 @@ const GroupTable = ({
         DevicesImageInfo.length === 0
           ? '-'
           : DevicesImageInfo.length > 1
-          ? 'Multiple images'
-          : DevicesImageInfo[0]?.Name,
+            ? 'Multiple images'
+            : DevicesImageInfo[0]?.Name,
       ],
       cells: [
         {
@@ -121,8 +141,8 @@ const GroupTable = ({
             DevicesImageInfo.length === 0
               ? '-'
               : DevicesImageInfo.length > 1
-              ? image
-              : DevicesImageInfo[0]?.Name,
+                ? image
+                : DevicesImageInfo[0]?.Name,
         },
       ],
     };

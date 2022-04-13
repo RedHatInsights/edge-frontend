@@ -47,7 +47,6 @@ const Groups = () => {
             handleRenameModal={handleRenameModal}
             handleDeleteModal={handleDeleteModal}
             handleCreateModal={() => setIsCreateModalOpen(true)}
-            openModal={handleCreateModal}
             getGroups={getGroups}
           />
         ) : (
