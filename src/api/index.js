@@ -62,8 +62,8 @@ const getTableParams = (q) => {
     return value === undefined
       ? acc
       : acc === ''
-      ? `${value}`
-      : `${acc}&${value}`;
+        ? `${value}`
+        : `${acc}&${value}`;
   }, '');
 
   return query;
@@ -490,4 +490,8 @@ export const removeDevicesFromGroup = (groupId, devices) => {
 
 export const removeDeviceFromGroupById = (groupId, id) => {
   return instance.delete(`${EDGE_API}/device-groups/${groupId}/devices/${id}`);
+};
+
+export const validateImage = async (ids) => {
+  return await instance.post(`${EDGE_API}/updates/validate`, ids);
 };
