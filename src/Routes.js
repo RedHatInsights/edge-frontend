@@ -63,7 +63,7 @@ export const Routes = () => {
     <Suspense
       fallback={
         <Bullseye>
-          <Spinner size='xl' />
+          <Spinner size="xl" />
         </Bullseye>
       }
     >
@@ -86,9 +86,10 @@ export const Routes = () => {
         />
         <Route path={paths['manage-images-detail']} component={ImageDetail} />
         <Route path={paths['manage-images']} component={Images} />
+        <Route exact path={paths['repositories']} component={Repositories} />
         <Route
           exact
-          path={paths['repositories']}
+          path={paths['learning-resources']}
           component={LearningResources}
         />
         <Route>

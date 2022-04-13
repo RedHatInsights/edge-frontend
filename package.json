@@ -132,6 +132,7 @@
     "manage-images": "/manage-images",
     "manage-images-detail": "/manage-images/:imageId",
     "manage-images-detail-version": "/manage-images/:imageId/versions/:imageVersionId",
-    "repositories": "/repositories"
+    "repositories": "/repositories",
+    "learning-resources": "/learning-resources"
   }
 }

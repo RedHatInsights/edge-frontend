@@ -19,10 +19,10 @@ const quickstarts = [
       name: 'name',
     },
     spec: {
-      displayName: 'Installing and configuring the rhoas CLI',
+      displayName: 'Build and register RHEL for Edge images',
       icon: <BookIcon />,
       description:
-        'Install and configure the rhoas CLI to start creating Kafka instances and other resources from the command line.',
+        'With the edge management application, you can create an image and manage the packages associated with an image. You can build an image, download it, install it on a node, and then register that node so it can receive updates.',
       link: {
         href: 'https://console.redhat.com/application-services/learning-resources',
       },
@@ -36,14 +36,10 @@ const quickstarts = [
       name: 'name',
     },
     spec: {
-      displayName:
-        'Getting started with the rhoas CLI for Red Hat OpenShift Streams for Apache Kafka',
+      displayName: 'Working with systems',
       icon: <BookIcon />,
       description:
-        'Create a Kafka instance, service account, and Kafka topics from the command line.',
-      link: {
-        href: 'https://console.redhat.com/application-services/learning-resources',
-      },
+        'Group, connect, and manage edge systems after registering them with the edge management console.',
       type: { text: 'Documentation', color: 'orange' },
     },
   },
@@ -52,18 +48,18 @@ const quickstarts = [
 const App = () => {
   return (
     <QuickStartCatalogSection>
-      <TextContent className='pf-u-mb-md'>
-        <Text component='h2'>Documentation</Text>
-        <Text component='p' className='catalog-sub'>
+      <TextContent className="pf-u-mb-md">
+        <Text component="h2">Documentation</Text>
+        <Text component="p" className="catalog-sub">
           Technical information for using the service
         </Text>
       </TextContent>
-      <Gallery className='pfext-quick-start-catalog__gallery' hasGutter>
+      <Gallery className="pfext-quick-start-catalog__gallery" hasGutter>
         {quickstarts.map((quickStart, index) => {
           return (
             <GalleryItem
               key={index}
-              className='pfext-quick-start-catalog__gallery-item'
+              className="pfext-quick-start-catalog__gallery-item"
             >
               <QuickStartTile quickStart={quickStart} />
             </GalleryItem>
