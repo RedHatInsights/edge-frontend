@@ -105,9 +105,9 @@ const GroupsDetail = () => {
     const statusMessages = {
       onSuccess: {
         title: 'Success',
-        description: `${deviceIds.length} devices have been removed successfully`,
+        description: `${deviceIds.length} systems have been removed successfully`,
       },
-      onError: { title: 'Error', description: 'failed to remove devices' },
+      onError: { title: 'Error', description: 'failed to remove systems' },
     };
     apiWithToast(
       dispatch,
@@ -254,7 +254,7 @@ const GroupsDetail = () => {
             <Empty
               icon="cube"
               title="Add systems to the group"
-              body="Create system groups to help manage your devices more effectively"
+              body="Create groups to help manage your systems more effectively"
               primaryAction={{
                 text: 'Add systems',
                 click: () => setIsAddModalOpen(true),
