@@ -19,7 +19,7 @@ describe('Groups', () => {
       >
         <Provider store={mockStore({})}>
           <MemoryRouter initialEntries={['/edge-managment']}>
-            <Route path="/fleet-managment">
+            <Route path="/edge-managment">
               <Groups />
             </Route>
           </MemoryRouter>
