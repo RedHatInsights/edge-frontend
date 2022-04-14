@@ -25,8 +25,6 @@ const CreateImage = ({ navigateBack }) => {
   const dispatch = useDispatch();
   const customRepoFlag = useFeatureFlags('fleet-management.custom-repos');
 
-  console.log(customRepoFlag);
-
   const closeAction = () => {
     navigateBack();
     dispatch({ type: CREATE_NEW_IMAGE_RESET });
@@ -103,7 +101,7 @@ const CreateImage = ({ navigateBack }) => {
         });
       }}
       defaultArch="x86_64"
-      initialValues={{ version: 0 }}
+      initialValues={{ version: 0, includesCustomRepos: customRepoFlag }}
       schema={{
         fields: [
           {
@@ -122,6 +120,9 @@ const CreateImage = ({ navigateBack }) => {
               'release',
               'imageType',
               'third-party-repositories',
+              'imageOutput',
+              'imageSetDetails',
+              'includesCustomRepos',
             ],
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
