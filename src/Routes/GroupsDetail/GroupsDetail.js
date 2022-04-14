@@ -179,7 +179,7 @@ const GroupsDetail = () => {
                       imageSetId: device?.ImageInfo?.Image.ImageSetID,
                     })),
                     imageData:
-                      data?.Devices?.data[0].ImageInfo.UpdatesAvailable?.[0],
+                      data?.Devices?.data[0].ImageInfo?.UpdatesAvailable?.[0],
                   })}
                   onClick={() =>
                     setUpdateModal((prevState) => ({
