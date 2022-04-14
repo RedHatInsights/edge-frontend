@@ -88,7 +88,7 @@ const Devices = () => {
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Fleet management" />
+        <PageHeaderTitle title="Edge management" />
       </PageHeader>
       <Main className="edge-devices">
         <Tiles />
@@ -261,7 +261,7 @@ const Devices = () => {
             //  inventory.current.onRefreshData();
             //},
           }}
-          onRowClick={(_e, id) => history.push(`/fleet-management/${id}`)}
+          onRowClick={(_e, id) => history.push(`/edge-management/${id}`)}
           onLoad={({ mergeWithEntities }) => {
             getRegistry()?.register?.({
               ...mergeWithEntities(),

@@ -6,7 +6,7 @@
 - [Setup](#setup)
 
 # About
-The edge-frontend repo is the front-end for [RHEL for Edge/Fleet managment ](https://console.stage.redhat.com/edge/fleet-management), which is part of console.redhat.com.
+The edge-frontend repo is the front-end for [RHEL for Edge/Fleet managment ](https://console.stage.redhat.com/edge/edge-management), which is part of console.redhat.com.
 
 # Tools
 - [Cloud-Services-Config](#cloud-services-config)
@@ -71,10 +71,10 @@ Run the application in beta environment - beta only supported
 ```bash
 API_PORT=3000 BETA=true npm run start:proxy
 ```
-**Edge application will be available on https://stage.foo.redhat.com:1337/beta/edge/fleet-management**
+**Edge application will be available on https://stage.foo.redhat.com:1337/beta/edge/edge-management**
 
 To switch environment (for instance if you want to run your app with prod DB)
 ```bash
 ENVIRONMENT=prod BETA=true npm run start:proxy
 ```
-**Edge application will be available on https://prod.foo.redhat.com:1337/beta/edge/fleet-management**
+**Edge application will be available on https://prod.foo.redhat.com:1337/beta/edge/edge-management**

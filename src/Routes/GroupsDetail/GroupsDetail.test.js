@@ -16,7 +16,7 @@ describe('Groups', () => {
         }}
       >
         <Provider store={registry.getStore()}>
-          <MemoryRouter initialEntries={['/fleet-managment/some-id']}>
+          <MemoryRouter initialEntries={['/edge-managment/some-id']}>
             <Route path="/fleet-managment/:uuid">
               <GroupsDetail />
             </Route>

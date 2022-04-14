@@ -134,7 +134,7 @@ const GroupsDetail = () => {
         {groupName ? (
           <Breadcrumb>
             <BreadcrumbItem>
-              <Link to={`${paths['fleet-management']}`}>Groups</Link>
+              <Link to={`${paths['edge-management']}`}>Groups</Link>
             </BreadcrumbItem>
             <BreadcrumbItem>{groupName}</BreadcrumbItem>
           </Breadcrumb>
@@ -330,7 +330,7 @@ const GroupsDetail = () => {
         <DeleteGroupModal
           isModalOpen={isDeleteModalOpen}
           setIsModalOpen={setIsDeleteModalOpen}
-          reloadData={() => history.push(paths['fleet-management'])}
+          reloadData={() => history.push(paths['edge-management'])}
           modalState={modalState}
         />
       )}

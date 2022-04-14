@@ -93,7 +93,7 @@ const GroupTable = ({
       ],
       cells: [
         {
-          title: <Link to={`${paths['fleet-management']}/${ID}`}>{Name}</Link>,
+          title: <Link to={`${paths['edge-management']}/${ID}`}>{Name}</Link>,
         },
         {
           title: systems.length,
