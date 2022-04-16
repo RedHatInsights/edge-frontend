@@ -1,19 +1,32 @@
 /// <reference types="cypress" />
 
+const { waitFor } = require("@testing-library/react");
+
 describe('Create image wizard', () => {
+  let customRepoFlag = false
+  const manageImagesUrl = 'manage-images'
+
   beforeEach(() => {
 
     const userName = Cypress.env('username');
     const userPassword = Cypress.env('password');
 
     cy.visit(Cypress.config().baseUrl)
-
+    
+    
     cy.waitFor('#username-verification');
     cy.get('#username-verification')
-        .type(`${userName}{enter}`);
+    .type(`${userName}{enter}`);
     cy.waitFor('#password');
     cy.get('#password')
-        .type(`${userPassword}{enter}`);
+    .type(`${userPassword}{enter}`);
+    cy.intercept('GET', '/api/featureflags/v0*').as('featureFlag')
+    cy.visit('/' + manageImagesUrl)
+    cy.url().should('include', manageImagesUrl)
+    cy.waitFor('.pf-c-title')
+
+    cy.wait('@featureFlag')
+      .then(flag => customRepoFlag = flag.response.body.toggles.find(toggle => toggle.name === 'fleet-management.custom-repos').enabled)
 
 });
 
@@ -29,33 +42,45 @@ describe('Create image wizard', () => {
     };
 
     //change these property to test different wizard inputs
-    const manageImagesUrl = 'manage-images'
     const imageName = 'UI_Test_Image-3'
     const distribution = 'rhel-85'
     const outputTypes = 'rhel-edge-commit'
     const packageName = 'vim-common'
     const deviceUserName = 'test-name'
     const sshKey = 'ssh-rsa 1'
+    const customRepoName = 'tpapaioa-repo-1'
+    const customPkg = 'bear-4.1-1.noarch.rpm'
 
     const requestBody = {
-      "name": imageName,
+      "name": "UI_Test_Image-3",
       "version": 0,
-      "distribution": distribution,
-      "imageType": outputTypes,
+      "distribution": "rhel-85",
+      "imageType": "rhel-edge-commit",
       "packages": [
           {
-              "name": packageName
+              "name": "vim-common"
           }
       ],
-      "outputTypes": outputTypes === 'rhel-edge-installer' ? ['rhel-edge-installer', 'rhel-edge-commit'] : ['rhel-edge-commit'],
+      "outputTypes": [
+          "rhel-edge-commit"
+      ],
       "commit": {
           "arch": "x86_64"
       },
-      "installer": outputTypes === 'rhel-edge-installer' ? {
-        "username": deviceUserName,
-        "sshkey": sshKey
-      } : {}
-    }
+      "installer": {},
+      "thirdPartyRepositories": [
+          {
+              "ID": 4770,
+              "Name": "tpapaioa-repo-1",
+              "URL": "https://repos.fedorapeople.org/pulp/pulp/demo_repos/zoo"
+          }
+      ],
+      "customPackages": [
+          {
+              "Name": "bear-4.1-1.noarch.rpm"
+          }
+      ]
+  }
 
     // spying and response stubbing
     cy.intercept('POST', '**/images', (req) => {
@@ -65,9 +90,7 @@ describe('Create image wizard', () => {
       })
     }).as('postImageData')
 
-    cy.visit('/' + manageImagesUrl)
-    cy.url().should('include', manageImagesUrl)
-    cy.waitFor('.pf-c-title')
+    
     cy.get('.pf-c-title')
         .should('include.text', 'Images')
     //if cookies banner close it
@@ -112,9 +135,27 @@ describe('Create image wizard', () => {
       cy.get('.pf-c-wizard__nav-list > :nth-child(3)')
       .should('contain', 'Additional packages')
       cy.clickNextButtonImageWizard()
-      cy.get('.pf-c-form > .pf-c-title')
-        .should('contain', 'Additional packages')
     }
+    //if custom repos feature flag is enabled, test custom repos steps
+    if (customRepoFlag) {
+      //add custom repo
+      cy.get('.pf-c-form > .pf-c-title')
+        .should('contain', 'Custom repositories')
+      cy.get('.pf-c-form > .pf-c-title')
+      .should('contain', 'Custom repositories')
+      cy.get('.pf-c-form > [data-testid="toolbar-header-testid"] > :nth-child(1) > .pf-c-toolbar__content-section > [data-testid="filter-input-testid"] > :nth-child(1) > #textInput1 > .pf-c-input-group > .pf-c-search-input__bar > .pf-c-search-input__text > .pf-c-search-input__text-input').type(customRepoName)
+      cy.get('[data-ouia-component-id="OUIA-Generated-TableRow-2"] > .pf-c-table__check > input').click()
+      cy.clickNextButtonImageWizard()
+      // add custom package
+      cy.get('.pf-c-form > .pf-c-title')
+      .should('contain', 'Custom packages')
+      cy.get('.pf-c-form__group-control > .pf-c-form-control').type(customPkg)
+      cy.clickNextButtonImageWizard()
+    }
+    
+    cy.get('.pf-c-form > .pf-c-title')
+      .should('contain', 'Additional packages')
+    
     //add package to image
     cy.get('[data-testid="available-search-input"]').type(`${packageName}{enter}`)
     cy.waitFor('#composable-option-0 > .pf-c-dual-list-selector__list-item-row > .pf-c-dual-list-selector__item > .pf-c-dual-list-selector__item-main > :nth-child(1) > .pf-c-content')
@@ -127,15 +168,19 @@ describe('Create image wizard', () => {
     cy.get('.pf-c-form > .pf-c-title')
       .should('contain', 'Review')
     //submit create image wizard
-    cy.get('[data-testid="review-image-details"] > :nth-child(3) > dd')
+    cy.get('[data-testid="review-image-details"] > :nth-child(2) > .pf-m-9-col > dd')
       .should('contain', imageName)
-    cy.get('[data-testid="review-image-details"] > :nth-child(5) > dd')
+    cy.get('[data-testid="review-image-details"] > :nth-child(3) > .pf-m-9-col > dd')
       .should('contain', '1')
-    cy.get('[data-testid="review-image-output"] > :nth-child(3) > dd')
+    cy.get('[data-testid="review-image-output"] > :nth-child(2) > .pf-m-9-col > dd')
       .should('contain', releaseMapper[distribution])
     cy.get('[data-testid="review-image-output"]')
       .should('contain', imageTypeMapper[outputTypes])
-    cy.get('[data-testid="review-image-packages"] > .pf-m-9-col > dd')
+    cy.get('[data-testid="review-image-output"] > :nth-child(3) > .pf-m-9-col > dd')
+      .should('contain', 'RHEL for Edge Commit (.tar)')
+    cy.get('[data-testid="review-image-packages"] > :nth-child(2) > .pf-m-9-col > dd')
+      .should('contain', '1')
+    cy.get('[data-testid="review-image-packages"] > :nth-child(3) > .pf-m-9-col > dd')
       .should('contain', '1')
     cy.clickNextButtonImageWizard()
 
