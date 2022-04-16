@@ -1,4 +1,4 @@
-/// //<reference types="cypress" />
+/// <reference types="cypress" />
 
 describe('simple login to fleet management', () => {
     beforeEach(() => {
