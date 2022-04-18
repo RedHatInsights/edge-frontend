@@ -77,7 +77,7 @@ const RepositoryTable = ({ data, openModal }) => {
       rows={buildRows}
       actionResolver={actionResolver}
       areActionsDisabled={() => false}
-      defaultSort={{ index: 0, direction: 'desc' }}
+      defaultSort={{ index: 0, direction: 'asc' }}
       toolbarButtons={[
         {
           title: 'Add repository',
