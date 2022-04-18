@@ -91,7 +91,7 @@ export const Routes = () => {
         {useFeatureFlags('fleet-management.custom-repos') && (
           <Route exact path={paths['repositories']} component={Repositories} />
         )}
-         <Route
+        <Route
           exact
           path={paths['learning-resources']}
           component={LearningResources}
