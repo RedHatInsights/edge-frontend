@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
@@ -34,6 +34,18 @@ const CreateGroupModal = ({
   reloadData,
 }) => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    /*
+      temp focus solution, better approach to pass a ref input and set it
+      when form inputs are mounted
+    */
+
+    setTimeout(() => {
+      const input = document.querySelector('#name');
+      if (input) input.focus();
+    }, 50);
+  }, []);
 
   const handleCreateGroup = (values) => {
     const statusMessages = {

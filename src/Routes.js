@@ -55,6 +55,10 @@ const Repositories = React.lazy(() =>
   import('./Routes/Repositories/Repositories')
 );
 
+const LearningResources = React.lazy(() =>
+  import('./Routes/LearningResources/LearningResources')
+);
+
 export const Routes = () => {
   return (
     <Suspense
@@ -83,9 +87,15 @@ export const Routes = () => {
         />
         <Route path={paths['manage-images-detail']} component={ImageDetail} />
         <Route path={paths['manage-images']} component={Images} />
+
         {useFeatureFlags('fleet-management.custom-repos') && (
           <Route exact path={paths['repositories']} component={Repositories} />
         )}
+        <Route
+          exact
+          path={paths['learning-resources']}
+          component={LearningResources}
+        />
         <Route>
           <Redirect to={paths['fleet-management']} />
         </Route>

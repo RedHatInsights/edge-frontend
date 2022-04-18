@@ -172,7 +172,7 @@ const GroupTable = ({
         rows={buildRows}
         actionResolver={actionResolver}
         areActionsDisabled={() => false}
-        defaultSort={{ index: 0, direction: 'desc' }}
+        defaultSort={{ index: 0, direction: 'asc' }}
         emptyFilterState={{
           title: 'No matching groups found',
           body: 'To continue, edit your filter settings and try again',
