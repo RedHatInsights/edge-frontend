@@ -6,6 +6,8 @@ import {
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { useHistory } from 'react-router-dom';
 import DeviceTable from './DeviceTable';
+import AddDeviceModal from './AddDeviceModal';
+import CreateGroupModal from '../Groups/CreateGroupModal';
 import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api';
 import { Bullseye, Spinner } from '@patternfly/react-core';
@@ -17,13 +19,26 @@ const UpdateDeviceModal = React.lazy(() =>
 const Inventory = () => {
   const [response, fetchData] = useApi(getInventory);
   const { data, isLoading, hasError } = response;
+  const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
+  const [deviceId, setDeviceId] = useState([]);
+  const [checkedDeviceIds, setCheckedDeviceIds] = useState([]);
+  const [isRowSelected, setIsRowSelected] = useState(false);
+  const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
+  const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
   const [updateModal, setUpdateModal] = useState({
     isOpen: false,
     deviceData: null,
     imageData: null,
   });
 
+  console.log(deviceId, checkedDeviceIds);
   const history = useHistory();
+
+  const handleAddDevicesToGroup = (ids, isRow) => {
+    setIsAddDeviceModalOpen(true);
+    isRow ? setDeviceId(ids) : setCheckedDeviceIds(ids);
+    setIsRowSelected(isRow);
+  };
 
   return (
     <Fragment>
@@ -37,6 +52,25 @@ const Inventory = () => {
           isLoading={isLoading}
           hasError={hasError}
           setUpdateModal={setUpdateModal}
+          handleAddDevicesToGroup={handleAddDevicesToGroup}
+          hasCheckbox={true}
+          selectedItems={setCheckedDeviceIds}
+          kebabItems={[
+            {
+              isDisabled: !(checkedDeviceIds.length > 0),
+              title: 'Add to group',
+              onClick: () =>
+                handleAddDevicesToGroup(
+                  checkedDeviceIds.map((device) => ({
+                    ID: device.deviceID,
+                    name: device.display_name,
+                  })),
+                  false
+                ),
+            },
+          ]}
+          hasModalSubmitted={hasModalSubmitted}
+          setHasModalSubmitted={setHasModalSubmitted}
         />
       </Main>
       {updateModal.isOpen && (
@@ -62,6 +96,29 @@ const Inventory = () => {
             refreshTable={fetchData}
           />
         </Suspense>
+      )}
+      {isAddDeviceModalOpen && (
+        <AddDeviceModal
+          isModalOpen={isAddDeviceModalOpen}
+          setIsModalOpen={setIsAddDeviceModalOpen}
+          setIsCreateGroupModalOpen={setIsCreateGroupModalOpen}
+          reloadData={() => {
+            fetchData();
+            setTimeout(() => setHasModalSubmitted(true), 800);
+          }}
+          deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
+        />
+      )}
+      {isCreateGroupModalOpen && (
+        <CreateGroupModal
+          isModalOpen={isCreateGroupModalOpen}
+          setIsModalOpen={setIsCreateGroupModalOpen}
+          reloadData={() => {
+            fetchData();
+            setTimeout(() => setHasModalSubmitted(true), 800);
+          }}
+          deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
+        />
       )}
     </Fragment>
   );

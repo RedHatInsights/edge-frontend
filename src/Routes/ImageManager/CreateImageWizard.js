@@ -18,10 +18,13 @@ import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
 import { useDispatch } from 'react-redux';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { getEdgeImageStatus } from '../../api';
+import { useFeatureFlags } from '../../constants';
 
 const CreateImage = ({ navigateBack }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
+  const customRepoFlag = useFeatureFlags('fleet-management.custom-repos');
+
   const closeAction = () => {
     navigateBack();
     dispatch({ type: CREATE_NEW_IMAGE_RESET });
@@ -98,7 +101,7 @@ const CreateImage = ({ navigateBack }) => {
         });
       }}
       defaultArch="x86_64"
-      initialValues={{ version: 0 }}
+      initialValues={{ version: 0, includesCustomRepos: customRepoFlag }}
       schema={{
         fields: [
           {
@@ -117,6 +120,9 @@ const CreateImage = ({ navigateBack }) => {
               'release',
               'imageType',
               'third-party-repositories',
+              'imageOutput',
+              'imageSetDetails',
+              'includesCustomRepos',
             ],
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!

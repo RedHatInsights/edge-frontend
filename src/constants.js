@@ -15,6 +15,8 @@ import infoColor from '@patternfly/react-tokens/dist/esm/global_info_color_100';
 
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 
+import { useFlag, useFlagsStatus } from '@unleash/proxy-client-react';
+
 export const statusMapper = [
   'done',
   'error',
@@ -177,8 +179,15 @@ export const emptyStateNoFliters = (isLoading, count, history) =>
   !history.location.search.includes('has_filters=true');
 
 export const canUpdateSelectedDevices = ({ deviceData, imageData }) =>
-  deviceData.length > 0 && imageData
+  deviceData?.length > 0 && imageData
     ? deviceData?.some(
         (device) => device.imageSetId !== deviceData[0].imageSetId
       )
     : true;
+
+export const useFeatureFlags = (flag) => {
+  const { flagsReady } = useFlagsStatus();
+  const isFlagEnabled = useFlag(flag);
+
+  return flagsReady ? isFlagEnabled : false;
+};

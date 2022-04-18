@@ -12,13 +12,13 @@ const RepositoryHeader = () => {
       <>
         <PageHeaderTitle title="Applications settings" />
         <p className="pf-u-mt-sm">
-          Settings for Fleet Management
+          Settings for Edge Management
           <Popover
             aria-label="Basic popover"
-            headerContent={<div>About Fleet Management</div>}
+            headerContent={<div>About Edge Management</div>}
             bodyContent={
               <div>
-                Fleet Management is a service that allows you to provision,
+                Edge Management is a service that allows you to provision,
                 update and maintain edge systems.
               </div>
             }

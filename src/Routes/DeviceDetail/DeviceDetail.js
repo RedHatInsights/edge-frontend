@@ -68,7 +68,7 @@ const DeviceDetail = () => {
       setUpdateModal((prevState) => ({
         ...prevState,
         deviceData: [
-          ...prevState.deviceData,
+          ...(prevState.deviceData || []),
           {
             display_name: entity.display_name,
             id: entity.id,
@@ -107,7 +107,7 @@ const DeviceDetail = () => {
           <Breadcrumb ouiaId="systems-list">
             <BreadcrumbItem>
               <Link to={uuid ? `/groups` : '/inventory'}>
-                {uuid ? 'Groups' : 'Inventory'}
+                {uuid ? 'Groups' : 'Systems'}
               </Link>
             </BreadcrumbItem>
             {uuid && (

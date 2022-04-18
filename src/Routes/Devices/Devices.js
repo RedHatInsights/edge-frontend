@@ -88,7 +88,7 @@ const Devices = () => {
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Fleet management" />
+        <PageHeaderTitle title="Edge management" />
       </PageHeader>
       <Main className="edge-devices">
         <Tiles />

@@ -34,33 +34,29 @@ const WizardRepositoryTable = ({ ...props }) => {
   };
 
   const buildRows = ({ data }) =>
-    data.map(({ ID, Name, URL }) => {
-      return {
-        id: ID,
-        name: Name,
-        URL: URL,
-        noApiSortFilter: [Name],
-        cells: [
-          {
-            title: (
-              <>
-                <Text className="pf-u-mb-xs" component={TextVariants.p}>
-                  {Name}
-                </Text>
-                <Text
-                  component={TextVariants.a}
-                  href={URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {URL} <ExternalLinkAltIcon className="pf-u-ml-sm" />
-                </Text>
-              </>
-            ),
-          },
-        ],
-      };
-    });
+    data.map(({ ID, Name, URL }) => ({
+      rowInfo: { id: ID, name: Name, URL: URL },
+      noApiSortFilter: [Name],
+      cells: [
+        {
+          title: (
+            <>
+              <Text className="pf-u-mb-xs" component={TextVariants.p}>
+                {Name}
+              </Text>
+              <Text
+                component={TextVariants.a}
+                href={URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {URL} <ExternalLinkAltIcon className="pf-u-ml-sm" />
+              </Text>
+            </>
+          ),
+        },
+      ],
+    }));
 
   return (
     <>
