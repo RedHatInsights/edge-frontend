@@ -16,7 +16,7 @@ const quickstarts = [
     apiVersion: '5',
     kind: 'documentation',
     metadata: {
-      name: 'name',
+      name: 'build-register-images',
     },
     spec: {
       displayName: 'Build and register RHEL for Edge images',
@@ -33,19 +33,22 @@ const quickstarts = [
     apiVersion: '5',
     kind: 'documentation',
     metadata: {
-      name: 'name',
+      name: 'working-with-systems',
     },
     spec: {
       displayName: 'Working with systems',
       icon: <BookIcon />,
       description:
         'Group, connect, and manage edge systems after registering them with the edge management console.',
+      link: {
+        href: 'https://console.redhat.com/application-services/learning-resources',
+      },
       type: { text: 'Documentation', color: 'orange' },
     },
   },
 ];
 
-const App = () => {
+const Quickstarts = () => {
   return (
     <QuickStartCatalogSection>
       <TextContent className="pf-u-mb-md">
@@ -70,4 +73,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Quickstarts;
