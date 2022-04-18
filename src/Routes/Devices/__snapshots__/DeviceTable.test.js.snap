@@ -27,12 +27,12 @@ exports[`ImageSets table to render correctly 1`] = `
       data-ouia-component-type="PF4/Title"
       data-ouia-safe="true"
     >
-      Connect edge devices
+      Connect edge systems
     </h4>
     <div
       class="pf-c-empty-state__body"
     >
-      Connect and manage edge devices here after registering them via the console. To start, create a RHEL for Edge image and install it to your target device.
+      Connect and manage edge systems here after registering them via the console. To start, create a RHEL for Edge image and install it to your target system.
     </div>
     <div
       class="pf-c-empty-state__secondary"
@@ -45,7 +45,7 @@ exports[`ImageSets table to render correctly 1`] = `
         data-ouia-safe="true"
         href="/"
       >
-        How to connect a device
+        How to connect a system
         <svg
           aria-hidden="true"
           class="pf-u-ml-sm"

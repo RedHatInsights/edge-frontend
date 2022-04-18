@@ -31,7 +31,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
           variant: 'info',
           title: 'Updating device',
           description: isMultiple
-            ? ` ${deviceName.length} devices were added to the queue.`
+            ? ` ${deviceName.length} systems were added to the queue.`
             : ` ${deviceName} was added to the queue.`,
         }),
       });

@@ -244,13 +244,13 @@ const DeviceTable = ({
         <CustomEmptyState
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}
-          title={'Connect edge devices'}
+          title={'Connect edge systems'}
           body={
-            'Connect and manage edge devices here after registering them via the console. To start, create a RHEL for Edge image and install it to your target device.'
+            'Connect and manage edge systems here after registering them via the console. To start, create a RHEL for Edge image and install it to your target system.'
           }
           secondaryActions={[
             {
-              title: 'How to connect a device',
+              title: 'How to connect a system',
               link: '/',
               type: 'link',
             },
