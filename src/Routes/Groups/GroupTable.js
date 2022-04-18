@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
-import { Tooltip } from '@patternfly/react-core';
+import { Bullseye, Spinner, Tooltip } from '@patternfly/react-core';
+import { validateImage } from '../../api';
+
+const UpdateDeviceModal = React.lazy(() =>
+  import('../Devices/UpdateDeviceModal')
+);
 
 const filters = [
   {
@@ -30,10 +35,27 @@ const GroupTable = ({
   handleCreateModal,
   handleRenameModal,
   handleDeleteModal,
+  fetchGroups,
 }) => {
+  const [updateModal, setUpdateModal] = useState({
+    isOpen: false,
+    deviceData: null,
+    imageData: null,
+  });
+
   const actionResolver = (rowData) => {
     if (!rowData?.rowInfo) return [];
-    const { id, title } = rowData?.rowInfo;
+    const { id, title, devices, devicesImageInfo } = rowData?.rowInfo;
+    const hasValidImage =
+      devices.length > 0 &&
+      !validateImage(
+        devices.map((device) => ({
+          ID: device.ImageID,
+        }))
+      ).UpdateValid;
+
+    const hasUpdate = devicesImageInfo?.some((image) => image.UpdateAvailable);
+
     return (
       id && [
         {
@@ -43,6 +65,29 @@ const GroupTable = ({
         {
           title: 'Delete',
           onClick: () => handleDeleteModal(id, title),
+        },
+        {
+          title: 'Update',
+          onClick: () =>
+            setUpdateModal((prevState) => ({
+              ...prevState,
+              deviceData: devices.map((device) => ({
+                id: device.ID,
+                display_name: device.Name,
+              })),
+              imageData: {
+                Image: {
+                  Name: devicesImageInfo[0].Name,
+                  Version: devicesImageInfo[0].Version,
+                  CreatedAt: devicesImageInfo[0].CreatedAt,
+                  Distribution: devicesImageInfo[0].Distribution,
+                  CommitID: devicesImageInfo[0].CommitID,
+                },
+                PackageDiff: devicesImageInfo[0].PackageDiff,
+              },
+              isOpen: true,
+            })),
+          isDisabled: devices.length > 0 ? !(hasValidImage && hasUpdate) : true,
         },
       ]
     );
@@ -81,6 +126,8 @@ const GroupTable = ({
             : DevicesImageInfo.length > 1
             ? 'Multiple images'
             : DevicesImageInfo[0]?.Name,
+        devicesImageInfo: rowData.DevicesImageInfo,
+        devices: Devices,
       },
       noApiSortFilter: [
         Name,
@@ -137,6 +184,30 @@ const GroupTable = ({
           },
         ]}
       />
+      {updateModal.isOpen && (
+        <Suspense
+          fallback={
+            <Bullseye>
+              <Spinner />
+            </Bullseye>
+          }
+        >
+          <UpdateDeviceModal
+            navigateBack={() => {
+              history.push({ pathname: history.location.pathname });
+              setUpdateModal((prevState) => {
+                return {
+                  ...prevState,
+                  isOpen: false,
+                };
+              });
+            }}
+            setUpdateModal={setUpdateModal}
+            updateModal={updateModal}
+            refreshTable={fetchGroups}
+          />
+        </Suspense>
+      )}
     </>
   );
 };
@@ -150,6 +221,7 @@ GroupTable.propTypes = {
   handleRenameModal: PropTypes.func,
   handleDeleteModal: PropTypes.func,
   handleCreateModal: PropTypes.func,
+  fetchGroups: PropTypes.func,
 };
 
 export default GroupTable;

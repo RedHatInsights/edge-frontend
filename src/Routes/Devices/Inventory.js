@@ -31,7 +31,6 @@ const Inventory = () => {
     imageData: null,
   });
 
-  console.log(deviceId, checkedDeviceIds);
   const history = useHistory();
 
   const handleAddDevicesToGroup = (ids, isRow) => {
