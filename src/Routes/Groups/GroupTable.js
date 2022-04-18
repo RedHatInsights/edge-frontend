@@ -46,6 +46,16 @@ const GroupTable = ({
   const actionResolver = (rowData) => {
     if (!rowData?.rowInfo) return [];
     const { id, title, devices, devicesImageInfo } = rowData?.rowInfo;
+    const hasValidImage =
+      devices.length > 0 &&
+      !validateImage(
+        devices.map((device) => ({
+          ID: device.ImageID,
+        }))
+      ).UpdateValid;
+
+    const hasUpdate = devicesImageInfo?.some((image) => image.UpdateAvailable);
+
     return (
       id && [
         {
@@ -71,18 +81,13 @@ const GroupTable = ({
                   Version: devicesImageInfo[0].Version,
                   CreatedAt: devicesImageInfo[0].CreatedAt,
                   Distribution: devicesImageInfo[0].Distribution,
+                  CommitID: devicesImageInfo[0].CommitID,
                 },
                 PackageDiff: devicesImageInfo[0].PackageDiff,
               },
               isOpen: true,
             })),
-          isDisabled: devices[0]?.ImageID
-            ? !validateImage(
-                devices.map((device) => ({
-                  ID: device.ImageID,
-                }))
-              )
-            : true,
+          isDisabled: devices.length > 0 ? !(hasValidImage && hasUpdate) : true,
         },
       ]
     );

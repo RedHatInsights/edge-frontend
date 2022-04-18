@@ -14,7 +14,7 @@ import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
 
 const Groups = () => {
-  const [response, fetchData] = useApi(getGroups);
+  const [response, fetchGroups] = useApi(getGroups);
   const { data, isLoading, hasError } = response;
 
   const [modalState, setModalState] = useState({ id: null, name: '' });
@@ -47,7 +47,7 @@ const Groups = () => {
             handleRenameModal={handleRenameModal}
             handleDeleteModal={handleDeleteModal}
             handleCreateModal={() => setIsCreateModalOpen(true)}
-            getGroups={getGroups}
+            fetchGroups={fetchGroups}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
@@ -75,14 +75,14 @@ const Groups = () => {
         <CreateGroupModal
           isModalOpen={isCreateModalOpen}
           setIsModalOpen={setIsCreateModalOpen}
-          reloadData={fetchData}
+          reloadData={fetchGroups}
         />
       )}
       {isRenameModalOpen && (
         <RenameGroupModal
           isModalOpen={isRenameModalOpen}
           setIsModalOpen={setIsRenameModalOpen}
-          reloadData={fetchData}
+          reloadData={fetchGroups}
           modalState={modalState}
         />
       )}
@@ -90,7 +90,7 @@ const Groups = () => {
         <DeleteGroupModal
           isModalOpen={isDeleteModalOpen}
           setIsModalOpen={setIsDeleteModalOpen}
-          reloadData={fetchData}
+          reloadData={fetchGroups}
           modalState={modalState}
         />
       )}
