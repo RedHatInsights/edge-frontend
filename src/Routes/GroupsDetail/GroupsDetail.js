@@ -26,7 +26,7 @@ import {
   removeDeviceFromGroupById,
   removeDevicesFromGroup,
 } from '../../api/index';
-import DeviceModal from '../Devices/DeviceModal';
+import AddSystemsToGroupModal from '../Devices/AddSystemsToGroupModal';
 import { canUpdateSelectedDevices, stateToUrlSearch } from '../../constants';
 import useApi from '../../hooks/useApi';
 import apiWithToast from '../../utils/apiWithToast';
@@ -271,7 +271,7 @@ const GroupsDetail = () => {
         )}
       </Main>
       {isAddModalOpen && (
-        <DeviceModal
+        <AddSystemsToGroupModal
           groupId={groupId}
           closeModal={() => setIsAddModalOpen(false)}
           isOpen={isAddModalOpen}
