@@ -12,12 +12,10 @@ const SelectInput = ({ defaultOptions }) => {
   const onToggle = (isOpen) => setIsOpen(isOpen);
 
   const onSelect = (_event, selection, isPlaceholder) => {
-    console.log('select');
     if (isPlaceholder) clearSelection();
     else {
       setSelected(selection);
       setIsOpen(false);
-      console.log('selected:', selection.toString());
     }
     change('group', selection);
   };

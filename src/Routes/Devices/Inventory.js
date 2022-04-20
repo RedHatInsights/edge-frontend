@@ -7,6 +7,7 @@ import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { useHistory } from 'react-router-dom';
 import DeviceTable from './DeviceTable';
 import AddDeviceModal from './AddDeviceModal';
+import RemoveDeviceModal from './RemoveDeviceModal';
 import CreateGroupModal from '../Groups/CreateGroupModal';
 import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api';
@@ -20,6 +21,7 @@ const Inventory = () => {
   const [response, fetchData] = useApi(getInventory);
   const { data, isLoading, hasError } = response;
   const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
+  const [isRemoveDeviceModalOpen, setIsRemoveDeviceModalOpen] = useState(false);
   const [deviceId, setDeviceId] = useState([]);
   const [checkedDeviceIds, setCheckedDeviceIds] = useState([]);
   const [isRowSelected, setIsRowSelected] = useState(false);
@@ -39,6 +41,12 @@ const Inventory = () => {
     setIsRowSelected(isRow);
   };
 
+  const handleRemoveDevicesFromGroup = (ids, isRow) => {
+    setIsRemoveDeviceModalOpen(true);
+    isRow ? setDeviceId(ids) : setCheckedDeviceIds(ids);
+    setIsRowSelected(isRow);
+  };
+
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
@@ -52,6 +60,7 @@ const Inventory = () => {
           hasError={hasError}
           setUpdateModal={setUpdateModal}
           handleAddDevicesToGroup={handleAddDevicesToGroup}
+          handleRemoveDevicesFromGroup={handleRemoveDevicesFromGroup}
           hasCheckbox={true}
           selectedItems={setCheckedDeviceIds}
           kebabItems={[
@@ -117,6 +126,17 @@ const Inventory = () => {
             setTimeout(() => setHasModalSubmitted(true), 800);
           }}
           deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
+        />
+      )}
+      {isRemoveDeviceModalOpen && (
+        <RemoveDeviceModal
+          isModalOpen={isRemoveDeviceModalOpen}
+          setIsModalOpen={setIsRemoveDeviceModalOpen}
+          reloadData={() => {
+            fetchData();
+            setTimeout(() => setHasModalSubmitted(true), 800);
+          }}
+          deviceInfo={isRowSelected ? deviceId : checkedDeviceIds}
         />
       )}
     </Fragment>
