@@ -5,7 +5,7 @@ import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
-import { Split, SplitItem } from '@patternfly/react-core';
+import { Split, SplitItem, Tooltip } from '@patternfly/react-core';
 import { loadDeviceTable } from '../../store/actions';
 import CustomEmptyState from '../../components/Empty';
 import { useHistory } from 'react-router-dom';
@@ -110,53 +110,79 @@ const columnNames = [
 ];
 
 const createRows = (devices) =>
-  devices?.map((device) => ({
-    rowInfo: {
-      deviceID: device?.Device?.ID,
-      id: device?.Device?.UUID,
-      display_name: device?.Device?.DeviceName,
-      updateImageData: device?.ImageInfo?.UpdatesAvailable?.[0],
-      deviceStatus: getDeviceStatus(device),
-      imageSetId: device?.ImageInfo?.Image?.ImageSetID,
-      imageName: device?.ImageInfo?.Image?.Name,
-    },
-    noApiSortFilter: [
-      device?.Device?.DeviceName || '',
-      device?.ImageInfo?.Image?.Name || '',
-      '',
-      device?.Device?.LastSeen || '',
-      getDeviceStatus(device),
-    ],
-    cells: [
-      {
-        title: (
-          <Link to={`${paths['inventory']}/${device?.Device?.UUID}`}>
-            {device?.Device?.DeviceName}
-          </Link>
-        ),
+  devices?.map((device) => {
+    const { Device, ImageInfo } = device;
+
+    const deviceGroupTooltip = (
+      <div>
+        <Tooltip
+          content={
+            <div>
+              {Device.DevicesGroups.map((group, index) => (
+                <p key={index}>{group.Name}</p>
+              ))}
+            </div>
+          }
+        >
+          <span>Multiple groups</span>
+        </Tooltip>
+      </div>
+    );
+
+    return {
+      rowInfo: {
+        deviceID: Device?.ID,
+        id: Device?.UUID,
+        display_name: Device?.DeviceName,
+        updateImageData: ImageInfo?.UpdatesAvailable?.[0],
+        deviceStatus: getDeviceStatus(device),
+        imageSetId: ImageInfo?.Image?.ImageSetID,
+        imageName: ImageInfo?.Image?.Name,
+        deviceGroups: Device.DevicesGroups,
       },
-      {
-        title: device?.ImageInfo?.Image?.Name ? (
-          <Link
-            to={`${paths['manage-images']}/${device?.ImageInfo?.Image?.ImageSetID}/versions/${device?.ImageInfo?.Image?.ID}/details`}
-          >
-            {device?.ImageInfo?.Image?.Name}
-          </Link>
-        ) : (
-          'unavailable'
-        ),
-      },
-      {
-        title: '-',
-      },
-      {
-        title: <DateFormat date={device?.Device?.LastSeen} />,
-      },
-      {
-        title: <DeviceStatus Device={device} />,
-      },
-    ],
-  }));
+      noApiSortFilter: [
+        Device?.DeviceName || '',
+        ImageInfo?.Image?.Name || '',
+        '',
+        Device?.LastSeen || '',
+        getDeviceStatus(device),
+      ],
+      cells: [
+        {
+          title: (
+            <Link to={`${paths['inventory']}/${Device?.UUID}`}>
+              {Device?.DeviceName}
+            </Link>
+          ),
+        },
+        {
+          title: ImageInfo?.Image?.Name ? (
+            <Link
+              to={`${paths['manage-images']}/${ImageInfo?.Image?.ImageSetID}/versions/${ImageInfo?.Image?.ID}/details`}
+            >
+              {ImageInfo?.Image?.Name}
+            </Link>
+          ) : (
+            'unavailable'
+          ),
+        },
+        {
+          title:
+            Device.DevicesGroups.length === 0
+              ? '-'
+              : Device.DevicesGroups.length === 1
+              ? Device.DevicesGroups[0].Name
+              : deviceGroupTooltip,
+        },
+        {
+          title: <DateFormat date={Device?.LastSeen} />,
+        },
+        {
+          title: <DeviceStatus Device={device} />,
+        },
+      ],
+    };
+  });
 
 const DeviceTable = ({
   hasCheckbox = false,
@@ -171,6 +197,7 @@ const DeviceTable = ({
   setRemoveModal,
   setIsAddModalOpen,
   handleAddDevicesToGroup,
+  handleRemoveDevicesFromGroup,
   hasModalSubmitted,
   setHasModalSubmitted,
 }) => {
@@ -192,6 +219,24 @@ const DeviceTable = ({
               {
                 ID: rowData.rowInfo.deviceID,
                 name: rowData.rowInfo.display_name,
+              },
+            ],
+            true
+          ),
+      });
+    }
+
+    if (handleRemoveDevicesFromGroup) {
+      actions.push({
+        title: 'Remove from group',
+        isDisabled: rowData?.rowInfo?.deviceGroups.length === 0,
+        onClick: () =>
+          handleRemoveDevicesFromGroup(
+            [
+              {
+                ID: rowData.rowInfo.deviceID,
+                name: rowData.rowInfo.display_name,
+                deviceGroups: rowData.rowInfo.deviceGroups,
               },
             ],
             true
@@ -315,6 +360,7 @@ DeviceTable.propTypes = {
   hasModalSubmitted: PropTypes.bool,
   setHasModalSubmitted: PropTypes.func,
   handleAddDevicesToGroup: PropTypes.func,
+  handleRemoveDevicesFromGroup: PropTypes.func,
 };
 
 export default DeviceTable;

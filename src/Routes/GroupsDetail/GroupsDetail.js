@@ -284,6 +284,7 @@ const GroupsDetail = () => {
           openModal={() => setRemoveModal(false)}
           title={'Remove from group'}
           submitLabel={'Remove'}
+          variant="danger"
           schema={{
             fields: [
               {

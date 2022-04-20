@@ -20,6 +20,7 @@ const AddSystemsToGroupModal = ({
     <Modal
       id="add-systems-modal"
       title="Add systems"
+      position="top"
       isOpen={isOpen}
       onClose={closeModal}
       variant="large"
