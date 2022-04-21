@@ -3,10 +3,20 @@ import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import Modal from '../../components/Modal';
-import { createGroup, addDevicesToGroup } from '../../api';
+import { createGroup, addDevicesToGroup, validateGroupName } from '../../api';
 import { nameValidator } from '../../constants';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
+
+const asyncGroupNameValidation = async (value) => {
+  const resp = await validateGroupName(value);
+  // isValid should be isNotValid
+  // who wrote that Go code :thinking_face:
+  // spoiler: it was me
+  if (resp.data.isValid) {
+    return 'Group name already exists';
+  }
+};
 
 const createGroupSchema = {
   fields: [
@@ -21,6 +31,7 @@ const createGroupSchema = {
         { type: validatorTypes.REQUIRED },
 
         { type: validatorTypes.MAX_LENGTH, threshold: 50 },
+        asyncGroupNameValidation,
         nameValidator,
       ],
     },

@@ -495,3 +495,7 @@ export const removeDeviceFromGroupById = (groupId, id) => {
 export const validateImage = async (ids) => {
   return await instance.post(`${EDGE_API}/updates/validate`, ids);
 };
+
+export const validateGroupName = (name) => {
+  return instance.get(`${EDGE_API}/device-groups/checkName/${name}`);
+};
