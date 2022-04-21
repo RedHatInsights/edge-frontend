@@ -22,6 +22,7 @@ import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail, loadEdgeImageSets } from '../../store/actions';
 import { getEdgeImageStatus } from '../../api';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
+import { useFeatureFlags } from '../../constants';
 
 const UpdateImage = ({ navigateBack, updateImageID }) => {
   const [user, setUser] = useState();
@@ -30,6 +31,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
     navigateBack();
     dispatch({ type: CREATE_NEW_IMAGE_RESET });
   };
+  const customRepoFlag = useFeatureFlags('fleet-management.custom-repos');
 
   const { getRegistry } = useContext(RegistryContext);
   const { data } = useSelector(
@@ -141,6 +143,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         version: data?.image?.Version,
         release: data?.image?.Distribution,
         imageType: ['rhel-edge-commit'],
+        includesCustomRepos: customRepoFlag,
         'selected-packages': data?.image?.Packages?.map((pkg) => ({
           ...pkg,
           name: pkg.Name,
