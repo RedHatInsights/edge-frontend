@@ -14,7 +14,7 @@ const filters = [{ label: 'Name', type: 'text' }];
 
 const WizardRepositoryTable = ({ ...props }) => {
   const [selectedRepos, setSelectedRepos] = useState([]);
-  const [response] = useApi(getCustomRepositories);
+  const [response] = useApi({ api: getCustomRepositories });
   const { data, isLoading, hasError } = response;
   const { change, getState } = useFormApi();
   const { input } = useFieldApi(props);

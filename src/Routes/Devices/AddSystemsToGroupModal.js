@@ -12,7 +12,7 @@ const AddSystemsToGroupModal = ({
   isOpen,
   reloadData,
 }) => {
-  const [response] = useApi(getInventory);
+  const [response] = useApi({ api: getInventory });
   const { data, isLoading, hasError } = response;
   const [deviceIds, setDeviceIds] = useState([]);
 

@@ -12,9 +12,15 @@ import CreateGroupModal from './CreateGroupModal';
 import RenameGroupModal from './RenameGroupModal';
 import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
+import { useHistory } from 'react-router-dom';
+import { emptyStateNoFliters } from '../../constants';
 
 const Groups = () => {
-  const [response, fetchGroups] = useApi(getGroups);
+  const history = useHistory();
+  const [response, fetchGroups] = useApi({
+    api: getGroups,
+    tableReload: true,
+  });
   const { data, isLoading, hasError } = response;
 
   const [modalState, setModalState] = useState({ id: null, name: '' });
@@ -38,7 +44,7 @@ const Groups = () => {
         <PageHeaderTitle title="Groups" />
       </PageHeader>
       <Main className="edge-devices">
-        {isLoading || data?.count > 0 ? (
+        {!emptyStateNoFliters(isLoading, data?.count, history) ? (
           <GroupTable
             data={data?.data || []}
             count={data?.count}
