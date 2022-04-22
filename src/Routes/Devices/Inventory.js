@@ -54,7 +54,7 @@ const Inventory = () => {
       </PageHeader>
       <Main className="edge-devices">
         <DeviceTable
-          data={data?.data}
+          data={data?.data?.devices}
           count={data?.count}
           isLoading={isLoading}
           hasError={hasError}
