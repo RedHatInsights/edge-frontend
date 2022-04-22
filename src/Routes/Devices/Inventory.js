@@ -18,7 +18,7 @@ const UpdateDeviceModal = React.lazy(() =>
 );
 
 const Inventory = () => {
-  const [response, fetchData] = useApi(getInventory);
+  const [response, fetchData] = useApi({ api: getInventory });
   const { data, isLoading, hasError } = response;
   const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
   const [isRemoveDeviceModalOpen, setIsRemoveDeviceModalOpen] = useState(false);

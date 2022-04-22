@@ -59,7 +59,7 @@ const AddDeviceModal = ({
   deviceIds,
 }) => {
   const dispatch = useDispatch();
-  const [response] = useApi(getGroups);
+  const [response] = useApi({ api: getGroups });
 
   const handleAddDevices = (values) => {
     const { group } = values;
