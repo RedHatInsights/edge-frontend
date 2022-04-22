@@ -72,7 +72,7 @@ const GroupTable = ({
             setUpdateModal((prevState) => ({
               ...prevState,
               deviceData: devices.map((device) => ({
-                id: device.ID,
+                id: device.UUID,
                 display_name: device.Name,
               })),
               imageData: {
