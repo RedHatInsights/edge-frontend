@@ -15,10 +15,10 @@ const filters = [
     label: 'Name',
     type: 'text',
   },
-  {
-    label: 'Image',
-    type: 'text',
-  },
+  // {
+  //   label: 'Image',
+  //   type: 'text',
+  // },
 ];
 
 const columns = [
