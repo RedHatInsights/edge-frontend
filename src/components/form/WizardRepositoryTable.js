@@ -33,8 +33,8 @@ const WizardRepositoryTable = ({ ...props }) => {
     setSelectedRepos(checkedRepos);
   };
 
-  const buildRows = ({ data }) =>
-    data.map(({ ID, Name, URL }) => ({
+  const buildRows = ({ data }) => {
+    return data.map(({ ID, Name, URL }) => ({
       rowInfo: { id: ID, name: Name, URL: URL },
       noApiSortFilter: [Name],
       cells: [
@@ -57,6 +57,7 @@ const WizardRepositoryTable = ({ ...props }) => {
         },
       ],
     }));
+  };
 
   return (
     <>
