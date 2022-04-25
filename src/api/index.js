@@ -458,7 +458,7 @@ export const getGroups = () => {
 };
 
 export const getGroupById = (id) => {
-  return instance.get(`${EDGE_API}/device-groups/${id}/details`);
+  return instance.get(`${EDGE_API}/device-groups/${id}/view`);
 };
 
 export const updateGroupById = (id, payload) => {

@@ -116,9 +116,10 @@ const columnNames = [
   },
 ];
 
-const createRows = (devices) =>
-  devices?.map((device) => {
+const createRows = (devices) => {
+  return devices?.map((device) => {
     let { DeviceName, DeviceGroups } = device;
+
     const {
       DeviceID,
       DeviceUUID,
@@ -208,6 +209,7 @@ const createRows = (devices) =>
       ],
     };
   });
+};
 
 const DeviceTable = ({
   hasCheckbox = false,
