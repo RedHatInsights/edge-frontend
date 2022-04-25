@@ -50,7 +50,7 @@ const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
             color={warningColor.value}
             className="pf-u-mr-md"
           />
-          Remove Repository
+          Remove repository
         </>
       }
       isOpen={isOpen}
