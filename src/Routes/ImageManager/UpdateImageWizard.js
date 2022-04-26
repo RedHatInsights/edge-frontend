@@ -148,7 +148,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
           ...pkg,
           name: pkg.Name,
         })),
-        'third-party-repositories': data?.image?.ThirdPartyRepositories.map(
+        'third-party-repositories': data?.image?.ThirdPartyRepositories?.map(
           (repo) => ({
             id: repo.ID,
             name: repo.Name,
