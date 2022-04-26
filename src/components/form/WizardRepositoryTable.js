@@ -10,10 +10,14 @@ import useApi from '../../hooks/useApi';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 
+import { Modal, Button, Flex } from '@patternfly/react-core';
+
 const filters = [{ label: 'Name', type: 'text' }];
 
 const WizardRepositoryTable = ({ ...props }) => {
   const [selectedRepos, setSelectedRepos] = useState([]);
+  const [uncheckedRepo, setUncheckedRepo] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [response] = useApi({ api: getCustomRepositories });
   const { data, isLoading, hasError } = response;
   const { change, getState } = useFormApi();
@@ -24,12 +28,51 @@ const WizardRepositoryTable = ({ ...props }) => {
     change(input.name, selectedRepos);
   }, [selectedRepos]);
 
+  const getUncheckedRepostiories = (previousChecked, newChecked) => {
+    return previousChecked.filter((object1) => {
+      return !newChecked.some((object2) => {
+        return object1.id === object2.id;
+      });
+    });
+  };
+
+  const handleModalToggle = () => {
+    let currentCheck = selectedRepos;
+    currentCheck.push(uncheckedRepo);
+    setSelectedRepos(currentCheck);
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const modalFooter = (
+    <Flex>
+      <Button
+        key="confirm"
+        variant="primary"
+        onClick={() => handleModalToggle()}
+        isDanger
+      >
+        Unlink
+      </Button>
+      <Button key="cancel" variant="link" onClick={() => handleModalToggle()}>
+        Cancel
+      </Button>
+    </Flex>
+  );
+
   const getRepoIds = (checked) => {
     const checkedRepos = checked?.map((repo) => ({
       id: repo?.id,
       name: repo?.name,
       URL: repo?.URL,
     }));
+    const uncheckedRepos = getUncheckedRepostiories(
+      selectedRepos,
+      checkedRepos
+    );
+    if (uncheckedRepos.length > 0) {
+      setUncheckedRepo(uncheckedRepos.shift());
+      handleModalToggle();
+    }
     setSelectedRepos(checkedRepos);
   };
 
@@ -72,22 +115,59 @@ const WizardRepositoryTable = ({ ...props }) => {
           }}
         />
       ) : (
-        <GeneralTable
-          apiFilterSort={false}
-          filters={filters}
-          tableData={{
-            count: data?.length,
-            data,
-            isLoading,
-            hasError,
-          }}
-          columnNames={[{ title: 'Name', type: 'name', sort: true }]}
-          rows={isLoading ? [] : buildRows(data)}
-          defaultSort={{ index: 0, direction: 'desc' }}
-          hasCheckbox={true}
-          selectedItems={getRepoIds}
-          initSelectedItems={wizardState}
-        />
+        <React.Fragment>
+          <GeneralTable
+            apiFilterSort={false}
+            filters={filters}
+            tableData={{
+              count: data?.length,
+              data,
+              isLoading,
+              hasError,
+            }}
+            columnNames={[{ title: 'Name', type: 'name', sort: true }]}
+            rows={isLoading ? [] : buildRows(data)}
+            defaultSort={{ index: 0, direction: 'desc' }}
+            hasCheckbox={true}
+            selectedItems={getRepoIds}
+            initSelectedItems={wizardState}
+          />
+          <Modal
+            isOpen={isModalOpen}
+            aria-label="My dialog"
+            aria-labelledby="custom-header-label"
+            aria-describedby="custom-header-description"
+            onClose={handleModalToggle}
+            title="Unlinking repository?"
+            titleIconVariant="warning"
+            footer={modalFooter}
+            variant="small"
+          >
+            <span id="custom-header-description">
+              X packages from this repository are being used in this image.
+              Unlinking the repository will remove the packages.
+              <br />
+              <br />
+              To avoid remove the packages when replacing this repository, link
+              the new repository before unlinking the existing one.
+            </span>
+            <br />
+            <br />
+            <b>Packages</b>
+            <br />
+            test-package
+            <br />
+            <br />
+            <b>Name</b>
+            <br />
+            {uncheckedRepo?.name}
+            <br />
+            <br />
+            <b>BaseURL</b>
+            <br />
+            {uncheckedRepo?.URL}
+          </Modal>
+        </React.Fragment>
       )}
     </>
   );
