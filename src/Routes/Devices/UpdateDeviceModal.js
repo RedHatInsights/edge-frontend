@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   TextContent,
   Text,
@@ -34,15 +34,14 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   const deviceName = isMultiple
     ? updateModal.deviceData.map((device) => device.display_name)
     : updateModal?.deviceData[0]?.display_name;
-  useEffect(() => {
-    updateModal?.imageSetId
-      ? getImageSet({ id: updateModal.imageSetId }).then((data) =>
-          setImageData(data.Data.images[0])
-        )
-      : getImageData(updateModal.imageId).then((data) =>
-          setImageData(data.Data.images[0])
-        );
-  }, [updateModal]);
+
+  updateModal?.imageSetId
+    ? getImageSet({ id: updateModal.imageSetId }).then((data) =>
+        setImageData(data.Data.images[0])
+      )
+    : getImageData(updateModal.imageId).then((data) =>
+        setImageData(data.Data.images[0])
+      );
 
   const handleUpdateModal = async () => {
     try {
