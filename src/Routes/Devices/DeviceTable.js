@@ -323,7 +323,7 @@ const DeviceTable = ({
           secondaryActions={[
             {
               title: 'How to connect a system',
-              link: '/',
+              link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/getting_started/index',
               type: 'link',
             },
           ]}

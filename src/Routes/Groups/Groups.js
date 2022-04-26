@@ -69,7 +69,7 @@ const Groups = () => {
                 {
                   type: 'link',
                   title: 'Learn more about system groups',
-                  link: '#',
+                  link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/working_with_systems_in_the_edge_management_application/index',
                 },
               ]}
             />
