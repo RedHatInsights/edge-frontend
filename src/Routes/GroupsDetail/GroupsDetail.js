@@ -208,10 +208,10 @@ const GroupsDetail = () => {
         </Flex>
       </PageHeader>
       <Main className="edge-devices">
-        {isLoading || data?.Devices?.count > 0 ? (
+        {isLoading || data?.DevicesView?.total > 0 ? (
           <DeviceTable
-            data={data?.Devices?.data || []}
-            count={data?.Devices?.count}
+            data={data?.DevicesView?.devices || []}
+            count={data?.DevicesView?.total}
             isLoading={isLoading}
             hasError={hasError}
             hasCheckbox={true}

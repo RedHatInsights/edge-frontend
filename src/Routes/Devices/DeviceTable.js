@@ -16,15 +16,14 @@ import {
 } from '@patternfly/react-icons';
 import { emptyStateNoFliters } from '../../constants';
 
-const getDeviceStatus = (deviceData) =>
-  deviceData?.ImageInfo?.UpdatesAvailable
+const getDeviceStatus = (deviceStatus, isUpdateAvailable) =>
+  deviceStatus === 'UPDATING'
+    ? 'updating'
+    : isUpdateAvailable
     ? 'updateAvailable'
-    : deviceData?.Device?.Booted
-    ? 'running'
-    : 'booting';
+    : 'running';
 
-const DeviceStatus = ({ Device }) => {
-  const status = getDeviceStatus(Device);
+const DeviceStatus = ({ status }) => {
   const statusType = {
     booting: (
       <Split className="pf-u-info-color-100">
@@ -48,6 +47,14 @@ const DeviceStatus = ({ Device }) => {
           <ExclamationTriangleIcon />
         </SplitItem>
         <SplitItem>Update Available</SplitItem>
+      </Split>
+    ),
+    updating: (
+      <Split className="pf-u-warning-color-100">
+        <SplitItem className="pf-u-mr-sm">
+          <ExclamationTriangleIcon />
+        </SplitItem>
+        <SplitItem>Updating</SplitItem>
       </Split>
     ),
   };
@@ -109,16 +116,36 @@ const columnNames = [
   },
 ];
 
-const createRows = (devices) =>
-  devices?.map((device) => {
-    const { Device, ImageInfo } = device;
+const createRows = (devices) => {
+  return devices?.map((device) => {
+    let { DeviceName, DeviceGroups } = device;
+
+    const {
+      DeviceID,
+      DeviceUUID,
+      UpdateAvailable,
+      LastSeen,
+      ImageName,
+      ImageSetID,
+      // ImageID,
+      Status,
+    } = device;
+
+    if (DeviceName === '') {
+      // needs to be fixed with proper name in sync with inv
+      DeviceName = 'localhost';
+    }
+
+    if (DeviceGroups === null) {
+      DeviceGroups = [];
+    }
 
     const deviceGroupTooltip = (
       <div>
         <Tooltip
           content={
             <div>
-              {Device.DevicesGroups.map((group, index) => (
+              {DeviceGroups.map((group, index) => (
                 <p key={index}>{group.Name}</p>
               ))}
             </div>
@@ -131,36 +158,32 @@ const createRows = (devices) =>
 
     return {
       rowInfo: {
-        deviceID: Device?.ID,
-        id: Device?.UUID,
-        display_name: Device?.DeviceName,
-        updateImageData: ImageInfo?.UpdatesAvailable?.[0],
-        deviceStatus: getDeviceStatus(device),
-        imageSetId: ImageInfo?.Image?.ImageSetID,
-        imageName: ImageInfo?.Image?.Name,
-        deviceGroups: Device.DevicesGroups,
+        deviceID: DeviceID,
+        id: DeviceUUID,
+        display_name: DeviceName,
+        updateImageData: UpdateAvailable,
+        deviceStatus: getDeviceStatus(Status, UpdateAvailable),
+        imageSetId: ImageSetID,
+        imageName: ImageName,
+        deviceGroups: DeviceGroups,
       },
       noApiSortFilter: [
-        Device?.DeviceName || '',
-        ImageInfo?.Image?.Name || '',
+        DeviceName || '',
+        ImageName || '',
         '',
-        Device?.LastSeen || '',
-        getDeviceStatus(device),
+        LastSeen || '',
+        getDeviceStatus(Status, UpdateAvailable),
       ],
       cells: [
         {
           title: (
-            <Link to={`${paths['inventory']}/${Device?.UUID}`}>
-              {Device?.DeviceName}
-            </Link>
+            <Link to={`${paths['inventory']}/${DeviceUUID}`}>{DeviceName}</Link>
           ),
         },
         {
-          title: ImageInfo?.Image?.Name ? (
-            <Link
-              to={`${paths['manage-images']}/${ImageInfo?.Image?.ImageSetID}/versions/${ImageInfo?.Image?.ID}/details`}
-            >
-              {ImageInfo?.Image?.Name}
+          title: ImageName ? (
+            <Link to={`${paths['manage-images']}/${ImageSetID}/`}>
+              {ImageName}
             </Link>
           ) : (
             'unavailable'
@@ -168,21 +191,25 @@ const createRows = (devices) =>
         },
         {
           title:
-            Device.DevicesGroups.length === 0
+            DeviceGroups.length === 0
               ? '-'
-              : Device.DevicesGroups.length === 1
-              ? Device.DevicesGroups[0].Name
+              : DeviceGroups.length === 1
+              ? DeviceGroups[0].Name
               : deviceGroupTooltip,
         },
         {
-          title: <DateFormat date={Device?.LastSeen} />,
+          // needs to be fixed with proper date
+          title: <DateFormat date={LastSeen.split(' ')[0]} />,
         },
         {
-          title: <DeviceStatus Device={device} />,
+          title: (
+            <DeviceStatus status={getDeviceStatus(Status, UpdateAvailable)} />
+          ),
         },
       ],
     };
   });
+};
 
 const DeviceTable = ({
   hasCheckbox = false,
