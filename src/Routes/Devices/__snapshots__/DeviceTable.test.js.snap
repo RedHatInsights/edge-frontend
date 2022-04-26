@@ -44,6 +44,7 @@ exports[`ImageSets table to render correctly 1`] = `
         data-ouia-component-type="PF4/Button"
         data-ouia-safe="true"
         href="https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/getting_started/index"
+        target="_blank"
       >
         How to connect a system
         <svg
