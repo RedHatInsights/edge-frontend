@@ -61,6 +61,7 @@ const Empty = ({
           component={type === 'link' ? 'a' : 'button'}
           href={link}
           variant="link"
+          target={type === 'link' ? '_blank' : ''}
           key={index}
           onClick={onClick}
         >
