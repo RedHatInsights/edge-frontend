@@ -57,7 +57,7 @@ const GroupsDetail = () => {
     deviceData: null,
     imageData: null,
   });
-  const [response, fetchData] = useApi(() => getGroupById(groupId));
+  const [response, fetchData] = useApi({ api: () => getGroupById(groupId) });
   const { data, isLoading, hasError } = response;
   const { groupId } = params;
   const groupName = data?.DeviceGroup?.Name;

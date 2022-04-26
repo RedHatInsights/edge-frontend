@@ -69,6 +69,7 @@ const GeneralTable = ({
   kebabItems,
   hasModalSubmitted,
   setHasModalSubmitted,
+  isUseApi,
 }) => {
   const defaultCheckedRows = initSelectedItems ? initSelectedItems : [];
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
@@ -105,6 +106,12 @@ const GeneralTable = ({
           }),
         }
       : null;
+
+    if (isUseApi) {
+      loadTableData(query);
+      return;
+    }
+
     apiFilterSort && urlParam
       ? loadTableData(dispatch, urlParam, query)
       : apiFilterSort
@@ -393,6 +400,7 @@ GeneralTable.propTypes = {
   hasModalSubmitted: PropTypes.bool,
   setHasModalSubmitted: PropTypes.func,
   initSelectedItems: PropTypes.array,
+  isUseApi: PropTypes.bool,
 };
 
 GeneralTable.defaultProps = {

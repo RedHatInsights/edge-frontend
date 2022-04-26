@@ -41,7 +41,7 @@ const AddModal = ({ isOpen, openModal, reloadData }) => {
 
   return (
     <Modal
-      title="Add Repository"
+      title="Add repository"
       isOpen={isOpen}
       openModal={() => openModal({ type: 'add' })}
       submitLabel="Add"

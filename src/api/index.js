@@ -453,8 +453,9 @@ export const createGroup = (payload) => {
   });
 };
 
-export const getGroups = () => {
-  return instance.get(`${EDGE_API}/device-groups`);
+export const getGroups = (q) => {
+  const query = getTableParams(q);
+  return instance.get(`${EDGE_API}/device-groups?${query}`);
 };
 
 export const getGroupById = (id) => {
