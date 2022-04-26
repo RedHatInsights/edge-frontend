@@ -24,7 +24,7 @@ const quickstarts = [
       description:
         'With the edge management application, you can create an image and manage the packages associated with an image. You can build an image, download it, install it on a node, and then register that node so it can receive updates.',
       link: {
-        href: 'https://console.redhat.com/application-services/learning-resources',
+        href: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/getting_started/index',
       },
       type: { text: 'Documentation', color: 'orange' },
     },
@@ -41,7 +41,7 @@ const quickstarts = [
       description:
         'Group, connect, and manage edge systems after registering them with the edge management console.',
       link: {
-        href: 'https://console.redhat.com/application-services/learning-resources',
+        href: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/working_with_systems_in_the_edge_management_application/index',
       },
       type: { text: 'Documentation', color: 'orange' },
     },
