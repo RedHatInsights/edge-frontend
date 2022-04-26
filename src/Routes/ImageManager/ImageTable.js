@@ -21,7 +21,7 @@ const defaultFilters = [
   {
     label: 'Distribution',
     type: 'checkbox',
-    options: [{ option: 'RHEL 8.4', optionApiName: 'rhel-84' }],
+    options: [{ option: 'RHEL 8.5', optionApiName: 'rhel-85' }],
   },
   {
     label: 'Status',
