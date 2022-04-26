@@ -51,8 +51,8 @@ const AddSystemsToGroupModal = ({
         hasCheckbox={true}
         isLoading={isLoading}
         hasError={hasError}
-        count={data?.count}
-        data={data?.data || []}
+        count={data?.data?.total}
+        data={data?.data?.devices || []}
       />
     </Modal>
   );
