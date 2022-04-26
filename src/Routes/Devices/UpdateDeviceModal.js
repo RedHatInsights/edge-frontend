@@ -1,8 +1,18 @@
-import React from 'react';
-import { TextContent, Text } from '@patternfly/react-core';
+import React, { useEffect, useState } from 'react';
+import {
+  TextContent,
+  Text,
+  Bullseye,
+  Backdrop,
+  Spinner,
+} from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
-import { updateDeviceLatestImage } from '../../api/index';
+import {
+  getImageById,
+  getImageSet,
+  updateDeviceLatestImage,
+} from '../../api/index';
 import { useDispatch } from 'react-redux';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import Modal from '../../components/Modal';
@@ -11,20 +21,33 @@ import BuildModalReview from '../../components/BuildModalReview';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from '../ImageManagerDetail/constants';
 
+const getImageData = (imageId) =>
+  getImageById({ id: imageId }).then((imageSetId) =>
+    getImageSet({ id: imageSetId?.image?.ImageSetID })
+  );
+
 const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
+  const [imageData, setImageData] = useState();
   const dispatch = useDispatch();
-  const imageData = updateModal?.imageData;
   const isMultiple = updateModal.deviceData.length > 1;
   const deviceId = updateModal.deviceData.map((device) => device.id);
   const deviceName = isMultiple
     ? updateModal.deviceData.map((device) => device.display_name)
     : updateModal?.deviceData[0]?.display_name;
+  useEffect(() => {
+    updateModal?.imageSetId
+      ? getImageSet({ id: updateModal.imageSetId }).then((data) =>
+          setImageData(data.Data.images[0])
+        )
+      : getImageData(updateModal.imageId).then((data) =>
+          setImageData(data.Data.images[0])
+        );
+  }, [updateModal]);
 
   const handleUpdateModal = async () => {
     try {
       await updateDeviceLatestImage({
         DevicesUUID: deviceId,
-        CommitId: imageData?.Image?.CommitID,
       });
       dispatch({
         ...addNotification({
@@ -83,27 +106,27 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   );
 
   const updateToDetails = {
-    title: `Update to version ${imageData?.Image.Version}`,
+    title: `Update to version ${imageData?.image.Version}`,
     rows: [
-      { title: 'Image Name', value: imageData?.Image.Name },
-      { title: 'Version', value: imageData?.Image.Version },
+      { title: 'Image Name', value: imageData?.image.Name },
+      { title: 'Version', value: imageData?.image.Version },
       {
         title: 'Created',
-        value: <DateFormat date={imageData?.Image.CreatedAt} />,
+        value: <DateFormat date={imageData?.image.CreatedAt} />,
       },
       {
         title: 'Release',
-        value: distributionMapper[imageData?.Image.Distribution],
+        value: distributionMapper[imageData?.image.Distribution],
       },
     ],
   };
 
   const packageDetails = {
-    title: `Changes from version ${imageData?.Image.Version - 1}`,
+    title: `Changes from version ${imageData?.image.Version - 1}`,
     rows: [
-      { title: 'Added', value: imageData?.PackageDiff?.Added?.length || 0 },
-      { title: 'Removed', value: imageData?.PackageDiff?.Removed?.length || 0 },
-      { title: 'Updated', value: imageData?.PackageDiff?.Updated?.length || 0 },
+      { title: 'Added', value: imageData?.update_added?.length || 0 },
+      { title: 'Removed', value: imageData?.update_removed?.length || 0 },
+      { title: 'Updated', value: imageData?.update_updated?.length || 0 },
     ],
   };
 
@@ -139,18 +162,30 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   };
 
   return (
-    <Modal
-      size="medium"
-      title={`Update system${isMultiple ? 's' : ''} to latest image version`}
-      isOpen={updateModal.isOpen}
-      openModal={() =>
-        setUpdateModal((prevState) => ({ ...prevState, isOpen: false }))
-      }
-      submitLabel="Update Device"
-      schema={updateSchema}
-      onSubmit={handleUpdateModal}
-      reloadData={refreshTable}
-    />
+    <>
+      {imageData ? (
+        <Modal
+          size="medium"
+          title={`Update system${
+            isMultiple ? 's' : ''
+          } to latest image version`}
+          isOpen={updateModal.isOpen}
+          openModal={() =>
+            setUpdateModal((prevState) => ({ ...prevState, isOpen: false }))
+          }
+          submitLabel="Update Device"
+          schema={updateSchema}
+          onSubmit={handleUpdateModal}
+          reloadData={refreshTable}
+        />
+      ) : (
+        <Backdrop>
+          <Bullseye>
+            <Spinner isSVG diameter="100px" />
+          </Bullseye>
+        </Backdrop>
+      )}
+    </>
   );
 };
 
@@ -160,6 +195,8 @@ UpdateDeviceModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     deviceData: PropTypes.array.isRequired,
     imageData: PropTypes.object,
+    imageId: PropTypes.number,
+    imageSetId: PropTypes.number,
   }).isRequired,
   setUpdateModal: PropTypes.func.isRequired,
 };

@@ -285,7 +285,7 @@ const DeviceTable = ({
                   display_name: rowData.rowInfo.display_name,
                 },
               ],
-              imageData: rowData.rowInfo.updateImageData,
+              imageSetId: rowData.rowInfo.imageSetId,
             };
           });
         },
