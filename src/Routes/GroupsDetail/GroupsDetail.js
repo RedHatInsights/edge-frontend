@@ -230,7 +230,8 @@ const GroupsDetail = () => {
                     ...prevState,
                     isOpen: true,
                     deviceData: [...deviceIds],
-                    imageData: deviceIds[0].updateImageData,
+                    imageSetId: deviceIds.find((device) => device?.imageSetId)
+                      .imageSetId,
                   })),
               },
             ]}
