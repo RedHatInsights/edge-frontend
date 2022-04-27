@@ -27,7 +27,11 @@ import {
   removeDevicesFromGroup,
 } from '../../api/index';
 import AddSystemsToGroupModal from '../Devices/AddSystemsToGroupModal';
-import { canUpdateSelectedDevices, stateToUrlSearch } from '../../constants';
+import {
+  canUpdateSelectedDevices,
+  emptyStateNoFliters,
+  stateToUrlSearch,
+} from '../../constants';
 import useApi from '../../hooks/useApi';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
@@ -204,7 +208,11 @@ const GroupsDetail = () => {
         </Flex>
       </PageHeader>
       <Main className="edge-devices">
-        {isLoading || data?.DevicesView?.total > 0 ? (
+        {!emptyStateNoFliters(
+          isLoading,
+          data?.DeviceGroup?.Devices.length,
+          history
+        ) ? (
           <DeviceTable
             data={data?.DevicesView?.devices || []}
             count={data?.DevicesView?.total}
