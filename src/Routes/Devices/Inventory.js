@@ -18,7 +18,10 @@ const UpdateDeviceModal = React.lazy(() =>
 );
 
 const Inventory = () => {
-  const [response, fetchData] = useApi({ api: getInventory });
+  const [response, fetchDevices] = useApi({
+    api: getInventory,
+    tableReload: true,
+  });
   const { data, isLoading, hasError } = response;
   const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
   const [isRemoveDeviceModalOpen, setIsRemoveDeviceModalOpen] = useState(false);
@@ -79,6 +82,7 @@ const Inventory = () => {
           ]}
           hasModalSubmitted={hasModalSubmitted}
           setHasModalSubmitted={setHasModalSubmitted}
+          fetchDevices={fetchDevices}
         />
       </Main>
       {updateModal.isOpen && (
@@ -101,7 +105,7 @@ const Inventory = () => {
             }}
             setUpdateModal={setUpdateModal}
             updateModal={updateModal}
-            refreshTable={fetchData}
+            refreshTable={fetchDevices}
           />
         </Suspense>
       )}
@@ -111,7 +115,7 @@ const Inventory = () => {
           setIsModalOpen={setIsAddDeviceModalOpen}
           setIsCreateGroupModalOpen={setIsCreateGroupModalOpen}
           reloadData={() => {
-            fetchData();
+            fetchDevices();
             setTimeout(() => setHasModalSubmitted(true), 800);
           }}
           deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
@@ -122,7 +126,7 @@ const Inventory = () => {
           isModalOpen={isCreateGroupModalOpen}
           setIsModalOpen={setIsCreateGroupModalOpen}
           reloadData={() => {
-            fetchData();
+            fetchDevices();
             setTimeout(() => setHasModalSubmitted(true), 800);
           }}
           deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
@@ -133,7 +137,7 @@ const Inventory = () => {
           isModalOpen={isRemoveDeviceModalOpen}
           setIsModalOpen={setIsRemoveDeviceModalOpen}
           reloadData={() => {
-            fetchData();
+            fetchDevices();
             setTimeout(() => setHasModalSubmitted(true), 800);
           }}
           deviceInfo={isRowSelected ? deviceId : checkedDeviceIds}

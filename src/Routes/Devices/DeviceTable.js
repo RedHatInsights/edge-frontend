@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
 import { Split, SplitItem, Tooltip } from '@patternfly/react-core';
-import { loadDeviceTable } from '../../store/actions';
 import CustomEmptyState from '../../components/Empty';
 import { useHistory } from 'react-router-dom';
 import {
@@ -65,10 +64,6 @@ const DeviceStatus = ({ status }) => {
 const defaultFilters = [
   {
     label: 'Name',
-    type: 'text',
-  },
-  {
-    label: 'Image',
     type: 'text',
   },
   {
@@ -227,6 +222,7 @@ const DeviceTable = ({
   handleRemoveDevicesFromGroup,
   hasModalSubmitted,
   setHasModalSubmitted,
+  fetchDevices,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -330,9 +326,10 @@ const DeviceTable = ({
         />
       ) : (
         <GeneralTable
-          apiFilterSort={false}
+          apiFilterSort={true}
+          isUseApi={true}
           filters={defaultFilters}
-          loadTableData={loadDeviceTable}
+          loadTableData={fetchDevices}
           tableData={{
             count: count,
             isLoading: isLoading,
@@ -388,6 +385,7 @@ DeviceTable.propTypes = {
   setHasModalSubmitted: PropTypes.func,
   handleAddDevicesToGroup: PropTypes.func,
   handleRemoveDevicesFromGroup: PropTypes.func,
+  fetchDevices: PropTypes.func,
 };
 
 export default DeviceTable;

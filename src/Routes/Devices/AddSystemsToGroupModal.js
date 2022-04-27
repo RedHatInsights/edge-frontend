@@ -12,7 +12,10 @@ const AddSystemsToGroupModal = ({
   isOpen,
   reloadData,
 }) => {
-  const [response] = useApi({ api: getInventory });
+  const [response, fetchDevices] = useApi({
+    api: getInventory,
+    tableReload: true,
+  });
   const { data, isLoading, hasError } = response;
   const [deviceIds, setDeviceIds] = useState([]);
 
@@ -51,8 +54,9 @@ const AddSystemsToGroupModal = ({
         hasCheckbox={true}
         isLoading={isLoading}
         hasError={hasError}
-        count={data?.data?.total}
+        count={data?.count}
         data={data?.data?.devices || []}
+        fetchDevices={fetchDevices}
       />
     </Modal>
   );
