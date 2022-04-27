@@ -46,6 +46,7 @@ const DeviceDetail = () => {
     ({ entityDetails }) => entityDetails?.entity?.id
   );
 
+  const [imageData, setImageData] = useState();
   const [updateModal, setUpdateModal] = useState({
     isOpen: false,
     deviceData: null,
@@ -64,6 +65,7 @@ const DeviceDetail = () => {
         return;
       }
       const image_data = await getDeviceHasUpdate(deviceId);
+      setImageData(image_data);
       setIsDeviceStatusLoading(false);
       setUpdateModal((prevState) => ({
         ...prevState,
@@ -72,16 +74,9 @@ const DeviceDetail = () => {
           {
             display_name: entity.display_name,
             id: entity.id,
-            system_profile: {
-              image_data,
-              status:
-                image_data?.UpdateTransactions?.[
-                  image_data.UpdateTransactions.length - 1
-                ]?.Status,
-            },
           },
         ],
-        imageData: image_data?.ImageInfo?.UpdatesAvailable?.[0],
+        imageSetId: imageData?.ImageInfo?.Image?.ImageSetID,
       }));
       setImageId(image_data?.ImageInfo?.Image?.ID);
     })();
@@ -131,18 +126,13 @@ const DeviceDetail = () => {
               {
                 title: 'Update',
                 isDisabled:
-                  updateModal.deviceData?.system_profile?.image_data
-                    ?.UpdateTransactions?.[
-                    updateModal.deviceData?.system_profile?.image_data
-                      ?.UpdateTransactions.length - 1
+                  imageData?.UpdateTransactions?.[
+                    imageData?.UpdateTransactions.length - 1
                   ]?.Status === 'BUILDING' ||
-                  updateModal.deviceData?.system_profile?.image_data
-                    ?.UpdateTransactions?.[
-                    updateModal.deviceData?.system_profile?.image_data
-                      ?.UpdateTransactions.length - 1
+                  imageData?.UpdateTransactions?.[
+                    imageData?.UpdateTransactions.length - 1
                   ]?.Status === 'CREATED' ||
-                  !updateModal.deviceData?.system_profile?.image_data?.ImageInfo
-                    ?.UpdatesAvailable?.length > 0,
+                  !imageData?.ImageInfo?.UpdatesAvailable?.length > 0,
                 onClick: () => {
                   setUpdateModal((prevState) => ({
                     ...prevState,
@@ -157,8 +147,8 @@ const DeviceDetail = () => {
 
           {isDeviceStatusLoading ? (
             <Skeleton size={SkeletonSize.xs} />
-          ) : updateModal?.deviceData?.system_profile?.status === 'BUILDING' ||
-            updateModal?.deviceData?.system_profile?.status === 'CREATED' ? (
+          ) : imageData?.UpdateTransactions?.Status === 'BUILDING' ||
+            imageData?.UpdateTransactions?.Status === 'CREATED' ? (
             <Label
               className="pf-u-mt-sm"
               color="blue"
@@ -166,8 +156,7 @@ const DeviceDetail = () => {
             >
               Updating
             </Label>
-          ) : updateModal?.deviceData?.system_profile?.image_data?.ImageInfo
-              ?.UpdatesAvailable?.length > 0 ? (
+          ) : imageData?.ImageInfo?.UpdatesAvailable?.length > 0 ? (
             <Label
               className="pf-u-mt-sm"
               color="orange"
