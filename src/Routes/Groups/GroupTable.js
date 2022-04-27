@@ -75,16 +75,7 @@ const GroupTable = ({
                 id: device.UUID,
                 display_name: device.Name,
               })),
-              imageData: {
-                Image: {
-                  Name: devicesImageInfo[0].Name,
-                  Version: devicesImageInfo[0].Version,
-                  CreatedAt: devicesImageInfo[0].CreatedAt,
-                  Distribution: devicesImageInfo[0].Distribution,
-                  CommitID: devicesImageInfo[0].CommitID,
-                },
-                PackageDiff: devicesImageInfo[0].PackageDiff,
-              },
+              imageId: devices.find((device) => device?.ImageID).ImageID,
               isOpen: true,
             })),
           isDisabled: devices.length > 0 ? !(hasValidImage && hasUpdate) : true,

@@ -121,13 +121,6 @@ const GroupsDetail = () => {
     setTimeout(() => setHasModalSubmitted(true), 800);
   };
 
-  const getDeviceStatus = (deviceData) =>
-    deviceData?.ImageInfo?.UpdatesAvailable
-      ? 'updateAvailable'
-      : deviceData?.Device?.Booted
-      ? 'running'
-      : 'booting';
-
   return (
     <>
       <PageHeader className="pf-m-light">
@@ -175,28 +168,27 @@ const GroupsDetail = () => {
                 <DropdownItem
                   key="update-all-devices"
                   isDisabled={canUpdateSelectedDevices({
-                    deviceData: data?.Devices?.data?.map((device) => ({
-                      imageSetId: device?.ImageInfo?.Image.ImageSetID,
+                    deviceData: data?.DevicesView?.devices?.map((device) => ({
+                      imageSetId: device?.ImageSetID,
                     })),
-                    imageData:
-                      data?.Devices?.data[0].ImageInfo?.UpdatesAvailable?.[0],
+                    imageData: data?.DevicesView?.devices?.some(
+                      (device) => device.ImageID
+                    ),
                   })}
                   onClick={() =>
                     setUpdateModal((prevState) => ({
                       ...prevState,
                       isOpen: true,
-                      deviceData: data?.Devices?.data?.map((device) => ({
-                        deviceID: device?.Device?.ID,
-                        id: device?.Device?.UUID,
-                        display_name: device?.Device?.DeviceName,
-                        updateImageData:
-                          device?.ImageInfo?.UpdatesAvailable?.[0],
-                        deviceStatus: getDeviceStatus(device),
-                        imageSetId: device?.ImageInfo?.Image?.ImageSetID,
-                        imageName: device?.ImageInfo?.Image?.Name,
+                      deviceData: data?.DevicesView?.devices?.map((device) => ({
+                        id: device?.DeviceUUID,
+                        display_name:
+                          device?.DeviceName === ''
+                            ? 'localhost'
+                            : device?.DeviceName,
                       })),
-                      imageData:
-                        data?.Devices?.data[0].ImageInfo.UpdatesAvailable?.[0],
+                      imageSetId: data?.DevicesView?.devices.find(
+                        (device) => device.ImageSetID
+                      )?.ImageSetID,
                     }))
                   }
                 >
@@ -238,7 +230,8 @@ const GroupsDetail = () => {
                     ...prevState,
                     isOpen: true,
                     deviceData: [...deviceIds],
-                    imageData: deviceIds[0].updateImageData,
+                    imageSetId: deviceIds.find((device) => device?.imageSetId)
+                      .imageSetId,
                   })),
               },
             ]}
