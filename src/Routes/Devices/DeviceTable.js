@@ -338,7 +338,7 @@ const DeviceTable = ({
           columnNames={columnNames}
           rows={createRows(data || [])}
           actionResolver={actionResolver}
-          defaultSort={{ index: 3, direction: 'desc' }}
+          defaultSort={{ index: 4, direction: 'desc' }}
           toolbarButtons={
             canBeAdded
               ? [

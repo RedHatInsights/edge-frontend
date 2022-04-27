@@ -100,7 +100,7 @@ const GeneralTable = ({
           offset: (page - 1) * perPage,
           ...transformSort({
             direction: sortBy.direction,
-            name: columns[sortBy.index].type,
+            name: columns[hasCheckbox ? sortBy.index - 1 : sortBy.index].type,
           }),
         }
       : null;
@@ -190,7 +190,6 @@ const GeneralTable = ({
     : 0;
 
   const handleSort = (_event, index, direction) => {
-    hasCheckbox ? (index = index - 1) : index;
     setSortBy({ index, direction });
   };
 
@@ -351,7 +350,7 @@ const GeneralTable = ({
         data-testid="general-table-testid"
         variant="compact"
         aria-label="General Table Component"
-        sortBy={hasCheckbox ? { ...sortBy, index: sortBy.index + 1 } : sortBy}
+        sortBy={sortBy}
         onSort={handleSort}
         actionResolver={actionResolver ? actionResolver : null}
         areActionsDisabled={areActionsDisabled}

@@ -83,7 +83,7 @@ const WizardRepositoryTable = ({ ...props }) => {
           }}
           columnNames={[{ title: 'Name', type: 'name', sort: true }]}
           rows={isLoading ? [] : buildRows(data)}
-          defaultSort={{ index: 0, direction: 'desc' }}
+          defaultSort={{ index: 1, direction: 'desc' }}
           hasCheckbox={true}
           selectedItems={getRepoIds}
           initSelectedItems={wizardState}
