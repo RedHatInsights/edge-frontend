@@ -54,6 +54,7 @@ exports[`Empty renders correctly 1`] = `
         data-ouia-component-type="PF4/Button"
         data-ouia-safe="true"
         href="#"
+        target="_blank"
       >
         Secondary action
         <svg
