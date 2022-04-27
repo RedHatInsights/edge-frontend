@@ -67,10 +67,6 @@ const defaultFilters = [
     type: 'text',
   },
   {
-    label: 'Image',
-    type: 'text',
-  },
-  {
     label: 'Status',
     type: 'checkbox',
     options: [
