@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   TextContent,
   Text,
@@ -35,13 +35,15 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
     ? updateModal.deviceData.map((device) => device.display_name)
     : updateModal?.deviceData[0]?.display_name;
 
-  updateModal?.imageSetId
-    ? getImageSet({ id: updateModal.imageSetId }).then((data) =>
-        setImageData(data.Data.images[0])
-      )
-    : getImageData(updateModal.imageId).then((data) =>
-        setImageData(data.Data.images[0])
-      );
+  useEffect(() => {
+    updateModal?.imageSetId
+      ? getImageSet({ id: updateModal.imageSetId }).then((data) =>
+          setImageData(data.Data.images[0])
+        )
+      : getImageData(updateModal.imageId).then((data) =>
+          setImageData(data.Data.images[0])
+        );
+  }, []);
 
   const handleUpdateModal = async () => {
     try {
@@ -123,9 +125,9 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   const packageDetails = {
     title: `Changes from version ${imageData?.image.Version - 1}`,
     rows: [
-      { title: 'Added', value: imageData?.update_added?.length || 0 },
-      { title: 'Removed', value: imageData?.update_removed?.length || 0 },
-      { title: 'Updated', value: imageData?.update_updated?.length || 0 },
+      { title: 'Added', value: imageData?.update_added || 0 },
+      { title: 'Removed', value: imageData?.update_removed || 0 },
+      { title: 'Updated', value: imageData?.update_updated || 0 },
     ],
   };
 
