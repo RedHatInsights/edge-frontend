@@ -27,7 +27,7 @@ const getImageData = (imageId) =>
   );
 
 const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
-  const [imageData, setImageData] = useState();
+  const [imageData, setImageData] = useState(null);
   const dispatch = useDispatch();
   const isMultiple = updateModal.deviceData.length > 1;
   const deviceId = updateModal.deviceData.map((device) => device.id);
