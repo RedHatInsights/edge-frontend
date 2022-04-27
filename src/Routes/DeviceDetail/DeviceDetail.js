@@ -76,7 +76,7 @@ const DeviceDetail = () => {
             id: entity.id,
           },
         ],
-        imageSetId: imageData?.ImageInfo?.Image?.ImageSetID,
+        imageSetId: image_data?.ImageInfo?.Image?.ImageSetID,
       }));
       setImageId(image_data?.ImageInfo?.Image?.ID);
     })();
@@ -132,7 +132,8 @@ const DeviceDetail = () => {
                   imageData?.UpdateTransactions?.[
                     imageData?.UpdateTransactions.length - 1
                   ]?.Status === 'CREATED' ||
-                  !imageData?.ImageInfo?.UpdatesAvailable?.length > 0,
+                  !imageData?.ImageInfo?.UpdatesAvailable?.length > 0 ||
+                  !updateModal.imageSetId,
                 onClick: () => {
                   setUpdateModal((prevState) => ({
                     ...prevState,
