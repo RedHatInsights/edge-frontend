@@ -57,7 +57,7 @@ const GroupsDetail = () => {
     deviceData: null,
     imageData: null,
   });
-  const [response, fetchData] = useApi({ api: () => getGroupById(groupId) });
+  const [response, fetchDevices] = useApi({ api: () => getGroupById(groupId) });
   const { data, isLoading, hasError } = response;
   const { groupId } = params;
   const groupName = data?.DeviceGroup?.Name;
@@ -248,6 +248,7 @@ const GroupsDetail = () => {
             setUpdateModal={setUpdateModal}
             hasModalSubmitted={hasModalSubmitted}
             setHasModalSubmitted={setHasModalSubmitted}
+            fetchDevices={fetchDevices}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
@@ -275,7 +276,7 @@ const GroupsDetail = () => {
           groupId={groupId}
           closeModal={() => setIsAddModalOpen(false)}
           isOpen={isAddModalOpen}
-          reloadData={fetchData}
+          reloadData={fetchDevices}
         />
       )}
       {removeModal.isOpen && (
@@ -299,7 +300,7 @@ const GroupsDetail = () => {
               ? handleSingleDeviceRemoval
               : handleBulkDeviceRemoval
           }
-          reloadData={fetchData}
+          reloadData={fetchDevices}
         />
       )}
 
@@ -323,7 +324,7 @@ const GroupsDetail = () => {
             }}
             setUpdateModal={setUpdateModal}
             updateModal={updateModal}
-            refreshTable={fetchData}
+            refreshTable={fetchDevices}
           />
         </Suspense>
       )}
