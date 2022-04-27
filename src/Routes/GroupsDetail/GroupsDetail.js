@@ -44,6 +44,7 @@ const GroupsDetail = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const history = useHistory();
+  const { groupId } = params;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -57,9 +58,12 @@ const GroupsDetail = () => {
     deviceData: null,
     imageData: null,
   });
-  const [response, fetchDevices] = useApi({ api: () => getGroupById(groupId) });
+  const [response, fetchDevices] = useApi({
+    api: getGroupById,
+    byId: groupId,
+    tableReload: true,
+  });
   const { data, isLoading, hasError } = response;
-  const { groupId } = params;
   const groupName = data?.DeviceGroup?.Name;
   const [deviceIds, getDeviceIds] = useState([]);
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);

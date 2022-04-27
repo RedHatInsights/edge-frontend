@@ -442,7 +442,7 @@ export const editCustomRepository = (payload) => {
 export const removeCustomRepository = (id) =>
   instance.delete(`${EDGE_API}/thirdpartyrepo/${id}`);
 
-export const getInventory = (q) => {
+export const getInventory = ({ q }) => {
   const query = getTableParams(q);
   return instance.get(`${EDGE_API}/devices/devicesview?${query}`);
 };
@@ -454,13 +454,14 @@ export const createGroup = (payload) => {
   });
 };
 
-export const getGroups = (q) => {
+export const getGroups = ({ q }) => {
   const query = getTableParams(q);
   return instance.get(`${EDGE_API}/device-groups?${query}`);
 };
 
-export const getGroupById = (id) => {
-  return instance.get(`${EDGE_API}/device-groups/${id}/view`);
+export const getGroupById = ({ id, q }) => {
+  const query = getTableParams(q);
+  return instance.get(`${EDGE_API}/device-groups/${id}/view?${query}`);
 };
 
 export const updateGroupById = (id, payload) => {

@@ -74,9 +74,7 @@ const GeneralTable = ({
   const defaultCheckedRows = initSelectedItems ? initSelectedItems : [];
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
-  const [sortBy, setSortBy] = useState(
-    hasCheckbox ? { ...defaultSort, index: defaultSort.index + 1 } : defaultSort
-  );
+  const [sortBy, setSortBy] = useState(defaultSort);
   const [perPage, setPerPage] = useState(20);
   const [page, setPage] = useState(1);
   const [checkedRows, setCheckedRows] = useState(defaultCheckedRows);
@@ -85,7 +83,7 @@ const GeneralTable = ({
 
   useEffect(() => {
     if (
-      !history.location.search.includes('add_system_modal=true') &&
+      //!history.location.search.includes('add_system_modal=true') &&
       !history.location.search.includes('create_image=true') &&
       !history.location.search.includes('update_image=true')
     ) {
@@ -352,7 +350,7 @@ const GeneralTable = ({
         data-testid="general-table-testid"
         variant="compact"
         aria-label="General Table Component"
-        sortBy={sortBy}
+        sortBy={hasCheckbox ? { ...sortBy, index: sortBy.index + 1 } : sortBy}
         onSort={handleSort}
         actionResolver={actionResolver ? actionResolver : null}
         areActionsDisabled={areActionsDisabled}
