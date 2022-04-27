@@ -190,6 +190,7 @@ const GeneralTable = ({
     : 0;
 
   const handleSort = (_event, index, direction) => {
+    hasCheckbox ? (index = index - 1) : index;
     setSortBy({ index, direction });
   };
 
