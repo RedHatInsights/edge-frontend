@@ -2,7 +2,7 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-const useApi = ({ api, byId, statusMessages, tableReload = false }) => {
+const useApi = ({ api, id = null, statusMessages, tableReload = false }) => {
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,7 +25,7 @@ const useApi = ({ api, byId, statusMessages, tableReload = false }) => {
   const fetchData = async (query = '') => {
     setIsLoading(true);
     try {
-      const data = await api(byId ? { id: byId, q: query } : { q: query });
+      const data = await api({ id, query });
       setData(data);
 
       if (hasSuccess) {

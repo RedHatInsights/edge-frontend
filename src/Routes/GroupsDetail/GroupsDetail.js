@@ -60,7 +60,7 @@ const GroupsDetail = () => {
   });
   const [response, fetchDevices] = useApi({
     api: getGroupById,
-    byId: groupId,
+    id: groupId,
     tableReload: true,
   });
   const { data, isLoading, hasError } = response;
