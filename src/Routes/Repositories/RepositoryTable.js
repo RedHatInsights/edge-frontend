@@ -8,6 +8,9 @@ const filters = [{ label: 'Name', type: 'text' }];
 
 const RepositoryTable = ({ data, openModal }) => {
   const actionResolver = (rowData) => {
+    if (!rowData.rowInfo) {
+      return [];
+    }
     const { id, repoName, repoBaseURL } = rowData.rowInfo;
     return [
       {
