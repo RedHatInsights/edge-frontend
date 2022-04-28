@@ -70,7 +70,6 @@ const DeviceDetail = () => {
       setUpdateModal((prevState) => ({
         ...prevState,
         deviceData: [
-          ...(prevState.deviceData || []),
           {
             display_name: entity.display_name,
             id: entity.id,
