@@ -22,7 +22,7 @@ const createGroupSchema = {
       name: 'name',
       label: 'Group name',
       helperText:
-        'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
+        'Name must start with alphanumeric characters and can contain underscore and hyphen characters.',
       isRequired: true,
       validate: [
         { type: validatorTypes.REQUIRED },
