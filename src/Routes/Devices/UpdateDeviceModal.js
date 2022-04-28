@@ -37,9 +37,13 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
 
   useEffect(() => {
     updateModal?.imageSetId
-      ? getImageSet({ id: updateModal.imageSetId }).then((data) =>
-          setImageData(data.Data.images[0])
-        )
+      ? getImageSet({
+          id: updateModal.imageSetId,
+          q: {
+            limit: 1,
+            sort_by: '-created_at',
+          },
+        }).then((data) => setImageData(data.Data.images[0]))
       : getImageData(updateModal.imageId).then((data) =>
           setImageData(data.Data.images[0])
         );
