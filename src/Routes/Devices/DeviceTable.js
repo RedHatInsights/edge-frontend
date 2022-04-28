@@ -14,6 +14,8 @@ import {
   InProgressIcon,
 } from '@patternfly/react-icons';
 import { emptyStateNoFliters } from '../../constants';
+import infoColor from '@patternfly/react-tokens/dist/esm/global_active_color_300';
+import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 
 const getDeviceStatus = (deviceStatus, isUpdateAvailable) =>
   deviceStatus === 'UPDATING'
@@ -43,15 +45,15 @@ const DeviceStatus = ({ status }) => {
     updateAvailable: (
       <Split className="pf-u-warning-color-100">
         <SplitItem className="pf-u-mr-sm">
-          <ExclamationTriangleIcon />
+          <ExclamationTriangleIcon color={warningColor.value} />
         </SplitItem>
         <SplitItem>Update Available</SplitItem>
       </Split>
     ),
     updating: (
-      <Split className="pf-u-info-color-100">
+      <Split className="pf-u-active-color-100">
         <SplitItem className="pf-u-mr-sm">
-          <InProgressIcon />
+          <InProgressIcon color={infoColor.value} />
         </SplitItem>
         <SplitItem>Updating</SplitItem>
       </Split>
@@ -193,8 +195,7 @@ const createRows = (devices) => {
               : deviceGroupTooltip,
         },
         {
-          // needs to be fixed with proper date
-          title: <DateFormat date={LastSeen.split(' ')[0]} />,
+          title: <DateFormat date={LastSeen} />,
         },
         {
           title: (
