@@ -23,7 +23,13 @@ import { distributionMapper } from '../ImageManagerDetail/constants';
 
 const getImageData = (imageId) =>
   getImageById({ id: imageId }).then((imageSetId) =>
-    getImageSet({ id: imageSetId?.image?.ImageSetID })
+    getImageSet({
+      id: imageSetId?.image?.ImageSetID,
+      q: {
+        limit: 1,
+        sort_by: '-created_at',
+      },
+    })
   );
 
 const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
@@ -37,9 +43,13 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
 
   useEffect(() => {
     updateModal?.imageSetId
-      ? getImageSet({ id: updateModal.imageSetId }).then((data) =>
-          setImageData(data.Data.images[0])
-        )
+      ? getImageSet({
+          id: updateModal.imageSetId,
+          q: {
+            limit: 1,
+            sort_by: '-created_at',
+          },
+        }).then((data) => setImageData(data.Data.images[0]))
       : getImageData(updateModal.imageId).then((data) =>
           setImageData(data.Data.images[0])
         );
