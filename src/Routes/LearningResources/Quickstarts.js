@@ -19,12 +19,12 @@ const quickstarts = [
       name: 'build-register-images',
     },
     spec: {
-      displayName: 'Build and register RHEL for Edge images',
+      displayName: 'Create RHEL for Edge images and configure automated management',
       icon: <BookIcon />,
       description:
         'With the edge management application, you can create an image and manage the packages associated with an image. You can build an image, download it, install it on a node, and then register that node so it can receive updates.',
       link: {
-        href: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/getting_started/index',
+        href: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/create_rhel_for_edge_images_and_configure_automated_management/index',
       },
       type: { text: 'Documentation', color: 'orange' },
     },
@@ -36,7 +36,7 @@ const quickstarts = [
       name: 'working-with-systems',
     },
     spec: {
-      displayName: 'Working with systems',
+      displayName: 'Working with systems in the edge management application',
       icon: <BookIcon />,
       description:
         'Group, connect, and manage edge systems after registering them with the edge management console.',
