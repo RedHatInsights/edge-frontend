@@ -8,7 +8,7 @@ const AuthModal = () => {
       style={{ padding: '15px' }}
       isOpen={true}
       variant="small"
-      onClose={() => (window.location.href = 'https://www.redhat.com/en')}
+      onClose={() => (window.location.href = 'https://console.redhat.com/')}
       aria-label="auth-modal"
       header={
         <h2 className="pf-u-pr-xl pf-u-pl-xl pf-u-font-size-2xl pf-u-text-align-center pf-u-font-weight-bold">
@@ -49,7 +49,7 @@ const AuthModal = () => {
             component="a"
             key="not-now"
             variant="link"
-            href="https://www.redhat.com/en"
+            href="https://console.redhat.com/"
           >
             Not now
           </Button>
