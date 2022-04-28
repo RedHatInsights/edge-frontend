@@ -23,7 +23,13 @@ import { distributionMapper } from '../ImageManagerDetail/constants';
 
 const getImageData = (imageId) =>
   getImageById({ id: imageId }).then((imageSetId) =>
-    getImageSet({ id: imageSetId?.image?.ImageSetID })
+    getImageSet({
+      id: imageSetId?.image?.ImageSetID,
+      q: {
+        limit: 1,
+        sort_by: '-created_at',
+      },
+    })
   );
 
 const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
