@@ -7,7 +7,7 @@ import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import { nameValidator } from '../../../constants';
 
 const helperText =
-  'Can only contain letters, numbers, spaces, hyphens( - ), and underscores( _ ).';
+  'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).';
 
 const asyncImageNameValidation = (value) =>
   checkImageName(value)

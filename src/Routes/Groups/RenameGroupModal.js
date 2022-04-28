@@ -28,8 +28,8 @@ const createGroupSchema = {
         { type: validatorTypes.REQUIRED },
 
         { type: validatorTypes.MAX_LENGTH, threshold: 50 },
-        asyncGroupNameValidation,
         nameValidator,
+        asyncGroupNameValidation,
       ],
     },
   ],

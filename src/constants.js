@@ -124,9 +124,9 @@ export const imageArchMapper = {
 
 export const nameValidator = {
   type: validatorTypes.PATTERN,
-  pattern: /^[A-Za-z0-9]+[A-Za-z0-9_-\s]*$/,
+  pattern: /^[A-Za-z0-9]+[A-Za-z0-9_\-\s]*$/,
   message:
-    'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
+    'Name must start with alphanumeric characters and can contain underscore and hyphen characters.',
 };
 
 export const mapUrlToObj = (url, keys) => {
