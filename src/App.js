@@ -6,12 +6,13 @@ import { notificationsReducer } from '@redhat-cloud-services/frontend-components
 import { NotificationPortal } from '@redhat-cloud-services/frontend-components-notifications/NotificationPortal';
 import './App.scss';
 import AuthModal from './components/AuthModal';
+import { Bullseye, Spinner } from '@patternfly/react-core';
 
 const App = (props) => {
   const { getRegistry } = useContext(RegistryContext);
   const [isLogged, setIsLogged] = useState(false);
   const history = useHistory();
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(null);
   useEffect(() => {
     insights.chrome.init();
     // TODO change this to your appname
@@ -42,7 +43,15 @@ const App = (props) => {
   return (
     <Fragment>
       <NotificationPortal />
-      {isAuth && isLogged ? <Routes childProps={props} /> : <AuthModal />}
+      {isAuth && isLogged ? (
+        <Routes childProps={props} />
+      ) : isAuth === null ? (
+        <Bullseye>
+          <Spinner size="xl" />
+        </Bullseye>
+      ) : (
+        <AuthModal />
+      )}
     </Fragment>
   );
 };
