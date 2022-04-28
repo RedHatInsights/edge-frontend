@@ -25,7 +25,7 @@ const DeviceDetailTabs = ({
         </Tab>
         <Tab eventKey={1} title={<TabTitleText>Vulnerability</TabTitleText>}>
           <VulnerabilityTab
-            systemProfile={systemProfile}
+            deviceData={systemProfile}
             setUpdateModal={setUpdateModal}
             imageId={imageId}
             setReload={setReload}

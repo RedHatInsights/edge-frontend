@@ -70,7 +70,6 @@ const DeviceDetail = () => {
       setUpdateModal((prevState) => ({
         ...prevState,
         deviceData: [
-          ...(prevState.deviceData || []),
           {
             display_name: entity.display_name,
             id: entity.id,
@@ -148,8 +147,12 @@ const DeviceDetail = () => {
 
           {isDeviceStatusLoading ? (
             <Skeleton size={SkeletonSize.xs} />
-          ) : imageData?.UpdateTransactions?.Status === 'BUILDING' ||
-            imageData?.UpdateTransactions?.Status === 'CREATED' ? (
+          ) : imageData?.UpdateTransactions[
+              imageData?.UpdateTransactions?.length - 1
+            ]?.Status === 'BUILDING' ||
+            imageData?.UpdateTransactions[
+              imageData?.UpdateTransactions?.length - 1
+            ]?.Status === 'CREATED' ? (
             <Label
               className="pf-u-mt-sm"
               color="blue"
@@ -157,7 +160,7 @@ const DeviceDetail = () => {
             >
               Updating
             </Label>
-          ) : imageData?.ImageInfo?.UpdatesAvailable?.length > 0 ? (
+          ) : imageData?.Device?.UpdateAvailable ? (
             <Label
               className="pf-u-mt-sm"
               color="orange"
@@ -178,7 +181,7 @@ const DeviceDetail = () => {
         <Grid gutter="md">
           <GridItem span={12}>
             <DeviceDetailTabs
-              systemProfile={updateModal?.deviceData}
+              systemProfile={imageData}
               imageId={imageId}
               setUpdateModal={setUpdateModal}
               setReload={setReload}
