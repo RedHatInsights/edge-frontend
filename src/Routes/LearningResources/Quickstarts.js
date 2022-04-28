@@ -19,7 +19,8 @@ const quickstarts = [
       name: 'build-register-images',
     },
     spec: {
-      displayName: 'Create RHEL for Edge images and configure automated management',
+      displayName:
+        'Create RHEL for Edge images and configure automated management',
       icon: <BookIcon />,
       description:
         'With the edge management application, you can create an image and manage the packages associated with an image. You can build an image, download it, install it on a node, and then register that node so it can receive updates.',

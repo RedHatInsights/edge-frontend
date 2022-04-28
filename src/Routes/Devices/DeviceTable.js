@@ -318,7 +318,8 @@ const DeviceTable = ({
           }
           secondaryActions={[
             {
-              title: 'Create RHEL for Edge images and configure automated management',
+              title:
+                'Create RHEL for Edge images and configure automated management',
               link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/create_rhel_for_edge_images_and_configure_automated_management/index',
               type: 'link',
             },
