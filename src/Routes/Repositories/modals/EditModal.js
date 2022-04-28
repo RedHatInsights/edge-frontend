@@ -49,7 +49,7 @@ const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
 
   return (
     <Modal
-      title="Edit Repository"
+      title="Edit repository"
       isOpen={isOpen}
       openModal={() => openModal({ type: 'edit' })}
       submitLabel="Update"
