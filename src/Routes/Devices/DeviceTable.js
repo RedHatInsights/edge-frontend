@@ -49,9 +49,9 @@ const DeviceStatus = ({ status }) => {
       </Split>
     ),
     updating: (
-      <Split className="pf-u-warning-color-100">
+      <Split className="pf-u-info-color-100">
         <SplitItem className="pf-u-mr-sm">
-          <ExclamationTriangleIcon />
+          <InProgressIcon />
         </SplitItem>
         <SplitItem>Updating</SplitItem>
       </Split>
