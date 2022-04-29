@@ -195,7 +195,7 @@ const createRows = (devices) => {
               : deviceGroupTooltip,
         },
         {
-          title: <DateFormat date={LastSeen} />,
+          title: LastSeen ? <DateFormat date={LastSeen} /> : 'Unknown',
         },
         {
           title: (
