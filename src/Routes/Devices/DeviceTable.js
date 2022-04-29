@@ -72,10 +72,10 @@ const defaultFilters = [
     label: 'Status',
     type: 'checkbox',
     options: [
-      { option: 'Booting', value: 'booting' },
-      { option: 'Running', value: 'running' },
+      // { option: 'Booting', value: 'booting' },
+      // { option: 'Running', value: 'running' },
       { option: 'Update Available', value: 'updateAvailable' },
-      { option: 'Updating', value: 'updating' },
+      // { option: 'Updating', value: 'updating' },
     ],
   },
 ];
