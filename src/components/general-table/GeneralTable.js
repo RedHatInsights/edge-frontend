@@ -105,6 +105,11 @@ const GeneralTable = ({
         }
       : null;
 
+    if (query?.status === 'updateAvailable') {
+      delete query.status;
+      query.update_available = 'true';
+    }
+
     if (isUseApi) {
       loadTableData(query);
       return;
