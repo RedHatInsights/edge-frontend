@@ -183,7 +183,8 @@ const GroupsDetail = () => {
                       (device) => device.ImageID
                     ),
                   })}
-                  onClick={() =>
+                  onClick={() => {
+                    setIsDropdownOpen(false);
                     setUpdateModal((prevState) => ({
                       ...prevState,
                       isOpen: true,
@@ -197,8 +198,8 @@ const GroupsDetail = () => {
                       imageSetId: data?.DevicesView?.devices.find(
                         (device) => device.ImageSetID
                       )?.ImageSetID,
-                    }))
-                  }
+                    }));
+                  }}
                 >
                   Update
                 </DropdownItem>,
