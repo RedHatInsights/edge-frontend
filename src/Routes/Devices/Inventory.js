@@ -57,6 +57,7 @@ const Inventory = () => {
       </PageHeader>
       <Main className="edge-devices">
         <DeviceTable
+          isSystemsView={true}
           data={data?.data?.devices}
           count={data?.count}
           isLoading={isLoading}

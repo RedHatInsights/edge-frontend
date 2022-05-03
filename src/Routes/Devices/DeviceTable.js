@@ -224,6 +224,7 @@ const DeviceTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
   fetchDevices,
+  isSystemsView = null,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -309,7 +310,7 @@ const DeviceTable = ({
 
   return (
     <>
-      {emptyStateNoFliters(isLoading, count, history) ? (
+      {isSystemsView && emptyStateNoFliters(isLoading, count, history) ? (
         <CustomEmptyState
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}
@@ -388,6 +389,7 @@ DeviceTable.propTypes = {
   handleAddDevicesToGroup: PropTypes.func,
   handleRemoveDevicesFromGroup: PropTypes.func,
   fetchDevices: PropTypes.func,
+  isSystemsView: PropTypes.bool,
 };
 
 export default DeviceTable;
