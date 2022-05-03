@@ -224,7 +224,7 @@ const DeviceTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
   fetchDevices,
-  isSystemsView = null,
+  isSystemsView = false,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
