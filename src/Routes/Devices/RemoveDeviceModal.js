@@ -31,7 +31,7 @@ const removeDescription = (deviceInfo) => {
   return (
     <Text>
       Do you want to remove <strong>{systemText} </strong> from{' '}
-      <strong>{groupText}</strong>
+      <strong>{groupText}</strong>?
     </Text>
   );
 };
