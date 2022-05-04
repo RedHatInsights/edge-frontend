@@ -19,7 +19,7 @@ const StatusLabel = ({ status }) => {
     text = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   }
   return (
-    <Split>
+    <Split style={{ color: color }}>
       <SplitItem className="pf-u-mr-sm">{icon(color)}</SplitItem>
       <SplitItem>{text}</SplitItem>
     </Split>
