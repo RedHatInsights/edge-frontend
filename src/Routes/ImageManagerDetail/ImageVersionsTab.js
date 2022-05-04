@@ -138,9 +138,19 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
 
     return actionsArray;
   };
+  let imageLatestVersion = imageData?.data?.Data?.images?.[0].image?.Version;
 
-  const areActionsDisabled = (rowData) =>
-    rowData.rowInfo?.imageStatus === 'BUILDING';
+  const areActionsDisabledForNonLatestImageVersion = (rowData) => {
+    for (let i = 0; i < imageLatestVersion; i++) {
+      if (
+        imageData?.data?.Data?.images?.[i].image?.Version <
+          imageLatestVersion ||
+        rowData.rowInfo?.imageStatus === 'BUILDING'
+      ) {
+        return true;
+      }
+    }
+  };
 
   return (
     <Main className="add-100vh">
@@ -156,7 +166,7 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
         columnNames={columnNames}
         rows={rows || []}
         actionResolver={actionResolver}
-        areActionsDisabled={areActionsDisabled}
+        areActionsDisabled={areActionsDisabledForNonLatestImageVersion}
         defaultSort={{ index: 2, direction: 'desc' }}
       />
     </Main>
