@@ -8,7 +8,13 @@ import useApi from '../../hooks/useApi';
 import apiWithToast from '../../utils/apiWithToast';
 import { getGroups, addDevicesToGroup } from '../../api';
 import { useDispatch } from 'react-redux';
-import { Button, Text } from '@patternfly/react-core';
+import {
+  Backdrop,
+  Bullseye,
+  Spinner,
+  Button,
+  Text,
+} from '@patternfly/react-core';
 
 const CreateGroupButton = ({ openModal }) => (
   <>
@@ -60,6 +66,7 @@ const AddDeviceModal = ({
 }) => {
   const dispatch = useDispatch();
   const [response] = useApi({ api: getGroups });
+  const { data, isLoading } = response;
 
   const handleAddDevices = (values) => {
     const { group } = values;
@@ -77,7 +84,13 @@ const AddDeviceModal = ({
       statusMessages
     );
   };
-  return (
+  return isLoading ? (
+    <Backdrop>
+      <Bullseye>
+        <Spinner isSVG diameter="100px" />
+      </Bullseye>
+    </Backdrop>
+  ) : (
     <Modal
       isOpen={isModalOpen}
       openModal={() => setIsModalOpen(false)}
@@ -86,7 +99,7 @@ const AddDeviceModal = ({
       additionalMappers={{
         'search-input': {
           component: SearchInput,
-          defaultOptions: response?.data?.data || [],
+          defaultOptions: data?.data || [],
         },
         'create-group-btn': {
           component: CreateGroupButton,
