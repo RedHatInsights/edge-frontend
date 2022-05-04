@@ -79,7 +79,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
     Updated: () => data?.update_updated,
   };
 
-  if (data?.Installer?.Checksum) {
+  if (data?.image?.Installer?.Checksum) {
     detailsMapper['SHA-256 Checksum'] = () => data?.image?.Installer?.Checksum;
   }
 
