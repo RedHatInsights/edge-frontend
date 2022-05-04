@@ -26,14 +26,13 @@ exports[`DetailsHeader renders correctly 1`] = `
         >
           <div
             class="pf-l-split"
-            style="color: rgb(0, 102, 204);"
           >
             <div
               class="pf-l-split__item pf-u-mr-sm"
             >
               <svg
                 aria-hidden="true"
-                fill="#06c"
+                fill="blue"
                 height="1em"
                 role="img"
                 style="vertical-align: -0.125em;"
