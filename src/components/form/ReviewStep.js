@@ -77,7 +77,7 @@ const ReviewStep = () => {
 
   const packages = () => {
     const pkgs = [
-      {
+      getState().values?.includesCustomRepos && {
         name: isUpdate ? 'Custom Updated' : 'Custom Added',
         value: calcPkgDiff(customPackageAfter, customPackageBefore),
       },
