@@ -3,6 +3,7 @@ import CheckCircleIcon from '@patternfly/react-icons/dist/js/icons/check-circle-
 import InProgressIcon from '@patternfly/react-icons/dist/js/icons/in-progress-icon';
 import TimesCircleIcon from '@patternfly/react-icons/dist/js/icons/times-circle-icon';
 import QuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/question-circle-icon';
+import infoColor from '@patternfly/react-tokens/dist/esm/global_active_color_100';
 
 export const composeStatus = [
   'CREATED',
@@ -27,16 +28,16 @@ export const statusIcons = {
   // eslint-disable-next-line react/display-name
   SUCCESS: (color) => <CheckCircleIcon color={color} />,
   // eslint-disable-next-line react/display-name
-  INTERRUPTED: (color) => <TimesCircleIcon color={color} />,
+  INTERRUPTED: (color) => <InProgressIcon color={color} />,
 };
 
 export const statusColors = {
   unknown: 'grey',
   CREATED: 'green',
-  BUILDING: 'blue',
+  BUILDING: infoColor.value,
   ERROR: 'red',
   SUCCESS: 'green',
-  INTERRUPTED: 'red',
+  INTERRUPTED: infoColor.value,
 };
 
 export const imageStatusMapper = {
@@ -44,7 +45,7 @@ export const imageStatusMapper = {
   BUILDING: 'Image build in progress',
   ERROR: 'ERROR',
   SUCCESS: 'Ready',
-  INTERRUPTED: 'Interrupted',
+  INTERRUPTED: 'Image build in progress',
 };
 
 export const distributionMapper = {
