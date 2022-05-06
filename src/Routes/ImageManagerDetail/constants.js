@@ -13,8 +13,6 @@ export const composeStatus = [
   'INTERRUPTED',
 ];
 
-export const DEFAULT_RELEASE = 'rhel-85';
-
 //For this object, it's need to sisable lint once this is not a react component
 export const statusIcons = {
   // eslint-disable-next-line react/display-name
@@ -49,12 +47,18 @@ export const imageStatusMapper = {
 };
 
 export const distributionMapper = {
+  'rhel-84': 'RHEL 8.4',
   'rhel-85': 'RHEL 8.5',
 };
 
 export const releaseMapper = {
   'rhel-85': 'Red Hat Enterprise Linux (RHEL) 8.5',
+  'rhel-84': 'Red Hat Enterprise Linux (RHEL) 8.4',
 };
+
+export const supportedReleases = ['rhel-84', 'rhel-85'];
+
+export const DEFAULT_RELEASE = 'rhel-85';
 
 export const imageTypeMapper = {
   'rhel-edge-commit': 'RHEL for Edge Commit (.tar)',
@@ -62,3 +66,15 @@ export const imageTypeMapper = {
 };
 
 export const isAccountMissing = (data) => data && !data?.Account;
+
+// getReleases returns a list of the supported releases + the forced release
+export const getReleases = (forcedRelease) =>
+  Object.entries(releaseMapper)
+    .filter(
+      ([release]) =>
+        supportedReleases.includes(release) || release === forcedRelease
+    )
+    .map(([release, releaseLabel]) => ({
+      value: release,
+      label: releaseLabel,
+    }));

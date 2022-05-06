@@ -9,6 +9,7 @@ import { DateFormat } from '@redhat-cloud-services/frontend-components/DateForma
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import {
   imageTypeMapper,
+  DEFAULT_RELEASE,
   distributionMapper,
 } from '../ImageManagerDetail/constants';
 import { loadEdgeImages } from '../../store/actions';
@@ -21,7 +22,12 @@ const defaultFilters = [
   {
     label: 'Distribution',
     type: 'checkbox',
-    options: [{ option: 'RHEL 8.5', optionApiName: 'rhel-85' }],
+    options: [
+      {
+        option: distributionMapper[DEFAULT_RELEASE],
+        optionApiName: DEFAULT_RELEASE,
+      },
+    ],
   },
   {
     label: 'Status',

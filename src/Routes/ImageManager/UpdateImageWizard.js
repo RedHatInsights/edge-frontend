@@ -23,6 +23,7 @@ import { loadImageDetail, loadEdgeImageSets } from '../../store/actions';
 import { getEdgeImageStatus } from '../../api';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { useFeatureFlags } from '../../constants';
+import { getReleases } from '../ImageManagerDetail/constants';
 
 const UpdateImage = ({ navigateBack, updateImageID }) => {
   const [user, setUser] = useState();
@@ -142,6 +143,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
         username: data?.image?.Installer.Username,
         version: data?.image?.Version,
         release: data?.image?.Distribution,
+        release_options: getReleases(data?.image?.Distribution),
         imageType: ['rhel-edge-commit'],
         includesCustomRepos: customRepoFlag,
         'selected-packages': data?.image?.Packages?.map((pkg) => ({
