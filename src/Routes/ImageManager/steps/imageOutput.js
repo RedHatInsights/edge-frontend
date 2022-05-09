@@ -42,6 +42,7 @@ const ReleaseLabel = () => {
       onSelect={onSelect}
       selections={selected}
       isOpen={isOpen}
+      style={{ paddingLeft: 0, marginLeft: 0 }}
     >
       {options.map((item) => (
         <SelectOption key={item.value} value={item.value}>
