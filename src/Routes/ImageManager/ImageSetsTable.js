@@ -53,13 +53,13 @@ const columnNames = [
     columnTransforms: [cellWidth(35)],
   },
   {
-    title: 'Current Version',
+    title: 'Current version',
     type: 'version',
     sort: false,
     columnTransforms: [cellWidth(15)],
   },
   {
-    title: 'Last Updated',
+    title: 'Last updated',
     type: 'updated_at',
     sort: true,
     columnTransforms: [cellWidth(25)],
