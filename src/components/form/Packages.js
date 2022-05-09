@@ -99,7 +99,7 @@ const Packages = ({ defaultArch, ...props }) => {
     }
 
     const { data, meta } = await getPackages(
-      getState()?.values?.release || 'rhel-84',
+      getState()?.values?.release || 'rhel-85',
       getState()?.values?.architecture || defaultArch,
       availableInputValue
     );
