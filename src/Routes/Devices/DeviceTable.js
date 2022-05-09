@@ -100,7 +100,7 @@ const columnNames = [
     columnTransforms: [cellWidth(15)],
   },
   {
-    title: 'Last Seen',
+    title: 'Last seen',
     type: 'last_seen',
     sort: true,
     columnTransforms: [cellWidth(15)],
