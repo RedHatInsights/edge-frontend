@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { getEdgeImageStatus } from '../../api';
 import { useFeatureFlags } from '../../constants';
+import { DEFAULT_RELEASE } from '../ImageManagerDetail/constants';
 
 const CreateImage = ({ navigateBack }) => {
   const [user, setUser] = useState();
@@ -101,7 +102,11 @@ const CreateImage = ({ navigateBack }) => {
         });
       }}
       defaultArch="x86_64"
-      initialValues={{ version: 0, includesCustomRepos: customRepoFlag }}
+      initialValues={{
+        version: 0,
+        release: DEFAULT_RELEASE,
+        includesCustomRepos: customRepoFlag,
+      }}
       schema={{
         fields: [
           {
