@@ -225,6 +225,7 @@ const DeviceTable = ({
   setHasModalSubmitted,
   fetchDevices,
   isSystemsView = false,
+  externalDataUpdate = false,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -358,6 +359,7 @@ const DeviceTable = ({
           kebabItems={kebabItems}
           hasModalSubmitted={hasModalSubmitted}
           setHasModalSubmitted={setHasModalSubmitted}
+          externalDataUpdate={externalDataUpdate}
         />
       )}
     </>
@@ -390,6 +392,7 @@ DeviceTable.propTypes = {
   handleRemoveDevicesFromGroup: PropTypes.func,
   fetchDevices: PropTypes.func,
   isSystemsView: PropTypes.bool,
+  externalDataUpdate: PropTypes.bool,
 };
 
 export default DeviceTable;

@@ -70,6 +70,7 @@ const GeneralTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
   isUseApi,
+  externalDataUpdate,
 }) => {
   const defaultCheckedRows = initSelectedItems ? initSelectedItems : [];
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
@@ -130,6 +131,12 @@ const GeneralTable = ({
     selectedItems && selectedItems(checkedRows);
     hasModalSubmitted && setHasModalSubmitted(false);
   }, [checkedRows]);
+
+  useEffect(() => {
+    if (externalDataUpdate) {
+      setPage(1);
+    }
+  }, [externalDataUpdate]);
 
   const { count, isLoading, hasError } = tableData;
 
@@ -321,7 +328,6 @@ const GeneralTable = ({
     : hasCheckbox
     ? checkboxRows()
     : filteredRows;
-
   return (
     <>
       <ToolbarHeader
@@ -405,11 +411,13 @@ GeneralTable.propTypes = {
   setHasModalSubmitted: PropTypes.func,
   initSelectedItems: PropTypes.array,
   isUseApi: PropTypes.bool,
+  externalDataUpdate: PropTypes.bool,
 };
 
 GeneralTable.defaultProps = {
   hasModalSubmitted: false,
   setHasModalSubmitted: () => {},
+  externalDataUpdate: false,
 };
 
 export default GeneralTable;

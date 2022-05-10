@@ -32,7 +32,12 @@ const getImageData = (imageId) =>
     })
   );
 
-const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
+const UpdateDeviceModal = ({
+  updateModal,
+  setUpdateModal,
+  refreshTable,
+  refreshPaginationIndex,
+}) => {
   const [imageData, setImageData] = useState(null);
   const dispatch = useDispatch();
   const isMultiple = updateModal.deviceData.length > 1;
@@ -81,6 +86,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
 
     handleClose();
     refreshTable ? refreshTable() : null;
+    refreshTable ? refreshPaginationIndex(true) : null;
   };
 
   const handleClose = () => {
@@ -202,6 +208,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
 
 UpdateDeviceModal.propTypes = {
   refreshTable: PropTypes.func,
+  refreshPaginationIndex: PropTypes.func,
   updateModal: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
     deviceData: PropTypes.array.isRequired,

@@ -30,6 +30,7 @@ const Inventory = () => {
   const [isRowSelected, setIsRowSelected] = useState(false);
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
   const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
+  const [tableReloadAfterUpdate, setTableRealoadAfterUpdate] = useState(false);
   const [updateModal, setUpdateModal] = useState({
     isOpen: false,
     deviceData: null,
@@ -67,6 +68,7 @@ const Inventory = () => {
           handleRemoveDevicesFromGroup={handleRemoveDevicesFromGroup}
           hasCheckbox={true}
           selectedItems={setCheckedDeviceIds}
+          externalDataUpdate={tableReloadAfterUpdate}
           kebabItems={[
             {
               isDisabled: !(checkedDeviceIds.length > 0),
@@ -107,6 +109,7 @@ const Inventory = () => {
             setUpdateModal={setUpdateModal}
             updateModal={updateModal}
             refreshTable={fetchDevices}
+            refreshPaginationIndex={setTableRealoadAfterUpdate}
           />
         </Suspense>
       )}
