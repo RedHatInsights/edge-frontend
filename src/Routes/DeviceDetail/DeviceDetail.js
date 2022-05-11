@@ -26,7 +26,7 @@ import DeviceDetailTabs from './DeviceDetailTabs';
 import CheckCircleIcon from '@patternfly/react-icons/dist/js/icons/check-circle-icon';
 import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-triangle-icon';
 import InProgressIcon from '@patternfly/react-icons/dist/js/icons/in-progress-icon';
-import { getDeviceHasUpdate } from '../../api/index';
+import { getDeviceHasUpdate } from '../../api/devices';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(
@@ -98,7 +98,7 @@ const DeviceDetail = () => {
         }}
       >
         <PageHeader>
-          <Breadcrumb ouiaId="systems-list">
+          <Breadcrumb ouiaId='systems-list'>
             <BreadcrumbItem>
               <Link to={uuid ? `/groups` : '/inventory'}>
                 {uuid ? 'Groups' : 'Systems'}
@@ -114,13 +114,13 @@ const DeviceDetail = () => {
               </BreadcrumbItem>
             )}
             <BreadcrumbItem isActive>
-              <div className="ins-c-inventory__detail--breadcrumb-name">
+              <div className='ins-c-inventory__detail--breadcrumb-name'>
                 {entity?.display_name || <Skeleton size={SkeletonSize.xs} />}
               </div>
             </BreadcrumbItem>
           </Breadcrumb>
           <InventoryDetailHead
-            fallback=""
+            fallback=''
             actions={[
               {
                 title: 'Update',
@@ -154,31 +154,31 @@ const DeviceDetail = () => {
               imageData?.UpdateTransactions?.length - 1
             ]?.Status === 'CREATED' ? (
             <Label
-              className="pf-u-mt-sm"
-              color="blue"
+              className='pf-u-mt-sm'
+              color='blue'
               icon={<InProgressIcon />}
             >
               Updating
             </Label>
           ) : imageData?.Device?.UpdateAvailable ? (
             <Label
-              className="pf-u-mt-sm"
-              color="orange"
+              className='pf-u-mt-sm'
+              color='orange'
               icon={<ExclamationTriangleIcon />}
             >
               Update Available
             </Label>
           ) : (
             <Label
-              className="pf-u-mt-sm"
-              color="green"
-              icon={<CheckCircleIcon color="green" />}
+              className='pf-u-mt-sm'
+              color='green'
+              icon={<CheckCircleIcon color='green' />}
             >
               Running
             </Label>
           )}
         </PageHeader>
-        <Grid gutter="md">
+        <Grid gutter='md'>
           <GridItem span={12}>
             <DeviceDetailTabs
               systemProfile={imageData}

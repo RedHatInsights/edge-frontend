@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import Modal from '../../components/Modal';
-import { createGroup, addDevicesToGroup, validateGroupName } from '../../api';
+import {
+  createGroup,
+  addDevicesToGroup,
+  validateGroupName,
+} from '../../api/groups';
 import { nameValidator } from '../../constants';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
@@ -91,8 +95,8 @@ const CreateGroupModal = ({
     <Modal
       isOpen={isModalOpen}
       openModal={() => setIsModalOpen(false)}
-      title="Create group"
-      submitLabel="Create"
+      title='Create group'
+      submitLabel='Create'
       schema={createGroupSchema}
       onSubmit={deviceIds ? handleAddDevicesToNewGroup : handleCreateGroup}
       reloadData={reloadData}

@@ -25,7 +25,7 @@ import {
   getGroupById,
   removeDeviceFromGroupById,
   removeDevicesFromGroup,
-} from '../../api/index';
+} from '../../api/groups';
 import AddSystemsToGroupModal from '../Devices/AddSystemsToGroupModal';
 import {
   canUpdateSelectedDevices,
@@ -131,7 +131,7 @@ const GroupsDetail = () => {
 
   return (
     <>
-      <PageHeader className="pf-m-light">
+      <PageHeader className='pf-m-light'>
         {groupName ? (
           <Breadcrumb>
             <BreadcrumbItem>
@@ -141,7 +141,7 @@ const GroupsDetail = () => {
           </Breadcrumb>
         ) : (
           <Breadcrumb isActive>
-            <Skeleton width="100px" />
+            <Skeleton width='100px' />
           </Breadcrumb>
         )}
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
@@ -149,7 +149,7 @@ const GroupsDetail = () => {
             {groupName ? (
               <PageHeaderTitle title={groupName} />
             ) : (
-              <Skeleton width="150px" />
+              <Skeleton width='150px' />
             )}
           </FlexItem>
           <FlexItem>
@@ -157,7 +157,7 @@ const GroupsDetail = () => {
               position={DropdownPosition.right}
               toggle={
                 <DropdownToggle
-                  id="image-set-details-dropdown"
+                  id='image-set-details-dropdown'
                   toggleIndicator={CaretDownIcon}
                   onToggle={(newState) => setIsDropdownOpen(newState)}
                   isDisabled={false}
@@ -168,13 +168,13 @@ const GroupsDetail = () => {
               isOpen={isDropdownOpen}
               dropdownItems={[
                 <DropdownItem
-                  key="delete-device-group"
+                  key='delete-device-group'
                   onClick={() => handleDeleteModal(groupId, groupName)}
                 >
                   Delete Group
                 </DropdownItem>,
                 <DropdownItem
-                  key="update-all-devices"
+                  key='update-all-devices'
                   isDisabled={canUpdateSelectedDevices({
                     deviceData: data?.DevicesView?.devices?.map((device) => ({
                       imageSetId: device?.ImageSetID,
@@ -208,7 +208,7 @@ const GroupsDetail = () => {
           </FlexItem>
         </Flex>
       </PageHeader>
-      <Main className="edge-devices">
+      <Main className='edge-devices'>
         {!emptyStateNoFliters(
           isLoading,
           data?.DeviceGroup?.Devices.length,
@@ -259,9 +259,9 @@ const GroupsDetail = () => {
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
-              icon="cube"
-              title="Add systems to the group"
-              body="Create groups to help manage your systems more effectively"
+              icon='cube'
+              title='Add systems to the group'
+              body='Create groups to help manage your systems more effectively'
               primaryAction={{
                 text: 'Add systems',
                 click: () => setIsAddModalOpen(true),
@@ -291,7 +291,7 @@ const GroupsDetail = () => {
           openModal={() => setRemoveModal(false)}
           title={'Remove from group'}
           submitLabel={'Remove'}
-          variant="danger"
+          variant='danger'
           schema={{
             fields: [
               {

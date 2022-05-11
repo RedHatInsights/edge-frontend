@@ -6,7 +6,7 @@ import Modal from '../../components/Modal';
 import SearchInput from '../../components/SearchInput';
 import useApi from '../../hooks/useApi';
 import apiWithToast from '../../utils/apiWithToast';
-import { getGroups, addDevicesToGroup } from '../../api';
+import { getGroups, addDevicesToGroup } from '../../api/groups';
 import { useDispatch } from 'react-redux';
 import {
   Backdrop,
@@ -19,7 +19,7 @@ import {
 const CreateGroupButton = ({ openModal }) => (
   <>
     <Text>Or</Text>
-    <Button variant="secondary" className="pf-u-w-50" onClick={openModal}>
+    <Button variant='secondary' className='pf-u-w-50' onClick={openModal}>
       Create Group
     </Button>
   </>
@@ -87,15 +87,15 @@ const AddDeviceModal = ({
   return isLoading ? (
     <Backdrop>
       <Bullseye>
-        <Spinner isSVG diameter="100px" />
+        <Spinner isSVG diameter='100px' />
       </Bullseye>
     </Backdrop>
   ) : (
     <Modal
       isOpen={isModalOpen}
       openModal={() => setIsModalOpen(false)}
-      title="Add to group"
-      submitLabel="Add"
+      title='Add to group'
+      submitLabel='Add'
       additionalMappers={{
         'search-input': {
           component: SearchInput,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import Modal from '../../components/Modal';
-import { updateGroupById, validateGroupName } from '../../api';
+import { updateGroupById, validateGroupName } from '../../api/groups';
 import { nameValidator } from '../../constants';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
@@ -58,8 +58,8 @@ const RenameGroupModal = ({
     <Modal
       isOpen={isModalOpen}
       openModal={() => setIsModalOpen(false)}
-      title="Rename group"
-      submitLabel="Save"
+      title='Rename group'
+      submitLabel='Save'
       schema={createGroupSchema}
       initialValues={modalState}
       onSubmit={handleRenameModal}

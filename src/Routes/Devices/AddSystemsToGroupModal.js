@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Button, Modal } from '@patternfly/react-core';
 import DeviceTable from '../Devices/DeviceTable';
 import PropTypes from 'prop-types';
-import { addDevicesToGroup } from '../../api/index';
-import { getInventory } from '../../api';
+import { addDevicesToGroup } from '../../api/groups';
+import { getInventory } from '../../api/devices';
 import useApi from '../../hooks/useApi';
 
 const AddSystemsToGroupModal = ({
@@ -21,17 +21,17 @@ const AddSystemsToGroupModal = ({
 
   return (
     <Modal
-      id="add-systems-modal"
-      title="Add systems"
-      position="top"
+      id='add-systems-modal'
+      title='Add systems'
+      position='top'
       isOpen={isOpen}
       onClose={closeModal}
-      variant="large"
+      variant='large'
       actions={[
         <Button
           isDisabled={deviceIds.length === 0}
-          key="confirm"
-          variant="primary"
+          key='confirm'
+          variant='primary'
           onClick={() => {
             addDevicesToGroup(
               parseInt(groupId),
@@ -43,7 +43,7 @@ const AddSystemsToGroupModal = ({
         >
           Add systems
         </Button>,
-        <Button key="cancel" variant="link" onClick={closeModal}>
+        <Button key='cancel' variant='link' onClick={closeModal}>
           Cancel
         </Button>,
       ]}

@@ -20,7 +20,7 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail, loadEdgeImageSets } from '../../store/actions';
-import { getEdgeImageStatus } from '../../api';
+import { getEdgeImageStatus } from '../../api/images';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { useFeatureFlags } from '../../constants';
 import { getReleases } from '../ImageManagerDetail/constants';
@@ -134,7 +134,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
           );
         });
       }}
-      defaultArch="x86_64"
+      defaultArch='x86_64'
       initialValues={{
         name: data?.image?.Name,
         isUpdate: true,
@@ -200,7 +200,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
   ) : (
     <Backdrop>
       <Bullseye>
-        <Spinner isSVG diameter="100px" />
+        <Spinner isSVG diameter='100px' />
       </Bullseye>
     </Backdrop>
   );

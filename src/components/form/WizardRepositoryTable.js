@@ -5,7 +5,7 @@ import { Text, TextVariants } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import EmptyState from '../Empty';
 import { routes as paths } from '../../../package.json';
-import { getCustomRepositories } from '../../api/index';
+import { getCustomRepositories } from '../../api/repositories';
 import useApi from '../../hooks/useApi';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
@@ -41,16 +41,16 @@ const WizardRepositoryTable = ({ ...props }) => {
         {
           title: (
             <>
-              <Text className="pf-u-mb-xs" component={TextVariants.p}>
+              <Text className='pf-u-mb-xs' component={TextVariants.p}>
                 {Name}
               </Text>
               <Text
                 component={TextVariants.a}
                 href={URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                target='_blank'
+                rel='noopener noreferrer'
               >
-                {URL} <ExternalLinkAltIcon className="pf-u-ml-sm" />
+                {URL} <ExternalLinkAltIcon className='pf-u-ml-sm' />
               </Text>
             </>
           ),
@@ -63,9 +63,9 @@ const WizardRepositoryTable = ({ ...props }) => {
     <>
       {isLoading !== true && !data?.count > 0 ? (
         <EmptyState
-          icon="repository"
-          title="No custom repositories available"
-          body="Add custom repositories to build RHEL for Edge images with additional packages."
+          icon='repository'
+          title='No custom repositories available'
+          body='Add custom repositories to build RHEL for Edge images with additional packages.'
           primaryAction={{
             text: 'Custom repositories',
             href: paths['repositories'],

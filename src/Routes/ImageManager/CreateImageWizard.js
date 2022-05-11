@@ -17,7 +17,7 @@ import { createNewImage, loadEdgeImageSets } from '../../store/actions';
 import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
 import { useDispatch } from 'react-redux';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
-import { getEdgeImageStatus } from '../../api';
+import { getEdgeImageStatus } from '../../api/images';
 import { useFeatureFlags } from '../../constants';
 import { DEFAULT_RELEASE } from '../ImageManagerDetail/constants';
 
@@ -101,7 +101,7 @@ const CreateImage = ({ navigateBack }) => {
           closeAction();
         });
       }}
-      defaultArch="x86_64"
+      defaultArch='x86_64'
       initialValues={{
         version: 0,
         release: DEFAULT_RELEASE,

@@ -25,7 +25,7 @@ import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail, loadEdgeImageSets } from '../../store/actions';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { createNewImage, addImageToPoll } from '../../store/actions';
-import { getEdgeImageStatus } from '../../api';
+import { getEdgeImageStatus } from '../../api/images';
 
 const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
   const dispatch = useDispatch();
@@ -124,17 +124,17 @@ const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
 
   return data ? (
     <Modal
-      variant="medium"
+      variant='medium'
       title={`Update image: ${data?.image?.Name}`}
-      description="Review the information and click Create image to start the build process"
+      description='Review the information and click Create image to start the build process'
       isOpen={updateCveModal.isOpen}
       onClose={handleClose}
       //onSubmit={handleUpdateModal}
       actions={[
-        <Button key="confirm" variant="primary" onClick={handleUpdateModal}>
+        <Button key='confirm' variant='primary' onClick={handleUpdateModal}>
           Create Image
         </Button>,
-        <Button key="cancel" variant="link" onClick={handleClose}>
+        <Button key='cancel' variant='link' onClick={handleClose}>
           Cancel
         </Button>,
       ]}
@@ -186,7 +186,7 @@ const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
             Updated
           </TextListItem>
           <TextListItem
-            className="pf-u-pl-lg"
+            className='pf-u-pl-lg'
             component={TextListItemVariants.dd}
           >
             {updateCveModal?.cveCount}
@@ -197,7 +197,7 @@ const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
   ) : (
     <Backdrop>
       <Bullseye>
-        <Spinner isSVG diameter="100px" />
+        <Spinner isSVG diameter='100px' />
       </Bullseye>
     </Backdrop>
   );

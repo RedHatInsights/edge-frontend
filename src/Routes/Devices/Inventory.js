@@ -10,7 +10,7 @@ import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
 import CreateGroupModal from '../Groups/CreateGroupModal';
 import useApi from '../../hooks/useApi';
-import { getInventory } from '../../api';
+import { getInventory } from '../../api/devices';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 
 const UpdateDeviceModal = React.lazy(() =>
@@ -52,10 +52,10 @@ const Inventory = () => {
 
   return (
     <Fragment>
-      <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Systems" />
+      <PageHeader className='pf-m-light'>
+        <PageHeaderTitle title='Systems' />
       </PageHeader>
-      <Main className="edge-devices">
+      <Main className='edge-devices'>
         <DeviceTable
           isSystemsView={true}
           data={data?.data?.devices}

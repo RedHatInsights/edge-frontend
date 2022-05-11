@@ -5,7 +5,7 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import Modal from '../../components/Modal';
 import SearchInput from '../../components/SearchInput';
 import apiWithToast from '../../utils/apiWithToast';
-import { removeDeviceFromGroupById } from '../../api';
+import { removeDeviceFromGroupById } from '../../api/groups';
 import { useDispatch } from 'react-redux';
 import { Text } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
@@ -101,10 +101,10 @@ const RemoveDeviceModal = ({
   return (
     <Modal
       isOpen={isModalOpen}
-      variant="danger"
+      variant='danger'
       openModal={() => setIsModalOpen(false)}
-      title="Remove from group"
-      submitLabel="Remove"
+      title='Remove from group'
+      submitLabel='Remove'
       titleIconVariant={WarningIcon}
       additionalMappers={{
         'search-input': {
