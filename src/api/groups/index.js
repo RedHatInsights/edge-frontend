@@ -1,4 +1,4 @@
-import { EDGE_API } from '../index';
+import { EDGE_API, getTableParams } from '../index';
 import { instance } from '@redhat-cloud-services/frontend-components-utilities/interceptors/interceptors';
 
 export const createGroup = (payload) => {

@@ -1,16 +1,16 @@
 #!/bin/sh
-# . "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/_/husky.sh"
  
-# if npm run lint:js:fix; then
-#   git add -A .
-# else
-#   echo "Lint failed, fix lint and retry committing"
-#   exit 1
-# fi
+if npm run lint:js:fix; then
+  git add -A .
+else
+  echo "Lint failed, fix lint and retry committing"
+  exit 1
+fi
 
-# if npm test -- -u; then
-#   git add -A .
-# else
-#   echo "Tests failed, fix tests and retry committing"
-#   exit 1
-# fi
+if npm test -- -u; then
+  git add -A .
+else
+  echo "Tests failed, fix tests and retry committing"
+  exit 1
+fi
