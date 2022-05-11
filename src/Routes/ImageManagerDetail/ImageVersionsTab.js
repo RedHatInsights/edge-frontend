@@ -117,13 +117,25 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
         ),
       });
     }
+    let imageLatestVersion = imageData?.data?.Data?.images?.[0].image?.Version;
 
+    const areActionsDisabledForNonLatestImageVersion = (imageData) => {
+      for (let i = 0; i < imageLatestVersion; i++) {
+        console.log(imageData?.data?.Data?.images?.[i].image?.Version);
+        if (
+          imageData?.data?.Data?.images?.[i].image?.Version < imageLatestVersion
+        ) {
+          return true;
+        }
+      }
+    };
     if (
       rowData.rowInfo?.imageStatus === 'SUCCESS' ||
       rowData.rowInfo?.imageStatus === 'ERROR'
     ) {
       actionsArray.push({
         title: 'Update Image',
+        isDisabled: areActionsDisabledForNonLatestImageVersion,
         onClick: (_event, _rowId, rowData) => {
           openUpdateWizard(rowData.rowInfo.id);
         },
@@ -135,22 +147,11 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
         title: '',
       });
     }
-
     return actionsArray;
   };
-  let imageLatestVersion = imageData?.data?.Data?.images?.[0].image?.Version;
 
-  const areActionsDisabledForNonLatestImageVersion = (rowData) => {
-    for (let i = 0; i < imageLatestVersion; i++) {
-      if (
-        imageData?.data?.Data?.images?.[i].image?.Version <
-          imageLatestVersion ||
-        rowData.rowInfo?.imageStatus === 'BUILDING'
-      ) {
-        return true;
-      }
-    }
-  };
+  const areActionsDisabled = (rowData) =>
+    rowData.rowInfo?.imageStatus === 'BUILDING';
 
   return (
     <Main className="add-100vh">
@@ -166,7 +167,7 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
         columnNames={columnNames}
         rows={rows || []}
         actionResolver={actionResolver}
-        areActionsDisabled={areActionsDisabledForNonLatestImageVersion}
+        areActionsDisabled={areActionsDisabled}
         defaultSort={{ index: 2, direction: 'desc' }}
       />
     </Main>
