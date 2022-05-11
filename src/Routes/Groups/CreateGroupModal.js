@@ -95,8 +95,8 @@ const CreateGroupModal = ({
     <Modal
       isOpen={isModalOpen}
       openModal={() => setIsModalOpen(false)}
-      title='Create group'
-      submitLabel='Create'
+      title="Create group"
+      submitLabel="Create"
       schema={createGroupSchema}
       onSubmit={deviceIds ? handleAddDevicesToNewGroup : handleCreateGroup}
       reloadData={reloadData}

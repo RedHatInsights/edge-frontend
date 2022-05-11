@@ -58,8 +58,8 @@ const RenameGroupModal = ({
     <Modal
       isOpen={isModalOpen}
       openModal={() => setIsModalOpen(false)}
-      title='Rename group'
-      submitLabel='Save'
+      title="Rename group"
+      submitLabel="Save"
       schema={createGroupSchema}
       initialValues={modalState}
       onSubmit={handleRenameModal}

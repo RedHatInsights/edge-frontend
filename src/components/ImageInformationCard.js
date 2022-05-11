@@ -31,7 +31,7 @@ const ImageInformationCard = () => {
 
   return (
     <LoadingCard
-      title='Image Information'
+      title="Image Information"
       isLoading={false}
       items={[
         {

@@ -87,10 +87,10 @@ const Devices = () => {
 
   return (
     <Fragment>
-      <PageHeader className='pf-m-light'>
-        <PageHeaderTitle title='Edge management' />
+      <PageHeader className="pf-m-light">
+        <PageHeaderTitle title="Edge management" />
       </PageHeader>
-      <Main className='edge-devices'>
+      <Main className="edge-devices">
         <Tiles />
         <InventoryTable
           ref={inventory}

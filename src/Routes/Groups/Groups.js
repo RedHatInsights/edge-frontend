@@ -40,10 +40,10 @@ const Groups = () => {
 
   return (
     <>
-      <PageHeader className='pf-m-light'>
-        <PageHeaderTitle title='Groups' />
+      <PageHeader className="pf-m-light">
+        <PageHeaderTitle title="Groups" />
       </PageHeader>
-      <Main className='edge-devices'>
+      <Main className="edge-devices">
         {!emptyStateNoFliters(isLoading, data?.count, history) ? (
           <GroupTable
             data={data?.data || []}
@@ -58,9 +58,9 @@ const Groups = () => {
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
-              icon='module'
-              title='Create a system group'
-              body='Create system groups to help manage your devices more effectively'
+              icon="module"
+              title="Create a system group"
+              body="Create system groups to help manage your devices more effectively"
               primaryAction={{
                 text: 'Create group',
                 click: () => setIsCreateModalOpen(true),

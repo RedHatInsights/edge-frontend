@@ -90,10 +90,10 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   };
 
   const WarningText = () => (
-    <TextContent className='pf-u-pt-md'>
+    <TextContent className="pf-u-pt-md">
       <Text
         style={{ color: 'var(--pf-global--palette--gold-500)' }}
-        component='small'
+        component="small"
       >
         <ExclamationTriangleIcon /> After the update is installed, the device
         will apply the changes.
@@ -105,7 +105,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
     <TextContent>
       <Text>
         Update{' '}
-        <span className='pf-u-font-weight-bold pf-u-font-size-md'>
+        <span className="pf-u-font-weight-bold pf-u-font-size-md">
           {isMultiple ? `${deviceName.length} systems` : deviceName}
         </span>{' '}
         to latest version of the image linked to it.
@@ -173,7 +173,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
     <>
       {imageData ? (
         <Modal
-          size='medium'
+          size="medium"
           title={`Update system${
             isMultiple ? 's' : ''
           } to latest image version`}
@@ -181,7 +181,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
           openModal={() =>
             setUpdateModal((prevState) => ({ ...prevState, isOpen: false }))
           }
-          submitLabel='Update Device'
+          submitLabel="Update Device"
           schema={updateSchema}
           onSubmit={handleUpdateModal}
           reloadData={refreshTable}
@@ -189,7 +189,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
       ) : (
         <Backdrop>
           <Bullseye>
-            <Spinner isSVG diameter='100px' />
+            <Spinner isSVG diameter="100px" />
           </Bullseye>
         </Backdrop>
       )}

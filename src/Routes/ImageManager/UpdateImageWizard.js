@@ -134,7 +134,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
           );
         });
       }}
-      defaultArch='x86_64'
+      defaultArch="x86_64"
       initialValues={{
         name: data?.image?.Name,
         isUpdate: true,
@@ -200,7 +200,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
   ) : (
     <Backdrop>
       <Bullseye>
-        <Spinner isSVG diameter='100px' />
+        <Spinner isSVG diameter="100px" />
       </Bullseye>
     </Backdrop>
   );

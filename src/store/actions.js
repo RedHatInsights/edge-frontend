@@ -20,15 +20,8 @@ import {
   POLLING_IMAGES,
   LOAD_DEVICE_TABLE,
 } from './action-types';
+
 import {
-  fetchGroups,
-  threshold,
-  devicesInfo,
-  canariesInfo,
-  groupsDetail,
-  groupDevicesInfo,
-  fetchActiveImages,
-  fetchDeviceSummary,
   fetchImageStatus,
   getImageById,
   fetchEdgeImages,
@@ -36,13 +29,9 @@ import {
   getImagePackageMetadata,
   createImage,
   getImageSet,
-  getInventory,
-} from '../api';
-
-export const loadGroups = (perPage = 50, page = 1) => ({
-  type: LOAD_GROUPS,
-  payload: fetchGroups({ perPage, page }),
-});
+  fetchActiveImages,
+} from '../api/images';
+import { getInventory } from '../api/devices';
 
 export const loadThreshold = () => ({
   type: LOAD_TRESHOLD,

@@ -64,9 +64,9 @@ const Repository = () => {
             </>
           ) : (
             <EmptyState
-              icon='repository'
-              title='Add a custom repository'
-              body='Add custom repositories to build RHEL for Edge images with additional packages.'
+              icon="repository"
+              title="Add a custom repository"
+              body="Add custom repositories to build RHEL for Edge images with additional packages."
               primaryAction={{
                 text: 'Add repository',
                 click: () => openModal({ type: 'add' }),

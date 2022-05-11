@@ -61,10 +61,10 @@ const DeleteGroupModal = ({
     <Modal
       isOpen={isModalOpen}
       openModal={() => setIsModalOpen(false)}
-      title='Delete group'
+      title="Delete group"
       titleIconVariant={WarningIcon}
-      variant='danger'
-      submitLabel='Delete'
+      variant="danger"
+      submitLabel="Delete"
       schema={schema(name)}
       onSubmit={handleDeleteGroup}
       reloadData={reloadData}

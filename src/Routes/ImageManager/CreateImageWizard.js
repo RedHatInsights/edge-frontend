@@ -101,7 +101,7 @@ const CreateImage = ({ navigateBack }) => {
           closeAction();
         });
       }}
-      defaultArch='x86_64'
+      defaultArch="x86_64"
       initialValues={{
         version: 0,
         release: DEFAULT_RELEASE,

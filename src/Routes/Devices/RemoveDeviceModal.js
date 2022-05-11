@@ -101,10 +101,10 @@ const RemoveDeviceModal = ({
   return (
     <Modal
       isOpen={isModalOpen}
-      variant='danger'
+      variant="danger"
       openModal={() => setIsModalOpen(false)}
-      title='Remove from group'
-      submitLabel='Remove'
+      title="Remove from group"
+      submitLabel="Remove"
       titleIconVariant={WarningIcon}
       additionalMappers={{
         'search-input': {
