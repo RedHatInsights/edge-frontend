@@ -42,6 +42,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
     Release: () => distributionMapper?.[data?.image?.['Distribution']],
     //Size: 'Size',
     Description: 'Description',
+    'Ostree Commit Hash': () => data?.image?.Commit?.OSTreeCommit,
   };
 
   const userInfoMapper = {
@@ -95,6 +96,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
                 {label}
               </TextListItem>
               {label === 'SHA-256 Checksum' ||
+              label === 'Ostree Commit Hash' ||
               (label === 'SSH Key' && value()) ? (
                 <TextListItem component={TextListItemVariants.dd}>
                   <ClipboardCopy
