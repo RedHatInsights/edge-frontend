@@ -35,19 +35,19 @@ const columnNames = [
     title: 'Output',
     type: 'image_type',
     sort: false,
-    columnTransforms: [cellWidth(35)],
+    columnTransforms: [cellWidth(25)],
   },
   {
     title: 'Ostree Commit Hash',
     type: 'ostree_commit_hash',
     sort: false,
-    columnTransforms: [cellWidth(15)],
+    columnTransforms: [cellWidth(20)],
   },
   {
     title: 'Created',
     type: 'created_at',
     sort: true,
-    columnTransforms: [cellWidth(25)],
+    columnTransforms: [cellWidth(15)],
   },
   {
     title: 'Status',
