@@ -44,6 +44,8 @@ Install all dependencies
 ```bash
 npm install
 ```
+Verify that node version is 16.
+
 ## Running locally with webpack-proxy
 
 Add `prod.foo.redhat.com`, `stage.foo.redhat.com`, `qa.foo.redhat.com` and  `ci.foo.redhat.com` to your `/etc/hosts` file (one time action). Follow this guide on [how to edit your `/etc/hosts file`](https://docs.rackspace.com/support/how-to/modify-your-hosts-file/)
