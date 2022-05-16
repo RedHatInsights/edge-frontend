@@ -191,3 +191,9 @@ export const useFeatureFlags = (flag) => {
 
   return flagsReady ? isFlagEnabled : false;
 };
+
+export const truncateString = (string, characterCount) =>
+  `${string.substring(0, characterCount[0])}...${string.substring(
+    string.length - characterCount[1],
+    string.length
+  )}`;

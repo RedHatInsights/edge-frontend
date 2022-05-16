@@ -42,7 +42,6 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
     Release: () => distributionMapper?.[data?.image?.['Distribution']],
     //Size: 'Size',
     Description: 'Description',
-    'Ostree Commit Hash': () => data?.image?.Commit?.OSTreeCommit,
   };
 
   const userInfoMapper = {
@@ -82,6 +81,11 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
 
   if (data?.image?.Installer?.Checksum) {
     detailsMapper['SHA-256 Checksum'] = () => data?.image?.Installer?.Checksum;
+  }
+
+  if (data?.image?.Commit?.OSTreeCommit) {
+    detailsMapper['Ostree Commit Hash'] = () =>
+      data?.image?.Commit?.OSTreeCommit;
   }
 
   const buildTextList = (labelsToValueMapper) =>

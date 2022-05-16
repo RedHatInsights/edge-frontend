@@ -3,13 +3,14 @@ import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
-import { Text, Popover, Button } from '@patternfly/react-core';
+import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import { imageTypeMapper } from '../ImageManagerDetail/constants';
 import { loadImageSetDetail } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
 import Main from '@redhat-cloud-services/frontend-components/Main';
+import { truncateString } from '../../constants';
 
 const defaultFilters = [
   {
@@ -85,14 +86,9 @@ const createRows = (data, imageSetId) => {
       },
       {
         title: image?.Commit?.OSTreeCommit ? (
-          <Popover
-            headerContent="Ostree Commit Hash"
-            bodyContent={image?.Commit?.OSTreeCommit}
-          >
-            <Button variant="link" isInline isSmall>
-              {(image?.Commit?.OSTreeCommit).substring(0, 7)}
-            </Button>
-          </Popover>
+          <Tooltip content={<div>{image?.Commit?.OSTreeCommit}</div>}>
+            <span>{truncateString(image?.Commit?.OSTreeCommit, [5, 5])}</span>
+          </Tooltip>
         ) : (
           <Text>Unavailable</Text>
         ),
