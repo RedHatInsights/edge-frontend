@@ -83,6 +83,11 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
     detailsMapper['SHA-256 Checksum'] = () => data?.image?.Installer?.Checksum;
   }
 
+  if (data?.image?.Commit?.OSTreeCommit) {
+    detailsMapper['Ostree Commit Hash'] = () =>
+      data?.image?.Commit?.OSTreeCommit;
+  }
+
   const buildTextList = (labelsToValueMapper) =>
     data
       ? Object.entries(labelsToValueMapper).map(([label, value]) => {
@@ -95,6 +100,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
                 {label}
               </TextListItem>
               {label === 'SHA-256 Checksum' ||
+              label === 'Ostree Commit Hash' ||
               (label === 'SSH Key' && value()) ? (
                 <TextListItem component={TextListItemVariants.dd}>
                   <ClipboardCopy

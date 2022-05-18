@@ -3,13 +3,14 @@ import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
-import { Text } from '@patternfly/react-core';
+import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import { imageTypeMapper } from '../ImageManagerDetail/constants';
 import { loadImageSetDetail } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
 import Main from '@redhat-cloud-services/frontend-components/Main';
+import { truncateString } from '../../constants';
 
 const defaultFilters = [
   {
@@ -35,13 +36,19 @@ const columnNames = [
     title: 'Output',
     type: 'image_type',
     sort: false,
-    columnTransforms: [cellWidth(35)],
+    columnTransforms: [cellWidth(25)],
+  },
+  {
+    title: 'Ostree Commit Hash',
+    type: 'ostree_commit_hash',
+    sort: false,
+    columnTransforms: [cellWidth(20)],
   },
   {
     title: 'Created',
     type: 'created_at',
     sort: true,
-    columnTransforms: [cellWidth(25)],
+    columnTransforms: [cellWidth(15)],
   },
   {
     title: 'Status',
@@ -76,6 +83,15 @@ const createRows = (data, imageSetId) => {
       },
       {
         title: imageTypeMapper[image?.ImageType],
+      },
+      {
+        title: image?.Commit?.OSTreeCommit ? (
+          <Tooltip content={<div>{image?.Commit?.OSTreeCommit}</div>}>
+            <span>{truncateString(image?.Commit?.OSTreeCommit, [5, 5])}</span>
+          </Tooltip>
+        ) : (
+          <Text>Unavailable</Text>
+        ),
       },
       {
         title: <DateFormat date={image?.CreatedAt} />,
