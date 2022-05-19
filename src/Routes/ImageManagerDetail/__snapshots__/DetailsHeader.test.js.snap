@@ -21,7 +21,7 @@ exports[`DetailsHeader renders correctly 1`] = `
           test image
         </h1>
         <dd
-          class=""
+          class="pf-u-pt-sm"
           data-pf-content="true"
         >
           <div
