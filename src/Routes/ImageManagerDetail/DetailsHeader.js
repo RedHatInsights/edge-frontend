@@ -21,7 +21,6 @@ import StatusLabel from './StatusLabel';
 import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
-import { isAccountMissing } from './constants';
 
 const dropdownItems = (data, imageVersion, openUpdateWizard) => {
   const imageData = imageVersion ? imageVersion : data?.images?.[0];
@@ -66,7 +65,7 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
 
   return (
     <>
-      {isAccountMissing(data?.image_set) ? (
+      {!imageData.isLoading && imageData.hasError ? (
         <Breadcrumb>
           <BreadcrumbItem>
             <Link to={paths['manage-images']}>Back to Manage Images</Link>
