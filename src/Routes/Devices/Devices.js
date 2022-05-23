@@ -24,7 +24,7 @@ import {
 import { Tiles } from '../../components/Tiles';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import DeviceStatus from './DeviceStatus';
-import { getDeviceHasUpdate } from '../../api';
+import { getDeviceHasUpdate } from '../../api/devices';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(/* webpackChunkName: "CreateImageWizard" */ './UpdateDeviceModal')

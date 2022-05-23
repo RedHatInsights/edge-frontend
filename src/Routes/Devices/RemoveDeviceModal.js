@@ -5,7 +5,7 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import Modal from '../../components/Modal';
 import SearchInput from '../../components/SearchInput';
 import apiWithToast from '../../utils/apiWithToast';
-import { removeDeviceFromGroupById } from '../../api';
+import { removeDeviceFromGroupById } from '../../api/groups';
 import { useDispatch } from 'react-redux';
 import { Text } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';

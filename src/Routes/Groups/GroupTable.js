@@ -4,7 +4,7 @@ import GeneralTable from '../../components/general-table/GeneralTable';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../../package.json';
 import { Bullseye, Spinner, Tooltip } from '@patternfly/react-core';
-import { validateImage } from '../../api';
+import { validateImage } from '../../api/images';
 
 const UpdateDeviceModal = React.lazy(() =>
   import('../Devices/UpdateDeviceModal')

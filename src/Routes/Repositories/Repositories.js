@@ -7,7 +7,7 @@ import TableHeader from './TableHeader';
 import RepositoryTable from './RepositoryTable';
 import Main from '@redhat-cloud-services/frontend-components/Main';
 import RepositoryHeader from './RepositoryHeader';
-import { getCustomRepositories } from '../../api/index';
+import { getCustomRepositories } from '../../api/repositories';
 import { Skeleton } from '@patternfly/react-core';
 
 const Repository = () => {

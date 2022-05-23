@@ -26,7 +26,7 @@ import DeviceDetailTabs from './DeviceDetailTabs';
 import CheckCircleIcon from '@patternfly/react-icons/dist/js/icons/check-circle-icon';
 import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-triangle-icon';
 import InProgressIcon from '@patternfly/react-icons/dist/js/icons/in-progress-icon';
-import { getDeviceHasUpdate } from '../../api/index';
+import { getDeviceHasUpdate } from '../../api/devices';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(

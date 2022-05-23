@@ -7,7 +7,7 @@ import {
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import GroupTable from './GroupTable';
 import Empty from '../../components/Empty';
-import { getGroups } from '../../api/index';
+import { getGroups } from '../../api/groups';
 import CreateGroupModal from './CreateGroupModal';
 import RenameGroupModal from './RenameGroupModal';
 import DeleteGroupModal from './DeleteGroupModal';
