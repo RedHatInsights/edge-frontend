@@ -25,7 +25,7 @@ import {
   getGroupById,
   removeDeviceFromGroupById,
   removeDevicesFromGroup,
-} from '../../api/index';
+} from '../../api/groups';
 import AddSystemsToGroupModal from '../Devices/AddSystemsToGroupModal';
 import {
   canUpdateSelectedDevices,

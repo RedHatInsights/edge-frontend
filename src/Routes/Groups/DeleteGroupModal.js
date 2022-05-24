@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import Modal from '../../components/Modal';
-import { deleteGroupById } from '../../api';
+import { deleteGroupById } from '../../api/groups';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 import { Text } from '@patternfly/react-core';

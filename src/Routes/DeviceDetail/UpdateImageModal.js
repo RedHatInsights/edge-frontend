@@ -25,7 +25,7 @@ import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail, loadEdgeImageSets } from '../../store/actions';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { createNewImage, addImageToPoll } from '../../store/actions';
-import { getEdgeImageStatus } from '../../api';
+import { getEdgeImageStatus } from '../../api/images';
 
 const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
   const dispatch = useDispatch();

@@ -3,7 +3,7 @@ import Modal from '../../../components/Modal';
 import { HelperText, HelperTextItem } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
-import { editCustomRepository } from '../../../api/index';
+import { editCustomRepository } from '../../../api/repositories';
 
 const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
   const editSchema = {

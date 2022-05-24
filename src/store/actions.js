@@ -1,5 +1,4 @@
 import {
-  LOAD_GROUPS,
   LOAD_TRESHOLD,
   LOAD_DEVICES_INFO,
   LOAD_CANARIES_INFO,
@@ -20,15 +19,8 @@ import {
   POLLING_IMAGES,
   LOAD_DEVICE_TABLE,
 } from './action-types';
+
 import {
-  fetchGroups,
-  threshold,
-  devicesInfo,
-  canariesInfo,
-  groupsDetail,
-  groupDevicesInfo,
-  fetchActiveImages,
-  fetchDeviceSummary,
   fetchImageStatus,
   getImageById,
   fetchEdgeImages,
@@ -36,37 +28,33 @@ import {
   getImagePackageMetadata,
   createImage,
   getImageSet,
-  getInventory,
-} from '../api';
-
-export const loadGroups = (perPage = 50, page = 1) => ({
-  type: LOAD_GROUPS,
-  payload: fetchGroups({ perPage, page }),
-});
+  fetchActiveImages,
+} from '../api/images';
+import { getInventory } from '../api/devices';
 
 export const loadThreshold = () => ({
   type: LOAD_TRESHOLD,
-  payload: threshold(),
+  payload: () => {},
 });
 
-export const loadDevicesInfo = (systemsCount) => ({
+export const loadDevicesInfo = () => ({
   type: LOAD_DEVICES_INFO,
-  payload: devicesInfo(systemsCount),
+  payload: () => {},
 });
 
 export const loadCanariesInfo = () => ({
   type: LOAD_CANARIES_INFO,
-  payload: canariesInfo(),
+  payload: () => {},
 });
 
-export const loadGroupsDetail = (uuid, page, perPage) => ({
+export const loadGroupsDetail = () => ({
   type: LOAD_GROUP_DETAIL,
-  payload: groupsDetail(uuid, { page, perPage }),
+  payload: () => {},
 });
 
-export const loadGroupDevicesInfo = (uuid) => ({
+export const loadGroupDevicesInfo = () => ({
   type: LOAD_GROUP_DEVICES_INFO,
-  payload: groupDevicesInfo(uuid),
+  payload: () => {},
 });
 
 export const selectEntity = (id, selected) => ({
@@ -111,7 +99,7 @@ export const loadImages = (dispatch, pagination) => {
 export const loadDeviceSummary = (dispatch) => {
   dispatch({
     type: LOAD_DEVICE_SUMMARY,
-    payload: fetchDeviceSummary,
+    payload: () => {},
     meta: {
       notifications: {
         rejected: {

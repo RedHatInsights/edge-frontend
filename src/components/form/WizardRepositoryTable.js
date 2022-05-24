@@ -5,7 +5,7 @@ import { Text, TextVariants } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import EmptyState from '../Empty';
 import { routes as paths } from '../../../package.json';
-import { getCustomRepositories } from '../../api/index';
+import { getCustomRepositories } from '../../api/repositories';
 import useApi from '../../hooks/useApi';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';

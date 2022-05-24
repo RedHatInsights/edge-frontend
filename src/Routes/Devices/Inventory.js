@@ -10,7 +10,7 @@ import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
 import CreateGroupModal from '../Groups/CreateGroupModal';
 import useApi from '../../hooks/useApi';
-import { getInventory } from '../../api';
+import { getInventory } from '../../api/devices';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 
 const UpdateDeviceModal = React.lazy(() =>

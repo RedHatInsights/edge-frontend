@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import LoadingCard from '@redhat-cloud-services/frontend-components-inventory-general-info/LoadingCard';
-import { getImageDataOnDevice } from '../api/index';
+import { getImageDataOnDevice } from '../api/images';
 import { routes as paths } from '../../package.json';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
