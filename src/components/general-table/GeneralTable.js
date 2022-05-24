@@ -155,7 +155,7 @@ const GeneralTable = ({
               (value) =>
                 value.isChecked &&
                 row.noApiSortFilter[
-                  columnNames.findIndex((row) => row.title === filter.label)
+                  columnNames.findIndex((row) => row.title === filter.label) - 1
                 ].toLowerCase() === value.value.toLowerCase()
             );
           }
