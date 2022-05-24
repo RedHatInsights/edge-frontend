@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import EmptyState from '../../components/Empty';
 
 import { mapUrlToObj } from '../../constants';
-import { isAccountMissing } from './constants';
 
 // conditional render for same index
 const tabs = {
@@ -59,7 +58,7 @@ const ImageDetailTabs = ({
 
   return (
     <>
-      {isAccountMissing(imageData?.data?.Data?.image_set) ? (
+      {!imageData.isLoading && imageData.hasError ? (
         <EmptyState
           icon="question"
           title="Image not found"
