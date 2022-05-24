@@ -106,7 +106,7 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
                   >
                     {data?.image_set?.Name || <Skeleton width="150px" />}
                   </TextListItem>
-                  <TextListItem component="dd">
+                  <TextListItem className="pf-u-pt-sm" component="dd">
                     {data?.Status || data?.images?.[0]?.image?.Status ? (
                       <StatusLabel status={data?.images?.[0]?.image?.Status} />
                     ) : (
