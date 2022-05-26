@@ -1,0 +1,85 @@
+import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
+
+import { useFlag, useFlagsStatus } from '@unleash/proxy-client-react';
+
+export const nameValidator = {
+  type: validatorTypes.PATTERN,
+  pattern: /^[A-Za-z0-9]+[A-Za-z0-9_\-\s]*$/,
+  message:
+    'Name must start with alphanumeric characters and can contain underscore and hyphen characters.',
+};
+
+export const mapUrlToObj = (url, keys) => {
+  const splitUrl = url.split('/');
+  const obj = {};
+
+  for (let i = 1; i < splitUrl.length; i++) {
+    if (splitUrl[i]) {
+      obj[keys[i - 1]] = splitUrl[i];
+    }
+  }
+
+  obj.buildUrl = function () {
+    return Object.values(this).reduce(
+      (acc, curr) => (typeof curr !== 'function' ? `${acc}/${curr}` : acc),
+      ''
+    );
+  };
+
+  return obj;
+};
+
+//urlString is the string added to the url search param
+//state is a boolean that adds or removes the urlString from the url
+export const stateToUrlSearch = (urlString, state) => {
+  var searchArray = [];
+  const currentSearchArray =
+    location.search.length > 0
+      ? location.search.includes('&')
+        ? location.search.split('?')[1].split('&')
+        : location.search.split('?').slice(1)
+      : [];
+  if (state) {
+    currentSearchArray.includes(urlString)
+      ? currentSearchArray
+      : currentSearchArray.push(urlString);
+    searchArray = currentSearchArray;
+  } else {
+    searchArray = currentSearchArray.includes(urlString)
+      ? currentSearchArray.filter((e) => e !== urlString)
+      : currentSearchArray;
+  }
+
+  return searchArray.join('&');
+};
+
+export const emptyStateNoFliters = (isLoading, count, history) =>
+  isLoading !== true &&
+  !count > 0 &&
+  !history.location.search.includes('has_filters=true');
+
+export const canUpdateSelectedDevices = ({ deviceData, imageData }) =>
+  deviceData?.length > 0 && imageData
+    ? deviceData?.some(
+        (device) => device.imageSetId !== deviceData[0].imageSetId
+      )
+    : true;
+
+export const useFeatureFlags = (flag) => {
+  const { flagsReady } = useFlagsStatus();
+  const isFlagEnabled = useFlag(flag);
+
+  return flagsReady ? isFlagEnabled : false;
+};
+
+export const truncateString = (string, characterCount) =>
+  `${string.substring(0, characterCount[0])}...${string.substring(
+    string.length - characterCount[1],
+    string.length
+  )}`;
+
+export const transformSort = ({ direction, name }) => {
+  return {
+    sort_by: direction === 'asc' ? name : `-${name}`,
+  };
+};
