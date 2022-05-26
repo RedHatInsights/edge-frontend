@@ -108,6 +108,9 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
                     clickTip="Copied"
                     variant="expansion"
                     className="pf-u-text-break-word"
+                    id={`${label
+                      .replace(/\s+/g, '-')
+                      .toLowerCase()}-clipboard-copy`}
                   >
                     {typeof value === 'function'
                       ? value() || 'Unavailable'
