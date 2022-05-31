@@ -44,7 +44,7 @@ Install all dependencies
 ```bash
 npm install
 ```
-Verify that node version is 16.
+Verify that node version should be 16.13.0 <= 16.13.1
 
 ## Running locally with webpack-proxy
 
