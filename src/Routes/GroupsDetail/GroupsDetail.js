@@ -31,7 +31,7 @@ import {
   canUpdateSelectedDevices,
   emptyStateNoFliters,
   stateToUrlSearch,
-} from '../../constants';
+} from '../../utils';
 import useApi from '../../hooks/useApi';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';

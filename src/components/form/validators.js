@@ -1,4 +1,4 @@
-import { reservedUsernames } from './constants';
+import { reservedUsernames } from './constants/reservedUsernames';
 
 export const reservedUsernameValidator = () => (value) =>
   reservedUsernames.includes(value)
