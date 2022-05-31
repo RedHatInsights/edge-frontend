@@ -6,7 +6,7 @@ import Modal from '../../components/Modal';
 import SearchInput from '../../components/SearchInput';
 import useApi from '../../hooks/useApi';
 import apiWithToast from '../../utils/apiWithToast';
-import { getGroups, addDevicesToGroup } from '../../api';
+import { getGroups, addDevicesToGroup } from '../../api/groups';
 import { useDispatch } from 'react-redux';
 import {
   Backdrop,

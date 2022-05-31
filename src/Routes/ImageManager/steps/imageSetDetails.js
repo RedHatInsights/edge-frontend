@@ -2,7 +2,7 @@ import React from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import { Flex, FlexItem, Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
-import { checkImageName } from '../../../api';
+import { checkImageName } from '../../../api/images';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import { nameValidator } from '../../../constants';
 

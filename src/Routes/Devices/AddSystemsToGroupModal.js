@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Button, Modal } from '@patternfly/react-core';
 import DeviceTable from '../Devices/DeviceTable';
 import PropTypes from 'prop-types';
-import { addDevicesToGroup } from '../../api/index';
-import { getInventory } from '../../api';
+import { addDevicesToGroup } from '../../api/groups';
+import { getInventory } from '../../api/devices';
 import useApi from '../../hooks/useApi';
 
 const AddSystemsToGroupModal = ({

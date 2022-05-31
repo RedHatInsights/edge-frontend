@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from '../../../components/Modal';
-import { createCustomRepository } from '../../../api/index';
+import { createCustomRepository } from '../../../api/repositories';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { nameValidator } from '../../../constants';

@@ -4,7 +4,7 @@ import { TextContent, Text } from '@patternfly/react-core';
 import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-triangle-icon';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 import PropTypes from 'prop-types';
-import { removeCustomRepository } from '../../../api/index';
+import { removeCustomRepository } from '../../../api/repositories';
 
 const LabelWithText = ({ label, text }) => {
   return (
