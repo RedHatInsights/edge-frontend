@@ -6,7 +6,7 @@ import {
   statusIcons,
   statusColors,
   imageStatusMapper,
-} from './constants';
+} from '../../constants';
 
 const StatusLabel = ({ status }) => {
   let icon = statusIcons['unknown'];

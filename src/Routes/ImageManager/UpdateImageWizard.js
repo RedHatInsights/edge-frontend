@@ -22,8 +22,7 @@ import { imageDetailReducer } from '../../store/reducers';
 import { loadImageDetail, loadEdgeImageSets } from '../../store/actions';
 import { getEdgeImageStatus } from '../../api/images';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
-import { useFeatureFlags } from '../../constants';
-import { getReleases } from '../ImageManagerDetail/constants';
+import { useFeatureFlags, getReleases } from '../../utils';
 
 const UpdateImage = ({ navigateBack, updateImageID }) => {
   const [user, setUser] = useState();

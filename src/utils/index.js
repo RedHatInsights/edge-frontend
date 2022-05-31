@@ -1,6 +1,6 @@
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
-
 import { useFlag, useFlagsStatus } from '@unleash/proxy-client-react';
+import { releaseMapper, supportedReleases } from '../constants';
 
 export const nameValidator = {
   type: validatorTypes.PATTERN,
@@ -83,3 +83,17 @@ export const transformSort = ({ direction, name }) => {
     sort_by: direction === 'asc' ? name : `-${name}`,
   };
 };
+
+export const isAccountMissing = (data) => data && !data?.Account;
+
+// getReleases returns a list of the supported releases + the forced release
+export const getReleases = (forcedRelease) =>
+  Object.entries(releaseMapper)
+    .filter(
+      ([release]) =>
+        supportedReleases.includes(release) || release === forcedRelease
+    )
+    .map(([release, releaseLabel]) => ({
+      value: release,
+      label: releaseLabel,
+    }));

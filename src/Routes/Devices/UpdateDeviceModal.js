@@ -16,7 +16,7 @@ import Modal from '../../components/Modal';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import BuildModalReview from '../../components/BuildModalReview';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
-import { distributionMapper } from '../ImageManagerDetail/constants';
+import { distributionMapper } from '../../constants';
 
 const getImageData = (imageId) =>
   getImageById({ id: imageId }).then((imageSetId) =>
