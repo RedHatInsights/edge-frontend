@@ -10,7 +10,7 @@ import { imageTypeMapper } from '../../constants';
 import { loadImageSetDetail } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
 import Main from '@redhat-cloud-services/frontend-components/Main';
-import { truncateString } from '../../constants';
+import { truncateString } from '../../utils';
 
 const defaultFilters = [
   {

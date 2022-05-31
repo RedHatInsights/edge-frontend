@@ -9,7 +9,7 @@ import ImagePackagesTab from './ImagePackagesTab';
 import PropTypes from 'prop-types';
 import EmptyState from '../../components/Empty';
 
-import { mapUrlToObj } from '../../constants';
+import { mapUrlToObj } from '../../utils';
 
 // conditional render for same index
 const tabs = {
