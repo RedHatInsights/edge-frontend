@@ -13,7 +13,7 @@ import RenameGroupModal from './RenameGroupModal';
 import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
 import { useHistory } from 'react-router-dom';
-import { emptyStateNoFliters } from '../../constants';
+import { emptyStateNoFliters } from '../../utils';
 
 const Groups = () => {
   const history = useHistory();

@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import { Select, SelectOption, Text } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
-import {
-  imageTypeMapper,
-  DEFAULT_RELEASE,
-  getReleases,
-} from '../../ImageManagerDetail/constants';
+import { imageTypeMapper, DEFAULT_RELEASE } from '../../../constants';
+import { getReleases } from '../../../utils';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 
 const ReleaseLabel = () => {

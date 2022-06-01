@@ -18,8 +18,8 @@ import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
 import { useDispatch } from 'react-redux';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { getEdgeImageStatus } from '../../api/images';
-import { useFeatureFlags } from '../../constants';
-import { DEFAULT_RELEASE } from '../ImageManagerDetail/constants';
+import { useFeatureFlags } from '../../utils';
+import { DEFAULT_RELEASE } from '../../constants';
 
 const CreateImage = ({ navigateBack }) => {
   const [user, setUser] = useState();

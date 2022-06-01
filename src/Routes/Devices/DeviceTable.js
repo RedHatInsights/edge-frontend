@@ -13,7 +13,7 @@ import {
   ExclamationTriangleIcon,
   InProgressIcon,
 } from '@patternfly/react-icons';
-import { emptyStateNoFliters } from '../../constants';
+import { emptyStateNoFliters } from '../../utils';
 import infoColor from '@patternfly/react-tokens/dist/esm/global_active_color_300';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 

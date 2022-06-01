@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom';
 import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import StatusLabel from '../ImageManagerDetail/StatusLabel';
-import { imageTypeMapper } from '../ImageManagerDetail/constants';
+import { imageTypeMapper } from '../../constants';
 import { loadImageSetDetail } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
 import Main from '@redhat-cloud-services/frontend-components/Main';
-import { truncateString } from '../../constants';
+import { truncateString } from '../../utils';
 
 const defaultFilters = [
   {

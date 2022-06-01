@@ -1,7 +1,3 @@
-import React from 'react';
-
-export const InventoryContext = React.createContext({});
-
 export const reservedUsernames = [
   'root',
   'bin',

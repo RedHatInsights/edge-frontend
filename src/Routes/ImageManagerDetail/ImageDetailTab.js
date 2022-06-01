@@ -13,7 +13,7 @@ import {
   Skeleton,
 } from '@patternfly/react-core';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
-import { distributionMapper } from './constants';
+import { distributionMapper } from '../../constants';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';

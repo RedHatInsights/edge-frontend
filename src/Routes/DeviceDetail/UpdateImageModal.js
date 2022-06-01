@@ -13,10 +13,7 @@ import {
   Bullseye,
   Spinner,
 } from '@patternfly/react-core';
-import {
-  imageTypeMapper,
-  releaseMapper,
-} from '../ImageManagerDetail/constants';
+import { imageTypeMapper, releaseMapper } from '../../constants';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { useSelector, shallowEqual } from 'react-redux';

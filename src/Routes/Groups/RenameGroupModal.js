@@ -4,7 +4,7 @@ import validatorTypes from '@data-driven-forms/react-form-renderer/validator-typ
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import Modal from '../../components/Modal';
 import { updateGroupById, validateGroupName } from '../../api/groups';
-import { nameValidator } from '../../constants';
+import { nameValidator } from '../../utils';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
 

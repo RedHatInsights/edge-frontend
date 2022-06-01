@@ -11,7 +11,7 @@ import { loadEdgeImageSets } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
 import CustomEmptyState from '../../components/Empty';
 import { useHistory } from 'react-router-dom';
-import { emptyStateNoFliters } from '../../constants';
+import { emptyStateNoFliters } from '../../utils';
 
 const TooltipSelectorRef = ({ index }) => (
   <div>
