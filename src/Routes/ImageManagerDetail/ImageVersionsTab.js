@@ -58,12 +58,14 @@ const columnNames = [
   },
 ];
 
-const createRows = (data, imageSetId) => {
+const createRows = (data, imageSetId, latestImageVersion) => {
   return data?.map(({ image }) => ({
     rowInfo: {
       id: image?.ID,
       imageStatus: image?.Status,
       isoURL: image?.Installer?.ImageBuildISOURL,
+      latestImageVersion,
+      currentImageVersion: image.Version,
     },
     noApiSortFilter: [
       image?.Version,
@@ -104,13 +106,15 @@ const createRows = (data, imageSetId) => {
 };
 
 const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
+  const latestImageVersion = imageData?.data?.Data.image_set.Version;
   const [rows, setRows] = useState([]);
   useEffect(() => {
     if (imageData?.data) {
       setRows(
         createRows(
           imageData?.data?.Data?.images,
-          imageData?.data?.Data?.image_set?.ID
+          imageData?.data?.Data?.image_set?.ID,
+          latestImageVersion
         )
       );
     }
@@ -143,6 +147,9 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
         onClick: (_event, _rowId, rowData) => {
           openUpdateWizard(rowData.rowInfo.id);
         },
+        isDisabled:
+          rowData?.rowInfo?.latestImageVersion !==
+          rowData?.rowInfo?.currentImageVersion,
       });
     }
 
@@ -154,7 +161,6 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
 
     return actionsArray;
   };
-
   const areActionsDisabled = (rowData) =>
     rowData.rowInfo?.imageStatus === 'BUILDING';
 
