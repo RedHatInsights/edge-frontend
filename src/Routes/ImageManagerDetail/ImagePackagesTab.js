@@ -32,14 +32,20 @@ const columnNames = [
   //{ title: 'Type', type: 'type', sort: false, columnTransforms: [cellWidth(35)] },
 ];
 
-const createRows = (data, imageData, toggleTable) => {
+const createRows = ({
+  distribution,
+  installedPackages,
+  addedPackages,
+  showAll,
+}) => {
   const rowData =
-    toggleTable === 0
-      ? data.filter(
+    showAll === 0
+      ? installedPackages.filter(
           (pack) =>
-            imageData.filter((image) => pack.name === image.Name).length > 0
+            addedPackages?.filter((image) => pack.name === image.Name).length >
+            0
         )
-      : data;
+      : installedPackages;
   return rowData.map((packageData) => ({
     noApiSortFilter: [
       packageData?.name,
@@ -55,7 +61,7 @@ const createRows = (data, imageData, toggleTable) => {
       {
         title: (
           <a
-            href={`https://access.redhat.com/downloads/content/rhel---8/x86_64/7416/${packageData?.name}/${packageData?.version}-${packageData?.release}/${packageData?.arch}/fd431d51/package`}
+            href={`https://access.redhat.com/downloads/content/rhel---${distribution}/x86_64/7416/${packageData?.name}/${packageData?.version}-${packageData?.release}/${packageData?.arch}/fd431d51/package`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -89,6 +95,11 @@ const ImagePackagesTab = ({ imageVersion }) => {
   const history = useHistory();
   const splitUrl = location.pathname.split('/');
   const defaultToggle = splitUrl.length === 7 ? tabsToIndex[splitUrl[6]] : 1;
+  // Distribution examples would be: rhel-86, rhel-90, and rhel-100
+  const distribution = imageVersion?.image?.Distribution?.split('-')[1].slice(
+    0,
+    -1
+  );
 
   const [packageData, setPackageData] = useState({});
   const [toggleTable, setToggleTable] = useState(defaultToggle);
@@ -131,11 +142,13 @@ const ImagePackagesTab = ({ imageVersion }) => {
         columnNames={columnNames}
         rows={
           packageData?.image?.Commit?.InstalledPackages
-            ? createRows(
-                packageData?.image?.Commit?.InstalledPackages,
-                packageData?.image?.Packages,
-                toggleTable
-              )
+            ? createRows({
+                distribution: distribution,
+                installedPackages:
+                  packageData?.image?.Commit?.InstalledPackages,
+                addedPackages: packageData?.image?.Packages,
+                showAll: toggleTable,
+              })
             : []
         }
         actionResolver={() => []}
