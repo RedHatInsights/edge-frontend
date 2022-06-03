@@ -15,7 +15,7 @@ import {
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from '../../constants';
 import PropTypes from 'prop-types';
-import { routes as paths } from '../../../package.json';
+import { routes as paths } from '../../constants/routeMapper';
 import { Link } from 'react-router-dom';
 
 const ImageDetailTab = ({ imageData, imageVersion }) => {
