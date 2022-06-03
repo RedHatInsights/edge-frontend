@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, TabTitleText, Skeleton } from '@patternfly/react-core';
 import { useHistory, useLocation } from 'react-router-dom';
-import { routes as paths } from '../../../package.json';
+import { routes as paths } from '../../constants/routeMapper';
 
 import ImageDetailTab from './ImageDetailTab';
 import ImageVersionTab from './ImageVersionsTab';
