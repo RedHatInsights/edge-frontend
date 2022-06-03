@@ -57,7 +57,7 @@ describe('Filter input', () => {
       />
     );
     const filterInputElement = await findByTestId('filter-input-testid');
-    const filterInput = await findByPlaceholderText('Filter by Test 1');
+    const filterInput = await findByPlaceholderText('Filter by test 1');
 
     expect(filterInputElement).toBeDefined();
     expect(filterInput.value).toEqual('test-label');

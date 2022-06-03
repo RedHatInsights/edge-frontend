@@ -39,7 +39,7 @@ const columnNames = [
     columnTransforms: [cellWidth(25)],
   },
   {
-    title: 'Ostree Commit Hash',
+    title: 'Ostree commit hash',
     type: 'ostree_commit_hash',
     sort: false,
     columnTransforms: [cellWidth(20)],

@@ -121,9 +121,9 @@ exports[`ImageSets table to render correctly 1`] = `
                     </svg>
                   </span>
                   <input
-                    aria-label="Select input for Name"
+                    aria-label="Select input for name"
                     class="pf-c-search-input__text-input"
-                    placeholder="Filter by Name"
+                    placeholder="Filter by name"
                     value=""
                   />
                 </span>

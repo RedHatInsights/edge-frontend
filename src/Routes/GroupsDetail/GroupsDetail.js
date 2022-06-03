@@ -171,7 +171,7 @@ const GroupsDetail = () => {
                   key="delete-device-group"
                   onClick={() => handleDeleteModal(groupId, groupName)}
                 >
-                  Delete Group
+                  Delete group
                 </DropdownItem>,
                 <DropdownItem
                   key="update-all-devices"
