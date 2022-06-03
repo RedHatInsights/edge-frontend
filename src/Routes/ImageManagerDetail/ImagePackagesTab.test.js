@@ -50,7 +50,7 @@ describe('ImagePackagesTab', () => {
       screen
         .getByRole('textbox', 'Select input for Name')
         .getAttribute('placeholder')
-    ).toEqual('Filter by Name');
+    ).toEqual('Filter by name');
     expect(screen.getByRole('button', { name: 'Additional' })).toBeDefined();
     expect(screen.getByRole('button', { name: 'All' })).toBeDefined();
     expect(screen.getByText(/test package 2/i)).toBeDefined();

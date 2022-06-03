@@ -171,7 +171,7 @@ const GroupsDetail = () => {
                   key="delete-device-group"
                   onClick={() => handleDeleteModal(groupId, groupName)}
                 >
-                  Delete Group
+                  Delete group
                 </DropdownItem>,
                 <DropdownItem
                   key="update-all-devices"
@@ -259,9 +259,9 @@ const GroupsDetail = () => {
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
-              icon="cube"
+              icon="plus"
               title="Add systems to the group"
-              body="Create groups to help manage your systems more effectively"
+              body="Create groups to help manage your systems more effectively."
               primaryAction={{
                 text: 'Add systems',
                 click: () => setIsAddModalOpen(true),

@@ -68,7 +68,7 @@ const columnNames = [
   },
 ];
 
-const createRows = (devices) => {
+const createRows = (devices, isSystemsView) => {
   return devices?.map((device) => {
     let { DeviceName, DeviceGroups } = device;
 
@@ -128,15 +128,21 @@ const createRows = (devices) => {
       ],
       cells: [
         {
-          title: (
+          title: isSystemsView ? (
             <Link to={`${paths['inventory']}/${DeviceUUID}`}>{DeviceName}</Link>
+          ) : (
+            DeviceName
           ),
         },
         {
           title: ImageName ? (
-            <Link to={`${paths['manage-images']}/${ImageSetID}/`}>
-              {ImageName}
-            </Link>
+            isSystemsView ? (
+              <Link to={`${paths['manage-images']}/${ImageSetID}/`}>
+                {ImageName}
+              </Link>
+            ) : (
+              ImageName
+            )
           ) : (
             'unavailable'
           ),
@@ -294,7 +300,7 @@ const DeviceTable = ({
             hasError: hasError,
           }}
           columnNames={columnNames}
-          rows={createRows(data || [])}
+          rows={createRows(data || [], isSystemsView)}
           actionResolver={actionResolver}
           defaultSort={{ index: 3, direction: 'desc' }}
           toolbarButtons={

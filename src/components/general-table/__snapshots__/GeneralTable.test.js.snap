@@ -121,9 +121,9 @@ exports[`General table should render correctly 1`] = `
                     </svg>
                   </span>
                   <input
-                    aria-label="Select input for Test 1"
+                    aria-label="Select input for test 1"
                     class="pf-c-search-input__text-input"
-                    placeholder="Filter by Test 1"
+                    placeholder="Filter by test 1"
                     value=""
                   />
                 </span>

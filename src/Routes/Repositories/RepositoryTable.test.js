@@ -47,7 +47,7 @@ describe('RepositoryTable', () => {
       screen
         .getByRole('textbox', 'Select input for Name')
         .getAttribute('placeholder')
-    ).toEqual('Filter by Name');
+    ).toEqual('Filter by name');
     expect(screen.findByRole('button', 'Add repository')).toBeDefined();
     expect(screen.findByRole('button', 'Name')).toBeDefined();
     expect(screen.getAllByText(/test name/i)).toHaveLength(3);
