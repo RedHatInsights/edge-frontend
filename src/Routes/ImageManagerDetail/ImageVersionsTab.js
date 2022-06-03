@@ -5,7 +5,7 @@ import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
 import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
-import StatusLabel from '../ImageManagerDetail/StatusLabel';
+import Status from '../../components/Status';
 import { imageTypeMapper } from '../../constants';
 import { loadImageSetDetail } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
@@ -99,7 +99,7 @@ const createRows = (data, imageSetId, latestImageVersion) => {
         title: <DateFormat date={image?.CreatedAt} />,
       },
       {
-        title: <StatusLabel status={image?.Status} />,
+        title: <Status type={image?.Status.toLowerCase()} />,
       },
     ],
   }));

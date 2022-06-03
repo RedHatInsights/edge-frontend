@@ -1,23 +1,22 @@
 import {
   CheckCircleIcon,
-  ExclamationCircleIcon,
   ExclamationTriangleIcon,
-  BellIcon,
-  PauseCircleIcon,
-  CircleNotchIcon,
+  PlusCircleIcon,
   UnknownIcon,
+  RepositoryIcon,
+  SearchIcon,
+  ModuleIcon,
+  CubeIcon,
+  TimesCircleIcon,
+  InProgressIcon,
+  QuestionCircleIcon,
 } from '@patternfly/react-icons';
 
 import dangerColor from '@patternfly/react-tokens/dist/esm/global_danger_color_100';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 import successColor from '@patternfly/react-tokens/dist/esm/global_success_color_100';
 import infoColor from '@patternfly/react-tokens/dist/esm/global_info_color_100';
-
-import React from 'react';
-import InProgressIcon from '@patternfly/react-icons/dist/js/icons/in-progress-icon';
-import TimesCircleIcon from '@patternfly/react-icons/dist/js/icons/times-circle-icon';
-import QuestionCircleIcon from '@patternfly/react-icons/dist/js/icons/question-circle-icon';
-import otherInfoColor from '@patternfly/react-tokens/dist/esm/global_active_color_100';
+import activeColor from '@patternfly/react-tokens/dist/esm/global_active_color_100';
 
 export const statusMapper = [
   'done',
@@ -28,32 +27,6 @@ export const statusMapper = [
   'warning',
   'notification',
 ];
-
-export const statusToIcon = {
-  done: {
-    icon: CheckCircleIcon,
-    color: successColor.value,
-    title: 'Fully adopted',
-  },
-  error: {
-    icon: ExclamationCircleIcon,
-    color: dangerColor.value,
-    title: 'Error while adopting',
-  },
-  pending: { icon: PauseCircleIcon, title: 'Pending adoption' },
-  updating: { icon: CircleNotchIcon, title: 'Updating' },
-  unknown: { icon: UnknownIcon, title: 'Unknown state' },
-  warning: {
-    icon: ExclamationTriangleIcon,
-    color: warningColor.value,
-    title: 'Warning while adopting',
-  },
-  notification: {
-    icon: BellIcon,
-    color: infoColor.value,
-    title: 'Delivering',
-  },
-};
 
 export const sortByDirection = (data, direction = 'asc') =>
   data.sort((a, b) =>
@@ -83,39 +56,6 @@ export const composeStatus = [
   'INTERRUPTED',
 ];
 
-//For this object, it's need to sisable lint once this is not a react component
-export const statusIcons = {
-  // eslint-disable-next-line react/display-name
-  unknown: (color) => <QuestionCircleIcon color={color} />,
-  // eslint-disable-next-line react/display-name
-  CREATED: (color) => <CheckCircleIcon color={color} />,
-  // eslint-disable-next-line react/display-name
-  BUILDING: (color) => <InProgressIcon color={color} />,
-  // eslint-disable-next-line react/display-name
-  ERROR: (color) => <TimesCircleIcon color={color} />,
-  // eslint-disable-next-line react/display-name
-  SUCCESS: (color) => <CheckCircleIcon color={color} />,
-  // eslint-disable-next-line react/display-name
-  INTERRUPTED: (color) => <InProgressIcon color={color} />,
-};
-
-export const statusColors = {
-  unknown: 'grey',
-  CREATED: 'green',
-  BUILDING: otherInfoColor.value,
-  ERROR: 'red',
-  SUCCESS: 'green',
-  INTERRUPTED: otherInfoColor.value,
-};
-
-export const imageStatusMapper = {
-  CREATED: 'CREATED',
-  BUILDING: 'Image build in progress',
-  ERROR: 'ERROR',
-  SUCCESS: 'Ready',
-  INTERRUPTED: 'Image build in progress',
-};
-
 export const distributionMapper = {
   'rhel-84': 'RHEL 8.4',
   'rhel-85': 'RHEL 8.5',
@@ -137,4 +77,26 @@ export const DEFAULT_RELEASE = 'rhel-90';
 export const imageTypeMapper = {
   'rhel-edge-commit': 'RHEL for Edge Commit (.tar)',
   'rhel-edge-installer': 'RHEL for Edge Installer (.iso)',
+};
+
+export const iconMapper = {
+  unknown: UnknownIcon,
+  repository: RepositoryIcon,
+  search: SearchIcon,
+  module: ModuleIcon,
+  cube: CubeIcon,
+  question: QuestionCircleIcon,
+  plus: PlusCircleIcon,
+  checkCircle: CheckCircleIcon,
+  exclamationTriangle: ExclamationTriangleIcon,
+  timesCircle: TimesCircleIcon,
+  inProgress: InProgressIcon,
+};
+
+export const colorMapper = {
+  green: successColor.value,
+  yellow: warningColor.value,
+  lightBlue: infoColor.value,
+  blue: activeColor.value,
+  red: dangerColor.value,
 };

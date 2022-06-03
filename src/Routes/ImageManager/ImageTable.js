@@ -6,7 +6,7 @@ import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
 import { Text } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
-import StatusLabel from '../ImageManagerDetail/StatusLabel';
+import Status from '../../components/Status';
 import {
   imageTypeMapper,
   DEFAULT_RELEASE,
@@ -72,7 +72,7 @@ const createRows = (data) => {
         title: <DateFormat date={image?.CreatedAt} />,
       },
       {
-        title: <StatusLabel status={image?.Status} />,
+        title: <Status type={image?.Status.toLowerCase()} />,
       },
     ],
     imageStatus: image?.Status,

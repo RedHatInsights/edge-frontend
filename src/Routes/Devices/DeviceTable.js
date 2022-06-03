@@ -5,17 +5,11 @@ import { routes as paths } from '../../../package.json';
 import { Link } from 'react-router-dom';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
-import { Split, SplitItem, Tooltip } from '@patternfly/react-core';
+import { Tooltip } from '@patternfly/react-core';
 import CustomEmptyState from '../../components/Empty';
 import { useHistory } from 'react-router-dom';
-import {
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  InProgressIcon,
-} from '@patternfly/react-icons';
 import { emptyStateNoFliters } from '../../utils';
-import infoColor from '@patternfly/react-tokens/dist/esm/global_active_color_300';
-import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
+import DeviceStatus from '../../components/Status';
 
 const getDeviceStatus = (deviceStatus, isUpdateAvailable) =>
   deviceStatus === 'UPDATING'
@@ -23,45 +17,6 @@ const getDeviceStatus = (deviceStatus, isUpdateAvailable) =>
     : isUpdateAvailable
     ? 'updateAvailable'
     : 'running';
-
-const DeviceStatus = ({ status }) => {
-  const statusType = {
-    booting: (
-      <Split className="pf-u-info-color-100">
-        <SplitItem className="pf-u-mr-sm">
-          <InProgressIcon />
-        </SplitItem>
-        <SplitItem>Booting</SplitItem>
-      </Split>
-    ),
-    running: (
-      <Split className="pf-u-success-color-100">
-        <SplitItem className="pf-u-mr-sm">
-          <CheckCircleIcon />
-        </SplitItem>
-        <SplitItem>Running</SplitItem>
-      </Split>
-    ),
-    updateAvailable: (
-      <Split className="pf-u-warning-color-100">
-        <SplitItem className="pf-u-mr-sm">
-          <ExclamationTriangleIcon color={warningColor.value} />
-        </SplitItem>
-        <SplitItem>Update Available</SplitItem>
-      </Split>
-    ),
-    updating: (
-      <Split className="pf-u-active-color-100">
-        <SplitItem className="pf-u-mr-sm">
-          <InProgressIcon color={infoColor.value} />
-        </SplitItem>
-        <SplitItem>Updating</SplitItem>
-      </Split>
-    ),
-  };
-
-  return statusType[status];
-};
 
 const defaultFilters = [
   {
@@ -199,7 +154,7 @@ const createRows = (devices) => {
         },
         {
           title: (
-            <DeviceStatus status={getDeviceStatus(Status, UpdateAvailable)} />
+            <DeviceStatus type={getDeviceStatus(Status, UpdateAvailable)} />
           ),
         },
       ],

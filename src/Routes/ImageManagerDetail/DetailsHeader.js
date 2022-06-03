@@ -17,7 +17,7 @@ import {
   DropdownToggle,
   DropdownPosition,
 } from '@patternfly/react-core';
-import StatusLabel from './StatusLabel';
+import Status from '../../components/Status';
 import { routes as paths } from '../../../package.json';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
@@ -107,7 +107,9 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
                   </TextListItem>
                   <TextListItem className="pf-u-pt-sm" component="dd">
                     {data?.Status || data?.images?.[0]?.image?.Status ? (
-                      <StatusLabel status={data?.images?.[0]?.image?.Status} />
+                      <Status
+                        type={data?.images?.[0]?.image?.Status.toLowerCase()}
+                      />
                     ) : (
                       <Skeleton width="100px" />
                     )}

@@ -7,26 +7,10 @@ import {
   EmptyStateBody,
   EmptyStateSecondaryActions,
 } from '@patternfly/react-core';
-import RepositoryIcon from '@patternfly/react-icons/dist/esm/icons/repository-icon';
-import SearchIcon from '@patternfly/react-icons/dist/esm/icons/search-icon';
-import ModuleIcon from '@patternfly/react-icons/dist/esm/icons/module-icon';
-import CubeIcon from '@patternfly/react-icons/dist/esm/icons/cube-icon';
-import {
-  ExternalLinkAltIcon,
-  QuestionCircleIcon,
-  PlusCircleIcon,
-} from '@patternfly/react-icons';
+import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-
-const emptyStateIconMapper = {
-  repository: RepositoryIcon,
-  search: SearchIcon,
-  module: ModuleIcon,
-  cube: CubeIcon,
-  question: QuestionCircleIcon,
-  plus: PlusCircleIcon,
-};
+import { iconMapper } from '../constants';
 
 const Empty = ({
   bgColor,
@@ -37,7 +21,7 @@ const Empty = ({
   secondaryActions,
 }) => (
   <EmptyState variant="large" style={{ backgroundColor: bgColor || '' }}>
-    {icon && <EmptyStateIcon icon={emptyStateIconMapper[icon]} />}
+    {icon && <EmptyStateIcon icon={iconMapper[icon]} />}
     <Title headingLevel="h4" size="lg">
       {title}
     </Title>

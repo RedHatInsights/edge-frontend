@@ -33,7 +33,7 @@ exports[`DetailsHeader renders correctly 1`] = `
             >
               <svg
                 aria-hidden="true"
-                fill="#06c"
+                fill="currentColor"
                 height="1em"
                 role="img"
                 style="vertical-align: -0.125em;"
@@ -48,7 +48,9 @@ exports[`DetailsHeader renders correctly 1`] = `
             <div
               class="pf-l-split__item"
             >
-              Image build in progress
+              <p>
+                Image build in progress
+              </p>
             </div>
           </div>
         </dd>
