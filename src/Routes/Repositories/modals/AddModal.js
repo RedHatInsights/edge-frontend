@@ -3,7 +3,7 @@ import Modal from '../../../components/Modal';
 import { createCustomRepository } from '../../../api/repositories';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
-import { nameValidator } from '../../../constants';
+import { nameValidator } from '../../../utils';
 
 const AddModal = ({ isOpen, openModal, reloadData }) => {
   const addSchema = {

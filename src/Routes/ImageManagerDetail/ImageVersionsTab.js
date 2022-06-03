@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
-import { routes as paths } from '../../../package.json';
+import { routes as paths } from '../../constants/routeMapper';
 import { Link } from 'react-router-dom';
 import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
-import StatusLabel from '../ImageManagerDetail/StatusLabel';
-import { imageTypeMapper } from '../ImageManagerDetail/constants';
+import Status from '../../components/Status';
+import { imageTypeMapper } from '../../constants';
 import { loadImageSetDetail } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
 import Main from '@redhat-cloud-services/frontend-components/Main';
-import { truncateString } from '../../constants';
+import { truncateString } from '../../utils';
 
 const defaultFilters = [
   {
@@ -39,7 +39,7 @@ const columnNames = [
     columnTransforms: [cellWidth(25)],
   },
   {
-    title: 'Ostree Commit Hash',
+    title: 'Ostree commit hash',
     type: 'ostree_commit_hash',
     sort: false,
     columnTransforms: [cellWidth(20)],
@@ -99,7 +99,7 @@ const createRows = (data, imageSetId, latestImageVersion) => {
         title: <DateFormat date={image?.CreatedAt} />,
       },
       {
-        title: <StatusLabel status={image?.Status} />,
+        title: <Status type={image?.Status.toLowerCase()} />,
       },
     ],
   }));

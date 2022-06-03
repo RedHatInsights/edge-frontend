@@ -17,7 +17,7 @@ import {
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import Empty from '../../components/Empty';
 import { Link, useHistory } from 'react-router-dom';
-import { routes as paths } from '../../../package.json';
+import { routes as paths } from '../../constants/routeMapper';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import DeviceTable from '../Devices/DeviceTable';
 import { useParams } from 'react-router-dom';
@@ -31,7 +31,7 @@ import {
   canUpdateSelectedDevices,
   emptyStateNoFliters,
   stateToUrlSearch,
-} from '../../constants';
+} from '../../utils';
 import useApi from '../../hooks/useApi';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
@@ -171,7 +171,7 @@ const GroupsDetail = () => {
                   key="delete-device-group"
                   onClick={() => handleDeleteModal(groupId, groupName)}
                 >
-                  Delete Group
+                  Delete group
                 </DropdownItem>,
                 <DropdownItem
                   key="update-all-devices"
@@ -259,9 +259,9 @@ const GroupsDetail = () => {
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
-              icon="cube"
+              icon="plus"
               title="Add systems to the group"
-              body="Create groups to help manage your systems more effectively"
+              body="Create groups to help manage your systems more effectively."
               primaryAction={{
                 text: 'Add systems',
                 click: () => setIsAddModalOpen(true),

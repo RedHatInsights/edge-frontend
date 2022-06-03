@@ -8,7 +8,7 @@ import {
   addDevicesToGroup,
   validateGroupName,
 } from '../../api/groups';
-import { nameValidator } from '../../constants';
+import { nameValidator } from '../../utils';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
 

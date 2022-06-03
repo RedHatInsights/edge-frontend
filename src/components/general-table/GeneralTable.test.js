@@ -75,7 +75,7 @@ describe('General table', () => {
     );
 
     const generalTableHeader = await findByTestId('toolbar-header-testid');
-    const headerInput = await findByPlaceholderText('Filter by Test 1');
+    const headerInput = await findByPlaceholderText('Filter by test 1');
     const generalTable = await findByTestId('general-table-testid');
     const generalTableFooter = await findByTestId('pagination-footer-test-id');
 

@@ -46,7 +46,7 @@ describe('Toolbar Header', () => {
       );
 
     const headerElement = await findByTestId('toolbar-header-testid');
-    const headerInput = await findByPlaceholderText('Filter by Test 1');
+    const headerInput = await findByPlaceholderText('Filter by test 1');
     const headerButton = await findByRole('button', {
       name: 'Test toolbar button',
     });

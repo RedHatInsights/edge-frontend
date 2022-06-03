@@ -10,7 +10,7 @@ import {
 } from '@patternfly/react-core';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-triangle-icon';
-import { releaseMapper } from '../../ImageManagerDetail/constants';
+import { releaseMapper } from '../../../constants';
 
 const CustomPackageLabel = () => {
   const { getState } = useFormApi();

@@ -2,16 +2,16 @@ import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
-import { routes as paths } from '../../../package.json';
+import { routes as paths } from '../../constants/routeMapper';
 import { Link } from 'react-router-dom';
 import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
-import StatusLabel from '../ImageManagerDetail/StatusLabel';
 import { loadEdgeImageSets } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
 import CustomEmptyState from '../../components/Empty';
 import { useHistory } from 'react-router-dom';
-import { emptyStateNoFliters } from '../../constants';
+import { emptyStateNoFliters } from '../../utils';
+import Status from '../../components/Status';
 
 const TooltipSelectorRef = ({ index }) => (
   <div>
@@ -101,7 +101,7 @@ const createRows = (data) => {
           <>
             {/* workaround for tooltip on kebab*/}
             <TooltipSelectorRef index={index} />
-            <StatusLabel status={image_set?.Images[0].Status} />
+            <Status type={image_set?.Images[0].Status.toLowerCase()} />
           </>
         ),
       },

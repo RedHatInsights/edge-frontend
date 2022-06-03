@@ -15,7 +15,7 @@ import { useHistory } from 'react-router-dom';
 import { RegistryContext } from '../../store';
 import { edgeImageSetsReducer } from '../../store/reducers';
 import ImageSetsTable from './ImageSetsTable';
-import { stateToUrlSearch } from '../../constants';
+import { stateToUrlSearch } from '../../utils';
 
 const CreateImageWizard = React.lazy(() =>
   import(

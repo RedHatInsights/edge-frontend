@@ -1,9 +1,9 @@
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import React, { Suspense } from 'react';
-import { routes as paths } from '../package.json';
+import { routes as paths } from './constants/routeMapper';
 import { Bullseye, Spinner } from '@patternfly/react-core';
-import { useFeatureFlags } from './constants';
+import { useFeatureFlags } from './utils';
 // const Groups = React.lazy(() =>
 //   import(/* webpackChunkName: "GroupsPage" */ './Routes/Groups/Groups')
 // );

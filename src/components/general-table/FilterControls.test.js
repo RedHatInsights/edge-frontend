@@ -32,7 +32,7 @@ describe('Filter controls', () => {
 
     const filterInput = await findByTestId('filter-input-testid');
     const filterDropdown = await findByTestId('filter-dropdown-testid');
-    const filterInputValue = await findByPlaceholderText('Filter by Test 1');
+    const filterInputValue = await findByPlaceholderText('Filter by test 1');
 
     expect(filterInput).toBeDefined();
     expect(filterDropdown).toBeDefined();

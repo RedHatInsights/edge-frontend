@@ -13,9 +13,9 @@ import {
   Skeleton,
 } from '@patternfly/react-core';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
-import { distributionMapper } from './constants';
+import { distributionMapper } from '../../constants';
 import PropTypes from 'prop-types';
-import { routes as paths } from '../../../package.json';
+import { routes as paths } from '../../constants/routeMapper';
 import { Link } from 'react-router-dom';
 
 const ImageDetailTab = ({ imageData, imageVersion }) => {
@@ -46,7 +46,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
 
   const userInfoMapper = {
     Username: () => data?.image?.Installer?.Username,
-    'SSH Key': () => data?.image?.Installer?.SshKey,
+    'SSH key': () => data?.image?.Installer?.SshKey,
   };
   const renderAdditionalPackageLink = () => {
     return (
@@ -69,8 +69,8 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   };
 
   const packageMapper = {
-    'Total Additional Packages': renderAdditionalPackageLink,
-    'Total Packages': renderTotalPackageLink,
+    'Total additional packages': renderAdditionalPackageLink,
+    'Total packages': renderTotalPackageLink,
   };
 
   const packageDiffMapper = {
@@ -80,11 +80,11 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   };
 
   if (data?.image?.Installer?.Checksum) {
-    detailsMapper['SHA-256 Checksum'] = () => data?.image?.Installer?.Checksum;
+    detailsMapper['SHA-256 checksum'] = () => data?.image?.Installer?.Checksum;
   }
 
   if (data?.image?.Commit?.OSTreeCommit) {
-    detailsMapper['Ostree Commit Hash'] = () =>
+    detailsMapper['Ostree commit hash'] = () =>
       data?.image?.Commit?.OSTreeCommit;
   }
 
@@ -99,9 +99,9 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
               >
                 {label}
               </TextListItem>
-              {label === 'SHA-256 Checksum' ||
-              label === 'Ostree Commit Hash' ||
-              (label === 'SSH Key' && value()) ? (
+              {label === 'SHA-256 checksum' ||
+              label === 'Ostree commit hash' ||
+              (label === 'SSH key' && value()) ? (
                 <TextListItem component={TextListItemVariants.dd}>
                   <ClipboardCopy
                     hoverTip="Copy"
@@ -144,7 +144,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
           <TextList component={TextListVariants.dl}>
             {buildTextList(detailsMapper) || createSkeleton(6)}
           </TextList>
-          <Text component={TextVariants.h2}>User Information </Text>
+          <Text component={TextVariants.h2}>User information </Text>
           <TextList component={TextListVariants.dl}>
             {buildTextList(userInfoMapper) || createSkeleton(2)}
           </TextList>

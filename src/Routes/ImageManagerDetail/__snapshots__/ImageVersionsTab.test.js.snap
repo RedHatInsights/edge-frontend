@@ -43,7 +43,7 @@ exports[`ImageVersionsTab renders correctly 1`] = `
                 <span
                   class="pf-c-select__toggle-text"
                 >
-                  Filter by Status
+                  Filter by status
                 </span>
               </div>
               <span

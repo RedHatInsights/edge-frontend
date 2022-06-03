@@ -1,10 +1,7 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import { TextContent, Text } from '@patternfly/react-core';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
-import {
-  imageTypeMapper,
-  releaseMapper,
-} from '../../Routes/ImageManagerDetail/constants';
+import { imageTypeMapper, releaseMapper } from '../../Routes/../constants';
 import { shallowEqual, useSelector } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { createImageReducer } from '../../store/reducers';

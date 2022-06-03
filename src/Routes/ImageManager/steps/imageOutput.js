@@ -5,14 +5,27 @@ import validatorTypes from '@data-driven-forms/react-form-renderer/validator-typ
 import {
   imageTypeMapper,
   DEFAULT_RELEASE,
-  getReleases,
-} from '../../ImageManagerDetail/constants';
+  TEMPORARY_RELEASE,
+  temporaryReleases,
+  supportedReleases,
+} from '../../../constants';
+import { getReleases } from '../../../utils';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
+import { useFeatureFlags } from '../../../utils';
 
 const ReleaseLabel = () => {
+  const temporaryReleasesFlag = useFeatureFlags(
+    'fleet-management.temporary-releases'
+  );
   const { change, getState } = useFormApi();
-  const release = getState()?.values?.release || DEFAULT_RELEASE;
-  const releases = getState()?.values?.release_options || getReleases(release);
+  const release =
+    getState()?.values?.release ||
+    (temporaryReleasesFlag ? TEMPORARY_RELEASE : DEFAULT_RELEASE);
+  const releases =
+    getState()?.values?.release_options ||
+    (temporaryReleasesFlag
+      ? getReleases(release, [...supportedReleases, ...temporaryReleases])
+      : getReleases(release));
   const [options, setOptions] = useState(releases);
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(release);

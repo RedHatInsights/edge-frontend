@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, TabTitleText, Skeleton } from '@patternfly/react-core';
 import { useHistory, useLocation } from 'react-router-dom';
-import { routes as paths } from '../../../package.json';
+import { routes as paths } from '../../constants/routeMapper';
 
 import ImageDetailTab from './ImageDetailTab';
 import ImageVersionTab from './ImageVersionsTab';
@@ -9,7 +9,7 @@ import ImagePackagesTab from './ImagePackagesTab';
 import PropTypes from 'prop-types';
 import EmptyState from '../../components/Empty';
 
-import { mapUrlToObj } from '../../constants';
+import { mapUrlToObj } from '../../utils';
 
 // conditional render for same index
 const tabs = {

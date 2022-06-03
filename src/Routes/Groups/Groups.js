@@ -13,7 +13,7 @@ import RenameGroupModal from './RenameGroupModal';
 import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
 import { useHistory } from 'react-router-dom';
-import { emptyStateNoFliters } from '../../constants';
+import { emptyStateNoFliters } from '../../utils';
 
 const Groups = () => {
   const history = useHistory();
@@ -58,9 +58,9 @@ const Groups = () => {
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
             <Empty
-              icon="module"
+              icon="plus"
               title="Create a system group"
-              body="Create system groups to help manage your devices more effectively"
+              body="Create system groups to help manage your devices more effectively."
               primaryAction={{
                 text: 'Create group',
                 click: () => setIsCreateModalOpen(true),

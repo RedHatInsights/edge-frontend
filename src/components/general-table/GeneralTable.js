@@ -12,10 +12,10 @@ import { Skeleton } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
-import { transformSort } from '../../Routes/ImageManager/constants';
+import { transformSort } from '../../utils';
 import BulkSelect from './BulkSelect';
 import { useHistory } from 'react-router-dom';
-import { stateToUrlSearch } from '../../constants';
+import { stateToUrlSearch } from '../../utils';
 
 const filterParams = (chipsArray) => {
   const filterParamsObj =
