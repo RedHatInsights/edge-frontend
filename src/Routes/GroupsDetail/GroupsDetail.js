@@ -17,7 +17,7 @@ import {
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import Empty from '../../components/Empty';
 import { Link, useHistory } from 'react-router-dom';
-import { routes as paths } from '../../../package.json';
+import { routes as paths } from '../../constants/routeMapper';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import DeviceTable from '../Devices/DeviceTable';
 import { useParams } from 'react-router-dom';

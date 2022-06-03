@@ -18,7 +18,7 @@ import {
   DropdownPosition,
 } from '@patternfly/react-core';
 import StatusLabel from './StatusLabel';
-import { routes as paths } from '../../../package.json';
+import { routes as paths } from '../../constants/routeMapper';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 
