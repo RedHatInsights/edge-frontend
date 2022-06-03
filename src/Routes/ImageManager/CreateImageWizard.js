@@ -19,12 +19,15 @@ import { useDispatch } from 'react-redux';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { getEdgeImageStatus } from '../../api/images';
 import { useFeatureFlags } from '../../utils';
-import { DEFAULT_RELEASE } from '../../constants';
+import { DEFAULT_RELEASE, TEMPORARY_RELEASE } from '../../constants';
 
 const CreateImage = ({ navigateBack }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
   const customRepoFlag = useFeatureFlags('fleet-management.custom-repos');
+  const temporaryReleasesFlag = useFeatureFlags(
+    'fleet-management.temporary-releases'
+  );
 
   const closeAction = () => {
     navigateBack();
@@ -104,7 +107,7 @@ const CreateImage = ({ navigateBack }) => {
       defaultArch="x86_64"
       initialValues={{
         version: 0,
-        release: DEFAULT_RELEASE,
+        release: temporaryReleasesFlag ? TEMPORARY_RELEASE : DEFAULT_RELEASE,
         includesCustomRepos: customRepoFlag,
       }}
       schema={{

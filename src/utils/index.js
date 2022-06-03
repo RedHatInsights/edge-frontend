@@ -87,11 +87,13 @@ export const transformSort = ({ direction, name }) => {
 export const isAccountMissing = (data) => data && !data?.Account;
 
 // getReleases returns a list of the supported releases + the forced release
-export const getReleases = (forcedRelease) =>
+export const getReleases = (forcedRelease, inculdedReleases) =>
   Object.entries(releaseMapper)
     .filter(
       ([release]) =>
-        supportedReleases.includes(release) || release === forcedRelease
+        (inculdedReleases ? inculdedReleases : supportedReleases).includes(
+          release
+        ) || release === forcedRelease
     )
     .map(([release, releaseLabel]) => ({
       value: release,
