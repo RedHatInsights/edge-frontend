@@ -7,6 +7,7 @@ import {
   DEFAULT_RELEASE,
   TEMPORARY_RELEASE,
   temporaryReleases,
+  supportedReleases,
 } from '../../../constants';
 import { getReleases } from '../../../utils';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
@@ -23,7 +24,7 @@ const ReleaseLabel = () => {
   const releases =
     getState()?.values?.release_options ||
     (temporaryReleasesFlag
-      ? getReleases(release, temporaryReleases)
+      ? getReleases(release, [...supportedReleases, ...temporaryReleases])
       : getReleases(release));
   const [options, setOptions] = useState(releases);
   const [isOpen, setIsOpen] = useState(false);
