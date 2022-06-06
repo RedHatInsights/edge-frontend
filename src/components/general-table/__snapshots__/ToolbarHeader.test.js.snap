@@ -8,6 +8,7 @@ exports[`Toolbar Header should render correctly 1`] = `
   data-ouia-safe="true"
   data-testid="toolbar-header-testid"
   id="toolbar-header"
+  style="padding: 16px;"
 >
   <div
     class="pf-c-toolbar__content"
