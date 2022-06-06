@@ -17,7 +17,7 @@ const ToolbarFooter = ({
   setPage,
 }) => {
   return (
-    <Toolbar id="toolbar">
+    <Toolbar id="toolbar-footer">
       <ToolbarContent>
         <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
           {isLoading ? (

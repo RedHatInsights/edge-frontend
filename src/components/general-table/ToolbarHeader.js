@@ -44,7 +44,7 @@ const ToolbarHeader = ({
   kebabItems,
 }) => {
   return (
-    <Toolbar id="toolbar" data-testid="toolbar-header-testid">
+    <Toolbar id="toolbar-header" data-testid="toolbar-header-testid">
       <ToolbarContent>
         <FilterControls
           filters={filters}

@@ -7,7 +7,7 @@ exports[`ImageSets table to render correctly 1`] = `
   data-ouia-component-type="PF4/Toolbar"
   data-ouia-safe="true"
   data-testid="toolbar-header-testid"
-  id="toolbar"
+  id="toolbar-header"
 >
   <div
     class="pf-c-toolbar__content"
@@ -163,7 +163,7 @@ exports[`ImageSets table to render correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-expandable-content-0"
+      id="toolbar-header-expandable-content-0"
     >
       <div
         class="pf-c-toolbar__group"
@@ -182,7 +182,7 @@ exports[`ImageSets table to render correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-expandable-content-1"
+      id="toolbar-header-expandable-content-1"
     >
       <div
         class="pf-c-toolbar__group"
