@@ -1,12 +1,10 @@
 import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
-import { shallowEqual, useSelector } from 'react-redux';
 import { routes as paths } from '../../constants/routeMapper';
 import { Link } from 'react-router-dom';
 import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
-import { loadEdgeImageSets } from '../../store/actions';
 import { cellWidth } from '@patternfly/react-table';
 import CustomEmptyState from '../../components/Empty';
 import { useHistory } from 'react-router-dom';
@@ -109,20 +107,15 @@ const createRows = (data) => {
   }));
 };
 
-const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
-  const { count, data, isLoading, hasError } = useSelector(
-    ({ edgeImageSetsReducer }) => ({
-      count: edgeImageSetsReducer?.data?.Count || 0,
-      data: edgeImageSetsReducer?.data?.Data || [],
-      isLoading:
-        edgeImageSetsReducer?.isLoading === undefined
-          ? true
-          : edgeImageSetsReducer.isLoading,
-      hasError: edgeImageSetsReducer?.hasError,
-    }),
-    shallowEqual
-  );
-
+const ImageTable = ({
+  data,
+  count,
+  isLoading,
+  hasError,
+  fetchImageSets,
+  openCreateWizard,
+  openUpdateWizard,
+}) => {
   const history = useHistory();
 
   const actionResolver = (rowData) => {
@@ -184,8 +177,9 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
       ) : (
         <GeneralTable
           apiFilterSort={true}
+          isUseApi={true}
           filters={defaultFilters}
-          loadTableData={loadEdgeImageSets}
+          loadTableData={fetchImageSets}
           tableData={{ count, data, isLoading, hasError }}
           columnNames={columnNames}
           rows={data ? createRows(data) : []}
@@ -205,6 +199,11 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
 };
 
 ImageTable.propTypes = {
+  data: PropTypes.array,
+  count: PropTypes.number,
+  isLoading: PropTypes.bool,
+  hasError: PropTypes.bool,
+  fetchImageSets: PropTypes.func,
   clearFilters: PropTypes.func,
   openCreateWizard: PropTypes.func,
   openUpdateWizard: PropTypes.func,
