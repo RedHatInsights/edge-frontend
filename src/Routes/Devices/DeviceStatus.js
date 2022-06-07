@@ -54,7 +54,7 @@ const DeviceStatus = ({ imageData, rpm_ostree_deployments }) => {
           <ExclamationTriangleIcon color={warningColor.value} />
         </SplitItem>
         <SplitItem className="pf-u-warning-color-200">
-          Update Available
+          Update available
         </SplitItem>
       </Split>
     );
