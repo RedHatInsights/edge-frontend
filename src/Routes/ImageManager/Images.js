@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  useState,
-  useEffect,
-  useContext,
-  Suspense,
-} from 'react';
+import React, { Fragment, useState, Suspense } from 'react';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -12,10 +6,10 @@ import {
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { Spinner, Bullseye } from '@patternfly/react-core';
 import { useHistory } from 'react-router-dom';
-import { RegistryContext } from '../../store';
-import { edgeImageSetsReducer } from '../../store/reducers';
 import ImageSetsTable from './ImageSetsTable';
 import { stateToUrlSearch } from '../../utils';
+import { getImageSets } from '../../api/images';
+import useApi from '../../hooks/useApi';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -30,13 +24,19 @@ const UpdateImageWizard = React.lazy(() =>
 );
 
 const Images = () => {
-  const { getRegistry } = useContext(RegistryContext);
+  const history = useHistory();
+
+  const [response, fetchImageSets] = useApi({
+    api: getImageSets,
+    tableReload: true,
+  });
+  const { data, isLoading, hasError } = response;
+
   const [isCreateWizardOpen, setIsCreateWizardOpen] = useState(false);
   const [UpdateWizard, setUpdateWizard] = useState({
     isOpen: false,
     imageId: null,
   });
-  const history = useHistory();
 
   const openCreateWizard = () => {
     history.push({
@@ -56,10 +56,6 @@ const Images = () => {
       imageId: id,
     });
   };
-  useEffect(() => {
-    const registered = getRegistry().register({ edgeImageSetsReducer });
-    return () => registered();
-  }, []);
 
   return (
     <Fragment>
@@ -68,6 +64,11 @@ const Images = () => {
       </PageHeader>
       <Main className="edge-devices">
         <ImageSetsTable
+          data={data?.Data || []}
+          count={data?.Count}
+          isLoading={isLoading}
+          hasError={hasError}
+          fetchImageSets={fetchImageSets}
           openCreateWizard={openCreateWizard}
           openUpdateWizard={openUpdateWizard}
         />

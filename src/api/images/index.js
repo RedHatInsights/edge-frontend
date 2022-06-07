@@ -134,3 +134,8 @@ export const getPackages = async (distribution, architecture, search) => {
 export const getImageById = ({ id }) => {
   return instance.get(`${EDGE_API}/images/${id}/details`);
 };
+
+export const getImageSets = ({ query }) => {
+  const q = getTableParams(query);
+  return instance.get(`${EDGE_API}/image-sets?${q}`);
+};
