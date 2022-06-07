@@ -4,7 +4,6 @@ import { Grid, GridItem } from '@patternfly/react-core';
 import {
   Breadcrumb,
   BreadcrumbItem,
-  Label,
   Bullseye,
   Spinner,
 } from '@patternfly/react-core';
@@ -23,10 +22,8 @@ import { deviceDetail } from '../../store/deviceDetail';
 import { RegistryContext } from '../../store';
 import systemProfileStore from '@redhat-cloud-services/frontend-components-inventory-general-info/redux';
 import DeviceDetailTabs from './DeviceDetailTabs';
-import CheckCircleIcon from '@patternfly/react-icons/dist/js/icons/check-circle-icon';
-import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-triangle-icon';
-import InProgressIcon from '@patternfly/react-icons/dist/js/icons/in-progress-icon';
 import { getDeviceHasUpdate } from '../../api/devices';
+import Status from '../../components/Status';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(
@@ -153,29 +150,15 @@ const DeviceDetail = () => {
             imageData?.UpdateTransactions[
               imageData?.UpdateTransactions?.length - 1
             ]?.Status === 'CREATED' ? (
-            <Label
-              className="pf-u-mt-sm"
-              color="blue"
-              icon={<InProgressIcon />}
-            >
-              Updating
-            </Label>
+            <Status type="updating" isLabel={true} className="pf-u-mt-sm" />
           ) : imageData?.Device?.UpdateAvailable ? (
-            <Label
+            <Status
+              type="updateAvailable"
+              isLabel={true}
               className="pf-u-mt-sm"
-              color="orange"
-              icon={<ExclamationTriangleIcon />}
-            >
-              Update Available
-            </Label>
+            />
           ) : (
-            <Label
-              className="pf-u-mt-sm"
-              color="green"
-              icon={<CheckCircleIcon color="green" />}
-            >
-              Running
-            </Label>
+            <Status type="running" isLabel={true} className="pf-u-mt-sm" />
           )}
         </PageHeader>
         <Grid gutter="md">
