@@ -39,6 +39,7 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import Modal from '../../components/Modal';
 import DeleteGroupModal from '../Groups/DeleteGroupModal';
+import RenameGroupModal from '../Groups/RenameGroupModal';
 
 const UpdateDeviceModal = React.lazy(() =>
   import('../Devices/UpdateDeviceModal')
@@ -73,10 +74,16 @@ const GroupsDetail = () => {
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
   const [modalState, setModalState] = useState({ id: null, name: '' });
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
 
   const handleDeleteModal = (id, name) => {
     setModalState({ id, name });
     setIsDeleteModalOpen(true);
+  };
+
+  const handleRenameModal = (id, name) => {
+    setModalState({ id, name });
+    setIsRenameModalOpen(true);
   };
 
   const removeDeviceLabel = () =>
@@ -172,6 +179,12 @@ const GroupsDetail = () => {
                   onClick={() => handleDeleteModal(groupId, groupName)}
                 >
                   Delete group
+                </DropdownItem>,
+                <DropdownItem
+                  key="rename-device-group"
+                  onClick={() => handleRenameModal(groupId, groupName)}
+                >
+                  Rename group
                 </DropdownItem>,
                 <DropdownItem
                   key="update-all-devices"
@@ -339,6 +352,14 @@ const GroupsDetail = () => {
           isModalOpen={isDeleteModalOpen}
           setIsModalOpen={setIsDeleteModalOpen}
           reloadData={() => history.push(paths['fleet-management'])}
+          modalState={modalState}
+        />
+      )}
+      {isRenameModalOpen && (
+        <RenameGroupModal
+          isModalOpen={isRenameModalOpen}
+          setIsModalOpen={setIsRenameModalOpen}
+          reloadData={() => fetchDevices()}
           modalState={modalState}
         />
       )}
