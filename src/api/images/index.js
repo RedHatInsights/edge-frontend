@@ -136,6 +136,7 @@ export const getImageById = ({ id }) => {
 };
 
 export const getImageSets = ({ query }) => {
+  console.log(query);
   const q = getTableParams(query);
   return instance.get(`${EDGE_API}/image-sets?${q}`);
 };

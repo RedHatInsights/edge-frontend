@@ -89,6 +89,13 @@ const Images = () => {
               });
               setIsCreateWizardOpen(false);
             }}
+            reload={() =>
+              fetchImageSets({
+                limit: 20,
+                offset: 0,
+                sort_by: '-updated_at',
+              })
+            }
           />
         </Suspense>
       )}
@@ -113,6 +120,13 @@ const Images = () => {
                 };
               });
             }}
+            reload={() =>
+              fetchImageSets({
+                limit: 20,
+                offset: 0,
+                sort_by: '-updated_at',
+              })
+            }
             updateImageID={UpdateWizard.imageId}
           />
         </Suspense>
