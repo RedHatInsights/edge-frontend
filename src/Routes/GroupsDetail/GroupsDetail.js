@@ -268,6 +268,7 @@ const GroupsDetail = () => {
             hasModalSubmitted={hasModalSubmitted}
             setHasModalSubmitted={setHasModalSubmitted}
             fetchDevices={fetchDevices}
+            isAddSystemsView={true}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
