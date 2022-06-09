@@ -14,23 +14,22 @@ import { Bullseye, Backdrop, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
 import { createNewImage, addImageToPoll } from '../../store/actions';
-import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
 import { useDispatch } from 'react-redux';
 import { useSelector, shallowEqual } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
-import { loadImageDetail, loadEdgeImageSets } from '../../store/actions';
+import { loadImageDetail } from '../../store/actions';
 import { getEdgeImageStatus } from '../../api/images';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { useFeatureFlags, getReleases } from '../../utils';
 import { temporaryReleases, supportedReleases } from '../../constants';
 
-const UpdateImage = ({ navigateBack, updateImageID }) => {
+const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
   const closeAction = () => {
     navigateBack();
-    dispatch({ type: CREATE_NEW_IMAGE_RESET });
+    reload && reload();
   };
   const customRepoFlag = useFeatureFlags('fleet-management.custom-repos');
   const temporaryReleasesFlag = useFeatureFlags(
@@ -124,14 +123,12 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
                           description: `${resp.value.Name} image build is completed`,
                         })
                       ),
-                    (dispatch) => loadEdgeImageSets(dispatch),
                   ],
                 },
               },
             },
           });
           closeAction();
-          loadEdgeImageSets(dispatch);
           dispatch(
             addImageToPoll({ name: data.value.Name, id: data.value.ID })
           );
@@ -217,6 +214,7 @@ const UpdateImage = ({ navigateBack, updateImageID }) => {
 UpdateImage.propTypes = {
   navigateBack: PropTypes.func,
   updateImageID: PropTypes.number,
+  reload: PropTypes.func,
 };
 UpdateImage.defaultProps = {
   navigateBack: () => undefined,

@@ -68,7 +68,7 @@ const columnNames = [
   },
 ];
 
-const createRows = (devices, isSystemsView) => {
+const createRows = (devices, hasLinks) => {
   return devices?.map((device) => {
     let { DeviceName, DeviceGroups } = device;
 
@@ -128,7 +128,7 @@ const createRows = (devices, isSystemsView) => {
       ],
       cells: [
         {
-          title: isSystemsView ? (
+          title: hasLinks ? (
             <Link to={`${paths['inventory']}/${DeviceUUID}`}>{DeviceName}</Link>
           ) : (
             DeviceName
@@ -136,7 +136,7 @@ const createRows = (devices, isSystemsView) => {
         },
         {
           title: ImageName ? (
-            isSystemsView ? (
+            hasLinks ? (
               <Link to={`${paths['manage-images']}/${ImageSetID}/`}>
                 {ImageName}
               </Link>
@@ -186,6 +186,7 @@ const DeviceTable = ({
   setHasModalSubmitted,
   fetchDevices,
   isSystemsView = false,
+  isAddSystemsView = false,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -300,7 +301,7 @@ const DeviceTable = ({
             hasError: hasError,
           }}
           columnNames={columnNames}
-          rows={createRows(data || [], isSystemsView)}
+          rows={createRows(data || [], isAddSystemsView || isSystemsView)}
           actionResolver={actionResolver}
           defaultSort={{ index: 3, direction: 'desc' }}
           toolbarButtons={
@@ -351,6 +352,7 @@ DeviceTable.propTypes = {
   handleRemoveDevicesFromGroup: PropTypes.func,
   fetchDevices: PropTypes.func,
   isSystemsView: PropTypes.bool,
+  isAddSystemsView: PropTypes.bool,
 };
 
 export default DeviceTable;

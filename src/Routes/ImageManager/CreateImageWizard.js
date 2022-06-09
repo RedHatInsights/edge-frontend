@@ -13,15 +13,14 @@ import {
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import { createNewImage, loadEdgeImageSets } from '../../store/actions';
-import { CREATE_NEW_IMAGE_RESET } from '../../store/action-types';
+import { createNewImage } from '../../store/actions';
 import { useDispatch } from 'react-redux';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { getEdgeImageStatus } from '../../api/images';
 import { useFeatureFlags } from '../../utils';
 import { DEFAULT_RELEASE, TEMPORARY_RELEASE } from '../../constants';
 
-const CreateImage = ({ navigateBack }) => {
+const CreateImage = ({ navigateBack, reload }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
   const customRepoFlag = useFeatureFlags('fleet-management.custom-repos');
@@ -31,7 +30,7 @@ const CreateImage = ({ navigateBack }) => {
 
   const closeAction = () => {
     navigateBack();
-    dispatch({ type: CREATE_NEW_IMAGE_RESET });
+    reload && reload();
   };
   useEffect(() => {
     (async () => {
@@ -94,13 +93,11 @@ const CreateImage = ({ navigateBack }) => {
                           description: `${resp.value.Name} image build is completed`,
                         })
                       ),
-                    (dispatch) => loadEdgeImageSets(dispatch),
                   ],
                 },
               },
             },
           });
-          loadEdgeImageSets(dispatch);
           closeAction();
         });
       }}
@@ -154,6 +151,7 @@ const CreateImage = ({ navigateBack }) => {
 
 CreateImage.propTypes = {
   navigateBack: PropTypes.func,
+  reload: PropTypes.func,
 };
 CreateImage.defaultProps = {
   navigateBack: () => undefined,

@@ -89,6 +89,7 @@ const Images = () => {
               });
               setIsCreateWizardOpen(false);
             }}
+            reload={fetchImageSets}
           />
         </Suspense>
       )}
@@ -113,6 +114,7 @@ const Images = () => {
                 };
               });
             }}
+            reload={fetchImageSets}
             updateImageID={UpdateWizard.imageId}
           />
         </Suspense>
