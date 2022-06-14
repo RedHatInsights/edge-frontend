@@ -334,7 +334,7 @@ DeviceTable.propTypes = {
   temp: PropTypes.func,
   hasCheckbox: PropTypes.bool,
   setIsModalOpen: PropTypes.func,
-  selectedItems: PropTypes.array,
+  selectedItems: PropTypes.func,
   reload: PropTypes.bool,
   setReload: PropTypes.func,
   data: PropTypes.array,

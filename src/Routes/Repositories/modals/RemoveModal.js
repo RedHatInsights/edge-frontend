@@ -20,6 +20,10 @@ LabelWithText.propTypes = {
   text: PropTypes.string,
 };
 
+const WarningIcon = () => (
+  <ExclamationTriangleIcon color={warningColor.value} />
+);
+
 const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
   const addSchema = {
     fields: [
@@ -44,15 +48,8 @@ const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
 
   return (
     <Modal
-      title={
-        <>
-          <ExclamationTriangleIcon
-            color={warningColor.value}
-            className="pf-u-mr-md"
-          />
-          Remove repository
-        </>
-      }
+      title="Remove repository"
+      titleIconVariant={WarningIcon}
       isOpen={isOpen}
       openModal={() => openModal({ type: 'remove' })}
       submitLabel="Remove"
@@ -68,7 +65,7 @@ const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
 RemoveModal.propTypes = {
   openModal: PropTypes.func,
   reloadData: PropTypes.func,
-  isOpen: PropTypes.boo,
+  isOpen: PropTypes.bool,
   id: PropTypes.number,
   name: PropTypes.string,
   baseURL: PropTypes.string,
