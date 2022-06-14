@@ -45,14 +45,6 @@ const GroupTable = ({
   const actionResolver = (rowData) => {
     if (!rowData?.rowInfo) return [];
     const { id, title, devices, devicesImageInfo } = rowData?.rowInfo;
-    // const hasValidImage =
-    //   devices.length > 0 &&
-    //   !validateImage(
-    //     devices.map((device) => ({
-    //       ID: device.ImageID,
-    //     }))
-    //   ).UpdateValid;
-
     const hasUpdate = devicesImageInfo?.some((image) => image.UpdateAvailable);
 
     return (
