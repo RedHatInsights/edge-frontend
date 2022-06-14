@@ -55,7 +55,7 @@ const AddModal = ({ isOpen, openModal, reloadData }) => {
 AddModal.propTypes = {
   openModal: PropTypes.func,
   reloadData: PropTypes.func,
-  isOpen: PropTypes.boo,
+  isOpen: PropTypes.bool,
 };
 
 export default AddModal;

@@ -64,7 +64,7 @@ const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
 EditModal.propTypes = {
   openModal: PropTypes.func,
   reloadData: PropTypes.func,
-  isOpen: PropTypes.boo,
+  isOpen: PropTypes.bool,
   id: PropTypes.number,
   name: PropTypes.string,
   baseURL: PropTypes.string,

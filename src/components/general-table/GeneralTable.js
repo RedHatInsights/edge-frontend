@@ -342,7 +342,7 @@ const GeneralTable = ({
         toggleState={toggleState}
         kebabItems={kebabItems}
       >
-        {!isLoading && hasCheckbox && (
+        {!isLoading && hasCheckbox ? (
           <BulkSelect
             checkedRows={checkedRows}
             handleBulkSelect={handleBulkSelect}
@@ -350,7 +350,7 @@ const GeneralTable = ({
             handleNoneSelect={handleNoneSelect}
             displayedRowsLength={filteredRows.length}
           />
-        )}
+        ) : null}
       </ToolbarHeader>
       <Table
         data-testid="general-table-testid"
