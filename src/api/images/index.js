@@ -18,10 +18,6 @@ export const fetchActiveImages = ({ limit = 100, offset = 0 } = {}) => {
   );
 };
 
-export const validateImage = async (ids) => {
-  return await instance.post(`${EDGE_API}/updates/validate`, ids);
-};
-
 export const createImage = ({
   Id,
   name,

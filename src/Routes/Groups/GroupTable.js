@@ -4,7 +4,6 @@ import GeneralTable from '../../components/general-table/GeneralTable';
 import { Link } from 'react-router-dom';
 import { routes as paths } from '../../constants/routeMapper';
 import { Bullseye, Spinner, Tooltip } from '@patternfly/react-core';
-import { validateImage } from '../../api/images';
 
 const UpdateDeviceModal = React.lazy(() =>
   import('../Devices/UpdateDeviceModal')
@@ -46,13 +45,13 @@ const GroupTable = ({
   const actionResolver = (rowData) => {
     if (!rowData?.rowInfo) return [];
     const { id, title, devices, devicesImageInfo } = rowData?.rowInfo;
-    const hasValidImage =
-      devices.length > 0 &&
-      !validateImage(
-        devices.map((device) => ({
-          ID: device.ImageID,
-        }))
-      ).UpdateValid;
+    // const hasValidImage =
+    //   devices.length > 0 &&
+    //   !validateImage(
+    //     devices.map((device) => ({
+    //       ID: device.ImageID,
+    //     }))
+    //   ).UpdateValid;
 
     const hasUpdate = devicesImageInfo?.some((image) => image.UpdateAvailable);
 
@@ -78,7 +77,8 @@ const GroupTable = ({
               imageId: devices.find((device) => device?.ImageID).ImageID,
               isOpen: true,
             })),
-          isDisabled: devices.length > 0 ? !(hasValidImage && hasUpdate) : true,
+          isDisabled:
+            devices.length > 0 ? !(rowData?.hasValidUpdate && hasUpdate) : true,
         },
       ]
     );
@@ -119,6 +119,7 @@ const GroupTable = ({
             : DevicesImageInfo[0]?.Name,
         devicesImageInfo: rowData.DevicesImageInfo,
         devices: Devices,
+        hasValidUpdate: rowData?.DeviceGroup?.ValidUpdate,
       },
       // noApiSortFilter: [
       //   Name,
