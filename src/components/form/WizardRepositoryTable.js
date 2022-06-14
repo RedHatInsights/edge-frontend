@@ -21,7 +21,7 @@ const WizardRepositoryTable = ({ ...props }) => {
   const wizardState = getState()?.values?.[input.name];
 
   useEffect(() => {
-    change(input.name, selectedRepos);
+    change('added-repositories', selectedRepos);
   }, [selectedRepos]);
 
   const getRepoIds = (checked) => {

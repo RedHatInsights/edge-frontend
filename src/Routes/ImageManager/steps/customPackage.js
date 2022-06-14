@@ -1,22 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import {
+  Alert,
   Button,
+  Text,
+  TextContent,
   Popover,
   Stack,
   StackItem,
-  Text,
-  TextContent,
 } from '@patternfly/react-core';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-triangle-icon';
 import { releaseMapper } from '../../../constants';
 
 const CustomPackageLabel = () => {
-  const { getState } = useFormApi();
-  const addedRepos = getState()?.values?.['third-party-repositories'];
+  const banners = {
+    warning: (
+      <Alert
+        style={{ '--pf-c-content--h4--MarginTop': 0 }} //due to component's lack of responsive need to override property
+        variant="warning"
+        isInline
+        title="Linked custom repositories were removed when these packages were added. Ensure the package list is still correct."
+      />
+    ),
+    error: (
+      <Alert
+        style={{ '--pf-c-content--h4--MarginTop': 0 }} //due to component's lack of responsive need to override property
+        variant="danger"
+        isInline
+        title="No custom repositories linked. Clear custom packages or link a repository."
+      />
+    ),
+    noBanner: <></>,
+  };
+  const BANNER_WARNING = 'warning';
+  const BANNER_ERROR = 'error';
+  const { change, getState } = useFormApi();
+  const [banner, setBanner] = useState('noBanner');
+  const addedRepos = getState()?.values?.['added-repositories'];
+  const originalRepos = getState()?.values?.['third-party-repositories'];
   const release = getState()?.values?.release;
   const releaseName = release !== undefined ? releaseMapper[release] : '';
+
+  useEffect(() => {
+    change('third-party-repositories', addedRepos);
+    if (originalRepos.length > 0 && addedRepos.length == 0) {
+      setBanner(BANNER_ERROR);
+      return;
+    }
+    originalRepos.forEach((originalRepo) => {
+      if (
+        addedRepos.filter((addedRepo) => addedRepo.id === originalRepo.id)
+          .length === 0
+      ) {
+        setBanner(BANNER_WARNING);
+        return;
+      }
+    });
+  }, [addedRepos]);
 
   return (
     <TextContent>
@@ -42,6 +83,7 @@ const CustomPackageLabel = () => {
           to your
         </Popover>
         <b> {releaseName}</b> image.
+        {banners[banner]}
       </Text>
     </TextContent>
   );
@@ -56,7 +98,6 @@ export default {
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
-
       label: <CustomPackageLabel />,
     },
     {
