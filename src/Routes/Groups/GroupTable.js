@@ -70,7 +70,9 @@ const GroupTable = ({
               isOpen: true,
             })),
           isDisabled:
-            devices.length > 0 ? !(rowData?.hasValidUpdate && hasUpdate) : true,
+            devices.length > 0
+              ? !(rowData?.rowInfo?.hasValidUpdate && hasUpdate)
+              : true,
         },
       ]
     );
