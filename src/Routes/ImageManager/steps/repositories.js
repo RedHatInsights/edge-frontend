@@ -7,7 +7,8 @@ export default {
   title: 'Custom repositories',
   name: 'repositories',
   nextStep: ({ values }) =>
-    values?.['third-party-repositories']?.length > 0
+    values?.['third-party-repositories']?.length > 0 ||
+    values?.['custom-packages']?.length > 0
       ? 'customPackages'
       : 'packages',
 

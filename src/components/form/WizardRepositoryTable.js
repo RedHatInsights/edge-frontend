@@ -20,8 +20,11 @@ const WizardRepositoryTable = ({ ...props }) => {
   const { input } = useFieldApi(props);
   const wizardState = getState()?.values?.[input.name];
 
+  // const previousRepos = wizardState == 0 ? [] : wizardState;
+  console.log(wizardState);
   useEffect(() => {
     change(input.name, selectedRepos);
+    // change('previous-custom-repos', previousRepos);
   }, [selectedRepos]);
 
   const getRepoIds = (checked) => {

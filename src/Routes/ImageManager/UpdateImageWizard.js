@@ -162,6 +162,13 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
             ...repo,
           })
         ),
+        'initial-custom-repositories': data?.image?.ThirdPartyRepositories?.map(
+          (repo) => ({
+            id: repo.ID,
+            name: repo.Name,
+            ...repo,
+          })
+        ),
         'custom-packages': data?.image?.CustomPackages?.map((pkg) => ({
           ...pkg,
           name: pkg.Name,
