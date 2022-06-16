@@ -74,6 +74,17 @@ const CreateImageWizard = ({
         },
         ...customComponentMapper,
       }}
+      validate={(values) => {
+        const errors = {};
+        if (
+          values['validate-custom-repos'] &&
+          values['custom-packages']?.length > 0 &&
+          values['third-party-repositories']?.length === 0
+        ) {
+          errors['custom-packages'] = 'No custom repositories linked';
+        }
+        return errors;
+      }}
       validatorMapper={{
         ...validatorTypes,
         registrationCredsValidator,

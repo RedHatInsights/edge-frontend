@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import {
   Alert,
@@ -14,33 +14,43 @@ import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/excla
 import { releaseMapper } from '../../../constants';
 
 const showAlert = (type) => {
-  <Alert
-    className="pf-u-mt-lg"
-    variant={type}
-    isInline
-    title={type === 'danger' ? 'blargh' : 'bleh'}
-    style={{ '--pf-c-content--h4--MarginTop': 0 }}
-  />;
+  return (
+    <Alert
+      className="pf-u-mt-lg"
+      variant={type}
+      isInline
+      title={
+        type === 'danger'
+          ? 'No custom repositories linked. Clear custom packages or link a repository.'
+          : 'Linked custom repositories were removed when these packages were added. Ensure the package list is still correct.'
+      }
+      style={{ '--pf-c-content--h4--MarginTop': 0 }}
+    />
+  );
 };
 
-// const checkRepoNameMismatch = (initRepos, currentRepos) => {
-//   if (initRepos.length !== currentRepos) {
-//     return true;
-//   }
+const checkRepoNameMismatch = (
+  initRepos = [],
+  currentRepos = [],
+  currentPackages = []
+) => {
+  if (currentRepos.length === 0 && currentPackages.length === 0) {
+    return false;
+  }
+  if (currentRepos.length < initRepos.length) {
+    return true;
+  }
 
-//   initRepos.forEach((iRepo) => {
-//     const foundRepo = currentRepos.find((cRepo) => cRepo.name === iRepo.name);
-//     if (!foundRepo) {
-//       return true;
-//     }
-//   });
-
-//   return false;
-// };
+  const isMismatch = !initRepos.every((iRepo) =>
+    currentRepos.find((cRepo) => cRepo.name === iRepo.name)
+  );
+  return isMismatch;
+};
 
 const CustomPackageLabel = () => {
-  const { getState } = useFormApi();
+  const { getState, change } = useFormApi();
   const addedRepos = getState()?.values?.['third-party-repositories'];
+  const initialRepos = getState()?.values?.['initial-custom-repositories'];
   const customPackages = getState()?.values?.['custom-packages'];
 
   const release = getState()?.values?.release;
@@ -61,7 +71,11 @@ const CustomPackageLabel = () => {
                 danger
     */
 
+  useEffect(() => {
+    change('validate-custom-repos', true);
+  }, []);
   console.log(addedRepos);
+  console.log(customPackages);
   return (
     <>
       <TextContent>
@@ -89,9 +103,11 @@ const CustomPackageLabel = () => {
           <b> {releaseName}</b> image.
         </Text>
       </TextContent>
-      {addedRepos.length == 0 &&
-        customPackages.length > 0 &&
-        showAlert('danger')}
+      {addedRepos.length === 0 && customPackages.length > 0
+        ? showAlert('danger')
+        : checkRepoNameMismatch(initialRepos, addedRepos, customPackages)
+        ? showAlert('warning')
+        : null}
     </>
   );
 };

@@ -36,6 +36,10 @@ const WizardRepositoryTable = ({ ...props }) => {
     setSelectedRepos(checkedRepos);
   };
 
+  useEffect(() => {
+    change('validate-custom-repos', false);
+  }, []);
+
   const buildRows = ({ data }) => {
     return data.map(({ ID, Name, URL }) => ({
       rowInfo: { id: ID, name: Name, URL: URL },
