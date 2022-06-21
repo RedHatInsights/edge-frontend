@@ -59,4 +59,10 @@ export const statusMapper = {
     text: 'Unknown',
     Icon: iconMapper.unknown,
   },
+  interrupted: {
+    text: 'Image build in progress',
+    Icon: iconMapper.inProgress,
+    color: colorMapper.blue,
+    labelColor: 'blue',
+  },
 };

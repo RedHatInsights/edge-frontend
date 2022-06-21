@@ -56,26 +56,11 @@ const CustomPackageLabel = () => {
   const release = getState()?.values?.release;
   const releaseName = release !== undefined ? releaseMapper[release] : '';
 
-  /*
-        addedRepos = current state of what's checked
-        initRepo:
-            if 0:
-                track nothing = []
-            else:
-                initRepos = addedRepos
-
-        alert:
-            if addedRepos != initRepos
-                warning
-            elif addedRepos == 0 && packages >= 1
-                danger
-    */
-
   useEffect(() => {
     change('validate-custom-repos', true);
+    change('show-custom-packages', true);
   }, []);
-  console.log(addedRepos);
-  console.log(customPackages);
+
   return (
     <>
       <TextContent>

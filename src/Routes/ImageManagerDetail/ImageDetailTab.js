@@ -28,7 +28,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
   }, [imageData, imageVersion]);
 
   const createSkeleton = (rows) =>
-    [...Array(rows * 2)].map((key) => <Skeleton width="180px" key={key} />);
+    [...Array(rows * 2)].map((_, key) => <Skeleton width="180px" key={key} />);
 
   const dateFormat = () => <DateFormat date={data?.image?.['CreatedAt']} />;
 
@@ -90,9 +90,9 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
 
   const buildTextList = (labelsToValueMapper) =>
     data
-      ? Object.entries(labelsToValueMapper).map(([label, value]) => {
+      ? Object.entries(labelsToValueMapper).map(([label, value], index) => {
           return (
-            <>
+            <div key={index}>
               <TextListItem
                 className="details-label"
                 component={TextListItemVariants.dt}
@@ -129,7 +129,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
                     : data?.image?.[value] || 'Unavailable'}
                 </TextListItem>
               )}
-            </>
+            </div>
           );
         })
       : null;
