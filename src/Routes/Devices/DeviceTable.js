@@ -29,7 +29,7 @@ const defaultFilters = [
     options: [
       // { option: 'Booting', value: 'booting' },
       // { option: 'Running', value: 'running' },
-      { option: 'Update Available', value: 'updateAvailable' },
+      { option: 'Update available', value: 'updateAvailable' },
       // { option: 'Updating', value: 'updating' },
     ],
   },
