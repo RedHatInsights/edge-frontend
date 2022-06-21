@@ -8,7 +8,8 @@ export default {
   name: 'repositories',
   nextStep: ({ values }) =>
     values?.['third-party-repositories']?.length > 0 ||
-    values?.['show-custom-packages']
+    values?.['show-custom-packages'] ||
+    values?.['initial-custom-repositories']?.length > 0
       ? 'customPackages'
       : 'packages',
 
