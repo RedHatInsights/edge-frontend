@@ -136,6 +136,7 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
       }}
       defaultArch="x86_64"
       initialValues={{
+        imageID: data?.image.ID,
         name: data?.image?.Name,
         isUpdate: true,
         description: data?.image?.Description,
@@ -174,6 +175,7 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
           name: pkg.Name,
         })),
       }}
+      test=""
       schema={{
         fields: [
           {

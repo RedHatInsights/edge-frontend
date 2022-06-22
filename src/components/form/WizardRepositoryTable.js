@@ -13,12 +13,22 @@ import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 const filters = [{ label: 'Name', type: 'text' }];
 
 const WizardRepositoryTable = ({ ...props }) => {
-  const [selectedRepos, setSelectedRepos] = useState([]);
-  const [response] = useApi({ api: getCustomRepositories });
-  const { data, isLoading, hasError } = response;
   const { change, getState } = useFormApi();
   const { input } = useFieldApi(props);
   const wizardState = getState()?.values?.[input.name];
+  const isUpdateWizard = getState()?.values?.isUpdate;
+  const imageID = getState()?.values?.imageID;
+
+  const [selectedRepos, setSelectedRepos] = useState([]);
+  const [response, fetchRepos] = useApi({
+    api: ({ query }) =>
+      getCustomRepositories({
+        imageID: isUpdateWizard ? imageID.toString() : '',
+        query,
+      }),
+    tableReload: true,
+  });
+  const { data, isLoading, hasError } = response;
 
   useEffect(() => {
     change(input.name, selectedRepos);
@@ -40,7 +50,7 @@ const WizardRepositoryTable = ({ ...props }) => {
   const buildRows = ({ data }) => {
     return data.map(({ ID, Name, URL }) => ({
       rowInfo: { id: ID, name: Name, URL: URL },
-      noApiSortFilter: [Name],
+      // noApiSortFilter: [Name],
       cells: [
         {
           title: (
@@ -77,7 +87,9 @@ const WizardRepositoryTable = ({ ...props }) => {
         />
       ) : (
         <GeneralTable
-          apiFilterSort={false}
+          apiFilterSort={true}
+          isUseApi={true}
+          loadTableData={fetchRepos}
           filters={filters}
           tableData={{
             count: data?.length,
@@ -85,9 +97,9 @@ const WizardRepositoryTable = ({ ...props }) => {
             isLoading,
             hasError,
           }}
-          columnNames={[{ title: 'Name', type: 'name', sort: true }]}
+          columnNames={[{ title: 'Name', type: 'name', sort: false }]}
           rows={isLoading ? [] : buildRows(data)}
-          defaultSort={{ index: 1, direction: 'desc' }}
+          defaultSort={{ index: 0, direction: 'desc' }}
           hasCheckbox={true}
           selectedItems={getRepoIds}
           initSelectedItems={wizardState}
