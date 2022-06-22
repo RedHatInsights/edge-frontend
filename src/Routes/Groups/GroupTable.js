@@ -115,15 +115,6 @@ const GroupTable = ({
         devices: Devices,
         hasValidUpdate: rowData?.DeviceGroup?.ValidUpdate,
       },
-      // noApiSortFilter: [
-      //   Name,
-      //   '',
-      //   DevicesImageInfo.length === 0
-      //     ? '-'
-      //     : DevicesImageInfo.length > 1
-      //     ? 'Multiple images'
-      //     : DevicesImageInfo[0]?.Name,
-      // ],
       cells: [
         {
           title: <Link to={`${paths['fleet-management']}/${ID}`}>{Name}</Link>,

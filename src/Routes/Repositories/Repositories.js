@@ -38,7 +38,7 @@ const Repository = () => {
   };
 
   const reloadData = async () => {
-    const repos = await getCustomRepositories();
+    const repos = await getCustomRepositories('');
     setData(
       repos.data.map((repo) => ({
         id: repo.ID,
