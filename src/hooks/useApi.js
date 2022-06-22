@@ -23,7 +23,6 @@ const useApi = ({ api, id = null, statusMessages, tableReload = false }) => {
   }
 
   const fetchData = async (query = '') => {
-    console.log(query);
     setIsLoading(true);
     try {
       const data = await api({ id, query });

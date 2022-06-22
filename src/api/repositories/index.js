@@ -1,13 +1,8 @@
 import { EDGE_API, getTableParams } from '../index';
 import { instance } from '@redhat-cloud-services/frontend-components-utilities/interceptors/interceptors';
 
-// export const getCustomRepositories = () => {
-//   return instance.get(`${EDGE_API}/thirdpartyrepo`);
-// };
-
 export const getCustomRepositories = ({ imageID = '', query }) => {
   const q = getTableParams(query);
-  console.log(q);
   return instance.get(
     `${EDGE_API}/thirdpartyrepo?${imageID ? `imageID=${imageID}&` : ''}${q}`
   );

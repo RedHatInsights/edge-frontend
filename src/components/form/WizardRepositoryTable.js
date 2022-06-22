@@ -50,7 +50,6 @@ const WizardRepositoryTable = ({ ...props }) => {
   const buildRows = ({ data }) => {
     return data.map(({ ID, Name, URL }) => ({
       rowInfo: { id: ID, name: Name, URL: URL },
-      // noApiSortFilter: [Name],
       cells: [
         {
           title: (
