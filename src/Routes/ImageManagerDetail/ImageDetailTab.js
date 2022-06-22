@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import {
   TextContent,
   TextList,
@@ -92,7 +92,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
     data
       ? Object.entries(labelsToValueMapper).map(([label, value], index) => {
           return (
-            <div key={index}>
+            <Fragment key={index}>
               <TextListItem
                 className="details-label"
                 component={TextListItemVariants.dt}
@@ -129,7 +129,7 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
                     : data?.image?.[value] || 'Unavailable'}
                 </TextListItem>
               )}
-            </div>
+            </Fragment>
           );
         })
       : null;
