@@ -91,7 +91,7 @@ const WizardRepositoryTable = ({ ...props }) => {
           loadTableData={fetchRepos}
           filters={filters}
           tableData={{
-            count: data?.length,
+            count: data?.count,
             data,
             isLoading,
             hasError,
