@@ -45,7 +45,6 @@ const RepositoryTable = ({
   };
 
   const buildRows = data.map(({ ID, Name, URL }) => {
-    console.log(Name);
     return {
       rowInfo: {
         id: ID,
