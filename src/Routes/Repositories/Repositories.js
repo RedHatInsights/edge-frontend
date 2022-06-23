@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import EmptyState from '../../components/Empty';
+import React, { useState } from 'react';
 import AddModal from './modals/AddModal';
 import EditModal from './modals/EditModal';
 import RemoveModal from './modals/RemoveModal';
@@ -7,12 +6,15 @@ import TableHeader from './TableHeader';
 import RepositoryTable from './RepositoryTable';
 import Main from '@redhat-cloud-services/frontend-components/Main';
 import RepositoryHeader from './RepositoryHeader';
+import useApi from '../../hooks/useApi';
 import { getCustomRepositories } from '../../api/repositories';
-import { Skeleton } from '@patternfly/react-core';
 
 const Repository = () => {
-  const [data, setData] = useState([]);
-  const [loaded, setLoaded] = useState(false);
+  const [response, fetchRepos] = useApi({
+    api: () => getCustomRepositories(''),
+    tableReload: true,
+  });
+  const { data, isLoading, hasError } = response;
   const [modalDetails, setModalDetails] = useState({
     isOpen: {
       add: false,
@@ -37,58 +39,25 @@ const Repository = () => {
     }));
   };
 
-  const reloadData = async () => {
-    const repos = await getCustomRepositories('');
-    setData(
-      repos.data.map((repo) => ({
-        id: repo.ID,
-        name: repo.Name,
-        baseURL: repo.URL,
-        ...repo,
-      }))
-    );
-    setLoaded(true);
-  };
-
-  useEffect(() => reloadData(), []);
-
   return (
     <>
       <RepositoryHeader />
       <Main>
-        {loaded ? (
-          data.length > 0 ? (
-            <>
-              <TableHeader />
-              <RepositoryTable data={data} openModal={openModal} />
-            </>
-          ) : (
-            <EmptyState
-              icon="repository"
-              title="Add a custom repository"
-              body="Add custom repositories to build RHEL for Edge images with additional packages."
-              primaryAction={{
-                text: 'Add repository',
-                click: () => openModal({ type: 'add' }),
-              }}
-              secondaryActions={
-                [
-                  //{
-                  //  title: 'Learn more about custom repositories',
-                  //  type: 'link',
-                  //  link: '#',
-                  //},
-                ]
-              }
-            />
-          )
-        ) : (
-          <Skeleton />
-        )}
+        <>
+          <TableHeader />
+          <RepositoryTable
+            data={data?.data || []}
+            count={data?.count}
+            openModal={openModal}
+            isLoading={isLoading}
+            hasError={hasError}
+            fetchRepos={fetchRepos}
+          />
+        </>
         <AddModal
           isOpen={modalDetails.isOpen.add}
           openModal={openModal}
-          reloadData={reloadData}
+          reloadData={fetchRepos}
         />
         <EditModal
           isOpen={modalDetails.isOpen.edit}
@@ -96,7 +65,7 @@ const Repository = () => {
           name={modalDetails.name}
           baseURL={modalDetails.baseURL}
           openModal={openModal}
-          reloadData={reloadData}
+          reloadData={fetchRepos}
         />
         <RemoveModal
           isOpen={modalDetails.isOpen.remove}
@@ -104,7 +73,7 @@ const Repository = () => {
           name={modalDetails.name}
           baseURL={modalDetails.baseURL}
           openModal={openModal}
-          reloadData={reloadData}
+          reloadData={fetchRepos}
         />
       </Main>
     </>
