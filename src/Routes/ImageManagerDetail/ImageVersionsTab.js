@@ -89,7 +89,7 @@ const createRows = (data, imageSetId, latestImageVersion) => {
       {
         title: image?.Commit?.OSTreeCommit ? (
           <Tooltip content={<div>{image?.Commit?.OSTreeCommit}</div>}>
-            <span>{truncateString(image?.Commit?.OSTreeCommit, [5, 5])}</span>
+            <span>{truncateString(image?.Commit?.OSTreeCommit, 5, 5)}</span>
           </Tooltip>
         ) : (
           <Text>Unavailable</Text>

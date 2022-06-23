@@ -8,10 +8,19 @@ import Main from '@redhat-cloud-services/frontend-components/Main';
 import RepositoryHeader from './RepositoryHeader';
 import useApi from '../../hooks/useApi';
 import { getCustomRepositories } from '../../api/repositories';
+import { useHistory } from 'react-router-dom';
+import { emptyStateNoFliters } from '../../utils';
+import { routes as paths } from '../../constants/routeMapper';
+import EmptyState from '../../components/Empty';
 
 const Repository = () => {
+  const history = useHistory();
   const [response, fetchRepos] = useApi({
-    api: () => getCustomRepositories(''),
+    api: ({ query }) =>
+      getCustomRepositories({
+        imageID: '',
+        query,
+      }),
     tableReload: true,
   });
   const { data, isLoading, hasError } = response;
@@ -45,14 +54,26 @@ const Repository = () => {
       <Main>
         <>
           <TableHeader />
-          <RepositoryTable
-            data={data?.data || []}
-            count={data?.count}
-            openModal={openModal}
-            isLoading={isLoading}
-            hasError={hasError}
-            fetchRepos={fetchRepos}
-          />
+          {!emptyStateNoFliters(isLoading, data?.count, history) ? (
+            <RepositoryTable
+              data={data?.data || []}
+              count={data?.count}
+              openModal={openModal}
+              isLoading={isLoading}
+              hasError={hasError}
+              fetchRepos={fetchRepos}
+            />
+          ) : (
+            <EmptyState
+              icon="repository"
+              title="No custom repositories available"
+              body="Add custom repositories to build RHEL for Edge images with additional packages."
+              primaryAction={{
+                text: 'Custom repositories',
+                href: paths['repositories'],
+              }}
+            />
+          )}
         </>
         <AddModal
           isOpen={modalDetails.isOpen.add}

@@ -1,10 +1,9 @@
 import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
-import { Text, TextVariants } from '@patternfly/react-core';
+import { Text, TextVariants, Tooltip } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
-import EmptyState from '../../components/Empty';
-import { routes as paths } from '../../constants/routeMapper';
+import { truncateString } from '../../utils';
 
 const filters = [{ label: 'Name', type: 'text' }];
 
@@ -46,6 +45,7 @@ const RepositoryTable = ({
   };
 
   const buildRows = data.map(({ ID, Name, URL }) => {
+    console.log(Name);
     return {
       rowInfo: {
         id: ID,
@@ -57,7 +57,9 @@ const RepositoryTable = ({
           title: (
             <>
               <Text className="pf-u-mb-xs" component={TextVariants.p}>
-                {Name}
+                <Tooltip content={<div>{Name}</div>}>
+                  <span>{truncateString(Name, 20)}</span>
+                </Tooltip>
               </Text>
               <Text
                 component={TextVariants.a}
@@ -76,41 +78,29 @@ const RepositoryTable = ({
 
   return (
     <>
-      {isLoading !== true && !count > 0 ? (
-        <EmptyState
-          icon="repository"
-          title="No custom repositories available"
-          body="Add custom repositories to build RHEL for Edge images with additional packages."
-          primaryAction={{
-            text: 'Custom repositories',
-            href: paths['repositories'],
-          }}
-        />
-      ) : (
-        <GeneralTable
-          apiFilterSort={true}
-          isUseApi={true}
-          loadTableData={fetchRepos}
-          filters={filters}
-          tableData={{
-            count,
-            data,
-            isLoading,
-            hasError,
-          }}
-          columnNames={[{ title: 'Name', type: 'name', sort: true }]}
-          rows={buildRows}
-          actionResolver={actionResolver}
-          areActionsDisabled={() => false}
-          defaultSort={{ index: 0, direction: 'asc' }}
-          toolbarButtons={[
-            {
-              title: 'Add repository',
-              click: () => openModal({ type: 'add' }),
-            },
-          ]}
-        />
-      )}
+      <GeneralTable
+        apiFilterSort={true}
+        isUseApi={true}
+        loadTableData={fetchRepos}
+        filters={filters}
+        tableData={{
+          count,
+          data,
+          isLoading,
+          hasError,
+        }}
+        columnNames={[{ title: 'Name', type: 'name', sort: true }]}
+        rows={buildRows}
+        actionResolver={actionResolver}
+        areActionsDisabled={() => false}
+        defaultSort={{ index: 0, direction: 'asc' }}
+        toolbarButtons={[
+          {
+            title: 'Add repository',
+            click: () => openModal({ type: 'add' }),
+          },
+        ]}
+      />
     </>
   );
 };

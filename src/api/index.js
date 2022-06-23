@@ -1,7 +1,10 @@
 export const IMAGE_BUILDER_API = '/api/image-builder/v1';
 export const EDGE_API = '/api/edge/v1';
 
-export const getTableParams = (q = '') => {
+export const getTableParams = (q) => {
+  if (q === undefined) {
+    return '';
+  }
   const query = Object.keys(q).reduce((acc, curr) => {
     let value = undefined;
     if (
