@@ -72,11 +72,23 @@ export const useFeatureFlags = (flag) => {
   return flagsReady ? isFlagEnabled : false;
 };
 
-export const truncateString = (string, characterCount) =>
-  `${string.substring(0, characterCount[0])}...${string.substring(
-    string.length - characterCount[1],
-    string.length
-  )}`;
+export const truncateString = (
+  string = '',
+  start,
+  end = 0,
+  separationString = '...'
+) => {
+  if (string.length <= start) {
+    return string;
+  }
+
+  const updatedString = `${string.substring(
+    0,
+    start
+  )}${separationString}${string.substring(string.length - end, string.length)}`;
+
+  return updatedString;
+};
 
 export const transformSort = ({ direction, name }) => {
   return {
