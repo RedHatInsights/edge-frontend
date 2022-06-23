@@ -12,19 +12,19 @@ describe('RepositoryTable', () => {
 
     const data = [
       {
-        id: 1,
-        name: 'test name 1',
-        baseURL: 'test url 1',
+        ID: 1,
+        Name: 'test name 1',
+        URL: 'test url 1',
       },
       {
-        id: 2,
-        name: 'test name 2',
-        baseURL: 'test url 2',
+        ID: 2,
+        Name: 'test name 2',
+        URL: 'test url 2',
       },
       {
-        id: 3,
-        name: 'test name 3',
-        baseURL: 'test url 3',
+        ID: 3,
+        Name: 'test name 3',
+        URL: 'test url 3',
       },
     ];
 
@@ -57,8 +57,8 @@ describe('RepositoryTable', () => {
     ).toEqual('Filter by name');
     expect(screen.findByRole('button', 'Add repository')).toBeDefined();
     expect(screen.findByRole('button', 'Name')).toBeDefined();
-    // expect(screen.getAllByText(/test name/i)).toHaveLength(3);
-    // expect(screen.getAllByRole('link', /test url/i)).toHaveLength(3);
+    expect(screen.getAllByText(/test name/i)).toHaveLength(3);
+    expect(screen.getAllByRole('link', /test url/i)).toHaveLength(3);
 
     expect(container.querySelector('div')).toMatchSnapshot();
   });
