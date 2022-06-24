@@ -12,7 +12,6 @@
     "lint:sass": "stylelint 'src/**/*.scss' --config .stylelintrc.json",
     "nightly": "npm run deploy",
     "prod": "NODE_ENV=production webpack serve --config config/dev.webpack.config.js",
-    "prod:proxy": "PROXY=true NODE_ENV=production webpack serve --config config/prod.webpack.config.js",
     "start": "NODE_ENV=development webpack serve --config config/dev.webpack.config.js",
     "start:proxy": "PROXY=true NODE_ENV=development webpack serve --config config/dev.webpack.config.js",
     "test": "jest --verbose",
