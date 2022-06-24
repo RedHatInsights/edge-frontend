@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import AddModal from './modals/AddModal';
 import EditModal from './modals/EditModal';
 import RemoveModal from './modals/RemoveModal';
-import TableHeader from './TableHeader';
 import RepositoryTable from './RepositoryTable';
 import Main from '@redhat-cloud-services/frontend-components/Main';
 import RepositoryHeader from './RepositoryHeader';
@@ -10,7 +9,6 @@ import useApi from '../../hooks/useApi';
 import { getCustomRepositories } from '../../api/repositories';
 import { useHistory } from 'react-router-dom';
 import { emptyStateNoFliters } from '../../utils';
-import { routes as paths } from '../../constants/routeMapper';
 import EmptyState from '../../components/Empty';
 
 const Repository = () => {
@@ -53,7 +51,6 @@ const Repository = () => {
       <RepositoryHeader />
       <Main>
         <>
-          <TableHeader />
           {!emptyStateNoFliters(isLoading, data?.count, history) ? (
             <RepositoryTable
               data={data?.data || []}
@@ -66,11 +63,11 @@ const Repository = () => {
           ) : (
             <EmptyState
               icon="repository"
-              title="No custom repositories available"
+              title="Add a custom repository"
               body="Add custom repositories to build RHEL for Edge images with additional packages."
               primaryAction={{
-                text: 'Custom repositories',
-                href: paths['repositories'],
+                text: 'Add repository',
+                click: () => openModal({ type: 'add' }),
               }}
             />
           )}
