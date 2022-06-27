@@ -1,6 +1,10 @@
 import {
+  BellIcon,
   CheckCircleIcon,
+  CircleNotchIcon,
+  ExclamationCircleIcon,
   ExclamationTriangleIcon,
+  PauseCircleIcon,
   PlusCircleIcon,
   UnknownIcon,
   RepositoryIcon,
@@ -102,4 +106,30 @@ export const colorMapper = {
   lightBlue: infoColor.value,
   blue: activeColor.value,
   red: dangerColor.value,
+};
+
+export const statusToIcon = {
+  done: {
+    icon: CheckCircleIcon,
+    color: successColor.value,
+    title: 'Fully adopted',
+  },
+  error: {
+    icon: ExclamationCircleIcon,
+    color: dangerColor.value,
+    title: 'Error while adopting',
+  },
+  pending: { icon: PauseCircleIcon, title: 'Pending adoption' },
+  updating: { icon: CircleNotchIcon, title: 'Updating' },
+  unknown: { icon: UnknownIcon, title: 'Unknown state' },
+  warning: {
+    icon: ExclamationTriangleIcon,
+    color: warningColor.value,
+    title: 'Warning while adopting',
+  },
+  notification: {
+    icon: BellIcon,
+    color: infoColor.value,
+    title: 'Delivering',
+  },
 };
