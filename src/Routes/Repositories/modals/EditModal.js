@@ -4,8 +4,23 @@ import { HelperText, HelperTextItem } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { editCustomRepository } from '../../../api/repositories';
+import apiWithToast from '../../../utils/apiWithToast';
+import { useDispatch } from 'react-redux';
 
 const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
+  const dispatch = useDispatch();
+
+  const handleAddRepository = (values) => {
+    const statusMessages = {
+      onSuccess: {
+        title: 'Success',
+        description: `${values.name} has been edited successfully`,
+      },
+      onError: { title: 'Error', description: 'Failed to edit a repo' },
+    };
+    apiWithToast(dispatch, () => editCustomRepository(values), statusMessages);
+  };
+
   const editSchema = {
     fields: [
       {
@@ -55,7 +70,7 @@ const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
       submitLabel="Update"
       schema={editSchema}
       initialValues={{ id, name, baseURL }}
-      onSubmit={(values) => editCustomRepository(values)}
+      onSubmit={handleAddRepository}
       reloadData={reloadData}
     />
   );
