@@ -4,8 +4,27 @@ import { createCustomRepository } from '../../../api/repositories';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { nameValidator } from '../../../utils';
+import apiWithToast from '../../../utils/apiWithToast';
+import { useDispatch } from 'react-redux';
 
 const AddModal = ({ isOpen, openModal, reloadData }) => {
+  const dispatch = useDispatch();
+
+  const handleAddRepository = (values) => {
+    const statusMessages = {
+      onSuccess: {
+        title: 'Success',
+        description: `${values.name} has been created successfully`,
+      },
+      onError: { title: 'Error', description: 'Failed to create a repo' },
+    };
+    apiWithToast(
+      dispatch,
+      () => createCustomRepository(values),
+      statusMessages
+    );
+  };
+
   const addSchema = {
     fields: [
       {
@@ -46,7 +65,7 @@ const AddModal = ({ isOpen, openModal, reloadData }) => {
       openModal={() => openModal({ type: 'add' })}
       submitLabel="Add"
       schema={addSchema}
-      onSubmit={(values) => createCustomRepository(values)}
+      onSubmit={handleAddRepository}
       reloadData={reloadData}
     />
   );
