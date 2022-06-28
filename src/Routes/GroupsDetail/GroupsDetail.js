@@ -297,6 +297,7 @@ const GroupsDetail = () => {
           closeModal={() => setIsAddModalOpen(false)}
           isOpen={isAddModalOpen}
           reloadData={fetchDevices}
+          groupName={data?.DeviceGroup?.Name}
         />
       )}
       {removeModal.isOpen && (
