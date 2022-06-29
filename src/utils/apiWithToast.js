@@ -19,7 +19,6 @@ const apiWithToast = (dispatch, api, statusMessages) => {
   const fetchData = async () => {
     try {
       const response = await api();
-
       if (hasSuccess) {
         dispatch({
           ...addNotification({

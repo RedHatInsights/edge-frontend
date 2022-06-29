@@ -5,12 +5,15 @@ import PropTypes from 'prop-types';
 import { addDevicesToGroup } from '../../api/groups';
 import { getInventory } from '../../api/devices';
 import useApi from '../../hooks/useApi';
+import apiWithToast from '../../utils/apiWithToast';
+import { useDispatch } from 'react-redux';
 
 const AddSystemsToGroupModal = ({
   groupId,
   closeModal,
   isOpen,
   reloadData,
+  groupName,
 }) => {
   const [response, fetchDevices] = useApi({
     api: getInventory,
@@ -18,6 +21,32 @@ const AddSystemsToGroupModal = ({
   });
   const { data, isLoading, hasError } = response;
   const [deviceIds, setDeviceIds] = useState([]);
+  const dispatch = useDispatch();
+
+  const handleAddDevicesToGroup = () => {
+    const statusMessages = {
+      onSuccess: {
+        title: 'Success',
+        description: `Device(s) have been added to ${groupName} successfully`,
+      },
+      onError: {
+        title: 'Error',
+        description: `An error occurred making the request`,
+      },
+    };
+
+    apiWithToast(
+      dispatch,
+      () =>
+        addDevicesToGroup(
+          parseInt(groupId),
+          deviceIds.map((device) => ({ ID: device.deviceID }))
+        ),
+      statusMessages
+    );
+    setTimeout(async () => await reloadData(), 500);
+    closeModal();
+  };
 
   return (
     <Modal
@@ -32,14 +61,7 @@ const AddSystemsToGroupModal = ({
           isDisabled={deviceIds.length === 0}
           key="confirm"
           variant="primary"
-          onClick={() => {
-            addDevicesToGroup(
-              parseInt(groupId),
-              deviceIds.map((device) => ({ ID: device.deviceID }))
-            );
-            setTimeout(async () => await reloadData(), 500);
-            closeModal();
-          }}
+          onClick={handleAddDevicesToGroup}
         >
           Add systems
         </Button>,
@@ -66,6 +88,7 @@ AddSystemsToGroupModal.propTypes = {
   closeModal: PropTypes.func,
   isOpen: PropTypes.bool,
   reloadData: PropTypes.func,
+  groupName: PropTypes.string,
 };
 
 export default AddSystemsToGroupModal;
