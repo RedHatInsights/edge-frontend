@@ -54,7 +54,7 @@ const ImageOutputCheckbox = (props) => {
       isStack
     >
       {props.options.map(({ value, label }, index) => (
-        <>
+        <Fragment key={index}>
           <Checkbox
             key={index}
             label={label}
@@ -90,7 +90,7 @@ const ImageOutputCheckbox = (props) => {
               </Text>
             </Fragment>
           )}
-        </>
+        </Fragment>
       ))}
     </FormGroup>
   );
