@@ -1,26 +1,15 @@
-import React, {
-  Fragment,
-  Suspense,
-  useEffect,
-  useContext,
-  useState,
-} from 'react';
+import React, { Fragment, Suspense, useEffect, useState } from 'react';
 import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Stack, StackItem, Spinner, Bullseye } from '@patternfly/react-core';
-import { useDispatch } from 'react-redux';
-import { RegistryContext } from '../../store';
-import { loadImageSetDetail } from '../../store/actions';
-import { imageSetDetailReducer } from '../../store/reducers';
 import { useParams, useHistory } from 'react-router-dom';
-import { useSelector, shallowEqual } from 'react-redux';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
 import UpdateImageWizard from '../ImageManager/UpdateImageWizard';
+import useApi from '../../hooks/useApi';
+import { getImageSet } from '../../api/images';
 
 const ImageDetail = () => {
   const { imageId, imageVersionId } = useParams();
-  const { getRegistry } = useContext(RegistryContext);
-  const dispatch = useDispatch();
   const history = useHistory();
   const [updateWizard, setUpdateWizard] = useState({
     isOpen: false,
@@ -28,14 +17,13 @@ const ImageDetail = () => {
   });
   const [imageVersion, setImageVersion] = useState(null);
 
-  const imageSetData = useSelector(
-    ({ imageSetDetailReducer }) => ({
-      data: imageSetDetailReducer?.data || null,
-      isLoading: imageSetDetailReducer?.isLoading,
-      hasError: imageSetDetailReducer?.hasError,
-    }),
-    shallowEqual
-  );
+  const [response, fetchImageSetDetails] = useApi({
+    api: getImageSet,
+    id: imageId,
+    tableReload: true,
+  });
+
+  const { data, isLoading } = response;
 
   const openUpdateWizard = (id) => {
     history.push({
@@ -54,21 +42,17 @@ const ImageDetail = () => {
   useEffect(() => {
     imageVersionId
       ? setImageVersion(
-          imageSetData?.data?.Data?.images?.[
-            imageSetData?.data?.Data?.images?.findIndex(
+          data?.Data?.images?.[
+            data?.Data?.images?.findIndex(
               (image) => image?.image?.ID == imageVersionId
             )
           ]
         )
       : setImageVersion(null);
-  }, [imageSetData, imageVersionId]);
+  }, [response, imageVersionId]);
 
   useEffect(() => {
-    const registered = getRegistry().register({
-      imageSetDetailReducer,
-    });
-    loadImageSetDetail(dispatch, imageId);
-    return () => registered();
+    fetchImageSetDetails();
   }, [imageId]);
 
   return (
@@ -77,7 +61,7 @@ const ImageDetail = () => {
         <Stack hasGutter>
           <StackItem>
             <DetailsHead
-              imageData={imageSetData}
+              imageData={response}
               imageVersion={imageVersion}
               openUpdateWizard={openUpdateWizard}
             />
@@ -85,11 +69,11 @@ const ImageDetail = () => {
         </Stack>
       </PageHeader>
       <ImageDetailTabs
-        imageData={imageSetData}
+        imageData={response}
         urlParam={imageId}
         imageVersion={imageVersion}
         openUpdateWizard={openUpdateWizard}
-        isLoading={imageSetData.isLoading}
+        isLoading={isLoading}
       />
       {updateWizard.isOpen && (
         <Suspense
