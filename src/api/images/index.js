@@ -71,7 +71,7 @@ export const createImage = ({
 export const getImageSet = ({
   id,
   q = {
-    limit: 20,
+    limit: 10,
     offset: 0,
     sort_by: '-created_at',
   },
