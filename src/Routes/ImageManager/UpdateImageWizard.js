@@ -185,7 +185,7 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
             isDynamic: true,
             inModal: true,
             buttonLabels: {
-              submit: 'Create image',
+              submit: 'Update image',
             },
             showTitles: true,
             title: `Update image: ${data?.image?.Name}`,
