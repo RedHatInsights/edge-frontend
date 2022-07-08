@@ -23,3 +23,21 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', () => {
+  cy.visit(Cypress.config().baseUrl)
+  cy.get('#username-verification').type(Cypress.env('username'))
+  cy.get('#login-show-step2').click()
+  cy.get('#password').type(Cypress.env('password'))
+  cy.get('#rh-password-verification-submit-button').click()
+})
+
+Cypress.Commands.add('clearCookieConsentModal', () => {
+  const consentModal = Cypress.$('.truste_overlay')
+  if (consentModal.length > 0){
+    cy.get('.truste_popframe').then((iframe) => {
+      const body = iframe.contents().find('body');
+      cy.wrap(body).find('a.call').click()
+    })
+  }
+})
