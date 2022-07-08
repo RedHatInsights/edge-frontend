@@ -15,6 +15,7 @@ function getConfigurationByFile(file) {
 }
 
 module.exports = defineConfig({
+  chromeWebSecurity: false,
   e2e: {
     setupNodeEvents(on, config) {
       // accept a configFile value or use local by default
