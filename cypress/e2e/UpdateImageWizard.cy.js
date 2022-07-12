@@ -1,23 +1,20 @@
-const imageName = 'acruzgon-20220627'
-const release = 'Red Hat Enterprise Linux (RHEL) 9.0'
-const outputTypes = ["RHEL for Edge Commit (.tar)", "RHEL for Edge Installer (.iso)"]
-const packageName = 'python3'
-const userName = 'acruzgon'
-const sshKey = 'ssh-ed25519'
-
 describe('Update image wizard', () => {
   beforeEach(() => {
+    cy.fixture("imageData").then(function (data) {
+      this.data = data
+    })
     cy.viewport(1600, 1000)
     cy.login()
     cy.clearCookieConsentModal()
     cy.visit('/manage-images')
   });
 
-  it('passes', () => {
+  it('passes', function () {
     cy.waitFor('.pf-c-title')
+    cy.wait(1000)
     cy.get('.pf-c-search-input__text-input', { timeout: 30000 })
       .should('be.visible')
-      .type(imageName)
+      .type(this.data.imageName)
 
     cy.wait(3000)
     cy.get('.pf-c-table__action').click()
@@ -43,7 +40,7 @@ describe('Update image wizard', () => {
 
     //Additional packages
     cy.get('h1').should('include.text', 'Additional packages')
-    cy.get('[id="available-textinput"]').type(packageName)
+    cy.get('[id="available-textinput"]').type(this.data.packageName)
     cy.get('[data-testid="package-search"]').click()
     cy.get('[aria-label="Add all"]').click()
     cy.get('button').contains('Next').click()
@@ -53,17 +50,16 @@ describe('Update image wizard', () => {
     cy.get('h1').should('include.text', 'Review')
 
     cy.get('[data-testid="review-image-details"] > .pf-m-12-col > h2').should('include.text', 'Details')
-    cy.get('[data-testid="review-image-details"] > :nth-child(2) > .pf-m-9-col > dd').should('include.text', imageName)
-
+    cy.get('[data-testid="review-image-details"] > :nth-child(2) > .pf-m-9-col > dd').should('include.text', this.data.imageName)
 
     cy.get('[data-testid="review-image-output"] > .pf-m-12-col > h2').should('include.text', 'Output')
-    cy.get('[data-testid="review-image-output"] > :nth-child(2) > .pf-m-9-col > dd').should('include.text', release)
-    cy.get('[data-testid="review-image-output"] > :nth-child(3) > .pf-m-9-col > dd').should('include.text', outputTypes[0])
-    cy.get('[data-testid="review-image-output"] > :nth-child(4) > .pf-m-9-col > dd').should('include.text', outputTypes[1])
+    cy.get('[data-testid="review-image-output"] > :nth-child(2) > .pf-m-9-col > dd').should('include.text', this.data.release)
+    cy.get('[data-testid="review-image-output"] > :nth-child(3) > .pf-m-9-col > dd').should('include.text', this.data.outputTypes[0])
+    cy.get('[data-testid="review-image-output"] > :nth-child(4) > .pf-m-9-col > dd').should('include.text', this.data.outputTypes[1])
 
     cy.get('[data-testid="review-image-registration"] > .pf-m-12-col > h2').should('include.text', 'Registration')
-    cy.get('[data-testid="review-image-registration"] > :nth-child(2) > .pf-m-9-col > dd').should('include.text', userName)
-    cy.get('[data-testid="review-image-registration"] > :nth-child(3) > .pf-m-9-col > dd').contains(sshKey)
+    cy.get('[data-testid="review-image-registration"] > :nth-child(2) > .pf-m-9-col > dd').should('include.text', this.data.userName)
+    cy.get('[data-testid="review-image-registration"] > :nth-child(3) > .pf-m-9-col > dd').contains(this.data.sshKey)
 
     cy.get('[data-testid="review-image-packages"] > .pf-m-12-col > h2').should('include.text', 'Packages')
 
