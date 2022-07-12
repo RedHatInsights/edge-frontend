@@ -1,0 +1,13 @@
+{
+    "imageName": "acruzgon-20220627",
+    "distribution": "rhel-90",
+    "packageName": "python3",
+    "userName": "acruzgon",
+    "sshKey": "ssh-ed25519",
+    "release": "Red Hat Enterprise Linux (RHEL) 9.0",
+    "outputTypes": [
+        "RHEL for Edge Commit (.tar)",
+        "RHEL for Edge Installer (.iso)"
+    ],
+    "expectedVersion": 2
+}

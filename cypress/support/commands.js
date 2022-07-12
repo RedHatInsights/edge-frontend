@@ -34,7 +34,7 @@ Cypress.Commands.add('login', () => {
 
 Cypress.Commands.add('clearCookieConsentModal', () => {
   const consentModal = Cypress.$('.truste_overlay')
-  if (consentModal.length > 0){
+  if (consentModal.length > 0) {
     cy.get('.truste_popframe').then((iframe) => {
       const body = iframe.contents().find('body');
       cy.wrap(body).find('a.call').click()
