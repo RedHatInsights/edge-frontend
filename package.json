@@ -18,6 +18,11 @@
     "verify": "npm-run-all build lint test",
     "prepare": "husky install"
   },
+  "nyc": {
+    "all": true,
+    "include": "src/**/*.js",
+    "report-dir": "cypress-coverage"
+  },
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [

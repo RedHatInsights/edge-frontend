@@ -18,13 +18,21 @@ module.exports = defineConfig({
   chromeWebSecurity: false,
 
   e2e: {
-    setupNodeEvents(on, config) {
-      // accept a configFile value or use local by default
+    async setupNodeEvents(on, config) {
+      require('@cypress/code-coverage/task')(on, config)
       const file = config.env.configFile || "local";
-      return getConfigurationByFile(file);
+      await getConfigurationByFile(file).then(configFile =>{
+        config.env = {...configFile.env, ...config.env}
+        config.baseUrl = configFile.baseUrl
+      })
+      return config;
     },
   },
-
+  env: {
+    codeCoverage: {
+      exclude: ['cypress/**/*.*']
+    }
+  },
   component: {
     devServer: {
       framework: "react",
