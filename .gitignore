@@ -13,6 +13,8 @@ node_modules
 dist
 
 cypress/config
+cypress/screenshots
+cypress/videos
 
 npm-debug.log*
 yarn-debug.log*
