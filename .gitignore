@@ -7,12 +7,12 @@
 .idea/
 
 # dependencies
-node_modules/
+node_modules
 
 # production
 dist
 
-cypress/config
+cypress/config/
 cypress/screenshots/
 cypress/videos/
 
