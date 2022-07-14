@@ -21,7 +21,7 @@
   "nyc": {
     "all": true,
     "include": "src/**/*.js",
-    "report-dir": "cypress-coverage"
+    "report-dir": "./coverage/"
   },
   "jest": {
     "collectCoverage": true,
