@@ -5,6 +5,8 @@ import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/excla
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 import PropTypes from 'prop-types';
 import { removeCustomRepository } from '../../../api/repositories';
+import apiWithToast from '../../../utils/apiWithToast';
+import { useDispatch } from 'react-redux';
 
 const LabelWithText = ({ label, text }) => {
   return (
@@ -25,6 +27,18 @@ const WarningIcon = () => (
 );
 
 const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
+  const dispatch = useDispatch();
+
+  const handleRemoveRepository = ({ id }) => {
+    const statusMessages = {
+      onSuccess: {
+        title: 'Success',
+        description: `${name} has been removed successfully`,
+      },
+      onError: { title: 'Error', description: 'Failed to remove a repository' },
+    };
+    apiWithToast(dispatch, () => removeCustomRepository(id), statusMessages);
+  };
   const addSchema = {
     fields: [
       {
@@ -56,7 +70,7 @@ const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
       schema={addSchema}
       initialValues={{ id }}
       variant="danger"
-      onSubmit={({ id }) => removeCustomRepository(id)}
+      onSubmit={handleRemoveRepository}
       reloadData={reloadData}
     />
   );

@@ -38,7 +38,7 @@ const ReviewStep = () => {
 
   const details = [
     { name: 'Name', value: getState().values.name },
-    { name: 'Version', value: getState().initialValues.version + 1 },
+    { name: 'Version', value: String(getState().initialValues.version + 1) },
     { name: 'Description', value: getState().values.description },
   ];
 
@@ -76,11 +76,11 @@ const ReviewStep = () => {
     const pkgs = [
       getState().values?.includesCustomRepos && {
         name: isUpdate ? 'Custom Updated' : 'Custom Added',
-        value: calcPkgDiff(customPackageAfter, customPackageBefore),
+        value: String(calcPkgDiff(customPackageAfter, customPackageBefore)),
       },
       {
         name: isUpdate ? 'RHEL Updated' : 'RHEL Added',
-        value: calcPkgDiff(RHELPackageAfter, RHELPackageBefore),
+        value: String(calcPkgDiff(RHELPackageAfter, RHELPackageBefore)),
       },
     ];
     return pkgs;

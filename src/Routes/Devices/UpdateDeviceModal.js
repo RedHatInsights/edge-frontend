@@ -45,6 +45,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
           q: {
             limit: 1,
             sort_by: '-created_at',
+            status: 'SUCCESS',
           },
         }).then((data) => setImageData(data.Data.images[0]))
       : getImageData(updateModal.imageId).then((data) =>
