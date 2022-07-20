@@ -26,7 +26,7 @@ const CreateGroupButton = ({ openModal }) => (
 );
 
 CreateGroupButton.propTypes = {
-  openModal: PropTypes.bool,
+  openModal: PropTypes.func,
 };
 
 const createDescription = (deviceIds) => {
