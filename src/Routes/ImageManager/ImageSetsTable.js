@@ -76,7 +76,7 @@ const createRows = (data) => {
       id: image_set?.ID,
       imageStatus: image_set?.Status,
       isoURL: image_set?.ImageBuildIsoURL || null,
-      latestImageID: image_set?.ID,
+      latestImageID: image_set?.ID, //not the correct ID, don't merge until the lastest image ID is sent
     },
     cells: [
       {
