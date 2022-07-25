@@ -64,8 +64,8 @@ const Images = () => {
       </PageHeader>
       <Main className="edge-devices">
         <ImageSetsTable
-          data={data?.Data || []}
-          count={data?.Count}
+          data={data?.data || []}
+          count={data?.count}
           isLoading={isLoading}
           hasError={hasError}
           fetchImageSets={fetchImageSets}

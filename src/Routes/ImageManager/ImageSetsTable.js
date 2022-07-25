@@ -71,12 +71,12 @@ const columnNames = [
 ];
 
 const createRows = (data) => {
-  return data.map(({ image_set, image_build_iso_url }, index) => ({
+  return data.map((image_set, index) => ({
     rowInfo: {
       id: image_set?.ID,
-      imageStatus: image_set?.Images[0].Status,
-      isoURL: image_build_iso_url || null,
-      latestImageID: image_set?.Images[0].ID,
+      imageStatus: image_set?.Status,
+      isoURL: image_set?.ImageBuildIsoURL || null,
+      latestImageID: image_set?.ID,
     },
     cells: [
       {
@@ -86,7 +86,7 @@ const createRows = (data) => {
           </Link>
         ),
       },
-      image_set?.Images[0].Version, // remove when image_set.Version is accurate
+      image_set?.Version, // remove when image_set.Version is accurate
       {
         title: image_set?.UpdatedAt ? (
           <DateFormat date={image_set?.UpdatedAt} />
@@ -99,7 +99,7 @@ const createRows = (data) => {
           <>
             {/* workaround for tooltip on kebab*/}
             <TooltipSelectorRef index={index} />
-            <Status type={image_set?.Images[0].Status.toLowerCase()} />
+            <Status type={image_set?.Status.toLowerCase()} />
           </>
         ),
       },
