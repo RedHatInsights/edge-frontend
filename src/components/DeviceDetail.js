@@ -1,49 +1,86 @@
 import React, { Suspense, lazy } from 'react';
 import { useStore, useSelector } from 'react-redux';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
-import { Tooltip } from '@patternfly/react-core';
+import { Tooltip, Skeleton } from '@patternfly/react-core';
 import TitleWithPopover from './TitleWithPopover';
 import GreenbootStatus from './GreenbootStatus';
+import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
+import { useLoadModule } from '@scalprum/react-core';
 
-const GeneralInformation = lazy(() =>
-  import(
-    '@redhat-cloud-services/frontend-components-inventory-general-info/GeneralInformation'
-  )
-);
-
-const SystemCard = lazy(() =>
-  import(
-    '@redhat-cloud-services/frontend-components-inventory-general-info/SystemCard'
-  )
-);
-const OperatingSystemCard = lazy(() =>
-  import(
-    '@redhat-cloud-services/frontend-components-inventory-general-info/OperatingSystemCard'
-  )
+const CmpLoader = () => (
+  <React.Fragment>
+    <Skeleton />
+    <br />
+    <Skeleton />
+    <br />
+    <Skeleton />
+    <br />
+  </React.Fragment>
 );
 
-const BiosCard = lazy(() =>
-  import(
-    '@redhat-cloud-services/frontend-components-inventory-general-info/BiosCard'
-  )
+const GeneralInformation = (props) => (
+  <AsyncComponent
+    appName="inventory"
+    module="./GeneralInformation"
+    fallback={<CmpLoader />}
+    {...props}
+  />
 );
 
-const CollectionCard = lazy(() =>
-  import(
-    '@redhat-cloud-services/frontend-components-inventory-general-info/CollectionCard'
-  )
+const SystemCard = (props) => (
+  <AsyncComponent
+    appName="inventory"
+    module="./SystemCard"
+    fallback={<CmpLoader />}
+    {...props}
+  />
 );
 
-const InfrastructureCard = lazy(() =>
-  import(
-    '@redhat-cloud-services/frontend-components-inventory-general-info/InfrastructureCard'
-  )
+const OperatingSystemCard = (props) => (
+  <AsyncComponent
+    appName="inventory"
+    module="./OperatingSystemCard"
+    fallback={<CmpLoader />}
+    {...props}
+  />
 );
+
+const BiosCard = (props) => (
+  <AsyncComponent
+    appName="inventory"
+    module="./BiosCard"
+    fallback={<CmpLoader />}
+    {...props}
+  />
+);
+
+const CollectionCard = (props) => (
+  <AsyncComponent
+    appName="inventory"
+    module="./CollectionCard"
+    fallback={<CmpLoader />}
+    {...props}
+  />
+);
+
+const InfrastructureCard = (props) => (
+  <AsyncComponent
+    appName="inventory"
+    module="./InfrastructureCard"
+    fallback={<CmpLoader />}
+    {...props}
+  />
+);
+
+console.log(InfrastructureCard, GeneralInformation, 'huuuuh');
+
 const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
 
-import { statusHelper } from '@redhat-cloud-services/frontend-components-inventory-general-info/dataMapper';
-
 const GeneralInformationTab = () => {
+  const [{ statusHelper }] = useLoadModule(
+    { appName: 'inventory', scope: 'inventory', module: './dataMapper' },
+    {}
+  );
   const writePermissions = useSelector(
     ({ permissionsReducer }) => permissionsReducer?.writePermissions
   );
@@ -55,15 +92,18 @@ const GeneralInformationTab = () => {
     })
   );
 
+  const store = useStore();
+
   return (
     <Suspense fallback="">
       <GeneralInformation
-        store={useStore()}
+        store={store}
         writePermissions={writePermissions}
         SystemCardWrapper={(props) => (
           <Suspense fallback="">
             <SystemCard
               {...props}
+              store={store}
               hasCPUs={false}
               hasSockets={false}
               hasCores={false}
@@ -87,23 +127,27 @@ const GeneralInformationTab = () => {
         OperatingSystemCardWrapper={(props) => (
           <Suspense fallback="">
             {' '}
-            <InfrastructureCard {...props} />
+            <InfrastructureCard {...props} store={store} />
           </Suspense>
         )}
         BiosCardWrapper={(props) => (
           <Suspense fallback="">
             {' '}
-            <ImageInformationCard {...props} />
+            <ImageInformationCard {...props} store={store} />
           </Suspense>
         )}
         InfrastructureCardWrapper={(props) => (
           <Suspense fallback="">
-            <BiosCard {...props} />
+            <BiosCard {...props} store={store} />
           </Suspense>
         )}
         ConfigurationCardWrapper={(props) => (
           <Suspense fallback="">
-            <OperatingSystemCard {...props} hasKernelModules={true} />
+            <OperatingSystemCard
+              {...props}
+              hasKernelModules={true}
+              store={store}
+            />
           </Suspense>
         )}
         CollectionCardWrapper={(props) => (
@@ -113,13 +157,14 @@ const GeneralInformationTab = () => {
               extra={[
                 {
                   title: 'RHC Health (broker functioning)',
-                  value: statusHelper[rhcHealth?.toUpperCase()] || (
+                  value: statusHelper?.[rhcHealth?.toUpperCase()] || (
                     <Tooltip content="Unknown service status">
                       <OutlinedQuestionCircleIcon className="ins-c-inventory__detail--unknown" />
                     </Tooltip>
                   ),
                 },
               ]}
+              store={store}
             />
           </Suspense>
         )}
