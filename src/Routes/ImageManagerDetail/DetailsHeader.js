@@ -22,8 +22,8 @@ import { routes as paths } from '../../constants/routeMapper';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 
-const dropdownItems = (data, imageVersion, openUpdateWizard) => {
-  const imageData = imageVersion ? imageVersion : data?.images?.[0];
+const dropdownItems = (data, imageVersion, isoURL, openUpdateWizard) => {
+  const imageData = imageVersion ? imageVersion : data?.LastImageDetails;
 
   const actionsArray = [];
 
@@ -38,13 +38,13 @@ const dropdownItems = (data, imageVersion, openUpdateWizard) => {
       </DropdownItem>
     );
 
-  imageData?.image?.Installer?.ImageBuildISOURL &&
+  isoURL &&
     actionsArray.push(
       <DropdownItem key="download-button" component="button">
         <Text
           className="force-text-black remove-underline"
           component="a"
-          href={imageData?.image?.Installer?.ImageBuildISOURL}
+          href={isoURL}
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -60,7 +60,7 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    setData(imageData?.data?.Data);
+    setData(imageData?.data);
   }, [imageData]);
 
   return (
@@ -79,13 +79,13 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
             </BreadcrumbItem>
             {imageVersion ? (
               <BreadcrumbItem>
-                <Link to={`${paths['manage-images']}/${data?.image_set?.ID}`}>
-                  {data?.image_set?.Name}
+                <Link to={`${paths['manage-images']}/${data?.ImageSet?.ID}`}>
+                  {data?.ImageSet?.Name}
                 </Link>
               </BreadcrumbItem>
             ) : (
               <BreadcrumbItem isActive>
-                {data?.image_set?.Name || <Skeleton width="100px" />}
+                {data?.ImageSet?.Name || <Skeleton width="100px" />}
               </BreadcrumbItem>
             )}
             {imageVersion && (
@@ -103,26 +103,31 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
                     component="h1"
                     className="grid-align-center pf-u-mb-0"
                   >
-                    {data?.image_set?.Name || <Skeleton width="150px" />}
+                    {data?.ImageSet?.Name || <Skeleton width="150px" />}
                   </TextListItem>
                   <TextListItem className="pf-u-pt-sm" component="dd">
-                    {data?.Status || data?.images?.[0]?.image?.Status ? (
+                    {imageVersion?.image?.Status ||
+                    data?.LastImageDetails?.image?.Status ? (
                       <Status
-                        type={data?.images?.[0]?.image?.Status.toLowerCase()}
+                        type={
+                          imageVersion
+                            ? imageVersion?.image?.Status.toLowerCase()
+                            : data?.LastImageDetails?.image?.Status.toLowerCase()
+                        }
                       />
                     ) : (
                       <Skeleton width="100px" />
                     )}
                   </TextListItem>
                   {imageVersion?.image?.UpdatedAt ||
-                  data?.images?.[0].image?.UpdatedAt ? (
+                  data?.LastImageDetails?.image?.UpdatedAt ? (
                     <TextListItem component="p">
                       {`Last updated `}
                       <DateFormat
                         date={
                           imageVersion
                             ? imageVersion?.image?.UpdatedAt
-                            : data?.images?.[0].image?.UpdatedAt
+                            : data?.LastImageDetails?.image?.UpdatedAt
                         }
                       />
                     </TextListItem>
@@ -143,7 +148,8 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
                       isDisabled={
                         (imageVersion
                           ? imageVersion?.image?.Status
-                          : data?.Images?.[0]?.Status) === 'BUILDING' || false
+                          : data?.LastImageDetails?.image.Status) ===
+                          'BUILDING' || false
                       }
                     >
                       Actions
@@ -153,6 +159,7 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
                   dropdownItems={dropdownItems(
                     data,
                     imageVersion,
+                    data?.ImageBuildIsoURL,
                     openUpdateWizard
                   )}
                 />

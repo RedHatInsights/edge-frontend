@@ -6,7 +6,7 @@ import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
 import UpdateImageWizard from '../ImageManager/UpdateImageWizard';
 import useApi from '../../hooks/useApi';
-import { getImageSet } from '../../api/images';
+import { getImageSetView } from '../../api/images';
 
 const ImageDetail = () => {
   const { imageId, imageVersionId } = useParams();
@@ -18,8 +18,8 @@ const ImageDetail = () => {
   const [imageVersion, setImageVersion] = useState(null);
 
   const [response, fetchImageSetDetails] = useApi({
-    api: getImageSet,
-    id: imageId,
+    api: getImageSetView,
+    id: imageVersionId ? `${imageId}/versions/${imageVersionId}` : `${imageId}`,
     tableReload: true,
   });
 
@@ -41,19 +41,13 @@ const ImageDetail = () => {
 
   useEffect(() => {
     imageVersionId
-      ? setImageVersion(
-          data?.Data?.images?.[
-            data?.Data?.images?.findIndex(
-              (image) => image?.image?.ID == imageVersionId
-            )
-          ]
-        )
+      ? setImageVersion(data?.ImageDetails)
       : setImageVersion(null);
   }, [response, imageVersionId]);
 
   useEffect(() => {
     fetchImageSetDetails();
-  }, [imageId]);
+  }, [imageId, imageVersionId]);
 
   return (
     <Fragment>

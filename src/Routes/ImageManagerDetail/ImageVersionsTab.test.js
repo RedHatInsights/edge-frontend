@@ -11,36 +11,38 @@ describe('ImageVersionsTab', () => {
     const openUpdateWizard = jest.fn();
     const imageData = {
       data: {
-        Data: {
-          images: [
+        ImageBuildIsoURL: 'test.com',
+        ImageSet: {
+          ID: 101,
+        },
+        LastImageDetails: {
+          image: {
+            ID: 200,
+            Status: 'BUILDING',
+            Version: 2,
+            ImageType: 'rhel-edge-installer',
+          },
+        },
+        ImagesViewData: {
+          count: 2,
+          data: [
             {
-              image: {
-                ID: 100,
-                Version: 1,
-                ImageType: 'rhel-edge-installer',
-                CreatedAt: '2022-01-24T18:27:24.331554Z',
-                Status: 'BUILDING',
-                Installer: {
-                  ImageBuildISOURL: '',
-                },
-              },
+              ID: 200,
+              Version: 2,
+              ImageType: 'rhel-edge-installer',
+              CreatedAt: '2022-07-15T16:41:44.237455+02:00',
+              Status: 'BUILDING',
+              ImageBuildIsoURL: '',
             },
             {
-              image: {
-                ID: 200,
-                Version: 2,
-                ImageType: 'rhel-edge-installer',
-                CreatedAt: '2022-01-24T18:27:24.331554Z',
-                Status: 'SUCCESS',
-                Installer: {
-                  ImageBuildISOURL: 'test.com',
-                },
-              },
+              ID: 100,
+              Version: 1,
+              ImageType: 'rhel-edge-installer',
+              CreatedAt: '2022-07-15T13:52:09.155502+02:00',
+              Status: 'SUCCESS',
+              ImageBuildIsoURL: 'test.com',
             },
           ],
-          image_set: {
-            ID: 101,
-          },
         },
       },
     };

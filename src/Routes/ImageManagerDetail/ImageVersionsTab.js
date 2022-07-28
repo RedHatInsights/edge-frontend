@@ -59,11 +59,11 @@ const columnNames = [
 ];
 
 const createRows = (data, imageSetId, latestImageVersion) => {
-  return data?.map(({ image }) => ({
+  return data?.map((image) => ({
     rowInfo: {
       id: image?.ID,
       imageStatus: image?.Status,
-      isoURL: image?.Installer?.ImageBuildISOURL,
+      isoURL: image?.ImageBuildIsoURL,
       latestImageVersion,
       currentImageVersion: image.Version,
     },
@@ -87,9 +87,9 @@ const createRows = (data, imageSetId, latestImageVersion) => {
         title: imageTypeMapper[image?.ImageType],
       },
       {
-        title: image?.Commit?.OSTreeCommit ? (
-          <Tooltip content={<div>{image?.Commit?.OSTreeCommit}</div>}>
-            <span>{truncateString(image?.Commit?.OSTreeCommit, 5, 5)}</span>
+        title: image?.CommitCheckSum ? (
+          <Tooltip content={<div>{image.CommitCheckSum}</div>}>
+            <span>{truncateString(image.CommitCheckSum, 5, 5)}</span>
           </Tooltip>
         ) : (
           <Text>Unavailable</Text>
@@ -106,14 +106,14 @@ const createRows = (data, imageSetId, latestImageVersion) => {
 };
 
 const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
-  const latestImageVersion = imageData?.data?.Data.image_set.Version;
+  const latestImageVersion = imageData?.data?.ImageSet?.Version;
   const [rows, setRows] = useState([]);
   useEffect(() => {
     if (imageData?.data) {
       setRows(
         createRows(
-          imageData?.data?.Data?.images,
-          imageData?.data?.Data?.image_set?.ID,
+          imageData?.data?.ImagesViewData?.data,
+          imageData?.data?.ImageSet?.ID,
           latestImageVersion
         )
       );
