@@ -136,5 +136,5 @@ export const getImageSets = ({ query }) => {
     query = { limit: 20, offset: 0, sort_by: '-updated_at' };
   }
   const q = getTableParams(query);
-  return instance.get(`${EDGE_API}/image-sets?${q}`);
+  return instance.get(`${EDGE_API}/image-sets/view?${q}`);
 };
