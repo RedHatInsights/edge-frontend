@@ -7,10 +7,11 @@ import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import Status from '../../components/Status';
 import { imageTypeMapper } from '../../constants';
-import { loadImageSetDetail } from '../../store/actions';
+import { getImageSetViewVersions } from '../../api/images';
 import { cellWidth } from '@patternfly/react-table';
 import Main from '@redhat-cloud-services/frontend-components/Main';
 import { truncateString } from '../../utils';
+import useApi from '../../hooks/useApi';
 
 const defaultFilters = [
   {
@@ -59,11 +60,11 @@ const columnNames = [
 ];
 
 const createRows = (data, imageSetId, latestImageVersion) => {
-  return data?.map(({ image }) => ({
+  return data?.map((image) => ({
     rowInfo: {
       id: image?.ID,
       imageStatus: image?.Status,
-      isoURL: image?.Installer?.ImageBuildISOURL,
+      isoURL: image?.ImageBuildIsoURL,
       latestImageVersion,
       currentImageVersion: image.Version,
     },
@@ -87,9 +88,9 @@ const createRows = (data, imageSetId, latestImageVersion) => {
         title: imageTypeMapper[image?.ImageType],
       },
       {
-        title: image?.Commit?.OSTreeCommit ? (
-          <Tooltip content={<div>{image?.Commit?.OSTreeCommit}</div>}>
-            <span>{truncateString(image?.Commit?.OSTreeCommit, 5, 5)}</span>
+        title: image?.CommitCheckSum ? (
+          <Tooltip content={<div>{image.CommitCheckSum}</div>}>
+            <span>{truncateString(image.CommitCheckSum, 5, 5)}</span>
           </Tooltip>
         ) : (
           <Text>Unavailable</Text>
@@ -106,19 +107,38 @@ const createRows = (data, imageSetId, latestImageVersion) => {
 };
 
 const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
-  const latestImageVersion = imageData?.data?.Data.image_set.Version;
-  const [rows, setRows] = useState([]);
+  const imageSetID = imageData?.data?.ImageSet?.ID;
+  const latestImageVersion = imageData?.data?.ImageSet?.Version;
+  const [data, setData] = useState(imageData?.data?.ImagesViewData);
+  const [isLoading, setIsLoading] = useState(imageData?.isLoading);
+  const [hasError, setHasError] = useState(imageData?.hasError);
+
+  const [response, fetchImageSetVersions] = useApi({
+    api: ({ query }) =>
+      getImageSetViewVersions({
+        imageSetID: imageSetID,
+        query,
+      }),
+    tableReload: true,
+  });
+
   useEffect(() => {
-    if (imageData?.data) {
-      setRows(
-        createRows(
-          imageData?.data?.Data?.images,
-          imageData?.data?.Data?.image_set?.ID,
-          latestImageVersion
-        )
-      );
+    if (!response.isLoading) {
+      setData(response.data);
     }
-  }, [imageData]);
+  }, [response]);
+
+  useEffect(() => {
+    if (!response.isLoading) {
+      setIsLoading(response.isLoading);
+    }
+  }, [response]);
+
+  useEffect(() => {
+    if (!response.isLoading) {
+      setHasError(response.hasError);
+    }
+  }, [response]);
 
   const actionResolver = (rowData) => {
     const actionsArray = [];
@@ -167,19 +187,21 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
   return (
     <Main className="add-100vh">
       <GeneralTable
-        apiFilterSort={false}
+        apiFilterSort={true}
+        isUseApi={true}
         filters={defaultFilters}
-        loadTableData={loadImageSetDetail}
+        loadTableData={fetchImageSetVersions}
         tableData={{
-          count: imageData?.data?.Count,
-          isLoading: imageData?.isLoading,
-          hasError: imageData?.hasError,
+          count: data?.count,
+          data: data?.data,
+          isLoading,
+          hasError,
         }}
         columnNames={columnNames}
-        rows={rows || []}
+        rows={createRows(data?.data, imageSetID, latestImageVersion)}
         actionResolver={actionResolver}
         areActionsDisabled={areActionsDisabled}
-        defaultSort={{ index: 2, direction: 'desc' }}
+        defaultSort={{ index: 3, direction: 'desc' }}
       />
     </Main>
   );
@@ -187,6 +209,8 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
 ImageVersionsTab.propTypes = {
   imageData: PropTypes.object,
   urlParam: PropTypes.string,
+  imageSetID: PropTypes.number,
+  createRows: PropTypes.func,
   openUpdateWizard: PropTypes.func,
 };
 
