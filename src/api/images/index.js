@@ -80,10 +80,24 @@ export const getImageSet = ({
   return instance.get(`${EDGE_API}/image-sets/${id}?${query}`);
 };
 
+export const getImageSetViewVersions = ({
+  imageSetID,
+  query = {
+    limit: 20,
+    offset: 0,
+    sort_by: '-created_at',
+  },
+}) => {
+  const q = getTableParams(query);
+  return instance.get(
+    `${EDGE_API}/image-sets/view/${imageSetID}/versions?${q}`
+  );
+};
+
 export const getImageSetView = ({
   id,
   q = {
-    limit: 10,
+    limit: 20,
     offset: 0,
     sort_by: '-created_at',
   },
