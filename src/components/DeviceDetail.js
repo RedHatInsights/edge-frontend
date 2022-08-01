@@ -1,28 +1,18 @@
 import React, { Suspense, lazy } from 'react';
 import { useStore, useSelector } from 'react-redux';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
-import { Tooltip, Skeleton } from '@patternfly/react-core';
+import { Tooltip } from '@patternfly/react-core';
 import TitleWithPopover from './TitleWithPopover';
 import GreenbootStatus from './GreenbootStatus';
 import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
 import { useLoadModule } from '@scalprum/react-core';
-
-const CmpLoader = () => (
-  <React.Fragment>
-    <Skeleton />
-    <br />
-    <Skeleton />
-    <br />
-    <Skeleton />
-    <br />
-  </React.Fragment>
-);
+import CmpLoader from './CmpLoader';
 
 const GeneralInformation = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./GeneralInformation"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={3} />}
     {...props}
   />
 );
@@ -71,8 +61,6 @@ const InfrastructureCard = (props) => (
     {...props}
   />
 );
-
-console.log(InfrastructureCard, GeneralInformation, 'huuuuh');
 
 const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Skeleton } from '@patternfly/react-core';
+import { PropTypes } from 'prop-types';
 
-const CmpLoader = () => {
+const CmpLoader = ({ numberOfRows }) => {
+  console.log(numberOfRows, 'testing numberOfRows');
   return (
     <React.Fragment>
       <Skeleton />
@@ -15,3 +17,7 @@ const CmpLoader = () => {
 };
 
 export default CmpLoader;
+
+CmpLoader.propTypes = {
+  numberOfRows: PropTypes.number,
+};
