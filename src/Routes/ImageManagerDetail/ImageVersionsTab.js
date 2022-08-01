@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
@@ -109,9 +109,6 @@ const createRows = (data, imageSetId, latestImageVersion) => {
 const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
   const imageSetID = imageData?.data?.ImageSet?.ID;
   const latestImageVersion = imageData?.data?.ImageSet?.Version;
-  const [data, setData] = useState(imageData?.data?.ImagesViewData);
-  const [isLoading, setIsLoading] = useState(imageData?.isLoading);
-  const [hasError, setHasError] = useState(imageData?.hasError);
 
   const [response, fetchImageSetVersions] = useApi({
     api: ({ query }) =>
@@ -122,23 +119,7 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
     tableReload: true,
   });
 
-  useEffect(() => {
-    if (!response.isLoading) {
-      setData(response.data);
-    }
-  }, [response]);
-
-  useEffect(() => {
-    if (!response.isLoading) {
-      setIsLoading(response.isLoading);
-    }
-  }, [response]);
-
-  useEffect(() => {
-    if (!response.isLoading) {
-      setHasError(response.hasError);
-    }
-  }, [response]);
+  const { data, isLoading, hasError } = response;
 
   const actionResolver = (rowData) => {
     const actionsArray = [];
