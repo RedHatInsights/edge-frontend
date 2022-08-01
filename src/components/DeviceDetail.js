@@ -21,7 +21,7 @@ const SystemCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./SystemCard"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={3} />}
     {...props}
   />
 );
@@ -30,7 +30,7 @@ const OperatingSystemCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./OperatingSystemCard"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={3} />}
     {...props}
   />
 );
@@ -39,7 +39,7 @@ const BiosCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./BiosCard"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={3} />}
     {...props}
   />
 );
@@ -48,7 +48,7 @@ const CollectionCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./CollectionCard"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={3} />}
     {...props}
   />
 );
@@ -57,7 +57,7 @@ const InfrastructureCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./InfrastructureCard"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={3} />}
     {...props}
   />
 );
