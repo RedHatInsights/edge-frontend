@@ -5,8 +5,46 @@ import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import logger from 'redux-logger';
 import { init, RegistryContext } from '../../store';
+import * as useApi from '../../hooks/useApi';
 
 describe('ImageVersionsTab', () => {
+  const imagesViewData = {
+    count: 2,
+    data: [
+      {
+        ID: 200,
+        Version: 2,
+        ImageType: 'rhel-edge-installer',
+        CreatedAt: '2022-07-15T16:41:44.237455+02:00',
+        Status: 'BUILDING',
+        ImageBuildIsoURL: '',
+      },
+      {
+        ID: 100,
+        Version: 1,
+        ImageType: 'rhel-edge-installer',
+        CreatedAt: '2022-07-15T13:52:09.155502+02:00',
+        Status: 'SUCCESS',
+        ImageBuildIsoURL: 'test.com',
+      },
+    ],
+  };
+
+  const mockFetchData = jest.fn();
+
+  beforeEach(() => {
+    jest
+      .spyOn(useApi, 'default')
+      .mockImplementation(() => [
+        { data: imagesViewData, isLoading: false, hasError: false },
+        mockFetchData,
+      ]);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('renders correctly', async () => {
     const openUpdateWizard = jest.fn();
     const imageData = {
@@ -22,27 +60,6 @@ describe('ImageVersionsTab', () => {
             Version: 2,
             ImageType: 'rhel-edge-installer',
           },
-        },
-        ImagesViewData: {
-          count: 2,
-          data: [
-            {
-              ID: 200,
-              Version: 2,
-              ImageType: 'rhel-edge-installer',
-              CreatedAt: '2022-07-15T16:41:44.237455+02:00',
-              Status: 'BUILDING',
-              ImageBuildIsoURL: '',
-            },
-            {
-              ID: 100,
-              Version: 1,
-              ImageType: 'rhel-edge-installer',
-              CreatedAt: '2022-07-15T13:52:09.155502+02:00',
-              Status: 'SUCCESS',
-              ImageBuildIsoURL: 'test.com',
-            },
-          ],
         },
       },
     };
@@ -64,6 +81,8 @@ describe('ImageVersionsTab', () => {
       </RegistryContext.Provider>,
       { wrapper: MemoryRouter }
     );
+
+    expect(mockFetchData.mock.calls.length).toBe(1);
 
     expect(screen.getByRole('button', { name: 'Options menu' })).toBeDefined();
     expect(
