@@ -37,10 +37,10 @@ const DeviceDetailTabs = ({
 };
 
 DeviceDetailTabs.propTypes = {
-  imageId: PropTypes.string,
+  imageId: PropTypes.number,
   systemProfile: PropTypes.object,
   setUpdateModal: PropTypes.func,
-  setReload: PropTypes.bool,
+  setReload: PropTypes.func,
 };
 
 export default DeviceDetailTabs;
