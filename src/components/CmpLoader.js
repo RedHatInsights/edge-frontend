@@ -4,9 +4,14 @@ import { PropTypes } from 'prop-types';
 
 const CmpLoader = ({ numberOfRows }) => {
   var CmpRows = [];
+
   for (var i = 0; i < numberOfRows; i++) {
-    CmpRows.push(<Skeleton />);
-    CmpRows.push(<br />);
+    CmpRows.push(
+      <React.Fragment key={i}>
+        <Skeleton />
+        <br />
+      </React.Fragment>
+    );
   }
   return <React.Fragment>{CmpRows}</React.Fragment>;
 };
