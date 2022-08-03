@@ -8,20 +8,23 @@ import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComp
 import { useLoadModule } from '@scalprum/react-core';
 import CmpLoader from './CmpLoader';
 
-const GeneralInformation = (props) => (
-  <AsyncComponent
-    appName="inventory"
-    module="./GeneralInformation"
-    fallback={<CmpLoader numberOfRows={3} />}
-    {...props}
-  />
-);
+const GeneralInformation = (props) => {
+  console.log(props);
+  return (
+    <AsyncComponent
+      appName="inventory"
+      module="./GeneralInformation"
+      fallback={<CmpLoader numberOfRows={3} />}
+      {...props}
+    />
+  );
+};
 
 const SystemCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./SystemCard"
-    fallback={<CmpLoader numberOfRows={3} />}
+    fallback={<CmpLoader numberOfRows={5} />}
     {...props}
   />
 );
@@ -30,7 +33,7 @@ const OperatingSystemCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./OperatingSystemCard"
-    fallback={<CmpLoader numberOfRows={3} />}
+    fallback={<CmpLoader numberOfRows={6} />}
     {...props}
   />
 );
@@ -39,7 +42,7 @@ const BiosCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./BiosCard"
-    fallback={<CmpLoader numberOfRows={3} />}
+    fallback={<CmpLoader numberOfRows={4} />}
     {...props}
   />
 );
@@ -48,7 +51,7 @@ const CollectionCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./CollectionCard"
-    fallback={<CmpLoader numberOfRows={3} />}
+    fallback={<CmpLoader numberOfRows={7} />}
     {...props}
   />
 );
@@ -57,7 +60,7 @@ const InfrastructureCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./InfrastructureCard"
-    fallback={<CmpLoader numberOfRows={3} />}
+    fallback={<CmpLoader numberOfRows={6} />}
     {...props}
   />
 );
