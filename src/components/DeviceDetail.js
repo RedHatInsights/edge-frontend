@@ -9,15 +9,12 @@ import { useLoadModule } from '@scalprum/react-core';
 import CmpLoader from './CmpLoader';
 
 const GeneralInformation = (props) => {
-  console.log(props);
-  return (
-    <AsyncComponent
-      appName="inventory"
-      module="./GeneralInformation"
-      fallback={<CmpLoader numberOfRows={3} />}
-      {...props}
-    />
-  );
+  <AsyncComponent
+    appName="inventory"
+    module="./GeneralInformation"
+    fallback={<CmpLoader numberOfRows={3} />}
+    {...props}
+  />;
 };
 
 const SystemCard = (props) => (
