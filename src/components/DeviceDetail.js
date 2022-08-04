@@ -1,28 +1,18 @@
 import React, { Suspense, lazy } from 'react';
 import { useStore, useSelector } from 'react-redux';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
-import { Tooltip, Skeleton } from '@patternfly/react-core';
+import { Tooltip } from '@patternfly/react-core';
 import TitleWithPopover from './TitleWithPopover';
 import GreenbootStatus from './GreenbootStatus';
 import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
 import { useLoadModule } from '@scalprum/react-core';
-
-const CmpLoader = () => (
-  <React.Fragment>
-    <Skeleton />
-    <br />
-    <Skeleton />
-    <br />
-    <Skeleton />
-    <br />
-  </React.Fragment>
-);
+import CmpLoader from './CmpLoader';
 
 const GeneralInformation = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./GeneralInformation"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={3} />}
     {...props}
   />
 );
@@ -31,7 +21,7 @@ const SystemCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./SystemCard"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={5} />}
     {...props}
   />
 );
@@ -40,7 +30,7 @@ const OperatingSystemCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./OperatingSystemCard"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={6} />}
     {...props}
   />
 );
@@ -49,7 +39,7 @@ const BiosCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./BiosCard"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={4} />}
     {...props}
   />
 );
@@ -58,7 +48,7 @@ const CollectionCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./CollectionCard"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={7} />}
     {...props}
   />
 );
@@ -67,12 +57,10 @@ const InfrastructureCard = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./InfrastructureCard"
-    fallback={<CmpLoader />}
+    fallback={<CmpLoader numberOfRows={6} />}
     {...props}
   />
 );
-
-console.log(InfrastructureCard, GeneralInformation, 'huuuuh');
 
 const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
 
