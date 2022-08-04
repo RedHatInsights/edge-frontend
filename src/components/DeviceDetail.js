@@ -8,14 +8,14 @@ import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComp
 import { useLoadModule } from '@scalprum/react-core';
 import CmpLoader from './CmpLoader';
 
-const GeneralInformation = (props) => {
+const GeneralInformation = (props) => (
   <AsyncComponent
     appName="inventory"
     module="./GeneralInformation"
     fallback={<CmpLoader numberOfRows={3} />}
     {...props}
-  />;
-};
+  />
+);
 
 const SystemCard = (props) => (
   <AsyncComponent
