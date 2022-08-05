@@ -305,14 +305,22 @@ const DeviceTable = ({
           actionResolver={actionResolver}
           defaultSort={{ index: 3, direction: 'desc' }}
           toolbarButtons={
-            canBeAdded
+            (canBeAdded
               ? [
                   {
                     title: 'Add systems',
                     click: () => setIsAddModalOpen(true),
                   },
                 ]
-              : []
+              : [],
+            isSystemsView
+              ? [
+                  {
+                    title: 'Update',
+                    click: () => setUpdateModal(true),
+                  },
+                ]
+              : [])
           }
           hasCheckbox={hasCheckbox}
           skeletonRowQuantity={skeletonRowQuantity}
