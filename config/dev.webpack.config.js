@@ -13,6 +13,9 @@ const webpackProxy = {
     process.env.BETA ? 'beta' : 'stable'
   }`, // for accessing prod-beta start your app with ENVIRONMENT=prod and BETA=true
   appUrl: process.env.BETA ? '/beta/edge' : '/edge',
+  ...(process.env.INSIGHTS_CHROME && {
+    localChrome: process.env.INSIGHTS_CHROME,
+  }),
   routes: {
     ...(process.env.API_PORT && {
       '/api/edge': { host: `http://localhost:${process.env.API_PORT}` },
