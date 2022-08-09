@@ -59,7 +59,7 @@ describe('Update image wizard', () => {
 
     cy.get('[data-testid="review-image-registration"] > .pf-m-12-col > h2').should('include.text', 'Registration')
     cy.get('[data-testid="review-image-registration"] > :nth-child(2) > .pf-m-9-col > dd').should('include.text', this.data.userName)
-    cy.get('[data-testid="review-image-registration"] > :nth-child(3) > .pf-m-9-col > dd').contains(this.data.sshKey)
+    cy.get('[data-testid="review-image-registration"] > :nth-child(3) > .pf-m-9-col > dd').contains('ssh-ed25519')
 
     cy.get('[data-testid="review-image-packages"] > .pf-m-12-col > h2').should('include.text', 'Packages')
 
