@@ -190,6 +190,7 @@ const DeviceTable = ({
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
+  const canBeUpdated = setUpdateModal;
   const history = useHistory();
 
   const actionResolver = (rowData) => {
@@ -313,9 +314,10 @@ const DeviceTable = ({
                   },
                 ]
               : [],
-            isSystemsView
+            canBeUpdated
               ? [
                   {
+                    isDisabled: true,
                     title: 'Update',
                     click: () => setUpdateModal(true),
                   },
