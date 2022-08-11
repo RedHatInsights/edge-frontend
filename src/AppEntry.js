@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -8,7 +8,8 @@ import { getBaseName } from '@redhat-cloud-services/frontend-components-utilitie
 import logger from 'redux-logger';
 
 const AppEntry = ({ hasLogger }) => {
-  const registry = hasLogger ? init(logger) : init(logger);
+  // Initialize reducer registry only at initial render.
+  const registry = useMemo(() => (hasLogger ? init(logger) : init()), []);
   return (
     <RegistryContext.Provider
       value={{
