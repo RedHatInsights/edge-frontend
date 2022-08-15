@@ -24,6 +24,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+//import { recurse } from 'cypress-recurse'
+
 Cypress.Commands.add('login', () => {
   cy.visit(Cypress.config().baseUrl)
   cy.get('#username-verification').type(Cypress.env('username'))
@@ -41,3 +43,71 @@ Cypress.Commands.add('clearCookieConsentModal', () => {
     })
   }
 })
+
+Cypress.Commands.add('beforeTest', (url) => {
+  cy.fixture("imageData").then(function (data) {
+    this.data = data
+    })
+  cy.fixture("contents").then(function (contents) {
+    this.contents = contents
+   })
+  cy.viewport(1600, 1000)
+  cy.login()
+  cy.clearCookieConsentModal()
+  cy.visit(url)
+
+})
+
+Cypress.Commands.add('iterateRows', (element, value) => {
+  cy.get(`tbody ${element}`).each(($element) => {
+    cy.wrap($element)
+      .contains(value)
+  })
+
+})
+
+Cypress.Commands.add('selectInDropdownMenu', (label, status) => {
+  cy.get('[data-testid="toolbar-header-testid"]').find('[data-testid="filter-dropdown-testid"]').click()
+  cy.get('[data-testid="toolbar-header-testid"]').find('[data-testid="filter-dropdown-testid"]').contains(label).click()
+  cy.get('[data-testid="toolbar-header-testid"]').find('[data-testid="filter-input-testid"]').click()
+  cy.get('label').contains(status).click()
+  cy.get('[data-testid="toolbar-header-testid"]').find('[data-testid="filter-input-testid"]').click()
+
+})
+
+Cypress.Commands.add('clickButton', (value) => {
+  cy.get('button').contains(value).click()
+})
+
+Cypress.Commands.add('testPagination', (selector, test) => {
+  if(test == "perPage"){    
+    cy.wrap([10, 20, 50, 100]).each((num, i, array) => {
+      cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('[data-testid="pagination-header-test-id"]').click()
+      cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find(`[data-action="per-page-${num}"]`).click()
+      cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('b').should('include.text', `1 - ${num}`)
+
+      })
+      cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('[data-action="previous"]').should('to.be.disabled')
+      cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('[data-action="next"]').should('to.not.be.disabled')
+      
+      //takes more that 3 min, do we want to keep it?
+      // recurse(
+      //   () => cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('[data-action="next"]'),
+      //   ($button) => $button.should('to.not.be.disabled'),
+      //   {
+      //     log: false,
+      //     limit: 100,
+      //     timeout: 180000,
+      //     delay: 0,
+      //     post(){
+      //       cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('[data-action="next"]').click()
+      //     }
+      //   }
+    
+      // )      
+
+  }else{    
+
+  }
+})
+
