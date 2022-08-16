@@ -6,7 +6,7 @@ describe('Images', () => {
   });
 
   it('happy path', function () {  
-    cy.get('.pf-c-title', { timeout: 30000 }).should('include.text', 'Systems')
+    cy.get('.pf-c-title', { timeout: 30000 }).should('include.text', 'Images')
 
     //Filter by Name
     cy.get('[data-testid="toolbar-header-testid"]').find('[data-testid="filter-dropdown-testid"]').click()

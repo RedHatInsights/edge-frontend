@@ -95,15 +95,15 @@ describe('Create image wizard', () => {
 
     //Click Create image
 
-    // cy.get('.pf-c-wizard__footer > .pf-m-primary').click()
-    // cy.wait(2000)
-    // cy.get('.pf-c-alert__description').should('include.text', imageName)
-    // cy.get('.pf-c-search-input__text-input', { timeout: 30000 })
-    // .should('be.visible')
-    // .type(imageName)
-    // cy.wait(1000)
-    // cy.get('.pf-m-width-35 > a').should('include.text', imageName)
-    // cy.get(':nth-child(2) > p').should('include.text', 'Image build in progress')
+    cy.get('.pf-c-wizard__footer > .pf-m-primary').click()
+    cy.wait(2000)
+    cy.get('.pf-c-alert__description').should('include.text', imageName)
+    cy.get('.pf-c-search-input__text-input', { timeout: 30000 })
+    .should('be.visible')
+    .type(imageName)
+    cy.wait(1000)
+    cy.get('.pf-m-width-35 > a').should('include.text', imageName)
+    cy.get(':nth-child(2) > p').should('include.text', 'Image build in progress')
 
 
   })

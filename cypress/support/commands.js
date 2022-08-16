@@ -88,23 +88,7 @@ Cypress.Commands.add('testPagination', (selector, test) => {
 
       })
       cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('[data-action="previous"]').should('to.be.disabled')
-      cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('[data-action="next"]').should('to.not.be.disabled')
-      
-      //takes more that 3 min, do we want to keep it?
-      // recurse(
-      //   () => cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('[data-action="next"]'),
-      //   ($button) => $button.should('to.not.be.disabled'),
-      //   {
-      //     log: false,
-      //     limit: 100,
-      //     timeout: 180000,
-      //     delay: 0,
-      //     post(){
-      //       cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('[data-action="next"]').click()
-      //     }
-      //   }
-    
-      // )      
+      cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('[data-action="next"]').should('to.not.be.disabled')    
 
   }else{    
 
