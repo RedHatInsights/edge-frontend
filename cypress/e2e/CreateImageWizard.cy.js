@@ -2,20 +2,10 @@ const dayjs = require('dayjs')
 
 describe('Create image wizard', () => {
   beforeEach(() => {
-    cy.fixture("imageData").then(function (data) {
-      this.data = data
-    })
-    cy.fixture("contents").then(function (contents) {
-      this.contents = contents
-    })
-    cy.viewport(1600, 1000)
-    cy.login()
-    cy.clearCookieConsentModal()
-    cy.visit('/manage-images')
+    cy.beforeTest('/manage-images')    
   });
 
   it('happy path', function () {  
-    //cy.log(this.data)
     cy.waitFor('.pf-c-title')
     cy.wait(1000)
     cy.get(':nth-child(3) > .pf-c-button', { timeout: 30000 }).contains('Create new image').click()
@@ -73,23 +63,7 @@ describe('Create image wizard', () => {
     cy.get('.pf-c-content > p').should('include.text', this.contents.customRepoContent)
 
     //Custom repositories -- pagination
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('[aria-label="Items per page"]').click()
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('[data-action="per-page-10"]').click()
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('b').should('include.text', '1 - 10')
-
-
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('[aria-label="Items per page"]').click()
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('[data-action="per-page-20"]').click()
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('b').should('include.text', '1 - 20')
-
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('[aria-label="Items per page"]').click()
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('[data-action="per-page-50"]').click()
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('b').should('include.text', '1 - 50')
-
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('[aria-label="Items per page"]').click()
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('[data-action="per-page-100"]').click()
-    cy.get('.pf-c-form > [id="toolbar-header"]').find('b').should('include.text', '1 - 100')
-
+    cy.testPagination('.pf-c-form >', 'perPage')
     cy.get('.pf-c-wizard__footer > .pf-m-primary').contains('Next').click()
 
     //Additional packages
