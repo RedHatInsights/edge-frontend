@@ -50,6 +50,27 @@ const Inventory = () => {
     setIsRowSelected(isRow);
   };
 
+  console.log(checkedDeviceIds);
+  const setCanBeUpdated = () => {
+    let canBeUpdated = false;
+    if (checkedDeviceIds.length > 0) {
+      let initialImage = checkedDeviceIds[0].imageSetId;
+      for (let device of checkedDeviceIds) {
+        if (device.imageSetId !== initialImage) {
+          canBeUpdated = false;
+          break;
+        }
+        if (device.updateImageData === true) {
+          canBeUpdated = true;
+        }
+      }
+    } else {
+      canBeUpdated = false;
+    }
+    console.log(canBeUpdated);
+    return canBeUpdated;
+  };
+
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
@@ -67,6 +88,7 @@ const Inventory = () => {
           handleRemoveDevicesFromGroup={handleRemoveDevicesFromGroup}
           hasCheckbox={true}
           selectedItems={setCheckedDeviceIds}
+          selectedItemsUpdateable={setCanBeUpdated()}
           kebabItems={[
             {
               isDisabled: !(checkedDeviceIds.length > 0),

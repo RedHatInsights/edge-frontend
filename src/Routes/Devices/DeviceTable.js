@@ -170,7 +170,9 @@ const createRows = (devices, hasLinks) => {
 
 const DeviceTable = ({
   hasCheckbox = false,
+  //checkedRows,
   selectedItems,
+  selectedItemsUpdateable,
   skeletonRowQuantity,
   data,
   count,
@@ -317,16 +319,21 @@ const DeviceTable = ({
             canBeUpdated
               ? [
                   {
-                    isDisabled: true,
+                    /*
+                    isDisabled: selectedItems
+                      ? !(selectedItems.length > 0)
+                      : [true],
+                    */
+                    isDisabled: !selectedItemsUpdateable,
                     title: 'Update',
-                    click: () => setUpdateModal(true),
+                    click: () => setUpdateModal(/**/),
                   },
                 ]
               : [])
           }
           hasCheckbox={hasCheckbox}
-          skeletonRowQuantity={skeletonRowQuantity}
           selectedItems={selectedItems}
+          skeletonRowQuantity={skeletonRowQuantity}
           kebabItems={kebabItems}
           hasModalSubmitted={hasModalSubmitted}
           setHasModalSubmitted={setHasModalSubmitted}
@@ -335,6 +342,7 @@ const DeviceTable = ({
     </>
   );
 };
+
 DeviceTable.propTypes = {
   imageData: PropTypes.object,
   urlParam: PropTypes.string,
@@ -345,6 +353,7 @@ DeviceTable.propTypes = {
   hasCheckbox: PropTypes.bool,
   setIsModalOpen: PropTypes.func,
   selectedItems: PropTypes.func,
+  selectedItemsUpdateable: PropTypes.bool,
   reload: PropTypes.bool,
   setReload: PropTypes.func,
   data: PropTypes.array,
