@@ -44,8 +44,10 @@ const GroupTable = ({
 
   const actionResolver = (rowData) => {
     if (!rowData?.rowInfo) return [];
-    const { id, title, devices, devicesImageInfo } = rowData?.rowInfo;
-    const hasUpdate = devicesImageInfo?.some((image) => image.UpdateAvailable);
+    const { id, title, devices, devicesImageSetInfo } = rowData?.rowInfo;
+    const hasUpdate = devicesImageSetInfo?.some(
+      (device) => device.UpdateAvailable
+    );
 
     return (
       id && [
@@ -80,9 +82,9 @@ const GroupTable = ({
 
   const buildRows = data?.map((rowData) => {
     const { ID, Name, Devices } = rowData?.DeviceGroup;
-    let { DevicesImageInfo } = rowData;
-    if (!DevicesImageInfo) {
-      DevicesImageInfo = [];
+    let { DevicesImageSetInfo } = rowData;
+    if (!DevicesImageSetInfo) {
+      DevicesImageSetInfo = [];
     }
     const systems = Devices ?? [];
     const image = (
@@ -90,7 +92,7 @@ const GroupTable = ({
         <Tooltip
           content={
             <div>
-              {DevicesImageInfo.map((device, index) => (
+              {DevicesImageSetInfo.map((device, index) => (
                 <p key={index}>{device.Name}</p>
               ))}
             </div>
@@ -106,12 +108,12 @@ const GroupTable = ({
         id: ID,
         title: Name,
         image:
-          DevicesImageInfo.length === 0
+          DevicesImageSetInfo.length === 0
             ? '-'
-            : DevicesImageInfo.length > 1
+            : DevicesImageSetInfo.length > 1
             ? 'Multiple images'
-            : DevicesImageInfo[0]?.Name,
-        devicesImageInfo: rowData.DevicesImageInfo,
+            : DevicesImageSetInfo[0]?.Name,
+        DevicesImageSetInfo: rowData.DevicesImageSetInfo,
         devices: Devices,
         hasValidUpdate: rowData?.DeviceGroup?.ValidUpdate,
       },
@@ -124,11 +126,11 @@ const GroupTable = ({
         },
         {
           title:
-            DevicesImageInfo.length === 0
+            DevicesImageSetInfo.length === 0
               ? '-'
-              : DevicesImageInfo.length > 1
+              : DevicesImageSetInfo.length > 1
               ? image
-              : DevicesImageInfo[0]?.Name,
+              : DevicesImageSetInfo[0]?.Name,
         },
       ],
     };
