@@ -60,7 +60,7 @@ const Groups = () => {
             <Empty
               icon="plus"
               title="Create a system group"
-              body="Create system groups to help manage your devices more effectively."
+              body="Create system groups to help manage your systems more effectively."
               primaryAction={{
                 text: 'Create group',
                 click: () => setIsCreateModalOpen(true),

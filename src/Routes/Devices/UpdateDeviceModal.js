@@ -182,7 +182,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
           openModal={() =>
             setUpdateModal((prevState) => ({ ...prevState, isOpen: false }))
           }
-          submitLabel="Update Device"
+          submitLabel="Update system"
           schema={updateSchema}
           onSubmit={handleUpdateModal}
           reloadData={refreshTable}
