@@ -4,17 +4,13 @@ describe('Update image wizard', () => {
   });
 
   it('passes', function () {
-    cy.waitFor('.pf-c-title')
-    cy.wait(1000)
+    cy.get('.pf-c-title',  { timeout: 30000 }).should('be.visible').should('include.text', 'Images')
     cy.get('.pf-c-search-input__text-input', { timeout: 30000 })
       .should('be.visible')
       .type(this.data.imageName)
-
     cy.wait(1000)
     cy.get('.pf-c-table__action').click()
-    cy.wait(1000)
     cy.get('.pf-c-dropdown__menu-item').contains('Update Image').click()
-    cy.wait(1000)
     cy.get('h2').should('include.text', 'Update image:')
     cy.get('.pf-c-button.pf-m-secondary').contains('Back').should('to.be.disabled')
     cy.get('.pf-c-button.pf-m-primary').contains('Next').click()
@@ -25,7 +21,7 @@ describe('Update image wizard', () => {
     cy.clickButton('Next')
 
     //Device registration
-    cy.get('h1').should('include.text', 'Device registration')
+    cy.get('h1').should('include.text', 'System registration')
     cy.clickButton('Next')
 
     //Custom repos

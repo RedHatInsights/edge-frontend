@@ -1,4 +1,4 @@
-//chai.use(require('chai-sorted'))
+chai.use(require('chai-sorted'))
 import { really, map } from 'cypress-should-really'
 describe('Images', () => {
   before(() => {
@@ -26,20 +26,19 @@ describe('Images', () => {
     cy.selectInDropdownMenu('Status', 'Error')
     cy.iterateRows('p', 'Error')
     cy.clickButton('Clear filters')
+  
+    cy.wait(2000)
+    cy.get('.pf-m-width-35 > .pf-c-table__button', { timeout: 30000 })
+      .should('be.visible').click()
+    cy.get('tbody [data-label="Name"]')
+      .should(really(map('innerText'), 'be.ascending'))
+
+    cy.get('.pf-m-width-35 > .pf-c-table__button', { timeout: 30000 })
+      .should('be.visible').click()
+    cy.get('tbody [data-label="Name"]')
+      .should(really(map('innerText'), 'be.sorted', { descending: true, }))
 
     cy.testPagination('', 'perPage')
-
-    cy.wait(2000)
-    cy.get('.pf-m-width-35 > .pf-c-table__button').click()
-    cy.get('tbody [data-label="Name"]').wait(3000).should(
-      really(map('innerText'), 'be.ascending')
-    )
-
-    cy.get('.pf-m-width-35 > .pf-c-table__button').wait(3000).click()
-    cy.get('tbody [data-label="Name"]')
-      .should(
-        really(map('innerText'), 'be.sorted', { descending: true, })
-      )
 
   }) 
 })

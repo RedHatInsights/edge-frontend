@@ -47,7 +47,7 @@ describe('Create image wizard', () => {
 
     //Device registration
     cy.get('.pf-c-button.pf-m-primary').contains('Next').should('to.be.disabled')
-    cy.get('.pf-c-form > .pf-c-title').should('include.text', 'Device registration')
+    cy.get('.pf-c-form > .pf-c-title').should('include.text', 'System registration')
     cy.get('.pf-c-form__label-text').should('include.text', 'Username')
     cy.get('#username').type(this.data.userName)
 
