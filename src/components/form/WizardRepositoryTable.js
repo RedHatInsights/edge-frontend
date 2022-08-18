@@ -9,7 +9,7 @@ import { getCustomRepositories } from '../../api/repositories';
 import useApi from '../../hooks/useApi';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
-
+import { truncateString } from '../../utils';
 const filters = [{ label: 'Name', type: 'text' }];
 
 const WizardRepositoryTable = ({ ...props }) => {
@@ -55,7 +55,7 @@ const WizardRepositoryTable = ({ ...props }) => {
           title: (
             <>
               <Text className="pf-u-mb-xs" component={TextVariants.p}>
-                {Name}
+                <span>{truncateString(Name, 50)}</span>
               </Text>
               <Text
                 component={TextVariants.a}
