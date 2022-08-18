@@ -184,6 +184,7 @@ const DeviceTable = ({
   setIsAddModalOpen,
   handleAddDevicesToGroup,
   handleRemoveDevicesFromGroup,
+  handleUpdateSelected,
   hasModalSubmitted,
   setHasModalSubmitted,
   fetchDevices,
@@ -319,14 +320,9 @@ const DeviceTable = ({
             canBeUpdated
               ? [
                   {
-                    /*
-                    isDisabled: selectedItems
-                      ? !(selectedItems.length > 0)
-                      : [true],
-                    */
                     isDisabled: !selectedItemsUpdateable,
                     title: 'Update',
-                    click: () => setUpdateModal(/**/),
+                    click: () => handleUpdateSelected(),
                   },
                 ]
               : [])
@@ -369,6 +365,7 @@ DeviceTable.propTypes = {
   setHasModalSubmitted: PropTypes.func,
   handleAddDevicesToGroup: PropTypes.func,
   handleRemoveDevicesFromGroup: PropTypes.func,
+  handleUpdateSelected: PropTypes.func,
   fetchDevices: PropTypes.func,
   isSystemsView: PropTypes.bool,
   isAddSystemsView: PropTypes.bool,

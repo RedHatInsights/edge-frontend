@@ -50,7 +50,6 @@ const Inventory = () => {
     setIsRowSelected(isRow);
   };
 
-  console.log(checkedDeviceIds);
   const setCanBeUpdated = () => {
     let canBeUpdated = false;
     if (checkedDeviceIds.length > 0) {
@@ -67,8 +66,19 @@ const Inventory = () => {
     } else {
       canBeUpdated = false;
     }
-    console.log(canBeUpdated);
     return canBeUpdated;
+  };
+
+  const handleUpdateSelected = () => {
+    setUpdateModal((prevState) => ({
+      ...prevState,
+      deviceData: checkedDeviceIds.map((device) => ({
+        id: device.id,
+        display_name: device.display_name,
+      })),
+      imageSetId: checkedDeviceIds[0].imageSetId,
+      isOpen: true,
+    }));
   };
 
   return (
@@ -86,6 +96,7 @@ const Inventory = () => {
           setUpdateModal={setUpdateModal}
           handleAddDevicesToGroup={handleAddDevicesToGroup}
           handleRemoveDevicesFromGroup={handleRemoveDevicesFromGroup}
+          handleUpdateSelected={handleUpdateSelected}
           hasCheckbox={true}
           selectedItems={setCheckedDeviceIds}
           selectedItemsUpdateable={setCanBeUpdated()}
