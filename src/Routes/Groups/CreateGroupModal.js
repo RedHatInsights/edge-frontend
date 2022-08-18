@@ -79,9 +79,9 @@ const CreateGroupModal = ({
     const statusMessages = {
       onSuccess: {
         title: 'Success',
-        description: `Device(s) have been added to ${values.name} successfully`,
+        description: `system(s) have been added to ${values.name} successfully`,
       },
-      onError: { title: 'Error', description: 'Failed to add device to group' },
+      onError: { title: 'Error', description: 'Failed to add system to group' },
     };
 
     apiWithToast(

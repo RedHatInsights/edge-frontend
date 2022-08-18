@@ -4,7 +4,7 @@ import { Text, HelperText, HelperTextItem } from '@patternfly/react-core';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 
 export default {
-  title: 'Device registration',
+  title: 'System registration',
   name: 'registration',
   nextStep: ({ values }) =>
     values?.includesCustomRepos ? 'repositories' : 'packages',
@@ -12,7 +12,7 @@ export default {
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
-      label: <Text>Use this to log into your device.</Text>,
+      label: <Text>Use this to log into your system.</Text>,
     },
     {
       component: componentTypes.TEXT_FIELD,

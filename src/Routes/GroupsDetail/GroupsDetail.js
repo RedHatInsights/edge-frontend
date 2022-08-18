@@ -106,7 +106,7 @@ const GroupsDetail = () => {
         title: 'Success',
         description: `${removeModal.name} has been removed successfully`,
       },
-      onError: { title: 'Error', description: 'Failed to remove device' },
+      onError: { title: 'Error', description: 'Failed to remove system' },
     };
     apiWithToast(
       dispatch,
