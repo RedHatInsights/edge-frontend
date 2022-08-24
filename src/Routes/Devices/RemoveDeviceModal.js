@@ -87,7 +87,7 @@ const RemoveDeviceModal = ({
       },
       onError: {
         title: 'Error',
-        description: 'Failed to remove device from group',
+        description: 'Failed to remove system from group',
       },
     };
 
