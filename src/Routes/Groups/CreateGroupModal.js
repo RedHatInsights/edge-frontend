@@ -79,7 +79,7 @@ const CreateGroupModal = ({
     const statusMessages = {
       onSuccess: {
         title: 'Success',
-        description: `system(s) have been added to ${values.name} successfully`,
+        description: `System(s) have been added to ${values.name} successfully`,
       },
       onError: { title: 'Error', description: 'Failed to add system to group' },
     };

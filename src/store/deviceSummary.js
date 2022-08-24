@@ -21,7 +21,7 @@ const loadDeviceSummaryFulfilled = (state, { payload }) => {
 const loadDeviceSummaryRejected = () => ({
   isLoading: false,
   hasError: true,
-  data: 'No device summary data to view',
+  data: 'No system summary data to view',
 });
 
 export default applyReducerHash(

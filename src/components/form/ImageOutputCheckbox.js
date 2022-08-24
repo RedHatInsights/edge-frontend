@@ -17,7 +17,7 @@ const WarningInstallerHelperText = () => (
   <HelperText className="pf-u-ml-lg" hasIcon>
     <HelperTextItem className="pf-u-pb-md" variant="warning" hasIcon>
       Creating an installable version of your image increases the build time and
-      is not needed for updating existing devices. <br />
+      is not needed for updating existing systems. <br />
       You can create an installable version of this image later if you continue
       with this option
     </HelperTextItem>

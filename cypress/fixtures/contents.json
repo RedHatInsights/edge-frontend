@@ -6,6 +6,6 @@
 "edgeCommitContent":"An OSTree commit is always created when building an image.",
 "edgeInstallerContent":"An installable version of the image is typically created with a brand new image.",
 "optionsContent":"Enter some basic information about your image.",
-"deviceRegistrationContent":"Use this to log into your device."
+"deviceRegistrationContent":"Use this to log into your system."
 
 }
