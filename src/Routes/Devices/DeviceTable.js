@@ -193,7 +193,7 @@ const DeviceTable = ({
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
-  const canBeUpdated = setUpdateModal;
+  const canBeUpdated = isSystemsView;
   const history = useHistory();
 
   const actionResolver = (rowData) => {
