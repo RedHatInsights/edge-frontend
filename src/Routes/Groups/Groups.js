@@ -27,6 +27,7 @@ const Groups = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
 
   const handleRenameModal = (id, name) => {
     setModalState({ id, name });
@@ -36,6 +37,11 @@ const Groups = () => {
   const handleDeleteModal = (id, name) => {
     setModalState({ id, name });
     setIsDeleteModalOpen(true);
+  };
+
+  const reloadData = () => {
+    fetchGroups();
+    setTimeout(() => setHasModalSubmitted(true), 800);
   };
 
   return (
@@ -53,6 +59,8 @@ const Groups = () => {
             handleRenameModal={handleRenameModal}
             handleDeleteModal={handleDeleteModal}
             handleCreateModal={() => setIsCreateModalOpen(true)}
+            hasModalSubmitted={hasModalSubmitted}
+            setHasModalSubmitted={setHasModalSubmitted}
             fetchGroups={fetchGroups}
           />
         ) : (
@@ -81,14 +89,14 @@ const Groups = () => {
         <CreateGroupModal
           isModalOpen={isCreateModalOpen}
           setIsModalOpen={setIsCreateModalOpen}
-          reloadData={fetchGroups}
+          reloadData={reloadData}
         />
       )}
       {isRenameModalOpen && (
         <RenameGroupModal
           isModalOpen={isRenameModalOpen}
           setIsModalOpen={setIsRenameModalOpen}
-          reloadData={fetchGroups}
+          reloadData={reloadData}
           modalState={modalState}
         />
       )}
@@ -96,7 +104,7 @@ const Groups = () => {
         <DeleteGroupModal
           isModalOpen={isDeleteModalOpen}
           setIsModalOpen={setIsDeleteModalOpen}
-          reloadData={fetchGroups}
+          reloadData={reloadData}
           modalState={modalState}
         />
       )}

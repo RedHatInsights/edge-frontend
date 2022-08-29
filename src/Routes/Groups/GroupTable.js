@@ -34,6 +34,8 @@ const GroupTable = ({
   handleCreateModal,
   handleRenameModal,
   handleDeleteModal,
+  hasModalSubmitted,
+  setHasModalSubmitted,
   fetchGroups,
 }) => {
   const [updateModal, setUpdateModal] = useState({
@@ -162,6 +164,8 @@ const GroupTable = ({
             click: handleCreateModal,
           },
         ]}
+        hasModalSubmitted={hasModalSubmitted}
+        setHasModalSubmitted={setHasModalSubmitted}
       />
       {updateModal.isOpen && (
         <Suspense
@@ -183,7 +187,10 @@ const GroupTable = ({
             }}
             setUpdateModal={setUpdateModal}
             updateModal={updateModal}
-            refreshTable={fetchGroups}
+            refreshTable={() => {
+              fetchGroups();
+              setTimeout(() => setHasModalSubmitted(true), 800);
+            }}
           />
         </Suspense>
       )}
@@ -200,6 +207,8 @@ GroupTable.propTypes = {
   handleRenameModal: PropTypes.func,
   handleDeleteModal: PropTypes.func,
   handleCreateModal: PropTypes.func,
+  hasModalSubmitted: PropTypes.bool,
+  setHasModalSubmitted: PropTypes.func,
   fetchGroups: PropTypes.func,
 };
 

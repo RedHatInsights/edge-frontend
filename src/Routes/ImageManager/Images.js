@@ -37,6 +37,7 @@ const Images = () => {
     isOpen: false,
     imageId: null,
   });
+  const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
 
   const openCreateWizard = () => {
     history.push({
@@ -57,6 +58,11 @@ const Images = () => {
     });
   };
 
+  const reload = () => {
+    fetchImageSets();
+    setTimeout(() => setHasModalSubmitted(true), 800);
+  };
+
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
@@ -71,6 +77,8 @@ const Images = () => {
           fetchImageSets={fetchImageSets}
           openCreateWizard={openCreateWizard}
           openUpdateWizard={openUpdateWizard}
+          hasModalSubmitted={hasModalSubmitted}
+          setHasModalSubmitted={setHasModalSubmitted}
         />
       </Main>
       {isCreateWizardOpen && (
@@ -89,7 +97,7 @@ const Images = () => {
               });
               setIsCreateWizardOpen(false);
             }}
-            reload={fetchImageSets}
+            reload={reload}
           />
         </Suspense>
       )}
@@ -114,7 +122,7 @@ const Images = () => {
                 };
               });
             }}
-            reload={fetchImageSets}
+            reload={reload}
             updateImageID={UpdateWizard.imageId}
           />
         </Suspense>
