@@ -61,7 +61,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
       dispatch({
         ...addNotification({
           variant: 'info',
-          title: 'Updating device',
+          title: 'Updating system',
           description: isMultiple
             ? ` ${deviceName.length} systems were added to the queue.`
             : ` ${deviceName} was added to the queue.`,
@@ -71,7 +71,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
       dispatch({
         ...addNotification({
           variant: 'danger',
-          title: 'Updating a device was unsuccessful',
+          title: 'Updating a system was unsuccessful',
           description: `Response: ${err.statusText}`,
         }),
       });
@@ -96,7 +96,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
         style={{ color: 'var(--pf-global--palette--gold-500)' }}
         component="small"
       >
-        <ExclamationTriangleIcon /> After the update is installed, the device
+        <ExclamationTriangleIcon /> After the update is installed, the system
         will apply the changes.
       </Text>
     </TextContent>
@@ -179,10 +179,10 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
             isMultiple ? 's' : ''
           } to latest image version`}
           isOpen={updateModal.isOpen}
-          openModal={() =>
+          closeModal={() =>
             setUpdateModal((prevState) => ({ ...prevState, isOpen: false }))
           }
-          submitLabel="Update Device"
+          submitLabel="Update system"
           schema={updateSchema}
           onSubmit={handleUpdateModal}
           reloadData={refreshTable}

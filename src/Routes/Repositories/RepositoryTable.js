@@ -13,7 +13,7 @@ const RepositoryTable = ({
   isLoading,
   hasError,
   fetchRepos,
-  openModal,
+  closeModal,
 }) => {
   const actionResolver = (rowData) => {
     if (!rowData.rowInfo) {
@@ -24,7 +24,7 @@ const RepositoryTable = ({
       {
         title: 'Edit',
         onClick: () =>
-          openModal({
+          closeModal({
             type: 'edit',
             id: id,
             name: repoName,
@@ -34,7 +34,7 @@ const RepositoryTable = ({
       {
         title: 'Remove',
         onClick: () =>
-          openModal({
+          closeModal({
             type: 'remove',
             id: id,
             name: repoName,
@@ -96,7 +96,7 @@ const RepositoryTable = ({
         toolbarButtons={[
           {
             title: 'Add repository',
-            click: () => openModal({ type: 'add' }),
+            click: () => closeModal({ type: 'add' }),
           },
         ]}
       />
@@ -108,7 +108,7 @@ RepositoryTable.propTypes = {
   count: PropTypes.number,
   isLoading: PropTypes.bool,
   hasError: PropTypes.bool,
-  openModal: PropTypes.func,
+  closeModal: PropTypes.func,
   fetchRepos: PropTypes.func,
 };
 

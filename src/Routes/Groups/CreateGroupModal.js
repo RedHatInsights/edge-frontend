@@ -79,9 +79,9 @@ const CreateGroupModal = ({
     const statusMessages = {
       onSuccess: {
         title: 'Success',
-        description: `Device(s) have been added to ${values.name} successfully`,
+        description: `System(s) have been added to ${values.name} successfully`,
       },
-      onError: { title: 'Error', description: 'Failed to add device to group' },
+      onError: { title: 'Error', description: 'Failed to add system to group' },
     };
 
     apiWithToast(
@@ -94,7 +94,7 @@ const CreateGroupModal = ({
   return (
     <Modal
       isOpen={isModalOpen}
-      openModal={() => setIsModalOpen(false)}
+      closeModal={() => setIsModalOpen(false)}
       title="Create group"
       submitLabel="Create"
       schema={createGroupSchema}

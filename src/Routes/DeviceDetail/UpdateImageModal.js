@@ -123,13 +123,13 @@ const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
     <Modal
       variant="medium"
       title={`Update image: ${data?.image?.Name}`}
-      description="Review the information and click Create image to start the build process"
+      description="Review the information and click Update image to start the build process"
       isOpen={updateCveModal.isOpen}
       onClose={handleClose}
       //onSubmit={handleUpdateModal}
       actions={[
         <Button key="confirm" variant="primary" onClick={handleUpdateModal}>
-          Create Image
+          Update Image
         </Button>,
         <Button key="cancel" variant="link" onClick={handleClose}>
           Cancel

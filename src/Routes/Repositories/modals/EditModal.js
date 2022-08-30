@@ -7,7 +7,7 @@ import { editCustomRepository } from '../../../api/repositories';
 import apiWithToast from '../../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
 
-const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
+const EditModal = ({ closeModal, isOpen, id, name, baseURL, reloadData }) => {
   const dispatch = useDispatch();
 
   const handleEditRepository = (values) => {
@@ -65,7 +65,7 @@ const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
     <Modal
       title="Edit repository"
       isOpen={isOpen}
-      openModal={() => openModal({ type: 'edit' })}
+      closeModal={() => closeModal({ type: 'edit' })}
       submitLabel="Update"
       schema={editSchema}
       initialValues={{ id, name, baseURL }}
@@ -76,7 +76,7 @@ const EditModal = ({ openModal, isOpen, id, name, baseURL, reloadData }) => {
 };
 
 EditModal.propTypes = {
-  openModal: PropTypes.func,
+  closeModal: PropTypes.func,
   reloadData: PropTypes.func,
   isOpen: PropTypes.bool,
   id: PropTypes.number,

@@ -87,7 +87,7 @@ const RemoveDeviceModal = ({
       },
       onError: {
         title: 'Error',
-        description: 'Failed to remove device from group',
+        description: 'Failed to remove system from group',
       },
     };
 
@@ -102,7 +102,7 @@ const RemoveDeviceModal = ({
     <Modal
       isOpen={isModalOpen}
       variant="danger"
-      openModal={() => setIsModalOpen(false)}
+      closeModal={() => setIsModalOpen(false)}
       title="Remove from group"
       submitLabel="Remove"
       titleIconVariant={WarningIcon}
