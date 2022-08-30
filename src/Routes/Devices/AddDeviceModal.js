@@ -4,17 +4,10 @@ import validatorTypes from '@data-driven-forms/react-form-renderer/validator-typ
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import Modal from '../../components/Modal';
 import SearchInput from '../../components/SearchInput';
-import useApi from '../../hooks/useApi';
 import apiWithToast from '../../utils/apiWithToast';
-import { getGroups, addDevicesToGroup } from '../../api/groups';
+import { addDevicesToGroup } from '../../api/groups';
 import { useDispatch } from 'react-redux';
-import {
-  Backdrop,
-  Bullseye,
-  Spinner,
-  Button,
-  Text,
-} from '@patternfly/react-core';
+import { Button, Text } from '@patternfly/react-core';
 
 const CreateGroupButton = ({ openModal }) => (
   <>
@@ -48,7 +41,7 @@ const createSchema = (deviceIds) => ({
     },
     {
       component: 'search-input',
-      name: 'name',
+      name: 'group',
       label: 'Select a group',
       isRequired: true,
       validate: [{ type: validatorTypes.REQUIRED }],
@@ -65,8 +58,6 @@ const AddDeviceModal = ({
   deviceIds,
 }) => {
   const dispatch = useDispatch();
-  const [response] = useApi({ api: getGroups });
-  const { data, isLoading } = response;
 
   const handleAddDevices = (values) => {
     const { group } = values;
@@ -84,13 +75,7 @@ const AddDeviceModal = ({
       statusMessages
     );
   };
-  return isLoading ? (
-    <Backdrop>
-      <Bullseye>
-        <Spinner isSVG diameter="100px" />
-      </Bullseye>
-    </Backdrop>
-  ) : (
+  return (
     <Modal
       isOpen={isModalOpen}
       openModal={() => setIsModalOpen(false)}
@@ -99,7 +84,6 @@ const AddDeviceModal = ({
       additionalMappers={{
         'search-input': {
           component: SearchInput,
-          defaultOptions: data?.data || [],
         },
         'create-group-btn': {
           component: CreateGroupButton,
