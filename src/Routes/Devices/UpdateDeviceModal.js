@@ -179,7 +179,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
             isMultiple ? 's' : ''
           } to latest image version`}
           isOpen={updateModal.isOpen}
-          openModal={() =>
+          closeModal={() =>
             setUpdateModal((prevState) => ({ ...prevState, isOpen: false }))
           }
           submitLabel="Update system"

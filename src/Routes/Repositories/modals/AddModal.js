@@ -7,7 +7,7 @@ import { nameValidator } from '../../../utils';
 import apiWithToast from '../../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
 
-const AddModal = ({ isOpen, openModal, reloadData }) => {
+const AddModal = ({ isOpen, closeModal, reloadData }) => {
   const dispatch = useDispatch();
 
   const handleAddRepository = (values) => {
@@ -62,7 +62,7 @@ const AddModal = ({ isOpen, openModal, reloadData }) => {
     <Modal
       title="Add repository"
       isOpen={isOpen}
-      openModal={() => openModal({ type: 'add' })}
+      closeModal={() => closeModal({ type: 'add' })}
       submitLabel="Add"
       schema={addSchema}
       onSubmit={handleAddRepository}
@@ -72,7 +72,7 @@ const AddModal = ({ isOpen, openModal, reloadData }) => {
 };
 
 AddModal.propTypes = {
-  openModal: PropTypes.func,
+  closeModal: PropTypes.func,
   reloadData: PropTypes.func,
   isOpen: PropTypes.bool,
 };

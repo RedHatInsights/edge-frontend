@@ -109,7 +109,7 @@ const WizardRepositoryTable = ({ ...props }) => {
 };
 WizardRepositoryTable.propTypes = {
   data: PropTypes.array,
-  openModal: PropTypes.func,
+  closeModal: PropTypes.func,
 };
 
 export default WizardRepositoryTable;

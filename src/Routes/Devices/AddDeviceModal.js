@@ -9,17 +9,17 @@ import { addDevicesToGroup } from '../../api/groups';
 import { useDispatch } from 'react-redux';
 import { Button, Text } from '@patternfly/react-core';
 
-const CreateGroupButton = ({ openModal }) => (
+const CreateGroupButton = ({ closeModal }) => (
   <>
     <Text>Or</Text>
-    <Button variant="secondary" className="pf-u-w-50" onClick={openModal}>
+    <Button variant="secondary" className="pf-u-w-50" onClick={closeModal}>
       Create Group
     </Button>
   </>
 );
 
 CreateGroupButton.propTypes = {
-  openModal: PropTypes.func,
+  closeModal: PropTypes.func,
 };
 
 const createDescription = (deviceIds) => {
@@ -78,7 +78,7 @@ const AddDeviceModal = ({
   return (
     <Modal
       isOpen={isModalOpen}
-      openModal={() => setIsModalOpen(false)}
+      closeModal={() => setIsModalOpen(false)}
       title="Add to group"
       submitLabel="Add"
       additionalMappers={{
@@ -87,7 +87,7 @@ const AddDeviceModal = ({
         },
         'create-group-btn': {
           component: CreateGroupButton,
-          openModal: () => {
+          closeModal: () => {
             setIsCreateGroupModalOpen(true);
             setIsModalOpen(false);
           },

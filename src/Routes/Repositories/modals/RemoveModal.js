@@ -26,7 +26,7 @@ const WarningIcon = () => (
   <ExclamationTriangleIcon color={warningColor.value} />
 );
 
-const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
+const RemoveModal = ({ closeModal, id, isOpen, name, baseURL, reloadData }) => {
   const dispatch = useDispatch();
 
   const handleRemoveRepository = ({ id }) => {
@@ -65,7 +65,7 @@ const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
       title="Remove repository"
       titleIconVariant={WarningIcon}
       isOpen={isOpen}
-      openModal={() => openModal({ type: 'remove' })}
+      closeModal={() => closeModal({ type: 'remove' })}
       submitLabel="Remove"
       schema={addSchema}
       initialValues={{ id }}
@@ -77,7 +77,7 @@ const RemoveModal = ({ openModal, id, isOpen, name, baseURL, reloadData }) => {
 };
 
 RemoveModal.propTypes = {
-  openModal: PropTypes.func,
+  closeModal: PropTypes.func,
   reloadData: PropTypes.func,
   isOpen: PropTypes.bool,
   id: PropTypes.number,
