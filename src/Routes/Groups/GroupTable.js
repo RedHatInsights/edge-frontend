@@ -194,7 +194,7 @@ const GroupTable = ({
 GroupTable.propTypes = {
   data: PropTypes.array,
   count: PropTypes.number,
-  openModal: PropTypes.func,
+  closeModal: PropTypes.func,
   isLoading: PropTypes.bool,
   hasError: PropTypes.bool,
   handleRenameModal: PropTypes.func,

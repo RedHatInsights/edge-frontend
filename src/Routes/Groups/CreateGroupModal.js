@@ -94,7 +94,7 @@ const CreateGroupModal = ({
   return (
     <Modal
       isOpen={isModalOpen}
-      openModal={() => setIsModalOpen(false)}
+      closeModal={() => setIsModalOpen(false)}
       title="Create group"
       submitLabel="Create"
       schema={createGroupSchema}

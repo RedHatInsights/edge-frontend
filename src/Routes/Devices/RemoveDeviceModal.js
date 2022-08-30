@@ -102,7 +102,7 @@ const RemoveDeviceModal = ({
     <Modal
       isOpen={isModalOpen}
       variant="danger"
-      openModal={() => setIsModalOpen(false)}
+      closeModal={() => setIsModalOpen(false)}
       title="Remove from group"
       submitLabel="Remove"
       titleIconVariant={WarningIcon}

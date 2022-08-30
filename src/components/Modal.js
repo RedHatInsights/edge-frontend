@@ -9,7 +9,7 @@ const RepoModal = ({
   isOpen,
   title,
   titleIconVariant,
-  openModal, // should be closeModal, update here and other places that use it
+  closeModal,
   submitLabel,
   schema,
   initialValues,
@@ -25,7 +25,7 @@ const RepoModal = ({
       title={title}
       titleIconVariant={titleIconVariant ?? null}
       isOpen={isOpen}
-      onClose={openModal}
+      onClose={closeModal}
     >
       <FormRenderer
         schema={schema}
@@ -48,9 +48,9 @@ const RepoModal = ({
         onSubmit={async (values) => {
           await onSubmit(values);
           setTimeout(async () => await reloadData(), 500);
-          openModal();
+          closeModal();
         }}
-        onCancel={() => openModal()}
+        onCancel={() => closeModal()}
       />
     </Modal>
   );
@@ -59,7 +59,7 @@ const RepoModal = ({
 RepoModal.propTypes = {
   isOpen: PropTypes.bool,
   title: PropTypes.string,
-  openModal: PropTypes.func,
+  closeModal: PropTypes.func,
   reloadData: PropTypes.func,
   submitLabel: PropTypes.string,
   schema: PropTypes.object,
