@@ -59,12 +59,10 @@ const Inventory = () => {
           canBeUpdated = false;
           break;
         }
-        if (device.updateImageData === true) {
+        if (!canBeUpdated && device.updateImageData) {
           canBeUpdated = true;
         }
       }
-    } else {
-      canBeUpdated = false;
     }
     return canBeUpdated;
   };
@@ -73,20 +71,38 @@ const Inventory = () => {
   const setCanBeUpdated = () => {
     let canBeUpdated = false;
     if (checkedDeviceIds.length > 0) {
-      canBeUpdated = checkedDeviceIds.reduce(
-        (previousDevice, currentDevice) => {
-          if (currentDevice.imageSetId !== previousDevice.imageSetId) {
-            false;
-          }
-          if (currentDevice.updateImageData === true) true;
-        }
-      );
-    } else {
-      canBeUpdated = false;
+      canBeUpdated = 
+        checkedDeviceIds.reduce(checkImageAndUpdateStatus, {
+          previousId: null,
+          buttonEnabled: false,
+        })
+      ).buttonEnabled;
+      //console.log(canBeUpdated);
     }
+    return canBeUpdated;
+  };
+
+  const checkImageAndUpdateStatus = (previousDevice, currentDevice) => {
+    console.log(currentDevice.updateImageData);
+    console.log(previousDevice);
+    if (
+      previousDevice.previousId &&
+      previousDevice.previousId !== currentDevice.ImageSetId
+    ) {
+      previousDevice.buttonEnabled = false;
+      return previousDevice;
+    }
+
+    previousDevice.previousId = currentDevice.imageSetId;
+    if (previousDevice.buttonEnabled === false) {
+      previousDevice.buttonEnabled = currentDevice.updateImageData;
+    }
+
+    console.log(previousDevice?.buttonEnabled);
+    console.log(previousDevice);
+    return previousDevice;
   };
   */
-
   const handleUpdateSelected = () => {
     setUpdateModal((prevState) => ({
       ...prevState,
