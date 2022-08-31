@@ -10,6 +10,7 @@ import CustomEmptyState from '../../components/Empty';
 import { useHistory } from 'react-router-dom';
 import { emptyStateNoFliters } from '../../utils';
 import DeviceStatus from '../../components/Status';
+import RetryUpdatePopover from './RetryUpdatePopover';
 
 const getDeviceStatus = (deviceStatus, isUpdateAvailable) =>
   deviceStatus === 'UPDATING'
@@ -159,9 +160,17 @@ const createRows = (devices, hasLinks) => {
           title: LastSeen ? <DateFormat date={LastSeen} /> : 'Unknown',
         },
         {
-          title: (
-            <DeviceStatus type={getDeviceStatus(Status, UpdateAvailable)} />
-          ),
+          title:
+            getDeviceStatus(Status, UpdateAvailable) !== 'updateAvailable' ? (
+              <DeviceStatus type={getDeviceStatus(Status, UpdateAvailable)} />
+            ) : (
+              <RetryUpdatePopover lastSeen={LastSeen} deviceUUID={DeviceUUID}>
+                <DeviceStatus
+                  type={getDeviceStatus(Status, UpdateAvailable)}
+                  isLink={true}
+                />
+              </RetryUpdatePopover>
+            ),
         },
       ],
     };
