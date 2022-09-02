@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import { useStore, useSelector } from 'react-redux';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 import { Tooltip } from '@patternfly/react-core';
@@ -65,6 +65,9 @@ const InfrastructureCard = (props) => (
 const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
 
 const GeneralInformationTab = () => {
+  const [displayName, setDisplayName] = useState('');
+  const [ansibleHost, setAnsibleHost] = useState('');
+
   const [{ statusHelper }] = useLoadModule(
     { appName: 'inventory', scope: 'inventory', module: './dataMapper' },
     {}
@@ -109,6 +112,12 @@ const GeneralInformationTab = () => {
                   value: <GreenbootStatus status={greenbootStatus} />,
                 },
               ]}
+              setDisplayName={(id, value) =>
+                displayName !== value && setDisplayName(value)
+              }
+              setAnsibleHost={(id, value) =>
+                ansibleHost !== value && setAnsibleHost(value)
+              }
             />
           </Suspense>
         )}
