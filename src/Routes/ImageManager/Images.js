@@ -58,9 +58,9 @@ const Images = () => {
     });
   };
 
-  const reload = () => {
-    fetchImageSets();
-    setTimeout(() => setHasModalSubmitted(true), 800);
+  const reload = async () => {
+    await fetchImageSets();
+    setHasModalSubmitted(true);
   };
 
   return (

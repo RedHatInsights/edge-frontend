@@ -39,9 +39,9 @@ const Groups = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const reloadData = () => {
-    fetchGroups();
-    setTimeout(() => setHasModalSubmitted(true), 800);
+  const reloadData = async () => {
+    await fetchGroups();
+    setHasModalSubmitted(true);
   };
 
   return (

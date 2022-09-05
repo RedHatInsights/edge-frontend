@@ -47,9 +47,9 @@ const Repository = () => {
     }));
   };
 
-  const reloadData = () => {
-    fetchRepos();
-    setTimeout(() => setHasModalSubmitted(true), 800);
+  const reloadData = async () => {
+    await fetchRepos();
+    setHasModalSubmitted(true);
   };
 
   return (

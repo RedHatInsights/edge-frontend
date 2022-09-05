@@ -50,9 +50,9 @@ const Inventory = () => {
     setIsRowSelected(isRow);
   };
 
-  const reloadData = () => {
-    fetchDevices();
-    setTimeout(() => setHasModalSubmitted(true), 800);
+  const reloadData = async () => {
+    await fetchDevices();
+    setHasModalSubmitted(true);
   };
 
   return (

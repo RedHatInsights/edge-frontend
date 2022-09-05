@@ -187,9 +187,9 @@ const GroupTable = ({
             }}
             setUpdateModal={setUpdateModal}
             updateModal={updateModal}
-            refreshTable={() => {
-              fetchGroups();
-              setTimeout(() => setHasModalSubmitted(true), 800);
+            refreshTable={async () => {
+              await fetchGroups();
+              setHasModalSubmitted(true);
             }}
           />
         </Suspense>
