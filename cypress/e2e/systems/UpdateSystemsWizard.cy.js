@@ -26,11 +26,23 @@ describe("Systems", () => {
 
     cy.get(
       '[data-ouia-component-id="OUIA-Generated-TableRow-2"] > .pf-m-width-20 > a'
+    ).then(($text) => {
+      //const val = $text.text();
+      expect($text.text()).to.include("image");
+      cy.get(
+        '[data-ouia-component-id="OUIA-Generated-TableRow-3"] > .pf-m-width-20 > a'
+      ).should(($text2) => {
+        //const val2 = $text2.text();
+        expect($text.text()).not.to.eq($text2.text());
+      });
+    });
+    /*
+    cy.get(
+      '[data-ouia-component-id="OUIA-Generated-TableRow-2"] > .pf-m-width-20 > a'
     ).then(($msg) => {
       //const txt = $msg.text();
       $msg.innerText.should("include.text", "image");
     });
-    /*
       cy.get('@wags').then(wags => {
              expect(wags).to.contain("Portsmouth")
           });
