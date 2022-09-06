@@ -8,38 +8,51 @@ describe("Systems", () => {
   it("happy path", function () {
     cy.get(".pf-c-title", { timeout: 30000 }).should("include.text", "Systems");
 
-    //Filter by Name
+    //get all devices and save
+
+    //Update button disabled on open
+    cy.get(".pf-c-button.pf-m-primary")
+      .contains("Update")
+      .should("to.be.disabled");
+
+    //Disabled when multiple devices with Update Available are selected but have different images
+    cy.selectInDropdownMenu("Status", "Update available");
+    cy.get(
+      '[data-ouia-component-id="OUIA-Generated-TableRow-2"] > .pf-c-table__check > input'
+    ).click();
+    cy.get(
+      '[data-ouia-component-id="OUIA-Generated-TableRow-3"] > .pf-c-table__check > input'
+    ).click();
+
+    cy.get(
+      '[data-ouia-component-id="OUIA-Generated-TableRow-2"] > .pf-m-width-20 > a'
+    ).then(($msg) => {
+      //const txt = $msg.text();
+      $msg.innerText.should("include.text", "image");
+    });
     /*
-    cy.get('[data-testid="toolbar-header-testid"]').find('[data-testid="filter-dropdown-testid"]').click()
-    cy.get('[data-testid="toolbar-header-testid"]').find('[data-testid="filter-dropdown-testid"]').contains('Name').click()
-    cy.get('.pf-c-search-input__text-input').type('cy-test')
-    cy.get('.pf-m-width-35 > a').should('include.text', 'cy-test')
-    cy.wait(500)
-    cy.iterateRows('a', 'cy-test')
-    cy.clickButton('Clear filters')
+      cy.get('@wags').then(wags => {
+             expect(wags).to.contain("Portsmouth")
+          });
+      */
 
-    //Filter by Status - Ready
-    cy.selectInDropdownMenu('Status', 'Ready')
-    cy.iterateRows('p', 'Ready')
-    cy.clickButton('Clear filters')
+    cy.get(".pf-c-button.pf-m-primary")
+      .contains("Update")
+      .should("to.be.disabled");
 
-    //Sort by Status - Error
-    cy.selectInDropdownMenu('Status', 'Error')
-    cy.iterateRows('p', 'Error')
-    cy.clickButton('Clear filters')
-  
-    cy.wait(2000)
-    cy.get('.pf-m-width-35 > .pf-c-table__button', { timeout: 30000 })
-      .should('be.visible').click()
-    cy.get('tbody [data-label="Name"]')
-      .should(really(map('innerText'), 'be.ascending'))
+    //Disabled when checked devices have no Update Available status
+    //if its running status check it and ensure button is disabled
 
-    cy.get('.pf-m-width-35 > .pf-c-table__button', { timeout: 30000 })
-      .should('be.visible').click()
-    cy.get('tbody [data-label="Name"]')
-      .should(really(map('innerText'), 'be.sorted', { descending: true, }))
+    //Disabled when devices have different images
+    //check two different images and ensure button is disabled
 
-    cy.testPagination('', 'perPage')
-    */
+    //Update single system
+    //check some system with update available and ensure button is enabled
+
+    //Update multiple systems with same image set
+    //check multiple systems of specified image and ensure button is enabled
+
+    //Default - Update button disabled when no devices are selected
+    //uncheck all devices and ensure button is disabled
   });
 });
