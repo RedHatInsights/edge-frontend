@@ -21,6 +21,7 @@ describe('Edit Modal', () => {
     cy.get('.pf-c-form__actions > .pf-m-primary').contains('Update').click()
 
     cy.get('.pf-c-alert__title').should('include.text', 'Success')
+    cy.get('.pf-c-alert__description').should('include.text','has been edited successfully')
 
   }) 
 })
