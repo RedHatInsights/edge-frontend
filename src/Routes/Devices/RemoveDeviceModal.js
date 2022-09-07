@@ -54,7 +54,7 @@ const createSchema = (deviceInfo) => {
   if (deviceInfo[0].deviceGroups.length > 1) {
     schema.fields.push({
       component: 'search-input',
-      name: 'name',
+      name: 'group',
       label: 'Select a group',
       isRequired: true,
       validate: [{ type: validatorTypes.REQUIRED }],

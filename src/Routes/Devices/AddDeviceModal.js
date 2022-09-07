@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import Modal from '../../components/Modal';
-import SearchInput from '../../components/SearchInput';
+import SearchInputApi from '../../components/SearchInputApi';
 import apiWithToast from '../../utils/apiWithToast';
 import { addDevicesToGroup } from '../../api/groups';
 import { useDispatch } from 'react-redux';
@@ -83,7 +83,7 @@ const AddDeviceModal = ({
       submitLabel="Add"
       additionalMappers={{
         'search-input': {
-          component: SearchInput,
+          component: SearchInputApi,
         },
         'create-group-btn': {
           component: CreateGroupButton,
