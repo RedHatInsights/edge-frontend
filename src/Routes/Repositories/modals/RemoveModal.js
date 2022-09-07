@@ -55,7 +55,7 @@ const RemoveModal = ({ closeModal, id, isOpen, name, baseURL, reloadData }) => {
       {
         component: 'plain-text',
         name: 'baseURL',
-        label: <LabelWithText label="baseURL" text={baseURL} />,
+        label: <LabelWithText label="BaseURL" text={baseURL} />,
       },
     ],
   };
