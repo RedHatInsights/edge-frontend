@@ -303,7 +303,7 @@ const GroupsDetail = () => {
       {removeModal.isOpen && (
         <Modal
           isOpen={removeModal.isOpen}
-          openModal={() => setRemoveModal(false)}
+          closeModal={() => setRemoveModal(false)}
           title={'Remove from group'}
           submitLabel={'Remove'}
           variant="danger"

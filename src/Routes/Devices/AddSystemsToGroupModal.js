@@ -27,7 +27,7 @@ const AddSystemsToGroupModal = ({
     const statusMessages = {
       onSuccess: {
         title: 'Success',
-        description: `Device(s) have been added to ${groupName} successfully`,
+        description: `System(s) have been added to ${groupName} successfully`,
       },
       onError: {
         title: 'Error',

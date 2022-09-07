@@ -85,7 +85,7 @@ export const loadImages = (dispatch, pagination) => {
       notifications: {
         rejected: {
           variant: 'danger',
-          title: 'Can not show images data',
+          title: 'Cannot show images data',
           description: 'Failed receiving images from image-builder',
         },
       },
@@ -104,8 +104,8 @@ export const loadDeviceSummary = (dispatch) => {
       notifications: {
         rejected: {
           variant: 'danger',
-          title: 'Can not show device summary data',
-          description: 'Failed receiving device summary data from inventory',
+          title: 'Cannot show system summary data',
+          description: 'Failed receiving system summary data from inventory',
         },
       },
     },

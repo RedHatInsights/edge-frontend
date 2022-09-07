@@ -57,7 +57,7 @@ const RenameGroupModal = ({
   return (
     <Modal
       isOpen={isModalOpen}
-      openModal={() => setIsModalOpen(false)}
+      closeModal={() => setIsModalOpen(false)}
       title="Rename group"
       submitLabel="Save"
       schema={createGroupSchema}

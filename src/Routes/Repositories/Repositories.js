@@ -33,7 +33,7 @@ const Repository = () => {
     baseURL: '',
   });
 
-  const openModal = ({ type, id = null, name = '', baseURL = '' }) => {
+  const closeModal = ({ type, id = null, name = '', baseURL = '' }) => {
     setModalDetails((prevState) => ({
       ...prevState,
       id,
@@ -55,7 +55,7 @@ const Repository = () => {
             <RepositoryTable
               data={data?.data || []}
               count={data?.count}
-              openModal={openModal}
+              closeModal={closeModal}
               isLoading={isLoading}
               hasError={hasError}
               fetchRepos={fetchRepos}
@@ -67,14 +67,14 @@ const Repository = () => {
               body="Add custom repositories to build RHEL for Edge images with additional packages."
               primaryAction={{
                 text: 'Add repository',
-                click: () => openModal({ type: 'add' }),
+                click: () => closeModal({ type: 'add' }),
               }}
             />
           )}
         </>
         <AddModal
           isOpen={modalDetails.isOpen.add}
-          openModal={openModal}
+          closeModal={closeModal}
           reloadData={fetchRepos}
         />
         <EditModal
@@ -82,7 +82,7 @@ const Repository = () => {
           id={modalDetails.id}
           name={modalDetails.name}
           baseURL={modalDetails.baseURL}
-          openModal={openModal}
+          closeModal={closeModal}
           reloadData={fetchRepos}
         />
         <RemoveModal
@@ -90,7 +90,7 @@ const Repository = () => {
           id={modalDetails.id}
           name={modalDetails.name}
           baseURL={modalDetails.baseURL}
-          openModal={openModal}
+          closeModal={closeModal}
           reloadData={fetchRepos}
         />
       </Main>

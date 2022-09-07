@@ -3,30 +3,23 @@ import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import Modal from '../../components/Modal';
-import SearchInput from '../../components/SearchInput';
-import useApi from '../../hooks/useApi';
+import SearchInputApi from '../../components/SearchInputApi';
 import apiWithToast from '../../utils/apiWithToast';
-import { getGroups, addDevicesToGroup } from '../../api/groups';
+import { addDevicesToGroup } from '../../api/groups';
 import { useDispatch } from 'react-redux';
-import {
-  Backdrop,
-  Bullseye,
-  Spinner,
-  Button,
-  Text,
-} from '@patternfly/react-core';
+import { Button, Text } from '@patternfly/react-core';
 
-const CreateGroupButton = ({ openModal }) => (
+const CreateGroupButton = ({ closeModal }) => (
   <>
     <Text>Or</Text>
-    <Button variant="secondary" className="pf-u-w-50" onClick={openModal}>
+    <Button variant="secondary" className="pf-u-w-50" onClick={closeModal}>
       Create Group
     </Button>
   </>
 );
 
 CreateGroupButton.propTypes = {
-  openModal: PropTypes.func,
+  closeModal: PropTypes.func,
 };
 
 const createDescription = (deviceIds) => {
@@ -48,7 +41,7 @@ const createSchema = (deviceIds) => ({
     },
     {
       component: 'search-input',
-      name: 'name',
+      name: 'group',
       label: 'Select a group',
       isRequired: true,
       validate: [{ type: validatorTypes.REQUIRED }],
@@ -65,17 +58,15 @@ const AddDeviceModal = ({
   deviceIds,
 }) => {
   const dispatch = useDispatch();
-  const [response] = useApi({ api: getGroups });
-  const { data, isLoading } = response;
 
   const handleAddDevices = (values) => {
     const { group } = values;
     const statusMessages = {
       onSuccess: {
         title: 'Success',
-        description: `Device(s) have been added to ${group.toString()} successfully`,
+        description: `System(s) have been added to ${group.toString()} successfully`,
       },
-      onError: { title: 'Error', description: 'Failed to add device to group' },
+      onError: { title: 'Error', description: 'Failed to add system to group' },
     };
 
     apiWithToast(
@@ -84,26 +75,19 @@ const AddDeviceModal = ({
       statusMessages
     );
   };
-  return isLoading ? (
-    <Backdrop>
-      <Bullseye>
-        <Spinner isSVG diameter="100px" />
-      </Bullseye>
-    </Backdrop>
-  ) : (
+  return (
     <Modal
       isOpen={isModalOpen}
-      openModal={() => setIsModalOpen(false)}
+      closeModal={() => setIsModalOpen(false)}
       title="Add to group"
       submitLabel="Add"
       additionalMappers={{
         'search-input': {
-          component: SearchInput,
-          defaultOptions: data?.data || [],
+          component: SearchInputApi,
         },
         'create-group-btn': {
           component: CreateGroupButton,
-          openModal: () => {
+          closeModal: () => {
             setIsCreateGroupModalOpen(true);
             setIsModalOpen(false);
           },

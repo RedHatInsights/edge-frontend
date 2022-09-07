@@ -28,7 +28,7 @@ describe('RepositoryTable', () => {
       },
     ];
 
-    const openModal = jest.fn();
+    const closeModal = jest.fn();
 
     const { container } = render(
       <RegistryContext.Provider
@@ -42,7 +42,7 @@ describe('RepositoryTable', () => {
             hasError={false}
             data={data}
             count={data.length}
-            openModal={openModal}
+            closeModal={closeModal}
             fetchRepos={() => data}
           />
         </Provider>

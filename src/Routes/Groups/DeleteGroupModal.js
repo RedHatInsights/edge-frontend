@@ -60,7 +60,7 @@ const DeleteGroupModal = ({
   return (
     <Modal
       isOpen={isModalOpen}
-      openModal={() => setIsModalOpen(false)}
+      closeModal={() => setIsModalOpen(false)}
       title="Delete group"
       titleIconVariant={WarningIcon}
       variant="danger"

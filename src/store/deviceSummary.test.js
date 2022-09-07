@@ -34,7 +34,7 @@ describe('reducer', () => {
     ).toMatchObject({
       isLoading: false,
       hasError: true,
-      data: 'No device summary data to view',
+      data: 'No system summary data to view',
     });
   });
 });
