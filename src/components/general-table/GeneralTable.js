@@ -120,7 +120,7 @@ const GeneralTable = ({
       : apiFilterSort
       ? loadTableData(dispatch, query)
       : null;
-  }, [chipsArray, perPage, page, sortBy]);
+  }, [chipsArray, perPage, page, sortBy, hasModalSubmitted]);
 
   useEffect(() => {
     setCheckedRows(defaultCheckedRows);
