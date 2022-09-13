@@ -14,23 +14,92 @@ import apiWithToast from '../../utils/apiWithToast';
 import { updateDeviceLatestImage } from '../../api/devices';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+// import { async } from '@babel/runtime/regenerator';
+// import useIsMounted from '@data-driven-forms/common/hooks/use-is-mounted';
+
+function getDevicePopoverDescription(props) {
+  console.log(props.device);
+  if (props.device.DispatcherReason === 'The playbook failed to run.') {
+    return (
+      <div>
+        The playbook failed to run. You can retry the update or build a new one.
+        <Stack className="pf-u-mt-sm">
+          <StackItem className="pf-u-font-weight-bold">Last Seen</StackItem>
+          <StackItem> {<DateFormat date={props.lastSeen} />}</StackItem>
+        </Stack>
+      </div>
+    );
+  }
+  if (
+    props.device.DispatcherReason ===
+    'The service timed out during the last update.'
+  ) {
+    return (
+      <div>
+        The service timed out during the last update. You can retry the update
+        or build a new one.
+        <Stack className="pf-u-mt-sm">
+          <StackItem className="pf-u-font-weight-bold">Last Seen</StackItem>
+          <StackItem> {<DateFormat date={props.lastSeen} />}</StackItem>
+        </Stack>
+      </div>
+    );
+  }
+  if (props.device.DispatcherStatus === 'UNRESPONSIVE') {
+    return (
+      <div>
+        The service could not be reached via RHC. The device may communicate at
+        a later time if this is a network issues or could be an indication of a
+        larger problem.
+        <Stack className="pf-u-mt-sm">
+          <StackItem className="pf-u-font-weight-bold">Last Seen</StackItem>
+          <StackItem> {<DateFormat date={props.lastSeen} />}</StackItem>
+        </Stack>
+      </div>
+    );
+  }
+}
+
+function getDevicePopoverTitle(props) {
+  if (props.device.DispatcherReason === 'The playbook failed to run.') {
+    return <span className="pf-u-ml-xs"> Playbook error </span>;
+  }
+
+  if (
+    props.device.DispatcherReason ===
+    'The service timed out during the last update.'
+  ) {
+    return <span className="pf-u-ml-xs"> Service timed-out </span>;
+  }
+
+  if (props.device.DispatcherStatus === 'UNRESPONSIVE') {
+    return <span className="pf-u-ml-xs"> Unresponsive </span>;
+  }
+}
 
 const RetryUpdatePopover = (props) => {
   const [isVisible, setIsVisible] = React.useState(false);
   const dispatch = useDispatch();
   console.log(props);
+  const isMounted = React.useRef(true);
+  React.useEffect(() => {
+    if (isMounted.current) {
+      //fetch data
+      //setData (fetch result)
+      return () => {
+        isMounted.current = false;
+      };
+    }
+  });
+  console.log(props.DeviceUUID);
   const setUpdateModal = { setUpdateModal };
-  console.log(props.deviceUUID);
   const statusMessages = {
     onSuccess: {
       title: 'Success',
       description: ` This Service was added to the queue.`,
     },
-    onError: {
-      title: 'Error',
-      description: 'Updating a device was unsuccessful',
-    },
   };
+
   return (
     <DescriptionListGroup>
       <DescriptionListTermHelpText>
@@ -44,7 +113,7 @@ const RetryUpdatePopover = (props) => {
             <div style={{ color: '#c9190b' }}>
               {' '}
               <ExclamationCircleIcon size="sm" />
-              <span className="pf-u-ml-xs"> Error </span>
+              {getDevicePopoverTitle(props)}
             </div>
           }
           icon="true"
@@ -52,37 +121,32 @@ const RetryUpdatePopover = (props) => {
           color="red"
           // headerIcon={alertIcons[alertseverityvariant]}
           headerComponent="h6"
-          bodyContent={
-            <div>
-              Popovers are triggered by click rather than hover.
-              <Stack className="pf-u-mt-sm">
-                <StackItem className="pf-u-font-weight-bold">
-                  Last Seen
-                </StackItem>
-                <StackItem> {<DateFormat date={props.lastSeen} />}</StackItem>
-              </Stack>
-            </div>
-          }
+          bodyContent={getDevicePopoverDescription(props)}
           footerContent={
-            <Button
-              variant="link"
-              isInline
-              onClick={() => {
-                apiWithToast(
-                  dispatch,
-                  () => {
-                    updateDeviceLatestImage({
-                      deviceUUID: [props.deviceUUID],
-                    });
-                    setIsVisible(false);
-                  },
-                  statusMessages
-                );
-              }}
-            >
-              {' '}
-              Retry{' '}
-            </Button>
+            props.device.DispatcherStatus !== 'UNRESPONSIVE' ? (
+              <Button
+                variant="link"
+                isInline
+                onClick={() => {
+                  apiWithToast(
+                    dispatch,
+                    async () => {
+                      await updateDeviceLatestImage({
+                        DevicesUUID: [props.device.DeviceUUID],
+                      });
+                      setIsVisible(false);
+                      props.fetchDevices();
+                    },
+                    statusMessages
+                  );
+                }}
+              >
+                {' '}
+                Retry{' '}
+              </Button>
+            ) : (
+              ''
+            )
           }
         >
           {props.children}
@@ -95,7 +159,10 @@ const RetryUpdatePopover = (props) => {
 export default RetryUpdatePopover;
 
 RetryUpdatePopover.propTypes = {
-  deviceUUID: PropTypes.array,
-  lastSeen: PropTypes.array,
-  children: PropTypes.func,
+  deviceUUID: PropTypes.string,
+  lastSeen: PropTypes.string,
+  children: PropTypes.object,
+  device: PropTypes.object,
+  DeviceUUID: PropTypes.string,
+  fetchDevices: PropTypes.string,
 };

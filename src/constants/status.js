@@ -51,7 +51,7 @@ export const statusMapper = {
   },
   error: {
     text: 'Error',
-    Icon: iconMapper.timesCircle,
+    Icon: iconMapper.exclmationCircle,
     color: colorMapper.red,
     labelColor: 'red',
   },
@@ -64,5 +64,11 @@ export const statusMapper = {
     Icon: iconMapper.inProgress,
     color: colorMapper.blue,
     labelColor: 'blue',
+  },
+  unresponsive: {
+    text: 'Unresponsive',
+    Icon: iconMapper.exclmationCircle,
+    color: colorMapper.red,
+    labelColor: 'red',
   },
 };
