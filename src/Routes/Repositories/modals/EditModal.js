@@ -14,7 +14,7 @@ const EditModal = ({ closeModal, isOpen, id, name, baseURL, reloadData }) => {
     const statusMessages = {
       onSuccess: {
         title: 'Success',
-        description: `${name} has been renamed to ${values.name} successfully`,
+        description: `${values.name} has been edited successfully`,
       },
       onError: { title: 'Error', description: 'Failed to edit a repository' },
     };
