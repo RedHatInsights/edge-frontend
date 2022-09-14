@@ -115,6 +115,8 @@ const ImageTable = ({
   fetchImageSets,
   openCreateWizard,
   openUpdateWizard,
+  hasModalSubmitted,
+  setHasModalSubmitted,
 }) => {
   const history = useHistory();
 
@@ -192,6 +194,8 @@ const ImageTable = ({
               click: () => openCreateWizard(),
             },
           ]}
+          hasModalSubmitted={hasModalSubmitted}
+          setHasModalSubmitted={setHasModalSubmitted}
         />
       )}
     </>
@@ -212,6 +216,8 @@ ImageTable.propTypes = {
     page: PropTypes.number,
     perPage: PropTypes.number,
   }),
+  hasModalSubmitted: PropTypes.bool,
+  setHasModalSubmitted: PropTypes.func,
 };
 
 export default ImageTable;

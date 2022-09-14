@@ -32,6 +32,7 @@ const Repository = () => {
     name: '',
     baseURL: '',
   });
+  const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
 
   const closeModal = ({ type, id = null, name = '', baseURL = '' }) => {
     setModalDetails((prevState) => ({
@@ -44,6 +45,11 @@ const Repository = () => {
         [type]: !prevState.isOpen[type],
       },
     }));
+  };
+
+  const reloadData = async () => {
+    await fetchRepos();
+    setHasModalSubmitted(true);
   };
 
   return (
@@ -59,6 +65,8 @@ const Repository = () => {
               isLoading={isLoading}
               hasError={hasError}
               fetchRepos={fetchRepos}
+              hasModalSubmitted={hasModalSubmitted}
+              setHasModalSubmitted={setHasModalSubmitted}
             />
           ) : (
             <EmptyState
@@ -75,7 +83,7 @@ const Repository = () => {
         <AddModal
           isOpen={modalDetails.isOpen.add}
           closeModal={closeModal}
-          reloadData={fetchRepos}
+          reloadData={reloadData}
         />
         <EditModal
           isOpen={modalDetails.isOpen.edit}
@@ -83,7 +91,7 @@ const Repository = () => {
           name={modalDetails.name}
           baseURL={modalDetails.baseURL}
           closeModal={closeModal}
-          reloadData={fetchRepos}
+          reloadData={reloadData}
         />
         <RemoveModal
           isOpen={modalDetails.isOpen.remove}
@@ -91,7 +99,7 @@ const Repository = () => {
           name={modalDetails.name}
           baseURL={modalDetails.baseURL}
           closeModal={closeModal}
-          reloadData={fetchRepos}
+          reloadData={reloadData}
         />
       </Main>
     </>
