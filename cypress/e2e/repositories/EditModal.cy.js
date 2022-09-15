@@ -7,7 +7,7 @@ describe('Edit Modal', () => {
   it('edit repository modal happy path', function () {  
     cy.get('.pf-c-title', { timeout: 30000 }).should('include.text', 'Custom repositories')
     cy.get('.pf-c-search-input__text-input').type('cy-repo').wait(1000)
-    cy.get('tbody > tr >').find('button').click()
+    cy.get('tbody > tr').first().find('button').click()
     cy.get('.pf-c-dropdown__menu > li').first().click()
 
     cy.get('.pf-c-modal-box__title-text').should('include.text', 'Edit repository')
