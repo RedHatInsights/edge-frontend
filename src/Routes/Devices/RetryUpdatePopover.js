@@ -91,7 +91,8 @@ const RetryUpdatePopover = (props) => {
   const setUpdateModal = { setUpdateModal };
   const statusMessages = {
     onSuccess: {
-      title: 'Success',
+      variant: 'info',
+      title: 'Updating system',
       description: `${props.device.DeviceName} was added to the queue.`,
     },
   };
