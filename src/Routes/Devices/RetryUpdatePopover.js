@@ -14,11 +14,8 @@ import apiWithToast from '../../utils/apiWithToast';
 import { updateDeviceLatestImage } from '../../api/devices';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-// import { async } from '@babel/runtime/regenerator';
-// import useIsMounted from '@data-driven-forms/common/hooks/use-is-mounted';
 
 function getDevicePopoverDescription(props) {
-  console.log(props.device);
   if (props.device.DispatcherReason === 'The playbook failed to run.') {
     return (
       <div>
@@ -45,6 +42,7 @@ function getDevicePopoverDescription(props) {
       </div>
     );
   }
+
   if (props.device.DispatcherStatus === 'UNRESPONSIVE') {
     return (
       <div>
@@ -80,23 +78,21 @@ function getDevicePopoverTitle(props) {
 const RetryUpdatePopover = (props) => {
   const [isVisible, setIsVisible] = React.useState(false);
   const dispatch = useDispatch();
-  console.log(props);
+  props;
   const isMounted = React.useRef(true);
   React.useEffect(() => {
     if (isMounted.current) {
-      //fetch data
-      //setData (fetch result)
       return () => {
         isMounted.current = false;
       };
     }
   });
-  console.log(props.DeviceUUID);
+  props.DeviceUUID;
   const setUpdateModal = { setUpdateModal };
   const statusMessages = {
     onSuccess: {
       title: 'Success',
-      description: ` This Service was added to the queue.`,
+      description: `${props.device.DeviceName} was added to the queue.`,
     },
   };
 
@@ -119,7 +115,6 @@ const RetryUpdatePopover = (props) => {
           icon="true"
           varient="icon"
           color="red"
-          // headerIcon={alertIcons[alertseverityvariant]}
           headerComponent="h6"
           bodyContent={getDevicePopoverDescription(props)}
           footerContent={
@@ -164,5 +159,5 @@ RetryUpdatePopover.propTypes = {
   children: PropTypes.object,
   device: PropTypes.object,
   DeviceUUID: PropTypes.string,
-  fetchDevices: PropTypes.string,
+  fetchDevices: PropTypes.func,
 };

@@ -12,16 +12,16 @@ import { emptyStateNoFliters } from '../../utils';
 import DeviceStatus from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
 
-const getDeviceStatus = (deviceStatus, isUpdateAvailable, DispatcherStatus) =>
-  DispatcherStatus === 'ERROR'
+const getDeviceStatus = (deviceStatus, isUpdateAvailable, dispatcherStatus) =>
+  dispatcherStatus === 'ERROR'
     ? 'error'
-    : DispatcherStatus === 'UNRESPONSIVE'
+    : dispatcherStatus === 'UNRESPONSIVE'
     ? 'unresponsive'
-    : DeviceStatus === 'UPDATING'
+    : deviceStatus === 'UPDATING'
     ? 'updating'
     : isUpdateAvailable
     ? 'updateAvailable'
-    : 'running';
+    : 'upToDate';
 
 const defaultFilters = [
   {
@@ -181,10 +181,23 @@ const createRows = (devices, hasLinks, fetchDevices) => {
                 fetchDevices={fetchDevices}
                 device={device}
               >
-                <DeviceStatus type={deviceStatus} isLink={true} />
+                <DeviceStatus
+                  type={
+                    deviceStatus == 'error'
+                      ? 'errorWithExclamationCircle'
+                      : deviceStatus
+                  }
+                  isLink={true}
+                />
               </RetryUpdatePopover>
             ) : (
-              <DeviceStatus type={deviceStatus} />
+              <DeviceStatus
+                type={
+                  deviceStatus == 'error'
+                    ? 'errorWithExclamationCircle'
+                    : deviceStatus
+                }
+              />
             ),
         },
       ],
