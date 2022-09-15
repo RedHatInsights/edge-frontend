@@ -157,12 +157,6 @@ const DeviceDetail = () => {
               isLabel={true}
               className="pf-u-mt-sm"
             />
-          ) : imageData?.UpdateTransactions[
-              imageData?.UpdateTransactions?.length - 1
-            ]?.Status === 'DISCONNECTED' ? (
-            <Status type="unresponsive" isLabel={true} className="pf-u-mt-sm" />
-          ) : imageData?.Device?.UpdateAvailable ? (
-            <Status type="unresponsive" isLabel={true} className="pf-u-mt-sm" />
           ) : (
             <Status type="running" isLabel={true} className="pf-u-mt-sm" />
           )}
