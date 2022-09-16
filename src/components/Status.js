@@ -3,6 +3,21 @@ import PropTypes from 'prop-types';
 import { Label, Tooltip, Split, SplitItem } from '@patternfly/react-core';
 import { statusMapper } from '../constants/status';
 
+export const getDeviceStatus = (
+  deviceStatus,
+  isUpdateAvailable,
+  dispatcherStatus
+) =>
+  dispatcherStatus === 'ERROR'
+    ? 'error'
+    : dispatcherStatus === 'UNRESPONSIVE'
+    ? 'unresponsive'
+    : deviceStatus === 'UPDATING'
+    ? 'updating'
+    : isUpdateAvailable
+    ? 'updateAvailable'
+    : 'upToDate';
+
 const Status = ({
   type,
   isLabel = false,
