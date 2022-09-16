@@ -8,6 +8,7 @@ const Status = ({
   isLabel = false,
   toolTipContent = '',
   className = '',
+  isLink,
 }) => {
   const { text, Icon, color, labelColor } =
     Object.prototype.hasOwnProperty.call(statusMapper, type)
@@ -32,7 +33,18 @@ const Status = ({
             )}
           </SplitItem>
           <SplitItem>
-            <p>{text}</p>
+            <p
+              style={
+                isLink
+                  ? {
+                      textDecoration: ' grey dotted underline',
+                      cursor: 'pointer',
+                    }
+                  : {}
+              }
+            >
+              {text}
+            </p>
           </SplitItem>
         </Split>
       )}
@@ -47,4 +59,5 @@ Status.propTypes = {
   isLabel: PropTypes.bool,
   toolTipContent: PropTypes.string,
   className: PropTypes.string,
+  isLink: PropTypes.bool,
 };
