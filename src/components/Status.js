@@ -34,7 +34,14 @@ const Status = ({
           </SplitItem>
           <SplitItem>
             <p
-              style={isLink ? { textDecoration: ' grey dotted underline' } : {}}
+              style={
+                isLink
+                  ? {
+                      textDecoration: ' grey dotted underline',
+                      cursor: 'pointer',
+                    }
+                  : {}
+              }
             >
               {text}
             </p>
