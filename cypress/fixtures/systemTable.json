@@ -1,0 +1,77 @@
+{
+    "count": 1,
+    "data": {
+        "total": 1,
+        "devices": [
+            {
+            "DeviceID": 164009,
+            "DeviceName": "maeve-test-device",
+            "DeviceUUID": "b921f9cf-8042-46a8-9b3c-0f3d2fc85cfb",
+            "ImageID": 27170,
+            "ImageName": "iqe-test-image-8_5",
+            "LastSeen": "2022-09-14T20:06:39.584623Z",
+            "UpdateAvailable": false,
+            "Status": "RUNNING",
+            "ImageSetID": 8102,
+            "DeviceGroups": [{
+                "ID": 52760,
+                "Name": "test_device_groups_api_LmGwoYi7dz88OJ9Im"
+            }],
+            "DispatcherStatus": "",
+            "DispatcherReason": ""
+            },
+            {
+            "DeviceID": 164010,
+            "DeviceName": "maeve-test-device2",
+            "DeviceUUID": "a921f9cf-8042-46a8-9b3c-0f3d2fc85cfb",
+            "ImageID": 27170,
+            "ImageName": "iqe-test-image-8_5",
+            "LastSeen": "2022-09-14T20:06:39.584623Z",
+            "UpdateAvailable": true,
+            "Status": "RUNNING",
+            "ImageSetID": 8102,
+            "DeviceGroups": [{
+                "ID": 52760,
+                "Name": "test_device_groups_api_LmGwoYi7dz88OJ9Im"
+            }],
+            "DispatcherStatus": "",
+            "DispatcherReason": ""
+            },
+            {
+            "DeviceID": 164011,
+            "DeviceName": "maeve-test-device3",
+            "DeviceUUID": "c921f9cf-8042-46a8-9b3c-0f3d2fc85cfb",
+            "ImageID": 27170,
+            "ImageName": "iqe-test-image-8_5",
+            "LastSeen": "2022-09-14T20:06:39.584623Z",
+            "UpdateAvailable": false,
+            "Status": "RUNNING",
+            "ImageSetID": 8102,
+            "DeviceGroups": [{
+                "ID": 52760,
+                "Name": "test_device_groups_api_LmGwoYi7dz88OJ9Im"
+            }],
+            "DispatcherStatus": "",
+            "DispatcherReason": ""
+            },
+            {
+            "DeviceID": 164012,
+            "DeviceName": "maeve-test-device4",
+            "DeviceUUID": "d921f9cf-8042-46a8-9b3c-0f3d2fc85cfb",
+            "ImageID": 27170,
+            "ImageName": "iqe-test-image-8_5",
+            "LastSeen": "2022-09-14T20:06:39.584623Z",
+            "UpdateAvailable": true,
+            "Status": "RUNNING",
+            "ImageSetID": 8102,
+            "DeviceGroups": [{
+                "ID": 52760,
+                "Name": "test_device_groups_api_LmGwoYi7dz88OJ9Im"
+            }],
+            "DispatcherStatus": "",
+            "DispatcherReason": ""
+            }
+
+        ]
+    }
+}
