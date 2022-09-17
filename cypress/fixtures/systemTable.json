@@ -44,7 +44,7 @@
             "ImageID": 27170,
             "ImageName": "iqe-test-image-8_5",
             "LastSeen": "2022-09-14T20:06:39.584623Z",
-            "UpdateAvailable": false,
+            "UpdateAvailable": true,
             "Status": "RUNNING",
             "ImageSetID": 8102,
             "DeviceGroups": [{
@@ -58,12 +58,12 @@
             "DeviceID": 164012,
             "DeviceName": "maeve-test-device4",
             "DeviceUUID": "d921f9cf-8042-46a8-9b3c-0f3d2fc85cfb",
-            "ImageID": 27170,
-            "ImageName": "iqe-test-image-8_5",
+            "ImageID": 27171,
+            "ImageName": "iqe-test-image",
             "LastSeen": "2022-09-14T20:06:39.584623Z",
             "UpdateAvailable": true,
             "Status": "RUNNING",
-            "ImageSetID": 8102,
+            "ImageSetID": 8103,
             "DeviceGroups": [{
                 "ID": 52760,
                 "Name": "test_device_groups_api_LmGwoYi7dz88OJ9Im"
