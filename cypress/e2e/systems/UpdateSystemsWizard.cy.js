@@ -17,31 +17,7 @@ describe("Systems", () => {
     });
 
     cy.intercept("GET", "/api/edge/v1/image-sets/1*", {
-      Count: 1,
-      Data: {
-        image_set: {
-          ID: 1,
-          Name: "dl-image-85",
-          Version: 2,
-        },
-        images: [
-          {
-            image: {
-              ID: 1,
-              CreatedAt: "2022-08-17T11:14:04.230226Z",
-              Name: "dl-image-85",
-              Distribution: "rhel-85",
-              Version: 2,
-              CommitID: 878,
-              ImageSetID: 1,
-            },
-            update_added: 116,
-            update_removed: 0,
-            update_updated: 0,
-          },
-        ],
-        image_build_iso_url: "",
-      },
+      fixture: "getImageSet.json",
     });
 
     cy.get(".pf-c-title", { timeout: 30000 }).should("include.text", "Systems");
