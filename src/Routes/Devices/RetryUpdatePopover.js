@@ -116,6 +116,7 @@ const RetryUpdatePopover = (props) => {
           icon="true"
           varient="icon"
           color="red"
+          position={props.position ? props.position : 'left'}
           headerComponent="h6"
           bodyContent={getDevicePopoverDescription(props)}
           footerContent={
@@ -160,5 +161,6 @@ RetryUpdatePopover.propTypes = {
   children: PropTypes.object,
   device: PropTypes.object,
   DeviceUUID: PropTypes.string,
+  position: PropTypes.string,
   fetchDevices: PropTypes.func,
 };
