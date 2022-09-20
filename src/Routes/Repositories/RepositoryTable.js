@@ -14,6 +14,8 @@ const RepositoryTable = ({
   hasError,
   fetchRepos,
   closeModal,
+  hasModalSubmitted,
+  setHasModalSubmitted,
 }) => {
   const actionResolver = (rowData) => {
     if (!rowData.rowInfo) {
@@ -99,6 +101,8 @@ const RepositoryTable = ({
             click: () => closeModal({ type: 'add' }),
           },
         ]}
+        hasModalSubmitted={hasModalSubmitted}
+        setHasModalSubmitted={setHasModalSubmitted}
       />
     </>
   );
@@ -108,8 +112,10 @@ RepositoryTable.propTypes = {
   count: PropTypes.number,
   isLoading: PropTypes.bool,
   hasError: PropTypes.bool,
-  closeModal: PropTypes.func,
   fetchRepos: PropTypes.func,
+  closeModal: PropTypes.func,
+  hasModalSubmitted: PropTypes.bool,
+  setHasModalSubmitted: PropTypes.func,
 };
 
 export default RepositoryTable;
