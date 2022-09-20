@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 
 const WarningInstallerHelperText = () => (
-  <HelperText className="pf-u-ml-lg" hasIcon>
+  <HelperText className="pf-u-ml-lg">
     <HelperTextItem className="pf-u-pb-md" variant="warning" hasIcon>
       Creating an installable version of your image increases the build time and
       is not needed for updating existing systems. <br />
