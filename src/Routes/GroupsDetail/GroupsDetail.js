@@ -147,8 +147,10 @@ const GroupsDetail = () => {
             <BreadcrumbItem>{groupName}</BreadcrumbItem>
           </Breadcrumb>
         ) : (
-          <Breadcrumb isActive>
-            <Skeleton width="100px" />
+          <Breadcrumb>
+            <BreadcrumbItem isActive>
+              <Skeleton width="100px" />
+            </BreadcrumbItem>
           </Breadcrumb>
         )}
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>

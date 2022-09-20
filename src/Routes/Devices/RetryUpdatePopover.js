@@ -21,7 +21,7 @@ function getDevicePopoverDescription(props) {
       <div>
         The playbook failed to run. You can retry the update or build a new one.
         <Stack className="pf-u-mt-sm">
-          <StackItem className="pf-u-font-weight-bold">Last Seen</StackItem>
+          <StackItem className="pf-u-font-weight-bold">Last seen</StackItem>
           <StackItem> {<DateFormat date={props.lastSeen} />}</StackItem>
         </Stack>
       </div>
@@ -36,7 +36,7 @@ function getDevicePopoverDescription(props) {
         The service timed out during the last update. You can retry the update
         or build a new one.
         <Stack className="pf-u-mt-sm">
-          <StackItem className="pf-u-font-weight-bold">Last Seen</StackItem>
+          <StackItem className="pf-u-font-weight-bold">Last seen</StackItem>
           <StackItem> {<DateFormat date={props.lastSeen} />}</StackItem>
         </Stack>
       </div>
@@ -47,10 +47,10 @@ function getDevicePopoverDescription(props) {
     return (
       <div>
         The service could not be reached via RHC. The device may communicate at
-        a later time if this is a network issues or could be an indication of a
-        larger problem.
+        a later time if this is a network issue or could be an indication of a
+        more significant problem.
         <Stack className="pf-u-mt-sm">
-          <StackItem className="pf-u-font-weight-bold">Last Seen</StackItem>
+          <StackItem className="pf-u-font-weight-bold">Last seen</StackItem>
           <StackItem> {<DateFormat date={props.lastSeen} />}</StackItem>
         </Stack>
       </div>
@@ -116,6 +116,7 @@ const RetryUpdatePopover = (props) => {
           icon="true"
           varient="icon"
           color="red"
+          position={props.position ? props.position : 'left'}
           headerComponent="h6"
           bodyContent={getDevicePopoverDescription(props)}
           footerContent={
@@ -160,5 +161,6 @@ RetryUpdatePopover.propTypes = {
   children: PropTypes.object,
   device: PropTypes.object,
   DeviceUUID: PropTypes.string,
+  position: PropTypes.string,
   fetchDevices: PropTypes.func,
 };
