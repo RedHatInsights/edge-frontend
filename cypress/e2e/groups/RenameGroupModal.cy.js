@@ -1,11 +1,9 @@
-const dayjs = require('dayjs')
-
-describe('Create group modal', () => {
+describe('Rename group modal', () => {
   before(() => {
     cy.beforeTest('/fleet-management')    
   });
 
-  it('create group modal happy path', function () {  
+  it('rename group modal happy path', function () {  
     cy.get('.pf-c-title', { timeout: 30000 }).should('include.text', 'Groups')
     cy.get('.pf-c-search-input__text-input').type('cy-group').wait(500)
     cy.get('tbody > tr').first().find('button').click()
