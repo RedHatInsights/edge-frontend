@@ -3,11 +3,27 @@ import PropTypes from 'prop-types';
 import { Label, Tooltip, Split, SplitItem } from '@patternfly/react-core';
 import { statusMapper } from '../constants/status';
 
+export const getDeviceStatus = (
+  deviceStatus,
+  isUpdateAvailable,
+  dispatcherStatus
+) =>
+  dispatcherStatus === 'ERROR'
+    ? 'error'
+    : dispatcherStatus === 'UNRESPONSIVE'
+    ? 'unresponsive'
+    : deviceStatus === 'UPDATING'
+    ? 'updating'
+    : isUpdateAvailable
+    ? 'updateAvailable'
+    : 'upToDate';
+
 const Status = ({
   type,
   isLabel = false,
   toolTipContent = '',
   className = '',
+  isLink,
 }) => {
   const { text, Icon, color, labelColor } =
     Object.prototype.hasOwnProperty.call(statusMapper, type)
@@ -32,7 +48,18 @@ const Status = ({
             )}
           </SplitItem>
           <SplitItem>
-            <p>{text}</p>
+            <p
+              style={
+                isLink
+                  ? {
+                      textDecoration: ' grey dotted underline',
+                      cursor: 'pointer',
+                    }
+                  : {}
+              }
+            >
+              {text}
+            </p>
           </SplitItem>
         </Split>
       )}
@@ -47,4 +74,5 @@ Status.propTypes = {
   isLabel: PropTypes.bool,
   toolTipContent: PropTypes.string,
   className: PropTypes.string,
+  isLink: PropTypes.bool,
 };
