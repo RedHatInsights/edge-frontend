@@ -50,7 +50,7 @@ function getDevicePopoverDescription(props) {
         a later time if this is a network issue or could be an indication of a
         more significant problem.
         <Stack className="pf-u-mt-sm">
-          <StackItem className="pf-u-font-weight-bold">Last Seen</StackItem>
+          <StackItem className="pf-u-font-weight-bold">Last seen</StackItem>
           <StackItem> {<DateFormat date={props.lastSeen} />}</StackItem>
         </Stack>
       </div>
