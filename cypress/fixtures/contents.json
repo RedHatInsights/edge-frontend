@@ -15,4 +15,5 @@
 "baseUrlHelperEdit": "If you change the repo URL, you may not have access to the packages that were used to build images that reference this repository.",
 "removeModalContent": "Removing a repository could affect your ability to update images.",
 "deleteGroupContent": "and all its data will be permanently deleted. Associated systems will be removed from the group but will not be deleted."
+
 }
