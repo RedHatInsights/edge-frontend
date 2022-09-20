@@ -9,19 +9,8 @@ import { Tooltip } from '@patternfly/react-core';
 import CustomEmptyState from '../../components/Empty';
 import { useHistory } from 'react-router-dom';
 import { emptyStateNoFliters } from '../../utils';
-import DeviceStatus from '../../components/Status';
+import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
-
-const getDeviceStatus = (deviceStatus, isUpdateAvailable, dispatcherStatus) =>
-  dispatcherStatus === 'ERROR'
-    ? 'error'
-    : dispatcherStatus === 'UNRESPONSIVE'
-    ? 'unresponsive'
-    : deviceStatus === 'UPDATING'
-    ? 'updating'
-    : isUpdateAvailable
-    ? 'updateAvailable'
-    : 'upToDate';
 
 const defaultFilters = [
   {
