@@ -38,9 +38,6 @@ const DeviceDetail = () => {
   const { getRegistry } = useContext(RegistryContext);
   const { deviceId } = useParams();
   const entity = useSelector(({ entityDetails }) => entityDetails?.entity);
-  const groupName = useSelector(
-    ({ groupsDetailReducer }) => groupsDetailReducer?.name
-  );
 
   const [imageData, setImageData] = useState();
   const [updateModal, setUpdateModal] = useState({
@@ -115,19 +112,8 @@ const DeviceDetail = () => {
         <PageHeader>
           <Breadcrumb ouiaId="systems-list">
             <BreadcrumbItem>
-              <Link to={deviceId ? `/groups` : '/inventory'}>
-                {deviceId ? 'Groups' : 'Systems'}
-              </Link>
+              <Link to="/inventory">Systems</Link>
             </BreadcrumbItem>
-            {deviceId && (
-              <BreadcrumbItem>
-                {groupName ? (
-                  <Link to={`/groups/${deviceId}`}>{groupName}</Link>
-                ) : (
-                  <Skeleton size={SkeletonSize.xs} />
-                )}
-              </BreadcrumbItem>
-            )}
             <BreadcrumbItem isActive>
               <div className="ins-c-inventory__detail--breadcrumb-name">
                 {entity?.display_name || <Skeleton size={SkeletonSize.xs} />}
