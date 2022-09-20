@@ -55,11 +55,16 @@ const Inventory = () => {
     if (checkedDeviceIds.length > 0) {
       let initialImage = checkedDeviceIds[0].imageSetId;
       for (let device of checkedDeviceIds) {
+        console.log(device);
         if (device.imageSetId !== initialImage) {
           canBeUpdated = false;
           break;
         }
-        if (!canBeUpdated && device.updateImageData) {
+        if (
+          !canBeUpdated &&
+          device.updateImageData &&
+          device.deviceStatus !== 'updating'
+        ) {
           canBeUpdated = true;
         }
       }
