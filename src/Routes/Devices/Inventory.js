@@ -67,42 +67,6 @@ const Inventory = () => {
     return canBeUpdated;
   };
 
-  /*
-  const setCanBeUpdated = () => {
-    let canBeUpdated = false;
-    if (checkedDeviceIds.length > 0) {
-      canBeUpdated = 
-        checkedDeviceIds.reduce(checkImageAndUpdateStatus, {
-          previousId: null,
-          buttonEnabled: false,
-        })
-      ).buttonEnabled;
-      //console.log(canBeUpdated);
-    }
-    return canBeUpdated;
-  };
-
-  const checkImageAndUpdateStatus = (previousDevice, currentDevice) => {
-    console.log(currentDevice.updateImageData);
-    console.log(previousDevice);
-    if (
-      previousDevice.previousId &&
-      previousDevice.previousId !== currentDevice.ImageSetId
-    ) {
-      previousDevice.buttonEnabled = false;
-      return previousDevice;
-    }
-
-    previousDevice.previousId = currentDevice.imageSetId;
-    if (previousDevice.buttonEnabled === false) {
-      previousDevice.buttonEnabled = currentDevice.updateImageData;
-    }
-
-    console.log(previousDevice?.buttonEnabled);
-    console.log(previousDevice);
-    return previousDevice;
-  };
-  */
   const handleUpdateSelected = () => {
     setUpdateModal((prevState) => ({
       ...prevState,

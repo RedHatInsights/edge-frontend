@@ -170,7 +170,6 @@ const createRows = (devices, hasLinks) => {
 
 const DeviceTable = ({
   hasCheckbox = false,
-  //checkedRows,
   selectedItems,
   selectedItemsUpdateable,
   skeletonRowQuantity,
