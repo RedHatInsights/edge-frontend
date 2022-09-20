@@ -40,7 +40,7 @@ pull_request_rules:
       - updated-at<15 days ago
     actions:
       comment:
-        message: "This pull request is now 15 days old. Please revist, PR will be closed in 15 more days. @{{author}}"
+        message: "This pull request is now 15 days old. Please revisit. PR will be closed in 15 more days. @{{author}}"
       label:
         add:
           - stale warning  
@@ -63,75 +63,74 @@ pull_request_rules:
           - waiting for review
   - name: remove waiting for review label if not needed
     conditions:
-      - "#approved-reviews-by>=1"
+      - "#approved-reviews-by>=2"
     actions:
       label:
         remove:
           - waiting for review
   - name: add bug fix label
     conditions:
-      - body~=(?m)^\[X\] Bug fix (non-breaking change which fixes an issue)
+      - body~=(?m)^- \[[xX]\] Bug fix \(non-breaking change which fixes an issue\)
     actions:
       label:
         add:
           - bug fix
   - name: add new feature label
     conditions:
-      - body~=(?m)^\[X\] New feature (non-breaking change which adds functionality)
+      - body~=(?m)^- \[[xX]\] New feature \(non-breaking change which adds functionality\)
     actions:
       label:
         add:
           - new feature
   - name: add documentation label
     conditions:
-      - body~=(?m)^\[X\] Documentation update
+      - body~=(?m)^- \[[xX]\] Documentation update
     actions:
       label:
         add:
           - documentation
   - name: add test update label
     conditions:
-      - body~=(?m)^\[X\] Tests update
+      - body~=(?m)^- \[[xX]\] Tests update
     actions:
       label:
         add:
           - test update
   - name: remove bug fix label
     conditions:
-      - body~=(?m)^\[ \] Bug fix (non-breaking change which fixes an issue)
+      - body~=(?m)^- \[ \] Bug fix \(non-breaking change which fixes an issue\)
     actions:
       label:
         remove:
           - bug fix
   - name: remove new feature label
     conditions:
-      - body~=(?m)^\[ \] New feature (non-breaking change which adds functionality)
+      - body~=(?m)^- \[ \] New feature \(non-breaking change which adds functionality\)
     actions:
       label:
         remove:
           - new feature
   - name: remove documentation label
     conditions:
-      - body~=(?m)^\[ \] Documentation update
+      - body~=(?m)^- \[ \] Documentation update
     actions:
       label:
         remove:
           - documentation
   - name: remove test update label
     conditions:
-      - body~=(?m)^\[ \] Tests update
+      - body~=(?m)^- \[ \] Tests update
     actions:
       label:
         remove:
           - test update
   - name: add ready label
     conditions:
-      - body~=(?m)^\[X\] I have commented my code, particularly in hard-to-understand areas
-      - body~=(?m)^\[X\] I have made corresponding changes to the documentation
-      - body~=(?m)^\[X\] I have added tests that prove my fix is effective or that my feature works
-      - body~=(?m)^\[X\] New and existing unit tests pass locally with my changes
-      - body~=(?m)^\[X\] I run `go fmt ./...` to check that my code is properly formatted
-      - body~=(?m)^\[X\] I run `go vet ./...` to check that my code is free of common Go style mistakes
+      - body~=(?m)^- \[[xX]\] I have commented my code, particularly in hard-to-understand areas
+      - body~=(?m)^- \[[xX]\] I have made corresponding changes to the documentation
+      - body~=(?m)^- \[[xX]\] I have added tests that prove my fix is effective or that my feature works
+      - body~=(?m)^- \[[xX]\] New and existing unit tests pass locally with my changes
+      - body~=(?m)^- \[[xX]\] I run `npm run lint:js:fix` to check that my code is properly formatted
     actions:
       label:
         add:

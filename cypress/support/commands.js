@@ -25,12 +25,11 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 //import { recurse } from 'cypress-recurse'
-
 Cypress.Commands.add('login', () => {
   cy.visit(Cypress.config().baseUrl)
-  cy.get('#username-verification').type(Cypress.env('username'))
-  cy.get('#login-show-step2').click()
-  cy.get('#password').type(Cypress.env('password'))
+  cy.get('#username-verification', { timeout: 30000 }).should('be.visible').type(Cypress.env('username'))
+  cy.get('#login-show-step2', { timeout: 30000 }).should('be.visible').click()
+  cy.get('#password', { timeout: 30000 }).should('be.visible').type(Cypress.env('password'))
   cy.get('#rh-password-verification-submit-button').click()
 })
 

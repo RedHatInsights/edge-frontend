@@ -33,6 +33,10 @@ const apiWithToast = (dispatch, api, statusMessages) => {
         ...addNotification({
           variant: 'danger',
           ...statusMessages.onError,
+          // Add error message from API, if present
+          description: err?.Title
+            ? `${statusMessages.onError.description}: ${err.Title}`
+            : statusMessages.onError.description,
         }),
       });
       return err;

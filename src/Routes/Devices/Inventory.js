@@ -79,6 +79,11 @@ const Inventory = () => {
     }));
   };
 
+  const reloadData = async () => {
+    await fetchDevices();
+    setHasModalSubmitted(true);
+  };
+
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
@@ -137,7 +142,7 @@ const Inventory = () => {
             }}
             setUpdateModal={setUpdateModal}
             updateModal={updateModal}
-            refreshTable={fetchDevices}
+            refreshTable={reloadData}
           />
         </Suspense>
       )}
@@ -146,10 +151,7 @@ const Inventory = () => {
           isModalOpen={isAddDeviceModalOpen}
           setIsModalOpen={setIsAddDeviceModalOpen}
           setIsCreateGroupModalOpen={setIsCreateGroupModalOpen}
-          reloadData={() => {
-            fetchDevices();
-            setTimeout(() => setHasModalSubmitted(true), 800);
-          }}
+          reloadData={reloadData}
           deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
         />
       )}
@@ -157,10 +159,7 @@ const Inventory = () => {
         <CreateGroupModal
           isModalOpen={isCreateGroupModalOpen}
           setIsModalOpen={setIsCreateGroupModalOpen}
-          reloadData={() => {
-            fetchDevices();
-            setTimeout(() => setHasModalSubmitted(true), 800);
-          }}
+          reloadData={reloadData}
           deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
         />
       )}
@@ -168,10 +167,7 @@ const Inventory = () => {
         <RemoveDeviceModal
           isModalOpen={isRemoveDeviceModalOpen}
           setIsModalOpen={setIsRemoveDeviceModalOpen}
-          reloadData={() => {
-            fetchDevices();
-            setTimeout(() => setHasModalSubmitted(true), 800);
-          }}
+          reloadData={reloadData}
           deviceInfo={isRowSelected ? deviceId : checkedDeviceIds}
         />
       )}

@@ -6,6 +6,14 @@
 "edgeCommitContent":"An OSTree commit is always created when building an image.",
 "edgeInstallerContent":"An installable version of the image is typically created with a brand new image.",
 "optionsContent":"Enter some basic information about your image.",
-"deviceRegistrationContent":"Use this to log into your system."
+"deviceRegistrationContent":"Use this to log into your system.",
+"customRepositories": "Add custom repositories to build RHEL for Edge images with additional packages.",
+"addModalContent": "Link to a custom repository to add packages to RHEL for Edge images.",
+"nameHelper": "Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).",
+"baseUrlHelper": "Enter the baseURL for the custom repository.",
+"editRepositoryContent": "Update information about this custom repository.",
+"baseUrlHelperEdit": "If you change the repo URL, you may not have access to the packages that were used to build images that reference this repository.",
+"removeModalContent": "Removing a repository could affect your ability to update images.",
+"deleteGroupContent": "and all its data will be permanently deleted. Associated systems will be removed from the group but will not be deleted."
 
 }
