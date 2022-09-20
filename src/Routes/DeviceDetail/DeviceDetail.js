@@ -22,8 +22,10 @@ import { deviceDetail } from '../../store/deviceDetail';
 import { RegistryContext } from '../../store';
 import systemProfileStore from '@redhat-cloud-services/frontend-components-inventory-general-info/redux';
 import DeviceDetailTabs from './DeviceDetailTabs';
-import { getDeviceHasUpdate } from '../../api/devices';
-import Status from '../../components/Status';
+import { getDeviceHasUpdate, getInventory } from '../../api/devices';
+import Status, { getDeviceStatus } from '../../components/Status';
+import useApi from '../../hooks/useApi';
+import RetryUpdatePopover from '../Devices/RetryUpdatePopover';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(
@@ -34,14 +36,8 @@ const UpdateDeviceModal = React.lazy(() =>
 const DeviceDetail = () => {
   const [imageId, setImageId] = useState(null);
   const { getRegistry } = useContext(RegistryContext);
-  const { inventoryId, uuid } = useParams();
+  const { deviceId } = useParams();
   const entity = useSelector(({ entityDetails }) => entityDetails?.entity);
-  const groupName = useSelector(
-    ({ groupsDetailReducer }) => groupsDetailReducer?.name
-  );
-  const deviceId = useSelector(
-    ({ entityDetails }) => entityDetails?.entity?.id
-  );
 
   const [imageData, setImageData] = useState();
   const [updateModal, setUpdateModal] = useState({
@@ -78,9 +74,28 @@ const DeviceDetail = () => {
     })();
   }, [entity, reload]);
 
-  useEffect(() => {
-    insights?.chrome?.appObjectId?.(inventoryId);
-  }, [inventoryId]);
+  const [deviceData, fetchDeviceData] = useApi({
+    api: () =>
+      getInventory({
+        query: {
+          uuid: deviceId,
+        },
+      }),
+  });
+
+  const [deviceView] = deviceData.data?.data?.devices || [];
+  const {
+    Status: deviceViewStatus,
+    UpdateAvailable: updateAvailable,
+    DispatcherStatus: updateStatus,
+    LastSeen: lastSeen,
+  } = deviceView || {};
+
+  const deviceStatus = getDeviceStatus(
+    deviceViewStatus,
+    updateAvailable,
+    updateStatus
+  );
 
   return (
     <>
@@ -97,19 +112,8 @@ const DeviceDetail = () => {
         <PageHeader>
           <Breadcrumb ouiaId="systems-list">
             <BreadcrumbItem>
-              <Link to={uuid ? `/groups` : '/inventory'}>
-                {uuid ? 'Groups' : 'Systems'}
-              </Link>
+              <Link to="/inventory">Systems</Link>
             </BreadcrumbItem>
-            {uuid && (
-              <BreadcrumbItem>
-                {groupName ? (
-                  <Link to={`/groups/${uuid}`}>{groupName}</Link>
-                ) : (
-                  <Skeleton size={SkeletonSize.xs} />
-                )}
-              </BreadcrumbItem>
-            )}
             <BreadcrumbItem isActive>
               <div className="ins-c-inventory__detail--breadcrumb-name">
                 {entity?.display_name || <Skeleton size={SkeletonSize.xs} />}
@@ -144,21 +148,27 @@ const DeviceDetail = () => {
 
           {isDeviceStatusLoading ? (
             <Skeleton size={SkeletonSize.xs} />
-          ) : imageData?.UpdateTransactions[
-              imageData?.UpdateTransactions?.length - 1
-            ]?.Status === 'BUILDING' ||
-            imageData?.UpdateTransactions[
-              imageData?.UpdateTransactions?.length - 1
-            ]?.Status === 'CREATED' ? (
-            <Status type="updating" isLabel={true} className="pf-u-mt-sm" />
-          ) : imageData?.Device?.UpdateAvailable ? (
-            <Status
-              type="updateAvailable"
-              isLabel={true}
-              className="pf-u-mt-sm"
-            />
+          ) : deviceStatus === 'error' || deviceStatus === 'unresponsive' ? (
+            <RetryUpdatePopover
+              lastSeen={lastSeen}
+              deviceUUID={deviceId}
+              device={deviceView}
+              position={'right'}
+              fetchDevices={fetchDeviceData}
+            >
+              <Status
+                type={
+                  deviceStatus === 'error'
+                    ? 'errorWithExclamationCircle'
+                    : deviceStatus
+                }
+                isLink={true}
+                isLabel={true}
+                className="pf-u-mt-sm cursor-pointer"
+              />
+            </RetryUpdatePopover>
           ) : (
-            <Status type="running" isLabel={true} className="pf-u-mt-sm" />
+            <Status type={deviceStatus} isLabel={true} className="pf-u-mt-sm" />
           )}
         </PageHeader>
         <Grid gutter="md">
