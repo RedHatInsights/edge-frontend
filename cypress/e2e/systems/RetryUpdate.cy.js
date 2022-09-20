@@ -54,7 +54,7 @@ describe('Systems', () => {
     // Ensure the Unresponsive popover is there with reasoning
     cy.get('.pf-c-popover__content').should('be.visible');
     cy.get('.pf-u-ml-xs').should('include.text', 'Unresponsive');
-    cy.get('.pf-u-font-weight-bold').should('include.text', 'Last Seen');
+    cy.get('.pf-u-font-weight-bold').should('include.text', 'Last seen');
     cy.get('.pf-l-stack > :nth-child(2) > span').should('include.text', 'ago');
     //Select first Error
     cy.get(
@@ -67,7 +67,7 @@ describe('Systems', () => {
         'include.text',
         'The playbook failed to run. You can retry the update or build a new one.'
       );
-    cy.get('.pf-u-font-weight-bold').should('include.text', 'Last Seen');
+    cy.get('.pf-u-font-weight-bold').should('include.text', 'Last seen');
     cy.get('.pf-l-stack > :nth-child(2) > span').should('include.text', 'ago');
     //Check to see if the Retry Popover has button
     cy.get(
