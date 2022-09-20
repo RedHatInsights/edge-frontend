@@ -98,6 +98,7 @@ export const iconMapper = {
   exclamationTriangle: ExclamationTriangleIcon,
   timesCircle: TimesCircleIcon,
   inProgress: InProgressIcon,
+  exclamationCircle: ExclamationCircleIcon,
 };
 
 export const colorMapper = {
