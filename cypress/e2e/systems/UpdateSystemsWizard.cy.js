@@ -127,8 +127,6 @@ describe("Systems", () => {
       .should("to.not.be.disabled")
       .click();
 
-    cy.wait(3000);
-
     cy.get(".pf-c-modal-box__title-text").should(
       "include.text",
       "Update systems to latest image version"
