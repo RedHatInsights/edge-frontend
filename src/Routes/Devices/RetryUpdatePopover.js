@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Popover,
   Button,
@@ -15,85 +15,53 @@ import { updateDeviceLatestImage } from '../../api/devices';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
-function getDevicePopoverDescription(props) {
-  if (props.device.DispatcherReason === 'The playbook failed to run.') {
-    return (
-      <div>
-        The playbook failed to run. You can retry the update or build a new one.
-        <Stack className="pf-u-mt-sm">
-          <StackItem className="pf-u-font-weight-bold">Last seen</StackItem>
-          <StackItem> {<DateFormat date={props.lastSeen} />}</StackItem>
-        </Stack>
-      </div>
-    );
-  }
-  if (
-    props.device.DispatcherReason ===
-    'The service timed out during the last update.'
-  ) {
-    return (
-      <div>
-        The service timed out during the last update. You can retry the update
-        or build a new one.
-        <Stack className="pf-u-mt-sm">
-          <StackItem className="pf-u-font-weight-bold">Last seen</StackItem>
-          <StackItem> {<DateFormat date={props.lastSeen} />}</StackItem>
-        </Stack>
-      </div>
-    );
-  }
+const FAILURE = 'The playbook failed to run.';
+const TIMEOUT = 'The service timed out during the last update.';
+const UNRESPONSIVE = 'UNRESPONSIVE';
 
-  if (props.device.DispatcherStatus === 'UNRESPONSIVE') {
-    return (
-      <div>
-        The service could not be reached via RHC. The device may communicate at
-        a later time if this is a network issue or could be an indication of a
-        more significant problem.
-        <Stack className="pf-u-mt-sm">
-          <StackItem className="pf-u-font-weight-bold">Last seen</StackItem>
-          <StackItem> {<DateFormat date={props.lastSeen} />}</StackItem>
-        </Stack>
-      </div>
-    );
-  }
-}
+const popoverDescription = (reason, status, lastSeen) => (
+  <div>
+    {reason === FAILURE
+      ? 'The playbook failed to run. You can retry the update or build a new one.'
+      : reason === TIMEOUT
+      ? 'The service timed out during the last update. You can retry the update'
+      : status === UNRESPONSIVE
+      ? 'The service could not be reached via RHC. The system may communicate at a later time if this is a network issue or could be an indication of a more significant problem.'
+      : 'Unknown'}
+    <Stack className="pf-u-mt-sm">
+      <StackItem className="pf-u-font-weight-bold">Last seen</StackItem>
+      <StackItem> {<DateFormat date={lastSeen} />}</StackItem>
+    </Stack>
+  </div>
+);
 
-function getDevicePopoverTitle(props) {
-  if (props.device.DispatcherReason === 'The playbook failed to run.') {
-    return <span className="pf-u-ml-xs"> Playbook error </span>;
-  }
+const popoverTitle = (reason, status) => (
+  <span className="pf-u-ml-xs">
+    {reason === FAILURE
+      ? 'Playbook error'
+      : reason === TIMEOUT
+      ? 'Service timed out'
+      : status === UNRESPONSIVE
+      ? 'Unresponsive'
+      : 'Unknown'}
+  </span>
+);
 
-  if (
-    props.device.DispatcherReason ===
-    'The service timed out during the last update.'
-  ) {
-    return <span className="pf-u-ml-xs"> Service timed-out </span>;
-  }
-
-  if (props.device.DispatcherStatus === 'UNRESPONSIVE') {
-    return <span className="pf-u-ml-xs"> Unresponsive </span>;
-  }
-}
-
-const RetryUpdatePopover = (props) => {
-  const [isVisible, setIsVisible] = React.useState(false);
+const RetryUpdatePopover = ({
+  device,
+  position,
+  fetchDevices,
+  lastSeen,
+  children,
+}) => {
+  const [isVisible, setIsVisible] = useState(false);
   const dispatch = useDispatch();
-  props;
-  const isMounted = React.useRef(true);
-  React.useEffect(() => {
-    if (isMounted.current) {
-      return () => {
-        isMounted.current = false;
-      };
-    }
-  });
-  props.DeviceUUID;
-  const setUpdateModal = { setUpdateModal };
+
   const statusMessages = {
     onSuccess: {
       variant: 'info',
       title: 'Updating system',
-      description: `${props.device.DeviceName} was added to the queue.`,
+      description: `${device.DeviceName} was added to the queue.`,
     },
   };
 
@@ -105,22 +73,26 @@ const RetryUpdatePopover = (props) => {
           shouldOpen={() => setIsVisible(true)}
           shouldClose={() => setIsVisible(false)}
           aria-label="Alert popover"
-          alertseverityvariant={'danger'}
+          alertseverityvariant="danger"
           headerContent={
             <div style={{ color: '#c9190b' }}>
               {' '}
               <ExclamationCircleIcon size="sm" />
-              {getDevicePopoverTitle(props)}
+              {popoverTitle(device.DispatcherReason, device.DispatcherStatus)}
             </div>
           }
           icon="true"
-          varient="icon"
+          variant="icon"
           color="red"
-          position={props.position ? props.position : 'left'}
+          position={position}
           headerComponent="h6"
-          bodyContent={getDevicePopoverDescription(props)}
+          bodyContent={popoverDescription(
+            device.DispatcherReason,
+            device.DispatcherStatus,
+            lastSeen
+          )}
           footerContent={
-            props.device.DispatcherStatus !== 'UNRESPONSIVE' ? (
+            device.DispatcherStatus !== UNRESPONSIVE ? (
               <Button
                 variant="link"
                 isInline
@@ -129,10 +101,10 @@ const RetryUpdatePopover = (props) => {
                     dispatch,
                     async () => {
                       await updateDeviceLatestImage({
-                        DevicesUUID: [props.device.DeviceUUID],
+                        DevicesUUID: [device.DeviceUUID],
                       });
                       setIsVisible(false);
-                      props.fetchDevices();
+                      fetchDevices();
                     },
                     statusMessages
                   );
@@ -146,21 +118,24 @@ const RetryUpdatePopover = (props) => {
             )
           }
         >
-          {props.children}
+          {children}
         </Popover>
       </DescriptionListTermHelpText>
       <DescriptionListDescription> </DescriptionListDescription>
     </DescriptionListGroup>
   );
 };
-export default RetryUpdatePopover;
 
 RetryUpdatePopover.propTypes = {
-  deviceUUID: PropTypes.string,
   lastSeen: PropTypes.string,
-  children: PropTypes.object,
+  children: PropTypes.element,
   device: PropTypes.object,
-  DeviceUUID: PropTypes.string,
   position: PropTypes.string,
   fetchDevices: PropTypes.func,
 };
+
+RetryUpdatePopover.defaultProps = {
+  position: 'left',
+};
+
+export default RetryUpdatePopover;
