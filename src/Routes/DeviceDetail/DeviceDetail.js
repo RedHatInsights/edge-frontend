@@ -151,7 +151,6 @@ const DeviceDetail = () => {
           ) : deviceStatus === 'error' || deviceStatus === 'unresponsive' ? (
             <RetryUpdatePopover
               lastSeen={lastSeen}
-              deviceUUID={deviceId}
               device={deviceView}
               position={'right'}
               fetchDevices={fetchDeviceData}
