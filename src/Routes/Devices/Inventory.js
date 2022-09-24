@@ -78,6 +78,7 @@ const Inventory = () => {
       deviceData: checkedDeviceIds.map((device) => ({
         id: device.id,
         display_name: device.display_name,
+        deviceStatus: device.deviceStatus,
       })),
       imageSetId: checkedDeviceIds[0].imageSetId,
       isOpen: true,
