@@ -24,7 +24,7 @@ const popoverDescription = (reason, status, lastSeen) => (
     {reason === FAILURE
       ? 'The playbook failed to run. You can retry the update or build a new one.'
       : reason === TIMEOUT
-      ? 'The service timed out during the last update. You can retry the update'
+      ? 'The service timed out during the last update. You can retry the update or build a new one.'
       : status === UNRESPONSIVE
       ? 'The service could not be reached via RHC. The system may communicate at a later time if this is a network issue or could be an indication of a more significant problem.'
       : 'Unknown'}
@@ -48,6 +48,7 @@ const popoverTitle = (reason, status) => (
 );
 
 const RetryUpdatePopover = ({
+  id,
   device,
   position,
   fetchDevices,
@@ -69,6 +70,7 @@ const RetryUpdatePopover = ({
     <DescriptionListGroup>
       <DescriptionListTermHelpText>
         <Popover
+          id={id}
           isVisible={isVisible}
           shouldOpen={() => setIsVisible(true)}
           shouldClose={() => setIsVisible(false)}
@@ -127,6 +129,7 @@ const RetryUpdatePopover = ({
 };
 
 RetryUpdatePopover.propTypes = {
+  id: PropTypes.string,
   lastSeen: PropTypes.string,
   children: PropTypes.element,
   device: PropTypes.object,
@@ -136,6 +139,7 @@ RetryUpdatePopover.propTypes = {
 
 RetryUpdatePopover.defaultProps = {
   position: 'left',
+  id: 'retry-update',
 };
 
 export default RetryUpdatePopover;

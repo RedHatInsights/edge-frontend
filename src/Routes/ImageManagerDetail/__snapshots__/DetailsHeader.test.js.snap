@@ -26,6 +26,7 @@ exports[`DetailsHeader renders correctly 1`] = `
         >
           <div
             class="pf-l-split"
+            id="status"
             style="color: rgb(62, 134, 53);"
           >
             <div

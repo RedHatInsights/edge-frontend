@@ -19,6 +19,7 @@ export const getDeviceStatus = (
     : 'upToDate';
 
 const Status = ({
+  id,
   type,
   isLabel = false,
   toolTipContent = '',
@@ -33,11 +34,11 @@ const Status = ({
   return (
     <>
       {isLabel ? (
-        <Label color={labelColor} icon={<Icon />} className={className}>
+        <Label id={id} color={labelColor} icon={<Icon />} className={className}>
           {text}
         </Label>
       ) : (
-        <Split style={{ color }} className={className}>
+        <Split id={id} style={{ color }} className={className}>
           <SplitItem className="pf-u-mr-sm">
             {toolTipContent ? (
               <Tooltip content="blargh">
@@ -70,9 +71,14 @@ const Status = ({
 export default Status;
 
 Status.propTypes = {
+  id: PropTypes.string,
   type: PropTypes.string,
   isLabel: PropTypes.bool,
   toolTipContent: PropTypes.string,
   className: PropTypes.string,
   isLink: PropTypes.bool,
+};
+
+Status.defaultProps = {
+  id: 'status',
 };

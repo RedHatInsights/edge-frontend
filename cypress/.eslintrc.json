@@ -1,0 +1,14 @@
+{
+  "extends": ["plugin:cypress/recommended"],
+  "rules": {
+    "cypress/no-unnecessary-waiting": "off",
+    "semi": ["error", "never"],
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "semi": false
+      }
+    ]
+  }
+}

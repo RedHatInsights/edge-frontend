@@ -1,0 +1,22 @@
+{
+  "count": 1,
+  "data": {
+    "total": 1,
+    "devices": [
+      {
+        "DeviceID": 141598,
+        "DeviceName": "devicetest_test",
+        "DeviceUUID": "296c483d-5d24-4283-bd6e-fd451118fbd2",
+        "ImageID": 6148,
+        "ImageName": "devicetest7",
+        "LastSeen": "2022-09-16T06:54:57.526838Z",
+        "UpdateAvailable": true,
+        "Status": "RUNNING",
+        "ImageSetID": 3851,
+        "DeviceGroups": [],
+        "DispatcherStatus": "UNRESPONSIVE",
+        "DispatcherReason": ""
+      }
+    ]
+  }
+}
