@@ -293,7 +293,9 @@ const DeviceTable = ({
   };
 
   const areActionsDisabled = (rowData) =>
-    rowData.rowInfo?.deviceStatus !== 'updateAvailable';
+    !rowData.rowInfo?.UpdateAvailable &&
+    (rowData.rowInfo?.deviceStatus === 'updating' ||
+      rowData.rowInfo?.deviceStatus === 'upToDate');
 
   return (
     <>
