@@ -9,6 +9,7 @@ import {
   Flex,
   FlexItem,
   Skeleton,
+  Tooltip,
 } from '@patternfly/react-core';
 import {
   PageHeader,
@@ -136,6 +137,9 @@ const GroupsDetail = () => {
     setTimeout(() => setHasModalSubmitted(true), 800);
   };
 
+  const actionsLabel = 'Actions for group details view';
+  const dropdownId = 'group-details-dropdown';
+
   return (
     <>
       <PageHeader className="pf-m-light">
@@ -166,11 +170,16 @@ const GroupsDetail = () => {
               position={DropdownPosition.right}
               toggle={
                 <DropdownToggle
-                  id="image-set-details-dropdown"
+                  id={dropdownId}
                   toggleIndicator={CaretDownIcon}
                   onToggle={(newState) => setIsDropdownOpen(newState)}
                   isDisabled={false}
+                  aria-label={actionsLabel}
                 >
+                  <Tooltip
+                    content={actionsLabel}
+                    reference={() => document.getElementById(dropdownId)}
+                  />
                   Actions
                 </DropdownToggle>
               }
