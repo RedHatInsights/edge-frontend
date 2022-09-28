@@ -60,10 +60,10 @@ const Inventory = () => {
           break;
         }
         if (
-          (!canBeUpdated &&
-            device.updateImageData &&
-            device.deviceStatus === 'updateAvailable') ||
-          device.deviceStatus === 'error'
+          !canBeUpdated &&
+          device.updateImageData &&
+          (device.deviceStatus === 'updateAvailable' ||
+            device.deviceStatus === 'error')
         ) {
           canBeUpdated = true;
         }
