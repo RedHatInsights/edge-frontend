@@ -50,7 +50,7 @@ const Inventory = () => {
     setIsRowSelected(isRow);
   };
 
-  const setCanBeUpdated = () => {
+  const canBeUpdated = () => {
     let canBeUpdated = false;
     if (checkedDeviceIds.length > 0) {
       let initialImage = checkedDeviceIds[0].imageSetId;
@@ -108,7 +108,7 @@ const Inventory = () => {
           handleUpdateSelected={handleUpdateSelected}
           hasCheckbox={true}
           selectedItems={setCheckedDeviceIds}
-          selectedItemsUpdateable={setCanBeUpdated()}
+          selectedItemsUpdateable={canBeUpdated()}
           kebabItems={[
             {
               isDisabled: !(checkedDeviceIds.length > 0),
