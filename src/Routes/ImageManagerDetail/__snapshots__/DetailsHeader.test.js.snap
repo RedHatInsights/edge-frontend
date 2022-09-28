@@ -80,6 +80,7 @@ exports[`DetailsHeader renders correctly 1`] = `
         <button
           aria-expanded="true"
           aria-haspopup="true"
+          aria-label="Actions for image set details view"
           class="pf-c-dropdown__toggle"
           data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
           data-ouia-component-type="PF4/DropdownToggle"
