@@ -37,6 +37,7 @@ Cypress.Commands.add('clearCookieConsentModal', () => {
   if (consentModal.length > 0) {
     cy.get('.truste_popframe').then((iframe) => {
       const body = iframe.contents().find('body');
+      // After the click in the button to log in, it should wait otherwise it might fail
       cy.wrap(body).find('a.call').click().wait(2000);
     });
   }
