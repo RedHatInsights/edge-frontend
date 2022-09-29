@@ -196,6 +196,7 @@ const createRows = (devices, hasLinks, fetchDevices) => {
 const DeviceTable = ({
   hasCheckbox = false,
   selectedItems,
+  selectedItemsUpdateable,
   skeletonRowQuantity,
   data,
   count,
@@ -207,6 +208,7 @@ const DeviceTable = ({
   setIsAddModalOpen,
   handleAddDevicesToGroup,
   handleRemoveDevicesFromGroup,
+  handleUpdateSelected,
   hasModalSubmitted,
   setHasModalSubmitted,
   fetchDevices,
@@ -215,6 +217,7 @@ const DeviceTable = ({
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
+  const canBeUpdated = isSystemsView;
   const history = useHistory();
 
   const actionResolver = (rowData) => {
@@ -336,18 +339,27 @@ const DeviceTable = ({
           actionResolver={actionResolver}
           defaultSort={{ index: 3, direction: 'desc' }}
           toolbarButtons={
-            canBeAdded
+            (canBeAdded
               ? [
                   {
                     title: 'Add systems',
                     click: () => setIsAddModalOpen(true),
                   },
                 ]
-              : []
+              : [],
+            canBeUpdated
+              ? [
+                  {
+                    isDisabled: !selectedItemsUpdateable,
+                    title: 'Update',
+                    click: () => handleUpdateSelected(),
+                  },
+                ]
+              : [])
           }
           hasCheckbox={hasCheckbox}
-          skeletonRowQuantity={skeletonRowQuantity}
           selectedItems={selectedItems}
+          skeletonRowQuantity={skeletonRowQuantity}
           kebabItems={kebabItems}
           hasModalSubmitted={hasModalSubmitted}
           setHasModalSubmitted={setHasModalSubmitted}
@@ -356,6 +368,7 @@ const DeviceTable = ({
     </>
   );
 };
+
 DeviceTable.propTypes = {
   imageData: PropTypes.object,
   urlParam: PropTypes.string,
@@ -366,6 +379,7 @@ DeviceTable.propTypes = {
   hasCheckbox: PropTypes.bool,
   setIsModalOpen: PropTypes.func,
   selectedItems: PropTypes.func,
+  selectedItemsUpdateable: PropTypes.bool,
   reload: PropTypes.bool,
   setReload: PropTypes.func,
   data: PropTypes.array,
@@ -381,6 +395,7 @@ DeviceTable.propTypes = {
   setHasModalSubmitted: PropTypes.func,
   handleAddDevicesToGroup: PropTypes.func,
   handleRemoveDevicesFromGroup: PropTypes.func,
+  handleUpdateSelected: PropTypes.func,
   fetchDevices: PropTypes.func,
   isSystemsView: PropTypes.bool,
   isAddSystemsView: PropTypes.bool,

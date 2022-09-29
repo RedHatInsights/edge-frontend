@@ -26,7 +26,10 @@ const ToolbarKebab = ({ kebabItems }) => {
     <ToolbarItem>
       <Dropdown
         toggle={
-          <KebabToggle onToggle={() => setKebabIsOpen((prev) => !prev)} />
+          <KebabToggle
+            aria-label="Actions for selected table items"
+            onToggle={() => setKebabIsOpen((prev) => !prev)}
+          />
         }
         isOpen={kebabIsOpen}
         isPlain

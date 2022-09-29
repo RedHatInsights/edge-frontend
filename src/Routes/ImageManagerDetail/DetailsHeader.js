@@ -16,6 +16,7 @@ import {
   DropdownItem,
   DropdownToggle,
   DropdownPosition,
+  Tooltip,
 } from '@patternfly/react-core';
 import Status from '../../components/Status';
 import { routes as paths } from '../../constants/routeMapper';
@@ -62,6 +63,9 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
   useEffect(() => {
     setData(imageData?.data);
   }, [imageData]);
+
+  const actionsLabel = 'Actions for image set details view';
+  const dropdownId = 'image-set-details-dropdown';
 
   return (
     <>
@@ -142,7 +146,7 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
                   position={DropdownPosition.right}
                   toggle={
                     <DropdownToggle
-                      id="image-set-details-dropdown"
+                      id={dropdownId}
                       toggleIndicator={CaretDownIcon}
                       onToggle={(newState) => setIsOpen(newState)}
                       isDisabled={
@@ -151,7 +155,12 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
                           : data?.LastImageDetails?.image.Status) ===
                           'BUILDING' || false
                       }
+                      aria-label={actionsLabel}
                     >
+                      <Tooltip
+                        content={actionsLabel}
+                        reference={() => document.getElementById(dropdownId)}
+                      />
                       Actions
                     </DropdownToggle>
                   }
