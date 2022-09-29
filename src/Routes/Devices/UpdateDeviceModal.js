@@ -98,6 +98,16 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
       >
         <ExclamationTriangleIcon /> After the update is installed, the system
         will apply the changes.
+        {updateModal.deviceData.some(
+          (device) =>
+            device.deviceStatus !== 'updateAvailable' &&
+            device.deviceStatus !== 'error'
+        ) && (
+          <div>
+            <ExclamationTriangleIcon /> Some selected systems have a status of
+            unresponsive and may not successfully update.
+          </div>
+        )}
       </Text>
     </TextContent>
   );
