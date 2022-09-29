@@ -163,16 +163,15 @@ const createRows = (devices, hasLinks, fetchDevices) => {
         },
         {
           title:
-            deviceStatus == 'error' || deviceStatus == 'unresponsive' ? (
+            deviceStatus === 'error' || deviceStatus === 'unresponsive' ? (
               <RetryUpdatePopover
                 lastSeen={LastSeen}
-                deviceUUID={DeviceUUID}
                 fetchDevices={fetchDevices}
                 device={device}
               >
                 <DeviceStatus
                   type={
-                    deviceStatus == 'error'
+                    deviceStatus === 'error'
                       ? 'errorWithExclamationCircle'
                       : deviceStatus
                   }
@@ -182,7 +181,7 @@ const createRows = (devices, hasLinks, fetchDevices) => {
             ) : (
               <DeviceStatus
                 type={
-                  deviceStatus == 'error'
+                  deviceStatus === 'error'
                     ? 'errorWithExclamationCircle'
                     : deviceStatus
                 }
