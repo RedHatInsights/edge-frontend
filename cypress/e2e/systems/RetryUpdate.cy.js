@@ -1,9 +1,9 @@
 describe('Systems', () => {
   beforeEach(() => {
-    cy.beforeTest('/inventory')
-  })
+    cy.beforeTest('/inventory');
+  });
   it('RetryPopover', function () {
-    cy.intercept('POST', 'api/edge/v1/updates', {})
+    cy.intercept('POST', 'api/edge/v1/updates', {});
 
     cy.intercept('GET', '/api/edge/v1/devices/devicesview?*', {
       count: 2,
@@ -40,50 +40,50 @@ describe('Systems', () => {
           },
         ],
       },
-    })
+    });
 
-    cy.get('.pf-c-title', { timeout: 6000 }).should('include.text', 'Systems')
-    cy.wait(1000)
+    cy.get('.pf-c-title', { timeout: 6000 }).should('include.text', 'Systems');
+    cy.wait(1000);
     //Select first Unresponsive
     cy.get(
       '[data-ouia-component-id="OUIA-Generated-TableRow-2"] > .pf-m-width-25 > .pf-c-description-list__group > .pf-c-description-list__term > .pf-l-split > :nth-child(2) > p'
     )
       .should('include.text', 'Unresponsive')
-      .click()
+      .click();
     // Ensure the Unresponsive popover is there with reasoning
-    cy.get('.pf-c-popover__content').should('be.visible')
-    cy.get('.pf-u-ml-xs').should('include.text', 'Unresponsive')
-    cy.get('.pf-u-font-weight-bold').should('include.text', 'Last seen')
-    cy.get('.pf-l-stack > :nth-child(2) > span').should('include.text', 'ago')
+    cy.get('.pf-c-popover__content').should('be.visible');
+    cy.get('.pf-u-ml-xs').should('include.text', 'Unresponsive');
+    cy.get('.pf-u-font-weight-bold').should('include.text', 'Last seen');
+    cy.get('.pf-l-stack > :nth-child(2) > span').should('include.text', 'ago');
     //Select first Error
     cy.get(
       '[data-ouia-component-id="OUIA-Generated-TableRow-3"] > .pf-m-width-25 > .pf-c-description-list__group > .pf-c-description-list__term > .pf-l-split > :nth-child(2) > p'
-    ).click()
-    cy.get('.pf-u-ml-xs').should('include.text', 'Playbook error')
+    ).click();
+    cy.get('.pf-u-ml-xs').should('include.text', 'Playbook error');
     cy.get('.pf-c-popover__content')
       .find('.pf-c-popover__body')
       .should(
         'include.text',
         'The playbook failed to run. You can retry the update or build a new one.'
-      )
-    cy.get('.pf-u-font-weight-bold').should('include.text', 'Last seen')
-    cy.get('.pf-l-stack > :nth-child(2) > span').should('include.text', 'ago')
+      );
+    cy.get('.pf-u-font-weight-bold').should('include.text', 'Last seen');
+    cy.get('.pf-l-stack > :nth-child(2) > span').should('include.text', 'ago');
     //Check to see if the Retry Popover has button
     cy.get(
       '[data-ouia-component-id="OUIA-Generated-TableRow-3"] > .pf-m-width-25 > .pf-c-description-list__group > .pf-c-description-list__term > .pf-l-split > :nth-child(2) > p'
-    )
+    );
     cy.get('.pf-c-popover__content')
       .find('footer > button')
       .contains('Retry')
-      .click()
+      .click();
     //Toast
     cy.get('h4.pf-c-alert__title').should(
       'include.text',
       'Info alert:Updating system'
-    )
+    );
     cy.get('.pf-c-alert__description').should(
       'include.text',
       'was added to the queue.'
-    )
-  })
-})
+    );
+  });
+});
