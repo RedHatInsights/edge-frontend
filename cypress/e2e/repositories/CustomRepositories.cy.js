@@ -10,6 +10,9 @@ describe('Custom repositories', () => {
     cy.get('.pf-c-title', { timeout: 30000 }).should('include.text', 'Custom repositories')
     cy.get('p').first().should('include.text', this.contents.customRepositories)
     cy.get('.pf-c-search-input__text-input').type('cy-repo')
+
+    cy.wait(500)
+
     cy.get('[data-label="Name"] > p').should('include.text', 'cy-repo')
     cy.wait(500).clickButton('Clear filters')
 
