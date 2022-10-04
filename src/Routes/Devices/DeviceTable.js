@@ -352,6 +352,7 @@ const DeviceTable = ({
                   {
                     isDisabled: !selectedItemsUpdateable,
                     title: 'Update',
+                    id: 'toolbar-update-button',
                     click: () => handleUpdateSelected(),
                   },
                 ]
