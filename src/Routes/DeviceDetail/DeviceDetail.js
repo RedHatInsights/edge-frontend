@@ -126,12 +126,8 @@ const DeviceDetail = () => {
               {
                 title: 'Update',
                 isDisabled:
-                  imageData?.UpdateTransactions?.[
-                    imageData?.UpdateTransactions.length - 1
-                  ]?.Status === 'BUILDING' ||
-                  imageData?.UpdateTransactions?.[
-                    imageData?.UpdateTransactions.length - 1
-                  ]?.Status === 'CREATED' ||
+                  imageData?.UpdateTransactions?.[0]?.Status === 'BUILDING' ||
+                  imageData?.UpdateTransactions?.[0]?.Status === 'CREATED' ||
                   !imageData?.ImageInfo?.UpdatesAvailable?.length > 0 ||
                   !updateModal.imageSetId,
                 onClick: () => {

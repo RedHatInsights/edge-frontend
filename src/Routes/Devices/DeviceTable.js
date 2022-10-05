@@ -296,7 +296,9 @@ const DeviceTable = ({
   };
 
   const areActionsDisabled = (rowData) =>
-    rowData.rowInfo?.deviceStatus !== 'updateAvailable';
+    !rowData.rowInfo?.UpdateAvailable &&
+    (rowData.rowInfo?.deviceStatus === 'updating' ||
+      rowData.rowInfo?.deviceStatus === 'upToDate');
 
   return (
     <>
@@ -350,6 +352,7 @@ const DeviceTable = ({
                   {
                     isDisabled: !selectedItemsUpdateable,
                     title: 'Update',
+                    id: 'toolbar-update-button',
                     click: () => handleUpdateSelected(),
                   },
                 ]
