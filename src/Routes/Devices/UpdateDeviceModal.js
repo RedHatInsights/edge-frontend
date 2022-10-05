@@ -98,14 +98,32 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
       >
         <ExclamationTriangleIcon /> After the update is installed, the system
         will apply the changes.
+      </Text>
+    </TextContent>
+  );
+
+  const UpdateAvailabilityWarning = () => (
+    <TextContent className="pf-u-pt-md">
+      <Text
+        style={{ color: 'var(--pf-global--palette--gold-500)' }}
+        component="small"
+      >
         {updateModal.deviceData.some(
           (device) =>
             device.deviceStatus !== 'updateAvailable' &&
             device.deviceStatus !== 'error'
         ) && (
-          <div>
-            <ExclamationTriangleIcon /> Some selected systems have a status of
-            unresponsive and may not successfully update.
+          <div className="pf-c-alert pf-m-info pf-m-inline">
+            <div className="pf-c-alert__icon">
+              <i className="fas fa-fw fa-info-circle"></i>
+            </div>
+            <p className="pf-c-alert__title">
+              <strong>
+                <span className="pf-screen-reader">Info alert:</span>Some
+                systems will not be updated. This action will update only
+                systems with an update available.
+              </strong>
+            </p>
           </div>
         )}
       </Text>
@@ -155,6 +173,11 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
         component: componentTypes.PLAIN_TEXT,
         name: 'description',
         label: Description(),
+      },
+      {
+        component: componentTypes.PLAIN_TEXT,
+        name: 'update-availability-warning',
+        label: UpdateAvailabilityWarning(),
       },
       {
         component: componentTypes.PLAIN_TEXT,
