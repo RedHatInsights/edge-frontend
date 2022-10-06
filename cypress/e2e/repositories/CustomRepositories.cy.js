@@ -1,5 +1,5 @@
-chai.use(require('chai-sorted'))
-import { really, map } from 'cypress-should-really'
+//chai.use(require('chai-sorted'))
+//import { really, map } from 'cypress-should-really'
 
 describe('Custom repositories', () => {
   before(() => {

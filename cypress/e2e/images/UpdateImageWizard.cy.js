@@ -7,7 +7,7 @@ describe('Update image wizard', () => {
     cy.get('.pf-c-title',  { timeout: 30000 }).should('be.visible').should('include.text', 'Images')
     cy.get('.pf-c-search-input__text-input', { timeout: 30000 })
       .should('be.visible')
-      .type(this.data.imageName)
+      .type(this.data.imageName, {delay:100})
     cy.wait(1000)
     cy.get('.pf-c-table__action').click()
     cy.get('.pf-c-dropdown__menu-item').contains('Update Image').click()
