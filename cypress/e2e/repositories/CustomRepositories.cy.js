@@ -1,6 +1,3 @@
-//chai.use(require('chai-sorted'))
-//import { really, map } from 'cypress-should-really'
-
 describe('Custom repositories', () => {
   before(() => {
     cy.beforeTest('/repositories')    
@@ -18,15 +15,14 @@ describe('Custom repositories', () => {
 
     cy.wait(500)
 
-    cy.get('.pf-c-table__button', { timeout: 30000 })
-      .should('be.visible')
-    cy.get('tbody [data-label="Name"]')
-      //.should(really(map('innerText'), 'be.ascending'))
+    cy.get('.pf-c-table__button', { timeout: 30000 }).should('be.visible')
+    cy.wait(2000)
+    cy.sorting('tbody [data-label="Name"]', 'asc')
 
-    cy.get('.pf-c-table__button', { timeout: 30000 })
-      .should('be.visible').click()
-    cy.get('tbody [data-label="Name"]')
-      //.should(really(map('innerText'), 'be.sorted', { descending: true }))
+    cy.get('.pf-c-table__button', { timeout: 30000 }).should('be.visible').click()
+    cy.wait(2000)
+    cy.sorting('tbody [data-label="Name"]', 'des')
+
 
     cy.wait(500).testPagination('', 'perPage')
 

@@ -94,3 +94,22 @@ Cypress.Commands.add('testPagination', (selector, test) => {
   }
 })
 
+Cypress.Commands.add('sorting', (selector, order) => {
+  var sortedNames = ""
+  const collator = new Intl.Collator('en-US', {ignorePunctuation: true})
+  
+  cy.get(selector)
+  .then(($cell) => Cypress._.map($cell, (el) => el.innerText))
+  .then((list)=>{
+    if(order == "asc"){
+      sortedNames = list.sort((a, b) => collator.compare(a, b))
+    }else{
+      sortedNames = list.sort((a, b) => collator.compare(b, a))
+    }
+    expect(list).to.deep.equal(sortedNames)
+
+  })
+  
+})
+
+
