@@ -100,7 +100,7 @@ Cypress.Commands.add('sorting', (selector, order) => {
   cy.get(selector)
   .then(($cell) => Cypress._.map($cell, (el) => el.innerText))
   .then((list)=>{
-    var sortedList = [...list].sort((a, b) => order === "asc" ? collator.compare(a, b) : collator.compare(b, a));
+    const sortedList = [...list].sort((a, b) => order === "asc" ? collator.compare(a, b) : collator.compare(b, a));
     expect(list).to.deep.equal(sortedList)
 
   })
