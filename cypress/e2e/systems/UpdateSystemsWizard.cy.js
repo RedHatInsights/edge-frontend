@@ -1,5 +1,3 @@
-chai.use(require("chai-sorted"));
-import { really, map } from "cypress-should-really";
 describe("Systems", () => {
   before(() => {
     cy.beforeTest("/inventory");
