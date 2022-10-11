@@ -104,18 +104,20 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
     </TextContent>
   );
 
-  const UpdateAvailabilityWarning = () => (
+  const Description = () => (
     <TextContent>
-      <Text
-        style={{ color: 'var(--pf-global--palette--gold-500)' }}
-        component="small"
-      >
+      <Text>
+        Update{' '}
+        <span className="pf-u-font-weight-bold pf-u-font-size-md">
+          {isMultiple ? `${deviceName.length} systems` : deviceName}
+        </span>{' '}
+        to latest version of the image linked to it.
         {updateModal.deviceData.some(
           (device) =>
             device.deviceStatus !== 'updateAvailable' &&
             device.deviceStatus !== 'error'
         ) && (
-          <div className="pf-c-alert pf-m-info pf-m-inline">
+          <div className="pf-c-alert pf-m-info pf-m-inline pf-u-mt-md">
             <div className="pf-c-alert__icon">
               <i className="fas fa-fw fa-info-circle"></i>
             </div>
@@ -128,18 +130,6 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
             </p>
           </div>
         )}
-      </Text>
-    </TextContent>
-  );
-
-  const Description = () => (
-    <TextContent>
-      <Text>
-        Update{' '}
-        <span className="pf-u-font-weight-bold pf-u-font-size-md">
-          {isMultiple ? `${deviceName.length} systems` : deviceName}
-        </span>{' '}
-        to latest version of the image linked to it.
       </Text>
     </TextContent>
   );
@@ -175,11 +165,6 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
         component: componentTypes.PLAIN_TEXT,
         name: 'description',
         label: Description(),
-      },
-      {
-        component: componentTypes.PLAIN_TEXT,
-        name: 'update-availability-warning',
-        label: UpdateAvailabilityWarning(),
       },
       {
         component: componentTypes.PLAIN_TEXT,
