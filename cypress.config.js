@@ -15,9 +15,14 @@ function getConfigurationByFile(file) {
 }
 
 module.exports = defineConfig({
+  retries: {
+    runMode: 3,
+    openMode: 0,
+  },
   chromeWebSecurity: false,
   pageLoadTimeout: 120000,
-
+  defaultCommandTimeout:10000,
+  videoUploadOnPasses: false,  
 
   e2e: {
     setupNodeEvents(on, config) {

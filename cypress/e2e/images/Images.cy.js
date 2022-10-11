@@ -1,5 +1,3 @@
-chai.use(require('chai-sorted'))
-import { really, map } from 'cypress-should-really'
 describe('Images', () => {
   before(() => {
     cy.beforeTest('/manage-images')    
@@ -30,13 +28,14 @@ describe('Images', () => {
     cy.wait(2000)
     cy.get('.pf-m-width-35 > .pf-c-table__button', { timeout: 30000 })
       .should('be.visible').click()
-    cy.get('tbody [data-label="Name"]')
-      .should(really(map('innerText'), 'be.ascending'))
+    cy.wait(2000)
+    cy.sorting('tbody [data-label="Name"]', 'asc')
+
 
     cy.get('.pf-m-width-35 > .pf-c-table__button', { timeout: 30000 })
       .should('be.visible').click()
-    cy.get('tbody [data-label="Name"]')
-      .should(really(map('innerText'), 'be.sorted', { descending: true, }))
+    cy.wait(2000)
+    cy.sorting('tbody [data-label="Name"]', 'des')
 
     cy.testPagination('', 'perPage')
 
