@@ -93,17 +93,19 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   const WarningText = () => (
     <TextContent className="pf-u-pt-md">
       <Text
-        style={{ color: 'var(--pf-global--palette--gold-500)' }}
+        style={{ color: 'var(--pf-global--warning-color--200' }}
         component="small"
       >
-        <ExclamationTriangleIcon /> After the update is installed, the system
-        will apply the changes.
+        <ExclamationTriangleIcon
+          style={{ color: 'var(--pf-global--warning-color--100' }}
+        />{' '}
+        After the update is installed, the system will apply the changes.
       </Text>
     </TextContent>
   );
 
   const UpdateAvailabilityWarning = () => (
-    <TextContent className="pf-u-pt-md">
+    <TextContent>
       <Text
         style={{ color: 'var(--pf-global--palette--gold-500)' }}
         component="small"
