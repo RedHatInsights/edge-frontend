@@ -5,6 +5,7 @@ import {
   Bullseye,
   Backdrop,
   Spinner,
+  Alert,
 } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
@@ -117,18 +118,11 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
             device.deviceStatus !== 'updateAvailable' &&
             device.deviceStatus !== 'error'
         ) && (
-          <div className="pf-c-alert pf-m-info pf-m-inline pf-u-mt-md">
-            <div className="pf-c-alert__icon">
-              <i className="fas fa-fw fa-info-circle"></i>
-            </div>
-            <p className="pf-c-alert__title">
-              <strong>
-                <span className="pf-screen-reader">Info alert:</span>Some
-                systems will not be updated. This action will update only
-                systems with an update available.
-              </strong>
-            </p>
-          </div>
+          <Alert
+            variant="info"
+            isInline
+            title="Some systems will not be updated. This action will update only systems with an update available."
+          />
         )}
       </Text>
     </TextContent>
