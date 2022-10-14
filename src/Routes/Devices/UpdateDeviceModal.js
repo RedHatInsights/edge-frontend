@@ -113,18 +113,19 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
           {isMultiple ? `${deviceName.length} systems` : deviceName}
         </span>{' '}
         to latest version of the image linked to it.
-        {updateModal.deviceData.some(
-          (device) =>
-            device.deviceStatus !== 'updateAvailable' &&
-            device.deviceStatus !== 'error'
-        ) && (
-          <Alert
-            variant="info"
-            isInline
-            title="Some systems will not be updated. This action will update only systems with an update available."
-          />
-        )}
       </Text>
+      {updateModal.deviceData.some(
+        (device) =>
+          device.deviceStatus !== 'updateAvailable' &&
+          device.deviceStatus !== 'error'
+      ) && (
+        <Alert
+          variant="info"
+          isInline
+          title="Some systems will not be updated. This action will update only systems with an update available."
+          style={{ '--pf-c-content--h4--MarginTop': 0 }}
+        />
+      )}
     </TextContent>
   );
 
