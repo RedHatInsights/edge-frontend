@@ -1,11 +1,21 @@
 import React from 'react';
 import Modal from '../../../components/Modal';
-import { createCustomRepository } from '../../../api/repositories';
+import {
+  createCustomRepository,
+  validateRepoName,
+} from '../../../api/repositories';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { nameValidator } from '../../../utils';
 import apiWithToast from '../../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
+
+const asyncRepoNameValidation = async (value) => {
+  const resp = await validateRepoName(value);
+  if (resp.data.isValid) {
+    return 'Repository name already exists';
+  }
+};
 
 const AddModal = ({ isOpen, closeModal, reloadData }) => {
   const dispatch = useDispatch();
@@ -41,7 +51,11 @@ const AddModal = ({ isOpen, closeModal, reloadData }) => {
         helperText:
           'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
         isRequired: true,
-        validate: [{ type: validatorTypes.REQUIRED }, nameValidator],
+        validate: [
+          { type: validatorTypes.REQUIRED },
+          nameValidator,
+          asyncRepoNameValidation,
+        ],
       },
       {
         component: 'textarea',

@@ -24,3 +24,7 @@ export const editCustomRepository = (payload) => {
 
 export const removeCustomRepository = (id) =>
   instance.delete(`${EDGE_API}/thirdpartyrepo/${id}`);
+
+export const validateRepoName = (name) => {
+  return instance.get(`${EDGE_API}/thirdpartyrepo/checkName/${name}`);
+};

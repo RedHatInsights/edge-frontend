@@ -52,28 +52,6 @@ const DeviceDetail = () => {
     insights.chrome.appAction('system-detail');
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      if (!entity?.display_name) {
-        return;
-      }
-      const image_data = await getDeviceHasUpdate(deviceId);
-      setImageData(image_data);
-      setIsDeviceStatusLoading(false);
-      setUpdateModal((prevState) => ({
-        ...prevState,
-        deviceData: [
-          {
-            display_name: entity.display_name,
-            id: entity.id,
-          },
-        ],
-        imageSetId: image_data?.ImageInfo?.Image?.ImageSetID,
-      }));
-      setImageId(image_data?.ImageInfo?.Image?.ID);
-    })();
-  }, [entity, reload]);
-
   const [deviceData, fetchDeviceData] = useApi({
     api: () =>
       getInventory({
@@ -96,6 +74,29 @@ const DeviceDetail = () => {
     updateAvailable,
     updateStatus
   );
+
+  useEffect(() => {
+    (async () => {
+      if (!entity?.display_name) {
+        return;
+      }
+      const image_data = await getDeviceHasUpdate(deviceId);
+      setImageData(image_data);
+      setIsDeviceStatusLoading(false);
+      setUpdateModal((prevState) => ({
+        ...prevState,
+        deviceData: [
+          {
+            display_name: entity.display_name,
+            id: entity.id,
+            deviceStatus: deviceStatus,
+          },
+        ],
+        imageSetId: image_data?.ImageInfo?.Image?.ImageSetID,
+      }));
+      setImageId(image_data?.ImageInfo?.Image?.ID);
+    })();
+  }, [entity, reload]);
 
   return (
     <>

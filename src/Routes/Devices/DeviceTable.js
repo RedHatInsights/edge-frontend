@@ -271,6 +271,7 @@ const DeviceTable = ({
                 {
                   id: rowData.rowInfo.id,
                   display_name: rowData.rowInfo.display_name,
+                  deviceStatus: rowData.rowInfo.deviceStatus,
                 },
               ],
               imageSetId: rowData.rowInfo.imageSetId,

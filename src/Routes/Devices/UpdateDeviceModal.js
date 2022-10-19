@@ -5,6 +5,7 @@ import {
   Bullseye,
   Backdrop,
   Spinner,
+  Alert,
 } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
@@ -93,21 +94,13 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
   const WarningText = () => (
     <TextContent className="pf-u-pt-md">
       <Text
-        style={{ color: 'var(--pf-global--palette--gold-500)' }}
+        style={{ color: 'var(--pf-global--warning-color--200' }}
         component="small"
       >
-        <ExclamationTriangleIcon /> After the update is installed, the system
-        will apply the changes.
-        {updateModal.deviceData.some(
-          (device) =>
-            device.deviceStatus !== 'updateAvailable' &&
-            device.deviceStatus !== 'error'
-        ) && (
-          <div>
-            <ExclamationTriangleIcon /> Some selected systems have a status of
-            unresponsive and may not successfully update.
-          </div>
-        )}
+        <ExclamationTriangleIcon
+          style={{ color: 'var(--pf-global--warning-color--100' }}
+        />{' '}
+        After the update is installed, the system will apply the changes.
       </Text>
     </TextContent>
   );
@@ -121,6 +114,18 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
         </span>{' '}
         to latest version of the image linked to it.
       </Text>
+      {updateModal.deviceData.some(
+        (device) =>
+          device.deviceStatus !== 'updateAvailable' &&
+          device.deviceStatus !== 'error'
+      ) && (
+        <Alert
+          variant="info"
+          isInline
+          title="Some systems will not be updated. This action will update only systems with an update available."
+          style={{ '--pf-c-content--h4--MarginTop': 0 }}
+        />
+      )}
     </TextContent>
   );
 
