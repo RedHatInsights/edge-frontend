@@ -18,6 +18,7 @@ const RepoModal = ({
   size,
   onSubmit,
   additionalMappers,
+  validatorMapper,
 }) => {
   return (
     <Modal
@@ -29,6 +30,7 @@ const RepoModal = ({
     >
       <FormRenderer
         schema={schema}
+        validatorMapper={validatorMapper}
         FormTemplate={(props) => (
           <FormTemplate
             {...props}
@@ -69,6 +71,7 @@ RepoModal.propTypes = {
   size: PropTypes.string,
   additionalMappers: PropTypes.object,
   titleIconVariant: PropTypes.any,
+  validatorMapper: PropTypes.object,
 };
 
 export default RepoModal;
