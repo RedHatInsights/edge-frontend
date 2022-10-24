@@ -14,6 +14,7 @@ import SSHInputField from './form/SSHInputField';
 import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
 import { registrationCredsValidator } from './form/RegistrationCreds';
 import { reservedUsernameValidator } from './form/validators';
+import { imageNameValidator } from '../Routes/ImageManager/steps/imageSetDetails.js';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import CustomPackageTextArea from './form/CustomPackageTextArea';
 
@@ -89,6 +90,7 @@ const CreateImageWizard = ({
         ...validatorTypes,
         registrationCredsValidator,
         reservedUsernameValidator,
+        imageNameValidator,
       }}
       onCancel={onClose}
     />

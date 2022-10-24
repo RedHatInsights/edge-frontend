@@ -10,11 +10,20 @@ import { nameValidator } from '../../../utils';
 import apiWithToast from '../../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
 
-const asyncRepoNameValidation = async (value) => {
+const asyncRepoNameValidation = async (value = '') => {
+  // do not fire validation request for empty name
+  if (value.length === 0) {
+    return undefined;
+  }
   const resp = await validateRepoName(value);
   if (resp.data.isValid) {
-    return 'Repository name already exists';
+    // async validator has to throw error, not return it
+    throw 'Repository name already exists';
   }
+};
+
+const validatorMapper = {
+  repoName: () => asyncRepoNameValidation,
 };
 
 const AddModal = ({ isOpen, closeModal, reloadData }) => {
@@ -52,9 +61,10 @@ const AddModal = ({ isOpen, closeModal, reloadData }) => {
           'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
         isRequired: true,
         validate: [
+          // async validator has to be first in the list
+          { type: 'repoName' },
           { type: validatorTypes.REQUIRED },
           nameValidator,
-          asyncRepoNameValidation,
         ],
       },
       {
@@ -81,6 +91,7 @@ const AddModal = ({ isOpen, closeModal, reloadData }) => {
       schema={addSchema}
       onSubmit={handleAddRepository}
       reloadData={reloadData}
+      validatorMapper={validatorMapper}
     />
   );
 };
