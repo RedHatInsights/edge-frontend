@@ -12,14 +12,23 @@ import { nameValidator } from '../../utils';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
 
-const asyncGroupNameValidation = async (value) => {
+const asyncGroupNameValidation = async (value = '') => {
+  // do not fire validation request for empty name
+  if (value.length === 0) {
+    return undefined;
+  }
   const resp = await validateGroupName(value);
   // isValid should be isNotValid
   // who wrote that Go code :thinking_face:
   // spoiler: it was me
   if (resp.data.isValid) {
-    return 'Group name already exists';
+    // async validator has to throw and error not return it
+    throw 'Group name already exists';
   }
+};
+
+const validatorMapper = {
+  groupName: () => asyncGroupNameValidation,
 };
 
 const createGroupSchema = {
@@ -32,11 +41,12 @@ const createGroupSchema = {
         'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
       isRequired: true,
       validate: [
+        // async validator has to be firs in the validatio config
+        { type: 'groupName' },
         { type: validatorTypes.REQUIRED },
 
         { type: validatorTypes.MAX_LENGTH, threshold: 50 },
         nameValidator,
-        asyncGroupNameValidation,
       ],
     },
   ],
@@ -100,6 +110,7 @@ const CreateGroupModal = ({
       schema={createGroupSchema}
       onSubmit={deviceIds ? handleAddDevicesToNewGroup : handleCreateGroup}
       reloadData={reloadData}
+      validatorMapper={validatorMapper}
     />
   );
 };
