@@ -72,9 +72,7 @@ export default {
   nextStep: ({ values }) =>
     values?.imageType?.includes('rhel-edge-installer') || !values.imageType
       ? 'registration'
-      : values?.includesCustomRepos
-      ? 'repositories'
-      : 'packages',
+      : 'repositories',
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,

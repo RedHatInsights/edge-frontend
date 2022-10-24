@@ -23,7 +23,6 @@ import { DEFAULT_RELEASE, TEMPORARY_RELEASE } from '../../constants';
 const CreateImage = ({ navigateBack, reload }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
-  const customRepoFlag = useFeatureFlags('fleet-management.custom-repos');
   const temporaryReleasesFlag = useFeatureFlags(
     'fleet-management.temporary-releases'
   );
@@ -105,7 +104,6 @@ const CreateImage = ({ navigateBack, reload }) => {
       initialValues={{
         version: 0,
         release: temporaryReleasesFlag ? TEMPORARY_RELEASE : DEFAULT_RELEASE,
-        includesCustomRepos: customRepoFlag,
       }}
       schema={{
         fields: [
