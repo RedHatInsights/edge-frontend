@@ -18,11 +18,8 @@ const asyncGroupNameValidation = async (value = '') => {
     return undefined;
   }
   const resp = await validateGroupName(value);
-  // isValid should be isNotValid
-  // who wrote that Go code :thinking_face:
-  // spoiler: it was me
   if (resp.data.isValid) {
-    // async validator has to throw and error not return it
+    // async validator has to throw error, not return it
     throw 'Group name already exists';
   }
 };
@@ -41,10 +38,9 @@ const createGroupSchema = {
         'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
       isRequired: true,
       validate: [
-        // async validator has to be firs in the validatio config
+        // async validator has to be first in the list
         { type: 'groupName' },
         { type: validatorTypes.REQUIRED },
-
         { type: validatorTypes.MAX_LENGTH, threshold: 50 },
         nameValidator,
       ],
