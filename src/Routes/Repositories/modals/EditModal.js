@@ -43,7 +43,7 @@ const EditModal = ({ closeModal, isOpen, id, name, baseURL, reloadData }) => {
         label: 'BaseURL',
         placeholder: 'https://',
         helperText: (
-          <HelperText hasIcon>
+          <HelperText>
             <HelperTextItem className="pf-u-pb-md" variant="warning" hasIcon>
               If you change the repo URL, you may not have access to the
               packages that were used to build images that reference this

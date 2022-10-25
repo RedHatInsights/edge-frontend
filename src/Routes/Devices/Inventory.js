@@ -50,6 +50,42 @@ const Inventory = () => {
     setIsRowSelected(isRow);
   };
 
+  const canBeUpdated = () => {
+    let canBeUpdated = false;
+    if (checkedDeviceIds.length > 0) {
+      let initialImage = checkedDeviceIds[0].imageSetId;
+      for (let device of checkedDeviceIds) {
+        if (device.imageSetId !== initialImage) {
+          canBeUpdated = false;
+          break;
+        }
+        if (
+          (!canBeUpdated &&
+            device.updateImageData &&
+            device.deviceStatus === 'updateAvailable') ||
+          device.deviceStatus === 'unresponsive' ||
+          device.deviceStatus === 'error'
+        ) {
+          canBeUpdated = true;
+        }
+      }
+    }
+    return canBeUpdated;
+  };
+
+  const handleUpdateSelected = () => {
+    setUpdateModal((prevState) => ({
+      ...prevState,
+      deviceData: checkedDeviceIds.map((device) => ({
+        id: device.id,
+        display_name: device.display_name,
+        deviceStatus: device.deviceStatus,
+      })),
+      imageSetId: checkedDeviceIds[0].imageSetId,
+      isOpen: true,
+    }));
+  };
+
   const reloadData = async () => {
     await fetchDevices();
     setHasModalSubmitted(true);
@@ -70,8 +106,10 @@ const Inventory = () => {
           setUpdateModal={setUpdateModal}
           handleAddDevicesToGroup={handleAddDevicesToGroup}
           handleRemoveDevicesFromGroup={handleRemoveDevicesFromGroup}
+          handleUpdateSelected={handleUpdateSelected}
           hasCheckbox={true}
           selectedItems={setCheckedDeviceIds}
+          selectedItemsUpdateable={canBeUpdated()}
           kebabItems={[
             {
               isDisabled: !(checkedDeviceIds.length > 0),

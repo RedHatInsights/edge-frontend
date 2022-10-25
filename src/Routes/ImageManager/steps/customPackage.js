@@ -134,7 +134,7 @@ export default {
       name: 'warning',
       label: (
         <Text className="pf-u-warning-color-200">
-          <ExclamationTriangleIcon class="pf-u-warning-color-100" />
+          <ExclamationTriangleIcon className="pf-u-warning-color-100" />
           &nbsp; Packages names that do not have exact name and casing will not
           be included in the image.
         </Text>

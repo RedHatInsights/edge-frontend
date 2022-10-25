@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: edge-frontend
+objects:
+  - apiVersion: cloud.redhat.com/v1alpha1
+    kind: Frontend
+    metadata:
+      name: edge
+    spec:
+      envName: ${ENV_NAME}
+      title: Edge
+      deploymentRepo: https://github.com/RedHatInsights/edge-frontend
+      API:
+        versions:
+          - v1
+      frontend:
+        paths:
+          - /apps/edge
+      image: ${IMAGE}:${IMAGE_TAG}
+      navItems:
+        - title: Inventory
+          expandable: true
+          routes:
+            - title: Groups
+              appId: edge
+              filterable: false
+              href: /edge/fleet-management
+              permissions:
+                - method: withEmail
+                  args:
+                    - "@redhat.com"
+                    - "@sbb.ch"
+            - title: Systems
+              appId: edge
+              filterable: false
+              href: /edge/inventory
+              permissions:
+                - method: withEmail
+                  args:
+                    - "@redhat.com"
+                    - "@sbb.ch"
+          permissions:
+            - method: withEmail
+              args:
+                - "@redhat.com"
+                - "@sbb.ch"
+      module:
+        manifestLocation: /apps/edge/fed-mods.json
+        modules:
+          - id: edge
+            module: ./RootApp
+            routes:
+              - pathname: /edge
+        moduleID: edge
+parameters:
+  - name: ENV_NAME
+    required: true
+  - name: IMAGE_TAG
+    required: true
+  - name: IMAGE
+    value: quay.io/cloudservices/edge-frontend

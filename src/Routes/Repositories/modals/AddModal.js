@@ -1,11 +1,30 @@
 import React from 'react';
 import Modal from '../../../components/Modal';
-import { createCustomRepository } from '../../../api/repositories';
+import {
+  createCustomRepository,
+  validateRepoName,
+} from '../../../api/repositories';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { nameValidator } from '../../../utils';
 import apiWithToast from '../../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
+
+const asyncRepoNameValidation = async (value = '') => {
+  // do not fire validation request for empty name
+  if (value.length === 0) {
+    return undefined;
+  }
+  const resp = await validateRepoName(value);
+  if (resp.data.isValid) {
+    // async validator has to throw error, not return it
+    throw 'Repository name already exists';
+  }
+};
+
+const validatorMapper = {
+  repoName: () => asyncRepoNameValidation,
+};
 
 const AddModal = ({ isOpen, closeModal, reloadData }) => {
   const dispatch = useDispatch();
@@ -41,7 +60,12 @@ const AddModal = ({ isOpen, closeModal, reloadData }) => {
         helperText:
           'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
         isRequired: true,
-        validate: [{ type: validatorTypes.REQUIRED }, nameValidator],
+        validate: [
+          // async validator has to be first in the list
+          { type: 'repoName' },
+          { type: validatorTypes.REQUIRED },
+          nameValidator,
+        ],
       },
       {
         component: 'textarea',
@@ -67,6 +91,7 @@ const AddModal = ({ isOpen, closeModal, reloadData }) => {
       schema={addSchema}
       onSubmit={handleAddRepository}
       reloadData={reloadData}
+      validatorMapper={validatorMapper}
     />
   );
 };

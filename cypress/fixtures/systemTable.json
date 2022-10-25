@@ -1,0 +1,77 @@
+{
+    "count": 4,
+    "data": {
+        "total": 4,
+        "devices": [
+            {
+            "DeviceID": 164009,
+            "DeviceName": "maeve-test-device",
+            "DeviceUUID": "testdevice",
+            "ImageID": 27170,
+            "ImageName": "iqe-test-image-8_5",
+            "LastSeen": "2022-09-14T20:06:39.584623Z",
+            "UpdateAvailable": false,
+            "Status": "RUNNING",
+            "ImageSetID": 1,
+            "DeviceGroups": [{
+                "ID": 52760,
+                "Name": "test_device_groups_api_LmGwoYi7dz88OJ9Im"
+            }],
+            "DispatcherStatus": "",
+            "DispatcherReason": ""
+            },
+            {
+            "DeviceID": 164010,
+            "DeviceName": "maeve-test-device2",
+            "DeviceUUID": "testdevice2",
+            "ImageID": 27170,
+            "ImageName": "iqe-test-image-8_5",
+            "LastSeen": "2022-09-14T20:06:39.584623Z",
+            "UpdateAvailable": true,
+            "Status": "RUNNING",
+            "ImageSetID": 1,
+            "DeviceGroups": [{
+                "ID": 52760,
+                "Name": "test_device_groups_api_LmGwoYi7dz88OJ9Im"
+            }],
+            "DispatcherStatus": "",
+            "DispatcherReason": ""
+            },
+            {
+            "DeviceID": 164011,
+            "DeviceName": "maeve-test-device3",
+            "DeviceUUID": "testdevice3",
+            "ImageID": 27170,
+            "ImageName": "iqe-test-image-8_5",
+            "LastSeen": "2022-09-14T20:06:39.584623Z",
+            "UpdateAvailable": true,
+            "Status": "RUNNING",
+            "ImageSetID": 1,
+            "DeviceGroups": [{
+                "ID": 52760,
+                "Name": "test_device_groups_api_LmGwoYi7dz88OJ9Im"
+            }],
+            "DispatcherStatus": "",
+            "DispatcherReason": ""
+            },
+            {
+            "DeviceID": 164012,
+            "DeviceName": "maeve-test-device4",
+            "DeviceUUID": "testdevice4",
+            "ImageID": 27171,
+            "ImageName": "iqe-test-image",
+            "LastSeen": "2022-09-14T20:06:39.584623Z",
+            "UpdateAvailable": true,
+            "Status": "RUNNING",
+            "ImageSetID": 2,
+            "DeviceGroups": [{
+                "ID": 52760,
+                "Name": "test_device_groups_api_LmGwoYi7dz88OJ9Im"
+            }],
+            "DispatcherStatus": "",
+            "DispatcherReason": ""
+            }
+
+        ]
+    }
+}

@@ -15,9 +15,9 @@ import FilterChip from './FilterChips';
 import ToolbarKebab from './ToolbarKebab';
 
 const ToolbarButtons = ({ buttons }) => {
-  return buttons.map(({ title, click }, index) => (
+  return buttons.map(({ title, click, isDisabled, id }, index) => (
     <ToolbarItem key={index}>
-      <Button onClick={click} variant="primary">
+      <Button onClick={click} variant="primary" isDisabled={isDisabled} id={id}>
         {title}
       </Button>
     </ToolbarItem>
