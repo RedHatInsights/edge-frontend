@@ -27,9 +27,6 @@ const CharacterCount = () => {
   return <h1>{description?.length || 0}/250</h1>;
 };
 
-export const imageNameValidator = () => (value) =>
-  asyncImageNameValidation(value);
-
 export default {
   title: 'Details',
   name: 'imageSetDetails',
@@ -51,7 +48,7 @@ export default {
       placeholder: 'Image name',
       helperText: helperText,
       validate: [
-        { type: 'imageNameValidator' },
+        asyncImageNameValidation,
         { type: validatorTypes.REQUIRED },
         { type: validatorTypes.MAX_LENGTH, threshold: 50 },
         nameValidator,
