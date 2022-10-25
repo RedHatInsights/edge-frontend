@@ -3,7 +3,6 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import React, { Suspense } from 'react';
 import { routes as paths } from './constants/routeMapper';
 import { Bullseye, Spinner } from '@patternfly/react-core';
-import { useFeatureFlags } from './utils';
 // const Groups = React.lazy(() =>
 //   import(/* webpackChunkName: "GroupsPage" */ './Routes/Groups/Groups')
 // );
@@ -88,9 +87,8 @@ export const Routes = () => {
         <Route path={paths['manage-images-detail']} component={ImageDetail} />
         <Route path={paths['manage-images']} component={Images} />
 
-        {useFeatureFlags('fleet-management.custom-repos') && (
-          <Route exact path={paths['repositories']} component={Repositories} />
-        )}
+        <Route exact path={paths['respositories']} component={Repositories} />
+
         <Route
           exact
           path={paths['learning-resources']}
