@@ -22,8 +22,8 @@ objects:
         - title: Inventory
           expandable: true
           routes:
-            - title: Groups
-              appId: edge
+            - title: "Groups"
+              appId: "edge"
               filterable: false
               href: /edge/fleet-management
               permissions:
@@ -31,8 +31,8 @@ objects:
                   args:
                     - "@redhat.com"
                     - "@sbb.ch"
-            - title: Systems
-              appId: edge
+            - title: "Systems"
+              appId: "edge"
               filterable: false
               href: /edge/inventory
               permissions:
