@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 import React, { Fragment, useState, Suspense } from 'react';
 import {
@@ -13,18 +14,14 @@ import CreateGroupModal from '../Groups/CreateGroupModal';
 import UpdateSystems from './UpdateSystems';
 import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api/devices';
+import { Link } from 'react-router-dom';
+
 import {
-  Bullseye,
-  Spinner,
   TextContent,
   Text,
   Breadcrumb,
   BreadcrumbItem,
 } from '@patternfly/react-core';
-
-const UpdateDeviceModal = React.lazy(() =>
-  import(/* webpackChunkName: "CreateImageWizard" */ './UpdateDeviceModal')
-);
 
 const Inventory = () => {
   const [response, fetchDevices] = useApi({
@@ -39,8 +36,7 @@ const Inventory = () => {
   const [isRowSelected, setIsRowSelected] = useState(false);
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
   const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
-  const [isSystemUpdating, setIsSystemUpdating] = useState(true);
-  const [updateModal, setUpdateModal] = useState({
+  const [updatePage, setUpdatePage] = useState({
     isOpen: false,
     deviceData: null,
     imageData: null,
@@ -82,22 +78,18 @@ const Inventory = () => {
     }
     return canBeUpdated;
   };
-
-  // const handleUpdateSelected = () => {
-  //   setUpdateModal((prevState) => ({
-  //     ...prevState,
-  //     deviceData: checkedDeviceIds.map((device) => ({
-  //       id: device.id,
-  //       display_name: device.display_name,
-  //       deviceStatus: device.deviceStatus,
-  //     })),
-  //     imageSetId: checkedDeviceIds[0].imageSetId,
-  //     isOpen: true,
-  //   }));
-  // };
-
   const handleUpdateSelected = () => {
-    setIsSystemUpdating((prevState) => !prevState);
+    setUpdatePage((prevState) => ({
+      ...prevState,
+      deviceData: checkedDeviceIds.map((device) => ({
+        id: device.id,
+        display_name: device.display_name,
+        deviceStatus: device.deviceStatus,
+      })),
+      imageData: { imageName: checkedDeviceIds[0].imageName },
+      imageSetId: checkedDeviceIds[0].imageSetId,
+      isOpen: true,
+    }));
   };
 
   const reloadData = async () => {
@@ -108,34 +100,39 @@ const Inventory = () => {
   return (
     <Fragment>
       <PageHeader className='pf-m-light'>
-        {isSystemUpdating && (
+        {updatePage.isOpen && (
           <Breadcrumb>
-            <BreadcrumbItem onClick={handleUpdateSelected}>
-              Systems
+            <BreadcrumbItem
+              onClick={() =>
+                setUpdatePage((prev) => ({ ...prev, isOpen: false }))
+              }
+            >
+              <Link to='/inventory'>Systems</Link>
             </BreadcrumbItem>
             <BreadcrumbItem>Update</BreadcrumbItem>
           </Breadcrumb>
         )}
-        <PageHeaderTitle title={isSystemUpdating ? 'Update' : 'Systems'} />
-        {isSystemUpdating && (
+        <PageHeaderTitle title={updatePage.isOpen ? 'Update' : 'Systems'} />
+        {updatePage.isOpen && (
           <TextContent className='pf-u-mt-md'>
             <Text>
-              Update <strong>Banna001</strong> to a newer version of{' '}
-              <strong>PeelsYouPeel</strong> by selecting a new version from the
-              table below.
+              Update <strong>{updatePage?.deviceData[0].display_name}</strong>{' '}
+              to a newer version of{' '}
+              <strong>{updatePage?.imageData.imageName}</strong> by selecting a
+              new version from the table below.
             </Text>
           </TextContent>
         )}
       </PageHeader>
       <Main className='edge-devices'>
-        {!isSystemUpdating ? (
+        {!updatePage.isOpen ? (
           <DeviceTable
             isSystemsView={true}
             data={data?.data?.devices}
             count={data?.count}
             isLoading={isLoading}
             hasError={hasError}
-            setUpdateModal={setUpdateModal}
+            setUpdatePage={setUpdatePage}
             handleAddDevicesToGroup={handleAddDevicesToGroup}
             handleRemoveDevicesFromGroup={handleRemoveDevicesFromGroup}
             handleUpdateSelected={handleUpdateSelected}
@@ -161,33 +158,14 @@ const Inventory = () => {
             fetchDevices={fetchDevices}
           />
         ) : (
-          <UpdateSystems />
-        )}
-      </Main>
-      {updateModal.isOpen && (
-        <Suspense
-          fallback={
-            <Bullseye>
-              <Spinner />
-            </Bullseye>
-          }
-        >
-          <UpdateDeviceModal
-            navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
-              setUpdateModal((prevState) => {
-                return {
-                  ...prevState,
-                  isOpen: false,
-                };
-              });
-            }}
-            setUpdateModal={setUpdateModal}
-            updateModal={updateModal}
+          <UpdateSystems
+            setUpdatePage={setUpdatePage}
+            updatePage={updatePage}
             refreshTable={reloadData}
           />
-        </Suspense>
-      )}
+        )}
+      </Main>
+
       {isAddDeviceModalOpen && (
         <AddDeviceModal
           isModalOpen={isAddDeviceModalOpen}

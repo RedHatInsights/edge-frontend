@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
 import ToolbarHeader from './ToolbarHeader';
 import ToolbarFooter from './ToolbarFooter';
@@ -70,6 +71,9 @@ const GeneralTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
   isUseApi,
+  hasRadio = false,
+  setRadioSelection,
+  isFooterFixed = false,
 }) => {
   const defaultCheckedRows = initSelectedItems ? initSelectedItems : [];
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
@@ -275,7 +279,7 @@ const GeneralTable = ({
 
   const loadingRows = (perPage) =>
     [...Array(skeletonRowQuantity ?? perPage)].map(() => ({
-      cells: columnNames.map(() => ({ title: <Skeleton width="100%" /> })),
+      cells: columnNames.map(() => ({ title: <Skeleton width='100%' /> })),
     }));
 
   const emptyFilterView = () => {
@@ -290,8 +294,8 @@ const GeneralTable = ({
             },
             title: (
               <CustomEmptyState
-                data-testid="general-table-empty-state-no-match"
-                bgColor="white"
+                data-testid='general-table-empty-state-no-match'
+                bgColor='white'
                 icon={emptyFilterState?.icon ?? 'search'}
                 title={emptyFilterState?.title ?? 'No match found'}
                 body={emptyFilterState?.body ?? ''}
@@ -321,6 +325,24 @@ const GeneralTable = ({
     : hasCheckbox
     ? checkboxRows()
     : filteredRows;
+
+  const onSelect = () => {
+    if (isLoading) {
+      return null;
+    }
+
+    if (hasCheckbox) {
+      // change to handleCheckboxSelect
+      return handleSelect;
+    }
+
+    if (hasRadio) {
+      return (_event, _isSelecting, rowIndex) => {
+        const versionData = tableRows[rowIndex];
+        setRadioSelection(versionData);
+      };
+    }
+  };
 
   return (
     <>
@@ -353,17 +375,18 @@ const GeneralTable = ({
         ) : null}
       </ToolbarHeader>
       <Table
-        data-testid="general-table-testid"
-        variant="compact"
-        aria-label="General Table Component"
+        data-testid='general-table-testid'
+        variant='compact'
+        aria-label='General Table Component'
         sortBy={hasCheckbox ? { ...sortBy, index: sortBy.index + 1 } : sortBy}
         onSort={handleSort}
         actionResolver={actionResolver ? actionResolver : null}
         areActionsDisabled={areActionsDisabled}
         cells={columns}
         rows={tableRows}
-        onSelect={!isLoading && hasCheckbox && handleSelect}
+        onSelect={onSelect()}
         canSelectAll={false}
+        selectVariant={hasRadio ? 'radio' : hasCheckbox ? 'checkbox' : ''}
       >
         <TableHeader />
         <TableBody />
@@ -376,6 +399,7 @@ const GeneralTable = ({
         setPerPage={setPerPage}
         page={page}
         setPage={setPage}
+        isFooterFixed={isFooterFixed}
       />
     </>
   );
@@ -405,6 +429,10 @@ GeneralTable.propTypes = {
   setHasModalSubmitted: PropTypes.func,
   initSelectedItems: PropTypes.array,
   isUseApi: PropTypes.bool,
+  hasToolbar: PropTypes.bool,
+  hasRadio: PropTypes.bool,
+  setRadioSelection: PropTypes.func,
+  isFooterFixed: PropTypes.bool,
 };
 
 GeneralTable.defaultProps = {

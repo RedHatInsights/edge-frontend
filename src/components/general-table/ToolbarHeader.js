@@ -45,7 +45,7 @@ const ToolbarHeader = ({
 }) => {
   return (
     <Toolbar
-      style={{ padding: '16px' }}
+      style={{ padding: '0' }}
       id="toolbar-header"
       data-testid="toolbar-header-testid"
     >
