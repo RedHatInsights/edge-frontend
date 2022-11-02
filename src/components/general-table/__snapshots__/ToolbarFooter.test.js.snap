@@ -7,7 +7,7 @@ exports[`Repository Footer should render correctly 1`] = `
   data-ouia-component-type="PF4/Toolbar"
   data-ouia-safe="true"
   id="toolbar-footer"
-  style="padding: 16px;"
+  style="padding: 0px;"
 >
   <div
     class="pf-c-toolbar__content"

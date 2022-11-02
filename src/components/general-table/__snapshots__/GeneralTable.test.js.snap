@@ -8,7 +8,7 @@ exports[`General table should render correctly 1`] = `
   data-ouia-safe="true"
   data-testid="toolbar-header-testid"
   id="toolbar-header"
-  style="padding: 16px;"
+  style="padding: 0px;"
 >
   <div
     class="pf-c-toolbar__content"
