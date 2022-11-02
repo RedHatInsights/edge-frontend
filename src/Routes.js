@@ -87,7 +87,7 @@ export const Routes = () => {
         <Route path={paths['manage-images-detail']} component={ImageDetail} />
         <Route path={paths['manage-images']} component={Images} />
 
-        <Route exact path={paths['respositories']} component={Repositories} />
+        <Route exact path={paths['repositories']} component={Repositories} />
 
         <Route
           exact
