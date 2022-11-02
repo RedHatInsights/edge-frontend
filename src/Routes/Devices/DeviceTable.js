@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
@@ -203,7 +202,7 @@ const DeviceTable = ({
   count,
   isLoading,
   hasError,
-  setUpdatePage,
+  setUpdateModal,
   kebabItems,
   setRemoveModal,
   setIsAddModalOpen,
@@ -264,12 +263,10 @@ const DeviceTable = ({
       actions.push({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
-          //console.log("DeviceTable > rowData:", rowData);
-          setUpdatePage((prevState) => {
+          setUpdateModal((prevState) => {
             return {
               ...prevState,
               isOpen: true,
-              imageData: { imageName: rowData?.rowInfo?.imageName },
               deviceData: [
                 {
                   id: rowData.rowInfo.id,
@@ -308,7 +305,7 @@ const DeviceTable = ({
     <>
       {isSystemsView && emptyStateNoFliters(isLoading, count, history) ? (
         <CustomEmptyState
-          data-testid='general-table-empty-state-no-data'
+          data-testid="general-table-empty-state-no-data"
           icon={'plus'}
           title={'Connect edge systems'}
           body={
@@ -391,7 +388,7 @@ DeviceTable.propTypes = {
   count: PropTypes.number,
   isLoading: PropTypes.bool,
   hasError: PropTypes.bool,
-  setUpdatePage: PropTypes.func,
+  setUpdateModal: PropTypes.func,
   handleSingleDeviceRemoval: PropTypes.func,
   kebabItems: PropTypes.array,
   setRemoveModal: PropTypes.func,

@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { headerCol } from '@patternfly/react-table';
@@ -7,6 +5,7 @@ import { Button, Divider } from '@patternfly/react-core';
 import { updateSystemByCommitID } from '../../api/devices';
 import { useDispatch } from 'react-redux';
 import apiWithToast from '../../utils/apiWithToast';
+import PropTypes from 'prop-types';
 
 const filters = [
   { label: 'Version', type: 'text' },
@@ -104,7 +103,7 @@ const UpdateVersionTable = ({ data, setUpdatePage, refreshTable }) => {
   return (
     <>
       <GeneralTable
-        className='pf-u-mt-sm'
+        className="pf-u-mt-sm"
         apiFilterSort={true}
         isUseApi={false}
         loadTableData={() => buildRows}
@@ -139,8 +138,8 @@ const UpdateVersionTable = ({ data, setUpdatePage, refreshTable }) => {
 
         <Button
           style={{ left: '60px' }}
-          key='confirm'
-          variant='primary'
+          key="confirm"
+          variant="primary"
           isDisabled={!selectedVersion}
           onClick={() => handleUpdateEvent()}
         >
@@ -148,8 +147,8 @@ const UpdateVersionTable = ({ data, setUpdatePage, refreshTable }) => {
         </Button>
         <Button
           style={{ left: '70px' }}
-          key='cancel'
-          variant='link'
+          key="cancel"
+          variant="link"
           onClick={handleClose}
         >
           Cancel
@@ -159,4 +158,9 @@ const UpdateVersionTable = ({ data, setUpdatePage, refreshTable }) => {
   );
 };
 
+UpdateVersionTable.propTypes = {
+  data: PropTypes.array,
+  setUpdatePage: PropTypes.func,
+  refreshTable: PropTypes.func,
+};
 export default UpdateVersionTable;

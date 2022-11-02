@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
@@ -39,11 +38,11 @@ const CurrentVersion = ({ data }) => {
   return (
     <>
       <TextContent>
-        <Title headingLevel='h2'>
+        <Title headingLevel="h2">
           <Text>Current version</Text>
         </Title>
       </TextContent>
-      <Flex className='pf-u-mt-sm' spaceItems={{ default: 'spaceItems4xl' }}>
+      <Flex className="pf-u-mt-sm" spaceItems={{ default: 'spaceItems4xl' }}>
         <FlexItem
           spacer={{ default: 'spacerXs' }}
           style={{ width: '48px' }}
@@ -51,10 +50,10 @@ const CurrentVersion = ({ data }) => {
         {d.map(({ label, value, width }, index) => {
           return (
             <FlexItem key={index} style={{ width: width }}>
-              <Text className='pf-u-font-size-sm' component={'b'}>
+              <Text className="pf-u-font-size-sm" component={'b'}>
                 {label}
               </Text>
-              <Text className='pf-u-mt-sm pf-u-font-size-sm'>{value}</Text>
+              <Text className="pf-u-mt-sm pf-u-font-size-sm">{value}</Text>
             </FlexItem>
           );
         })}
@@ -62,13 +61,16 @@ const CurrentVersion = ({ data }) => {
     </>
   );
 };
+CurrentVersion.propTypes = {
+  data: PropTypes.array,
+};
 
 const AllVersions = ({ data, setUpdatePage, refreshTable }) => {
   return (
     <>
       <TextContent>
-        <Title headingLevel='h2'>
-          <Text className='pf-u-mt-md'>Select version to update to</Text>
+        <Title headingLevel="h2">
+          <Text className="pf-u-mt-md">Select version to update to</Text>
         </Title>
       </TextContent>
       <UpdateVersionTable
@@ -80,7 +82,9 @@ const AllVersions = ({ data, setUpdatePage, refreshTable }) => {
   );
 };
 AllVersions.propTypes = {
+  data: PropTypes.array,
   setUpdatePage: PropTypes.func,
+  refreshTable: PropTypes.func,
 };
 
 const PageLayout = (props) => {
@@ -94,10 +98,15 @@ const PageLayout = (props) => {
     </Page>
   );
 };
+PageLayout.propTypes = {
+  children: PropTypes.any,
+  data: PropTypes.array,
+  setUpdatePage: PropTypes.func,
+  refreshTable: PropTypes.func,
+};
 
 const UpdateSystems = ({ setUpdatePage, updatePage, refreshTable }) => {
   const [imageData, setImageData] = useState();
-  //useApi
   useEffect(() => {
     (async () => {
       const image_data = await getDeviceHasUpdate(updatePage.deviceData[0].id);
@@ -122,7 +131,7 @@ const UpdateSystems = ({ setUpdatePage, updatePage, refreshTable }) => {
           systemsRunning: 'TBD',
           created: (
             <span>
-              <DateFormat type='relative' date={element?.CreatedAt} />
+              <DateFormat type="relative" date={element?.CreatedAt} />
             </span>
           ),
           commitID: element?.CommitID,
@@ -148,7 +157,7 @@ const UpdateSystems = ({ setUpdatePage, updatePage, refreshTable }) => {
       ) : (
         <Backdrop>
           <Bullseye>
-            <Spinner isSVG diameter='100px' />
+            <Spinner isSVG diameter="100px" />
           </Bullseye>
         </Backdrop>
       )}
@@ -156,6 +165,10 @@ const UpdateSystems = ({ setUpdatePage, updatePage, refreshTable }) => {
   );
 };
 
-UpdateSystems.propTypes = { setUpdatePage: PropTypes.func };
+UpdateSystems.PropTypes = {
+  setUpdatePage: PropTypes.func,
+  refreshTable: PropTypes.func,
+  updatePage: PropTypes.object,
+};
 
 export default UpdateSystems;
