@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable prettier/prettier */
-import React, { Fragment, useState, Suspense } from 'react';
+import React, { Fragment, useState } from 'react';
 import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
-import { useHistory } from 'react-router-dom';
+//import { useHistory } from 'react-router-dom';
 import DeviceTable from './DeviceTable';
 import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
@@ -42,7 +40,7 @@ const Inventory = () => {
     imageData: null,
   });
 
-  const history = useHistory();
+  //const history = useHistory();
 
   const handleAddDevicesToGroup = (ids, isRow) => {
     setIsAddDeviceModalOpen(true);
@@ -99,7 +97,7 @@ const Inventory = () => {
 
   return (
     <Fragment>
-      <PageHeader className='pf-m-light'>
+      <PageHeader className="pf-m-light">
         {updatePage.isOpen && (
           <Breadcrumb>
             <BreadcrumbItem
@@ -107,14 +105,14 @@ const Inventory = () => {
                 setUpdatePage((prev) => ({ ...prev, isOpen: false }))
               }
             >
-              <Link to='/inventory'>Systems</Link>
+              <Link to="/inventory">Systems</Link>
             </BreadcrumbItem>
             <BreadcrumbItem>Update</BreadcrumbItem>
           </Breadcrumb>
         )}
         <PageHeaderTitle title={updatePage.isOpen ? 'Update' : 'Systems'} />
         {updatePage.isOpen && (
-          <TextContent className='pf-u-mt-md'>
+          <TextContent className="pf-u-mt-md">
             <Text>
               Update <strong>{updatePage?.deviceData[0].display_name}</strong>{' '}
               to a newer version of{' '}
@@ -124,7 +122,7 @@ const Inventory = () => {
           </TextContent>
         )}
       </PageHeader>
-      <Main className='edge-devices'>
+      <Main className="edge-devices">
         {!updatePage.isOpen ? (
           <DeviceTable
             isSystemsView={true}

@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
 import ToolbarHeader from './ToolbarHeader';
 import ToolbarFooter from './ToolbarFooter';
@@ -279,7 +278,7 @@ const GeneralTable = ({
 
   const loadingRows = (perPage) =>
     [...Array(skeletonRowQuantity ?? perPage)].map(() => ({
-      cells: columnNames.map(() => ({ title: <Skeleton width='100%' /> })),
+      cells: columnNames.map(() => ({ title: <Skeleton width="100%" /> })),
     }));
 
   const emptyFilterView = () => {
@@ -294,8 +293,8 @@ const GeneralTable = ({
             },
             title: (
               <CustomEmptyState
-                data-testid='general-table-empty-state-no-match'
-                bgColor='white'
+                data-testid="general-table-empty-state-no-match"
+                bgColor="white"
                 icon={emptyFilterState?.icon ?? 'search'}
                 title={emptyFilterState?.title ?? 'No match found'}
                 body={emptyFilterState?.body ?? ''}
@@ -375,9 +374,9 @@ const GeneralTable = ({
         ) : null}
       </ToolbarHeader>
       <Table
-        data-testid='general-table-testid'
-        variant='compact'
-        aria-label='General Table Component'
+        data-testid="general-table-testid"
+        variant="compact"
+        aria-label="General Table Component"
         sortBy={hasCheckbox ? { ...sortBy, index: sortBy.index + 1 } : sortBy}
         onSort={handleSort}
         actionResolver={actionResolver ? actionResolver : null}
