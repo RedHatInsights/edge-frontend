@@ -1,7 +1,5 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
 import {
   Page,
   PageSection,
@@ -165,7 +163,7 @@ const UpdateSystems = ({ setUpdatePage, updatePage, refreshTable }) => {
   );
 };
 
-UpdateSystems.PropTypes = {
+UpdateSystems.propTypes = {
   setUpdatePage: PropTypes.func,
   refreshTable: PropTypes.func,
   updatePage: PropTypes.object,

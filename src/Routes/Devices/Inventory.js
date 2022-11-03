@@ -4,7 +4,6 @@ import {
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
-//import { useHistory } from 'react-router-dom';
 import DeviceTable from './DeviceTable';
 import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
@@ -39,8 +38,6 @@ const Inventory = () => {
     deviceData: null,
     imageData: null,
   });
-
-  //const history = useHistory();
 
   const handleAddDevicesToGroup = (ids, isRow) => {
     setIsAddDeviceModalOpen(true);
@@ -114,9 +111,9 @@ const Inventory = () => {
         {updatePage.isOpen && (
           <TextContent className="pf-u-mt-md">
             <Text>
-              Update <strong>{updatePage?.deviceData[0].display_name}</strong>{' '}
+              Update <strong>{updatePage?.deviceData[0]?.display_name}</strong>{' '}
               to a newer version of{' '}
-              <strong>{updatePage?.imageData.imageName}</strong> by selecting a
+              <strong>{updatePage?.imageData?.imageName}</strong> by selecting a
               new version from the table below.
             </Text>
           </TextContent>
