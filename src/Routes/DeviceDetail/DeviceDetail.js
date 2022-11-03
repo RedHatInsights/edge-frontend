@@ -141,6 +141,7 @@ const DeviceDetail = () => {
             ]}
             hideBack
             hideInvDrawer
+            inventoryId={deviceId}
           />
 
           {isDeviceStatusLoading ? (
