@@ -15,13 +15,6 @@ export const getDeviceHasUpdate = async (id) => {
   }
 };
 
-export const updateDeviceLatestImage = async (payload) => {
+export const updateSystemToSpecificImage = async (payload) => {
   return await instance.post(`${EDGE_API}/updates`, payload);
-};
-
-export const updateSystemByCommitID = async (payload) => {
-  return await instance.post(`${EDGE_API}/updates`, {
-    CommitID: payload.CommitID,
-    DevicesUUID: payload.DevicesUUID,
-  });
 };

@@ -22,10 +22,6 @@ const ToolbarFooter = ({
   };
 
   if (isFooterFixed) {
-    // styles.position = 'fixed';
-    // styles.left = '0';
-    // styles.bottom = '0';
-    // styles.width = '100%';
     styles.paddingBottom = '30px';
     styles.paddingTop = '20px';
   }
