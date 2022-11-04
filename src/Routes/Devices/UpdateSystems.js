@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import {
   Page,
   PageSection,
-  Flex,
-  FlexItem,
   Text,
   TextContent,
   Title,
@@ -13,6 +11,8 @@ import {
   Bullseye,
   Spinner,
   Backdrop,
+  Grid,
+  GridItem,
 } from '@patternfly/react-core';
 import UpdateVersionTable from './UpdateVersionTable';
 import { getDeviceHasUpdate } from '../../api/devices';
@@ -21,16 +21,16 @@ import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 
 const CurrentVersion = ({ data }) => {
   let d = [
-    { label: 'Version', value: data[0]?.version, width: '145px' },
-    { label: 'Release', value: data[0]?.release, width: '154px' },
+    { label: 'Version', value: data[0]?.version, width: '180px' },
+    { label: 'Release', value: data[0]?.release, width: '190px' },
     {
       label: 'Additional packages',
       value: data[0]?.additionalPackages,
-      width: '144px',
+      width: '180px',
     },
-    { label: 'All packages', value: 'TBD', width: '140px' },
-    { label: 'Systems running', value: 'TBD', width: '145px' },
-    { label: 'Created', value: data[0]?.created, width: '140px' },
+    { label: 'All packages', value: 'TBD', width: '180px' },
+    { label: 'Systems running', value: 'TBD', width: '180px' },
+    { label: 'Created', value: data[0]?.created, width: 'max-content' },
   ];
 
   return (
@@ -40,22 +40,22 @@ const CurrentVersion = ({ data }) => {
           <Text>Current version</Text>
         </Title>
       </TextContent>
-      <Flex className="pf-u-mt-sm" spaceItems={{ default: 'spaceItems4xl' }}>
-        <FlexItem
-          spacer={{ default: 'spacerXs' }}
-          style={{ width: '48px' }}
-        ></FlexItem>
+      <Grid className="pf-u-mt-sm" span={12} style={{ paddingLeft: '43px' }}>
         {d.map(({ label, value, width }, index) => {
           return (
-            <FlexItem key={index} style={{ width: width }}>
+            <GridItem
+              key={index}
+              span={2}
+              style={{ width: width, padding: '8px', position: 'relative' }}
+            >
               <Text className="pf-u-font-size-sm" component={'b'}>
                 {label}
               </Text>
               <Text className="pf-u-mt-sm pf-u-font-size-sm">{value}</Text>
-            </FlexItem>
+            </GridItem>
           );
         })}
-      </Flex>
+      </Grid>
     </>
   );
 };
