@@ -46,7 +46,7 @@ const GroupTable = ({
 
   const actionResolver = (rowData) => {
     if (!rowData?.rowInfo) return [];
-    const { id, title, devices, devicesImageInfo } = rowData?.rowInfo;
+    const { id, title, devices, devicesImageInfo } = rowData.rowInfo;
     const hasUpdate = devicesImageInfo?.some((image) => image.UpdateAvailable);
 
     return (
@@ -81,7 +81,7 @@ const GroupTable = ({
   };
 
   const buildRows = data?.map((rowData) => {
-    const { ID, Name, Devices } = rowData?.DeviceGroup;
+    const { ID, Name, Devices } = rowData.DeviceGroup;
     let { DevicesImageInfo } = rowData;
     if (!DevicesImageInfo) {
       DevicesImageInfo = [];
