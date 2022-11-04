@@ -26,7 +26,7 @@
             "!src/**/stories/*"
         ],
         "transformIgnorePatterns": [
-            "<rootDir>/node_modules/(?!(@data-driven-forms/|@patternfly/|@redhat-cloud-services/|unleash-proxy-client/|uuid/)).*$"
+            "<rootDir>/node_modules/(?!(@data-driven-forms/|@patternfly/|@redhat-cloud-services/|uuid/)).*$"
         ],
         "coverageDirectory": "./coverage/",
         "moduleNameMapper": {
