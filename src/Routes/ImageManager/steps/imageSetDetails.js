@@ -9,24 +9,13 @@ import { nameValidator } from '../../../utils';
 const helperText =
   'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).';
 
-const asyncImageNameValidation = (value) =>
-  checkImageName(value)
-    .then((result) => {
-      if (result.ImageExists) {
-        throw new Error('Name already exists');
-      }
-    })
-    .catch(({ message }) => {
-      throw message;
-    });
-
 const CharacterCount = () => {
   const { getState } = useFormApi();
   const description = getState().values?.description;
   return <h1>{description?.length || 0}/250</h1>;
 };
 
-export default {
+const getImageSetDetailsSchema = () => ({
   title: 'Details',
   name: 'imageSetDetails',
   nextStep: 'imageOutput',
@@ -47,10 +36,21 @@ export default {
       placeholder: 'Image name',
       helperText: helperText,
       validate: [
-        asyncImageNameValidation,
+        // Define async validator inline here, so that results are not cached
+        async (value = '') => {
+          // Do not fire validation request for empty name
+          if (value.length === 0) {
+            return undefined;
+          }
+          const resp = await checkImageName(value);
+          if (resp.ImageExists) {
+            // Async validator has to throw error, not return it
+            throw 'Name already exists';
+          }
+        },
         { type: validatorTypes.REQUIRED },
-        nameValidator,
         { type: validatorTypes.MAX_LENGTH, threshold: 50 },
+        nameValidator,
       ],
       isRequired: true,
     },
@@ -72,9 +72,10 @@ export default {
         </Flex>
       ),
       placeholder: 'Add description',
-
       resizeOrientation: 'vertical',
       validate: [{ type: validatorTypes.MAX_LENGTH, threshold: 250 }],
     },
   ],
-};
+});
+
+export default getImageSetDetailsSchema;

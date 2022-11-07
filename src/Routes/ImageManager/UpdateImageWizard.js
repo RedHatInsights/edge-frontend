@@ -31,7 +31,6 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
     navigateBack();
     reload && reload();
   };
-  const customRepoFlag = useFeatureFlags('fleet-management.custom-repos');
   const temporaryReleasesFlag = useFeatureFlags(
     'fleet-management.temporary-releases'
   );
@@ -151,7 +150,6 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
             ])
           : getReleases(data?.image?.Distribution),
         imageType: ['rhel-edge-commit'],
-        includesCustomRepos: customRepoFlag,
         'selected-packages': data?.image?.Packages?.map((pkg) => ({
           ...pkg,
           name: pkg.Name,

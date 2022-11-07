@@ -80,7 +80,7 @@ describe('DetailsHeader', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: /actions/i }));
     fireEvent.click(
-      screen.getByRole('button', { name: /create new version/i })
+      screen.getByRole('menuitem', { name: /Create new version/i })
     );
     expect(openUpdateWizard).toBeCalled();
 

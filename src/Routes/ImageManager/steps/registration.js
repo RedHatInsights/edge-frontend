@@ -6,8 +6,7 @@ import validatorTypes from '@data-driven-forms/react-form-renderer/validator-typ
 export default {
   title: 'System registration',
   name: 'registration',
-  nextStep: ({ values }) =>
-    values?.includesCustomRepos ? 'repositories' : 'packages',
+  nextStep: 'repositories',
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,

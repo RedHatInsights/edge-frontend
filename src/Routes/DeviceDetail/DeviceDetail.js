@@ -20,12 +20,12 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { deviceDetail } from '../../store/deviceDetail';
 import { RegistryContext } from '../../store';
-import systemProfileStore from '@redhat-cloud-services/frontend-components-inventory-general-info/redux';
 import DeviceDetailTabs from './DeviceDetailTabs';
 import { getDeviceHasUpdate, getInventory } from '../../api/devices';
 import Status, { getDeviceStatus } from '../../components/Status';
 import useApi from '../../hooks/useApi';
 import RetryUpdatePopover from '../Devices/RetryUpdatePopover';
+import { useLoadModule } from '@scalprum/react-core';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(
@@ -34,6 +34,14 @@ const UpdateDeviceModal = React.lazy(() =>
 );
 
 const DeviceDetail = () => {
+  const [{ default: systemProfileStore }] = useLoadModule(
+    {
+      appName: 'inventory',
+      scope: 'inventory',
+      module: './systemProfileStore',
+    },
+    {}
+  );
   const [imageId, setImageId] = useState(null);
   const { getRegistry } = useContext(RegistryContext);
   const { deviceId } = useParams();
@@ -98,111 +106,114 @@ const DeviceDetail = () => {
     })();
   }, [entity, reload]);
 
-  return (
-    <>
-      <DetailWrapper
-        hideInvLink
-        showTags
-        onLoad={({ mergeWithDetail }) => {
-          getRegistry().register({
-            systemProfileStore,
-            ...mergeWithDetail(deviceDetail),
-          });
-        }}
-      >
-        <PageHeader>
-          <Breadcrumb ouiaId="systems-list">
-            <BreadcrumbItem>
-              <Link to="/inventory">Systems</Link>
-            </BreadcrumbItem>
-            <BreadcrumbItem isActive>
-              <div className="ins-c-inventory__detail--breadcrumb-name">
-                {entity?.display_name || <Skeleton size={SkeletonSize.xs} />}
-              </div>
-            </BreadcrumbItem>
-          </Breadcrumb>
-          <InventoryDetailHead
-            fallback=""
-            actions={[
-              {
-                title: 'Update',
-                isDisabled:
-                  imageData?.UpdateTransactions?.[0]?.Status === 'BUILDING' ||
-                  imageData?.UpdateTransactions?.[0]?.Status === 'CREATED' ||
-                  !imageData?.ImageInfo?.UpdatesAvailable?.length > 0 ||
-                  !updateModal.imageSetId,
-                onClick: () => {
-                  setUpdateModal((prevState) => ({
-                    ...prevState,
-                    isOpen: true,
-                  }));
-                },
+  return systemProfileStore ? (
+    <DetailWrapper
+      hideInvLink
+      showTags
+      onLoad={({ mergeWithDetail }) => {
+        getRegistry().register({
+          systemProfileStore,
+          ...mergeWithDetail(deviceDetail),
+        });
+      }}
+    >
+      <PageHeader>
+        <Breadcrumb ouiaId="systems-list">
+          <BreadcrumbItem>
+            <Link to="/inventory">Systems</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem isActive>
+            <div className="ins-c-inventory__detail--breadcrumb-name">
+              {entity?.display_name || <Skeleton size={SkeletonSize.xs} />}
+            </div>
+          </BreadcrumbItem>
+        </Breadcrumb>
+        <InventoryDetailHead
+          fallback=""
+          actions={[
+            {
+              title: 'Update',
+              isDisabled:
+                imageData?.UpdateTransactions?.[0]?.Status === 'BUILDING' ||
+                imageData?.UpdateTransactions?.[0]?.Status === 'CREATED' ||
+                !imageData?.ImageInfo?.UpdatesAvailable?.length > 0 ||
+                !updateModal.imageSetId,
+              onClick: () => {
+                setUpdateModal((prevState) => ({
+                  ...prevState,
+                  isOpen: true,
+                }));
               },
-            ]}
-            hideBack
-            hideInvDrawer
-          />
+            },
+          ]}
+          hideBack
+          hideInvDrawer
+          inventoryId={deviceId}
+        />
 
-          {isDeviceStatusLoading ? (
-            <Skeleton size={SkeletonSize.xs} />
-          ) : deviceStatus === 'error' || deviceStatus === 'unresponsive' ? (
-            <RetryUpdatePopover
-              lastSeen={lastSeen}
-              device={deviceView}
-              position={'right'}
-              fetchDevices={fetchDeviceData}
-            >
-              <Status
-                type={
-                  deviceStatus === 'error'
-                    ? 'errorWithExclamationCircle'
-                    : deviceStatus
-                }
-                isLink={true}
-                isLabel={true}
-                className="pf-u-mt-sm cursor-pointer"
-              />
-            </RetryUpdatePopover>
-          ) : (
-            <Status type={deviceStatus} isLabel={true} className="pf-u-mt-sm" />
-          )}
-        </PageHeader>
-        <Grid gutter="md">
-          <GridItem span={12}>
-            <DeviceDetailTabs
-              systemProfile={imageData}
-              imageId={imageId}
-              setUpdateModal={setUpdateModal}
-              setReload={setReload}
-            />
-          </GridItem>
-        </Grid>
-        {updateModal.isOpen && (
-          <Suspense
-            fallback={
-              <Bullseye>
-                <Spinner />
-              </Bullseye>
-            }
+        {isDeviceStatusLoading ? (
+          <Skeleton size={SkeletonSize.xs} />
+        ) : deviceStatus === 'error' || deviceStatus === 'unresponsive' ? (
+          <RetryUpdatePopover
+            lastSeen={lastSeen}
+            device={deviceView}
+            position={'right'}
+            fetchDevices={fetchDeviceData}
           >
-            <UpdateDeviceModal
-              navigateBack={() => {
-                history.push({ pathname: history.location.pathname });
-                setUpdateModal((prevState) => {
-                  return {
-                    ...prevState,
-                    isOpen: false,
-                  };
-                });
-              }}
-              setUpdateModal={setUpdateModal}
-              updateModal={updateModal}
-              refreshTable={() => setReload(true)}
+            <Status
+              type={
+                deviceStatus === 'error'
+                  ? 'errorWithExclamationCircle'
+                  : deviceStatus
+              }
+              isLink={true}
+              isLabel={true}
+              className="pf-u-mt-sm cursor-pointer"
             />
-          </Suspense>
+          </RetryUpdatePopover>
+        ) : (
+          <Status type={deviceStatus} isLabel={true} className="pf-u-mt-sm" />
         )}
-      </DetailWrapper>
-    </>
+      </PageHeader>
+      <Grid gutter="md">
+        <GridItem span={12}>
+          <DeviceDetailTabs
+            systemProfile={imageData}
+            imageId={imageId}
+            setUpdateModal={setUpdateModal}
+            setReload={setReload}
+          />
+        </GridItem>
+      </Grid>
+      {updateModal.isOpen && (
+        <Suspense
+          fallback={
+            <Bullseye>
+              <Spinner />
+            </Bullseye>
+          }
+        >
+          <UpdateDeviceModal
+            navigateBack={() => {
+              history.push({ pathname: history.location.pathname });
+              setUpdateModal((prevState) => {
+                return {
+                  ...prevState,
+                  isOpen: false,
+                };
+              });
+            }}
+            setUpdateModal={setUpdateModal}
+            updateModal={updateModal}
+            refreshTable={() => setReload(true)}
+          />
+        </Suspense>
+      )}
+    </DetailWrapper>
+  ) : (
+    <Bullseye>
+      <Spinner />
+    </Bullseye>
   );
 };
 

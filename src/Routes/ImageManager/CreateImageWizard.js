@@ -6,7 +6,7 @@ import {
   review,
   packages,
   repositories,
-  imageSetDetails,
+  getImageSetDetailsSchema,
   imageOutput,
   customPackages,
 } from './steps';
@@ -23,7 +23,6 @@ import { DEFAULT_RELEASE, TEMPORARY_RELEASE } from '../../constants';
 const CreateImage = ({ navigateBack, reload }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
-  const customRepoFlag = useFeatureFlags('fleet-management.custom-repos');
   const temporaryReleasesFlag = useFeatureFlags(
     'fleet-management.temporary-releases'
   );
@@ -32,6 +31,7 @@ const CreateImage = ({ navigateBack, reload }) => {
     navigateBack();
     reload && reload();
   };
+
   useEffect(() => {
     (async () => {
       insights?.chrome?.auth
@@ -39,6 +39,10 @@ const CreateImage = ({ navigateBack, reload }) => {
         .then((result) => setUser(result != undefined ? result : {}));
     })();
   }, []);
+
+  // Re-initialize imageSetDetails schema each render, to avoid cache
+  // of async validator results across multiple instances of the form.
+  const imageSetDetails = getImageSetDetailsSchema();
 
   return user ? (
     <ImageCreator
@@ -105,7 +109,6 @@ const CreateImage = ({ navigateBack, reload }) => {
       initialValues={{
         version: 0,
         release: temporaryReleasesFlag ? TEMPORARY_RELEASE : DEFAULT_RELEASE,
-        includesCustomRepos: customRepoFlag,
       }}
       schema={{
         fields: [
@@ -121,13 +124,10 @@ const CreateImage = ({ navigateBack, reload }) => {
             showTitles: true,
             title: 'Create image',
             crossroads: [
-              'target-environment',
               'release',
               'imageType',
               'third-party-repositories',
               'imageOutput',
-              'imageSetDetails',
-              'includesCustomRepos',
             ],
             // order in this array does not reflect order in wizard nav, this order is managed inside
             // of each step by `nextStep` property!
