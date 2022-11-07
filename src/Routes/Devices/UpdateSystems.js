@@ -34,6 +34,7 @@ const CurrentVersion = ({ data }) => {
       value: data[0]?.systemsRunning,
       width: '180px',
     },
+
     { label: 'Created', value: data[0]?.created, width: 'max-content' },
   ];
 
