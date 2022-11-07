@@ -28,8 +28,12 @@ const CurrentVersion = ({ data }) => {
       value: data[0]?.additionalPackages,
       width: '180px',
     },
-    { label: 'All packages', value: 'TBD', width: '180px' },
-    { label: 'Systems running', value: 'TBD', width: '180px' },
+    { label: 'All packages', value: data[0]?.allPackages, width: '180px' },
+    {
+      label: 'Systems running',
+      value: data[0]?.systemsRunning,
+      width: '180px',
+    },
     { label: 'Created', value: data[0]?.created, width: 'max-content' },
   ];
 
@@ -114,27 +118,33 @@ const UpdateSystems = ({ setUpdatePage, updatePage, refreshTable }) => {
 
   const buildRows = (data, all) => {
     var d = [];
-    var uuid = data?.Device?.UUID;
-    var device_name = data?.Device?.DeviceName;
 
     {
-      data = all ? data?.ImageInfo?.UpdatesAvailable : [data?.ImageInfo?.Image];
-      data?.map((element) => {
+      var _data = all
+        ? data?.ImageInfo?.UpdatesAvailable
+        : [data?.ImageInfo?.Image];
+      _data?.map((element, index) => {
         element = all ? element?.Image : element;
         d.push({
           version: element?.Version,
           release: distributionMapper[element?.Distribution],
-          additionalPackages: element?.Packages?.length,
-          allPackages: 'TBD',
-          systemsRunning: 'TBD',
+          additionalPackages: element?.Packages?.length
+            ? element?.Packages?.length
+            : '0',
+          allPackages: all
+            ? _data[index]?.TotalPackages
+            : data?.ImageInfo?.TotalPackages,
+          systemsRunning: all
+            ? _data[index]?.SystemsRunning
+            : data?.ImageInfo?.SystemsRunning,
           created: (
             <span>
               <DateFormat type="relative" date={element?.CreatedAt} />
             </span>
           ),
           commitID: element?.CommitID,
-          deviceUUID: uuid,
-          deviceName: device_name,
+          deviceUUID: data?.Device?.UUID,
+          deviceName: data?.Device?.DeviceName,
         });
       });
     }

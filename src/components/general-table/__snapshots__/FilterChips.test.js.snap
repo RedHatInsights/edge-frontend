@@ -2,16 +2,15 @@
 
 exports[`Filter chips should render correctly 1`] = `
 <div
-  aria-labelledby="pf-random-id-0"
   class="pf-c-chip-group pf-u-mr-xs pf-m-category"
   data-ouia-component-type="PF4/ChipGroup"
   data-ouia-safe="true"
-  role="group"
 >
   <div
     class="pf-c-chip-group__main"
   >
     <span
+      aria-hidden="true"
       class="pf-c-chip-group__label"
       id="pf-random-id-0"
     >
