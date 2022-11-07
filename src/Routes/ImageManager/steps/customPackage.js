@@ -71,20 +71,20 @@ const CustomPackageLabel = () => {
             headerContent="Custom Repositories"
             bodyContent={
               <Stack>
-                {addedRepos.map((repo) => (
-                  <StackItem key={repo}>
-                    <Text>{repo.name}</Text>
+                {addedRepos.map(({ name }) => (
+                  <StackItem key={name}>
+                    <Text>{name}</Text>
                   </StackItem>
                 ))}
               </Stack>
             }
           >
             <Button variant="link" isInline>
-              {addedRepos.length} custom repositories
-            </Button>{' '}
-            to your
-          </Popover>
-          <b> {releaseName}</b> image.
+              {addedRepos.length} custom{' '}
+              {addedRepos.length === 1 ? 'repository' : 'repositories'}
+            </Button>
+          </Popover>{' '}
+          to your <b>{releaseName}</b> image.
         </Text>
       </TextContent>
       {addedRepos.length === 0 && customPackages.length > 0 ? (
