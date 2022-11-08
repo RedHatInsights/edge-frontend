@@ -3,21 +3,11 @@ import { getImageDataOnDevice } from '../api/images';
 import { routes as paths } from '../constants/routeMapper';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
+import LoadingCard from '@redhat-cloud-services/frontend-components-inventory-general-info/LoadingCard';
 import {
   Skeleton,
   SkeletonSize,
 } from '@redhat-cloud-services/frontend-components/Skeleton';
-import CmpLoader from './CmpLoader';
-
-const LoadingCard = (props) => (
-  <AsyncComponent
-    appName="inventory"
-    module="./LoadingCard"
-    fallback={<CmpLoader numberOfRows={5} />}
-    {...props}
-  />
-);
 
 const ImageInformationCard = () => {
   const deviceId = useSelector(
