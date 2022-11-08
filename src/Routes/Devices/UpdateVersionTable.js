@@ -28,7 +28,13 @@ const columns = [
   { title: 'Created' },
 ];
 
-const UpdateVersionTable = ({ data, setUpdatePage, refreshTable }) => {
+const UpdateVersionTable = ({
+  data,
+  setUpdatePage,
+  refreshTable,
+  isLoading,
+  hasError,
+}) => {
   const [selectedVersion, setSelectedVersion] = useState(null);
   const [selectedCommitID, setSelectedCommitID] = useState(null);
   const dispatch = useDispatch();
@@ -110,8 +116,8 @@ const UpdateVersionTable = ({ data, setUpdatePage, refreshTable }) => {
         filters={filters}
         tableData={{
           count: data?.length,
-          isLoading: false,
-          hasError: false,
+          isLoading,
+          hasError,
         }}
         columnNames={columns}
         rows={buildRows}
@@ -162,5 +168,7 @@ UpdateVersionTable.propTypes = {
   data: PropTypes.array,
   setUpdatePage: PropTypes.func,
   refreshTable: PropTypes.func,
+  isLoading: PropTypes.bool,
+  hasError: PropTypes.bool,
 };
 export default UpdateVersionTable;

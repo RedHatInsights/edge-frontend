@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Page,
@@ -18,6 +18,7 @@ import UpdateVersionTable from './UpdateVersionTable';
 import { getDeviceHasUpdate } from '../../api/devices';
 import { distributionMapper } from '../../constants';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
+import useApi from '../../hooks/useApi';
 
 const CurrentVersion = ({ data }) => {
   let d = [
@@ -95,7 +96,13 @@ CurrentVersion.propTypes = {
   data: PropTypes.array,
 };
 
-const AllVersions = ({ data, setUpdatePage, refreshTable }) => {
+const AllVersions = ({
+  data,
+  setUpdatePage,
+  refreshTable,
+  isLoading,
+  hasError,
+}) => {
   return (
     <>
       <TextContent>
@@ -107,6 +114,8 @@ const AllVersions = ({ data, setUpdatePage, refreshTable }) => {
         setUpdatePage={setUpdatePage}
         data={data}
         refreshTable={refreshTable}
+        isLoading={isLoading}
+        hasError={hasError}
       />
     </>
   );
@@ -115,6 +124,8 @@ AllVersions.propTypes = {
   data: PropTypes.array,
   setUpdatePage: PropTypes.func,
   refreshTable: PropTypes.func,
+  isLoading: PropTypes.bool,
+  hasError: PropTypes.bool,
 };
 
 const PageLayout = (props) => {
@@ -136,13 +147,11 @@ PageLayout.propTypes = {
 };
 
 const UpdateSystems = ({ setUpdatePage, updatePage, refreshTable }) => {
-  const [imageData, setImageData] = useState();
-  useEffect(() => {
-    (async () => {
-      const image_data = await getDeviceHasUpdate(updatePage.deviceData[0].id);
-      setImageData(image_data);
-    })();
-  }, []);
+  const [response] = useApi({
+    api: () => getDeviceHasUpdate(updatePage.deviceData[0].id),
+    tableReload: false,
+  });
+  const { data, isLoading, hasError } = response;
 
   const buildRows = (data, all) => {
     var d = [];
@@ -177,13 +186,15 @@ const UpdateSystems = ({ setUpdatePage, updatePage, refreshTable }) => {
 
   return (
     <>
-      {imageData ? (
+      {data ? (
         <PageLayout>
-          <CurrentVersion data={buildRows(imageData, false)} />
+          <CurrentVersion data={buildRows(data, false)} />
           <AllVersions
-            data={buildRows(imageData, true)}
+            data={buildRows(data, true)}
             setUpdatePage={setUpdatePage}
             refreshTable={refreshTable}
+            isLoading={isLoading}
+            hasError={hasError}
           />
         </PageLayout>
       ) : (
@@ -201,6 +212,8 @@ UpdateSystems.propTypes = {
   setUpdatePage: PropTypes.func,
   refreshTable: PropTypes.func,
   updatePage: PropTypes.object,
+  isLoading: PropTypes.bool,
+  hasError: PropTypes.bool,
 };
 
 export default UpdateSystems;
