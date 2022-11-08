@@ -21,21 +21,43 @@ import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 
 const CurrentVersion = ({ data }) => {
   let d = [
-    { label: 'Version', value: data[0]?.version, width: '180px' },
-    { label: 'Release', value: data[0]?.release, width: '190px' },
+    {
+      label: 'Version',
+      value: data[0]?.version,
+      width: '180px',
+      right: '10px',
+    },
+    {
+      label: 'Release',
+      value: data[0]?.release,
+      width: '190px',
+      right: '10px',
+    },
     {
       label: 'Additional packages',
       value: data[0]?.additionalPackages,
       width: '180px',
+      right: '15px',
     },
-    { label: 'All packages', value: data[0]?.allPackages, width: '180px' },
+    {
+      label: 'All packages',
+      value: data[0]?.allPackages,
+      width: '180px',
+      right: '25px',
+    },
     {
       label: 'Systems running',
       value: data[0]?.systemsRunning,
       width: '180px',
+      right: '40px',
     },
 
-    { label: 'Created', value: data[0]?.created, width: 'max-content' },
+    {
+      label: 'Created',
+      value: data[0]?.created,
+      width: 'max-content',
+      right: '60px',
+    },
   ];
 
   return (
@@ -46,12 +68,17 @@ const CurrentVersion = ({ data }) => {
         </Title>
       </TextContent>
       <Grid className="pf-u-mt-sm" span={12} style={{ paddingLeft: '43px' }}>
-        {d.map(({ label, value, width }, index) => {
+        {d.map(({ label, value, width, right }, index) => {
           return (
             <GridItem
               key={index}
               span={2}
-              style={{ width: width, padding: '8px', position: 'relative' }}
+              style={{
+                width: width,
+                padding: '8px',
+                position: 'relative',
+                right: right,
+              }}
             >
               <Text className="pf-u-font-size-sm" component={'b'}>
                 {label}
@@ -124,20 +151,16 @@ const UpdateSystems = ({ setUpdatePage, updatePage, refreshTable }) => {
       var _data = all
         ? data?.ImageInfo?.UpdatesAvailable
         : [data?.ImageInfo?.Image];
-      _data?.map((element, index) => {
+      _data?.map((element) => {
         element = all ? element?.Image : element;
         d.push({
           version: element?.Version,
           release: distributionMapper[element?.Distribution],
-          additionalPackages: element?.Packages?.length
+          additionalPackages: element?.Packages
             ? element?.Packages?.length
             : '0',
-          allPackages: all
-            ? _data[index]?.TotalPackages
-            : data?.ImageInfo?.TotalPackages,
-          systemsRunning: all
-            ? _data[index]?.SystemsRunning
-            : data?.ImageInfo?.SystemsRunning,
+          allPackages: element?.TotalPackages,
+          systemsRunning: element?.SystemsRunning,
           created: (
             <span>
               <DateFormat type="relative" date={element?.CreatedAt} />
