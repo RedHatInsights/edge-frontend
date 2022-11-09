@@ -202,7 +202,7 @@ const DeviceTable = ({
   count,
   isLoading,
   hasError,
-  setUpdateModal,
+  setUpdatePage,
   kebabItems,
   setRemoveModal,
   setIsAddModalOpen,
@@ -263,7 +263,7 @@ const DeviceTable = ({
       actions.push({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
-          setUpdateModal((prevState) => {
+          setUpdatePage((prevState) => {
             return {
               ...prevState,
               isOpen: true,
@@ -274,7 +274,7 @@ const DeviceTable = ({
                   deviceStatus: rowData.rowInfo.deviceStatus,
                 },
               ],
-              imageSetId: rowData.rowInfo.imageSetId,
+              imageData: { imageName: rowData.rowInfo.imageName },
             };
           });
         },
@@ -388,7 +388,7 @@ DeviceTable.propTypes = {
   count: PropTypes.number,
   isLoading: PropTypes.bool,
   hasError: PropTypes.bool,
-  setUpdateModal: PropTypes.func,
+  setUpdatePage: PropTypes.func,
   handleSingleDeviceRemoval: PropTypes.func,
   kebabItems: PropTypes.array,
   setRemoveModal: PropTypes.func,

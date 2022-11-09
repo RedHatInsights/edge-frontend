@@ -2,6 +2,7 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 
 const apiWithToast = (dispatch, api, statusMessages) => {
   const hasSuccess = statusMessages?.onSuccess;
+  const hasInfo = statusMessages?.onInfo;
 
   if (!statusMessages) {
     statusMessages = {
@@ -19,7 +20,14 @@ const apiWithToast = (dispatch, api, statusMessages) => {
   const fetchData = async () => {
     try {
       const response = await api();
-      if (hasSuccess) {
+      if (hasInfo) {
+        dispatch({
+          ...addNotification({
+            variant: 'info',
+            ...statusMessages.onInfo,
+          }),
+        });
+      } else if (hasSuccess) {
         dispatch({
           ...addNotification({
             variant: 'success',

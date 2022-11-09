@@ -70,6 +70,9 @@ const GeneralTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
   isUseApi,
+  hasRadio = false,
+  setRadioSelection,
+  isFooterFixed = false,
 }) => {
   const defaultCheckedRows = initSelectedItems ? initSelectedItems : [];
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
@@ -322,6 +325,24 @@ const GeneralTable = ({
     ? checkboxRows()
     : filteredRows;
 
+  const onSelect = () => {
+    if (isLoading) {
+      return null;
+    }
+
+    if (hasCheckbox) {
+      // change to handleCheckboxSelect
+      return handleSelect;
+    }
+
+    if (hasRadio) {
+      return (_event, _isSelecting, rowIndex) => {
+        const versionData = tableRows[rowIndex];
+        setRadioSelection(versionData);
+      };
+    }
+  };
+
   return (
     <>
       <ToolbarHeader
@@ -362,8 +383,9 @@ const GeneralTable = ({
         areActionsDisabled={areActionsDisabled}
         cells={columns}
         rows={tableRows}
-        onSelect={!isLoading && hasCheckbox && handleSelect}
+        onSelect={onSelect()}
         canSelectAll={false}
+        selectVariant={hasRadio ? 'radio' : hasCheckbox ? 'checkbox' : ''}
       >
         <TableHeader />
         <TableBody />
@@ -376,6 +398,7 @@ const GeneralTable = ({
         setPerPage={setPerPage}
         page={page}
         setPage={setPage}
+        isFooterFixed={isFooterFixed}
       />
     </>
   );
@@ -405,6 +428,10 @@ GeneralTable.propTypes = {
   setHasModalSubmitted: PropTypes.func,
   initSelectedItems: PropTypes.array,
   isUseApi: PropTypes.bool,
+  hasToolbar: PropTypes.bool,
+  hasRadio: PropTypes.bool,
+  setRadioSelection: PropTypes.func,
+  isFooterFixed: PropTypes.bool,
 };
 
 GeneralTable.defaultProps = {
