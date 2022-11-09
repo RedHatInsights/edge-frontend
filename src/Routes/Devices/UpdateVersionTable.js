@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { headerCol } from '@patternfly/react-table';
 import { Button, Divider } from '@patternfly/react-core';
-import { updateToSpecificImage } from '../../api/devices';
+import { updateSystemToSpecificImage } from '../../api/devices';
 import { useDispatch } from 'react-redux';
 import apiWithToast from '../../utils/apiWithToast';
 import PropTypes from 'prop-types';
@@ -87,7 +87,7 @@ const UpdateVersionTable = ({
     apiWithToast(
       dispatch,
       () =>
-        updateToSpecificImage({
+        updateSystemToSpecificImage({
           CommitID: selectedCommitID.commitID,
           DevicesUUID: [selectedCommitID.deviceUUID],
         }),
