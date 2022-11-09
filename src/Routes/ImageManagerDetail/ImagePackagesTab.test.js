@@ -48,7 +48,7 @@ describe('ImagePackagesTab', () => {
 
     expect(
       screen
-        .getByRole('textbox', 'Select input for name')
+        .getByRole('searchbox', 'Select input for name')
         .getAttribute('placeholder')
     ).toEqual('Filter by name');
     expect(screen.getByRole('button', { name: 'Additional' })).toBeDefined();
