@@ -41,7 +41,24 @@ More technically, spandx is a flexible, configuration-based reverse proxy for lo
 
 # Setup
 Install all dependencies
+Install NVM
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+```
+Source the new instructions NVM added to .bashrc
+```
+source ~/.bashrc
+```
+Install version 16
 ```bash
+nvm install 16
+```
+Use version 16
+```
+nvm use 16
+```
+install dependencies
+```
 npm install
 ```
 Verify that node version should be 16.13.0 <= 16.13.1
