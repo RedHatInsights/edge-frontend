@@ -11,7 +11,7 @@ import { DescriptionListTermHelpText } from '@patternfly/react-core';
 import ExclamationCircleIcon from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import apiWithToast from '../../utils/apiWithToast';
-import { updateDeviceLatestImage } from '../../api/devices';
+import { updateSystemToSpecificImage } from '../../api/devices';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -100,7 +100,7 @@ const RetryUpdatePopover = ({
                   apiWithToast(
                     dispatch,
                     async () => {
-                      await updateDeviceLatestImage({
+                      await updateSystemToSpecificImage({
                         DevicesUUID: [device.DeviceUUID],
                       });
                       setIsVisible(false);

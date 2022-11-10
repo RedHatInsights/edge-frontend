@@ -15,9 +15,18 @@ const ToolbarFooter = ({
   setPerPage,
   page,
   setPage,
+  isFooterFixed,
 }) => {
+  const styles = {
+    padding: '0',
+  };
+
+  if (isFooterFixed) {
+    styles.paddingBottom = '30px';
+    styles.paddingTop = '20px';
+  }
   return (
-    <Toolbar style={{ padding: '16px' }} id="toolbar-footer">
+    <Toolbar style={styles} id="toolbar-footer">
       <ToolbarContent>
         <ToolbarItem variant="pagination" align={{ default: 'alignRight' }}>
           {isLoading ? (
@@ -46,6 +55,7 @@ ToolbarFooter.propTypes = {
   setPerPage: PropTypes.func,
   page: PropTypes.number,
   setPage: PropTypes.func,
+  isFooterFixed: PropTypes.bool,
 };
 
 export default ToolbarFooter;
