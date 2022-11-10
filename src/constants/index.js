@@ -80,8 +80,8 @@ export const supportedReleases = ['rhel-84', 'rhel-85', 'rhel-87'];
 
 export const temporaryReleases = ['rhel-86', 'rhel-90'];
 
-export const DEFAULT_RELEASE = 'rhel-85';
-export const TEMPORARY_RELEASE = 'rhel-90';
+export const DEFAULT_RELEASE = 'rhel-90';
+export const TEMPORARY_RELEASE = 'rhel-87';
 
 export const imageTypeMapper = {
   'rhel-edge-commit': 'RHEL for Edge Commit (.tar)',
