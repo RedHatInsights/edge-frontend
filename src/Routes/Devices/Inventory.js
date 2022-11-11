@@ -1,21 +1,24 @@
-import React, { Fragment, useState, Suspense } from 'react';
+import React, { Fragment, useState } from 'react';
 import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
-import { useHistory } from 'react-router-dom';
 import DeviceTable from './DeviceTable';
 import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
 import CreateGroupModal from '../Groups/CreateGroupModal';
+import UpdateSystems from './UpdateSystems';
 import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api/devices';
-import { Bullseye, Spinner } from '@patternfly/react-core';
+import { Link } from 'react-router-dom';
 
-const UpdateDeviceModal = React.lazy(() =>
-  import(/* webpackChunkName: "CreateImageWizard" */ './UpdateDeviceModal')
-);
+import {
+  TextContent,
+  Text,
+  Breadcrumb,
+  BreadcrumbItem,
+} from '@patternfly/react-core';
 
 const Inventory = () => {
   const [response, fetchDevices] = useApi({
@@ -30,13 +33,11 @@ const Inventory = () => {
   const [isRowSelected, setIsRowSelected] = useState(false);
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
   const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
-  const [updateModal, setUpdateModal] = useState({
+  const [updatePage, setUpdatePage] = useState({
     isOpen: false,
     deviceData: null,
     imageData: null,
   });
-
-  const history = useHistory();
 
   const handleAddDevicesToGroup = (ids, isRow) => {
     setIsAddDeviceModalOpen(true);
@@ -72,15 +73,15 @@ const Inventory = () => {
     }
     return canBeUpdated;
   };
-
   const handleUpdateSelected = () => {
-    setUpdateModal((prevState) => ({
+    setUpdatePage((prevState) => ({
       ...prevState,
       deviceData: checkedDeviceIds.map((device) => ({
         id: device.id,
         display_name: device.display_name,
         deviceStatus: device.deviceStatus,
       })),
+      imageData: { imageName: checkedDeviceIds[0].imageName },
       imageSetId: checkedDeviceIds[0].imageSetId,
       isOpen: true,
     }));
@@ -94,65 +95,72 @@ const Inventory = () => {
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Systems" />
+        {updatePage.isOpen && (
+          <Breadcrumb>
+            <BreadcrumbItem
+              onClick={() =>
+                setUpdatePage((prev) => ({ ...prev, isOpen: false }))
+              }
+            >
+              <Link to="/inventory">Systems</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>Update</BreadcrumbItem>
+          </Breadcrumb>
+        )}
+        <PageHeaderTitle title={updatePage.isOpen ? 'Update' : 'Systems'} />
+        {updatePage.isOpen && (
+          <TextContent className="pf-u-mt-md">
+            <Text>
+              Update <strong>{updatePage?.deviceData[0]?.display_name}</strong>{' '}
+              to a newer version of{' '}
+              <strong>{updatePage?.imageData?.imageName}</strong> by selecting a
+              new version from the table below.
+            </Text>
+          </TextContent>
+        )}
       </PageHeader>
       <Main className="edge-devices">
-        <DeviceTable
-          isSystemsView={true}
-          data={data?.data?.devices}
-          count={data?.count}
-          isLoading={isLoading}
-          hasError={hasError}
-          setUpdateModal={setUpdateModal}
-          handleAddDevicesToGroup={handleAddDevicesToGroup}
-          handleRemoveDevicesFromGroup={handleRemoveDevicesFromGroup}
-          handleUpdateSelected={handleUpdateSelected}
-          hasCheckbox={true}
-          selectedItems={setCheckedDeviceIds}
-          selectedItemsUpdateable={canBeUpdated()}
-          kebabItems={[
-            {
-              isDisabled: !(checkedDeviceIds.length > 0),
-              title: 'Add to group',
-              onClick: () =>
-                handleAddDevicesToGroup(
-                  checkedDeviceIds.map((device) => ({
-                    ID: device.deviceID,
-                    name: device.display_name,
-                  })),
-                  false
-                ),
-            },
-          ]}
-          hasModalSubmitted={hasModalSubmitted}
-          setHasModalSubmitted={setHasModalSubmitted}
-          fetchDevices={fetchDevices}
-        />
-      </Main>
-      {updateModal.isOpen && (
-        <Suspense
-          fallback={
-            <Bullseye>
-              <Spinner />
-            </Bullseye>
-          }
-        >
-          <UpdateDeviceModal
-            navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
-              setUpdateModal((prevState) => {
-                return {
-                  ...prevState,
-                  isOpen: false,
-                };
-              });
-            }}
-            setUpdateModal={setUpdateModal}
-            updateModal={updateModal}
+        {!updatePage.isOpen ? (
+          <DeviceTable
+            isSystemsView={true}
+            data={data?.data?.devices}
+            count={data?.count}
+            isLoading={isLoading}
+            hasError={hasError}
+            setUpdatePage={setUpdatePage}
+            handleAddDevicesToGroup={handleAddDevicesToGroup}
+            handleRemoveDevicesFromGroup={handleRemoveDevicesFromGroup}
+            handleUpdateSelected={handleUpdateSelected}
+            hasCheckbox={true}
+            selectedItems={setCheckedDeviceIds}
+            selectedItemsUpdateable={canBeUpdated()}
+            kebabItems={[
+              {
+                isDisabled: !(checkedDeviceIds.length > 0),
+                title: 'Add to group',
+                onClick: () =>
+                  handleAddDevicesToGroup(
+                    checkedDeviceIds.map((device) => ({
+                      ID: device.deviceID,
+                      name: device.display_name,
+                    })),
+                    false
+                  ),
+              },
+            ]}
+            hasModalSubmitted={hasModalSubmitted}
+            setHasModalSubmitted={setHasModalSubmitted}
+            fetchDevices={fetchDevices}
+          />
+        ) : (
+          <UpdateSystems
+            setUpdatePage={setUpdatePage}
+            updatePage={updatePage}
             refreshTable={reloadData}
           />
-        </Suspense>
-      )}
+        )}
+      </Main>
+
       {isAddDeviceModalOpen && (
         <AddDeviceModal
           isModalOpen={isAddDeviceModalOpen}
