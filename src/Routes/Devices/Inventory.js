@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -8,19 +8,25 @@ import DeviceTable from './DeviceTable';
 import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
 import CreateGroupModal from '../Groups/CreateGroupModal';
-import UpdateSystems from './UpdateSystems';
+import UpdateSystem from './UpdateSystem';
 import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api/devices';
-import { Link } from 'react-router-dom';
-
+import { Link, useHistory } from 'react-router-dom';
 import {
   TextContent,
   Text,
   Breadcrumb,
   BreadcrumbItem,
+  Bullseye,
+  Spinner,
 } from '@patternfly/react-core';
 
+const UpdateDeviceModal = React.lazy(() =>
+  import(/* webpackChunkName: "UpdateDeviceModal" */ './UpdateDeviceModal')
+);
+
 const Inventory = () => {
+  const history = useHistory();
   const [response, fetchDevices] = useApi({
     api: getInventory,
     tableReload: true,
@@ -33,7 +39,14 @@ const Inventory = () => {
   const [isRowSelected, setIsRowSelected] = useState(false);
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
   const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
+
   const [updatePage, setUpdatePage] = useState({
+    isOpen: false,
+    deviceData: null,
+    imageData: null,
+  });
+
+  const [updateModal, setUpdateModal] = useState({
     isOpen: false,
     deviceData: null,
     imageData: null,
@@ -73,8 +86,9 @@ const Inventory = () => {
     }
     return canBeUpdated;
   };
+
   const handleUpdateSelected = () => {
-    setUpdatePage((prevState) => ({
+    setUpdateModal((prevState) => ({
       ...prevState,
       deviceData: checkedDeviceIds.map((device) => ({
         id: device.id,
@@ -93,7 +107,7 @@ const Inventory = () => {
   };
 
   return (
-    <Fragment>
+    <>
       <PageHeader className="pf-m-light">
         {updatePage.isOpen && (
           <Breadcrumb>
@@ -120,7 +134,13 @@ const Inventory = () => {
         )}
       </PageHeader>
       <Main className="edge-devices">
-        {!updatePage.isOpen ? (
+        {updatePage.isOpen ? (
+          <UpdateSystem
+            setUpdatePage={setUpdatePage}
+            systemId={updatePage.deviceData[0].id}
+            refreshTable={reloadData}
+          />
+        ) : (
           <DeviceTable
             isSystemsView={true}
             data={data?.data?.devices}
@@ -128,6 +148,8 @@ const Inventory = () => {
             isLoading={isLoading}
             hasError={hasError}
             setUpdatePage={setUpdatePage}
+            setUpdateModal={setUpdateModal}
+            updateModal={updateModal}
             handleAddDevicesToGroup={handleAddDevicesToGroup}
             handleRemoveDevicesFromGroup={handleRemoveDevicesFromGroup}
             handleUpdateSelected={handleUpdateSelected}
@@ -152,15 +174,32 @@ const Inventory = () => {
             setHasModalSubmitted={setHasModalSubmitted}
             fetchDevices={fetchDevices}
           />
-        ) : (
-          <UpdateSystems
-            setUpdatePage={setUpdatePage}
-            updatePage={updatePage}
-            refreshTable={reloadData}
-          />
         )}
       </Main>
-
+      {updateModal.isOpen && (
+        <Suspense
+          fallback={
+            <Bullseye>
+              <Spinner />
+            </Bullseye>
+          }
+        >
+          <UpdateDeviceModal
+            navigateBack={() => {
+              history.push({ pathname: history.location.pathname });
+              setUpdateModal((prevState) => {
+                return {
+                  ...prevState,
+                  isOpen: false,
+                };
+              });
+            }}
+            setUpdateModal={setUpdateModal}
+            updateModal={updateModal}
+            refreshTable={reloadData}
+          />
+        </Suspense>
+      )}
       {isAddDeviceModalOpen && (
         <AddDeviceModal
           isModalOpen={isAddDeviceModalOpen}
@@ -186,7 +225,7 @@ const Inventory = () => {
           deviceInfo={isRowSelected ? deviceId : checkedDeviceIds}
         />
       )}
-    </Fragment>
+    </>
   );
 };
 

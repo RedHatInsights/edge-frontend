@@ -10,7 +10,7 @@ import {
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
 import { getImageById, getImageSet } from '../../api/images';
-import { updateSystemToSpecificImage } from '../../api/devices';
+import { updateSystem } from '../../api/devices';
 import { useDispatch } from 'react-redux';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import Modal from '../../components/Modal';
@@ -56,7 +56,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
 
   const handleUpdateModal = async () => {
     try {
-      await updateSystemToSpecificImage({
+      await updateSystem({
         DevicesUUID: deviceId,
       });
       dispatch({

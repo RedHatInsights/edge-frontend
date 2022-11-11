@@ -275,7 +275,7 @@ const GroupsDetail = () => {
             selectedItems={getDeviceIds}
             setRemoveModal={setRemoveModal}
             setIsAddModalOpen={setIsAddModalOpen}
-            setUpdateModal={setUpdateModal}
+            setUpdatePage={setUpdateModal}
             hasModalSubmitted={hasModalSubmitted}
             setHasModalSubmitted={setHasModalSubmitted}
             fetchDevices={fetchDevices}

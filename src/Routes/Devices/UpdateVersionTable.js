@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { headerCol } from '@patternfly/react-table';
 import { Button, Divider } from '@patternfly/react-core';
-import { updateSystemToSpecificImage } from '../../api/devices';
+import { updateSystem } from '../../api/devices';
 import { useDispatch } from 'react-redux';
 import apiWithToast from '../../utils/apiWithToast';
 import PropTypes from 'prop-types';
@@ -67,7 +67,7 @@ const UpdateVersionTable = ({
     };
   });
 
-  const setUpdateEvent = async (value) => {
+  const setUpdateEvent = (value) => {
     setSelectedVersion(value.cells[0]);
     setSelectedCommitID(value);
   };
@@ -87,7 +87,7 @@ const UpdateVersionTable = ({
     apiWithToast(
       dispatch,
       () =>
-        updateSystemToSpecificImage({
+        updateSystem({
           CommitID: selectedCommitID.commitID,
           DevicesUUID: [selectedCommitID.deviceUUID],
         }),
