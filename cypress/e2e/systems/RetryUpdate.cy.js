@@ -1,4 +1,3 @@
-const dayjs = require('dayjs');
 describe('Systems', () => {
   beforeEach(() => {
     cy.beforeTest('/inventory');
@@ -13,10 +12,10 @@ describe('Systems', () => {
         devices: [
           {
             DeviceID: 141598,
-            DeviceName: 'admilleransibletest_test',
+            DeviceName: 'devicetest_test',
             DeviceUUID: '296c483d-5d24-4283-bd6e-fd451118fbd2',
             ImageID: 6148,
-            ImageName: 'admillerAnsibleTest7',
+            ImageName: 'devicetest7',
             LastSeen: '2022-09-16T06:54:57.526838Z',
             UpdateAvailable: true,
             Status: 'RUNNING',
@@ -27,10 +26,10 @@ describe('Systems', () => {
           },
           {
             DeviceID: 141599,
-            DeviceName: 'admilleransibletest_test2',
+            DeviceName: 'devicetest_test2',
             DeviceUUID: '296c483d-5d24-4283-bd6e-fd451118fbd3',
             ImageID: 6149,
-            ImageName: 'admillerAnsibleTest72',
+            ImageName: 'devicetest72',
             LastSeen: '2022-09-16T06:54:57.526838Z',
             UpdateAvailable: true,
             Status: 'ERROR',

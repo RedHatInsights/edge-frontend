@@ -14,6 +14,8 @@
 "editRepositoryContent": "Update information about this custom repository.",
 "baseUrlHelperEdit": "If you change the repo URL, you may not have access to the packages that were used to build images that reference this repository.",
 "removeModalContent": "Removing a repository could affect your ability to update images.",
-"deleteGroupContent": "and all its data will be permanently deleted. Associated systems will be removed from the group but will not be deleted."
-
+"deleteGroupContent": "and all its data will be permanently deleted. Associated systems will be removed from the group but will not be deleted.",
+"deviceUnresponsive": "The service could not be reached via RHC. The system may communicate at a later time if this is a network issue or could be an indication of a more significant problem.",
+"deviceErrorTimeout": "The service timed out during the last update. You can retry the update or build a new one.",
+"deviceErrorFailed": "The playbook failed to run. You can retry the update or build a new one."
 }

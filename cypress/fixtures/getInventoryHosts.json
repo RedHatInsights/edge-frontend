@@ -1,0 +1,62 @@
+{
+  "total": 1,
+  "count": 1,
+  "page": 1,
+  "per_page": 50,
+  "results": [
+    {
+      "insights_id": "1d0432f7-ad01-44cf-b7c6-c5e817958387",
+      "subscription_manager_id": "9a20bf0c-f74f-41e0-921e-5033b3a9d2ba",
+      "satellite_id": null,
+      "bios_uuid": "3fc49178-f3c4-45af-a0b3-bd059cbc1cd9",
+      "ip_addresses": [
+        "192.168.122.131"
+      ],
+      "fqdn": "devicetest",
+      "mac_addresses": [
+        "52:54:00:36:79:cb",
+        "00:00:00:00:00:00"
+      ],
+      "provider_id": null,
+      "provider_type": null,
+      "id": "296c483d-5d24-4283-bd6e-fd451118fbd2",
+      "account": "6089719",
+      "org_id": "11789772",
+      "display_name": "devicetest_test",
+      "ansible_host": null,
+      "facts": [
+        {
+          "namespace": "rhsm",
+          "facts": {
+            "SYNC_TIMESTAMP": "2022-09-19T00:00:22.424943Z",
+            "IS_VIRTUAL": true,
+            "MEMORY": 2,
+            "ARCHITECTURE": "x86_64",
+            "RH_PROD": [
+              "479"
+            ],
+            "orgId": "11789772"
+          }
+        }
+      ],
+      "reporter": "puptoo",
+      "per_reporter_staleness": {
+        "rhsm-conduit": {
+          "check_in_succeeded": true,
+          "stale_timestamp": "2260-01-01T00:00:00+00:00",
+          "last_check_in": "2022-09-19T00:00:22.934610+00:00"
+        },
+        "puptoo": {
+          "check_in_succeeded": true,
+          "stale_timestamp": "2260-01-01T00:00:00+00:00",
+          "last_check_in": "2022-09-19T06:31:23.843979+00:00"
+        }
+      },
+      "stale_timestamp": "2260-01-01T00:00:00+00:00",
+      "stale_warning_timestamp": "2260-01-08T00:00:00+00:00",
+      "culled_timestamp": "2260-01-15T00:00:00+00:00",
+      "created": "2022-02-07T23:32:00.398023+00:00",
+      "updated": "2022-09-19T06:31:23.844299+00:00"
+    }
+  ]
+}

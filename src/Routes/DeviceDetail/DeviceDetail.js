@@ -161,6 +161,7 @@ const DeviceDetail = () => {
             fetchDevices={fetchDeviceData}
           >
             <Status
+              id={'device-status'}
               type={
                 deviceStatus === 'error'
                   ? 'errorWithExclamationCircle'
@@ -172,7 +173,12 @@ const DeviceDetail = () => {
             />
           </RetryUpdatePopover>
         ) : (
-          <Status type={deviceStatus} isLabel={true} className="pf-u-mt-sm" />
+          <Status
+            id={'device-status'}
+            type={deviceStatus}
+            isLabel={true}
+            className="pf-u-mt-sm"
+          />
         )}
       </PageHeader>
       <Grid gutter="md">

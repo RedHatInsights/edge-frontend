@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "plugin:cypress/recommended",
+    "@redhat-cloud-services/eslint-config-redhat-cloud-services"
+  ],
+  "rules": {
+    "cypress/no-unnecessary-waiting": "off"
+  },
+  "globals": {
+    "insights": true,
+    "shallow": true
+  }
+}

@@ -37,7 +37,8 @@ Cypress.Commands.add('clearCookieConsentModal', () => {
   if (consentModal.length > 0) {
     cy.get('.truste_popframe').then((iframe) => {
       const body = iframe.contents().find('body');
-      cy.wrap(body).find('a.call').click();
+      // After the click in the button to log in, it should wait otherwise it might fail
+      cy.wrap(body).find('a.call').click().wait(2000);
     });
   }
 });
@@ -75,7 +76,7 @@ Cypress.Commands.add('clickButton', (value) => {
 });
 
 Cypress.Commands.add('testPagination', (selector, test) => {
-  if (test == "perPage") {    
+  if (test == "perPage") {
     cy.wrap([10, 20, 50, 100]).each((num, i, array) => {
       cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find('[data-testid="pagination-header-test-id"]').click();
       cy.get(`${selector} [data-testid="toolbar-header-testid"]`).find(`[data-action="per-page-${num}"]`).click();
@@ -88,7 +89,7 @@ Cypress.Commands.add('testPagination', (selector, test) => {
 
 Cypress.Commands.add('sorting', (selector, order) => {
   const collator = new Intl.Collator('en-US', {ignorePunctuation: true});
-  
+
   cy.get(selector)
   .then(($cell) => Cypress._.map($cell, (el) => el.innerText))
   .then((list) => {
