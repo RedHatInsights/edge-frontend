@@ -15,6 +15,6 @@ export const getDeviceHasUpdate = async (id) => {
   }
 };
 
-export const updateSystemToSpecificImage = async (payload) => {
+export const updateSystem = async (payload) => {
   return await instance.post(`${EDGE_API}/updates`, payload);
 };
