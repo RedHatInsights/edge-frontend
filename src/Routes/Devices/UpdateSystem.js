@@ -63,7 +63,7 @@ const CurrentVersion = ({ image, isLoading }) => {
         </Title>
       </TextContent>
       <TableComposable
-        aria-label="Simple table"
+        aria-label="Current version table"
         variant={'compact'}
         borders={false}
       >
