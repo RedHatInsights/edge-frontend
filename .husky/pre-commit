@@ -7,10 +7,3 @@ else
   echo "Lint failed, fix lint and retry committing"
   exit 1
 fi
-
-if npm test -- -u; then
-  git add -A .
-else
-  echo "Tests failed, fix tests and retry committing"
-  exit 1
-fi
