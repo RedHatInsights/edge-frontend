@@ -11,54 +11,49 @@ import {
   Bullseye,
   Spinner,
   Backdrop,
-  Grid,
-  GridItem,
+  Skeleton,
 } from '@patternfly/react-core';
 import UpdateVersionTable from './UpdateVersionTable';
 import { getDeviceHasUpdate } from '../../api/devices';
 import { distributionMapper } from '../../constants';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import useApi from '../../hooks/useApi';
+import {
+  TableComposable,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+} from '@patternfly/react-table';
 
-const CurrentVersion = ({ image }) => {
-  const fields = [
+const CurrentVersion = ({ image, isLoading }) => {
+  const current_version = [
     {
-      label: 'Version',
-      value: image?.version,
-      width: '180px',
-      right: '10px',
-    },
-    {
-      label: 'Release',
-      value: image?.release,
-      width: '190px',
-      right: '10px',
-    },
-    {
-      label: 'Additional packages',
-      value: image?.additionalPackages,
-      width: '180px',
-      right: '15px',
-    },
-    {
-      label: 'All packages',
-      value: image?.allPackages,
-      width: '180px',
-      right: '25px',
-    },
-    {
-      label: 'Systems running',
-      value: image?.systemsRunning,
-      width: '180px',
-      right: '40px',
-    },
-    {
-      label: 'Created',
-      value: image?.created,
-      width: 'max-content',
-      right: '60px',
+      version: isLoading ? <Skeleton width="100%" /> : image?.version,
+      release: isLoading ? <Skeleton width="100%" /> : image?.release,
+      additionalPackages: isLoading ? (
+        <Skeleton width="100%" />
+      ) : (
+        image?.additionalPackages
+      ),
+      allPackages: isLoading ? <Skeleton width="100%" /> : image?.allPackages,
+      systemsRunning: isLoading ? (
+        <Skeleton width="100%" />
+      ) : (
+        image?.systemsRunning
+      ),
+      created: isLoading ? <Skeleton width="100%" /> : image?.created,
     },
   ];
+  const columnNames = {
+    version: 'Version',
+    release: 'Release',
+    additionalPackages: 'Additional packages',
+    allPackages: 'All packages',
+    systemsRunning: 'Systems running',
+    created: 'Created',
+  };
 
   return (
     <>
@@ -67,33 +62,47 @@ const CurrentVersion = ({ image }) => {
           <Text>Current version</Text>
         </Title>
       </TextContent>
-      <Grid className="pf-u-mt-sm" span={12} style={{ paddingLeft: '43px' }}>
-        {fields.map(({ label, value, width, right }, index) => {
-          return (
-            <GridItem
-              key={index}
-              span={2}
-              style={{
-                width,
-                padding: '8px',
-                position: 'relative',
-                right,
-              }}
-            >
-              <Text className="pf-u-font-size-sm" component={'b'}>
-                {label}
-              </Text>
-              <Text className="pf-u-mt-sm pf-u-font-size-sm">{value}</Text>
-            </GridItem>
-          );
-        })}
-      </Grid>
+      <TableComposable
+        aria-label="Current version table"
+        variant={'compact'}
+        borders={false}
+      >
+        <Thead>
+          <Tr style={{ borderBottomStyle: 'hidden' }}>
+            <Th style={{ width: '3%' }}></Th>
+            <Th>{columnNames.version}</Th>
+            <Th>{columnNames.release}</Th>
+            <Th>{columnNames.additionalPackages}</Th>
+            <Th>{columnNames.allPackages}</Th>
+            <Th>{columnNames.systemsRunning}</Th>
+            <Th>{columnNames.created}</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {current_version.map((version) => (
+            <Tr key={version.version}>
+              <Td></Td>
+              <Td dataLabel={columnNames.version}>{version.version}</Td>
+              <Td dataLabel={columnNames.release}>{version.release}</Td>
+              <Td dataLabel={columnNames.additionalPackages}>
+                {version.additionalPackages}
+              </Td>
+              <Td dataLabel={columnNames.allPackages}>{version.allPackages}</Td>
+              <Td dataLabel={columnNames.systemsRunning}>
+                {version.systemsRunning}
+              </Td>
+              <Td dataLabel={columnNames.created}>{version.created}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </TableComposable>
     </>
   );
 };
 
 CurrentVersion.propTypes = {
   image: PropTypes.object,
+  isLoading: PropTypes.bool,
 };
 
 const AllVersions = ({
@@ -170,7 +179,7 @@ const UpdateSystem = ({ setUpdatePage, systemId, refreshTable }) => {
 
   return data ? (
     <PageLayout>
-      <CurrentVersion image={currentImage} />
+      <CurrentVersion image={currentImage} isLoading={isLoading} />
       <AllVersions
         data={newImages}
         setUpdatePage={setUpdatePage}
