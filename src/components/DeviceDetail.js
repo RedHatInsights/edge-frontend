@@ -5,7 +5,6 @@ import { Tooltip } from '@patternfly/react-core';
 import TitleWithPopover from './TitleWithPopover';
 import GreenbootStatus from './GreenbootStatus';
 import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
-import { useLoadModule } from '@scalprum/react-core';
 import CmpLoader from './CmpLoader';
 
 const GeneralInformation = (props) => (
@@ -64,20 +63,106 @@ const InfrastructureCard = (props) => (
 
 const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
 
-const GeneralInformationTab = () => {
-  const [{ statusHelper }] = useLoadModule(
-    { appName: 'inventory', scope: 'inventory', module: './dataMapper' },
-    {}
+const InfrastructureCardWrapper = (props) => {
+  const store = useStore();
+  return (
+    <Suspense fallback="">
+      {' '}
+      <InfrastructureCard {...props} store={store} />
+    </Suspense>
   );
+};
+
+const ImageInformationCardWrapper = (props) => {
+  const store = useStore();
+  return (
+    <Suspense fallback="">
+      {' '}
+      <ImageInformationCard {...props} store={store} />
+    </Suspense>
+  );
+};
+
+const BiosCardWrapper = (props) => {
+  const store = useStore();
+  return (
+    <Suspense fallback="">
+      <BiosCard {...props} store={store} />
+    </Suspense>
+  );
+};
+
+const OperatingSystemCardWrapper = (props) => {
+  const store = useStore();
+  return (
+    <Suspense fallback="">
+      <OperatingSystemCard {...props} hasKernelModules={true} store={store} />
+    </Suspense>
+  );
+};
+
+const CollectionCardWrapper = (props) => {
+  const store = useStore();
+  // TODO: fix rhcHealth display
+  const rhcHealth = null;
+  return (
+    <Suspense fallback="">
+      <CollectionCard
+        {...props}
+        extra={[
+          {
+            title: 'RHC Health (broker functioning)',
+            value: rhcHealth || (
+              <Tooltip content="Unknown service status">
+                <OutlinedQuestionCircleIcon className="ins-c-inventory__detail--unknown" />
+              </Tooltip>
+            ),
+          },
+        ]}
+        store={store}
+      />
+    </Suspense>
+  );
+};
+
+const SystemCardWrapper = (props) => {
+  const store = useStore();
+  const { greenbootStatus } = useSelector(({ systemProfileStore }) => {
+    return {
+      greenbootStatus: systemProfileStore?.systemProfile?.greenboot_status,
+    };
+  });
+
+  return (
+    <Suspense fallback="">
+      <SystemCard
+        {...props}
+        store={store}
+        hasCPUs={false}
+        hasSockets={false}
+        hasCores={false}
+        hasCPUFlags={false}
+        hasRAM={false}
+        hasSAP={false}
+        extra={[
+          {
+            title: (
+              <TitleWithPopover
+                title="GreenBoot Status"
+                content="This is a description about greenboot status"
+              />
+            ),
+            value: <GreenbootStatus status={greenbootStatus} />,
+          },
+        ]}
+      />
+    </Suspense>
+  );
+};
+
+const GeneralInformationTab = () => {
   const writePermissions = useSelector(
     ({ permissionsReducer }) => permissionsReducer?.writePermissions
-  );
-
-  const { greenbootStatus, rhcHealth } = useSelector(
-    ({ systemProfileStore }) => ({
-      greenbootStatus: systemProfileStore?.systemProfile?.greenboot_status,
-      rhcHealth: null,
-    })
   );
 
   const store = useStore();
@@ -87,75 +172,12 @@ const GeneralInformationTab = () => {
       <GeneralInformation
         store={store}
         writePermissions={writePermissions}
-        SystemCardWrapper={(props) => (
-          <Suspense fallback="">
-            <SystemCard
-              {...props}
-              store={store}
-              hasCPUs={false}
-              hasSockets={false}
-              hasCores={false}
-              hasCPUFlags={false}
-              hasRAM={false}
-              hasSAP={false}
-              extra={[
-                {
-                  title: (
-                    <TitleWithPopover
-                      title="GreenBoot Status"
-                      content="This is a description about greenboot status"
-                    />
-                  ),
-                  value: <GreenbootStatus status={greenbootStatus} />,
-                },
-              ]}
-            />
-          </Suspense>
-        )}
-        OperatingSystemCardWrapper={(props) => (
-          <Suspense fallback="">
-            {' '}
-            <InfrastructureCard {...props} store={store} />
-          </Suspense>
-        )}
-        BiosCardWrapper={(props) => (
-          <Suspense fallback="">
-            {' '}
-            <ImageInformationCard {...props} store={store} />
-          </Suspense>
-        )}
-        InfrastructureCardWrapper={(props) => (
-          <Suspense fallback="">
-            <BiosCard {...props} store={store} />
-          </Suspense>
-        )}
-        ConfigurationCardWrapper={(props) => (
-          <Suspense fallback="">
-            <OperatingSystemCard
-              {...props}
-              hasKernelModules={true}
-              store={store}
-            />
-          </Suspense>
-        )}
-        CollectionCardWrapper={(props) => (
-          <Suspense fallback="">
-            <CollectionCard
-              {...props}
-              extra={[
-                {
-                  title: 'RHC Health (broker functioning)',
-                  value: statusHelper?.[rhcHealth?.toUpperCase()] || (
-                    <Tooltip content="Unknown service status">
-                      <OutlinedQuestionCircleIcon className="ins-c-inventory__detail--unknown" />
-                    </Tooltip>
-                  ),
-                },
-              ]}
-              store={store}
-            />
-          </Suspense>
-        )}
+        SystemCardWrapper={SystemCardWrapper}
+        OperatingSystemCardWrapper={InfrastructureCardWrapper}
+        BiosCardWrapper={ImageInformationCardWrapper}
+        InfrastructureCardWrapper={BiosCardWrapper}
+        ConfigurationCardWrapper={OperatingSystemCardWrapper}
+        CollectionCardWrapper={CollectionCardWrapper}
       />
     </Suspense>
   );
