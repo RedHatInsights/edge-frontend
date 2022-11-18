@@ -66,6 +66,7 @@ export const distributionMapper = {
   'rhel-86': 'RHEL 8.6',
   'rhel-87': 'RHEL 8.7',
   'rhel-90': 'RHEL 9.0',
+  'rhel-91': 'RHEL 9.1',
 };
 
 export const releaseMapper = {
