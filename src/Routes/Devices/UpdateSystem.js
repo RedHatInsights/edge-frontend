@@ -1,22 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  Backdrop,
+  Breadcrumb,
+  BreadcrumbItem,
+  Bullseye,
+  Card,
+  CardBody,
   Page,
   PageSection,
+  Spinner,
   Text,
   TextContent,
   Title,
-  Card,
-  CardBody,
-  Bullseye,
-  Spinner,
-  Backdrop,
-  Skeleton,
 } from '@patternfly/react-core';
 import UpdateVersionTable from './UpdateVersionTable';
-import { getDeviceHasUpdate } from '../../api/devices';
+import { getDevice } from '../../api/devices';
 import { distributionMapper } from '../../constants';
+import { routes as paths } from '../../constants/routeMapper';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
+import { Main } from '@redhat-cloud-services/frontend-components/Main';
+import {
+  PageHeader,
+  PageHeaderTitle,
+} from '@redhat-cloud-services/frontend-components/PageHeader';
 import useApi from '../../hooks/useApi';
 import {
   TableComposable,
@@ -26,24 +33,18 @@ import {
   Tbody,
   Td,
 } from '@patternfly/react-table';
+import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 
-const CurrentVersion = ({ image, isLoading }) => {
+const CurrentVersion = ({ image }) => {
   const current_version = [
     {
-      version: isLoading ? <Skeleton width="100%" /> : image?.version,
-      release: isLoading ? <Skeleton width="100%" /> : image?.release,
-      additionalPackages: isLoading ? (
-        <Skeleton width="100%" />
-      ) : (
-        image?.additionalPackages
-      ),
-      allPackages: isLoading ? <Skeleton width="100%" /> : image?.allPackages,
-      systemsRunning: isLoading ? (
-        <Skeleton width="100%" />
-      ) : (
-        image?.systemsRunning
-      ),
-      created: isLoading ? <Skeleton width="100%" /> : image?.created,
+      version: image?.version,
+      release: image?.release,
+      additionalPackages: image?.additionalPackages,
+      allPackages: image?.allPackages,
+      systemsRunning: image?.systemsRunning,
+      created: image?.created,
     },
   ];
   const columnNames = {
@@ -102,59 +103,10 @@ const CurrentVersion = ({ image, isLoading }) => {
 
 CurrentVersion.propTypes = {
   image: PropTypes.object,
-  isLoading: PropTypes.bool,
 };
 
-const AllVersions = ({
-  data,
-  setUpdatePage,
-  refreshTable,
-  isLoading,
-  hasError,
-}) => (
-  <>
-    <TextContent>
-      <Title headingLevel="h2">
-        <Text className="pf-u-mt-md">Select version to update to</Text>
-      </Title>
-    </TextContent>
-    <UpdateVersionTable
-      setUpdatePage={setUpdatePage}
-      data={data}
-      refreshTable={refreshTable}
-      isLoading={isLoading}
-      hasError={hasError}
-    />
-  </>
-);
-
-AllVersions.propTypes = {
-  data: PropTypes.array,
-  setUpdatePage: PropTypes.func,
-  refreshTable: PropTypes.func,
-  isLoading: PropTypes.bool,
-  hasError: PropTypes.bool,
-};
-
-const PageLayout = ({ children }) => (
-  <Page>
-    <PageSection isWidthLimited>
-      <Card>
-        <CardBody>{children}</CardBody>
-      </Card>
-    </PageSection>
-  </Page>
-);
-
-PageLayout.propTypes = {
-  children: PropTypes.any,
-};
-
-const UpdateSystem = ({ setUpdatePage, systemId, refreshTable }) => {
-  const [{ data, isLoading, hasError }] = useApi({
-    api: () => getDeviceHasUpdate(systemId),
-    tableReload: false,
-  });
+const UpdateSystemMain = ({ data }) => {
+  const device = data?.Device;
 
   const buildRow = (image) => ({
     version: image?.Version,
@@ -168,8 +120,8 @@ const UpdateSystem = ({ setUpdatePage, systemId, refreshTable }) => {
       </span>
     ),
     commitID: image?.CommitID,
-    deviceUUID: data?.Device?.UUID,
-    deviceName: data?.Device?.DeviceName,
+    deviceUUID: device?.UUID,
+    deviceName: device?.DeviceName,
   });
 
   const currentImage = buildRow(data?.ImageInfo?.Image);
@@ -177,17 +129,22 @@ const UpdateSystem = ({ setUpdatePage, systemId, refreshTable }) => {
     buildRow(update?.Image)
   );
 
-  return data ? (
-    <PageLayout>
-      <CurrentVersion image={currentImage} isLoading={isLoading} />
-      <AllVersions
-        data={newImages}
-        setUpdatePage={setUpdatePage}
-        refreshTable={refreshTable}
-        isLoading={isLoading}
-        hasError={hasError}
-      />
-    </PageLayout>
+  return device ? (
+    <Page>
+      <PageSection isWidthLimited>
+        <Card>
+          <CardBody>
+            <CurrentVersion image={currentImage} />
+            <TextContent>
+              <Title headingLevel="h2">
+                <Text className="pf-u-mt-md">Select version to update to</Text>
+              </Title>
+            </TextContent>
+            <UpdateVersionTable data={newImages} />
+          </CardBody>
+        </Card>
+      </PageSection>
+    </Page>
   ) : (
     <Backdrop>
       <Bullseye>
@@ -197,10 +154,48 @@ const UpdateSystem = ({ setUpdatePage, systemId, refreshTable }) => {
   );
 };
 
-UpdateSystem.propTypes = {
-  setUpdatePage: PropTypes.func,
-  systemId: PropTypes.string,
-  refreshTable: PropTypes.func,
+UpdateSystemMain.propTypes = {
+  data: PropTypes.object,
+};
+
+const UpdateSystem = () => {
+  const { deviceId } = useParams();
+  const [{ data, isLoading }] = useApi({
+    api: () => getDevice(deviceId),
+  });
+  const device = data?.Device;
+
+  return isLoading ? (
+    <Backdrop>
+      <Bullseye>
+        <Spinner isSVG diameter="100px" />
+      </Bullseye>
+    </Backdrop>
+  ) : (
+    <>
+      <PageHeader className="pf-m-light">
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <Link to={paths['inventory']}>Systems</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem>Update</BreadcrumbItem>
+        </Breadcrumb>
+        <PageHeaderTitle title="Update" />
+        <TextContent className="pf-u-mt-md">
+          <Text>
+            {'Update '}
+            <strong>{device?.DeviceName}</strong>
+            {' to a newer version of '}
+            <strong>{device?.ImageName}</strong>
+            {' by selecting a new version from the table below.'}
+          </Text>
+        </TextContent>
+      </PageHeader>
+      <Main className="edge-devices">
+        <UpdateSystemMain data={data} />
+      </Main>
+    </>
+  );
 };
 
 export default UpdateSystem;

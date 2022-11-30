@@ -6,13 +6,8 @@ export const getInventory = ({ query }) => {
   return instance.get(`${EDGE_API}/devices/devicesview?${q}`);
 };
 
-export const getDeviceHasUpdate = async (id) => {
-  try {
-    return await instance.get(`${EDGE_API}/devices/${id}`);
-  } catch (err) {
-    // temp error solution
-    console.log('');
-  }
+export const getDevice = (id) => {
+  return instance.get(`${EDGE_API}/devices/${id}`);
 };
 
 export const updateSystem = async (payload) => {

@@ -4,8 +4,10 @@ import { headerCol } from '@patternfly/react-table';
 import { Button, Divider } from '@patternfly/react-core';
 import { updateSystem } from '../../api/devices';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 import apiWithToast from '../../utils/apiWithToast';
 import PropTypes from 'prop-types';
+import { routes as paths } from '../../constants/routeMapper';
 
 const filters = [
   { label: 'Version', type: 'text' },
@@ -28,16 +30,11 @@ const columns = [
   { title: 'Created' },
 ];
 
-const UpdateVersionTable = ({
-  data,
-  setUpdatePage,
-  refreshTable,
-  isLoading,
-  hasError,
-}) => {
+const UpdateVersionTable = ({ data, isLoading, hasError }) => {
   const [selectedVersion, setSelectedVersion] = useState(null);
   const [selectedCommitID, setSelectedCommitID] = useState(null);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const buildRows = data?.map((rowData) => {
     const {
@@ -94,16 +91,10 @@ const UpdateVersionTable = ({
       statusMessages
     );
     handleClose();
-    refreshTable ? refreshTable() : null;
   };
 
   const handleClose = () => {
-    setUpdatePage((prevState) => {
-      return {
-        ...prevState,
-        isOpen: false,
-      };
-    });
+    history.push(paths['inventory']);
   };
 
   return (
@@ -166,8 +157,6 @@ const UpdateVersionTable = ({
 
 UpdateVersionTable.propTypes = {
   data: PropTypes.array,
-  setUpdatePage: PropTypes.func,
-  refreshTable: PropTypes.func,
   isLoading: PropTypes.bool,
   hasError: PropTypes.bool,
 };

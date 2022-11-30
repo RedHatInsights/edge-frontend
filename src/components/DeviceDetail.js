@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense } from 'react';
 import { useStore, useSelector } from 'react-redux';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 import { Tooltip } from '@patternfly/react-core';
@@ -61,7 +61,11 @@ const InfrastructureCard = (props) => (
   />
 );
 
-const ImageInformationCard = lazy(() => import('./ImageInformationCard'));
+const ImageInformationCard = React.lazy(() =>
+  import(
+    /* webpackChunkName: "ImageInformationCard" */ './ImageInformationCard'
+  )
+);
 
 const InfrastructureCardWrapper = (props) => {
   const store = useStore();

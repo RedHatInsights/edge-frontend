@@ -6,7 +6,9 @@ import { routes as paths } from '../../constants/routeMapper';
 import { Bullseye, Spinner, Tooltip } from '@patternfly/react-core';
 
 const UpdateDeviceModal = React.lazy(() =>
-  import('../Devices/UpdateDeviceModal')
+  import(
+    /* webpackChunkName: "UpdateDeviceModal" */ '../Devices/UpdateDeviceModal'
+  )
 );
 
 const filters = [
