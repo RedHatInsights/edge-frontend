@@ -44,6 +44,38 @@ objects:
             - method: withEmail
               args:
                 - "@redhat.com"
+        - title: Manage Images
+          expandable: true
+          routes:
+            - title: "Images"
+              appId: "edge"
+              filterable: false
+              href: /edge/manage-images
+              permissions:
+                - method: withEmail
+                  args:
+                    - "@redhat.com"
+                    - "@sbb.ch"
+            - title: "Custom Repositories"
+              appId: "edge"
+              filterable: false
+              href: /edge/repositories
+              permissions:
+                - method: withEmail
+                  args:
+                    - "@redhat.com"
+                    - "@sbb.ch"
+          permissions:
+            - method: withEmail
+              args:
+                - "@redhat.com"
+                - "@sbb.ch"
+        - title: Learning Resources
+          href: /edge/learning-resources
+          permissions:
+            - method: withEmail
+              args:
+                - "@redhat.com"
                 - "@sbb.ch"
       module:
         manifestLocation: /apps/edge/fed-mods.json
