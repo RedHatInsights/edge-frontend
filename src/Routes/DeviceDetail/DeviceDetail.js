@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, Suspense } from 'react';
-import { Link } from 'react-router-dom';
-import { Grid, GridItem } from '@patternfly/react-core';
 import {
+  Grid,
+  GridItem,
   Breadcrumb,
   BreadcrumbItem,
   Bullseye,
@@ -16,7 +16,7 @@ import {
   InventoryDetailHead,
   DetailWrapper,
 } from '@redhat-cloud-services/frontend-components/Inventory';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { deviceDetail } from '../../store/deviceDetail';
 import { RegistryContext } from '../../store';
@@ -26,6 +26,7 @@ import Status, { getDeviceStatus } from '../../components/Status';
 import useApi from '../../hooks/useApi';
 import RetryUpdatePopover from '../Devices/RetryUpdatePopover';
 import { useLoadModule } from '@scalprum/react-core';
+import { routes as paths } from '../../constants/routeMapper';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(
@@ -42,9 +43,11 @@ const DeviceDetail = () => {
     },
     {}
   );
+
+  const history = useHistory();
+  const { deviceId, groupId } = useParams();
   const [imageId, setImageId] = useState(null);
   const { getRegistry } = useContext(RegistryContext);
-  const { deviceId } = useParams();
   const entity = useSelector(({ entityDetails }) => entityDetails?.entity);
 
   const [imageData, setImageData] = useState();
@@ -54,11 +57,6 @@ const DeviceDetail = () => {
   });
   const [isDeviceStatusLoading, setIsDeviceStatusLoading] = useState(true);
   const [reload, setReload] = useState(false);
-  useEffect(() => {
-    insights.chrome.registerModule('inventory');
-    insights.chrome?.hideGlobalFilter?.(true);
-    insights.chrome.appAction('system-detail');
-  }, []);
 
   const [deviceData, fetchDeviceData] = useApi({
     api: () =>
@@ -75,13 +73,24 @@ const DeviceDetail = () => {
     UpdateAvailable: updateAvailable,
     DispatcherStatus: updateStatus,
     LastSeen: lastSeen,
+    DeviceGroups: deviceGroups,
   } = deviceView || {};
+
+  const groupName = groupId
+    ? deviceGroups?.find((group) => group.ID.toString() === groupId)?.Name
+    : null;
 
   const deviceStatus = getDeviceStatus(
     deviceViewStatus,
     updateAvailable,
     updateStatus
   );
+
+  useEffect(() => {
+    insights.chrome.registerModule('inventory');
+    insights.chrome?.hideGlobalFilter?.(true);
+    insights.chrome.appAction('system-detail');
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -118,16 +127,34 @@ const DeviceDetail = () => {
       }}
     >
       <PageHeader>
-        <Breadcrumb ouiaId="systems-list">
-          <BreadcrumbItem>
-            <Link to="/inventory">Systems</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem isActive>
-            <div className="ins-c-inventory__detail--breadcrumb-name">
-              {entity?.display_name || <Skeleton size={SkeletonSize.xs} />}
-            </div>
-          </BreadcrumbItem>
-        </Breadcrumb>
+        {!groupName ? (
+          <Breadcrumb ouiaId="systems-list">
+            <BreadcrumbItem>
+              <Link to={paths['inventory']}>Systems</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem isActive>
+              <div className="ins-c-inventory__detail--breadcrumb-name">
+                {entity?.display_name || <Skeleton size={SkeletonSize.xs} />}
+              </div>
+            </BreadcrumbItem>
+          </Breadcrumb>
+        ) : (
+          <Breadcrumb ouiaId="groups-list">
+            <BreadcrumbItem>
+              <Link to={`${paths['fleet-management']}`}>Groups</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Link to={`${paths['fleet-management']}/${groupId}`}>
+                {groupName}
+              </Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem isActive>
+              <div className="ins-c-inventory__detail--breadcrumb-name">
+                {entity?.display_name || <Skeleton size={SkeletonSize.xs} />}
+              </div>
+            </BreadcrumbItem>
+          </Breadcrumb>
+        )}
         <InventoryDetailHead
           fallback=""
           actions={[
