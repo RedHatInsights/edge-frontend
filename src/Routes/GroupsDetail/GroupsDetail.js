@@ -43,7 +43,9 @@ import DeleteGroupModal from '../Groups/DeleteGroupModal';
 import RenameGroupModal from '../Groups/RenameGroupModal';
 
 const UpdateDeviceModal = React.lazy(() =>
-  import('../Devices/UpdateDeviceModal')
+  import(
+    /* webpackChunkName: "UpdateDeviceModal" */ '../Devices/UpdateDeviceModal'
+  )
 );
 
 const GroupsDetail = () => {
@@ -275,7 +277,6 @@ const GroupsDetail = () => {
             selectedItems={getDeviceIds}
             setRemoveModal={setRemoveModal}
             setIsAddModalOpen={setIsAddModalOpen}
-            setUpdatePage={setUpdateModal}
             hasModalSubmitted={hasModalSubmitted}
             setHasModalSubmitted={setHasModalSubmitted}
             fetchDevices={fetchDevices}

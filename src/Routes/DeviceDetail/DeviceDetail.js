@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import { deviceDetail } from '../../store/deviceDetail';
 import { RegistryContext } from '../../store';
 import DeviceDetailTabs from './DeviceDetailTabs';
-import { getDeviceHasUpdate, getInventory } from '../../api/devices';
+import { getDevice, getInventory } from '../../api/devices';
 import Status, { getDeviceStatus } from '../../components/Status';
 import useApi from '../../hooks/useApi';
 import RetryUpdatePopover from '../Devices/RetryUpdatePopover';
@@ -30,7 +30,7 @@ import { routes as paths } from '../../constants/routeMapper';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(
-    /* webpackChunkName: "CreateImageWizard" */ '../Devices/UpdateDeviceModal'
+    /* webpackChunkName: "UpdateDeviceModal" */ '../Devices/UpdateDeviceModal'
   )
 );
 
@@ -97,7 +97,7 @@ const DeviceDetail = () => {
       if (!entity?.display_name) {
         return;
       }
-      const image_data = await getDeviceHasUpdate(deviceId);
+      const image_data = await getDevice(deviceId);
       setImageData(image_data);
       setIsDeviceStatusLoading(false);
       setUpdateModal((prevState) => ({
