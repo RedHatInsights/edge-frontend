@@ -5,6 +5,8 @@ export const routes = {
   canaries: '/canaries',
   'fleet-management': '/fleet-management',
   'fleet-management-detail': '/fleet-management/:groupId',
+  'fleet-management-system-detail':
+    '/fleet-management/:groupId/systems/:deviceId',
   inventory: '/inventory',
   'inventory-detail': '/inventory/:deviceId',
   'inventory-detail-update': '/inventory/:deviceId/update',

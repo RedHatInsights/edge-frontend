@@ -68,6 +68,7 @@ export const Routes = () => {
       <Switch>
         <Route exact path={paths.groups} component={Groups} />
         <Route exact path={paths['groups-detail']} component={GroupsDetail} />
+
         {/* <Route path={paths['device-detail']} component={DeviceDetail} /> */}
         {/* <Route path={paths.canaries} component={Canaries} /> */}
         <Route exact path={paths['fleet-management']} component={Groups} />
@@ -75,6 +76,11 @@ export const Routes = () => {
           exact
           path={paths['fleet-management-detail']}
           component={GroupsDetail}
+        />
+        <Route
+          exact
+          path={paths['fleet-management-system-detail']}
+          component={DeviceDetail}
         />
         <Route exact path={paths['inventory']} component={Inventory} />
         <Route
