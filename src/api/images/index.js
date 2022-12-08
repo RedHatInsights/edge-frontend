@@ -94,16 +94,8 @@ export const getImageSetViewVersions = ({
   );
 };
 
-export const getImageSetView = ({
-  id,
-  q = {
-    limit: 20,
-    offset: 0,
-    sort_by: '-created_at',
-  },
-}) => {
-  const query = getTableParams(q);
-  return instance.get(`${EDGE_API}/image-sets/view/${id}?${query}`);
+export const getImageSetView = ({ id }) => {
+  return instance.get(`${EDGE_API}/image-sets/view/${id}`);
 };
 
 export const getImagePackageMetadata = (id) => {
