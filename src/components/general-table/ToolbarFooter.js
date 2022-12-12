@@ -17,7 +17,7 @@ const ToolbarFooter = ({
   setPage,
   isFixed,
 }) => {
-  let styles = { padding: '0' };
+  let styles = { padding: '20px' };
   if (isFixed) {
     styles = { ...styles, paddingBottom: '30px', paddingTop: '20px' };
   }
