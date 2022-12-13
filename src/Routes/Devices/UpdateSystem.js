@@ -216,7 +216,7 @@ const UpdateSystem = () => {
             {'Update '}
             <strong>{device?.DeviceName}</strong>
             {' to a newer version of '}
-            <strong>{device?.ImageName}</strong>
+            <strong>{data?.ImageInfo?.Image?.Name}</strong>
             {' by selecting a new version from the table below.'}
           </Text>
         </TextContent>
