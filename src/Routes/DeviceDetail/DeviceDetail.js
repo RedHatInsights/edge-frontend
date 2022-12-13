@@ -163,13 +163,13 @@ const DeviceDetail = () => {
               isDisabled:
                 imageData?.UpdateTransactions?.[0]?.Status === 'BUILDING' ||
                 imageData?.UpdateTransactions?.[0]?.Status === 'CREATED' ||
-                !imageData?.ImageInfo?.UpdatesAvailable?.length > 0 ||
-                !updateModal.imageSetId,
+                !imageData?.ImageInfo?.UpdatesAvailable?.length > 0,
               onClick: () => {
-                setUpdateModal((prevState) => ({
-                  ...prevState,
-                  isOpen: true,
-                }));
+                history.push({
+                  pathname: groupName
+                    ? `${paths['fleet-management']}/${groupId}/systems/${deviceId}/update`
+                    : `${paths['inventory']}/${deviceId}/update`,
+                });
               },
             },
           ]}

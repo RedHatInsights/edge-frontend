@@ -7,6 +7,8 @@ export const routes = {
   'fleet-management-detail': '/fleet-management/:groupId',
   'fleet-management-system-detail':
     '/fleet-management/:groupId/systems/:deviceId',
+  'fleet-management-system-detail-update':
+    '/fleet-management/:groupId/systems/:deviceId/update',
   inventory: '/inventory',
   'inventory-detail': '/inventory/:deviceId',
   'inventory-detail-update': '/inventory/:deviceId/update',

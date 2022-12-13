@@ -82,6 +82,11 @@ export const Routes = () => {
           path={paths['fleet-management-system-detail']}
           component={DeviceDetail}
         />
+        <Route
+          exact
+          path={paths['fleet-management-system-detail-update']}
+          component={UpdateSystem}
+        />
         <Route exact path={paths['inventory']} component={Inventory} />
         <Route
           exact

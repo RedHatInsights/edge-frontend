@@ -159,11 +159,15 @@ UpdateSystemMain.propTypes = {
 };
 
 const UpdateSystem = () => {
-  const { deviceId } = useParams();
+  const { deviceId, groupId } = useParams();
   const [{ data, isLoading }] = useApi({
     api: () => getDevice(deviceId),
   });
   const device = data?.Device;
+  const groupName = groupId
+    ? device?.DevicesGroups?.find((group) => group.ID.toString() === groupId)
+        ?.Name
+    : null;
 
   return isLoading ? (
     <Backdrop>
@@ -174,19 +178,45 @@ const UpdateSystem = () => {
   ) : (
     <>
       <PageHeader className="pf-m-light">
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <Link to={paths['inventory']}>Systems</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem>Update</BreadcrumbItem>
-        </Breadcrumb>
+        {!groupName ? (
+          <Breadcrumb ouiaId="systems-list">
+            <BreadcrumbItem>
+              <Link to={paths['inventory']}>Systems</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Link to={`${paths['inventory']}/${deviceId}/`}>
+                {device?.DeviceName}
+              </Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>Update</BreadcrumbItem>
+          </Breadcrumb>
+        ) : (
+          <Breadcrumb ouiaId="groups-list">
+            <BreadcrumbItem>
+              <Link to={`${paths['fleet-management']}`}>Groups</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Link to={`${paths['fleet-management']}/${groupId}`}>
+                {groupName}
+              </Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <Link
+                to={`${paths['fleet-management']}/${groupId}/systems/${deviceId}/`}
+              >
+                {device?.DeviceName}
+              </Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>Update</BreadcrumbItem>
+          </Breadcrumb>
+        )}
         <PageHeaderTitle title="Update" />
         <TextContent className="pf-u-mt-md">
           <Text>
             {'Update '}
             <strong>{device?.DeviceName}</strong>
             {' to a newer version of '}
-            <strong>{device?.ImageName}</strong>
+            <strong>{data?.ImageInfo?.Image?.Name}</strong>
             {' by selecting a new version from the table below.'}
           </Text>
         </TextContent>
