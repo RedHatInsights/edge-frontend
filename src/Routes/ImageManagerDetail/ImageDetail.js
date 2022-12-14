@@ -49,6 +49,10 @@ const ImageDetail = () => {
     fetchImageSetDetails();
   }, [imageId, imageVersionId]);
 
+  const reload = async () => {
+    await fetchImageSetDetails();
+  };
+
   return (
     <Fragment>
       <PageHeader className="pf-m-light">
@@ -83,6 +87,7 @@ const ImageDetail = () => {
               setUpdateWizard((prevState) => ({ ...prevState, isOpen: false }));
             }}
             updateImageID={updateWizard.updateId}
+            reload={reload}
           />
         </Suspense>
       )}
