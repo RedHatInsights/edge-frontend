@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { headerCol } from '@patternfly/react-table';
 import { Button, Divider } from '@patternfly/react-core';
@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import apiWithToast from '../../utils/apiWithToast';
 import PropTypes from 'prop-types';
-import { routes as paths } from '../../constants/routeMapper';
 
 const filters = [
   { label: 'Version', type: 'text' },
@@ -93,8 +92,14 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
     handleClose();
   };
 
+  useEffect(() => {
+    if (history.action === 'POP') {
+      history.goBack();
+    }
+  }, [history.action]);
+
   const handleClose = () => {
-    history.push(paths['inventory']);
+    history.goBack();
   };
 
   return (
