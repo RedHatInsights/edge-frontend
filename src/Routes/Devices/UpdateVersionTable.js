@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import { headerCol } from '@patternfly/react-table';
 import { Button, Divider } from '@patternfly/react-core';
@@ -92,14 +92,8 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
     handleClose();
   };
 
-  useEffect(() => {
-    if (history.action === 'POP') {
-      history.goBack();
-    }
-  }, [history.action]);
-
   const handleClose = () => {
-    history.goBack();
+    history.go(-2);
   };
 
   return (
