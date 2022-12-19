@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import apiWithToast from '../../utils/apiWithToast';
 import PropTypes from 'prop-types';
+import { routes as paths } from '../../constants/routeMapper';
 
 const filters = [
   { label: 'Version', type: 'text' },
@@ -95,7 +96,9 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
 
   const handleClose = () => {
     history.push({
-      pathname: history.state.prevState,
+      pathname: history.state?.prevState
+        ? history.state?.prevState
+        : paths[history.location.pathname.split('/')[1]],
     });
   };
 
