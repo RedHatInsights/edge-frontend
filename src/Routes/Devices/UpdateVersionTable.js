@@ -89,11 +89,14 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
         }),
       statusMessages
     );
+
     handleClose();
   };
 
   const handleClose = () => {
-    history.go(-2);
+    history.push({
+      pathname: history.state.prevState,
+    });
   };
 
   return (

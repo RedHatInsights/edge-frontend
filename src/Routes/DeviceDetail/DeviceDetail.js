@@ -165,6 +165,7 @@ const DeviceDetail = () => {
                 imageData?.UpdateTransactions?.[0]?.Status === 'CREATED' ||
                 !imageData?.ImageInfo?.UpdatesAvailable?.length > 0,
               onClick: () => {
+                history.state = { prevState: history.location.pathname };
                 history.push({
                   pathname: groupName
                     ? `${paths['fleet-management']}/${groupId}/systems/${deviceId}/update`

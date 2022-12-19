@@ -217,6 +217,7 @@ const DeviceTable = ({
   fetchDevices,
   isSystemsView = false,
   isAddSystemsView = false,
+  groupId,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -272,8 +273,11 @@ const DeviceTable = ({
       actions.push({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
+          history.state = { prevState: history.location.pathname };
           history.push({
-            pathname: `${paths['inventory']}/${rowData.rowInfo.id}/update`,
+            pathname: groupId
+              ? `${paths['fleet-management']}/${groupId}/systems/${rowData.rowInfo.id}/update`
+              : `${paths['inventory']}/${rowData.rowInfo.id}/update`,
           });
         },
       });
@@ -399,6 +403,7 @@ DeviceTable.propTypes = {
   fetchDevices: PropTypes.func,
   isSystemsView: PropTypes.bool,
   isAddSystemsView: PropTypes.bool,
+  groupId: PropTypes.number,
 };
 
 export default DeviceTable;
