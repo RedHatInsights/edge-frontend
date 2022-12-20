@@ -91,9 +91,10 @@ const tabsToIndex = {
 };
 
 const ImagePackagesTab = ({ imageVersion }) => {
-  const location = useLocation();
   const history = useHistory();
-  const splitUrl = location.pathname.split('/');
+  const { pathname } = useLocation();
+
+  const splitUrl = pathname.split('/');
   const defaultToggle = splitUrl.length === 7 ? tabsToIndex[splitUrl[6]] : 1;
   // Distribution examples would be: rhel-86, rhel-90, and rhel-100
   const distribution = imageVersion?.image?.Distribution?.split('-')[1].slice(

@@ -4,7 +4,7 @@ import { headerCol } from '@patternfly/react-table';
 import { Button, Divider } from '@patternfly/react-core';
 import { updateSystem } from '../../api/devices';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router-dom';
 import apiWithToast from '../../utils/apiWithToast';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
@@ -35,6 +35,7 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
   const [selectedCommitID, setSelectedCommitID] = useState(null);
   const dispatch = useDispatch();
   const history = useHistory();
+  const { pathname } = useLocation();
 
   const buildRows = data?.map((rowData) => {
     const {
@@ -96,9 +97,7 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
 
   const handleClose = () => {
     history.push({
-      pathname: history.state?.prevState
-        ? history.state?.prevState
-        : paths[history.location.pathname.split('/')[1]],
+      pathname: history.state?.prevState || paths[pathname.split('/')[1]],
     });
   };
 

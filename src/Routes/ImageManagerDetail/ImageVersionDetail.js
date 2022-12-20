@@ -7,7 +7,7 @@ import {
   Spinner,
   Bullseye,
 } from '@patternfly/react-core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
 import PropTypes from 'prop-types';
@@ -20,6 +20,7 @@ const UpdateImageWizard = React.lazy(() =>
 
 const ImageVersionDetail = ({ data, imageVersion }) => {
   const history = useHistory();
+  const { pathname } = useLocation();
   const [isUpdateWizardOpen, setIsUpdateWizardOpen] = useState(false);
   const [imageData, setImageData] = useState({});
 
@@ -29,7 +30,7 @@ const ImageVersionDetail = ({ data, imageVersion }) => {
 
   const openUpdateWizard = () => {
     history.push({
-      pathname: history.location.pathname,
+      pathname,
       search: new URLSearchParams({
         update_image: true,
       }).toString(),
@@ -64,7 +65,7 @@ const ImageVersionDetail = ({ data, imageVersion }) => {
         >
           <UpdateImageWizard
             navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
+              history.push({ pathname });
               setIsUpdateWizardOpen(false);
             }}
             updateimageVersionId={data?.ID}

@@ -10,7 +10,7 @@ import RemoveDeviceModal from './RemoveDeviceModal';
 import CreateGroupModal from '../Groups/CreateGroupModal';
 import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api/devices';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 
 const UpdateDeviceModal = React.lazy(() =>
@@ -19,6 +19,7 @@ const UpdateDeviceModal = React.lazy(() =>
 
 const Inventory = () => {
   const history = useHistory();
+  const { pathname } = useLocation();
   const [response, fetchDevices] = useApi({
     api: getInventory,
     tableReload: true,
@@ -141,7 +142,7 @@ const Inventory = () => {
         >
           <UpdateDeviceModal
             navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
+              history.push({ pathname });
               setUpdateModal((prevState) => {
                 return {
                   ...prevState,

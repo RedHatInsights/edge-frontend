@@ -7,8 +7,8 @@ import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
 import CustomEmptyState from '../../components/Empty';
-import { useHistory } from 'react-router-dom';
-import { emptyStateNoFliters } from '../../utils';
+import { useLocation } from 'react-router-dom';
+import { emptyStateNoFilters } from '../../utils';
 import Status from '../../components/Status';
 
 const TooltipSelectorRef = ({ index }) => (
@@ -118,7 +118,7 @@ const ImageTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
 }) => {
-  const history = useHistory();
+  const { search } = useLocation();
 
   const actionResolver = (rowData) => {
     const actionsArray = [];
@@ -164,7 +164,7 @@ const ImageTable = ({
 
   return (
     <>
-      {emptyStateNoFliters(isLoading, count, history) ? (
+      {emptyStateNoFilters(isLoading, count, search) ? (
         <CustomEmptyState
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}

@@ -16,7 +16,7 @@ import {
   InventoryDetailHead,
   DetailWrapper,
 } from '@redhat-cloud-services/frontend-components/Inventory';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { useParams, useHistory, useLocation, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { deviceDetail } from '../../store/deviceDetail';
 import { RegistryContext } from '../../store';
@@ -45,6 +45,7 @@ const DeviceDetail = () => {
   );
 
   const history = useHistory();
+  const { pathname } = useLocation();
   const { deviceId, groupId } = useParams();
   const [imageId, setImageId] = useState(null);
   const { getRegistry } = useContext(RegistryContext);
@@ -165,11 +166,11 @@ const DeviceDetail = () => {
                 imageData?.UpdateTransactions?.[0]?.Status === 'CREATED' ||
                 !imageData?.ImageInfo?.UpdatesAvailable?.length > 0,
               onClick: () => {
-                history.state = { prevState: history.location.pathname };
                 history.push({
                   pathname: groupName
                     ? `${paths['fleet-management']}/${groupId}/systems/${deviceId}/update`
                     : `${paths['inventory']}/${deviceId}/update`,
+                  state: { prevState: pathname },
                 });
               },
             },
@@ -229,7 +230,7 @@ const DeviceDetail = () => {
         >
           <UpdateDeviceModal
             navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
+              history.push({ pathname });
               setUpdateModal((prevState) => {
                 return {
                   ...prevState,

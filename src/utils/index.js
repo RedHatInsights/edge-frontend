@@ -29,15 +29,15 @@ export const mapUrlToObj = (url, keys) => {
   return obj;
 };
 
-//urlString is the string added to the url search param
-//state is a boolean that adds or removes the urlString from the url
-export const stateToUrlSearch = (urlString, state) => {
+// urlString is the string added to the url search param
+// state is a boolean that adds or removes the urlString from the url
+export const stateToUrlSearch = (urlString, state, search) => {
   var searchArray = [];
   const currentSearchArray =
-    location.search.length > 0
-      ? location.search.includes('&')
-        ? location.search.split('?')[1].split('&')
-        : location.search.split('?').slice(1)
+    search.length > 0
+      ? search.includes('&')
+        ? search.split('?')[1].split('&')
+        : search.split('?').slice(1)
       : [];
   if (state) {
     currentSearchArray.includes(urlString)
@@ -53,10 +53,8 @@ export const stateToUrlSearch = (urlString, state) => {
   return searchArray.join('&');
 };
 
-export const emptyStateNoFliters = (isLoading, count, history) =>
-  isLoading !== true &&
-  !count > 0 &&
-  !history.location.search.includes('has_filters=true');
+export const emptyStateNoFilters = (isLoading, count, search) =>
+  isLoading !== true && !count > 0 && !search.includes('has_filters=true');
 
 export const canUpdateSelectedDevices = ({ deviceData, imageData }) =>
   deviceData?.length > 0 && imageData

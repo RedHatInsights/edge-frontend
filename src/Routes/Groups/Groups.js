@@ -12,11 +12,11 @@ import CreateGroupModal from './CreateGroupModal';
 import RenameGroupModal from './RenameGroupModal';
 import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
-import { useHistory } from 'react-router-dom';
-import { emptyStateNoFliters } from '../../utils';
+import { useLocation } from 'react-router-dom';
+import { emptyStateNoFilters } from '../../utils';
 
 const Groups = () => {
-  const history = useHistory();
+  const { search } = useLocation();
   const [response, fetchGroups] = useApi({
     api: getGroups,
     tableReload: true,
@@ -50,7 +50,7 @@ const Groups = () => {
         <PageHeaderTitle title="Groups" />
       </PageHeader>
       <Main className="edge-devices">
-        {!emptyStateNoFliters(isLoading, data?.count, history) ? (
+        {!emptyStateNoFilters(isLoading, data?.count, search) ? (
           <GroupTable
             data={data?.data || []}
             count={data?.count}

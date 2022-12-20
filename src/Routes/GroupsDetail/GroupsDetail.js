@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useState, Suspense } from 'react';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,7 +17,7 @@ import {
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import Empty from '../../components/Empty';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { routes as paths } from '../../constants/routeMapper';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import DeviceTable from '../Devices/DeviceTable';
@@ -28,11 +28,7 @@ import {
   removeDevicesFromGroup,
 } from '../../api/groups';
 import AddSystemsToGroupModal from '../Devices/AddSystemsToGroupModal';
-import {
-  canUpdateSelectedDevices,
-  emptyStateNoFliters,
-  stateToUrlSearch,
-} from '../../utils';
+import { canUpdateSelectedDevices, emptyStateNoFilters } from '../../utils';
 import useApi from '../../hooks/useApi';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
@@ -52,6 +48,8 @@ const GroupsDetail = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const history = useHistory();
+  const { search, pathname } = useLocation();
+
   const { groupId } = params;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -95,13 +93,6 @@ const GroupsDetail = () => {
         ? `${deviceIds.length} system${deviceIds.length === 1 ? '' : 's'}`
         : `${removeModal.name}`
     } from ${groupName}?`;
-
-  useEffect(() => {
-    history.push({
-      pathname: history.location.pathname,
-      search: stateToUrlSearch('add_system_modal=true', isAddModalOpen),
-    });
-  }, [isAddModalOpen]);
 
   const handleSingleDeviceRemoval = () => {
     const statusMessages = {
@@ -235,10 +226,10 @@ const GroupsDetail = () => {
         </Flex>
       </PageHeader>
       <Main className="edge-devices">
-        {!emptyStateNoFliters(
+        {!emptyStateNoFilters(
           isLoading,
           data?.DeviceGroup?.Devices.length,
-          history
+          search
         ) ? (
           <DeviceTable
             data={data?.DevicesView?.devices || []}
@@ -281,7 +272,7 @@ const GroupsDetail = () => {
             setHasModalSubmitted={setHasModalSubmitted}
             fetchDevices={fetchDevices}
             isAddSystemsView={true}
-            groupId={groupId}
+            groupId={parseInt(groupId)}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
@@ -348,7 +339,7 @@ const GroupsDetail = () => {
         >
           <UpdateDeviceModal
             navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
+              history.push({ pathname });
               setUpdateModal((prevState) => {
                 return {
                   ...prevState,

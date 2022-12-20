@@ -1,7 +1,7 @@
 import React, { useState, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import GeneralTable from '../../components/general-table/GeneralTable';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { routes as paths } from '../../constants/routeMapper';
 import { Bullseye, Spinner, Tooltip } from '@patternfly/react-core';
 
@@ -40,6 +40,9 @@ const GroupTable = ({
   setHasModalSubmitted,
   fetchGroups,
 }) => {
+  const history = useHistory();
+  const { pathname } = useLocation();
+
   const [updateModal, setUpdateModal] = useState({
     isOpen: false,
     deviceData: null,
@@ -179,7 +182,7 @@ const GroupTable = ({
         >
           <UpdateDeviceModal
             navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
+              history.push({ pathname });
               setUpdateModal((prevState) => {
                 return {
                   ...prevState,

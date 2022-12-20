@@ -7,12 +7,12 @@ import Main from '@redhat-cloud-services/frontend-components/Main';
 import RepositoryHeader from './RepositoryHeader';
 import useApi from '../../hooks/useApi';
 import { getCustomRepositories } from '../../api/repositories';
-import { useHistory } from 'react-router-dom';
-import { emptyStateNoFliters } from '../../utils';
+import { useLocation } from 'react-router-dom';
+import { emptyStateNoFilters } from '../../utils';
 import EmptyState from '../../components/Empty';
 
 const Repository = () => {
-  const history = useHistory();
+  const { search } = useLocation();
   const [response, fetchRepos] = useApi({
     api: ({ query }) =>
       getCustomRepositories({
@@ -57,7 +57,7 @@ const Repository = () => {
       <RepositoryHeader />
       <Main>
         <>
-          {!emptyStateNoFliters(isLoading, data?.count, history) ? (
+          {!emptyStateNoFilters(isLoading, data?.count, search) ? (
             <RepositoryTable
               data={data?.data || []}
               count={data?.count}
