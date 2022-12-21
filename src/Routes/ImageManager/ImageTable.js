@@ -56,7 +56,7 @@ const createRows = (data) => {
     cells: [
       {
         title: (
-          <Link to={`${paths['manage-images-detail']}/${image.ID}`}>
+          <Link to={`${paths.manageImagesDetail}/${image.ID}`}>
             {image.Name}
           </Link>
         ),

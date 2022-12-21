@@ -4,7 +4,7 @@ import { headerCol } from '@patternfly/react-table';
 import { Button, Divider } from '@patternfly/react-core';
 import { updateSystem } from '../../api/devices';
 import { useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import apiWithToast from '../../utils/apiWithToast';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
@@ -35,7 +35,8 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
   const [selectedCommitID, setSelectedCommitID] = useState(null);
   const dispatch = useDispatch();
   const history = useHistory();
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
+  const match = useRouteMatch();
 
   const buildRows = data?.map((rowData) => {
     const {
@@ -96,9 +97,25 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
   };
 
   const handleClose = () => {
-    history.push({
-      pathname: history.state?.prevState || paths[pathname.split('/')[1]],
-    });
+    // Return either to the system detail, group detail, or inventory page,
+    // depending on path and from_details param
+    let destPath = paths.inventory;
+    if (match.path === paths.inventoryDetailUpdate) {
+      destPath = search.includes('from_details=true')
+        ? paths.inventoryDetail
+        : paths.inventory;
+    }
+    if (match.path === paths.fleetManagementSystemDetailUpdate) {
+      destPath = search.includes('from_details=true')
+        ? paths.fleetManagementSystemDetail
+        : paths.fleetManagementDetail;
+    }
+
+    // Construct destination path
+    const pathLen = destPath.split('/').length;
+    const dest = pathname.split('/').slice(0, pathLen).join('/');
+
+    history.push({ pathname: dest });
   };
 
   return (

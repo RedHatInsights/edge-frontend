@@ -72,18 +72,18 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
       {!imageData.isLoading && imageData.hasError ? (
         <Breadcrumb>
           <BreadcrumbItem>
-            <Link to={paths['manage-images']}>Back to Manage Images</Link>
+            <Link to={paths.manageImages}>Back to Manage Images</Link>
           </BreadcrumbItem>
         </Breadcrumb>
       ) : (
         <>
           <Breadcrumb>
             <BreadcrumbItem>
-              <Link to={paths['manage-images']}>Manage Images</Link>
+              <Link to={paths.manageImages}>Manage Images</Link>
             </BreadcrumbItem>
             {imageVersion ? (
               <BreadcrumbItem>
-                <Link to={`${paths['manage-images']}/${data?.ImageSet?.ID}`}>
+                <Link to={`${paths.manageImages}/${data?.ImageSet?.ID}`}>
                   {data?.ImageSet?.Name}
                 </Link>
               </BreadcrumbItem>

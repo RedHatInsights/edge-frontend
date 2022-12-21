@@ -16,7 +16,7 @@ import {
   InventoryDetailHead,
   DetailWrapper,
 } from '@redhat-cloud-services/frontend-components/Inventory';
-import { useParams, useHistory, useLocation, Link } from 'react-router-dom';
+import { useHistory, useLocation, useParams, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { deviceDetail } from '../../store/deviceDetail';
 import { RegistryContext } from '../../store';
@@ -43,7 +43,6 @@ const DeviceDetail = () => {
     },
     {}
   );
-
   const history = useHistory();
   const { pathname } = useLocation();
   const { deviceId, groupId } = useParams();
@@ -131,7 +130,7 @@ const DeviceDetail = () => {
         {!groupName ? (
           <Breadcrumb ouiaId="systems-list">
             <BreadcrumbItem>
-              <Link to={paths['inventory']}>Systems</Link>
+              <Link to={paths.inventory}>Systems</Link>
             </BreadcrumbItem>
             <BreadcrumbItem isActive>
               <div className="ins-c-inventory__detail--breadcrumb-name">
@@ -142,10 +141,10 @@ const DeviceDetail = () => {
         ) : (
           <Breadcrumb ouiaId="groups-list">
             <BreadcrumbItem>
-              <Link to={`${paths['fleet-management']}`}>Groups</Link>
+              <Link to={paths.fleetManagement}>Groups</Link>
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <Link to={`${paths['fleet-management']}/${groupId}`}>
+              <Link to={`${paths.fleetManagement}/${groupId}`}>
                 {groupName}
               </Link>
             </BreadcrumbItem>
@@ -168,9 +167,9 @@ const DeviceDetail = () => {
               onClick: () => {
                 history.push({
                   pathname: groupName
-                    ? `${paths['fleet-management']}/${groupId}/systems/${deviceId}/update`
-                    : `${paths['inventory']}/${deviceId}/update`,
-                  state: { prevState: pathname },
+                    ? `${paths.fleetManagement}/${groupId}/systems/${deviceId}/update`
+                    : `${paths.inventory}/${deviceId}/update`,
+                  search: '?from_details=true',
                 });
               },
             },

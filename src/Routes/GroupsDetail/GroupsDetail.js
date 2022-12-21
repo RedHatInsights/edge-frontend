@@ -139,7 +139,7 @@ const GroupsDetail = () => {
         {groupName ? (
           <Breadcrumb>
             <BreadcrumbItem>
-              <Link to={`${paths['fleet-management']}`}>Groups</Link>
+              <Link to={paths.fleetManagement}>Groups</Link>
             </BreadcrumbItem>
             <BreadcrumbItem>{groupName}</BreadcrumbItem>
           </Breadcrumb>
@@ -272,7 +272,6 @@ const GroupsDetail = () => {
             setHasModalSubmitted={setHasModalSubmitted}
             fetchDevices={fetchDevices}
             isAddSystemsView={true}
-            groupId={parseInt(groupId)}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
@@ -357,7 +356,7 @@ const GroupsDetail = () => {
         <DeleteGroupModal
           isModalOpen={isDeleteModalOpen}
           setIsModalOpen={setIsDeleteModalOpen}
-          reloadData={() => history.push(paths['fleet-management'])}
+          reloadData={() => history.push(paths.fleetManagement)}
           modalState={modalState}
         />
       )}

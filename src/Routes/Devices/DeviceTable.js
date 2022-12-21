@@ -144,7 +144,7 @@ const createRows = (devices, hasLinks, fetchDevices, deviceLinkBase) => {
         {
           title: ImageName ? (
             hasLinks ? (
-              <Link to={`${paths['manage-images']}/${ImageSetID}/`}>
+              <Link to={`${paths.manageImages}/${ImageSetID}`}>
                 {ImageName}
               </Link>
             ) : (
@@ -217,7 +217,6 @@ const DeviceTable = ({
   fetchDevices,
   isSystemsView = false,
   isAddSystemsView = false,
-  groupId,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -226,10 +225,8 @@ const DeviceTable = ({
   const { pathname, search } = useLocation();
 
   // Create base URL path for system detail link
-  let deviceBaseUrl = pathname;
-  if (deviceBaseUrl !== paths.inventory) {
-    deviceBaseUrl = deviceBaseUrl + '/systems';
-  }
+  const deviceBaseUrl =
+    pathname === paths.inventory ? pathname : `${pathname}/systems`;
 
   const actionResolver = (rowData) => {
     const actions = [];
@@ -275,10 +272,7 @@ const DeviceTable = ({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
           history.push({
-            pathname: groupId
-              ? `${paths['fleet-management']}/${groupId}/systems/${rowData.rowInfo.id}/update`
-              : `${paths['inventory']}/${rowData.rowInfo.id}/update`,
-            state: { prevState: pathname },
+            pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
           });
         },
       });
@@ -404,7 +398,6 @@ DeviceTable.propTypes = {
   fetchDevices: PropTypes.func,
   isSystemsView: PropTypes.bool,
   isAddSystemsView: PropTypes.bool,
-  groupId: PropTypes.number,
 };
 
 export default DeviceTable;

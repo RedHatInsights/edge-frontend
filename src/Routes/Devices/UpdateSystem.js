@@ -180,10 +180,10 @@ const UpdateSystem = () => {
         {!groupName ? (
           <Breadcrumb ouiaId="systems-list">
             <BreadcrumbItem>
-              <Link to={paths['inventory']}>Systems</Link>
+              <Link to={paths.inventory}>Systems</Link>
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <Link to={`${paths['inventory']}/${deviceId}/`}>
+              <Link to={`${paths.inventory}/${deviceId}/`}>
                 {device?.DeviceName}
               </Link>
             </BreadcrumbItem>
@@ -192,16 +192,16 @@ const UpdateSystem = () => {
         ) : (
           <Breadcrumb ouiaId="groups-list">
             <BreadcrumbItem>
-              <Link to={`${paths['fleet-management']}`}>Groups</Link>
+              <Link to={paths.fleetManagement}>Groups</Link>
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <Link to={`${paths['fleet-management']}/${groupId}`}>
+              <Link to={`${paths.fleetManagement}/${groupId}`}>
                 {groupName}
               </Link>
             </BreadcrumbItem>
             <BreadcrumbItem>
               <Link
-                to={`${paths['fleet-management']}/${groupId}/systems/${deviceId}/`}
+                to={`${paths.fleetManagement}/${groupId}/systems/${deviceId}/`}
               >
                 {device?.DeviceName}
               </Link>

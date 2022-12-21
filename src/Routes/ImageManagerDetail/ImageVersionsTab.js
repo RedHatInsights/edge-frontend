@@ -78,7 +78,7 @@ const createRows = (data, imageSetId, latestImageVersion) => {
       {
         title: (
           <Link
-            to={`${paths['manage-images']}/${imageSetId}/versions/${image.ID}/details`}
+            to={`${paths.manageImages}/${imageSetId}/versions/${image.ID}/details`}
           >
             {image?.Version}
           </Link>

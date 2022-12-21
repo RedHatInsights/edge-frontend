@@ -65,7 +65,7 @@ const ImageDetailTabs = ({
           body="Please check you have the correct link with the correct image Id."
           primaryAction={{
             text: 'Back to Manage Images',
-            href: paths['manage-images'],
+            href: paths.manageImages,
           }}
           secondaryActions={[]}
         />
