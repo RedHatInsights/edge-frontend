@@ -166,9 +166,7 @@ const DeviceDetail = () => {
                 !imageData?.ImageInfo?.UpdatesAvailable?.length > 0,
               onClick: () => {
                 history.push({
-                  pathname: groupName
-                    ? `${paths.fleetManagement}/${groupId}/systems/${deviceId}/update`
-                    : `${paths.inventory}/${deviceId}/update`,
+                  pathname: `${pathname}/update`,
                   search: '?from_details=true',
                 });
               },
