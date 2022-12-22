@@ -33,9 +33,9 @@ exports[`ImageVersionsTab renders correctly 1`] = `
             <button
               aria-expanded="false"
               aria-label="Options menu"
-              aria-labelledby=" pf-select-toggle-id-0"
+              aria-labelledby=" pf-select-toggle-id-1"
               class="pf-c-select__toggle"
-              id="pf-select-toggle-id-0"
+              id="pf-select-toggle-id-1"
               type="button"
             >
               <div
@@ -78,7 +78,7 @@ exports[`ImageVersionsTab renders correctly 1`] = `
           data-ouia-component-type="PF4/Pagination"
           data-ouia-safe="true"
           data-testid="pagination-header-test-id"
-          id="pagination-options-menu-top-0"
+          id="pagination-options-menu-top-2"
           style="--pf-c-pagination__nav-page-select--c-form-control--width-chars: 2;"
         >
           <div
@@ -131,7 +131,7 @@ exports[`ImageVersionsTab renders correctly 1`] = `
                 data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
                 data-ouia-component-type="PF4/DropdownToggle"
                 data-ouia-safe="true"
-                id="pagination-options-menu-top-toggle-0"
+                id="pagination-options-menu-top-toggle-2"
                 type="button"
               >
                 <span
@@ -222,7 +222,7 @@ exports[`ImageVersionsTab renders correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-header-expandable-content-0"
+      id="toolbar-header-expandable-content-3"
     >
       <div
         class="pf-c-toolbar__group"
@@ -241,7 +241,7 @@ exports[`ImageVersionsTab renders correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-header-expandable-content-1"
+      id="toolbar-header-expandable-content-4"
     >
       <div
         class="pf-c-toolbar__group"
