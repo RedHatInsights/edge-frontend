@@ -24,8 +24,8 @@ const ImageDetailTabs = ({
   imageVersion,
   isLoading,
 }) => {
-  const location = useLocation();
   const history = useHistory();
+  const { pathname } = useLocation();
   const [activeTabKey, setActiveTabkey] = useState(tabs.details);
   const activeTab = imageVersion ? 'imageTab' : 'imageSetTab';
 
@@ -37,7 +37,7 @@ const ImageDetailTabs = ({
     'imageTab',
     'packagesToggle',
   ];
-  const imageUrlMapper = mapUrlToObj(location.pathname, keys);
+  const imageUrlMapper = mapUrlToObj(pathname, keys);
 
   const handleTabClick = (_event, tabIndex) => {
     const selectedTab =
@@ -54,7 +54,7 @@ const ImageDetailTabs = ({
     imageUrlMapper['imageTab']
       ? setActiveTabkey(tabs[imageUrlMapper['imageTab']])
       : setActiveTabkey(tabs[imageUrlMapper['imageSetTab']]);
-  }, [location.pathname]);
+  }, [pathname]);
 
   return (
     <>
@@ -65,7 +65,7 @@ const ImageDetailTabs = ({
           body="Please check you have the correct link with the correct image Id."
           primaryAction={{
             text: 'Back to Manage Images',
-            href: paths['manage-images'],
+            href: paths.manageImages,
           }}
           secondaryActions={[]}
         />

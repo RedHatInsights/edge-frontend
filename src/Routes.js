@@ -67,49 +67,46 @@ export const Routes = () => {
     >
       <Switch>
         <Route exact path={paths.groups} component={Groups} />
-        <Route exact path={paths['groups-detail']} component={GroupsDetail} />
+        <Route exact path={paths.groupsDetail} component={GroupsDetail} />
 
-        {/* <Route path={paths['device-detail']} component={DeviceDetail} /> */}
+        {/* <Route path={paths.deviceDetail} component={DeviceDetail} /> */}
         {/* <Route path={paths.canaries} component={Canaries} /> */}
-        <Route exact path={paths['fleet-management']} component={Groups} />
+        <Route exact path={paths.fleetManagement} component={Groups} />
         <Route
           exact
-          path={paths['fleet-management-detail']}
+          path={paths.fleetManagementDetail}
           component={GroupsDetail}
         />
         <Route
           exact
-          path={paths['fleet-management-system-detail']}
+          path={paths.fleetManagementSystemDetail}
           component={DeviceDetail}
         />
         <Route
           exact
-          path={paths['fleet-management-system-detail-update']}
+          path={paths.fleetManagementSystemDetailUpdate}
           component={UpdateSystem}
         />
-        <Route exact path={paths['inventory']} component={Inventory} />
+        <Route exact path={paths.inventory} component={Inventory} />
         <Route
           exact
-          path={paths['inventory-detail-update']}
+          path={paths.inventoryDetailUpdate}
           component={UpdateSystem}
         />
-        <Route path={paths['inventory-detail']} component={DeviceDetail} />
-        <Route
-          path={paths['manage-images-detail-version']}
-          component={ImageDetail}
-        />
-        <Route path={paths['manage-images-detail']} component={ImageDetail} />
-        <Route path={paths['manage-images']} component={Images} />
+        <Route path={paths.inventoryDetail} component={DeviceDetail} />
+        <Route path={paths.manageImagesDetailVersion} component={ImageDetail} />
+        <Route path={paths.manageImagesDetail} component={ImageDetail} />
+        <Route path={paths.manageImages} component={Images} />
 
-        <Route exact path={paths['repositories']} component={Repositories} />
+        <Route exact path={paths.repositories} component={Repositories} />
 
         <Route
           exact
-          path={paths['learning-resources']}
+          path={paths.learningResources}
           component={LearningResources}
         />
         <Route>
-          <Redirect to={paths['fleet-management']} />
+          <Redirect to={paths.fleetManagement} />
         </Route>
       </Switch>
     </Suspense>

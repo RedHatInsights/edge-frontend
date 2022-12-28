@@ -5,7 +5,7 @@ import {
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { Spinner, Bullseye } from '@patternfly/react-core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import ImageSetsTable from './ImageSetsTable';
 import { stateToUrlSearch } from '../../utils';
 import { getImageSets } from '../../api/images';
@@ -25,6 +25,7 @@ const UpdateImageWizard = React.lazy(() =>
 
 const Images = () => {
   const history = useHistory();
+  const { pathname, search } = useLocation();
 
   const [response, fetchImageSets] = useApi({
     api: getImageSets,
@@ -41,16 +42,16 @@ const Images = () => {
 
   const openCreateWizard = () => {
     history.push({
-      pathname: history.location.pathname,
-      search: stateToUrlSearch('create_image=true', true),
+      pathname,
+      search: stateToUrlSearch('create_image=true', true, search),
     });
     setIsCreateWizardOpen(true);
   };
 
   const openUpdateWizard = (id) => {
     history.push({
-      pathname: history.location.pathname,
-      search: stateToUrlSearch('update_image=true', true),
+      pathname,
+      search: stateToUrlSearch('update_image=true', true, search),
     });
     setUpdateWizard({
       isOpen: true,
@@ -92,8 +93,8 @@ const Images = () => {
           <CreateImageWizard
             navigateBack={() => {
               history.push({
-                pathname: history.location.pathname,
-                search: stateToUrlSearch('create_image=true', false),
+                pathname,
+                search: stateToUrlSearch('create_image=true', false, search),
               });
               setIsCreateWizardOpen(false);
             }}
@@ -112,8 +113,8 @@ const Images = () => {
           <UpdateImageWizard
             navigateBack={() => {
               history.push({
-                pathname: history.location.pathname,
-                search: stateToUrlSearch('update_image=true', false),
+                pathname,
+                search: stateToUrlSearch('update_image=true', false, search),
               });
               setUpdateWizard((prevState) => {
                 return {

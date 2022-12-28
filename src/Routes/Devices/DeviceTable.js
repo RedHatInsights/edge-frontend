@@ -2,12 +2,12 @@ import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
 import { Tooltip } from '@patternfly/react-core';
 import CustomEmptyState from '../../components/Empty';
-import { emptyStateNoFliters } from '../../utils';
+import { emptyStateNoFilters } from '../../utils';
 import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
 
@@ -144,7 +144,7 @@ const createRows = (devices, hasLinks, fetchDevices, deviceLinkBase) => {
         {
           title: ImageName ? (
             hasLinks ? (
-              <Link to={`${paths['manage-images']}/${ImageSetID}/`}>
+              <Link to={`${paths.manageImages}/${ImageSetID}`}>
                 {ImageName}
               </Link>
             ) : (
@@ -222,12 +222,11 @@ const DeviceTable = ({
   const canBeAdded = setIsAddModalOpen;
   const canBeUpdated = isSystemsView;
   const history = useHistory();
+  const { pathname, search } = useLocation();
 
   // Create base URL path for system detail link
-  let deviceBaseUrl = history.location.pathname;
-  if (deviceBaseUrl !== paths.inventory) {
-    deviceBaseUrl = deviceBaseUrl + '/systems';
-  }
+  const deviceBaseUrl =
+    pathname === paths.inventory ? pathname : `${pathname}/systems`;
 
   const actionResolver = (rowData) => {
     const actions = [];
@@ -273,7 +272,7 @@ const DeviceTable = ({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
           history.push({
-            pathname: `${paths['inventory']}/${rowData.rowInfo.id}/update`,
+            pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
           });
         },
       });
@@ -301,7 +300,7 @@ const DeviceTable = ({
 
   return (
     <>
-      {isSystemsView && emptyStateNoFliters(isLoading, count, history) ? (
+      {isSystemsView && emptyStateNoFilters(isLoading, count, search) ? (
         <CustomEmptyState
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}

@@ -51,7 +51,7 @@ const ImageInformationCard = () => {
               <Skeleton size={SkeletonSize.sm} />
             ) : imageData ? (
               <Link
-                to={`${paths['manage-images']}/${imageData?.Image?.ImageSetID}/details`}
+                to={`${paths.manageImages}/${imageData?.Image?.ImageSetID}/details`}
               >
                 {imageData?.Image?.Name}
               </Link>
@@ -65,7 +65,7 @@ const ImageInformationCard = () => {
               <Skeleton size={SkeletonSize.sm} />
             ) : imageData ? (
               <Link
-                to={`${paths['manage-images']}/${imageData?.Image?.ImageSetID}/versions/${imageData?.Image?.ID}/details`}
+                to={`${paths.manageImages}/${imageData?.Image?.ImageSetID}/versions/${imageData?.Image?.ID}/details`}
               >
                 {imageData?.Image?.Version}
               </Link>
@@ -79,7 +79,7 @@ const ImageInformationCard = () => {
               <Skeleton size={SkeletonSize.sm} />
             ) : imageData?.UpdatesAvailable ? (
               <Link
-                to={`${paths['manage-images']}/${imageData?.UpdatesAvailable[0]?.Image?.ImageSetID}/versions/${imageData?.UpdatesAvailable[0]?.Image?.ID}/details`}
+                to={`${paths.manageImages}/${imageData?.UpdatesAvailable[0]?.Image?.ImageSetID}/versions/${imageData?.UpdatesAvailable[0]?.Image?.ID}/details`}
               >
                 {imageData?.UpdatesAvailable[0]?.Image?.Version}
               </Link>
@@ -95,7 +95,7 @@ const ImageInformationCard = () => {
               <Skeleton size={SkeletonSize.sm} />
             ) : imageData?.RollbackImage?.ID ? (
               <Link
-                to={`${paths['manage-images']}/${imageData?.RollbackImage?.ImageSetID}/versions/${imageData?.RollbackImage?.ID}/details`}
+                to={`${paths.manageImages}/${imageData?.RollbackImage?.ImageSetID}/versions/${imageData?.RollbackImage?.ID}/details`}
               >
                 {imageData?.RollbackImage?.Version}
               </Link>

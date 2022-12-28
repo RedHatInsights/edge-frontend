@@ -75,7 +75,7 @@ const WizardRepositoryTable = (props) => {
           body="Add custom repositories to build RHEL for Edge images with additional packages."
           primaryAction={{
             text: 'Custom repositories',
-            href: paths['repositories'],
+            href: paths.repositories,
           }}
         />
       ) : (

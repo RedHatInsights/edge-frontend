@@ -14,7 +14,7 @@ import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
 import { transformSort } from '../../utils';
 import BulkSelect from './BulkSelect';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { stateToUrlSearch } from '../../utils';
 
 const filterParams = (chipsArray) => {
@@ -83,16 +83,21 @@ const GeneralTable = ({
   const [checkedRows, setCheckedRows] = useState(defaultCheckedRows);
   const dispatch = useDispatch();
   const history = useHistory();
+  const { pathname, search } = useLocation();
 
   useEffect(() => {
+    // Add or remove has_filters param depending on whether filters are present
     if (
-      //!history.location.search.includes('add_system_modal=true') &&
-      !history.location.search.includes('create_image=true') &&
-      !history.location.search.includes('update_image=true')
+      !search.includes('create_image=true') &&
+      !search.includes('update_image=true')
     ) {
-      history.push({
-        pathname: history.location.pathname,
-        search: stateToUrlSearch('has_filters=true', chipsArray.length > 0),
+      history.replace({
+        pathname,
+        search: stateToUrlSearch(
+          'has_filters=true',
+          chipsArray.length > 0,
+          search
+        ),
       });
     }
 

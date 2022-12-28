@@ -1,7 +1,7 @@
 import React, { Fragment, Suspense, useEffect, useState } from 'react';
 import { PageHeader } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Stack, StackItem, Spinner, Bullseye } from '@patternfly/react-core';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import DetailsHead from './DetailsHeader';
 import ImageDetailTabs from './ImageDetailTabs';
 import UpdateImageWizard from '../ImageManager/UpdateImageWizard';
@@ -11,6 +11,7 @@ import { getImageSetView } from '../../api/images';
 const ImageDetail = () => {
   const { imageId, imageVersionId } = useParams();
   const history = useHistory();
+  const { pathname } = useLocation();
   const [updateWizard, setUpdateWizard] = useState({
     isOpen: false,
     updateId: null,
@@ -27,7 +28,7 @@ const ImageDetail = () => {
 
   const openUpdateWizard = (id) => {
     history.push({
-      pathname: history.location.pathname,
+      pathname,
       search: new URLSearchParams({
         update_image: true,
       }).toString(),
@@ -83,7 +84,7 @@ const ImageDetail = () => {
         >
           <UpdateImageWizard
             navigateBack={() => {
-              history.push({ pathname: history.location.pathname });
+              history.push({ pathname });
               setUpdateWizard((prevState) => ({ ...prevState, isOpen: false }));
             }}
             updateImageID={updateWizard.updateId}
