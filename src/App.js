@@ -14,6 +14,8 @@ const App = (props) => {
   const history = useHistory();
   const [isAuth, setIsAuth] = useState(null);
   useEffect(() => {
+    insights.chrome.init();
+    // TODO change this to your appname
     insights.chrome.identifyApp('fleet-management');
 
     insights.chrome.on('APP_NAVIGATION', (event) =>
