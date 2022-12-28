@@ -33,6 +33,7 @@ const columns = [
 const UpdateVersionTable = ({ data, isLoading, hasError }) => {
   const [selectedVersion, setSelectedVersion] = useState(null);
   const [selectedCommitID, setSelectedCommitID] = useState(null);
+  const [isUpdateSubmitted, setIsUpdateSubmitted] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
   const { pathname, search } = useLocation();
@@ -71,7 +72,8 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
     setSelectedCommitID(value);
   };
 
-  const handleUpdateEvent = () => {
+  const handleUpdateEvent = async () => {
+    setIsUpdateSubmitted(true);
     const statusMessages = {
       onInfo: {
         title: 'Updating system',
@@ -83,7 +85,7 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
       },
     };
 
-    apiWithToast(
+    await apiWithToast(
       dispatch,
       () =>
         updateSystem({
@@ -94,6 +96,7 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
     );
 
     handleClose();
+    setIsUpdateSubmitted(false);
   };
 
   const handleClose = () => {
@@ -158,7 +161,7 @@ const UpdateVersionTable = ({ data, isLoading, hasError }) => {
           style={{ left: '60px' }}
           key="confirm"
           variant="primary"
-          isDisabled={!selectedVersion}
+          isDisabled={!selectedVersion || isUpdateSubmitted}
           onClick={() => handleUpdateEvent()}
         >
           Update system
