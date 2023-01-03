@@ -114,7 +114,7 @@ exports[`Toolbar Header should render correctly 1`] = `
           data-ouia-component-type="PF4/Pagination"
           data-ouia-safe="true"
           data-testid="pagination-header-test-id"
-          id="pagination-options-menu-top-0"
+          id="pagination-options-menu-top-top-pagination"
           style="--pf-c-pagination__nav-page-select--c-form-control--width-chars: 2;"
         >
           <div
@@ -167,7 +167,7 @@ exports[`Toolbar Header should render correctly 1`] = `
                 data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
                 data-ouia-component-type="PF4/DropdownToggle"
                 data-ouia-safe="true"
-                id="pagination-options-menu-top-toggle-0"
+                id="pagination-options-menu-top-top-toggle"
                 type="button"
               >
                 <span
