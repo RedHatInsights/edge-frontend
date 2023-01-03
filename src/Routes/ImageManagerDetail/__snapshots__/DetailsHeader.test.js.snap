@@ -12,17 +12,14 @@ exports[`DetailsHeader renders correctly 1`] = `
     >
       <dl
         class=""
-        data-pf-content="true"
       >
         <h1
           class="grid-align-center pf-u-mb-0"
-          data-pf-content="true"
         >
           test image
         </h1>
         <dd
           class="pf-u-pt-sm"
-          data-pf-content="true"
         >
           <div
             class="pf-l-split"
@@ -57,7 +54,6 @@ exports[`DetailsHeader renders correctly 1`] = `
         </dd>
         <p
           class=""
-          data-pf-content="true"
         >
           Last updated 
           <span>
