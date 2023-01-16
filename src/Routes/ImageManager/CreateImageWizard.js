@@ -60,7 +60,7 @@ const CreateImage = ({ navigateBack, reload }) => {
           dispatch({
             ...addNotification({
               variant: 'info',
-              title: 'Created image',
+              title: 'Creating image',
               description: `${resp.value.Name} image was added to the queue.`,
             }),
             meta: {
