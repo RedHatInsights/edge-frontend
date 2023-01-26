@@ -10,6 +10,11 @@ export const getDevice = (id) => {
   return instance.get(`${EDGE_API}/devices/${id}`);
 };
 
+export const getDeviceUpdates = ({ id, query }) => {
+  const q = getTableParams(query);
+  return instance.get(`${EDGE_API}/devices/${id}?${q}`);
+};
+
 export const updateSystem = async (payload) => {
   return await instance.post(`${EDGE_API}/updates`, payload);
 };
