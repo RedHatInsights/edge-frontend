@@ -3,7 +3,6 @@ import AddModal from './modals/AddModal';
 import EditModal from './modals/EditModal';
 import RemoveModal from './modals/RemoveModal';
 import RepositoryTable from './RepositoryTable';
-import Main from '@redhat-cloud-services/frontend-components/Main';
 import RepositoryHeader from './RepositoryHeader';
 import useApi from '../../hooks/useApi';
 import { getCustomRepositories } from '../../api/repositories';
@@ -55,7 +54,7 @@ const Repository = () => {
   return (
     <>
       <RepositoryHeader />
-      <Main>
+      <section className="pf-l-page__main-section pf-c-page__main-section">
         <>
           {!emptyStateNoFilters(isLoading, data?.count, search) ? (
             <RepositoryTable
@@ -101,7 +100,7 @@ const Repository = () => {
           closeModal={closeModal}
           reloadData={reloadData}
         />
-      </Main>
+      </section>
     </>
   );
 };

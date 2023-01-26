@@ -20,7 +20,6 @@ import { distributionMapper } from '../../constants';
 import { useDispatch } from 'react-redux';
 import { routes as paths } from '../../constants/routeMapper';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
-import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -379,14 +378,14 @@ const UpdateSystem = () => {
           )}
         </TextContent>
       </PageHeader>
-      <Main className="edge-devices">
+      <section className="edge-devices pf-l-page__main-section pf-c-page__main-section">
         <UpdateSystemMain
           data={data}
           fetchDevices={fetchDevices}
           isLoading={isLoading}
           hasError={hasError}
         />
-      </Main>
+      </section>
     </>
   );
 };
