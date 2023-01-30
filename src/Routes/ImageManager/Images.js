@@ -3,7 +3,6 @@ import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { Spinner, Bullseye } from '@patternfly/react-core';
 import { useHistory, useLocation } from 'react-router-dom';
 import ImageSetsTable from './ImageSetsTable';
@@ -69,7 +68,7 @@ const Images = () => {
       <PageHeader className="pf-m-light">
         <PageHeaderTitle title="Images" />
       </PageHeader>
-      <Main className="edge-devices">
+      <section className="edge-images pf-l-page__main-section pf-c-page__main-section">
         <ImageSetsTable
           data={data?.data || []}
           count={data?.count}
@@ -81,7 +80,7 @@ const Images = () => {
           hasModalSubmitted={hasModalSubmitted}
           setHasModalSubmitted={setHasModalSubmitted}
         />
-      </Main>
+      </section>
       {isCreateWizardOpen && (
         <Suspense
           fallback={

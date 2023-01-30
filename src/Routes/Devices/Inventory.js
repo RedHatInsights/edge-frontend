@@ -3,7 +3,6 @@ import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import DeviceTable from './DeviceTable';
 import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
@@ -98,7 +97,7 @@ const Inventory = () => {
       <PageHeader className="pf-m-light">
         <PageHeaderTitle title="Systems" />
       </PageHeader>
-      <Main className="edge-devices">
+      <section className="edge-devices pf-l-page__main-section pf-c-page__main-section">
         <DeviceTable
           isSystemsView={true}
           data={data?.data?.devices}
@@ -131,7 +130,7 @@ const Inventory = () => {
           setHasModalSubmitted={setHasModalSubmitted}
           fetchDevices={fetchDevices}
         />
-      </Main>
+      </section>
       {updateModal.isOpen && (
         <Suspense
           fallback={

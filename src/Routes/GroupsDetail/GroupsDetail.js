@@ -15,7 +15,6 @@ import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import Empty from '../../components/Empty';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { routes as paths } from '../../constants/routeMapper';
@@ -225,7 +224,7 @@ const GroupsDetail = () => {
           </FlexItem>
         </Flex>
       </PageHeader>
-      <Main className="edge-devices">
+      <section className="edge-devices pf-l-page__main-section pf-c-page__main-section">
         {!emptyStateNoFilters(
           isLoading,
           data?.DeviceGroup?.Devices.length,
@@ -293,7 +292,7 @@ const GroupsDetail = () => {
             />
           </Flex>
         )}
-      </Main>
+      </section>
       {isAddModalOpen && (
         <AddSystemsToGroupModal
           groupId={groupId}

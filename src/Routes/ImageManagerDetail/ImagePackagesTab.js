@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { cellWidth } from '@patternfly/react-table';
 import { useHistory, useLocation } from 'react-router-dom';
 import Empty from '../../components/Empty';
-import Main from '@redhat-cloud-services/frontend-components/Main';
 
 const defaultFilters = [{ label: 'Name', type: 'text' }];
 
@@ -128,7 +127,7 @@ const ImagePackagesTab = ({ imageVersion }) => {
   };
 
   return imageVersion?.image?.Commit?.Status === 'SUCCESS' ? (
-    <Main className="add-100vh">
+    <section className="add-100vh pf-l-page__main-section pf-c-page__main-section">
       <GeneralTable
         apiFilterSort={false}
         filters={defaultFilters}
@@ -166,9 +165,9 @@ const ImagePackagesTab = ({ imageVersion }) => {
           title: 'No packages to display',
         }}
       />
-    </Main>
+    </section>
   ) : (
-    <Main className="add-100vh">
+    <section className="add-100vh pf-l-page__main-section pf-c-page__main-section">
       <Empty
         bgColor="white"
         title="Package data currently unavailable"
@@ -176,7 +175,7 @@ const ImagePackagesTab = ({ imageVersion }) => {
         primaryAction={null}
         secondaryActions={[]}
       />
-    </Main>
+    </section>
   );
 };
 
