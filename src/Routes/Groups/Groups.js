@@ -4,7 +4,6 @@ import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import GroupTable from './GroupTable';
 import Empty from '../../components/Empty';
 import { getGroups } from '../../api/groups';
@@ -49,7 +48,7 @@ const Groups = () => {
       <PageHeader className="pf-m-light">
         <PageHeaderTitle title="Groups" />
       </PageHeader>
-      <Main className="edge-devices">
+      <section className="edge-groups pf-l-page__main-section pf-c-page__main-section">
         {!emptyStateNoFilters(isLoading, data?.count, search) ? (
           <GroupTable
             data={data?.data || []}
@@ -83,7 +82,7 @@ const Groups = () => {
             />
           </Flex>
         )}
-      </Main>
+      </section>
 
       {isCreateModalOpen && (
         <CreateGroupModal

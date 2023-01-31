@@ -9,7 +9,6 @@ import Status from '../../components/Status';
 import { imageTypeMapper } from '../../constants';
 import { getImageSetViewVersions } from '../../api/images';
 import { cellWidth } from '@patternfly/react-table';
-import Main from '@redhat-cloud-services/frontend-components/Main';
 import { truncateString } from '../../utils';
 import useApi from '../../hooks/useApi';
 
@@ -166,7 +165,7 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
     rowData.rowInfo?.imageStatus === 'BUILDING';
 
   return (
-    <Main className="add-100vh">
+    <section className="add-100vh pf-l-page__main-section pf-c-page__main-section">
       <GeneralTable
         apiFilterSort={true}
         isUseApi={true}
@@ -184,7 +183,7 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
         areActionsDisabled={areActionsDisabled}
         defaultSort={{ index: 3, direction: 'desc' }}
       />
-    </Main>
+    </section>
   );
 };
 ImageVersionsTab.propTypes = {
