@@ -158,7 +158,7 @@ const UpdateSystemMain = ({ data, fetchDevices, isLoading, hasError }) => {
       },
       onError: {
         title: 'Error',
-        description: `An error occurred making the request`,
+        description: `Failed to update the selected system(s)`,
       },
     };
 

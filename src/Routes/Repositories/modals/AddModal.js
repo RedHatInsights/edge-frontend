@@ -61,9 +61,9 @@ const AddModal = ({ isOpen, closeModal, reloadData }) => {
           'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
         isRequired: true,
         validate: [
-          // async validator has to be first in the list
           { type: 'repoName' },
           { type: validatorTypes.REQUIRED },
+          { type: validatorTypes.MAX_LENGTH, threshold: 50 },
           nameValidator,
         ],
       },
