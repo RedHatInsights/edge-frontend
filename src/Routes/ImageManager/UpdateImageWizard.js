@@ -13,12 +13,14 @@ import {
 import { Bullseye, Backdrop, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import { createNewImage, addImageToPoll } from '../../store/actions';
-import { useDispatch } from 'react-redux';
-import { useSelector, shallowEqual } from 'react-redux';
+import {
+  createNewImage,
+  addImageToPoll,
+  loadImageDetail,
+} from '../../store/actions';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
-import { loadImageDetail } from '../../store/actions';
 import { getEdgeImageStatus } from '../../api/images';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { useFeatureFlags, getReleases } from '../../utils';
@@ -85,7 +87,7 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
           dispatch({
             ...addNotification({
               variant: 'info',
-              title: 'Update image',
+              title: 'Updating image',
               description: `${resp.value.Name} image was added to the queue.`,
             }),
             meta: {
