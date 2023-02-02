@@ -15,13 +15,16 @@ import {
 } from '@patternfly/react-core';
 import { imageTypeMapper, releaseMapper } from '../../constants';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { RegistryContext } from '../../store';
 import { imageDetailReducer } from '../../store/reducers';
-import { loadImageDetail, loadEdgeImageSets } from '../../store/actions';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
-import { createNewImage, addImageToPoll } from '../../store/actions';
+import {
+  createNewImage,
+  addImageToPoll,
+  loadImageDetail,
+  loadEdgeImageSets,
+} from '../../store/actions';
 import { getEdgeImageStatus } from '../../api/images';
 
 const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
@@ -65,7 +68,7 @@ const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
       dispatch({
         ...addNotification({
           variant: 'info',
-          title: 'Update image',
+          title: 'Updating image',
           description: `${resp.value.Name} image was added to the queue.`,
         }),
         meta: {
@@ -126,7 +129,6 @@ const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
       description="Review the information and click Update image to start the build process"
       isOpen={updateCveModal.isOpen}
       onClose={handleClose}
-      //onSubmit={handleUpdateModal}
       actions={[
         <Button key="confirm" variant="primary" onClick={handleUpdateModal}>
           Update Image
