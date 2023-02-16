@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useContext, Suspense } from 'react';
 import {
-  Grid,
-  GridItem,
   Breadcrumb,
   BreadcrumbItem,
   Bullseye,
@@ -125,6 +123,7 @@ const DeviceDetail = () => {
           ...mergeWithDetail(deviceDetail),
         });
       }}
+      inventoryId={deviceId}
     >
       <PageHeader>
         {!groupName ? (
@@ -207,16 +206,14 @@ const DeviceDetail = () => {
           />
         )}
       </PageHeader>
-      <Grid gutter="md">
-        <GridItem span={12}>
-          <DeviceDetailTabs
-            systemProfile={imageData}
-            imageId={imageId}
-            setUpdateModal={setUpdateModal}
-            setReload={setReload}
-          />
-        </GridItem>
-      </Grid>
+      {entity && (
+        <DeviceDetailTabs
+          systemProfile={imageData}
+          imageId={imageId}
+          setUpdateModal={setUpdateModal}
+          setReload={setReload}
+        />
+      )}
       {updateModal.isOpen && (
         <Suspense
           fallback={
