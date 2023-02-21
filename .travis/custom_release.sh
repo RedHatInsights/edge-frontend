@@ -6,9 +6,9 @@ if [ "${TRAVIS_BRANCH}" = "master" ]
 then
     for env in ci qa
     do
-        echo "PUSHING ${env}-beta"
+        echo "PUSHING ${env}"
         rm -rf ./dist/.git
-        .travis/release.sh "${env}-beta"
+        .travis/release.sh "${env}"
     done
 fi
 
@@ -16,9 +16,9 @@ if [ "${TRAVIS_BRANCH}" = "master-stable" ]
 then
     for env in ci qa
     do
-        echo "PUSHING ${env}-stable"
+        echo "PUSHING ${env}"
         rm -rf ./dist/.git
-        .travis/release.sh "${env}-stable"
+        .travis/release.sh "${env}"
     done
 fi
 
