@@ -6,24 +6,20 @@ if [ "${TRAVIS_BRANCH}" = "master" ]
 then
     for env in ci qa
     do
-        echo "PUSHING ${env}"
+        echo "PUSHING ${env}-beta"
         rm -rf ./dist/.git
-        .travis/release.sh "${env}"
-    done
-fi
-
-if [ "${TRAVIS_BRANCH}" = "master-stable" ]
-then
-    for env in ci qa
-    do
-        echo "PUSHING ${env}"
+        .travis/release.sh "${env}-beta"
+        echo "PUSHING ${env}-stable"
         rm -rf ./dist/.git
-        .travis/release.sh "${env}"
+        .travis/release.sh "${env}-stable"
     done
 fi
 
 if [[ "${TRAVIS_BRANCH}" = "prod-beta" || "${TRAVIS_BRANCH}" = "prod-stable" ]]; then
-    echo "PUSHING ${TRAVIS_BRANCH}"
-    rm -rf ./build/.git
-    .travis/release.sh "${TRAVIS_BRANCH}"
+    for env in beta stable
+    do
+        echo "PUSHING prod-${env}"
+        rm -rf ./build/.git
+        .travis/release.sh "prod-${env}"
+    done
 fi
