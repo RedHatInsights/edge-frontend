@@ -4,8 +4,6 @@ import {
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
-  EmptyStateSecondaryActions,
-  //Icon,
   TextContent,
   Text,
   Title,
@@ -41,19 +39,6 @@ const RepositoryLinkAccess = () => (
       >
         Go to custom repositories
       </Button>
-      <EmptyStateSecondaryActions>
-        {/* Custom repos documentation not released yet */}
-        {/* <Button
-          id="moved-state-link"
-          variant="link"
-          className="ins-active-general_information__popover-icon"
-        >
-          Learn more about custom repositories
-          <Icon iconSize="md" size="lg" isInline>
-            <ExternalLinkAltIcon />
-          </Icon>
-        </Button> */}
-      </EmptyStateSecondaryActions>
     </EmptyState>
   </>
 );
