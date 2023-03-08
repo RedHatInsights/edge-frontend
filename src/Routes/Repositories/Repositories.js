@@ -9,8 +9,14 @@ import { getCustomRepositories } from '../../api/repositories';
 import { useLocation } from 'react-router-dom';
 import { emptyStateNoFilters } from '../../utils';
 import EmptyState from '../../components/Empty';
+import RepositoryLinkAccess from './RepositoryLinkAccess';
+import { useFeatureFlags } from '../../utils';
 
 const Repository = () => {
+  const customReposFleatureFlag = useFeatureFlags(
+    'edge-management.custom_repos_ui'
+  );
+
   const { search } = useLocation();
   const [response, fetchRepos] = useApi({
     api: ({ query }) =>
@@ -53,54 +59,60 @@ const Repository = () => {
 
   return (
     <>
-      <RepositoryHeader />
-      <section className="pf-l-page__main-section pf-c-page__main-section">
+      {customReposFleatureFlag ? (
+        <RepositoryLinkAccess />
+      ) : (
         <>
-          {!emptyStateNoFilters(isLoading, data?.count, search) ? (
-            <RepositoryTable
-              data={data?.data || []}
-              count={data?.count}
+          <RepositoryHeader />
+          <section className="pf-l-page__main-section pf-c-page__main-section">
+            <>
+              {!emptyStateNoFilters(isLoading, data?.count, search) ? (
+                <RepositoryTable
+                  data={data?.data || []}
+                  count={data?.count}
+                  closeModal={closeModal}
+                  isLoading={isLoading}
+                  hasError={hasError}
+                  fetchRepos={fetchRepos}
+                  hasModalSubmitted={hasModalSubmitted}
+                  setHasModalSubmitted={setHasModalSubmitted}
+                />
+              ) : (
+                <EmptyState
+                  icon="repository"
+                  title="Add a custom repository"
+                  body="Add custom repositories to build RHEL for Edge images with additional packages."
+                  primaryAction={{
+                    text: 'Add repository',
+                    click: () => closeModal({ type: 'add' }),
+                  }}
+                />
+              )}
+            </>
+            <AddModal
+              isOpen={modalDetails.isOpen.add}
               closeModal={closeModal}
-              isLoading={isLoading}
-              hasError={hasError}
-              fetchRepos={fetchRepos}
-              hasModalSubmitted={hasModalSubmitted}
-              setHasModalSubmitted={setHasModalSubmitted}
+              reloadData={reloadData}
             />
-          ) : (
-            <EmptyState
-              icon="repository"
-              title="Add a custom repository"
-              body="Add custom repositories to build RHEL for Edge images with additional packages."
-              primaryAction={{
-                text: 'Add repository',
-                click: () => closeModal({ type: 'add' }),
-              }}
+            <EditModal
+              isOpen={modalDetails.isOpen.edit}
+              id={modalDetails.id}
+              name={modalDetails.name}
+              baseURL={modalDetails.baseURL}
+              closeModal={closeModal}
+              reloadData={reloadData}
             />
-          )}
+            <RemoveModal
+              isOpen={modalDetails.isOpen.remove}
+              id={modalDetails.id}
+              name={modalDetails.name}
+              baseURL={modalDetails.baseURL}
+              closeModal={closeModal}
+              reloadData={reloadData}
+            />
+          </section>
         </>
-        <AddModal
-          isOpen={modalDetails.isOpen.add}
-          closeModal={closeModal}
-          reloadData={reloadData}
-        />
-        <EditModal
-          isOpen={modalDetails.isOpen.edit}
-          id={modalDetails.id}
-          name={modalDetails.name}
-          baseURL={modalDetails.baseURL}
-          closeModal={closeModal}
-          reloadData={reloadData}
-        />
-        <RemoveModal
-          isOpen={modalDetails.isOpen.remove}
-          id={modalDetails.id}
-          name={modalDetails.name}
-          baseURL={modalDetails.baseURL}
-          closeModal={closeModal}
-          reloadData={reloadData}
-        />
-      </section>
+      )}
     </>
   );
 };
