@@ -15,15 +15,26 @@ then
     done
 fi
 
-if [ "${TRAVIS_BRANCH}" = "prod-beta" ] || [ "${TRAVIS_BRANCH}" = "prod-stable" ]
+if [ "${TRAVIS_BRANCH}" = "prod-beta" ] 
 then
+    echo "PUSHING prod-beta"
+    rm -rf ./build/.git
+    .travis/release.sh "prod-beta"
 
     echo "PUSHING prod-stable"
     rm -rf ./build/.git
     .travis/release.sh "prod-stable"
 
+fi
+
+if [ "${TRAVIS_BRANCH}" = "prod-stable" ] 
+then
     echo "PUSHING prod-beta"
     rm -rf ./build/.git
     .travis/release.sh "prod-beta"
+
+    echo "PUSHING prod-stable"
+    rm -rf ./build/.git
+    .travis/release.sh "prod-stable"
 
 fi
