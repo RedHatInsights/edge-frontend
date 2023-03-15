@@ -15,7 +15,8 @@ then
     done
 fi
 
-if [[ "${TRAVIS_BRANCH}" = "prod-beta" || "${TRAVIS_BRANCH}" = "prod-stable" ]]; then
+if [ "${TRAVIS_BRANCH}" = "prod-beta" ] || [ "${TRAVIS_BRANCH}" = "prod-stable" ]
+then
 
     echo "PUSHING prod-stable"
     rm -rf ./build/.git
