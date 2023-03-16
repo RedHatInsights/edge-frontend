@@ -19,7 +19,7 @@ if [[ "${TRAVIS_BRANCH}" = "prod-beta" || "${TRAVIS_BRANCH}" = "prod-stable" ]];
  for env in beta stable
     do
         echo "PUSHING prod-${env}"
-        rm -rf ./build/.git
+        rm -rf ./dist/.git
         .travis/release.sh "prod-${env}"
     done
 fi
