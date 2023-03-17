@@ -11,7 +11,7 @@ export FRONTEND_URL="git@github.com:RedHatInsights/edge-frontend.git"
 export WORKING_DIR="$HOME/playground"
 export ANNOTATION_MSG="Releasing Fleet Management Front End $NEW_RELEASE_TAG"
 
-push_stable() {
+
     create_workdir
     clean_frontend
     checkout_frontend
@@ -20,7 +20,7 @@ push_stable() {
     git checkout prod-stable
     git rebase $NEW_RELEASE_TAG
     git push origin prod-stable -f
-}
+
 
 create_workdir() {
     if [ ! -d $WORKING_DIR ]; then
