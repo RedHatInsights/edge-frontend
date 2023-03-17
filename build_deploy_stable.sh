@@ -1,5 +1,7 @@
 #!/bin/bash
-xport NEW_RELEASE_TAG="FLEET-X.Y.Z"
+set -e
+set -x
+export NEW_RELEASE_TAG="FLEET-X.Y.Z"
 
 ## Update your Gitlab username
 
