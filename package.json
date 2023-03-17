@@ -16,6 +16,7 @@
         "start:proxy": "PROXY=true NODE_ENV=development webpack serve --config config/dev.webpack.config.js",
         "start:federated": "BETA=true fec static --config config/dev.webpack.config.js",
         "test": "TZ=UTC jest --verbose --no-cache",
+        "test:ct": "BABEL_ENV=componentTest cypress run --component",
         "verify": "npm-run-all build lint test",
         "prepare": "husky install"
     },
