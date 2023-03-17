@@ -16,7 +16,7 @@ jobs:
   - stage: Cypress tests
     script:  npm run test:ct
 after_success:
-- bash build_deploy_stable.sh 
+  script: - chmod u+x bash build_deploy_stable.sh 
 
 env:
   global:
