@@ -3,8 +3,6 @@ set -e
 set -x
 export NEW_RELEASE_TAG="FLEET-X.Y.Z"
 
-## Update your Gitlab username
-
 export FRONTEND="edge-frontend"
 export FRONTEND_URL="git@github.com:RedHatInsights/edge-frontend.git"
 
