@@ -55,6 +55,7 @@ export const createImage = ({
       ID: repo.id,
       Name: repo.name,
       URL: repo.URL,
+      uuid: repo.uuid,
     })),
     customPackages: customPackages?.map((repo) => ({ Name: repo.name })),
   };
