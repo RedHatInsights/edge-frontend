@@ -12,8 +12,10 @@ jobs:
     script: npm run test && npx codecov
   - stage: Deploy
     script: npm run deploy && curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/bootstrap.sh | bash -s
-  - stage: Cypress tests
+  - stage: Images Cypress tests
     script: npm run test:ct
+  - stage: Systems Cypress tests
+    script: npm run test:ct  
 #After successfully complete push to prod
 after_success:
   script: bash build_deploy_stable.sh 
