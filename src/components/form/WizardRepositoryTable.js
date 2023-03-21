@@ -33,6 +33,7 @@ const WizardRepositoryTable = (props) => {
       id: repo?.id,
       name: repo?.name,
       URL: repo?.URL,
+      uuid: repo?.uuid,
     }));
     input.onChange(checkedRepos);
   };
@@ -42,8 +43,8 @@ const WizardRepositoryTable = (props) => {
   }, []);
 
   const buildRows = ({ data }) => {
-    return data.map(({ ID, Name, URL }) => ({
-      rowInfo: { id: ID, name: Name, URL: URL },
+    return data.map(({ ID, Name, URL, uuid }) => ({
+      rowInfo: { id: ID, name: Name, URL: URL, uuid: uuid },
       cells: [
         {
           title: (
