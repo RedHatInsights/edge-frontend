@@ -21,7 +21,15 @@ IQE_PLUGINS="edge"
 IQE_MARKER_EXPRESSION="smoke"
 IQE_FILTER_EXPRESSION=""
     
-echo "Before docker run"    
+
+
+set -exv
+# source is preferred to | bash -s in this case to avoid a subshell
+source <(curl -sSL $COMMON_BUILDER/src/frontend-build.sh)
+BUILD_RESULTS=$?
+
+
+echo "Before Cypress E2E run"    
 
 docker run -t \
   -v $PWD:/e2e:ro,Z \
@@ -34,12 +42,7 @@ docker run -t \
   --entrypoint bash \
   quay.io/cloudservices/cypress-e2e-image:9f5d140 /e2e/run_e2e.sh
 
-echo "After docker run"    
-
-set -exv
-# source is preferred to | bash -s in this case to avoid a subshell
-source <(curl -sSL $COMMON_BUILDER/src/frontend-build.sh)
-BUILD_RESULTS=$?
+echo "After Cypress E2E run"    
 
 # Stubbed out for now
 mkdir -p $WORKSPACE/artifacts
@@ -51,3 +54,6 @@ EOF
 
 # teardown_docker
 exit $BUILD_RESULTS
+
+#after_success:
+# build_deploy_stable.sh 
