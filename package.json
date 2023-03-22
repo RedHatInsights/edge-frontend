@@ -16,8 +16,8 @@
         "start:proxy": "PROXY=true NODE_ENV=development webpack serve --config config/dev.webpack.config.js",
         "start:federated": "BETA=true fec static --config config/dev.webpack.config.js",
         "test": "TZ=UTC jest --verbose --no-cache",
-        "images_tests:ct": "npx cypress run --e2e --spec cypress/e2e/images/Images.cy.js",
-        "systems_tests:ct": "npx cypress run --e2e --spec cypress/e2e/systems/Systems.cy.js",
+        "images_tests:ct": "npx cypress run --env configFile=e2e --e2e --spec cypress/e2e/images/Images.cy.js",
+        "systems_tests:ct": "npx cypress run --env configFile=e2e --e2e --spec cypress/e2e/systems/Systems.cy.js",
         "verify": "npm-run-all build lint test",
         "prepare": "husky install"
     },

@@ -28,7 +28,7 @@ docker run -t \
   -w /e2e \
   -e e2e_username=$e2e_username \
   -e e2e_password=$e2e_password \
-  -e base_url=$base_url \
+  -e base_url=$EDGEAPIBASEURL \
   --add-host stage.foo.redhat.com:127.0.0.1 \
   --add-host prod.foo.redhat.com:127.0.0.1 \
   --entrypoint bash \
