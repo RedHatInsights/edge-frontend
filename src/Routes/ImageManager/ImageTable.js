@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { shallowEqual, useSelector } from 'react-redux';
 import { routes as paths } from '../../constants/routeMapper';
 import { Link } from 'react-router-dom';
-import { Text } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import Status from '../../components/Status';
 import {
@@ -100,17 +99,10 @@ const ImageTable = ({ openCreateWizard, openUpdateWizard }) => {
     const actionsArray = [];
     if (rowData?.isoURL) {
       actionsArray.push({
-        title: (
-          <Text
-            className="force-text-black remove-underline"
-            component="a"
-            href={rowData.isoURL}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Download
-          </Text>
-        ),
+        title: 'Download',
+        onClick: (_event, _rowId, rowData) => {
+          window.open(rowData.isoURL);
+        },
       });
     }
     if (isFinalStatus(rowData.imageStatus)) {

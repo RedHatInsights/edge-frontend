@@ -124,17 +124,10 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
     const actionsArray = [];
     if (rowData.rowInfo?.isoURL) {
       actionsArray.push({
-        title: (
-          <Text
-            className="force-text-black remove-underline"
-            component="a"
-            href={rowData.rowInfo.isoURL}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Download
-          </Text>
-        ),
+        title: 'Download',
+        onClick: (_event, _rowId, rowData) => {
+          window.open(rowData.rowInfo.isoURL);
+        },
       });
     }
 
