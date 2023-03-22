@@ -3,7 +3,7 @@ import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
 import { Link } from 'react-router-dom';
-import { Text, Tooltip } from '@patternfly/react-core';
+import { Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
 import CustomEmptyState from '../../components/Empty';
@@ -124,17 +124,10 @@ const ImageTable = ({
     const actionsArray = [];
     if (rowData.rowInfo?.isoURL) {
       actionsArray.push({
-        title: (
-          <Text
-            className="force-text-black remove-underline"
-            component="a"
-            href={rowData.rowInfo?.isoURL}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Download
-          </Text>
-        ),
+        title: 'Download',
+        onClick: (_event, _rowId, rowData) => {
+          window.open(rowData.rowInfo?.isoURL);
+        },
       });
     }
 
