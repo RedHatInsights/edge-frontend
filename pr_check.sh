@@ -25,16 +25,9 @@ IQE_FILTER_EXPRESSION=""
 
 
 set -exv
-# source is preferred to | bash -s in this case to avoid a subshell
-source <(curl -sSL $COMMON_BUILDER/src/frontend-build.sh)
-BUILD_RESULTS=$?
-
-
 echo "Before Cypress E2E run"    
-echo  $E2E_USERNAME 
-echo  $E2E_PASSWORD 
-echo "Before Cypress E2E run"  
-docker run -t --name $CONTAINER_NAME\
+ 
+docker run -t --name $CONTAINER_NAME \
   -v $PWD:/e2e:ro,Z \
   -w /e2e \
   -e e2e_username=$E2E_USERNAME \
@@ -44,7 +37,12 @@ docker run -t --name $CONTAINER_NAME\
   --entrypoint bash \
   quay.io/cloudservices/cypress-e2e-image:9f5d140 /e2e/run_e2e.sh
 
-echo "After Cypress E2E run"    
+echo "After Cypress E2E run"
+
+# source is preferred to | bash -s in this case to avoid a subshell
+source <(curl -sSL $COMMON_BUILDER/src/frontend-build.sh)
+BUILD_RESULTS=$?
+    
 
 # Stubbed out for now
 mkdir -p $WORKSPACE/artifacts
@@ -59,3 +57,7 @@ exit $BUILD_RESULTS
 
 #after_success:
 # build_deploy_stable.sh 
+
+-v /var/lib/jenkins/workspace/RedHatInsights-edge-frontend-pr-check:/workspace:ro,Z
+
+-v /var/lib/jenkins/workspace/RedHatInsights-edge-frontend-pr-check/build/container_workspace:/e2e:ro,Z
