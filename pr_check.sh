@@ -31,8 +31,8 @@ echo "Before Cypress E2E run"
 docker run -t --name $CONTAINER_NAME \
   -v $PWD:/e2e:ro,Z \
   -w /e2e \
-  -e E2E_USERNAME=$E2E_USERNAME \
-  -e E2E_PASSWORD=$E2E_PASSWORD \
+  -e e2e_username=$E2E_USERNAME \
+  -e e2e_password=$E2E_PASSWORD \
   --add-host stage.foo.redhat.com:127.0.0.1 \
   --add-host prod.foo.redhat.com:127.0.0.1 \
   --entrypoint bash \
@@ -57,7 +57,3 @@ exit $BUILD_RESULTS
 
 #after_success:
 # build_deploy_stable.sh 
-
--v /var/lib/jenkins/workspace/RedHatInsights-edge-frontend-pr-check:/workspace:ro,Z
-
--v /var/lib/jenkins/workspace/RedHatInsights-edge-frontend-pr-check/build/container_workspace:/e2e:ro,Z
