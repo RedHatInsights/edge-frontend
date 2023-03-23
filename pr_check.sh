@@ -24,7 +24,8 @@ IQE_FILTER_EXPRESSION=""
     
 
 
-set -exv
+# set -exv
+set -xv
 echo "Before Cypress E2E run"    
  docker rm -f $CONTAINER_NAME || true
 docker run -t --name $CONTAINER_NAME \
