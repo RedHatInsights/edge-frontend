@@ -26,7 +26,7 @@ IQE_FILTER_EXPRESSION=""
 
 set -exv
 echo "Before Cypress E2E run"    
- 
+ docker rm -f $CONTAINER_NAME || true
 docker run -t --name $CONTAINER_NAME \
   -v $PWD:/e2e:ro,Z \
   -w /e2e \
@@ -52,7 +52,6 @@ cat << EOF > $WORKSPACE/artifacts/junit-dummy.xml
 </testsuite>
 EOF
 
-# teardown_docker
 exit $BUILD_RESULTS
 
 #after_success:
