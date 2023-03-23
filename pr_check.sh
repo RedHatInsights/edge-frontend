@@ -9,6 +9,7 @@ export COMPONENT="edge"
 export IMAGE="quay.io/cloudservices/edge-frontend"
 export WORKSPACE=${WORKSPACE:-$APP_ROOT} # if running in jenkins, use the build's workspace
 export APP_ROOT=$(pwd)
+export CONTAINER_NAME="cypress_execution"
 #16 is the default Node version. Change this to override it.
 export NODE_BUILD_VERSION=14
 COMMON_BUILDER=https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master
@@ -33,7 +34,7 @@ echo "Before Cypress E2E run"
 echo  $E2E_USERNAME 
 echo  $E2E_PASSWORD 
 echo "Before Cypress E2E run"  
-docker run -t \
+docker run -t --name $CONTAINER_NAME\
   -v $PWD:/e2e:ro,Z \
   -w /e2e \
   -e e2e_username=$E2E_USERNAME \
