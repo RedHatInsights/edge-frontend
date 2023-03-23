@@ -30,15 +30,14 @@ BUILD_RESULTS=$?
 
 
 echo "Before Cypress E2E run"    
-echo "env var e2e_username " $E2E_USERNAME 
-echo "env var e2e_password " $E2E_PASSWORD 
+echo  $E2E_USERNAME 
+echo  $E2E_PASSWORD 
 echo "Before Cypress E2E run"  
 docker run -t \
   -v $PWD:/e2e:ro,Z \
   -w /e2e \
   -e e2e_username=$E2E_USERNAME \
   -e e2e_password=$E2E_PASSWORD \
-  -e base_url=$EDGEAPIBASEURL \
   --add-host stage.foo.redhat.com:127.0.0.1 \
   --add-host prod.foo.redhat.com:127.0.0.1 \
   --entrypoint bash \
