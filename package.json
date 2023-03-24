@@ -18,6 +18,8 @@
         "test": "TZ=UTC jest --verbose --no-cache",
         "images_tests:ct": "npx cypress run --env configFile=e2e --e2e --spec cypress/e2e/images/Images.cy.js",
         "systems_tests:ct": "npx cypress run --env configFile=e2e --e2e --spec cypress/e2e/systems/Systems.cy.js",
+        "visits_tests:ct": "npx cypress run --env configFile=e2e --e2e --spec cypress/e2e/visitis/Visits.cy.js",
+        
         "verify": "npm-run-all build lint test",
         "prepare": "husky install"
     },
