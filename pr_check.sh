@@ -14,6 +14,9 @@ export CONTAINER_NAME="cypress_execution"
 export NODE_BUILD_VERSION=14
 COMMON_BUILDER=https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master
 
+export HTTPS_PROXY=$HTTPS_CYPRESS_PROXY
+export HTTP_PROXY=$HTTP_CYPRESS_PROXY
+
 # --------------------------------------------
 # Options that must be configured by app owner
 # --------------------------------------------
