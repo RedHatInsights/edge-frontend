@@ -16,6 +16,8 @@ COMMON_BUILDER=https://raw.githubusercontent.com/RedHatInsights/insights-fronten
 
 export HTTPS_PROXY=$HTTPS_CYPRESS_PROXY
 export HTTP_PROXY=$HTTP_CYPRESS_PROXY
+export CYPRESS_USERNAME=$E2E_USERNAME
+export CYPRESS_PASSWORD=$E2E_PASSWORD
 
 # --------------------------------------------
 # Options that must be configured by app owner
