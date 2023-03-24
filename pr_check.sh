@@ -38,6 +38,8 @@ docker run -t --name $CONTAINER_NAME \
   -w /e2e \
   -e e2e_username=$E2E_USERNAME \
   -e e2e_password=$E2E_PASSWORD \
+  -e HTTP_PROXY=$HTTP_CYPRESS_PROXY \
+  -e HTTPS_PROXY=$HTTPS_CYPRESS_PROXY \
   --add-host stage.foo.redhat.com:127.0.0.1 \
   --add-host prod.foo.redhat.com:127.0.0.1 \
   --entrypoint bash \
