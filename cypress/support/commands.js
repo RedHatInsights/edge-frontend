@@ -26,9 +26,9 @@
 
 Cypress.Commands.add('login', () => {
   cy.visit(Cypress.config().baseUrl);
-  cy.get('#username-verification', { timeout: 30000 }).should('be.visible').type(Cypress.env('e2e_username'));
+  cy.get('#username-verification', { timeout: 30000 }).should('be.visible').type(Cypress.env('username'));
   cy.get('#login-show-step2', { timeout: 30000 }).should('be.visible').click();
-  cy.get('#password', { timeout: 30000 }).should('be.visible').type(Cypress.env('e2e_password'));
+  cy.get('#password', { timeout: 30000 }).should('be.visible').type(Cypress.env('password'));
   cy.get('#rh-password-verification-submit-button').click();
 });
 
