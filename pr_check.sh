@@ -16,8 +16,8 @@ COMMON_BUILDER=https://raw.githubusercontent.com/RedHatInsights/insights-fronten
 
 export HTTPS_PROXY=$HTTPS_CYPRESS_PROXY
 export HTTP_PROXY=$HTTP_CYPRESS_PROXY
-export CYPRESS_USERNAME=$E2E_USERNAME
-export CYPRESS_PASSWORD=$E2E_PASSWORD
+export CYPRESS_username=$E2E_USERNAME
+export CYPRESS_password=$E2E_PASSWORD
 
 # --------------------------------------------
 # Options that must be configured by app owner
@@ -42,8 +42,8 @@ docker run -t --name $CONTAINER_NAME \
   -e e2e_password=$E2E_PASSWORD \
   -e HTTP_PROXY=$HTTP_CYPRESS_PROXY \
   -e HTTPS_PROXY=$HTTPS_CYPRESS_PROXY \
-  -e CYPRESS_USERNAME=$E2E_USERNAME \
-  -e CYPRESS_PASSWORD=$E2E_PASSWORD \
+  -e CYPRESS_username=$E2E_USERNAME \
+  -e CYPRESS_password=$E2E_PASSWORD \
   --add-host stage.foo.redhat.com:127.0.0.1 \
   --add-host prod.foo.redhat.com:127.0.0.1 \
   --entrypoint bash \
