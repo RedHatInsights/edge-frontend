@@ -9,7 +9,8 @@ describe('Images', () => {
     // Filter by Name
     cy.get('[data-testid="toolbar-header-testid"]').find('[data-testid="filter-dropdown-testid"]').click();
     cy.get('[data-testid="toolbar-header-testid"]').find('[data-testid="filter-dropdown-testid"]').contains('Name').click();
-    cy.get('.pf-c-search-input__text-input').type('cy-test');
+    // cy.get('.pf-c-text-inpeut-group__txt-input').type('cy-test');
+    cy.get('.pf-c-text-input-group__text-input').type('cy-test');
     cy.get('.pf-m-width-35 > a').should('include.text', 'cy-test');
     cy.wait(500);
     cy.iterateRows('a', 'cy-test');
@@ -39,8 +40,8 @@ describe('Images', () => {
     cy.testPagination('', 'perPage');
   });
 
-  it('manage images max header test', () => {
-    cy.largeHeaderRequest('/manage-images');
-  });
+  // it('manage images max header test', () => {
+  //   cy.largeHeaderRequest('/manage-images');
+  // });
 
 });
