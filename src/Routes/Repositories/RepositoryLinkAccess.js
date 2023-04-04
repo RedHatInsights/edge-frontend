@@ -24,11 +24,11 @@ const RepositoryLinkAccess = () => (
     <EmptyState id="moved-state">
       <EmptyStateIcon id="external-link-icon" icon={ExternalLinkAltIcon} />
       <Title id="moved-state-title" headingLevel="h4" size="xl">
-        Your repositories have moved!
+        Custom repositories have moved
       </Title>
       <EmptyStateBody id="moved-state-body">
-        Custom repositories have been combined so that you can use them across
-        all of the console.
+        You can now use your custom repositories across the console. Access them
+        on the Repositories page.
       </EmptyStateBody>
       <Button
         id="moved-state-button"
@@ -37,7 +37,7 @@ const RepositoryLinkAccess = () => (
         target="_blank"
         href={`https://${window.location.host}/settings/content`}
       >
-        Go to custom repositories
+        Go to Repositories
       </Button>
     </EmptyState>
   </>
