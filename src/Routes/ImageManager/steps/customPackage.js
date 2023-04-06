@@ -103,10 +103,10 @@ const CustomPackageLabel = () => {
 };
 
 export default {
-  title: 'Custom packages',
+  title: 'Additional custom packages',
   name: 'customPackages',
-  nextStep: 'packages',
-  substepOf: 'Add content',
+  nextStep: 'review',
+  substepOf: 'Content',
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,

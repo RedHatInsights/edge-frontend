@@ -18,10 +18,10 @@ const PackagesLabel = () => {
 };
 
 export default {
-  title: 'Additional packages',
+  title: 'Additional Red Hat packages',
   name: 'packages',
-  nextStep: 'review',
-  substepOf: 'Add content',
+  nextStep: 'repositories',
+  substepOf: 'Content',
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,

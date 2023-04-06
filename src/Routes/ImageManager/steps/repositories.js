@@ -11,9 +11,9 @@ export default {
     values?.['show-custom-packages'] ||
     values?.['initial-custom-repositories']?.length > 0
       ? 'customPackages'
-      : 'packages',
+      : 'review',
 
-  substepOf: 'Add content',
+  substepOf: 'Content',
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,
