@@ -3,16 +3,16 @@ const config = require('@redhat-cloud-services/frontend-components-config');
 
 const insightsProxy = {
   https: false,
-  ...(process.env.BETA && { deployment: 'beta/apps' }),
+  ...(process.env.BETA && { deployment: 'preview/apps' }),
 };
 
 const webpackProxy = {
-  deployment: process.env.BETA ? 'beta/apps' : 'apps',
+  deployment: process.env.BETA ? 'preview/apps' : 'apps',
   useProxy: true,
   env: `${process.env.ENVIRONMENT || 'stage'}-${
-    process.env.BETA ? 'beta' : 'stable'
+    process.env.BETA ? 'preview' : 'stable'
   }`, // for accessing prod-beta start your app with ENVIRONMENT=prod and BETA=true
-  appUrl: process.env.BETA ? '/beta/edge' : '/edge',
+  appUrl: process.env.BETA ? '/preview/edge' : '/edge',
   ...(process.env.INSIGHTS_CHROME && {
     localChrome: process.env.INSIGHTS_CHROME,
   }),
@@ -21,7 +21,7 @@ const webpackProxy = {
       '/api/edge': { host: `http://localhost:${process.env.API_PORT}` },
     }),
     ...(process.env.CONFIG_PORT && {
-      [`${process.env.BETA ? '/beta' : ''}/config`]: {
+      [`${process.env.BETA ? '/preview' : ''}/config`]: {
         host: `http://localhost:${process.env.CONFIG_PORT}`,
       },
     }),
