@@ -9,6 +9,7 @@ import {
   getImageSetDetailsSchema,
   imageOutput,
   customPackages,
+  additionalCustomPackages,
 } from './steps';
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -25,6 +26,10 @@ const CreateImage = ({ navigateBack, reload }) => {
   const dispatch = useDispatch();
   const temporaryReleasesFlag = useFeatureFlags(
     'fleet-management.temporary-releases'
+  );
+
+  const imageWizardFeatureFlag = useFeatureFlags(
+    'edge-management.image_wizard_ui'
   );
 
   const closeAction = () => {
@@ -135,10 +140,11 @@ const CreateImage = ({ navigateBack, reload }) => {
               imageSetDetails,
               imageOutput,
               registration,
-              repositories,
+              repositories(imageWizardFeatureFlag),
               packages,
               review,
               customPackages,
+              additionalCustomPackages,
             ],
           },
         ],

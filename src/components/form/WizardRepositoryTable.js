@@ -36,6 +36,10 @@ const WizardRepositoryTable = (props) => {
       uuid: repo?.uuid,
     }));
     input.onChange(checkedRepos);
+
+    checkedRepos.length
+      ? change('show-custom-packages', true)
+      : change('show-custom-packages', false);
   };
 
   useEffect(() => {

@@ -1,4 +1,9 @@
-import { EDGE_API, IMAGE_BUILDER_API, getTableParams } from '../index';
+import {
+  CONTENT_SOURCES_API,
+  EDGE_API,
+  IMAGE_BUILDER_API,
+  getTableParams,
+} from '../index';
 import { instance } from '@redhat-cloud-services/frontend-components-utilities/interceptors/interceptors';
 
 export const checkImageName = (name) => {
@@ -42,7 +47,7 @@ export const createImage = ({
     description,
     distribution: release,
     imageType: imageType,
-    packages: packages.map((item) => ({ name: item.name })),
+    packages: packages?.map((item) => ({ name: item.name })),
     outputTypes: imageTypes,
     commit: {
       arch: architecture,
@@ -156,4 +161,11 @@ export const getImageSets = ({ query }) => {
   }
   const q = getTableParams(query);
   return instance.get(`${EDGE_API}/image-sets/view?${q}`);
+};
+
+export const postRpmsNames = (urls, search) => {
+  return instance.post(`${CONTENT_SOURCES_API}/rpms/names`, {
+    urls: urls,
+    search: search,
+  });
 };

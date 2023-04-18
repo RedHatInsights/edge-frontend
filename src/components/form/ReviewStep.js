@@ -63,10 +63,17 @@ const ReviewStep = () => {
 
   const RHELPackageBefore = getState().initialValues['selected-packages'] || [];
   const RHELPackageAfter = getState().values['selected-packages'] || [];
-  const customPackageBefore = getState().initialValues['custom-packages'] || [];
-  const customPackageAfter = getState().values['custom-packages'] || [];
+  const customPackageBefore = getState().initialValues[
+    'third-party-repositories'
+  ].length
+    ? getState().initialValues['custom-packages']
+    : [];
+  const customPackageAfter = getState().values['third-party-repositories']
+    .length
+    ? getState().values['custom-packages']
+    : [];
 
-  const calcPkgDiff = (arr1, arr2) =>
+  const calcPkgDiff = (arr1 = [], arr2 = []) =>
     arr1.reduce(
       (acc, { name }) => acc + (!arr2.some((pkg) => pkg.name === name) ? 1 : 0),
       0

@@ -9,6 +9,7 @@ import {
   repositories,
   imageOutput,
   customPackages,
+  additionalCustomPackages,
 } from './steps';
 import { Bullseye, Backdrop, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -35,6 +36,10 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
   };
   const temporaryReleasesFlag = useFeatureFlags(
     'fleet-management.temporary-releases'
+  );
+
+  const imageWizardFeatureFlag = useFeatureFlags(
+    'edge-management.image_wizard_ui'
   );
 
   const { getRegistry } = useContext(RegistryContext);
@@ -201,9 +206,9 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
               updateDetails,
               imageOutput,
               registration,
-              repositories,
+              repositories(imageWizardFeatureFlag),
               packages,
-              repositories,
+              additionalCustomPackages,
               review,
               customPackages,
             ],
