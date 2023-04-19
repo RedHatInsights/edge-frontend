@@ -1,5 +1,6 @@
 export const IMAGE_BUILDER_API = '/api/image-builder/v1';
 export const EDGE_API = '/api/edge/v1';
+export const CONTENT_SOURCES_API = '/api/content-sources/v1';
 
 export const getTableParams = (q) => {
   if (q === undefined) {

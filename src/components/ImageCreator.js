@@ -7,6 +7,7 @@ import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import Review from './form/ReviewStep';
 import Packages from './form/Packages';
+import AdditionalCustomPackages from './form/AdditionalCustomPackages';
 import WizardRepositoryTable from './form/WizardRepositoryTable';
 import RegistrationCreds from './form/RegistrationCreds';
 import ImageOutputCheckbox from './form/ImageOutputCheckbox';
@@ -71,6 +72,9 @@ const CreateImageWizard = ({
         },
         'custom-package-text-area': {
           component: CustomPackageTextArea,
+        },
+        'additional-custom-packages': {
+          component: AdditionalCustomPackages,
         },
         ...customComponentMapper,
       }}

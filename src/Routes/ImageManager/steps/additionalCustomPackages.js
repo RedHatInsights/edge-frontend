@@ -11,7 +11,6 @@ import {
 } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
-import ExclamationTriangleIcon from '@patternfly/react-icons/dist/js/icons/exclamation-triangle-icon';
 import { releaseMapper } from '../../../constants';
 
 const CustomRepoAlert = ({ variant, title }) => (
@@ -51,7 +50,6 @@ const CustomPackageLabel = () => {
   const addedRepos = getState()?.values?.['third-party-repositories'];
   const initialRepos = getState()?.values?.['initial-custom-repositories'];
   const customPackages = getState()?.values?.['custom-packages'];
-
   const release = getState()?.values?.release;
   const releaseName = release !== undefined ? releaseMapper[release] : '';
 
@@ -64,7 +62,7 @@ const CustomPackageLabel = () => {
     <>
       <TextContent>
         <Text>
-          Add packages from{' '}
+          Search and choose packages from linked{' '}
           <Popover
             style={{ visibility: 'visible' }}
             position="bottom"
@@ -80,11 +78,10 @@ const CustomPackageLabel = () => {
             }
           >
             <Button variant="link" isInline>
-              {addedRepos.length} custom{' '}
-              {addedRepos.length === 1 ? 'repository' : 'repositories'}
+              custom {addedRepos.length === 1 ? 'repository' : 'repositories'}
             </Button>
           </Popover>{' '}
-          to your <b>{releaseName}</b> image.
+          to add to your <b>{releaseName}</b> image.
         </Text>
       </TextContent>
       {addedRepos.length === 0 && customPackages.length > 0 ? (
@@ -104,7 +101,7 @@ const CustomPackageLabel = () => {
 
 export default {
   title: 'Additional custom packages',
-  name: 'customPackages',
+  name: 'additionalCustomPackages',
   nextStep: 'review',
   substepOf: 'Content',
   fields: [
@@ -114,35 +111,11 @@ export default {
       label: <CustomPackageLabel />,
     },
     {
-      component: 'custom-package-text-area',
-      style: {
-        paddingRight: '32px',
-        height: '25vh',
-      },
+      component: 'additional-custom-packages',
       name: 'custom-packages',
+      label: 'Available options',
       initialValue: [],
       clearedValue: [],
-    },
-    {
-      component: componentTypes.PLAIN_TEXT,
-      name: 'packageDetails',
-      label: (
-        <Text>
-          Specify individual packages by exact name and casing, with no
-          whitespace, one entry to a line, and can include hyphens ( - ).
-        </Text>
-      ),
-    },
-    {
-      component: componentTypes.PLAIN_TEXT,
-      name: 'warning',
-      label: (
-        <Text className="pf-u-warning-color-200">
-          <ExclamationTriangleIcon className="pf-u-warning-color-100" />
-          &nbsp; Packages names that do not have exact name and casing will not
-          be included in the image.
-        </Text>
-      ),
     },
   ],
 };
