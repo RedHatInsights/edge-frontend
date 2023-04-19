@@ -46,6 +46,9 @@ const DeviceDetail = () => {
   const { deviceId, groupId } = useParams();
   const [imageId, setImageId] = useState(null);
   const { getRegistry } = useContext(RegistryContext);
+  const hasEntityFinishedLoading = useSelector(
+    (store) => store?.entityDetails?.loaded
+  );
   const entity = useSelector(({ entityDetails }) => entityDetails?.entity);
 
   const [imageData, setImageData] = useState();
@@ -206,7 +209,7 @@ const DeviceDetail = () => {
           />
         )}
       </PageHeader>
-      {entity && (
+      {hasEntityFinishedLoading && (
         <DeviceDetailTabs
           systemProfile={imageData}
           imageId={imageId}
