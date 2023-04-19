@@ -71,7 +71,6 @@ const AdditionalCustomPackages = ({ defaultArch, ...props }) => {
   const [hasNoSearchResults, setHasNoSearchResults] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [exactMatch, setExactMatch] = useState(false);
-  const [hasOnlyExactMatch, setOnlyExactMatch] = useState(false);
 
   useEffect(() => {
     const loadedPackages = getState()?.values?.[input.name] || [];
@@ -109,10 +108,12 @@ const AdditionalCustomPackages = ({ defaultArch, ...props }) => {
       availableInputValue
     );
 
+    setHasMoreResults(false);
+    setExactMatch(false);
+    setHasNoSearchResults(false);
+
     if (!data) {
       setHasNoSearchResults(true);
-      setHasMoreResults(false);
-      setOnlyExactMatch(false);
       setAvailableOptions([]);
       return;
     }
@@ -120,7 +121,6 @@ const AdditionalCustomPackages = ({ defaultArch, ...props }) => {
     if (data.length > 100) {
       setHasNoSearchResults(false);
       setHasMoreResults(true);
-      setOnlyExactMatch(false);
 
       let exactMatchIndex = null;
       data.forEach(({ package_name }, index) => {
@@ -139,12 +139,8 @@ const AdditionalCustomPackages = ({ defaultArch, ...props }) => {
         return;
       }
 
-      setExactMatch(false);
       setAvailableOptions([]);
       return;
-    } else {
-      setHasMoreResults(false);
-      setExactMatch(false);
     }
 
     const removeChosenPackages = data.filter(
@@ -385,7 +381,7 @@ const AdditionalCustomPackages = ({ defaultArch, ...props }) => {
               heading="No Results Found"
               body="Adjust your search and try again"
             />
-          ) : hasMoreResults || hasOnlyExactMatch ? (
+          ) : hasMoreResults ? (
             <>
               {exactMatch && (
                 <HelperText>
@@ -398,18 +394,17 @@ const AdditionalCustomPackages = ({ defaultArch, ...props }) => {
                 </HelperText>
               )}
               {exactMatch && displayPackagesFrom(availableOptions, false)}
-              {exactMatch && !hasOnlyExactMatch && (
+              {exactMatch && (
                 <Divider
                   className="pf-u-mt-md"
                   inset={{ default: 'insetMd' }}
                 />
               )}
-              {!hasOnlyExactMatch && (
-                <NoResultsText
-                  heading="Too many results to display"
-                  body="Please make the search more specific and try again"
-                />
-              )}
+
+              <NoResultsText
+                heading="Too many results to display"
+                body="Please make the search more specific and try again"
+              />
             </>
           ) : (
             <EmptyText text="Search above to add additional packages to your image." />
