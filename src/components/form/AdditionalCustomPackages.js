@@ -308,7 +308,7 @@ const AdditionalCustomPackages = ({ defaultArch, ...props }) => {
               onClick={handlePackageSearch}
               isDisabled={!isAvailable}
               variant="control"
-              aria-label="search button for additional custom packages"
+              aria-label="search button for search input"
               data-testid="package-search"
             >
               <ArrowRightIcon />
