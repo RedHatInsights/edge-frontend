@@ -12,7 +12,7 @@ const webpackProxy = {
   env: `${process.env.ENVIRONMENT || 'stage'}-${
     process.env.BETA ? 'beta' : 'stable'
   }`, // for accessing prod-beta start your app with ENVIRONMENT=prod and BETA=true
-  appUrl: process.env.BETA ? '/beta/edge' : '/edge',
+  appUrl: process.env.BETA ? ['/preview/edge', '/beta/edge'] : '/edge',
   ...(process.env.INSIGHTS_CHROME && {
     localChrome: process.env.INSIGHTS_CHROME,
   }),
