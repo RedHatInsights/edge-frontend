@@ -90,10 +90,10 @@ Run the application in beta environment - beta only supported
 ```bash
 API_PORT=3000 BETA=true npm run start:proxy
 ```
-**Edge application will be available on https://stage.foo.redhat.com:1337/beta/edge/fleet-management**
+**Edge application will be available on https://stage.foo.redhat.com:1337/preview/edge/fleet-management**
 
 To switch environment (for instance if you want to run your app with prod DB)
 ```bash
 ENVIRONMENT=prod BETA=true npm run start:proxy
 ```
-**Edge application will be available on https://prod.foo.redhat.com:1337/beta/edge/fleet-management**
+**Edge application will be available on https://prod.foo.redhat.com:1337/preview/edge/fleet-management**
