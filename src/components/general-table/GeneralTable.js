@@ -47,6 +47,8 @@ const filterParams = (chipsArray) => {
 };
 
 const GeneralTable = ({
+  historyProp,
+  locationProp,
   apiFilterSort,
   urlParam,
   filters,
@@ -82,8 +84,8 @@ const GeneralTable = ({
   const [page, setPage] = useState(1);
   const [checkedRows, setCheckedRows] = useState(defaultCheckedRows);
   const dispatch = useDispatch();
-  const history = useHistory();
-  const { pathname, search } = useLocation();
+  const history = historyProp ? historyProp() : useHistory();
+  const { pathname, search } = locationProp ? locationProp : useLocation();
 
   useEffect(() => {
     // Add or remove has_filters param depending on whether filters are present
@@ -410,6 +412,8 @@ const GeneralTable = ({
 };
 
 GeneralTable.propTypes = {
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
   apiFilterSort: PropTypes.bool,
   filters: PropTypes.array,
   urlParam: PropTypes.string,
