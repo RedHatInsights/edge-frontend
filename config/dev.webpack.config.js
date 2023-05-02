@@ -52,7 +52,7 @@ plugins.push(
         ),
         './UpdateDeviceModal': resolve(
           __dirname,
-          '../src/Routes/Devices/DeviceTable.js'
+          '../src/Routes/Devices/UpdateDeviceModal.js'
         ),
         './AddDeviceModal': resolve(
           __dirname,
