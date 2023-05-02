@@ -74,16 +74,6 @@ plugins.push(
             requiredVersion: deps['react-router-dom'],
           },
         },
-        {
-          react: { singleton: true, eager: true, requiredVersion: deps.react },
-        },
-        {
-          'react-dom': {
-            singleton: true,
-            eager: true,
-            requiredVersion: deps['react-dom'],
-          },
-        },
       ],
     }
   )
