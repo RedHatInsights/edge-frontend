@@ -4,7 +4,7 @@ const { config: webpackConfig, plugins } = config({
   rootFolder: resolve(__dirname, '../'),
   sassPrefix: '.fleet-management, .edge',
 });
-
+const deps = require('../package.json').dependencies;
 plugins.push(
   require('@redhat-cloud-services/frontend-components-config/federated-modules')(
     {
@@ -31,6 +31,7 @@ plugins.push(
         //   '../src/Routes/Groups/CreateGroupModal.js'
         // ),
       },
+      shared: [{ 'react-redux': { requiredVersion: deps['react-redux'] } }],
     }
   )
 );
