@@ -28,7 +28,7 @@ plugins.push(
         ),
         './CreateGroupModal': resolve(
           __dirname,
-          '../src/Routes/Devices/CreateGroupModal.js'
+          '../src/Routes/Groups/CreateGroupModal.js'
         ),
       },
     }
