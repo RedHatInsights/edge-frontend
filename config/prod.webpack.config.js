@@ -18,18 +18,18 @@ plugins.push(
           __dirname,
           '../src/Routes/Devices/DeviceTable.js'
         ),
-        './UpdateDeviceModal': resolve(
-          __dirname,
-          '../src/Routes/Devices/DeviceTable.js'
-        ),
-        './AddDeviceModal': resolve(
-          __dirname,
-          '../src/Routes/Devices/AddDeviceModal.js'
-        ),
-        './CreateGroupModal': resolve(
-          __dirname,
-          '../src/Routes/Groups/CreateGroupModal.js'
-        ),
+        // './UpdateDeviceModal': resolve(
+        //   __dirname,
+        //   '../src/Routes/Devices/DeviceTable.js'
+        // ),
+        // './AddDeviceModal': resolve(
+        //   __dirname,
+        //   '../src/Routes/Devices/AddDeviceModal.js'
+        // ),
+        // './CreateGroupModal': resolve(
+        //   __dirname,
+        //   '../src/Routes/Groups/CreateGroupModal.js'
+        // ),
       },
     }
   )
