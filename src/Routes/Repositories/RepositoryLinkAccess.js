@@ -4,6 +4,8 @@ import {
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
+  EmptyStateSecondaryActions,
+  Icon,
   TextContent,
   Text,
   Title,
@@ -39,6 +41,25 @@ const RepositoryLinkAccess = () => (
       >
         Go to Repositories
       </Button>
+      <EmptyStateSecondaryActions>
+        <Button
+          id="moved-state-link"
+          variant="link"
+          component="a"
+          target="_blank"
+          href="https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/create_rhel_for_edge_images_and_configure_automated_management/index#proc_rhem-create-custom-repos"
+        >
+          Learn more about custom repositories
+          <Icon
+            style={{ paddingLeft: '1rem' }}
+            iconSize="md"
+            size="lg"
+            isInline
+          >
+            <ExternalLinkAltIcon />
+          </Icon>
+        </Button>
+      </EmptyStateSecondaryActions>
     </EmptyState>
   </>
 );
