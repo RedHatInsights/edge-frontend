@@ -27,6 +27,7 @@ const webpackProxy = {
     }),
   },
 };
+
 const deps = require('../package.json').dependencies;
 const { config: webpackConfig, plugins } = config({
   rootFolder: resolve(__dirname, '../'),
