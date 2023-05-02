@@ -66,7 +66,15 @@ plugins.push(
         //   '../src/Routes/Devices/RemoveDeviceModal.js'
         // ),
       },
-      shared: [{ 'react-redux': { requiredVersion: deps['react-redux'] } }],
+      shared: [
+        { 'react-redux': { requiredVersion: deps['react-redux'] } },
+        {
+          'react-router-dom': {
+            singleton: true,
+            requiredVersion: deps['react-router-dom'],
+          },
+        },
+      ],
     }
   )
 );

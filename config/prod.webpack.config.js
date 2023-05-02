@@ -31,7 +31,15 @@ plugins.push(
         //   '../src/Routes/Groups/CreateGroupModal.js'
         // ),
       },
-      shared: [{ 'react-redux': { requiredVersion: deps['react-redux'] } }],
+      shared: [
+        { 'react-redux': { requiredVersion: deps['react-redux'] } },
+        {
+          'react-router-dom': {
+            singleton: true,
+            requiredVersion: deps['react-router-dom'],
+          },
+        },
+      ],
     }
   )
 );
