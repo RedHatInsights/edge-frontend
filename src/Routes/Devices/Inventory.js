@@ -11,14 +11,15 @@ import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api/devices';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Bullseye, Spinner } from '@patternfly/react-core';
+import PropTypes from 'prop-types';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(/* webpackChunkName: "UpdateDeviceModal" */ './UpdateDeviceModal')
 );
 
-const Inventory = (prop) => {
-  const history = prop?.history ? prop.history() : useHistory();
-  const { pathname } = prop?.location ? prop.location : useLocation();
+const Inventory = ({ historyProp, locationProp }) => {
+  const history = historyProp ? historyProp() : useHistory();
+  const { pathname } = locationProp ? locationProp : useLocation();
   const [response, fetchDevices] = useApi({
     api: getInventory,
     tableReload: true,
@@ -99,7 +100,8 @@ const Inventory = (prop) => {
       </PageHeader>
       <section className="edge-devices pf-l-page__main-section pf-c-page__main-section">
         <DeviceTable
-          prop={prop}
+          historyProp={historyProp}
+          locationProp={locationProp}
           isSystemsView={true}
           data={data?.data?.devices}
           count={data?.count}
@@ -183,6 +185,11 @@ const Inventory = (prop) => {
       )}
     </>
   );
+};
+
+Inventory.propTypes = {
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
 };
 
 export default Inventory;
