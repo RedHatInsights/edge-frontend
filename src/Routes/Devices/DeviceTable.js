@@ -222,8 +222,8 @@ const DeviceTable = ({
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
   const canBeUpdated = isSystemsView;
-  const history = prop.history ? prop.history() : useHistory();
-  const { pathname, search } = prop.location ? prop.location : useLocation();
+  const history = prop?.history ? prop.history() : useHistory();
+  const { pathname, search } = prop?.location ? prop.location : useLocation();
 
   // Create base URL path for system detail link
   const deviceBaseUrl =
