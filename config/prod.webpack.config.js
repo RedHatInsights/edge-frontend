@@ -9,7 +9,6 @@ plugins.push(
   require('@redhat-cloud-services/frontend-components-config/federated-modules')(
     {
       root: resolve(__dirname, '../'),
-      useFileHash: false,
       exposes: {
         // Application root
         './RootApp': resolve(__dirname, '../src/AppEntry'),
@@ -21,7 +20,7 @@ plugins.push(
         ),
         './UpdateDeviceModal': resolve(
           __dirname,
-          '../src/Routes/Devices/UpdateDeviceModal.js'
+          '../src/Routes/Devices/DeviceTable.js'
         ),
         './AddDeviceModal': resolve(
           __dirname,
