@@ -27,7 +27,7 @@ const webpackProxy = {
     }),
   },
 };
-
+const deps = require('../package.json').dependencies;
 const { config: webpackConfig, plugins } = config({
   rootFolder: resolve(__dirname, '../'),
   debug: true,
@@ -66,6 +66,7 @@ plugins.push(
         //   '../src/Routes/Devices/RemoveDeviceModal.js'
         // ),
       },
+      shared: [{ 'react-redux': { requiredVersion: deps['react-redux'] } }],
     }
   )
 );
