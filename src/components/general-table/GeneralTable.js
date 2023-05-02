@@ -85,7 +85,7 @@ const GeneralTable = ({
   const [checkedRows, setCheckedRows] = useState(defaultCheckedRows);
   const dispatch = useDispatch();
   const history = historyProp ? historyProp() : useHistory();
-  const { pathname, search } = locationProp ? locationProp : useLocation();
+  const { pathname, search } = locationProp ? locationProp() : useLocation();
 
   useEffect(() => {
     // Add or remove has_filters param depending on whether filters are present
