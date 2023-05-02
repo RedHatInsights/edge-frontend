@@ -16,9 +16,9 @@ const UpdateDeviceModal = React.lazy(() =>
   import(/* webpackChunkName: "UpdateDeviceModal" */ './UpdateDeviceModal')
 );
 
-const Inventory = () => {
-  const history = useHistory();
-  const { pathname } = useLocation();
+const Inventory = (prop) => {
+  const history = prop.history ? prop.history() : useHistory();
+  const { pathname } = prop.location ? prop.location : useLocation();
   const [response, fetchDevices] = useApi({
     api: getInventory,
     tableReload: true,
@@ -99,6 +99,7 @@ const Inventory = () => {
       </PageHeader>
       <section className="edge-devices pf-l-page__main-section pf-c-page__main-section">
         <DeviceTable
+          prop={prop}
           isSystemsView={true}
           data={data?.data?.devices}
           count={data?.count}
