@@ -28,6 +28,7 @@ const webpackProxy = {
   },
 };
 
+const deps = require('../package.json').dependencies;
 const { config: webpackConfig, plugins } = config({
   rootFolder: resolve(__dirname, '../'),
   debug: true,
@@ -49,23 +50,24 @@ plugins.push(
           __dirname,
           '../src/Routes/Devices/DeviceTable.js'
         ),
-        './UpdateDeviceModal': resolve(
-          __dirname,
-          '../src/Routes/Devices/UpdateDeviceModal.js'
-        ),
-        './AddDeviceModal': resolve(
-          __dirname,
-          '../src/Routes/Devices/AddDeviceModal.js'
-        ),
-        './CreateGroupModal': resolve(
-          __dirname,
-          '../src/Routes/Groups/CreateGroupModal.js'
-        ),
-        './RemoveDeviceModal': resolve(
-          __dirname,
-          '../src/Routes/Devices/RemoveDeviceModal.js'
-        ),
+        // './UpdateDeviceModal': resolve(
+        //   __dirname,
+        //   '../src/Routes/Devices/UpdateDeviceModal.js'
+        // ),
+        // './AddDeviceModal': resolve(
+        //   __dirname,
+        //   '../src/Routes/Devices/AddDeviceModal.js'
+        // ),
+        // './CreateGroupModal': resolve(
+        //   __dirname,
+        //   '../src/Routes/Groups/CreateGroupModal.js'
+        // ),
+        // './RemoveDeviceModal': resolve(
+        //   __dirname,
+        //   '../src/Routes/Devices/RemoveDeviceModal.js'
+        // ),
       },
+      shared: [{ 'react-redux': { requiredVersion: deps['react-redux'] } }],
     }
   )
 );

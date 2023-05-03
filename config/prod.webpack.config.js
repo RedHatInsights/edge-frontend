@@ -4,7 +4,7 @@ const { config: webpackConfig, plugins } = config({
   rootFolder: resolve(__dirname, '../'),
   sassPrefix: '.fleet-management, .edge',
 });
-
+const deps = require('../package.json').dependencies;
 plugins.push(
   require('@redhat-cloud-services/frontend-components-config/federated-modules')(
     {
@@ -18,19 +18,20 @@ plugins.push(
           __dirname,
           '../src/Routes/Devices/DeviceTable.js'
         ),
-        './UpdateDeviceModal': resolve(
-          __dirname,
-          '../src/Routes/Devices/DeviceTable.js'
-        ),
-        './AddDeviceModal': resolve(
-          __dirname,
-          '../src/Routes/Devices/AddDeviceModal.js'
-        ),
-        './CreateGroupModal': resolve(
-          __dirname,
-          '../src/Routes/Groups/CreateGroupModal.js'
-        ),
+        // './UpdateDeviceModal': resolve(
+        //   __dirname,
+        //   '../src/Routes/Devices/DeviceTable.js'
+        // ),
+        // './AddDeviceModal': resolve(
+        //   __dirname,
+        //   '../src/Routes/Devices/AddDeviceModal.js'
+        // ),
+        // './CreateGroupModal': resolve(
+        //   __dirname,
+        //   '../src/Routes/Groups/CreateGroupModal.js'
+        // ),
       },
+      shared: [{ 'react-redux': { requiredVersion: deps['react-redux'] } }],
     }
   )
 );

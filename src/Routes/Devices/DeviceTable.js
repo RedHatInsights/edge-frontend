@@ -198,6 +198,8 @@ const createRows = (devices, hasLinks, fetchDevices, deviceLinkBase) => {
 };
 
 const DeviceTable = ({
+  historyProp,
+  locationProp,
   hasCheckbox = false,
   selectedItems,
   selectedItemsUpdateable,
@@ -221,8 +223,8 @@ const DeviceTable = ({
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
   const canBeUpdated = isSystemsView;
-  const history = useHistory();
-  const { pathname, search } = useLocation();
+  const history = historyProp ? historyProp() : useHistory();
+  const { pathname, search } = locationProp ? locationProp : useLocation();
 
   // Create base URL path for system detail link
   const deviceBaseUrl =
@@ -319,6 +321,8 @@ const DeviceTable = ({
         />
       ) : (
         <GeneralTable
+          historyProp={historyProp}
+          locationProp={locationProp}
           apiFilterSort={true}
           isUseApi={true}
           filters={defaultFilters}
@@ -370,6 +374,8 @@ const DeviceTable = ({
 };
 
 DeviceTable.propTypes = {
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
   imageData: PropTypes.object,
   urlParam: PropTypes.string,
   openUpdateWizard: PropTypes.func,
