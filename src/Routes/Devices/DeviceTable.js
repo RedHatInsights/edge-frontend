@@ -321,6 +321,8 @@ const DeviceTable = ({
         />
       ) : (
         <GeneralTable
+          historyProp={historyProp}
+          locationProp={locationProp}
           apiFilterSort={true}
           isUseApi={true}
           filters={defaultFilters}
