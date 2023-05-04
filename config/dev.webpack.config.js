@@ -50,6 +50,11 @@ plugins.push(
           __dirname,
           '../src/Routes/Devices/DeviceTable.js'
         ),
+        // expose Images to use in Image Builder
+        './ImagesTable': resolve(
+          __dirname,
+          '../src/Routes/ImageManager/ImageTable.js'
+        ),
         // './UpdateDeviceModal': resolve(
         //   __dirname,
         //   '../src/Routes/Devices/UpdateDeviceModal.js'
