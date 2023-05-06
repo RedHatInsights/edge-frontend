@@ -19,7 +19,7 @@ const UpdateDeviceModal = React.lazy(() =>
 
 const Inventory = ({ historyProp, locationProp }) => {
   const history = historyProp ? historyProp() : useHistory();
-  const { pathname } = locationProp ? locationProp : useLocation();
+  const { pathname } = locationProp ? locationProp() : useLocation();
   const [response, fetchDevices] = useApi({
     api: getInventory,
     tableReload: true,

@@ -9,6 +9,7 @@ import ImageSetsTable from './ImageSetsTable';
 import { stateToUrlSearch } from '../../utils';
 import { getImageSets } from '../../api/images';
 import useApi from '../../hooks/useApi';
+import PropTypes from 'prop-types';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -22,14 +23,15 @@ const UpdateImageWizard = React.lazy(() =>
   )
 );
 
-const Images = () => {
-  const history = useHistory();
-  const { pathname, search } = useLocation();
+const Images = ({ historyProp, locationProp }) => {
+  const history = historyProp ? historyProp() : useHistory();
+  const { pathname, search } = locationProp ? locationProp() : useLocation();
 
   const [response, fetchImageSets] = useApi({
     api: getImageSets,
     tableReload: true,
   });
+
   const { data, isLoading, hasError } = response;
 
   const [isCreateWizardOpen, setIsCreateWizardOpen] = useState(false);
@@ -70,6 +72,8 @@ const Images = () => {
       </PageHeader>
       <section className="edge-images pf-l-page__main-section pf-c-page__main-section">
         <ImageSetsTable
+          historyProp={historyProp}
+          locationProp={locationProp}
           data={data?.data || []}
           count={data?.count}
           isLoading={isLoading}
@@ -131,4 +135,8 @@ const Images = () => {
   );
 };
 
+Images.propTypes = {
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
+};
 export default Images;
