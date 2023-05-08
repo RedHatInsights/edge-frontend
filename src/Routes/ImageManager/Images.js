@@ -4,7 +4,7 @@ import {
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Spinner, Bullseye } from '@patternfly/react-core';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import ImageSetsTable from './ImageSetsTable';
 import { stateToUrlSearch } from '../../utils';
 import { getImageSets } from '../../api/images';
@@ -23,8 +23,13 @@ const UpdateImageWizard = React.lazy(() =>
   )
 );
 
-const Images = ({ historyProp, locationProp }) => {
-  const history = historyProp ? historyProp() : useHistory();
+const Images = ({ historyProp, locationProp, navigateProp }) => {
+  const history = historyProp
+    ? historyProp()
+    : navigateProp
+    ? useNavigate()
+    : useHistory();
+  // const navigate = navigateProp ? navigateProp() : useNavigate() ;
   const { pathname, search } = locationProp ? locationProp() : useLocation();
 
   const [response, fetchImageSets] = useApi({
@@ -74,6 +79,7 @@ const Images = ({ historyProp, locationProp }) => {
         <ImageSetsTable
           historyProp={historyProp}
           locationProp={locationProp}
+          navigateProp={navigateProp}
           data={data?.data || []}
           count={data?.count}
           isLoading={isLoading}
@@ -138,5 +144,6 @@ const Images = ({ historyProp, locationProp }) => {
 Images.propTypes = {
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
+  navigateProp: PropTypes.func,
 };
 export default Images;

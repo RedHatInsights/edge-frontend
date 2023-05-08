@@ -110,6 +110,7 @@ const createRows = (data) => {
 const ImageTable = ({
   historyProp,
   locationProp,
+  navigateProp,
   data,
   count,
   isLoading,
@@ -176,6 +177,7 @@ const ImageTable = ({
           apiFilterSort={true}
           historyProp={historyProp}
           locationProp={locationProp}
+          navigateProp={navigateProp}
           isUseApi={true}
           filters={defaultFilters}
           loadTableData={fetchImageSets}
@@ -202,6 +204,7 @@ const ImageTable = ({
 ImageTable.propTypes = {
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   data: PropTypes.array,
   count: PropTypes.number,
   isLoading: PropTypes.bool,
