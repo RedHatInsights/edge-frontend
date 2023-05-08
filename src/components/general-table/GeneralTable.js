@@ -90,7 +90,11 @@ const GeneralTable = ({
     : useHistory
     ? useHistory()
     : null;
-  const navigate = navigateProp ? navigateProp() : useNavigate();
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
   const { pathname, search } = locationProp ? locationProp() : useLocation();
 
   useEffect(() => {
