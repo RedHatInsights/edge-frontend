@@ -133,7 +133,15 @@ CurrentVersion.propTypes = {
   image: PropTypes.object,
 };
 
-const UpdateSystemMain = ({ data, fetchDevices, isLoading, hasError, historyProp, locationProp, routeMatchProp }) => {
+const UpdateSystemMain = ({
+  data,
+  fetchDevices,
+  isLoading,
+  hasError,
+  historyProp,
+  locationProp,
+  routeMatchProp,
+}) => {
   const device = data?.Device;
   const [selectedVersion, setSelectedVersion] = useState(null);
   const [selectedCommitID, setSelectedCommitID] = useState(null);
@@ -142,10 +150,6 @@ const UpdateSystemMain = ({ data, fetchDevices, isLoading, hasError, historyProp
   const history = historyProp ? historyProp() : useHistory();
   const { pathname, search } = locationProp ? locationProp() : useLocation();
   const match = routeMatchProp ? routeMatchProp() : useRouteMatch();
-  // const history = useHistory();
-  // const { pathname, search } = useLocation();
-  // const match = useRouteMatch();
-
   const setUpdateEvent = (value) => {
     setSelectedVersion(value.cells[0]);
     setSelectedCommitID(value);
@@ -314,16 +318,24 @@ const UpdateSystemMain = ({ data, fetchDevices, isLoading, hasError, historyProp
 
 UpdateSystemMain.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
+  routeMatchProp: PropTypes.func,
   fetchDevices: PropTypes.func,
   isLoading: PropTypes.bool,
   hasError: PropTypes.bool,
 };
 
-const UpdateSystem = ({ historyProp, locationProp, routeMatchProp}) => {
+const UpdateSystem = ({
+  inventoryId,
+  historyProp,
+  locationProp,
+  routeMatchProp,
+}) => {
   const { deviceId, groupId } = useParams();
   const [{ data, isLoading, hasError }, fetchDevices] = useApi({
     api: getDeviceUpdates,
-    id: deviceId,
+    id: inventoryId ? inventoryId : deviceId,
     tableReload: true,
   });
 
@@ -396,6 +408,13 @@ const UpdateSystem = ({ historyProp, locationProp, routeMatchProp}) => {
       </section>
     </>
   );
+};
+
+UpdateSystem.propTypes = {
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
+  routeMatchProp: PropTypes.func,
+  inventoryId: PropTypes.string,
 };
 
 export default UpdateSystem;
