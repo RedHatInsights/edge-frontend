@@ -60,6 +60,14 @@ plugins.push(
           __dirname,
           '../src/Routes/Devices/DeviceTable.js'
         ),
+        './UpdateDeviceModal': resolve(
+          __dirname,
+          '../src/Routes/Devices/UpdateDeviceModal.js'
+        ),
+        './UpdateSystem': resolve(
+          __dirname,
+          '../src/Routes/Devices/UpdateSystem.js'
+        ),
       },
       shared: [
         { 'react-redux': { requiredVersion: deps['react-redux'] } },

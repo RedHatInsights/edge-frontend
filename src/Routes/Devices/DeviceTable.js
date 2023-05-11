@@ -273,6 +273,12 @@ const DeviceTable = ({
       actions.push({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
+          console.log('3-click: ' + deviceBaseUrl);
+          console.log('4-click: ' + rowData.rowInfo.id);
+          console.log(
+            '5-click: ' + `${deviceBaseUrl}/${rowData.rowInfo.id}/update`
+          );
+
           history.push({
             pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
           });

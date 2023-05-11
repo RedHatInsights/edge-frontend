@@ -146,6 +146,7 @@ const Inventory = ({ historyProp, locationProp }) => {
             navigateBack={() => {
               history.push({ pathname });
               setUpdateModal((prevState) => {
+                console.log('Click modal');
                 return {
                   ...prevState,
                   isOpen: false,
