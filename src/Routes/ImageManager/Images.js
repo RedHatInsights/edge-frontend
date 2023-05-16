@@ -29,7 +29,7 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
     : navigateProp
     ? useNavigate()
     : useHistory();
-  // const navigate = navigateProp ? navigateProp() : useNavigate() ;
+  const navigate = navigateProp ? navigateProp() : useNavigate();
   const { pathname, search } = locationProp ? locationProp() : useLocation();
 
   const [response, fetchImageSets] = useApi({
@@ -47,18 +47,29 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
 
   const openCreateWizard = () => {
-    history.push({
+    const a = {
       pathname,
       search: stateToUrlSearch('create_image=true', true, search),
-    });
+    };
+    if (navigateProp) {
+      navigate({ ...a, replace: true });
+    } else {
+      history.push({ a });
+    }
     setIsCreateWizardOpen(true);
   };
 
   const openUpdateWizard = (id) => {
-    history.push({
+    const a = {
       pathname,
       search: stateToUrlSearch('update_image=true', true, search),
-    });
+    };
+    if (navigateProp) {
+      navigate({ ...a, replace: true });
+    } else {
+      history.push({ a });
+    }
+
     setUpdateWizard({
       isOpen: true,
       imageId: id,
