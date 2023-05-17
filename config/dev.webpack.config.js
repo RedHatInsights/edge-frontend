@@ -44,8 +44,7 @@ plugins.push(
       exposes: {
         // Application root
         './RootApp': resolve(__dirname, '../src/AppEntry'),
-        // expose System detail to be used on insights
-        './Inventory': resolve(__dirname, '../src/Routes/Devices/Inventory.js'),
+        // expose Images detail to be used on insights
         './Images': resolve(__dirname, '../src/Routes/ImageManager/Images.js'),
         './ImagesSetTable': resolve(
           __dirname,
@@ -55,7 +54,8 @@ plugins.push(
           __dirname,
           '../src/Routes/ImageManagerDetail/ImageDetail.js'
         ),
-
+        // expose System detail to be used on insights
+        './Inventory': resolve(__dirname, '../src/Routes/Devices/Inventory.js'),
         './DeviceTable': resolve(
           __dirname,
           '../src/Routes/Devices/DeviceTable.js'
