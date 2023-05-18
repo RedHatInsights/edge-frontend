@@ -274,8 +274,7 @@ const DeviceTable = ({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
           history.push({
-            pathname: `/${rowData.rowInfo.id}/update`,
-            // pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
+            pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
           });
         },
       });

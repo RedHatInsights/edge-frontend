@@ -72,7 +72,7 @@ plugins.push(
       shared: [
         { 'react-redux': { requiredVersion: deps['react-redux'] } },
         { 'react-dom': { singleton: true, eager: true } },
-        { 'react-router-dom': { singleton: true, requiredVersion: '*' } },
+        { 'react-router-dom': { requiredVersion: deps['react-router-dom'] } },
         { 'react-redux': {} },
         { '@patternfly/react-core': { singleton: true } },
       ],

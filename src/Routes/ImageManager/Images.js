@@ -26,10 +26,14 @@ const UpdateImageWizard = React.lazy(() =>
 const Images = ({ historyProp, locationProp, navigateProp }) => {
   const history = historyProp
     ? historyProp()
-    : navigateProp
+    : useHistory
+    ? useHistory()
+    : null;
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
     ? useNavigate()
-    : useHistory();
-  const navigate = navigateProp ? navigateProp() : useNavigate();
+    : null;
   const { pathname, search } = locationProp ? locationProp() : useLocation();
 
   const [response, fetchImageSets] = useApi({
@@ -47,27 +51,27 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
 
   const openCreateWizard = () => {
-    const a = {
+    const param = {
       pathname,
       search: stateToUrlSearch('create_image=true', true, search),
     };
     if (navigateProp) {
-      navigate({ ...a, replace: true });
+      navigate({ ...param, replace: true });
     } else {
-      history.push({ a });
+      history.push(param);
     }
     setIsCreateWizardOpen(true);
   };
 
   const openUpdateWizard = (id) => {
-    const a = {
+    const param = {
       pathname,
       search: stateToUrlSearch('update_image=true', true, search),
     };
     if (navigateProp) {
-      navigate({ ...a, replace: true });
+      navigate({ ...param, replace: true });
     } else {
-      history.push({ a });
+      history.push(param);
     }
 
     setUpdateWizard({
