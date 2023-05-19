@@ -4,11 +4,12 @@ import {
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { Spinner, Bullseye } from '@patternfly/react-core';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import ImageSetsTable from './ImageSetsTable';
 import { stateToUrlSearch } from '../../utils';
 import { getImageSets } from '../../api/images';
 import useApi from '../../hooks/useApi';
+import PropTypes from 'prop-types';
 
 const CreateImageWizard = React.lazy(() =>
   import(
@@ -22,14 +23,24 @@ const UpdateImageWizard = React.lazy(() =>
   )
 );
 
-const Images = () => {
-  const history = useHistory();
-  const { pathname, search } = useLocation();
+const Images = ({ historyProp, locationProp, navigateProp }) => {
+  const history = historyProp
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
+  const { pathname, search } = locationProp ? locationProp() : useLocation();
 
   const [response, fetchImageSets] = useApi({
     api: getImageSets,
     tableReload: true,
   });
+
   const { data, isLoading, hasError } = response;
 
   const [isCreateWizardOpen, setIsCreateWizardOpen] = useState(false);
@@ -40,18 +51,29 @@ const Images = () => {
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
 
   const openCreateWizard = () => {
-    history.push({
+    const param = {
       pathname,
       search: stateToUrlSearch('create_image=true', true, search),
-    });
+    };
+    if (navigateProp) {
+      navigate({ ...param, replace: true });
+    } else {
+      history.push(param);
+    }
     setIsCreateWizardOpen(true);
   };
 
   const openUpdateWizard = (id) => {
-    history.push({
+    const param = {
       pathname,
       search: stateToUrlSearch('update_image=true', true, search),
-    });
+    };
+    if (navigateProp) {
+      navigate({ ...param, replace: true });
+    } else {
+      history.push(param);
+    }
+
     setUpdateWizard({
       isOpen: true,
       imageId: id,
@@ -70,6 +92,9 @@ const Images = () => {
       </PageHeader>
       <section className="edge-images pf-l-page__main-section pf-c-page__main-section">
         <ImageSetsTable
+          historyProp={historyProp}
+          locationProp={locationProp}
+          navigateProp={navigateProp}
           data={data?.data || []}
           count={data?.count}
           isLoading={isLoading}
@@ -131,4 +156,9 @@ const Images = () => {
   );
 };
 
+Images.propTypes = {
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
+  navigateProp: PropTypes.func,
+};
 export default Images;

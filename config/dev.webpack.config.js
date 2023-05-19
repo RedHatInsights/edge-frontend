@@ -44,35 +44,38 @@ plugins.push(
       exposes: {
         // Application root
         './RootApp': resolve(__dirname, '../src/AppEntry'),
+        // expose Images detail to be used on insights
+        './Images': resolve(__dirname, '../src/Routes/ImageManager/Images.js'),
+        './ImagesSetTable': resolve(
+          __dirname,
+          '../src/Routes/ImageManager/ImageSetsTable.js'
+        ),
+        './ImagesDetail': resolve(
+          __dirname,
+          '../src/Routes/ImageManagerDetail/ImageDetail.js'
+        ),
         // expose System detail to be used on insights
         './Inventory': resolve(__dirname, '../src/Routes/Devices/Inventory.js'),
         './DeviceTable': resolve(
           __dirname,
           '../src/Routes/Devices/DeviceTable.js'
         ),
-        // expose Images to use in Image Builder
-        './ImagesTable': resolve(
+        './UpdateDeviceModal': resolve(
           __dirname,
-          '../src/Routes/ImageManager/ImageTable.js'
+          '../src/Routes/Devices/UpdateDeviceModal.js'
         ),
-        // './UpdateDeviceModal': resolve(
-        //   __dirname,
-        //   '../src/Routes/Devices/UpdateDeviceModal.js'
-        // ),
-        // './AddDeviceModal': resolve(
-        //   __dirname,
-        //   '../src/Routes/Devices/AddDeviceModal.js'
-        // ),
-        // './CreateGroupModal': resolve(
-        //   __dirname,
-        //   '../src/Routes/Groups/CreateGroupModal.js'
-        // ),
-        // './RemoveDeviceModal': resolve(
-        //   __dirname,
-        //   '../src/Routes/Devices/RemoveDeviceModal.js'
-        // ),
+        './UpdateSystem': resolve(
+          __dirname,
+          '../src/Routes/Devices/UpdateSystem.js'
+        ),
       },
-      shared: [{ 'react-redux': { requiredVersion: deps['react-redux'] } }],
+      shared: [
+        { 'react-redux': { requiredVersion: deps['react-redux'] } },
+        { 'react-dom': { singleton: true, eager: true } },
+        { 'react-router-dom': { requiredVersion: deps['react-router-dom'] } },
+        { 'react-redux': {} },
+        { '@patternfly/react-core': { singleton: true } },
+      ],
     }
   )
 );
