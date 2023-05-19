@@ -14,7 +14,7 @@
         "prod": "NODE_ENV=production webpack serve --config config/dev.webpack.config.js",
         "start": "NODE_ENV=development webpack serve --config config/dev.webpack.config.js",
         "start:proxy": "PROXY=true NODE_ENV=development webpack serve --config config/dev.webpack.config.js",
-        "start:federated": "BETA=true fec static --config config/dev.webpack.config.js",
+        "start:federated": "BETA=true fec static --config config/dev.webpack.config.js -p 8002",
         "test": "TZ=UTC jest --verbose --no-cache",
         "verify": "npm-run-all build lint test",
         "prepare": "husky install"

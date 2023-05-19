@@ -3,7 +3,7 @@ import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
 import { Link } from 'react-router-dom';
-import { Tooltip } from '@patternfly/react-core';
+import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
 import CustomEmptyState from '../../components/Empty';
@@ -70,7 +70,7 @@ const columnNames = [
   },
 ];
 
-const createRows = (data) => {
+const createRows = (data, navigate) => {
   return data.map((image_set, index) => ({
     rowInfo: {
       id: image_set?.ID,
@@ -80,7 +80,24 @@ const createRows = (data) => {
     },
     cells: [
       {
-        title: (
+        title: navigate ? (
+          // <div
+          //   onClick={() => navigate(`${paths.manageImages}/${image_set?.ID}`)}
+          // >
+          //   {image_set?.Name}
+          // </div>
+
+          <Text
+            component="a"
+            onClick={(event) => {
+              event.preventDefault();
+              navigate(`${paths.manageImages}/${image_set?.ID}`);
+            }}
+            href={`${paths.manageImages}/${image_set?.ID}`}
+          >
+            {image_set?.Name}
+          </Text>
+        ) : (
           <Link to={`${paths.manageImages}/${image_set?.ID}`}>
             {image_set?.Name}
           </Link>
@@ -108,6 +125,9 @@ const createRows = (data) => {
 };
 
 const ImageTable = ({
+  historyProp,
+  locationProp,
+  navigateProp,
   data,
   count,
   isLoading,
@@ -118,7 +138,8 @@ const ImageTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
 }) => {
-  const { search } = useLocation();
+  const { search } = locationProp ? locationProp() : useLocation();
+  const navigate = navigateProp?.();
 
   const actionResolver = (rowData) => {
     const actionsArray = [];
@@ -172,12 +193,15 @@ const ImageTable = ({
       ) : (
         <GeneralTable
           apiFilterSort={true}
+          historyProp={historyProp}
+          locationProp={locationProp}
+          navigateProp={navigateProp}
           isUseApi={true}
           filters={defaultFilters}
           loadTableData={fetchImageSets}
           tableData={{ count, data, isLoading, hasError }}
           columnNames={columnNames}
-          rows={data ? createRows(data) : []}
+          rows={data ? createRows(data, navigate) : []}
           actionResolver={actionResolver}
           areActionsDisabled={areActionsDisabled}
           defaultSort={{ index: 2, direction: 'desc' }}
@@ -196,6 +220,9 @@ const ImageTable = ({
 };
 
 ImageTable.propTypes = {
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   data: PropTypes.array,
   count: PropTypes.number,
   isLoading: PropTypes.bool,
