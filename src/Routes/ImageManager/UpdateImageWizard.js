@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import ImageCreator from '../../components/ImageCreator';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import {
@@ -14,18 +14,14 @@ import {
 import { Bullseye, Backdrop, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import {
-  createNewImage,
-  addImageToPoll,
-  loadImageDetail,
-} from '../../store/actions';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { RegistryContext } from '../../store';
-import { imageDetailReducer } from '../../store/reducers';
+import { createNewImage, addImageToPoll } from '../../store/actions';
+import { useDispatch } from 'react-redux';
 import { getEdgeImageStatus } from '../../api/images';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { useFeatureFlags, getReleases } from '../../utils';
 import { temporaryReleases, supportedReleases } from '../../constants';
+import useApi from '../../hooks/useApi';
+import { getImageById } from '../../api/images';
 
 const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
   const [user, setUser] = useState();
@@ -41,23 +37,12 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
   const imageWizardFeatureFlag = useFeatureFlags(
     'edge-management.image_wizard_ui'
   );
-
-  const { getRegistry } = useContext(RegistryContext);
-  const { data } = useSelector(
-    ({ imageDetailReducer }) => ({
-      data: imageDetailReducer?.data || null,
-    }),
-    shallowEqual
-  );
-
-  useEffect(() => {
-    const registered = getRegistry().register({
-      imageDetailReducer,
-    });
-    updateImageID && loadImageDetail(dispatch, updateImageID);
-    return () => registered();
-  }, [dispatch]);
-
+  const [response] = useApi({
+    api: getImageById,
+    id: updateImageID,
+    tableReload: false,
+  });
+  const { data, isLoading } = response;
   useEffect(() => {
     (async () => {
       insights?.chrome?.auth
@@ -66,7 +51,7 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
     })();
   }, []);
 
-  return user && data ? (
+  return user && data && !isLoading ? (
     <ImageCreator
       onClose={closeAction}
       customComponentMapper={{

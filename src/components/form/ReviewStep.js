@@ -1,17 +1,14 @@
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { TextContent, Text } from '@patternfly/react-core';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import { imageTypeMapper, releaseMapper } from '../../Routes/../constants';
 import { shallowEqual, useSelector } from 'react-redux';
-import { RegistryContext } from '../../store';
-import { createImageReducer } from '../../store/reducers';
 import { Bullseye, Spinner, Alert } from '@patternfly/react-core';
 import ReviewSection from '../ReviewSection';
 
 const ReviewStep = () => {
   const { getState } = useFormApi();
   const isUpdate = getState().initialValues.isUpdate;
-  const { getRegistry } = useContext(RegistryContext);
   const { isLoading, hasError } = useSelector(
     ({ createImageReducer }) => ({
       isLoading:
@@ -23,10 +20,6 @@ const ReviewStep = () => {
     }),
     shallowEqual
   );
-  useEffect(() => {
-    const registered = getRegistry().register({ createImageReducer });
-    return () => registered();
-  }, []);
 
   if (isLoading) {
     return (
