@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
@@ -7,9 +7,9 @@ import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
 import CustomEmptyState from '../../components/Empty';
-import { useLocation } from 'react-router-dom';
 import { emptyStateNoFilters } from '../../utils';
 import Status from '../../components/Status';
+import ImageContext from '../../../src/Routes/ImageManager/Images.js';
 
 const TooltipSelectorRef = ({ index }) => (
   <div>
@@ -69,7 +69,6 @@ const columnNames = [
     columnTransforms: [cellWidth(30)],
   },
 ];
-
 const createRows = (data, navigate) => {
   return data.map((image_set, index) => ({
     rowInfo: {
@@ -119,9 +118,9 @@ const createRows = (data, navigate) => {
 };
 
 const ImageTable = ({
-  historyProp,
-  locationProp,
-  navigateProp,
+  //  historyProp,
+  // locationProp,
+  // navigateProp,
   data,
   count,
   isLoading,
@@ -132,8 +131,8 @@ const ImageTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
 }) => {
-  const { search } = locationProp ? locationProp() : useLocation();
-  const navigate = navigateProp?.();
+  const imageContext = useContext(ImageContext);
+  // const { search } = imageContext?.location?.() || useLocation();
   const actionResolver = (rowData) => {
     const actionsArray = [];
     if (rowData.rowInfo?.isoURL) {
@@ -171,7 +170,7 @@ const ImageTable = ({
 
   return (
     <>
-      {emptyStateNoFilters(isLoading, count, search) ? (
+      {emptyStateNoFilters(isLoading, count, imageContext.location) ? (
         <CustomEmptyState
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}
@@ -186,15 +185,15 @@ const ImageTable = ({
       ) : (
         <GeneralTable
           apiFilterSort={true}
-          historyProp={historyProp}
-          locationProp={locationProp}
-          navigateProp={navigateProp}
+          //  historyProp={historyProp}
+          //   locationProp={locationProp}
+          //  navigateProp={navigateProp}
           isUseApi={true}
           filters={defaultFilters}
           loadTableData={fetchImageSets}
           tableData={{ count, data, isLoading, hasError }}
           columnNames={columnNames}
-          rows={data ? createRows(data, navigate) : []}
+          rows={data ? createRows(data, imageContext.navigate) : []}
           actionResolver={actionResolver}
           areActionsDisabled={areActionsDisabled}
           defaultSort={{ index: 2, direction: 'desc' }}
@@ -213,9 +212,9 @@ const ImageTable = ({
 };
 
 ImageTable.propTypes = {
-  historyProp: PropTypes.func,
-  locationProp: PropTypes.func,
-  navigateProp: PropTypes.func,
+  //  historyProp: PropTypes.func,
+  //  locationProp: PropTypes.func,
+  // navigateProp: PropTypes.func,
   data: PropTypes.array,
   count: PropTypes.number,
   isLoading: PropTypes.bool,

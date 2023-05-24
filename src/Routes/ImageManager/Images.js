@@ -1,4 +1,4 @@
-import React, { Fragment, useState, Suspense } from 'react';
+import React, { Fragment, useState, Suspense, createContext } from 'react';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -24,17 +24,15 @@ const UpdateImageWizard = React.lazy(() =>
 );
 
 const Images = ({ historyProp, locationProp, navigateProp }) => {
-  const history = historyProp
-    ? historyProp()
-    : useHistory
-    ? useHistory()
-    : null;
+  const history = historyProp ? historyProp : useHistory ? useHistory : null;
   const navigate = navigateProp
-    ? navigateProp()
+    ? navigateProp
     : useNavigate
-    ? useNavigate()
+    ? useNavigate
     : null;
-  const { pathname, search } = locationProp ? locationProp() : useLocation();
+  const location = locationProp ? locationProp : useLocation;
+  const { pathname, search } = location();
+  const imageProps = { history, location, navigate };
 
   const [response, fetchImageSets] = useApi({
     api: getImageSets,
@@ -50,125 +48,119 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
   });
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
 
-  const openCreateWizard = () => {
+  const openCreateWizard = (navigate, history) => {
     const param = {
       pathname,
       search: stateToUrlSearch('create_image=true', true, search),
     };
-    if (navigateProp) {
-      navigate({ ...param, replace: true });
-    } else {
-      history.push(param);
-    }
+    navigate?.({ ...param, replace: true }) || history.push(param);
     setIsCreateWizardOpen(true);
   };
 
-  const openUpdateWizard = (id) => {
+  const openUpdateWizard = (id, navigate, history) => {
     const param = {
       pathname,
       search: stateToUrlSearch('update_image=true', true, search),
     };
-    if (navigateProp) {
-      navigate({ ...param, replace: true });
-    } else {
-      history.push(param);
-    }
+    navigate?.({ ...param, replace: true }) || history.push(param);
 
     setUpdateWizard({
       isOpen: true,
       imageId: id,
     });
   };
-
   const reload = async () => {
     await fetchImageSets();
     setHasModalSubmitted(true);
   };
 
   return (
-    <Fragment>
-      <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Images" />
-      </PageHeader>
-      <section className="edge-images pf-l-page__main-section pf-c-page__main-section">
-        <ImageSetsTable
-          historyProp={historyProp}
-          locationProp={locationProp}
-          navigateProp={navigateProp}
-          data={data?.data || []}
-          count={data?.count}
-          isLoading={isLoading}
-          hasError={hasError}
-          fetchImageSets={fetchImageSets}
-          openCreateWizard={openCreateWizard}
-          openUpdateWizard={openUpdateWizard}
-          hasModalSubmitted={hasModalSubmitted}
-          setHasModalSubmitted={setHasModalSubmitted}
-        />
-      </section>
-      {isCreateWizardOpen && (
-        <Suspense
-          fallback={
-            <Bullseye>
-              <Spinner />
-            </Bullseye>
-          }
-        >
-          <CreateImageWizard
-            navigateBack={() => {
-              const param = {
-                pathname,
-                search: stateToUrlSearch('create_image=true', false, search),
-              };
-              if (navigateProp) {
-                navigate({ ...param, replace: true });
-              } else {
-                history.push(param);
-              }
-              setIsCreateWizardOpen(false);
-            }}
-            reload={reload}
+    <ImageContext.Provider value={imageProps}>
+      <Fragment>
+        <PageHeader className="pf-m-light">
+          <PageHeaderTitle title="Images" />
+        </PageHeader>
+        <section className="edge-images pf-l-page__main-section pf-c-page__main-section">
+          <ImageSetsTable
+            data={data?.data || []}
+            count={data?.count}
+            isLoading={isLoading}
+            hasError={hasError}
+            fetchImageSets={fetchImageSets}
+            openCreateWizard={(...props) =>
+              openCreateWizard(
+                ...props,
+                imageProps?.navigate,
+                imageProps?.history
+              )
+            }
+            openUpdateWizard={(...props) =>
+              openUpdateWizard(
+                ...props,
+                imageProps?.navigate,
+                imageProps?.history
+              )
+            }
+            hasModalSubmitted={hasModalSubmitted}
+            setHasModalSubmitted={setHasModalSubmitted}
           />
-        </Suspense>
-      )}
-      {UpdateWizard.isOpen && (
-        <Suspense
-          fallback={
-            <Bullseye>
-              <Spinner />
-            </Bullseye>
-          }
-        >
-          <UpdateImageWizard
-            navigateBack={() => {
-              const param = {
-                pathname,
-                search: stateToUrlSearch('update_image=true', false, search),
-              };
-              if (navigateProp) {
-                navigate({ ...param, replace: true });
-              } else {
-                history.push(param);
-              }
-              setUpdateWizard((prevState) => {
-                return {
-                  ...prevState,
-                  isOpen: false,
+        </section>
+        {isCreateWizardOpen && (
+          <Suspense
+            fallback={
+              <Bullseye>
+                <Spinner />
+              </Bullseye>
+            }
+          >
+            <CreateImageWizard
+              navigateBack={() => {
+                const param = {
+                  pathname,
+                  search: stateToUrlSearch('create_image=true', false, search),
                 };
-              });
-            }}
-            reload={reload}
-            updateImageID={UpdateWizard.imageId}
-          />
-        </Suspense>
-      )}
-    </Fragment>
+                navigate?.({ ...param, replace: true }) || history.push(param);
+                setIsCreateWizardOpen(false);
+              }}
+              reload={reload}
+            />
+          </Suspense>
+        )}
+        {UpdateWizard.isOpen && (
+          <Suspense
+            fallback={
+              <Bullseye>
+                <Spinner />
+              </Bullseye>
+            }
+          >
+            <UpdateImageWizard
+              navigateBack={() => {
+                const param = {
+                  pathname,
+                  search: stateToUrlSearch('update_image=true', false, search),
+                };
+                navigate?.({ ...param, replace: true }) || history.push(param);
+                setUpdateWizard((prevState) => {
+                  return {
+                    ...prevState,
+                    isOpen: false,
+                  };
+                });
+              }}
+              reload={reload}
+              updateImageID={UpdateWizard.imageId}
+            />
+          </Suspense>
+        )}
+      </Fragment>
+    </ImageContext.Provider>
   );
 };
-
 Images.propTypes = {
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
   navigateProp: PropTypes.func,
 };
 export default Images;
+export const ImageContext = createContext();
