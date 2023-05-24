@@ -50,7 +50,6 @@ const GeneralTable = ({
   // historyProp,
   // locationProp,
   // navigateProp,
-  param,
   apiFilterSort,
   urlParam,
   filters,
@@ -94,16 +93,16 @@ const GeneralTable = ({
       !imageContext?.location.search.includes('create_image=true') &&
       !imageContext?.location.search.includes('update_image=true')
     ) {
-      const a = {
+      const param = {
         pathname: imageContext?.location.pathname,
         search: stateToUrlSearch(
           'has_filters=true',
-          chipsArray.length > 0,
+          chipsArray?.length > 0,
           imageContext?.location.search
         ),
       };
       imageContext?.navigate?.({ ...param, replace: true }) ||
-        imageContext.history.replace(a);
+        imageContext?.history.replace(param);
     }
 
     const query = apiFilterSort
@@ -415,7 +414,6 @@ const GeneralTable = ({
 };
 
 GeneralTable.propTypes = {
-  param: PropTypes.array,
   // historyProp: PropTypes.func,
   // locationProp: PropTypes.func,
   // navigateProp: PropTypes.func,

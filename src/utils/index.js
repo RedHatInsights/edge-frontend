@@ -34,7 +34,7 @@ export const mapUrlToObj = (url, keys) => {
 export const stateToUrlSearch = (urlString, state, search) => {
   var searchArray = [];
   const currentSearchArray =
-    search.length > 0
+    search?.length > 0
       ? search.includes('&')
         ? search.split('?')[1].split('&')
         : search.split('?').slice(1)
