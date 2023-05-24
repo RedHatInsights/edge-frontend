@@ -9,7 +9,7 @@ import { cellWidth } from '@patternfly/react-table';
 import CustomEmptyState from '../../components/Empty';
 import { emptyStateNoFilters } from '../../utils';
 import Status from '../../components/Status';
-import ImageContext from '../../../src/Routes/ImageManager/Images.js';
+import { ImageContext } from '../../utils/imageContext';
 
 const TooltipSelectorRef = ({ index }) => (
   <div>
@@ -118,9 +118,6 @@ const createRows = (data, navigate) => {
 };
 
 const ImageTable = ({
-  //  historyProp,
-  // locationProp,
-  // navigateProp,
   data,
   count,
   isLoading,
@@ -132,7 +129,7 @@ const ImageTable = ({
   setHasModalSubmitted,
 }) => {
   const imageContext = useContext(ImageContext);
-  // const { search } = imageContext?.location?.() || useLocation();
+  console.log(imageContext, 'this is imageContext!');
   const actionResolver = (rowData) => {
     const actionsArray = [];
     if (rowData.rowInfo?.isoURL) {

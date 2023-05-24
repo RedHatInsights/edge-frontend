@@ -46,10 +46,6 @@ plugins.push(
         './RootApp': resolve(__dirname, '../src/AppEntry'),
         // expose Images detail to be used on insights
         './Images': resolve(__dirname, '../src/Routes/ImageManager/Images.js'),
-        './UpdateImages': resolve(
-          __dirname,
-          '../src/Routes/ImageManager/UpdateImageWizard.js'
-        ),
         './ImagesSetTable': resolve(
           __dirname,
           '../src/Routes/ImageManager/ImageSetsTable.js'

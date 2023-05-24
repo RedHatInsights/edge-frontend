@@ -1,4 +1,4 @@
-import React, { Fragment, useState, Suspense, createContext } from 'react';
+import React, { Fragment, useState, Suspense } from 'react';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -9,6 +9,7 @@ import ImageSetsTable from './ImageSetsTable';
 import { stateToUrlSearch } from '../../utils';
 import { getImageSets } from '../../api/images';
 import useApi from '../../hooks/useApi';
+import { ImageContext } from '../../utils/imageContext';
 import PropTypes from 'prop-types';
 
 const CreateImageWizard = React.lazy(() =>
@@ -25,6 +26,7 @@ const UpdateImageWizard = React.lazy(() =>
 
 const Images = ({ historyProp, locationProp, navigateProp }) => {
   const history = historyProp ? historyProp : useHistory ? useHistory : null;
+  console.log('this is hist', history);
   const navigate = navigateProp
     ? navigateProp
     : useNavigate
@@ -32,7 +34,11 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
     : null;
   const location = locationProp ? locationProp : useLocation;
   const { pathname, search } = location();
-  const imageProps = { history, location, navigate };
+  const imageProps = {
+    history: history?.(),
+    location: location?.(),
+    navigate: navigate?.(),
+  };
 
   const [response, fetchImageSets] = useApi({
     api: getImageSets,
@@ -57,12 +63,17 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
     setIsCreateWizardOpen(true);
   };
 
-  const openUpdateWizard = (id, navigate, history) => {
+  const openUpdateWizard = (id) => {
     const param = {
       pathname,
       search: stateToUrlSearch('update_image=true', true, search),
     };
-    navigate?.({ ...param, replace: true }) || history.push(param);
+    if (imageProps.navigate) {
+      imageProps.navigate({ ...param, replace: true });
+    } else {
+      imageProps.history.push(param);
+    }
+    // navigate?.({ ...param, replace: true }) || history.push(param);
 
     setUpdateWizard({
       isOpen: true,
@@ -119,7 +130,11 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
                   pathname,
                   search: stateToUrlSearch('create_image=true', false, search),
                 };
-                navigate?.({ ...param, replace: true }) || history.push(param);
+                if (imageProps.navigate) {
+                  imageProps.navigate({ ...param, replace: true });
+                } else {
+                  imageProps.history.push(param);
+                }
                 setIsCreateWizardOpen(false);
               }}
               reload={reload}
@@ -163,4 +178,3 @@ Images.propTypes = {
   navigateProp: PropTypes.func,
 };
 export default Images;
-export const ImageContext = createContext();

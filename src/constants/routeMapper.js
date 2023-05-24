@@ -11,7 +11,7 @@ export const routes = {
   inventory: '/inventory',
   inventoryDetail: '/inventory/:deviceId',
   inventoryDetailUpdate: '/inventory/:deviceId/update',
-  manageImages: '/edge/manage-images',
+  manageImages: '/manage-images',
   manageImagesDetail: '/manage-images/:imageId',
   manageImagesDetailVersion: '/manage-images/:imageId/versions/:imageVersionId',
   repositories: '/repositories',

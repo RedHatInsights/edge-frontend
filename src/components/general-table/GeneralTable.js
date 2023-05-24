@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import ToolbarHeader from './ToolbarHeader';
 import ToolbarFooter from './ToolbarFooter';
 import createFilterValues from '../../components/general-table/createFilterValues';
-import ImageContext from '../../../src/Routes/ImageManager/Images.js';
+import { ImageContext } from '../../utils/imageContext';
 import {
   Table,
   TableHeader,
@@ -50,7 +50,6 @@ const GeneralTable = ({
   // historyProp,
   // locationProp,
   // navigateProp,
-  param,
   apiFilterSort,
   urlParam,
   filters,
@@ -87,6 +86,7 @@ const GeneralTable = ({
   const [checkedRows, setCheckedRows] = useState(defaultCheckedRows);
   const dispatch = useDispatch();
   const imageContext = useContext(ImageContext);
+  console.log('this is imageconTTTT', imageContext);
 
   useEffect(() => {
     // Add or remove has_filters param depending on whether filters are present
@@ -94,16 +94,16 @@ const GeneralTable = ({
       !imageContext?.location.search.includes('create_image=true') &&
       !imageContext?.location.search.includes('update_image=true')
     ) {
-      const a = {
+      const param = {
         pathname: imageContext?.location.pathname,
         search: stateToUrlSearch(
           'has_filters=true',
-          chipsArray.length > 0,
+          chipsArray?.length > 0,
           imageContext?.location.search
         ),
       };
       imageContext?.navigate?.({ ...param, replace: true }) ||
-        imageContext.history.replace(a);
+        imageContext?.history.replace(param);
     }
 
     const query = apiFilterSort
@@ -415,7 +415,6 @@ const GeneralTable = ({
 };
 
 GeneralTable.propTypes = {
-  param: PropTypes.array,
   // historyProp: PropTypes.func,
   // locationProp: PropTypes.func,
   // navigateProp: PropTypes.func,
