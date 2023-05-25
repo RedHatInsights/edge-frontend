@@ -228,7 +228,7 @@ const GroupsDetail = () => {
         {!emptyStateNoFilters(
           isLoading,
           data?.DeviceGroup?.Devices.length,
-          imageContext?.location?.search
+          imageContext.location
         ) ? (
           <DeviceTable
             data={data?.DevicesView?.devices || []}

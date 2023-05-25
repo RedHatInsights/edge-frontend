@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
+import { ImageContext } from '../../utils/imageContext';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -37,8 +38,8 @@ import {
 import {
   useParams,
   Link,
-  useHistory,
-  useLocation,
+  //  useHistory,
+  //  useLocation,
   useRouteMatch,
 } from 'react-router-dom';
 import apiWithToast from '../../utils/apiWithToast';
@@ -138,17 +139,18 @@ const UpdateSystemMain = ({
   fetchDevices,
   isLoading,
   hasError,
-  historyProp,
-  locationProp,
+  //historyProp,
+  //locationProp,
   routeMatchProp,
 }) => {
+  const imageContext = useContext(ImageContext);
   const device = data?.Device;
   const [selectedVersion, setSelectedVersion] = useState(null);
   const [selectedCommitID, setSelectedCommitID] = useState(null);
   const [isUpdateSubmitted, setIsUpdateSubmitted] = useState(false);
   const dispatch = useDispatch();
-  const history = historyProp ? historyProp() : useHistory();
-  const { pathname, search } = locationProp ? locationProp() : useLocation();
+  // const history = historyProp ? historyProp() : useHistory();
+  //  const { pathname, search } = locationProp ? locationProp() : useLocation();
   const match = routeMatchProp ? routeMatchProp() : useRouteMatch();
   const setUpdateEvent = (value) => {
     setSelectedVersion(value.cells[0]);
@@ -187,21 +189,24 @@ const UpdateSystemMain = ({
     // depending on path and from_details param
     let destPath = paths.inventory;
     if (match.path === paths.inventoryDetailUpdate) {
-      destPath = search.includes('from_details=true')
+      destPath = imageContext?.location?.search.includes('from_details=true')
         ? paths.inventoryDetail
         : paths.inventory;
     }
     if (match.path === paths.fleetManagementSystemDetailUpdate) {
-      destPath = search.includes('from_details=true')
+      destPath = imageContext?.location?.search.includes('from_details=true')
         ? paths.fleetManagementSystemDetail
         : paths.fleetManagementDetail;
     }
 
     // Construct destination path
     const pathLen = destPath.split('/').length;
-    const dest = pathname.split('/').slice(0, pathLen).join('/');
+    const dest = imageContext?.location?.pathname
+      .split('/')
+      .slice(0, pathLen)
+      .join('/');
 
-    history.push({ pathname: dest });
+    imageContext?.history?.push({ pathname: dest });
   };
 
   const buildRow = (image) => {
@@ -251,8 +256,8 @@ const UpdateSystemMain = ({
             </TextContent>
             <>
               <GeneralTable
-                historyProp={historyProp}
-                locationProp={locationProp}
+                // historyProp={historyProp}
+                //  locationProp={locationProp}
                 className="pf-u-mt-sm"
                 apiFilterSort={true}
                 isUseApi={true}
@@ -318,8 +323,8 @@ const UpdateSystemMain = ({
 
 UpdateSystemMain.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  historyProp: PropTypes.func,
-  locationProp: PropTypes.func,
+  //  historyProp: PropTypes.func,
+  // locationProp: PropTypes.func,
   routeMatchProp: PropTypes.func,
   fetchDevices: PropTypes.func,
   isLoading: PropTypes.bool,
@@ -328,8 +333,8 @@ UpdateSystemMain.propTypes = {
 
 const UpdateSystem = ({
   inventoryId,
-  historyProp,
-  locationProp,
+  //historyProp,
+  // locationProp,
   routeMatchProp,
 }) => {
   const { deviceId, groupId } = useParams();
@@ -401,8 +406,8 @@ const UpdateSystem = ({
           fetchDevices={fetchDevices}
           isLoading={isLoading}
           hasError={hasError}
-          historyProp={historyProp}
-          locationProp={locationProp}
+          // historyProp={historyProp}
+          //   locationProp={locationProp}
           routeMatchProp={routeMatchProp}
         />
       </section>
@@ -411,8 +416,8 @@ const UpdateSystem = ({
 };
 
 UpdateSystem.propTypes = {
-  historyProp: PropTypes.func,
-  locationProp: PropTypes.func,
+  // historyProp: PropTypes.func,
+  // locationProp: PropTypes.func,
   routeMatchProp: PropTypes.func,
   inventoryId: PropTypes.string,
 };

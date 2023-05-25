@@ -129,7 +129,6 @@ const ImageTable = ({
   setHasModalSubmitted,
 }) => {
   const imageContext = useContext(ImageContext);
-  console.log(imageContext, 'this is imageContext!');
   const actionResolver = (rowData) => {
     const actionsArray = [];
     if (rowData.rowInfo?.isoURL) {

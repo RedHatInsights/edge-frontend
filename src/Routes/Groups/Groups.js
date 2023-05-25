@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Flex } from '@patternfly/react-core';
 import {
   PageHeader,
@@ -11,15 +11,15 @@ import CreateGroupModal from './CreateGroupModal';
 import RenameGroupModal from './RenameGroupModal';
 import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
-import { useLocation } from 'react-router-dom';
 import { emptyStateNoFilters } from '../../utils';
+import { ImageContext } from '../../utils/imageContext';
 
 const Groups = () => {
-  const { search } = useLocation();
   const [response, fetchGroups] = useApi({
     api: getGroups,
     tableReload: true,
   });
+  const imageContext = useContext(ImageContext);
   const { data, isLoading, hasError } = response;
 
   const [modalState, setModalState] = useState({ id: null, name: '' });
@@ -49,7 +49,7 @@ const Groups = () => {
         <PageHeaderTitle title="Groups" />
       </PageHeader>
       <section className="edge-groups pf-l-page__main-section pf-c-page__main-section">
-        {!emptyStateNoFilters(isLoading, data?.count, search) ? (
+        {!emptyStateNoFilters(isLoading, data?.count, imageContext.location) ? (
           <GroupTable
             data={data?.data || []}
             count={data?.count}

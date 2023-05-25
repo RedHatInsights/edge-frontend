@@ -54,7 +54,7 @@ export const stateToUrlSearch = (urlString, state, search) => {
 };
 
 export const emptyStateNoFilters = (isLoading, count, search) =>
-  isLoading !== true && !count > 0 && !search.includes('has_filters=true');
+  isLoading !== true && !true && !search.includes('has_filters=true');
 
 export const canUpdateSelectedDevices = ({ deviceData, imageData }) =>
   deviceData?.length > 0 && imageData

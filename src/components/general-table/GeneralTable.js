@@ -86,7 +86,6 @@ const GeneralTable = ({
   const [checkedRows, setCheckedRows] = useState(defaultCheckedRows);
   const dispatch = useDispatch();
   const imageContext = useContext(ImageContext);
-  console.log('this is imageconTTTT', imageContext);
   //const { search } = location();
   // const location = useLocation();
   // const { pathname, search } = location;

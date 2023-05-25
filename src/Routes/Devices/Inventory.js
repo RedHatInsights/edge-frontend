@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useContext } from 'react';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -9,21 +9,21 @@ import RemoveDeviceModal from './RemoveDeviceModal';
 import CreateGroupModal from '../Groups/CreateGroupModal';
 import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api/devices';
-import { useHistory, useLocation } from 'react-router-dom';
 import { Bullseye, Spinner } from '@patternfly/react-core';
-import PropTypes from 'prop-types';
+import { ImageContext } from '../../utils/imageContext';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(/* webpackChunkName: "UpdateDeviceModal" */ './UpdateDeviceModal')
 );
 
-const Inventory = ({ historyProp, locationProp }) => {
-  const history = historyProp ? historyProp() : useHistory();
-  const { pathname } = locationProp ? locationProp() : useLocation();
+const Inventory = () => {
+  //  const history = historyProp ? historyProp() : useHistory();
+  // const { pathname } = locationProp ? locationProp() : useLocation();
   const [response, fetchDevices] = useApi({
     api: getInventory,
     tableReload: true,
   });
+  const imageContext = useContext(ImageContext);
   const { data, isLoading, hasError } = response;
   const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
   const [isRemoveDeviceModalOpen, setIsRemoveDeviceModalOpen] = useState(false);
@@ -100,8 +100,8 @@ const Inventory = ({ historyProp, locationProp }) => {
       </PageHeader>
       <section className="edge-devices pf-l-page__main-section pf-c-page__main-section">
         <DeviceTable
-          historyProp={historyProp}
-          locationProp={locationProp}
+          // historyProp={historyProp}
+          // locationProp={locationProp}
           isSystemsView={true}
           data={data?.data?.devices}
           count={data?.count}
@@ -144,7 +144,10 @@ const Inventory = ({ historyProp, locationProp }) => {
         >
           <UpdateDeviceModal
             navigateBack={() => {
-              history.push({ pathname });
+              const param = {
+                pathname: imageContext?.location?.pathname,
+              };
+              imageContext?.history?.push({ param });
               setUpdateModal((prevState) => {
                 return {
                   ...prevState,
@@ -185,11 +188,6 @@ const Inventory = ({ historyProp, locationProp }) => {
       )}
     </>
   );
-};
-
-Inventory.propTypes = {
-  historyProp: PropTypes.func,
-  locationProp: PropTypes.func,
 };
 
 export default Inventory;
