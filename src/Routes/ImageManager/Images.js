@@ -59,7 +59,11 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
       pathname,
       search: stateToUrlSearch('create_image=true', true, search),
     };
-    navigate?.({ ...param, replace: true }) || history.push(param);
+    if (imageProps.navigate) {
+      navigate?.({ ...param, replace: true });
+    } else {
+      history?.push(param);
+    }
     setIsCreateWizardOpen(true);
   };
 

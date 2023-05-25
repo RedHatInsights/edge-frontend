@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
 import { Tooltip } from '@patternfly/react-core';
@@ -10,6 +10,7 @@ import CustomEmptyState from '../../components/Empty';
 import { emptyStateNoFilters } from '../../utils';
 import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
+import { ImageContext } from '../../utils/imageContext';
 
 const defaultFilters = [
   {
@@ -198,8 +199,8 @@ const createRows = (devices, hasLinks, fetchDevices, deviceLinkBase) => {
 };
 
 const DeviceTable = ({
-  historyProp,
-  locationProp,
+  // historyProp,
+  // locationProp,
   hasCheckbox = false,
   selectedItems,
   selectedItemsUpdateable,
@@ -220,15 +221,18 @@ const DeviceTable = ({
   isSystemsView = false,
   isAddSystemsView = false,
 }) => {
+  const imageContext = useContext(ImageContext);
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
   const canBeUpdated = isSystemsView;
-  const history = historyProp ? historyProp() : useHistory();
-  const { pathname, search } = locationProp ? locationProp() : useLocation();
+  //  const history = historyProp ? historyProp() : useHistory();
+  //const { pathname, search } = locationProp ? locationProp() : useLocation();
 
   // Create base URL path for system detail link
   const deviceBaseUrl =
-    pathname === paths.inventory ? pathname : `${pathname}/systems`;
+    imageContext?.location.pathname === paths.inventory
+      ? imageContext?.location.pathname
+      : `${imageContext?.location.pathname}/systems`;
 
   const actionResolver = (rowData) => {
     const actions = [];
@@ -273,7 +277,7 @@ const DeviceTable = ({
       actions.push({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
-          history.push({
+          imageContext?.history.push({
             pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
           });
         },
@@ -302,7 +306,8 @@ const DeviceTable = ({
 
   return (
     <>
-      {isSystemsView && emptyStateNoFilters(isLoading, count, search) ? (
+      {isSystemsView &&
+      emptyStateNoFilters(isLoading, count, imageContext?.location.search) ? (
         <CustomEmptyState
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}
@@ -321,8 +326,8 @@ const DeviceTable = ({
         />
       ) : (
         <GeneralTable
-          historyProp={historyProp}
-          locationProp={locationProp}
+          //    historyProp={historyProp}
+          //    locationProp={locationProp}
           apiFilterSort={true}
           isUseApi={true}
           filters={defaultFilters}
@@ -374,8 +379,8 @@ const DeviceTable = ({
 };
 
 DeviceTable.propTypes = {
-  historyProp: PropTypes.func,
-  locationProp: PropTypes.func,
+  // historyProp: PropTypes.func,
+  //  locationProp: PropTypes.func,
   imageData: PropTypes.object,
   urlParam: PropTypes.string,
   openUpdateWizard: PropTypes.func,
