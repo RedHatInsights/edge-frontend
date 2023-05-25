@@ -87,25 +87,31 @@ const GeneralTable = ({
   const dispatch = useDispatch();
   const imageContext = useContext(ImageContext);
   console.log('this is imageconTTTT', imageContext);
+  //const { search } = location();
+  // const location = useLocation();
+  // const { pathname, search } = location;
 
   useEffect(() => {
     // Add or remove has_filters param depending on whether filters are present
     if (
-      !imageContext?.location.search.includes('create_image=true') &&
-      !imageContext?.location.search.includes('update_image=true')
+      // stateToUrlSearch('create_image=true', false, imageContext.location.search) &&
+      // stateToUrlSearch('update_image=true', false, imageContext.location.search)
+      // stateToUrlSearch('update_image=true', false, search)
+      !imageContext?.location?.search.includes('create_image=true') &&
+      !imageContext?.location?.search.includes('update_image=true')
     ) {
       const param = {
-        pathname: imageContext?.location.pathname,
+        pathname: imageContext?.location?.pathname,
         search: stateToUrlSearch(
           'has_filters=true',
           chipsArray?.length > 0,
-          imageContext?.location.search
+          imageContext?.location?.search
         ),
       };
       if (imageContext.navigate) {
         imageContext?.navigate?.({ ...param, replace: true });
       } else {
-        imageContext?.history.replace(param);
+        imageContext?.history?.replace(param);
       }
     }
 

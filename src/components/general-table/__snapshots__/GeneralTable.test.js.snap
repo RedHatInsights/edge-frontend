@@ -31,9 +31,9 @@ exports[`General table should render correctly 1`] = `
             aria-expanded="false"
             aria-haspopup="listbox"
             aria-label="Options menu"
-            aria-labelledby=" pf-select-toggle-id-1"
+            aria-labelledby=" pf-select-toggle-id-0"
             class="pf-c-select__toggle"
-            id="pf-select-toggle-id-1"
+            id="pf-select-toggle-id-0"
             type="button"
           >
             <div
@@ -298,7 +298,7 @@ exports[`General table should render correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-header-expandable-content-3"
+      id="toolbar-header-expandable-content-0"
     >
       <div
         class="pf-c-toolbar__group"
@@ -317,7 +317,7 @@ exports[`General table should render correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-header-expandable-content-4"
+      id="toolbar-header-expandable-content-1"
     >
       <div
         class="pf-c-toolbar__group"

@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useContext } from 'react';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,11 +16,12 @@ import {
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import Empty from '../../components/Empty';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { routes as paths } from '../../constants/routeMapper';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import DeviceTable from '../Devices/DeviceTable';
 import { useParams } from 'react-router-dom';
+import { ImageContext } from '../../utils/imageContext';
 import {
   getGroupById,
   removeDeviceFromGroupById,
@@ -46,8 +47,7 @@ const UpdateDeviceModal = React.lazy(() =>
 const GroupsDetail = () => {
   const dispatch = useDispatch();
   const params = useParams();
-  const history = useHistory();
-  const { search, pathname } = useLocation();
+  const imageContext = useContext(ImageContext);
 
   const { groupId } = params;
 
@@ -228,7 +228,7 @@ const GroupsDetail = () => {
         {!emptyStateNoFilters(
           isLoading,
           data?.DeviceGroup?.Devices.length,
-          search
+          imageContext?.location?.search
         ) ? (
           <DeviceTable
             data={data?.DevicesView?.devices || []}
@@ -337,7 +337,10 @@ const GroupsDetail = () => {
         >
           <UpdateDeviceModal
             navigateBack={() => {
-              history.push({ pathname });
+              const param = {
+                pathname: imageContext?.location?.pathname,
+              };
+              imageContext?.history?.push({ param });
               setUpdateModal((prevState) => {
                 return {
                   ...prevState,
@@ -355,7 +358,7 @@ const GroupsDetail = () => {
         <DeleteGroupModal
           isModalOpen={isDeleteModalOpen}
           setIsModalOpen={setIsDeleteModalOpen}
-          reloadData={() => history.push(paths.fleetManagement)}
+          reloadData={() => imageContext?.history?.push(paths.fleetManagement)}
           modalState={modalState}
         />
       )}

@@ -94,7 +94,7 @@ exports[`Groups should render correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-header-expandable-content-3"
+      id="toolbar-header-expandable-content-0"
     >
       <div
         class="pf-c-toolbar__group"
@@ -113,7 +113,7 @@ exports[`Groups should render correctly 1`] = `
     </div>
     <div
       class="pf-c-toolbar__expandable-content"
-      id="toolbar-header-expandable-content-4"
+      id="toolbar-header-expandable-content-1"
     >
       <div
         class="pf-c-toolbar__group"

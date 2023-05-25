@@ -230,9 +230,9 @@ const DeviceTable = ({
 
   // Create base URL path for system detail link
   const deviceBaseUrl =
-    imageContext?.location.pathname === paths.inventory
-      ? imageContext?.location.pathname
-      : `${imageContext?.location.pathname}/systems`;
+    imageContext?.location?.pathname === paths.inventory
+      ? imageContext?.location?.pathname
+      : `${imageContext?.location?.pathname}/systems`;
 
   const actionResolver = (rowData) => {
     const actions = [];
@@ -277,7 +277,7 @@ const DeviceTable = ({
       actions.push({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
-          imageContext?.history.push({
+          imageContext?.history?.push({
             pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
           });
         },
@@ -307,7 +307,7 @@ const DeviceTable = ({
   return (
     <>
       {isSystemsView &&
-      emptyStateNoFilters(isLoading, count, imageContext?.location.search) ? (
+      emptyStateNoFilters(isLoading, count, imageContext?.location?.search) ? (
         <CustomEmptyState
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}
