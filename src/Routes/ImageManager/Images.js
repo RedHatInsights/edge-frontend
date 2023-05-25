@@ -159,7 +159,11 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
                   pathname,
                   search: stateToUrlSearch('update_image=true', false, search),
                 };
-                navigate?.({ ...param, replace: true }) || history.push(param);
+                if (imageProps.navigate) {
+                  imageProps.navigate({ ...param, replace: true });
+                } else {
+                  imageProps.history.push(param);
+                }
                 setUpdateWizard((prevState) => {
                   return {
                     ...prevState,
