@@ -93,9 +93,6 @@ const GeneralTable = ({
   useEffect(() => {
     // Add or remove has_filters param depending on whether filters are present
     if (
-      // stateToUrlSearch('create_image=true', false, imageContext.location.search) &&
-      // stateToUrlSearch('update_image=true', false, imageContext.location.search)
-      // stateToUrlSearch('update_image=true', false, search)
       !imageContext?.location?.search.includes('create_image=true') &&
       !imageContext?.location?.search.includes('update_image=true')
     ) {
@@ -132,7 +129,7 @@ const GeneralTable = ({
     }
 
     if (isUseApi) {
-      loadTableData(query);
+      loadTableData && loadTableData(query);
       return;
     }
 
