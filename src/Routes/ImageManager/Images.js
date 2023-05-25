@@ -112,10 +112,14 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
         >
           <CreateImageWizard
             navigateBack={() => {
-              history.push({
-                pathname,
-                search: stateToUrlSearch('create_image=true', false, search),
-              });
+              if (navigateProp) {
+                navigate({ ...a, replace: true });
+              } else {
+                history.push({
+                  pathname,
+                  search: stateToUrlSearch('create_image=true', false, search),
+                });
+              }
               setIsCreateWizardOpen(false);
             }}
             reload={reload}
@@ -131,11 +135,20 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
           }
         >
           <UpdateImageWizard
+            // navigateBack={() => {
+            //   history.push({
+            //     pathname,
+            //     search: stateToUrlSearch('update_image=true', false, search),
+            //   });
             navigateBack={() => {
-              history.push({
-                pathname,
-                search: stateToUrlSearch('update_image=true', false, search),
-              });
+              if (navigateProp) {
+                navigate({ ...a, replace: true });
+              } else {
+                history.push({
+                  pathname,
+                  search: stateToUrlSearch('update_image=true', false, search),
+                });
+              }
               setUpdateWizard((prevState) => {
                 return {
                   ...prevState,

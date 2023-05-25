@@ -14,11 +14,12 @@ import {
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import { createNewImage } from '../../store/actions';
+// import { createNewImage } from '../../store/actions';
 import { useDispatch } from 'react-redux';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
-import { getEdgeImageStatus } from '../../api/images';
+// import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
+// import { getEdgeImageStatus, createImage } from '../../api/images';
 import { useFeatureFlags } from '../../utils';
+import apiWithToast from '../../utils/apiWithToast';
 import { DEFAULT_RELEASE, TEMPORARY_RELEASE } from '../../constants';
 
 const CreateImage = ({ navigateBack, reload }) => {
@@ -49,6 +50,14 @@ const CreateImage = ({ navigateBack, reload }) => {
   // of async validator results across multiple instances of the form.
   const imageSetDetails = getImageSetDetailsSchema();
 
+  const statusMessages = {
+    onSuccess: {
+      title: 'Success',
+      description: `Successfully created image`,
+    },
+    onError: { title: 'Error', description: 'Failed to create image' },
+  };
+
   return user ? (
     <ImageCreator
       onClose={closeAction}
@@ -61,54 +70,8 @@ const CreateImage = ({ navigateBack, reload }) => {
           ...values,
           architecture: 'x86_64',
         };
-        createNewImage(dispatch, payload, (resp) => {
-          dispatch({
-            ...addNotification({
-              variant: 'info',
-              title: 'Creating image',
-              description: `${resp.value.Name} image was added to the queue.`,
-            }),
-            meta: {
-              polling: {
-                id: `FETCH_IMAGE_${resp.value.ID}_BUILD_STATUS`,
-                fetcher: () => getEdgeImageStatus(resp.value.ID),
-                condition: (resp) => {
-                  switch (resp.Status) {
-                    case 'BUILDING':
-                      return [true, ''];
-                    case 'ERROR':
-                      return [false, 'failure'];
-                    default:
-                      return [false, 'success'];
-                  }
-                },
-                onEvent: {
-                  failure: [
-                    (dispatch) =>
-                      dispatch(
-                        addNotification({
-                          variant: 'danger',
-                          title: 'Image build failed',
-                          description: `${resp.value.Name} image build is completed unsuccessfully`,
-                        })
-                      ),
-                  ],
-                  success: [
-                    (dispatch) =>
-                      dispatch(
-                        addNotification({
-                          variant: 'success',
-                          title: 'Image is ready',
-                          description: `${resp.value.Name} image build is completed`,
-                        })
-                      ),
-                  ],
-                },
-              },
-            },
-          });
-          closeAction();
-        });
+        apiWithToast(dispatch, () => createImage(payload), statusMessages);
+        closeAction();
       }}
       defaultArch="x86_64"
       initialValues={{

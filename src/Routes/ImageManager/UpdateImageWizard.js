@@ -14,17 +14,19 @@ import {
 import { Bullseye, Backdrop, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import {
-  createNewImage,
-  addImageToPoll,
-  loadImageDetail,
-} from '../../store/actions';
+// import {
+//   createNewImage,
+//   addImageToPoll,
+//   loadImageDetail,
+// } from '../../store/actions';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { RegistryContext } from '../../store';
-import { imageDetailReducer } from '../../store/reducers';
-import { getEdgeImageStatus } from '../../api/images';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
+// import { imageDetailReducer } from '../../store/reducers';
+// import { getEdgeImageStatus, createImage } from '../../api/images';
+// import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { useFeatureFlags, getReleases } from '../../utils';
+import apiWithToast from '../../utils/apiWithToast';
+
 import { temporaryReleases, supportedReleases } from '../../constants';
 
 const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
@@ -50,21 +52,21 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
     shallowEqual
   );
 
-  useEffect(() => {
-    const registered = getRegistry().register({
-      imageDetailReducer,
-    });
-    updateImageID && loadImageDetail(dispatch, updateImageID);
-    return () => registered();
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const registered = getRegistry().register({
+  //     imageDetailReducer,
+  //   });
+  //   updateImageID && loadImageDetail(dispatch, updateImageID);
+  //   return () => registered();
+  // }, [dispatch]);
 
-  useEffect(() => {
-    (async () => {
-      insights?.chrome?.auth
-        ?.getUser()
-        .then((result) => setUser(result != undefined ? result : {}));
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     insights?.chrome?.auth
+  //       ?.getUser()
+  //       .then((result) => setUser(result != undefined ? result : {}));
+  //   })();
+  // }, []);
 
   return user && data ? (
     <ImageCreator
@@ -88,57 +90,60 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
             : data?.image?.Installer.Username,
         };
 
-        createNewImage(dispatch, payload, (resp) => {
-          dispatch({
-            ...addNotification({
-              variant: 'info',
-              title: 'Updating image',
-              description: `${resp.value.Name} image was added to the queue.`,
-            }),
-            meta: {
-              polling: {
-                id: `FETCH_IMAGE_${resp.value.ID}_BUILD_STATUS`,
-                fetcher: () => getEdgeImageStatus(resp.value.ID),
-                condition: (resp) => {
-                  switch (resp.Status) {
-                    case 'BUILDING':
-                      return [true, ''];
-                    case 'ERROR':
-                      return [false, 'failure'];
-                    default:
-                      return [false, 'success'];
-                  }
-                },
-                onEvent: {
-                  failure: [
-                    (dispatch) =>
-                      dispatch(
-                        addNotification({
-                          variant: 'danger',
-                          title: 'Image build failed',
-                          description: `${resp.value.Name} image build is completed unsuccessfully`,
-                        })
-                      ),
-                  ],
-                  success: [
-                    (dispatch) =>
-                      dispatch(
-                        addNotification({
-                          variant: 'success',
-                          title: 'Image is ready',
-                          description: `${resp.value.Name} image build is completed`,
-                        })
-                      ),
-                  ],
-                },
-              },
-            },
-          });
-          closeAction();
-          dispatch(
-            addImageToPoll({ name: data.value.Name, id: data.value.ID })
-          );
-        });
+        apiWithToast(dispatch, () => createImage(payload), statusMessages);
+        closeAction();
+
+        // createNewImage(dispatch, payload, (resp) => {
+        //   dispatch({
+        //     ...addNotification({
+        //       variant: 'info',
+        //       title: 'Updating image',
+        //       description: `${resp.value.Name} image was added to the queue.`,
+        //     }),
+        //     meta: {
+        //       polling: {
+        //         id: `FETCH_IMAGE_${resp.value.ID}_BUILD_STATUS`,
+        //         fetcher: () => getEdgeImageStatus(resp.value.ID),
+        //         condition: (resp) => {
+        //           switch (resp.Status) {
+        //             case 'BUILDING':
+        //               return [true, ''];
+        //             case 'ERROR':
+        //               return [false, 'failure'];
+        //             default:
+        //               return [false, 'success'];
+        //           }
+        //         },
+        //         onEvent: {
+        //           failure: [
+        //             (dispatch) =>
+        //               dispatch(
+        //                 addNotification({
+        //                   variant: 'danger',
+        //                   title: 'Image build failed',
+        //                   description: `${resp.value.Name} image build is completed unsuccessfully`,
+        //                 })
+        //               ),
+        //           ],
+        //           success: [
+        //             (dispatch) =>
+        //               dispatch(
+        //                 addNotification({
+        //                   variant: 'success',
+        //                   title: 'Image is ready',
+        //                   description: `${resp.value.Name} image build is completed`,
+        //                 })
+        //               ),
+        //           ],
+        //         },
+        //       },
+        //     },
+        //   });
+        //   closeAction();
+        //   dispatch(
+        //     addImageToPoll({ name: data.value.Name, id: data.value.ID })
+        //   );
+        // });
       }}
       defaultArch="x86_64"
       initialValues={{
