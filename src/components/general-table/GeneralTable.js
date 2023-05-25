@@ -102,8 +102,11 @@ const GeneralTable = ({
           imageContext?.location.search
         ),
       };
-      imageContext?.navigate?.({ ...param, replace: true }) ||
+      if (imageContext.navigate) {
+        imageContext?.navigate?.({ ...param, replace: true });
+      } else {
         imageContext?.history.replace(param);
+      }
     }
 
     const query = apiFilterSort
