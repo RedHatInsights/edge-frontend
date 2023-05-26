@@ -1,6 +1,6 @@
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 
-const apiWithToast = (dispatch, api, statusMessages) => {
+const apiWithToast = (dispatch, api, statusMessages, notificationProp) => {
   const hasSuccess = statusMessages?.onSuccess;
   const hasInfo = statusMessages?.onInfo;
 
@@ -20,32 +20,46 @@ const apiWithToast = (dispatch, api, statusMessages) => {
   const fetchData = async () => {
     try {
       const response = await api();
-      hasInfo &&
-        dispatch({
-          ...addNotification({
-            variant: 'info',
-            ...statusMessages.onInfo,
-          }),
-        });
-      hasSuccess &&
-        dispatch({
-          ...addNotification({
-            variant: 'success',
-            ...statusMessages.onSuccess,
-          }),
-        });
+      if (hasInfo) {
+        if (notificationProp) {
+          notificationProp.hasInfo(statusMessages.onInfo);
+        } else {
+          dispatch({
+            ...addNotification({
+              variant: 'info',
+              ...statusMessages.onInfo,
+            }),
+          });
+        }
+      }
+      if (hasSuccess) {
+        if (notificationProp) {
+          notificationProp.hasSuccess(statusMessages.onSuccess);
+        } else {
+          dispatch({
+            ...addNotification({
+              variant: 'success',
+              ...statusMessages.onSuccess,
+            }),
+          });
+        }
+      }
       return response;
     } catch (err) {
-      dispatch({
-        ...addNotification({
-          variant: 'danger',
-          ...statusMessages.onError,
-          // Add error message from API, if present
-          description: err?.Title
-            ? `${statusMessages.onError.description}: ${err.Title}`
-            : statusMessages.onError.description,
-        }),
-      });
+      if (notificationProp) {
+        notificationProp.err(statusMessages.onError, err);
+      } else {
+        dispatch({
+          ...addNotification({
+            variant: 'danger',
+            ...statusMessages.onError,
+            // Add error message from API, if present
+            description: err?.Title
+              ? `${statusMessages.onError.description}: ${err.Title}`
+              : statusMessages.onError.description,
+          }),
+        });
+      }
       return err;
     }
   };

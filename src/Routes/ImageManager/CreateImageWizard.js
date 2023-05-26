@@ -14,15 +14,13 @@ import {
 import { Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-// import { createNewImage } from '../../store/actions';
 import { useDispatch } from 'react-redux';
-// import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
-// import { getEdgeImageStatus, createImage } from '../../api/images';
+import { createImage } from '../../api/images';
 import { useFeatureFlags } from '../../utils';
 import apiWithToast from '../../utils/apiWithToast';
 import { DEFAULT_RELEASE, TEMPORARY_RELEASE } from '../../constants';
 
-const CreateImage = ({ navigateBack, reload }) => {
+const CreateImage = ({ navigateBack, reload, notificationProp }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
   const temporaryReleasesFlag = useFeatureFlags(
@@ -70,7 +68,7 @@ const CreateImage = ({ navigateBack, reload }) => {
           ...values,
           architecture: 'x86_64',
         };
-        apiWithToast(dispatch, () => createImage(payload), statusMessages);
+        apiWithToast(dispatch, () => createImage(payload), statusMessages, notificationProp);
         closeAction();
       }}
       defaultArch="x86_64"
@@ -121,6 +119,7 @@ const CreateImage = ({ navigateBack, reload }) => {
 CreateImage.propTypes = {
   navigateBack: PropTypes.func,
   reload: PropTypes.func,
+  notificationProp: PropTypes.object,
 };
 CreateImage.defaultProps = {
   navigateBack: () => undefined,

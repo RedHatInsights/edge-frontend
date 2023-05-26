@@ -23,7 +23,7 @@ const UpdateImageWizard = React.lazy(() =>
   )
 );
 
-const Images = ({ historyProp, locationProp, navigateProp }) => {
+const Images = ({ historyProp, locationProp, navigateProp, notificationProp }) => {
   const history = historyProp
     ? historyProp()
     : navigateProp
@@ -46,28 +46,29 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
   });
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
 
+  const createHistoryObj = {
+    pathname,
+    search: stateToUrlSearch('create_image=true', true, search),
+  };
+  const updateHistoryObj = {
+    pathname,
+    search: stateToUrlSearch('update_image=true', true, search),
+  };
+
   const openCreateWizard = () => {
-    const a = {
-      pathname,
-      search: stateToUrlSearch('create_image=true', true, search),
-    };
     if (navigateProp) {
-      navigate({ ...a, replace: true });
+      navigate({ ...createHistoryObj, replace: true });
     } else {
-      history.push({ a });
+      history.push({ createHistoryObj });
     }
     setIsCreateWizardOpen(true);
   };
 
   const openUpdateWizard = (id) => {
-    const a = {
-      pathname,
-      search: stateToUrlSearch('update_image=true', true, search),
-    };
     if (navigateProp) {
-      navigate({ ...a, replace: true });
+      navigate({ ...updateHistoryObj, replace: true });
     } else {
-      history.push({ a });
+      history.push({ updateHistoryObj });
     }
 
     setUpdateWizard({
@@ -113,7 +114,7 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
           <CreateImageWizard
             navigateBack={() => {
               if (navigateProp) {
-                navigate({ ...a, replace: true });
+                navigate({ ...createHistoryObj, replace: true });
               } else {
                 history.push({
                   pathname,
@@ -123,6 +124,7 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
               setIsCreateWizardOpen(false);
             }}
             reload={reload}
+            notificationProp={notificationProp}
           />
         </Suspense>
       )}
@@ -135,14 +137,9 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
           }
         >
           <UpdateImageWizard
-            // navigateBack={() => {
-            //   history.push({
-            //     pathname,
-            //     search: stateToUrlSearch('update_image=true', false, search),
-            //   });
             navigateBack={() => {
               if (navigateProp) {
-                navigate({ ...a, replace: true });
+                navigate({ ...updateHistoryObj, replace: true });
               } else {
                 history.push({
                   pathname,
@@ -158,6 +155,7 @@ const Images = ({ historyProp, locationProp, navigateProp }) => {
             }}
             reload={reload}
             updateImageID={UpdateWizard.imageId}
+            notificationProp={notificationProp}
           />
         </Suspense>
       )}
