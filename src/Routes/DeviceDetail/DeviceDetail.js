@@ -14,7 +14,7 @@ import {
   InventoryDetailHead,
   DetailWrapper,
 } from '@redhat-cloud-services/frontend-components/Inventory';
-import { useHistory, useLocation, useParams, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { deviceDetail } from '../../store/deviceDetail';
 import { RegistryContext } from '../../store';
@@ -25,6 +25,7 @@ import useApi from '../../hooks/useApi';
 import RetryUpdatePopover from '../Devices/RetryUpdatePopover';
 import { useLoadModule } from '@scalprum/react-core';
 import { routes as paths } from '../../constants/routeMapper';
+import { ImageContext } from '../../utils/imageContext';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(
@@ -41,8 +42,9 @@ const DeviceDetail = () => {
     },
     {}
   );
-  const history = useHistory();
-  const { pathname } = useLocation();
+  // const history = useHistory();
+  // const { pathname } = useLocation();
+  const imageContext = useContext(ImageContext);
   const { deviceId, groupId } = useParams();
   const [imageId, setImageId] = useState(null);
   const { getRegistry } = useContext(RegistryContext);
@@ -167,8 +169,8 @@ const DeviceDetail = () => {
                 imageData?.UpdateTransactions?.[0]?.Status === 'CREATED' ||
                 !imageData?.ImageInfo?.UpdatesAvailable?.length > 0,
               onClick: () => {
-                history.push({
-                  pathname: `${pathname}/update`,
+                imageContext?.history?.push({
+                  pathname: `${imageContext?.location?.pathname}/update`,
                   search: '?from_details=true',
                 });
               },
@@ -227,7 +229,9 @@ const DeviceDetail = () => {
         >
           <UpdateDeviceModal
             navigateBack={() => {
-              history.push({ pathname });
+              imageContext?.history?.push({
+                pathname: `${imageContext?.location?.pathname}`,
+              });
               setUpdateModal((prevState) => {
                 return {
                   ...prevState,
