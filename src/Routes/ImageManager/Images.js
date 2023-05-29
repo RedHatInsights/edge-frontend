@@ -23,7 +23,12 @@ const UpdateImageWizard = React.lazy(() =>
   )
 );
 
-const Images = ({ historyProp, locationProp, navigateProp, notificationProp }) => {
+const Images = ({
+  historyProp,
+  locationProp,
+  navigateProp,
+  notificationProp,
+}) => {
   const history = historyProp
     ? historyProp()
     : navigateProp
@@ -167,5 +172,6 @@ Images.propTypes = {
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
   navigateProp: PropTypes.func,
+  notificationProp: PropTypes.object,
 };
 export default Images;

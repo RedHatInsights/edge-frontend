@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import ImageCreator from '../../components/ImageCreator';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import {
@@ -22,7 +22,12 @@ import apiWithToast from '../../utils/apiWithToast';
 import { temporaryReleases, supportedReleases } from '../../constants';
 import useApi from '../../hooks/useApi';
 
-const UpdateImage = ({ navigateBack, updateImageID, reload, notificationProp }) => {
+const UpdateImage = ({
+  navigateBack,
+  updateImageID,
+  reload,
+  notificationProp,
+}) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
   const closeAction = () => {
@@ -38,7 +43,7 @@ const UpdateImage = ({ navigateBack, updateImageID, reload, notificationProp }) 
     })();
   }, []);
 
-  const [response, fetchImageSetDetails] = useApi({
+  const [response] = useApi({
     api: getImageById,
     id: updateImageID,
   });
@@ -83,7 +88,12 @@ const UpdateImage = ({ navigateBack, updateImageID, reload, notificationProp }) 
             : data?.image?.Installer.Username,
         };
 
-        apiWithToast(dispatch, () => createImage(payload), statusMessages, notificationProp);
+        apiWithToast(
+          dispatch,
+          () => createImage(payload),
+          statusMessages,
+          notificationProp
+        );
         closeAction();
       }}
       defaultArch="x86_64"

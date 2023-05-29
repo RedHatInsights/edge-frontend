@@ -68,7 +68,12 @@ const CreateImage = ({ navigateBack, reload, notificationProp }) => {
           ...values,
           architecture: 'x86_64',
         };
-        apiWithToast(dispatch, () => createImage(payload), statusMessages, notificationProp);
+        apiWithToast(
+          dispatch,
+          () => createImage(payload),
+          statusMessages,
+          notificationProp
+        );
         closeAction();
       }}
       defaultArch="x86_64"
