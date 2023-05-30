@@ -31,10 +31,14 @@ const Images = ({
 }) => {
   const history = historyProp
     ? historyProp()
-    : navigateProp
+    : useHistory
+    ? useHistory()
+    : null;
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
     ? useNavigate()
-    : useHistory();
-  const navigate = navigateProp ? navigateProp() : useNavigate();
+    : null;
   const { pathname, search } = locationProp ? locationProp() : useLocation();
 
   const [response, fetchImageSets] = useApi({
@@ -64,7 +68,7 @@ const Images = ({
     if (navigateProp) {
       navigate({ ...createHistoryObj, replace: true });
     } else {
-      history.push({ createHistoryObj });
+      history.push({ ...createHistoryObj });
     }
     setIsCreateWizardOpen(true);
   };
@@ -73,7 +77,7 @@ const Images = ({
     if (navigateProp) {
       navigate({ ...updateHistoryObj, replace: true });
     } else {
-      history.push({ updateHistoryObj });
+      history.push({ ...updateHistoryObj });
     }
 
     setUpdateWizard({
