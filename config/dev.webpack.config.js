@@ -6,6 +6,8 @@ const insightsProxy = {
   ...(process.env.BETA && { deployment: 'beta/apps' }),
 };
 
+const hostname = process.env.API_HOSTNAME ?? 'localhost';
+
 const webpackProxy = {
   deployment: process.env.BETA ? 'beta/apps' : 'apps',
   useProxy: true,
@@ -18,11 +20,11 @@ const webpackProxy = {
   }),
   routes: {
     ...(process.env.API_PORT && {
-      '/api/edge': { host: `http://localhost:${process.env.API_PORT}` },
+      '/api/edge': { host: `http://${hostname}:${process.env.API_PORT}` },
     }),
     ...(process.env.CONFIG_PORT && {
       [`${process.env.BETA ? '/beta' : ''}/config`]: {
-        host: `http://localhost:${process.env.CONFIG_PORT}`,
+        host: `http://${hostname}:${process.env.CONFIG_PORT}`,
       },
     }),
   },
