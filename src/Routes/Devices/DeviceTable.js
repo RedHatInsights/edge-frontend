@@ -224,7 +224,7 @@ const DeviceTable = ({
   const canBeAdded = setIsAddModalOpen;
   const canBeUpdated = isSystemsView;
   const history = historyProp ? historyProp() : useHistory();
-  const { pathname, search } = locationProp ? locationProp : useLocation();
+  const { pathname, search } = locationProp ? locationProp() : useLocation();
 
   // Create base URL path for system detail link
   const deviceBaseUrl =
@@ -274,7 +274,8 @@ const DeviceTable = ({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
           history.push({
-            pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
+            pathname: `/${rowData.rowInfo.id}/update`,
+            // pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
           });
         },
       });

@@ -19,7 +19,7 @@ const UpdateDeviceModal = React.lazy(() =>
 
 const Inventory = ({ historyProp, locationProp }) => {
   const history = historyProp ? historyProp() : useHistory();
-  const { pathname } = locationProp ? locationProp : useLocation();
+  const { pathname } = locationProp ? locationProp() : useLocation();
   const [response, fetchDevices] = useApi({
     api: getInventory,
     tableReload: true,
@@ -146,6 +146,7 @@ const Inventory = ({ historyProp, locationProp }) => {
             navigateBack={() => {
               history.push({ pathname });
               setUpdateModal((prevState) => {
+                console.log('Click modal');
                 return {
                   ...prevState,
                   isOpen: false,

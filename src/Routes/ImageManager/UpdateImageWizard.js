@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import ImageCreator from '../../components/ImageCreator';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import {
@@ -14,49 +14,26 @@ import {
 import { Bullseye, Backdrop, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import ReviewStep from '../../components/form/ReviewStep';
-import {
-  createNewImage,
-  addImageToPoll,
-  loadImageDetail,
-} from '../../store/actions';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { RegistryContext } from '../../store';
-import { imageDetailReducer } from '../../store/reducers';
-import { getEdgeImageStatus } from '../../api/images';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
+import { useDispatch } from 'react-redux';
+import { getImageById, createImage } from '../../api/images';
 import { useFeatureFlags, getReleases } from '../../utils';
-import { temporaryReleases, supportedReleases } from '../../constants';
+import apiWithToast from '../../utils/apiWithToast';
 
-const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
+import { temporaryReleases, supportedReleases } from '../../constants';
+import useApi from '../../hooks/useApi';
+
+const UpdateImage = ({
+  navigateBack,
+  updateImageID,
+  reload,
+  notificationProp,
+}) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
   const closeAction = () => {
     navigateBack();
     reload && reload();
   };
-  const temporaryReleasesFlag = useFeatureFlags(
-    'fleet-management.temporary-releases'
-  );
-
-  const imageWizardFeatureFlag = useFeatureFlags(
-    'edge-management.image_wizard_ui'
-  );
-
-  const { getRegistry } = useContext(RegistryContext);
-  const { data } = useSelector(
-    ({ imageDetailReducer }) => ({
-      data: imageDetailReducer?.data || null,
-    }),
-    shallowEqual
-  );
-
-  useEffect(() => {
-    const registered = getRegistry().register({
-      imageDetailReducer,
-    });
-    updateImageID && loadImageDetail(dispatch, updateImageID);
-    return () => registered();
-  }, [dispatch]);
 
   useEffect(() => {
     (async () => {
@@ -66,7 +43,30 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
     })();
   }, []);
 
-  return user && data ? (
+  const [response] = useApi({
+    api: getImageById,
+    id: updateImageID,
+  });
+
+  const { data, isLoading } = response;
+
+  const temporaryReleasesFlag = useFeatureFlags(
+    'fleet-management.temporary-releases'
+  );
+
+  const imageWizardFeatureFlag = useFeatureFlags(
+    'edge-management.image_wizard_ui'
+  );
+
+  const statusMessages = {
+    onSuccess: {
+      title: 'Success',
+      description: `Successfully started image update`,
+    },
+    onError: { title: 'Error', description: 'Failed to create image' },
+  };
+
+  return user && data && !isLoading ? (
     <ImageCreator
       onClose={closeAction}
       customComponentMapper={{
@@ -88,57 +88,13 @@ const UpdateImage = ({ navigateBack, updateImageID, reload }) => {
             : data?.image?.Installer.Username,
         };
 
-        createNewImage(dispatch, payload, (resp) => {
-          dispatch({
-            ...addNotification({
-              variant: 'info',
-              title: 'Updating image',
-              description: `${resp.value.Name} image was added to the queue.`,
-            }),
-            meta: {
-              polling: {
-                id: `FETCH_IMAGE_${resp.value.ID}_BUILD_STATUS`,
-                fetcher: () => getEdgeImageStatus(resp.value.ID),
-                condition: (resp) => {
-                  switch (resp.Status) {
-                    case 'BUILDING':
-                      return [true, ''];
-                    case 'ERROR':
-                      return [false, 'failure'];
-                    default:
-                      return [false, 'success'];
-                  }
-                },
-                onEvent: {
-                  failure: [
-                    (dispatch) =>
-                      dispatch(
-                        addNotification({
-                          variant: 'danger',
-                          title: 'Image build failed',
-                          description: `${resp.value.Name} image build is completed unsuccessfully`,
-                        })
-                      ),
-                  ],
-                  success: [
-                    (dispatch) =>
-                      dispatch(
-                        addNotification({
-                          variant: 'success',
-                          title: 'Image is ready',
-                          description: `${resp.value.Name} image build is completed`,
-                        })
-                      ),
-                  ],
-                },
-              },
-            },
-          });
-          closeAction();
-          dispatch(
-            addImageToPoll({ name: data.value.Name, id: data.value.ID })
-          );
-        });
+        apiWithToast(
+          dispatch,
+          () => createImage(payload),
+          statusMessages,
+          notificationProp
+        );
+        closeAction();
       }}
       defaultArch="x86_64"
       initialValues={{
@@ -229,6 +185,7 @@ UpdateImage.propTypes = {
   navigateBack: PropTypes.func,
   updateImageID: PropTypes.number,
   reload: PropTypes.func,
+  notificationProp: PropTypes.object,
 };
 UpdateImage.defaultProps = {
   navigateBack: () => undefined,

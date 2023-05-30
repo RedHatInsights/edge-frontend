@@ -14,7 +14,7 @@ import CustomEmptyState from '../Empty';
 import { useDispatch } from 'react-redux';
 import { transformSort } from '../../utils';
 import BulkSelect from './BulkSelect';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import { stateToUrlSearch } from '../../utils';
 
 const filterParams = (chipsArray) => {
@@ -49,6 +49,7 @@ const filterParams = (chipsArray) => {
 const GeneralTable = ({
   historyProp,
   locationProp,
+  navigateProp,
   apiFilterSort,
   urlParam,
   filters,
@@ -84,7 +85,16 @@ const GeneralTable = ({
   const [page, setPage] = useState(1);
   const [checkedRows, setCheckedRows] = useState(defaultCheckedRows);
   const dispatch = useDispatch();
-  const history = historyProp ? historyProp() : useHistory();
+  const history = historyProp
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
   const { pathname, search } = locationProp ? locationProp() : useLocation();
 
   useEffect(() => {
@@ -93,14 +103,19 @@ const GeneralTable = ({
       !search.includes('create_image=true') &&
       !search.includes('update_image=true')
     ) {
-      history.replace({
+      const a = {
         pathname,
         search: stateToUrlSearch(
           'has_filters=true',
           chipsArray.length > 0,
           search
         ),
-      });
+      };
+      if (navigateProp) {
+        navigate({ ...a, replace: true });
+      } else {
+        history.replace(a);
+      }
     }
 
     const query = apiFilterSort
@@ -414,6 +429,7 @@ const GeneralTable = ({
 GeneralTable.propTypes = {
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   apiFilterSort: PropTypes.bool,
   filters: PropTypes.array,
   urlParam: PropTypes.string,

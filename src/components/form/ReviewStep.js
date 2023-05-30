@@ -1,40 +1,12 @@
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { TextContent, Text } from '@patternfly/react-core';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import { imageTypeMapper, releaseMapper } from '../../Routes/../constants';
-import { shallowEqual, useSelector } from 'react-redux';
-import { RegistryContext } from '../../store';
-import { createImageReducer } from '../../store/reducers';
-import { Bullseye, Spinner, Alert } from '@patternfly/react-core';
 import ReviewSection from '../ReviewSection';
 
 const ReviewStep = () => {
   const { getState } = useFormApi();
   const isUpdate = getState().initialValues.isUpdate;
-  const { getRegistry } = useContext(RegistryContext);
-  const { isLoading, hasError } = useSelector(
-    ({ createImageReducer }) => ({
-      isLoading:
-        createImageReducer?.isLoading !== undefined
-          ? createImageReducer?.isLoading
-          : false,
-      hasError: createImageReducer?.hasError || false,
-      error: createImageReducer?.error || null,
-    }),
-    shallowEqual
-  );
-  useEffect(() => {
-    const registered = getRegistry().register({ createImageReducer });
-    return () => registered();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <Bullseye>
-        <Spinner />
-      </Bullseye>
-    );
-  }
 
   const details = [
     { name: 'Name', value: getState().values.name },
@@ -95,12 +67,12 @@ const ReviewStep = () => {
 
   return (
     <Fragment>
-      {hasError && (
+      {/* {hasError && (
         <Alert
           variant="danger"
           title="Failed sending the request: Edge API is not available"
         />
-      )}
+      )} */}
       <TextContent>
         <Text>
           Review the information and click{' '}

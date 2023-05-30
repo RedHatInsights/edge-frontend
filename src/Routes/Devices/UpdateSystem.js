@@ -133,16 +133,23 @@ CurrentVersion.propTypes = {
   image: PropTypes.object,
 };
 
-const UpdateSystemMain = ({ data, fetchDevices, isLoading, hasError }) => {
+const UpdateSystemMain = ({
+  data,
+  fetchDevices,
+  isLoading,
+  hasError,
+  historyProp,
+  locationProp,
+  routeMatchProp,
+}) => {
   const device = data?.Device;
   const [selectedVersion, setSelectedVersion] = useState(null);
   const [selectedCommitID, setSelectedCommitID] = useState(null);
   const [isUpdateSubmitted, setIsUpdateSubmitted] = useState(false);
   const dispatch = useDispatch();
-  const history = useHistory();
-  const { pathname, search } = useLocation();
-  const match = useRouteMatch();
-
+  const history = historyProp ? historyProp() : useHistory();
+  const { pathname, search } = locationProp ? locationProp() : useLocation();
+  const match = routeMatchProp ? routeMatchProp() : useRouteMatch();
   const setUpdateEvent = (value) => {
     setSelectedVersion(value.cells[0]);
     setSelectedCommitID(value);
@@ -244,6 +251,8 @@ const UpdateSystemMain = ({ data, fetchDevices, isLoading, hasError }) => {
             </TextContent>
             <>
               <GeneralTable
+                historyProp={historyProp}
+                locationProp={locationProp}
                 className="pf-u-mt-sm"
                 apiFilterSort={true}
                 isUseApi={true}
@@ -309,16 +318,24 @@ const UpdateSystemMain = ({ data, fetchDevices, isLoading, hasError }) => {
 
 UpdateSystemMain.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
+  routeMatchProp: PropTypes.func,
   fetchDevices: PropTypes.func,
   isLoading: PropTypes.bool,
   hasError: PropTypes.bool,
 };
 
-const UpdateSystem = () => {
+const UpdateSystem = ({
+  inventoryId,
+  historyProp,
+  locationProp,
+  routeMatchProp,
+}) => {
   const { deviceId, groupId } = useParams();
   const [{ data, isLoading, hasError }, fetchDevices] = useApi({
     api: getDeviceUpdates,
-    id: deviceId,
+    id: inventoryId ? inventoryId : deviceId,
     tableReload: true,
   });
 
@@ -384,10 +401,20 @@ const UpdateSystem = () => {
           fetchDevices={fetchDevices}
           isLoading={isLoading}
           hasError={hasError}
+          historyProp={historyProp}
+          locationProp={locationProp}
+          routeMatchProp={routeMatchProp}
         />
       </section>
     </>
   );
+};
+
+UpdateSystem.propTypes = {
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
+  routeMatchProp: PropTypes.func,
+  inventoryId: PropTypes.string,
 };
 
 export default UpdateSystem;
