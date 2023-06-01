@@ -11,6 +11,7 @@ import { useLocation, useHistory, useNavigate } from 'react-router-dom';
 import { emptyStateNoFilters } from '../../utils';
 import Status from '../../components/Status';
 import { getBaseURLFromPrefixAndName } from '../ImageManagerDetail/utils';
+import { distributionMapper } from '../../constants';
 
 const TooltipSelectorRef = ({ index }) => (
   <div>
@@ -49,33 +50,47 @@ const columnNames = [
     title: 'Name',
     type: 'name',
     sort: true,
-    columnTransforms: [cellWidth(35)],
+    columnTransforms: [cellWidth(15)],
   },
   {
-    title: 'Current version',
+    title: 'Version',
     type: 'version',
     sort: false,
     columnTransforms: [cellWidth(15)],
   },
   {
-    title: 'Last updated',
-    type: 'updated_at',
-    sort: true,
-    columnTransforms: [cellWidth(25)],
+    title: 'Release',
+    type: 'distribution',
+    options: distributionMapper,
+    sort: false,
+    columnTransforms: [cellWidth(15)],
+  },
+  {
+    title: 'Target',
+    type: 'outputTypes',
+    sort: false,
+    columnTransforms: [cellWidth(15)],
   },
   {
     title: 'Status',
     type: 'status',
     sort: false,
-    columnTransforms: [cellWidth(30)],
+    columnTransforms: [cellWidth(15)],
+  },
+  {
+    title: 'Created/Updated',
+    type: 'updated_at',
+    sort: true,
+    columnTransforms: [cellWidth(35)],
   },
 ];
-
 const createRows = (data, baseURL, history, navigate) => {
   return data.map((image_set, index) => ({
     rowInfo: {
       id: image_set?.ID,
       imageStatus: image_set?.Status,
+      distribution: image_set?.Distribution,
+      outputType: image_set?.OutputTypes,
       isoURL: image_set?.ImageBuildIsoURL || null,
       latestImageID: image_set?.ImageID,
     },
@@ -91,12 +106,11 @@ const createRows = (data, baseURL, history, navigate) => {
 
       image_set?.Version,
       {
-        title: image_set?.UpdatedAt ? (
-          <DateFormat date={image_set?.UpdatedAt} />
-        ) : (
-          'Unknown'
-        ),
+        title: distributionMapper[image_set?.Distribution],
       },
+      image_set?.OutputTypes.length == 2
+        ? 'Bare Metal Installer'
+        : 'Update Only',
       {
         title: (
           <>
@@ -104,6 +118,13 @@ const createRows = (data, baseURL, history, navigate) => {
             <TooltipSelectorRef index={index} />
             <Status type={image_set?.Status.toLowerCase()} />
           </>
+        ),
+      },
+      {
+        title: image_set?.UpdatedAt ? (
+          <DateFormat date={image_set?.UpdatedAt} />
+        ) : (
+          'Unknown'
         ),
       },
     ],
@@ -210,7 +231,7 @@ const ImageTable = ({
           rows={data ? createRows(data, baseURL, history, navigate) : []}
           actionResolver={actionResolver}
           areActionsDisabled={areActionsDisabled}
-          defaultSort={{ index: 2, direction: 'desc' }}
+          defaultSort={{ index: 5, direction: 'desc' }}
           toolbarButtons={[
             {
               title: 'Create new image',

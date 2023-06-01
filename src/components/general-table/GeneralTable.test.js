@@ -61,7 +61,7 @@ describe('General table', () => {
             emptyStateAction={emptyStateAction}
             actionResolver={actionResolver}
             areActionsDisabled={() => false}
-            defaultSort={{ index: 0, direction: 'desc' }}
+            defaultSort={{ index: 5, direction: 'desc' }}
             toolbarButtons={[
               {
                 title: 'test button',
