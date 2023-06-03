@@ -113,7 +113,6 @@ export const getReleases = (forcedRelease, inculdedReleases) =>
     }));
 
 export const createLink = ({ pathname, linkText, history, navigate }) => {
-  console.log(pathname)
   if (history) {
     return (
       <Button variant="link" onClick={() => history.push(pathname)}>
