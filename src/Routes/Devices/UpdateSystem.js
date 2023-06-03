@@ -36,12 +36,12 @@ import {
 } from '@patternfly/react-table';
 import {
   useParams,
-  Link,
   useHistory,
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
 import apiWithToast from '../../utils/apiWithToast';
+import { createLink } from '../../utils';
 
 const filters = [
   { label: 'Version', type: 'text' },
@@ -147,7 +147,11 @@ const UpdateSystemMain = ({
   const [selectedCommitID, setSelectedCommitID] = useState(null);
   const [isUpdateSubmitted, setIsUpdateSubmitted] = useState(false);
   const dispatch = useDispatch();
-  const history = historyProp ? historyProp() : useHistory();
+  const history = historyProp
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
   const { pathname, search } = locationProp ? locationProp() : useLocation();
   const match = routeMatchProp ? routeMatchProp() : useRouteMatch();
   const setUpdateEvent = (value) => {
@@ -331,11 +335,23 @@ const UpdateSystem = ({
   historyProp,
   locationProp,
   routeMatchProp,
+  paramsProp,
 }) => {
-  const { deviceId, groupId } = useParams();
+  const history = historyProp
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
+  const { deviceId, groupId } = paramsProp
+    ? paramsProp()
+    : useParams
+    ? useParams()
+    : null;
+  const currentId = inventoryId ? inventoryId : deviceId;
+  const currentInventoryPath = historyProp ? '/edge' : paths.inventory;
   const [{ data, isLoading, hasError }, fetchDevices] = useApi({
     api: getDeviceUpdates,
-    id: inventoryId ? inventoryId : deviceId,
+    id: currentId,
     tableReload: true,
   });
 
@@ -351,31 +367,44 @@ const UpdateSystem = ({
         {!groupName ? (
           <Breadcrumb ouiaId="systems-list">
             <BreadcrumbItem>
-              <Link to={paths.inventory}>Systems</Link>
+              {createLink({
+                pathname:
+                  currentInventoryPath === '/edge' ? '/' : currentInventoryPath,
+                linkText: 'Systems',
+                history,
+              })}
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <Link to={`${paths.inventory}/${deviceId}/`}>
-                {device?.DeviceName || <Skeleton width="100px" />}
-              </Link>
+              {createLink({
+                pathname: `${currentInventoryPath}/${currentId}/`,
+                linkText: device?.DeviceName || <Skeleton width="100px" />,
+                history,
+              })}
             </BreadcrumbItem>
             <BreadcrumbItem>Update</BreadcrumbItem>
           </Breadcrumb>
         ) : (
           <Breadcrumb ouiaId="groups-list">
             <BreadcrumbItem>
-              <Link to={paths.fleetManagement}>Groups</Link>
+              {createLink({
+                pathname: paths.fleetManagement,
+                linkText: 'Groups',
+                history,
+              })}
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <Link to={`${paths.fleetManagement}/${groupId}`}>
-                {groupName || <Skeleton width="100px" />}
-              </Link>
+              {createLink({
+                pathname: `${paths.fleetManagement}/${groupId}`,
+                linkText: groupName || <Skeleton width="100px" />,
+                history,
+              })}
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <Link
-                to={`${paths.fleetManagement}/${groupId}/systems/${deviceId}/`}
-              >
-                {device?.DeviceName}
-              </Link>
+              {createLink({
+                pathname: `${paths.fleetManagement}/${groupId}/systems/${currentId}/`,
+                linkText: device?.DeviceName,
+                history,
+              })}
             </BreadcrumbItem>
             <BreadcrumbItem>Update</BreadcrumbItem>
           </Breadcrumb>
@@ -414,6 +443,7 @@ UpdateSystem.propTypes = {
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
   routeMatchProp: PropTypes.func,
+  paramsProp: PropTypes.func,
   inventoryId: PropTypes.string,
 };
 

@@ -2,12 +2,12 @@ import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
 import { Tooltip } from '@patternfly/react-core';
 import CustomEmptyState from '../../components/Empty';
-import { emptyStateNoFilters } from '../../utils';
+import { createLink, emptyStateNoFilters } from '../../utils';
 import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
 
@@ -61,7 +61,14 @@ const columnNames = [
   },
 ];
 
-const createRows = (devices, hasLinks, fetchDevices, deviceLinkBase) => {
+const createRows = (
+  devices,
+  hasLinks,
+  fetchDevices,
+  deviceLinkBase,
+  history,
+  navigate
+) => {
   return devices?.map((device) => {
     let { DeviceName, DeviceGroups } = device;
     const {
@@ -129,30 +136,26 @@ const createRows = (devices, hasLinks, fetchDevices, deviceLinkBase) => {
       ],
       cells: [
         {
-          title: hasLinks ? (
-            <Link
-              to={{
+          title: hasLinks
+            ? createLink({
                 pathname: `${deviceLinkBase}/${DeviceUUID}`,
-              }}
-            >
-              {DeviceName}
-            </Link>
-          ) : (
-            DeviceName
-          ),
+                linkText: DeviceName,
+                history,
+                navigate,
+              })
+            : DeviceName,
         },
         {
-          title: ImageName ? (
-            hasLinks ? (
-              <Link to={`${paths.manageImages}/${ImageSetID}`}>
-                {ImageName}
-              </Link>
-            ) : (
-              ImageName
-            )
-          ) : (
-            'unavailable'
-          ),
+          title: ImageName
+            ? hasLinks
+              ? createLink({
+                  pathname: `${paths.manageImages}/${ImageSetID}`,
+                  linkText: ImageName,
+                  history,
+                  navigate,
+                })
+              : ImageName
+            : 'unavailable',
         },
         {
           title:
@@ -198,6 +201,7 @@ const createRows = (devices, hasLinks, fetchDevices, deviceLinkBase) => {
 };
 
 const DeviceTable = ({
+  navigateProp,
   historyProp,
   locationProp,
   hasCheckbox = false,
@@ -223,12 +227,29 @@ const DeviceTable = ({
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
   const canBeUpdated = isSystemsView;
-  const history = historyProp ? historyProp() : useHistory();
-  const { pathname, search } = locationProp ? locationProp() : useLocation();
+  const history = historyProp
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
+  const { pathname, search } = locationProp
+    ? locationProp()
+    : useLocation
+    ? useLocation()
+    : null;
 
   // Create base URL path for system detail link
   const deviceBaseUrl =
-    pathname === paths.inventory ? pathname : `${pathname}/systems`;
+    pathname === paths.inventory
+      ? pathname
+      : pathname === '/'
+      ? 'edge'
+      : `${pathname}/systems`;
 
   const actionResolver = (rowData) => {
     const actions = [];
@@ -338,7 +359,9 @@ const DeviceTable = ({
             data || [],
             isAddSystemsView || isSystemsView,
             fetchDevices,
-            deviceBaseUrl
+            deviceBaseUrl,
+            history,
+            navigate
           )}
           actionResolver={actionResolver}
           defaultSort={{ index: 3, direction: 'desc' }}
@@ -375,6 +398,7 @@ const DeviceTable = ({
 };
 
 DeviceTable.propTypes = {
+  navigateProp: PropTypes.func,
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
   imageData: PropTypes.object,
