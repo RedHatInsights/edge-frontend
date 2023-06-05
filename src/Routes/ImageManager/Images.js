@@ -24,6 +24,8 @@ const UpdateImageWizard = React.lazy(() =>
 );
 
 const Images = ({
+  pathPrefix,
+  urlName,
   historyProp,
   locationProp,
   navigateProp,
@@ -98,6 +100,8 @@ const Images = ({
       </PageHeader>
       <section className="edge-images pf-l-page__main-section pf-c-page__main-section">
         <ImageSetsTable
+          pathPrefix={pathPrefix}
+          urlName={urlName}
           historyProp={historyProp}
           locationProp={locationProp}
           navigateProp={navigateProp}
@@ -175,6 +179,8 @@ const Images = ({
 };
 
 Images.propTypes = {
+  pathPrefix: PropTypes.string,
+  urlName: PropTypes.string,
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
   navigateProp: PropTypes.func,

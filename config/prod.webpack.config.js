@@ -18,6 +18,10 @@ plugins.push(
           __dirname,
           '../src/Routes/Devices/DeviceTable.js'
         ),
+        './ImagesDetail': resolve(
+          __dirname,
+          '../src/Routes/ImageManagerDetail/ImageDetail.js'
+        ),
         // './UpdateDeviceModal': resolve(
         //   __dirname,
         //   '../src/Routes/Devices/DeviceTable.js'

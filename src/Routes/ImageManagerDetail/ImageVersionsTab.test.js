@@ -86,10 +86,14 @@ describe('ImageVersionsTab', () => {
 
     expect(screen.getByRole('button', { name: 'Options menu' })).toBeDefined();
     expect(
-      screen.getByRole('cell', { name: '1' }).firstChild.getAttribute('href')
+      screen
+        .getByRole('cell', { name: '1' })
+        .firstChild.getAttribute('target-href')
     ).toEqual('/manage-images/101/versions/100/details');
     expect(
-      screen.getByRole('cell', { name: '2' }).firstChild.getAttribute('href')
+      screen
+        .getByRole('cell', { name: '2' })
+        .firstChild.getAttribute('target-href')
     ).toEqual('/manage-images/101/versions/200/details');
     expect(
       screen.getAllByRole('cell', { name: 'RHEL for Edge Installer (.iso)' })

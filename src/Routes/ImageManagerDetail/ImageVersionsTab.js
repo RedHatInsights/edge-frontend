@@ -2,15 +2,16 @@ import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
-import { Link } from 'react-router-dom';
+import { useHistory, useNavigate } from 'react-router-dom';
 import { Text, Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import Status from '../../components/Status';
 import { imageTypeMapper } from '../../constants';
 import { getImageSetViewVersions } from '../../api/images';
 import { cellWidth } from '@patternfly/react-table';
-import { truncateString } from '../../utils';
+import { createLink, truncateString } from '../../utils';
 import useApi from '../../hooks/useApi';
+import { getBaseURLFromPrefixAndName } from './utils';
 
 const defaultFilters = [
   {
@@ -58,7 +59,21 @@ const columnNames = [
   },
 ];
 
-const createRows = (data, imageSetId, latestImageVersion) => {
+const createRows = (
+  data,
+  imageSetId,
+  latestImageVersion,
+  pathPrefix,
+  urlName,
+  history,
+  navigate
+) => {
+  const baseURL = getBaseURLFromPrefixAndName(
+    paths.manageImages,
+    pathPrefix,
+    urlName
+  );
+
   return data?.map((image) => ({
     rowInfo: {
       id: image?.ID,
@@ -75,13 +90,12 @@ const createRows = (data, imageSetId, latestImageVersion) => {
     ],
     cells: [
       {
-        title: (
-          <Link
-            to={`${paths.manageImages}/${imageSetId}/versions/${image.ID}/details`}
-          >
-            {image?.Version}
-          </Link>
-        ),
+        title: createLink({
+          pathname: `${baseURL}/${imageSetId}/versions/${image.ID}/details`,
+          linkText: image?.Version,
+          history,
+          navigate,
+        }),
       },
       {
         title: imageTypeMapper[image?.ImageType],
@@ -105,9 +119,28 @@ const createRows = (data, imageSetId, latestImageVersion) => {
   }));
 };
 
-const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
+const ImageVersionsTab = ({
+  pathPrefix,
+  urlName,
+  navigateProp,
+  historyProp,
+  locationProp,
+  imageData,
+  openUpdateWizard,
+}) => {
   const imageSetID = imageData?.data?.ImageSet?.ID;
   const latestImageVersion = imageData?.data?.ImageSet?.Version;
+
+  const history = historyProp
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
 
   const [response, fetchImageSetVersions] = useApi({
     api: ({ query }) =>
@@ -160,6 +193,9 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
   return (
     <section className="add-100vh pf-l-page__main-section pf-c-page__main-section">
       <GeneralTable
+        navigateProp={navigateProp}
+        historyProp={historyProp}
+        locationProp={locationProp}
         apiFilterSort={true}
         isUseApi={true}
         filters={defaultFilters}
@@ -171,7 +207,15 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
           hasError,
         }}
         columnNames={columnNames}
-        rows={createRows(data?.data, imageSetID, latestImageVersion)}
+        rows={createRows(
+          data?.data,
+          imageSetID,
+          latestImageVersion,
+          pathPrefix,
+          urlName,
+          history,
+          navigate
+        )}
         actionResolver={actionResolver}
         areActionsDisabled={areActionsDisabled}
         defaultSort={{ index: 3, direction: 'desc' }}
@@ -180,6 +224,11 @@ const ImageVersionsTab = ({ imageData, openUpdateWizard }) => {
   );
 };
 ImageVersionsTab.propTypes = {
+  pathPrefix: PropTypes.string,
+  urlName: PropTypes.string,
+  navigateProp: PropTypes.func,
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
   imageData: PropTypes.object,
   urlParam: PropTypes.string,
   imageSetID: PropTypes.number,

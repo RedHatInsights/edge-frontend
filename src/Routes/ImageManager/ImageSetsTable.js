@@ -10,6 +10,7 @@ import CustomEmptyState from '../../components/Empty';
 import { useLocation, useHistory, useNavigate } from 'react-router-dom';
 import { emptyStateNoFilters } from '../../utils';
 import Status from '../../components/Status';
+import { getBaseURLFromPrefixAndName } from '../ImageManagerDetail/utils';
 
 const TooltipSelectorRef = ({ index }) => (
   <div>
@@ -70,7 +71,7 @@ const columnNames = [
   },
 ];
 
-const createRows = (data, history, navigate) => {
+const createRows = (data, baseURL, history, navigate) => {
   return data.map((image_set, index) => ({
     rowInfo: {
       id: image_set?.ID,
@@ -81,7 +82,7 @@ const createRows = (data, history, navigate) => {
     cells: [
       {
         title: createLink({
-          pathname: `${paths.manageImages}/${image_set?.ID}`,
+          pathname: `${baseURL}/${image_set?.ID}`,
           linkText: image_set?.Name,
           history,
           navigate,
@@ -110,6 +111,8 @@ const createRows = (data, history, navigate) => {
 };
 
 const ImageTable = ({
+  pathPrefix,
+  urlName,
   historyProp,
   locationProp,
   navigateProp,
@@ -173,6 +176,12 @@ const ImageTable = ({
   const areActionsDisabled = (rowData) =>
     rowData.rowInfo?.imageStatus === 'BUILDING';
 
+  const baseURL = getBaseURLFromPrefixAndName(
+    paths.manageImages,
+    pathPrefix,
+    urlName
+  );
+
   return (
     <>
       {emptyStateNoFilters(isLoading, count, search) ? (
@@ -198,7 +207,7 @@ const ImageTable = ({
           loadTableData={fetchImageSets}
           tableData={{ count, data, isLoading, hasError }}
           columnNames={columnNames}
-          rows={data ? createRows(data, history, navigate) : []}
+          rows={data ? createRows(data, baseURL, history, navigate) : []}
           actionResolver={actionResolver}
           areActionsDisabled={areActionsDisabled}
           defaultSort={{ index: 2, direction: 'desc' }}
@@ -217,6 +226,8 @@ const ImageTable = ({
 };
 
 ImageTable.propTypes = {
+  pathPrefix: PropTypes.string,
+  urlName: PropTypes.string,
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
   navigateProp: PropTypes.func,

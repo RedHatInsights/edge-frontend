@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, Tab, TabTitleText, Skeleton } from '@patternfly/react-core';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import { routes as paths } from '../../constants/routeMapper';
 
 import ImageDetailTab from './ImageDetailTab';
@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import EmptyState from '../../components/Empty';
 
 import { mapUrlToObj } from '../../utils';
+import { restorePrefixURL } from './utils';
 
 // conditional render for same index
 const tabs = {
@@ -19,13 +20,33 @@ const tabs = {
 };
 
 const ImageDetailTabs = ({
+  pathPrefix,
+  urlName,
+  historyProp,
+  locationProp,
+  navigateProp,
   imageData,
   openUpdateWizard,
   imageVersion,
   isLoading,
 }) => {
-  const history = useHistory();
-  const { pathname } = useLocation();
+  const history = historyProp
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
+  const { pathname } = locationProp ? locationProp() : useLocation();
+  let currentPathName = pathname;
+  if (pathPrefix && pathname.startsWith(pathPrefix)) {
+    // remove the prefix from pathname
+    currentPathName = pathname.slice(pathPrefix.length);
+  }
+
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
   const [activeTabKey, setActiveTabkey] = useState(tabs.details);
   const activeTab = imageVersion ? 'imageTab' : 'imageSetTab';
 
@@ -37,7 +58,7 @@ const ImageDetailTabs = ({
     'imageTab',
     'packagesToggle',
   ];
-  const imageUrlMapper = mapUrlToObj(pathname, keys);
+  const imageUrlMapper = mapUrlToObj(currentPathName, keys);
 
   const handleTabClick = (_event, tabIndex) => {
     const selectedTab =
@@ -45,7 +66,13 @@ const ImageDetailTabs = ({
 
     imageUrlMapper[activeTab] = selectedTab;
 
-    history.push(imageUrlMapper.buildUrl());
+    const url = restorePrefixURL(imageUrlMapper.buildUrl(), pathPrefix);
+
+    if (navigateProp) {
+      navigate(url);
+    } else {
+      history.push(url);
+    }
 
     setActiveTabkey(tabIndex);
   };
@@ -81,6 +108,10 @@ const ImageDetailTabs = ({
               title={<TabTitleText>Details</TabTitleText>}
             >
               <ImageDetailTab
+                pathPrefix={pathPrefix}
+                urlName={urlName}
+                historyProp={historyProp}
+                navigateProp={navigateProp}
                 imageData={imageData}
                 imageVersion={imageVersion}
               />
@@ -98,7 +129,14 @@ const ImageDetailTabs = ({
                 eventKey={tabs.packages}
                 title={<TabTitleText>Packages</TabTitleText>}
               >
-                <ImagePackagesTab imageVersion={imageVersion} />
+                <ImagePackagesTab
+                  pathPrefix={pathPrefix}
+                  urlName={urlName}
+                  navigateProp={navigateProp}
+                  historyProp={historyProp}
+                  locationProp={locationProp}
+                  imageVersion={imageVersion}
+                />
               </Tab>
             ) : (
               <Tab
@@ -106,6 +144,11 @@ const ImageDetailTabs = ({
                 title={<TabTitleText>Versions</TabTitleText>}
               >
                 <ImageVersionTab
+                  pathPrefix={pathPrefix}
+                  urlName={urlName}
+                  navigateProp={navigateProp}
+                  historyProp={historyProp}
+                  locationProp={locationProp}
                   imageData={imageData}
                   openUpdateWizard={openUpdateWizard}
                 />
@@ -119,6 +162,11 @@ const ImageDetailTabs = ({
 };
 
 ImageDetailTabs.propTypes = {
+  pathPrefix: PropTypes.string,
+  urlName: PropTypes.string,
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   imageData: PropTypes.object,
   imageVersion: PropTypes.object,
   openUpdateWizard: PropTypes.func,

@@ -16,10 +16,34 @@ import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from '../../constants';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
-import { Link } from 'react-router-dom';
+import { createLink } from '../../utils';
+import { getBaseURLFromPrefixAndName } from './utils';
+import { useHistory, useNavigate } from 'react-router-dom';
 
-const ImageDetailTab = ({ imageData, imageVersion }) => {
+const ImageDetailTab = ({
+  pathPrefix,
+  urlName,
+  historyProp,
+  navigateProp,
+  imageData,
+  imageVersion,
+}) => {
   const [data, setData] = useState({});
+  const baseURL = getBaseURLFromPrefixAndName(
+    paths.manageImages,
+    pathPrefix,
+    urlName
+  );
+  const history = historyProp
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
 
   useEffect(() => {
     imageVersion
@@ -49,23 +73,21 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
     'SSH key': () => data?.image?.Installer?.SshKey,
   };
   const renderAdditionalPackageLink = () => {
-    return (
-      <Link
-        to={`${paths.manageImages}/${data?.image?.ImageSetID}/versions/${data?.image?.ID}/packages/additional`}
-      >
-        {data?.additional_packages}
-      </Link>
-    );
+    return createLink({
+      pathname: `${baseURL}/${data?.image?.ImageSetID}/versions/${data?.image?.ID}/packages/additional`,
+      linkText: data?.additional_packages,
+      history,
+      navigate,
+    });
   };
 
   const renderTotalPackageLink = () => {
-    return (
-      <Link
-        to={`${paths.manageImages}/${data?.image?.ImageSetID}/versions/${data?.image?.ID}/packages/all`}
-      >
-        {data?.packages}
-      </Link>
-    );
+    return createLink({
+      pathname: `${baseURL}/${data?.image?.ImageSetID}/versions/${data?.image?.ID}/packages/all`,
+      linkText: data?.packages,
+      history,
+      navigate,
+    });
   };
 
   const packageMapper = {
@@ -166,6 +188,10 @@ const ImageDetailTab = ({ imageData, imageVersion }) => {
 };
 
 ImageDetailTab.propTypes = {
+  pathPrefix: PropTypes.string,
+  urlName: PropTypes.string,
+  historyProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   imageData: PropTypes.object,
   imageVersion: PropTypes.object,
 };
