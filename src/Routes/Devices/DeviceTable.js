@@ -252,6 +252,7 @@ const DeviceTable = ({
       : `${pathname}/systems`;
 
   const actionResolver = (rowData) => {
+    const getUpdatePathname = (updateRowData) => historyProp ? `/${updateRowData.rowInfo.id}/update` : `/inventory/${updateRowData.rowInfo.id}/update`
     const actions = [];
     if (isLoading) return actions;
     if (!rowData?.rowInfo?.id) return actions;
@@ -295,7 +296,7 @@ const DeviceTable = ({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
           history.push({
-            pathname: `/${rowData.rowInfo.id}/update`,
+            pathname: getUpdatePathname(rowData),
             // pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
           });
         },
