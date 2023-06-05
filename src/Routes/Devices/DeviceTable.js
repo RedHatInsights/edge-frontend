@@ -252,7 +252,10 @@ const DeviceTable = ({
       : `${pathname}/systems`;
 
   const actionResolver = (rowData) => {
-    const getUpdatePathname = (updateRowData) => historyProp ? `/${updateRowData.rowInfo.id}/update` : `/inventory/${updateRowData.rowInfo.id}/update`
+    const getUpdatePathname = (updateRowData) =>
+      historyProp
+        ? `/${updateRowData.rowInfo.id}/update`
+        : `/inventory/${updateRowData.rowInfo.id}/update`;
     const actions = [];
     if (isLoading) return actions;
     if (!rowData?.rowInfo?.id) return actions;
