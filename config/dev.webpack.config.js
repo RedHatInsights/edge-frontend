@@ -48,6 +48,10 @@ plugins.push(
         './RootApp': resolve(__dirname, '../src/AppEntry'),
         // expose System detail to be used on insights
         './Inventory': resolve(__dirname, '../src/Routes/Devices/Inventory.js'),
+        './InventoryDetail': resolve(
+          __dirname,
+          '../src/Routes/DeviceDetail/DeviceDetail.js'
+        ),
         './Images': resolve(__dirname, '../src/Routes/ImageManager/Images.js'),
         './ImagesSetTable': resolve(
           __dirname,
@@ -66,6 +70,10 @@ plugins.push(
           __dirname,
           '../src/Routes/Devices/UpdateDeviceModal.js'
         ),
+        './UpdateImageModal': resolve(
+          __dirname,
+          '../src/Routes/DeviceDetail/UpdateImageModal.js'
+        ),
         './UpdateSystem': resolve(
           __dirname,
           '../src/Routes/Devices/UpdateSystem.js'
@@ -74,10 +82,9 @@ plugins.push(
       shared: [
         { 'react-redux': { requiredVersion: deps['react-redux'] } },
         { 'react-dom': { singleton: true, eager: true } },
-        { 'react-router-dom': { singleton: true, requiredVersion: '*' } },
-        { 'react-redux': {} },
         { '@patternfly/react-core': { singleton: true } },
       ],
+      exclude: ['react-router-dom'],
     }
   )
 );

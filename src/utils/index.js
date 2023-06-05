@@ -1,6 +1,8 @@
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import { useFlag, useFlagsStatus } from '@unleash/proxy-client-react';
 import { releaseMapper, supportedReleases } from '../constants';
+import React from 'react';
+import { Button } from '@patternfly/react-core';
 
 export const nameValidator = {
   type: validatorTypes.PATTERN,
@@ -109,3 +111,19 @@ export const getReleases = (forcedRelease, inculdedReleases) =>
       value: release,
       label: releaseLabel,
     }));
+
+export const createLink = ({ pathname, linkText, history, navigate }) => {
+  if (history) {
+    return (
+      <Button variant="link" onClick={() => history.push(pathname)}>
+        {linkText}
+      </Button>
+    );
+  } else if (navigate) {
+    return (
+      <Button variant="link" onClick={() => navigate(pathname)}>
+        {linkText}
+      </Button>
+    );
+  }
+};
