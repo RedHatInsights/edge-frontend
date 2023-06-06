@@ -9,7 +9,7 @@ import {
 } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { createLink } from '../utils';
 import { iconMapper } from '../constants';
 
 const Empty = ({
@@ -28,15 +28,17 @@ const Empty = ({
     <EmptyStateBody>{body}</EmptyStateBody>
     {primaryAction && (
       <>
-        {primaryAction.href ? (
-          <Button component={Link} to={primaryAction.href}>
-            {primaryAction.text}
-          </Button>
-        ) : (
-          <Button onClick={primaryAction.click} variant="primary">
-            {primaryAction.text}
-          </Button>
-        )}
+        {primaryAction.href
+          ? createLink({
+              pathname: `${primaryAction.href}`,
+              linkText: primaryAction.text,
+              history,
+            })
+          : createLink({
+              pathname: `${primaryAction.click}`,
+              linkText: primaryAction.text,
+              history,
+            })}
       </>
     )}
     <EmptyStateSecondaryActions>
