@@ -123,7 +123,12 @@ const ImageTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
 }) => {
-  const { search } = locationProp ? locationProp() : useLocation();
+  // const { search } = locationProp ? locationProp() : useLocation();
+  const { pathname, search } = locationProp
+    ? locationProp()
+    : useLocation
+    ? useLocation()
+    : null;
   const history = historyProp
   ? historyProp()
   : useHistory

@@ -3,7 +3,7 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import { Text } from '@patternfly/react-core';
 import WizardRepositoryTable from '../../../components/form/WizardRepositoryTable';
 
-export default (featureFlag) => {
+export default (featureFlag, locationProp) => {
   return {
     title: 'Custom repositories',
     name: 'repositories',
@@ -30,7 +30,7 @@ export default (featureFlag) => {
       {
         component: 'custom-repo-table',
         name: 'third-party-repositories',
-        label: <WizardRepositoryTable />,
+        label: <WizardRepositoryTable locationProp={locationProp} />,
         initialValue: [],
         clearedValue: [],
         initializeOnMount: true,

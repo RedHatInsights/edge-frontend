@@ -27,6 +27,7 @@ const UpdateImage = ({
   updateImageID,
   reload,
   notificationProp,
+  locationProp,
 }) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
@@ -162,7 +163,7 @@ const UpdateImage = ({
               updateDetails,
               imageOutput,
               registration,
-              repositories(imageWizardFeatureFlag),
+              repositories(imageWizardFeatureFlag, locationProp),
               packages,
               additionalCustomPackages,
               review,

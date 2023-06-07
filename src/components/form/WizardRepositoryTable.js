@@ -45,7 +45,6 @@ const WizardRepositoryTable = (props) => {
   useEffect(() => {
     change('validate-custom-repos', false);
   }, []);
-
   const buildRows = ({ data }) => {
     return data.map(({ ID, Name, URL, uuid }) => ({
       rowInfo: { id: ID, name: Name, URL: URL, uuid: uuid },
@@ -86,6 +85,7 @@ const WizardRepositoryTable = (props) => {
       ) : (
         <GeneralTable
           apiFilterSort={true}
+          locationProp={props?.label?.props?.locationProp}
           isUseApi={true}
           loadTableData={fetchRepos}
           filters={filters}
