@@ -20,7 +20,12 @@ import { useFeatureFlags } from '../../utils';
 import apiWithToast from '../../utils/apiWithToast';
 import { DEFAULT_RELEASE, TEMPORARY_RELEASE } from '../../constants';
 
-const CreateImage = ({ navigateBack, reload, notificationProp, locationProp }) => {
+const CreateImage = ({
+  navigateBack,
+  reload,
+  notificationProp,
+  locationProp,
+}) => {
   const [user, setUser] = useState();
   const dispatch = useDispatch();
   const temporaryReleasesFlag = useFeatureFlags(
@@ -125,6 +130,7 @@ CreateImage.propTypes = {
   navigateBack: PropTypes.func,
   reload: PropTypes.func,
   notificationProp: PropTypes.object,
+  locationProp: PropTypes.object,
 };
 CreateImage.defaultProps = {
   navigateBack: () => undefined,

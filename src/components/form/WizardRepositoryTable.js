@@ -69,7 +69,7 @@ const WizardRepositoryTable = (props) => {
       ],
     }));
   };
-
+  const locationProp = props?.label?.props?.locationProp;
   return (
     <>
       {!isLoading && !data?.count > 0 ? (
@@ -85,7 +85,7 @@ const WizardRepositoryTable = (props) => {
       ) : (
         <GeneralTable
           apiFilterSort={true}
-          locationProp={props?.label?.props?.locationProp}
+          locationProp={locationProp}
           isUseApi={true}
           loadTableData={fetchRepos}
           filters={filters}
@@ -109,6 +109,9 @@ const WizardRepositoryTable = (props) => {
 WizardRepositoryTable.propTypes = {
   data: PropTypes.array,
   closeModal: PropTypes.func,
+  locationProp: PropTypes.object,
+  label: PropTypes.object,
+  props: PropTypes.func,
 };
 
 export default WizardRepositoryTable;

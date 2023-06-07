@@ -187,6 +187,7 @@ UpdateImage.propTypes = {
   updateImageID: PropTypes.number,
   reload: PropTypes.func,
   notificationProp: PropTypes.object,
+  locationProp: PropTypes.object,
 };
 UpdateImage.defaultProps = {
   navigateBack: () => undefined,

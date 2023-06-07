@@ -70,7 +70,7 @@ const columnNames = [
   },
 ];
 
-const createRows = (data,  history, navigate) => {
+const createRows = (data, history, navigate) => {
   return data.map((image_set, index) => ({
     rowInfo: {
       id: image_set?.ID,
@@ -84,7 +84,7 @@ const createRows = (data,  history, navigate) => {
           pathname: `${paths.manageImages}/${image_set?.ID}`,
           linkText: image_set?.Name,
           history,
-          navigate
+          navigate,
         }),
       },
 
@@ -123,17 +123,16 @@ const ImageTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
 }) => {
-  // const { search } = locationProp ? locationProp() : useLocation();
-  const { pathname, search } = locationProp
+  const { search } = locationProp
     ? locationProp()
     : useLocation
     ? useLocation()
     : null;
   const history = historyProp
-  ? historyProp()
-  : useHistory
-  ? useHistory()
-  : null;
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
   const navigate = navigateProp
     ? navigateProp()
     : useNavigate
