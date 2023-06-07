@@ -2,7 +2,7 @@ import React from 'react';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { routes as paths } from '../../constants/routeMapper';
-import { Link } from 'react-router-dom';
+import { createLink } from '../../utils';
 import { Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
@@ -80,12 +80,13 @@ const createRows = (data) => {
     },
     cells: [
       {
-        title: (
-          <Link to={`${paths.manageImages}/${image_set?.ID}`}>
-            {image_set?.Name}
-          </Link>
-        ),
+        title: createLink({
+          pathname: `${paths.manageImages}/${image_set?.ID}`,
+          linkText: image_set?.Name,
+          history,
+        }),
       },
+
       image_set?.Version,
       {
         title: image_set?.UpdatedAt ? (
