@@ -134,6 +134,7 @@ const Images = ({
             }}
             reload={reload}
             notificationProp={notificationProp}
+            locationProp={locationProp}
           />
         </Suspense>
       )}
@@ -165,6 +166,7 @@ const Images = ({
             reload={reload}
             updateImageID={UpdateWizard.imageId}
             notificationProp={notificationProp}
+            locationProp={locationProp}
           />
         </Suspense>
       )}
