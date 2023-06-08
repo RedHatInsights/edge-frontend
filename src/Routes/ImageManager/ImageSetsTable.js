@@ -7,7 +7,7 @@ import { Tooltip } from '@patternfly/react-core';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
 import { cellWidth } from '@patternfly/react-table';
 import CustomEmptyState from '../../components/Empty';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory, useNavigate } from 'react-router-dom';
 import { emptyStateNoFilters } from '../../utils';
 import Status from '../../components/Status';
 
@@ -70,7 +70,7 @@ const columnNames = [
   },
 ];
 
-const createRows = (data) => {
+const createRows = (data, history, navigate) => {
   return data.map((image_set, index) => ({
     rowInfo: {
       id: image_set?.ID,
@@ -84,6 +84,7 @@ const createRows = (data) => {
           pathname: `${paths.manageImages}/${image_set?.ID}`,
           linkText: image_set?.Name,
           history,
+          navigate,
         }),
       },
 
@@ -122,8 +123,21 @@ const ImageTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
 }) => {
-  const { search } = locationProp ? locationProp() : useLocation();
-
+  const { search } = locationProp
+    ? locationProp()
+    : useLocation
+    ? useLocation()
+    : null;
+  const history = historyProp
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
   const actionResolver = (rowData) => {
     const actionsArray = [];
     if (rowData.rowInfo?.isoURL) {
@@ -184,7 +198,7 @@ const ImageTable = ({
           loadTableData={fetchImageSets}
           tableData={{ count, data, isLoading, hasError }}
           columnNames={columnNames}
-          rows={data ? createRows(data) : []}
+          rows={data ? createRows(data, history, navigate) : []}
           actionResolver={actionResolver}
           areActionsDisabled={areActionsDisabled}
           defaultSort={{ index: 2, direction: 'desc' }}

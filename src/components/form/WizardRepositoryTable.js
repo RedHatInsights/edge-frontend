@@ -45,7 +45,6 @@ const WizardRepositoryTable = (props) => {
   useEffect(() => {
     change('validate-custom-repos', false);
   }, []);
-
   const buildRows = ({ data }) => {
     return data.map(({ ID, Name, URL, uuid }) => ({
       rowInfo: { id: ID, name: Name, URL: URL, uuid: uuid },
@@ -70,7 +69,7 @@ const WizardRepositoryTable = (props) => {
       ],
     }));
   };
-
+  const locationProp = props?.label?.props?.locationProp;
   return (
     <>
       {!isLoading && !data?.count > 0 ? (
@@ -86,6 +85,7 @@ const WizardRepositoryTable = (props) => {
       ) : (
         <GeneralTable
           apiFilterSort={true}
+          locationProp={locationProp}
           isUseApi={true}
           loadTableData={fetchRepos}
           filters={filters}
@@ -109,6 +109,9 @@ const WizardRepositoryTable = (props) => {
 WizardRepositoryTable.propTypes = {
   data: PropTypes.array,
   closeModal: PropTypes.func,
+  locationProp: PropTypes.object,
+  label: PropTypes.object,
+  props: PropTypes.func,
 };
 
 export default WizardRepositoryTable;
