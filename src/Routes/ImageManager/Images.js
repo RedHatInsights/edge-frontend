@@ -1,9 +1,9 @@
 import React, { Fragment, useState, Suspense } from 'react';
+import { Spinner, Bullseye } from '@patternfly/react-core';
 import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
-import { Spinner, Bullseye } from '@patternfly/react-core';
 import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import ImageSetsTable from './ImageSetsTable';
 import { stateToUrlSearch } from '../../utils';
@@ -28,6 +28,7 @@ const Images = ({
   locationProp,
   navigateProp,
   notificationProp,
+  showHeaderProp,
 }) => {
   const history = historyProp
     ? historyProp()
@@ -40,7 +41,7 @@ const Images = ({
     ? useNavigate()
     : null;
   const { pathname, search } = locationProp ? locationProp() : useLocation();
-
+  const showHeader = showHeaderProp === undefined ? true : showHeaderProp;
   const [response, fetchImageSets] = useApi({
     api: getImageSets,
     tableReload: true,
@@ -93,9 +94,11 @@ const Images = ({
 
   return (
     <Fragment>
-      <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Images" />
-      </PageHeader>
+      {showHeader && (
+        <PageHeader className="pf-m-light">
+          <PageHeaderTitle title="Images" />
+        </PageHeader>
+      )}
       <section className="edge-images pf-l-page__main-section pf-c-page__main-section">
         <ImageSetsTable
           historyProp={historyProp}
@@ -179,5 +182,6 @@ Images.propTypes = {
   locationProp: PropTypes.func,
   navigateProp: PropTypes.func,
   notificationProp: PropTypes.object,
+  showHeaderProp: PropTypes.bool,
 };
 export default Images;
