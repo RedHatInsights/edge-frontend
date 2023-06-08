@@ -177,10 +177,10 @@ const GeneralInformationTab = () => {
         store={store}
         writePermissions={writePermissions}
         SystemCardWrapper={SystemCardWrapper}
-        OperatingSystemCardWrapper={InfrastructureCardWrapper}
-        BiosCardWrapper={ImageInformationCardWrapper}
-        InfrastructureCardWrapper={BiosCardWrapper}
-        ConfigurationCardWrapper={OperatingSystemCardWrapper}
+        OperatingSystemCardWrapper={OperatingSystemCardWrapper}
+        BiosCardWrapper={BiosCardWrapper}
+        InfrastructureCardWrapper={InfrastructureCardWrapper}
+        ConfigurationCardWrapper={ImageInformationCardWrapper}
         CollectionCardWrapper={CollectionCardWrapper}
       />
     </Suspense>
