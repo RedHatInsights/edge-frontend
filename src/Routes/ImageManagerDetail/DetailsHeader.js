@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory, useNavigate } from 'react-router-dom';
+import { createLink } from '../../utils';
 import PropTypes from 'prop-types';
 
 import {
@@ -22,6 +23,7 @@ import Status from '../../components/Status';
 import { routes as paths } from '../../constants/routeMapper';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import { DateFormat } from '@redhat-cloud-services/frontend-components/DateFormat';
+import { getBaseURLFromPrefixAndName } from './utils';
 
 const dropdownItems = (data, imageVersion, isoURL, openUpdateWizard) => {
   const imageData = imageVersion ? imageVersion : data?.LastImageDetails;
@@ -56,9 +58,28 @@ const dropdownItems = (data, imageVersion, isoURL, openUpdateWizard) => {
   return actionsArray;
 };
 
-const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
+const DetailsHead = ({
+  pathPrefix,
+  urlName,
+  historyProp,
+  navigateProp,
+  imageData,
+  imageVersion,
+  openUpdateWizard,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState({});
+
+  const history = historyProp
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
 
   useEffect(() => {
     setData(imageData?.data);
@@ -66,26 +87,44 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
 
   const actionsLabel = 'Actions for image set details view';
   const dropdownId = 'image-set-details-dropdown';
+  const baseURL = getBaseURLFromPrefixAndName(
+    paths.manageImages,
+    pathPrefix,
+    urlName
+  );
 
   return (
     <>
       {!imageData.isLoading && imageData.hasError ? (
         <Breadcrumb>
           <BreadcrumbItem>
-            <Link to={paths.manageImages}>Back to Manage Images</Link>
+            {createLink({
+              pathname: baseURL,
+              linkText: 'Back to Manage Images',
+              history,
+              navigate,
+            })}
           </BreadcrumbItem>
         </Breadcrumb>
       ) : (
         <>
           <Breadcrumb>
             <BreadcrumbItem>
-              <Link to={paths.manageImages}>Manage Images</Link>
+              {createLink({
+                pathname: baseURL,
+                linkText: 'Manage Images',
+                history,
+                navigate,
+              })}
             </BreadcrumbItem>
             {imageVersion ? (
               <BreadcrumbItem>
-                <Link to={`${paths.manageImages}/${data?.ImageSet?.ID}`}>
-                  {data?.ImageSet?.Name}
-                </Link>
+                {createLink({
+                  pathname: `${baseURL}/${data?.ImageSet?.ID}`,
+                  linkText: data?.ImageSet?.Name,
+                  history,
+                  navigate,
+                })}
               </BreadcrumbItem>
             ) : (
               <BreadcrumbItem isActive>
@@ -182,6 +221,10 @@ const DetailsHead = ({ imageData, imageVersion, openUpdateWizard }) => {
 };
 
 DetailsHead.propTypes = {
+  pathPrefix: PropTypes.string,
+  urlName: PropTypes.string,
+  historyProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   imageData: PropTypes.object,
   imageVersion: PropTypes.object,
   openUpdateWizard: PropTypes.func,

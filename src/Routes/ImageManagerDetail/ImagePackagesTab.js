@@ -4,8 +4,9 @@ import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import GeneralTable from '../../components/general-table/GeneralTable';
 import PropTypes from 'prop-types';
 import { cellWidth } from '@patternfly/react-table';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import Empty from '../../components/Empty';
+import { restorePrefixURL } from './utils';
 
 const defaultFilters = [{ label: 'Name', type: 'text' }];
 
@@ -89,11 +90,31 @@ const tabsToIndex = {
   all: 1,
 };
 
-const ImagePackagesTab = ({ imageVersion }) => {
-  const history = useHistory();
-  const { pathname } = useLocation();
+const ImagePackagesTab = ({
+  pathPrefix,
+  historyProp,
+  locationProp,
+  navigateProp,
+  imageVersion,
+}) => {
+  const history = historyProp
+    ? historyProp()
+    : useHistory
+    ? useHistory()
+    : null;
+  const { pathname } = locationProp ? locationProp() : useLocation();
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
+  let currentPathName = pathname;
+  if (pathPrefix && pathname.startsWith(pathPrefix)) {
+    // remove the prefix from pathname
+    currentPathName = pathname.slice(pathPrefix.length);
+  }
 
-  const splitUrl = pathname.split('/');
+  const splitUrl = currentPathName.split('/');
   const defaultToggle = splitUrl.length === 7 ? tabsToIndex[splitUrl[6]] : 1;
   // Distribution examples would be: rhel-86, rhel-90, and rhel-100
   const distribution = imageVersion?.image?.Distribution?.split('-')[1].slice(
@@ -121,14 +142,21 @@ const ImagePackagesTab = ({ imageVersion }) => {
       } else {
         splitUrl.push(indexToTabs[toggleIndex]);
       }
-
-      history.push(splitUrl.join('/'));
+      const url = restorePrefixURL(splitUrl.join('/'), pathPrefix);
+      if (navigateProp) {
+        navigate(url);
+      } else {
+        history.push(url);
+      }
     }
   };
 
   return imageVersion?.image?.Commit?.Status === 'SUCCESS' ? (
     <section className="add-100vh pf-l-page__main-section pf-c-page__main-section">
       <GeneralTable
+        navigateProp={navigateProp}
+        historyProp={historyProp}
+        locationProp={locationProp}
         apiFilterSort={false}
         filters={defaultFilters}
         tableData={{
@@ -180,6 +208,10 @@ const ImagePackagesTab = ({ imageVersion }) => {
 };
 
 ImagePackagesTab.propTypes = {
+  pathPrefix: PropTypes.string,
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   imageVersion: PropTypes.object,
 };
 

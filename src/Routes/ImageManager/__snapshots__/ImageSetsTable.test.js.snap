@@ -38,6 +38,9 @@ exports[`ImageSets table to render correctly 1`] = `
       data-ouia-component-id="OUIA-Generated-Button-link-1"
       data-ouia-component-type="PF4/Button"
       data-ouia-safe="true"
+      target-href="function () {
+        return fn.apply(this, arguments);
+      }"
       type="button"
     >
       Create new image
