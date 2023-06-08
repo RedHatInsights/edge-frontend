@@ -8,6 +8,7 @@ const deps = require('../package.json').dependencies;
 plugins.push(
   require('@redhat-cloud-services/frontend-components-config/federated-modules')(
     {
+      root: resolve(__dirname, '../'),
       exposes: {
         // Application root
         './RootApp': resolve(__dirname, '../src/AppEntry'),
