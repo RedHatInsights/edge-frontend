@@ -14,10 +14,14 @@ const getBaseURLFromPrefixAndName = (defaultBaseURL, pathPrefix, urlName) => {
 };
 
 const restorePrefixURL = (url, pathPrefix) => {
+  const separator = '/';
   if (!pathPrefix || url.startsWith(pathPrefix)) {
     return url;
   }
-  return [pathPrefix, url].join('/');
+  if (pathPrefix.endsWith(separator) || url.startsWith(separator)) {
+    return [pathPrefix, url].join('');
+  }
+  return [pathPrefix, url].join(separator);
 };
 
 export { getBaseURLFromPrefixAndName, restorePrefixURL };
