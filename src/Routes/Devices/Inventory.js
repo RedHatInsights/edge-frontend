@@ -17,7 +17,7 @@ const UpdateDeviceModal = React.lazy(() =>
   import(/* webpackChunkName: "UpdateDeviceModal" */ './UpdateDeviceModal')
 );
 
-const Inventory = ({ historyProp, locationProp }) => {
+const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
   const history = historyProp
     ? historyProp()
     : useHistory
@@ -32,6 +32,7 @@ const Inventory = ({ historyProp, locationProp }) => {
     api: getInventory,
     tableReload: true,
   });
+  const showHeader = showHeaderProp === undefined ? true : showHeaderProp;
   const { data, isLoading, hasError } = response;
   const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
   const [isRemoveDeviceModalOpen, setIsRemoveDeviceModalOpen] = useState(false);
@@ -100,13 +101,21 @@ const Inventory = ({ historyProp, locationProp }) => {
     await fetchDevices();
     setHasModalSubmitted(true);
   };
+  let classNameMain = '';
+  if (showHeaderProp !== undefined && showHeader) {
+    classNameMain =
+      'edge-devices pf-l-page__main-section pf-c-page__main-section';
+  }
 
   return (
     <>
-      <PageHeader className="pf-m-light">
-        <PageHeaderTitle title="Systems" />
-      </PageHeader>
-      <section className="edge-devices pf-l-page__main-section pf-c-page__main-section">
+      {showHeader && (
+        <PageHeader className="pf-m-light">
+          <PageHeaderTitle title="Systems" />
+        </PageHeader>
+      )}
+      {showHeader}
+      <section className={classNameMain}>
         <DeviceTable
           historyProp={historyProp}
           locationProp={locationProp}
@@ -199,6 +208,7 @@ const Inventory = ({ historyProp, locationProp }) => {
 Inventory.propTypes = {
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
+  showHeaderProp: PropTypes.bool,
 };
 
 export default Inventory;
