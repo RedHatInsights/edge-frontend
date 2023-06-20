@@ -65,13 +65,17 @@ export const distributionMapper = {
   'rhel-85': 'RHEL 8.5',
   'rhel-86': 'RHEL 8.6',
   'rhel-87': 'RHEL 8.7',
+  'rhel-88': 'RHEL 8.8',
   'rhel-90': 'RHEL 9.0',
   'rhel-91': 'RHEL 9.1',
+  'rhel-92': 'RHEL 9.2',
 };
 
 export const releaseMapper = {
+  'rhel-92': 'Red Hat Enterprise Linux (RHEL) 9.2',
   'rhel-91': 'Red Hat Enterprise Linux (RHEL) 9.1',
   'rhel-90': 'Red Hat Enterprise Linux (RHEL) 9.0',
+  'rhel-88': 'Red Hat Enterprise Linux (RHEL) 8.8',
   'rhel-87': 'Red Hat Enterprise Linux (RHEL) 8.7',
   'rhel-86': 'Red Hat Enterprise Linux (RHEL) 8.6',
   'rhel-85': 'Red Hat Enterprise Linux (RHEL) 8.5',
@@ -83,14 +87,16 @@ export const supportedReleases = [
   'rhel-85',
   'rhel-86',
   'rhel-87',
+  'rhel-88',
   'rhel-90',
   'rhel-91',
+  'rhel-92',
 ];
 
-export const temporaryReleases = ['rhel-91'];
+export const temporaryReleases = ['rhel-92'];
 
-export const DEFAULT_RELEASE = 'rhel-90';
-export const TEMPORARY_RELEASE = 'rhel-91';
+export const DEFAULT_RELEASE = 'rhel-92';
+export const TEMPORARY_RELEASE = 'rhel-92';
 
 export const imageTypeMapper = {
   'rhel-edge-commit': 'RHEL for Edge Commit (.tar)',
