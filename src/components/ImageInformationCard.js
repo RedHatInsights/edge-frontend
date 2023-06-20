@@ -19,8 +19,8 @@ const LoadingCard = (props) => (
   />
 );
 
-const ImageInformationCard = () => {
-  const deviceId = useSelector(
+const ImageInformationCard = ({deviceIdProps}) => {
+  const deviceId = deviceIdProps ?? useSelector(
     ({ entityDetails }) => entityDetails?.entity?.id
   );
   const [isImageInfoLoading, setIsImageInfoLoading] = useState(true);
@@ -39,73 +39,114 @@ const ImageInformationCard = () => {
     })();
   }, []);
 
+  const edgeImageData = [
+    {
+      title: 'Running image',
+      value: isImageInfoLoading ? (
+        <Skeleton size={SkeletonSize.sm} />
+      ) : imageData ? (
+        <Link
+          to={`${paths.manageImages}/${imageData?.Image?.ImageSetID}/details`}
+        >
+          {imageData?.Image?.Name}
+        </Link>
+      ) : (
+        'unavailable'
+      ),
+    },
+    {
+      title: 'Running version',
+      value: isImageInfoLoading ? (
+        <Skeleton size={SkeletonSize.sm} />
+      ) : imageData ? (
+        <Link
+          to={`${paths.manageImages}/${imageData?.Image?.ImageSetID}/versions/${imageData?.Image?.ID}/details`}
+        >
+          {imageData?.Image?.Version}
+        </Link>
+      ) : (
+        'unavailable'
+      ),
+    },
+    {
+      title: 'Target version',
+      value: isImageInfoLoading ? (
+        <Skeleton size={SkeletonSize.sm} />
+      ) : imageData?.UpdatesAvailable ? (
+        <Link
+          to={`${paths.manageImages}/${imageData?.UpdatesAvailable[0]?.Image?.ImageSetID}/versions/${imageData?.UpdatesAvailable[0]?.Image?.ID}/details`}
+        >
+          {imageData?.UpdatesAvailable[0]?.Image?.Version}
+        </Link>
+      ) : hasError ? (
+        'unavailable'
+      ) : (
+        'Same as running'
+      ),
+    },
+    {
+      title: 'Rollback version',
+      value: isImageInfoLoading ? (
+        <Skeleton size={SkeletonSize.sm} />
+      ) : imageData?.RollbackImage?.ID ? (
+        <Link
+          to={`${paths.manageImages}/${imageData?.RollbackImage?.ImageSetID}/versions/${imageData?.RollbackImage?.ID}/details`}
+        >
+          {imageData?.RollbackImage?.Version}
+        </Link>
+      ) : hasError ? (
+        'unavailable'
+      ) : (
+        'None'
+      ),
+    },
+  ];
+
+  const federatedImageData = [
+    {
+      title: 'Running image',
+      value: isImageInfoLoading ? (
+        <Skeleton size={SkeletonSize.sm} />
+      ) : imageData ? imageData?.Image?.Name : (
+        'unavailable'
+      ),
+    },
+    {
+      title: 'Running version',
+      value: isImageInfoLoading ? (
+        <Skeleton size={SkeletonSize.sm} />
+      ) : imageData ? imageData?.Image?.Version : (
+        'unavailable'
+      ),
+    },
+    {
+      title: 'Target version',
+      value: isImageInfoLoading ? (
+        <Skeleton size={SkeletonSize.sm} />
+      ) : imageData?.UpdatesAvailable ? imageData?.UpdatesAvailable[0]?.Image?.Version : hasError ? (
+        'unavailable'
+      ) : (
+        'Same as running'
+      ),
+    },
+    {
+      title: 'Rollback version',
+      value: isImageInfoLoading ? (
+        <Skeleton size={SkeletonSize.sm} />
+      ) : imageData?.RollbackImage?.ID ? imageData?.RollbackImage?.Version : hasError ? (
+        'unavailable'
+      ) : (
+        'None'
+      ),
+    },
+  ];
+
   return (
     <Suspense fallback="">
       <LoadingCard
         title="Image information"
         isLoading={false}
-        items={[
-          {
-            title: 'Running image',
-            value: isImageInfoLoading ? (
-              <Skeleton size={SkeletonSize.sm} />
-            ) : imageData ? (
-              <Link
-                to={`${paths.manageImages}/${imageData?.Image?.ImageSetID}/details`}
-              >
-                {imageData?.Image?.Name}
-              </Link>
-            ) : (
-              'unavailable'
-            ),
-          },
-          {
-            title: 'Running version',
-            value: isImageInfoLoading ? (
-              <Skeleton size={SkeletonSize.sm} />
-            ) : imageData ? (
-              <Link
-                to={`${paths.manageImages}/${imageData?.Image?.ImageSetID}/versions/${imageData?.Image?.ID}/details`}
-              >
-                {imageData?.Image?.Version}
-              </Link>
-            ) : (
-              'unavailable'
-            ),
-          },
-          {
-            title: 'Target version',
-            value: isImageInfoLoading ? (
-              <Skeleton size={SkeletonSize.sm} />
-            ) : imageData?.UpdatesAvailable ? (
-              <Link
-                to={`${paths.manageImages}/${imageData?.UpdatesAvailable[0]?.Image?.ImageSetID}/versions/${imageData?.UpdatesAvailable[0]?.Image?.ID}/details`}
-              >
-                {imageData?.UpdatesAvailable[0]?.Image?.Version}
-              </Link>
-            ) : hasError ? (
-              'unavailable'
-            ) : (
-              'Same as running'
-            ),
-          },
-          {
-            title: 'Rollback version',
-            value: isImageInfoLoading ? (
-              <Skeleton size={SkeletonSize.sm} />
-            ) : imageData?.RollbackImage?.ID ? (
-              <Link
-                to={`${paths.manageImages}/${imageData?.RollbackImage?.ImageSetID}/versions/${imageData?.RollbackImage?.ID}/details`}
-              >
-                {imageData?.RollbackImage?.Version}
-              </Link>
-            ) : hasError ? (
-              'unavailable'
-            ) : (
-              'None'
-            ),
-          },
-        ]}
+        items={deviceIdProps ? federatedImageData : edgeImageData}
       />
     </Suspense>
   );
