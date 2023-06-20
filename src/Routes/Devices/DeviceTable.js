@@ -87,6 +87,9 @@ const createRows = (
       UpdateAvailable,
       DispatcherStatus
     );
+
+  const currentInventoryPath = history ? '/edge' : paths.inventory;
+
     if (DeviceName === '') {
       // needs to be fixed with proper name in sync with inv
       DeviceName = 'localhost';
@@ -138,7 +141,7 @@ const createRows = (
         {
           title: hasLinks
             ? createLink({
-                pathname: `${deviceLinkBase}/${DeviceUUID}`,
+                pathname: currentInventoryPath === '/edge' ? `${DeviceUUID}` : `${deviceLinkBase}/${DeviceUUID}`,
                 linkText: DeviceName,
                 history,
                 navigate,
