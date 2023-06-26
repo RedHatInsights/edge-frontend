@@ -28,17 +28,17 @@ const Empty = ({
     <EmptyStateBody>{body}</EmptyStateBody>
     {primaryAction && (
       <>
-        {primaryAction.href
-          ? createLink({
-              pathname: `${primaryAction.href}`,
-              linkText: primaryAction.text,
-              history,
-            })
-          : createLink({
-              pathname: `${primaryAction.click}`,
-              linkText: primaryAction.text,
-              history,
-            })}
+        {primaryAction.href ? (
+          createLink({
+            pathname: `${primaryAction.href}`,
+            linkText: primaryAction.text,
+            history,
+          })
+        ) : (
+          <Button variant="link" onClick={primaryAction.click}>
+            {primaryAction.text}
+          </Button>
+        )}
       </>
     )}
     <EmptyStateSecondaryActions>
