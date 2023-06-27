@@ -35,7 +35,7 @@ const Empty = ({
             history,
           })
         ) : (
-          <Button variant="link" onClick={primaryAction.click}>
+          <Button variant="primary" onClick={primaryAction.click}>
             {primaryAction.text}
           </Button>
         )}

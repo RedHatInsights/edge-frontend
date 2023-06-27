@@ -209,13 +209,24 @@ const ImageTable = ({
         <CustomEmptyState
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}
-          title={'No images found'}
-          body={''}
+          title={'Create an OSTree image'}
+          body={
+            'Use the image builder tool to compose ' +
+            'customized RHEL (rpm-ostree) images optimized for Edge.' +
+            ' Then, you can remotely install, and securely manage and' +
+            ' scale deployments of the images on Edge servers.'
+          }
           primaryAction={{
             click: openCreateWizard,
             text: 'Create new image',
           }}
-          secondaryActions={[]}
+          secondaryActions={[
+            {
+              type: 'link',
+              title: 'RHEL for Edge image documentation',
+              link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html/create_rhel_for_edge_images_and_configure_automated_management/index',
+            },
+          ]}
         />
       ) : (
         <GeneralTable
