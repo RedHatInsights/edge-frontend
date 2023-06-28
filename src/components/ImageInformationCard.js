@@ -9,6 +9,7 @@ import {
   SkeletonSize,
 } from '@redhat-cloud-services/frontend-components/Skeleton';
 import CmpLoader from './CmpLoader';
+import PropTypes from 'prop-types';
 
 const LoadingCard = (props) => (
   <AsyncComponent
@@ -19,10 +20,10 @@ const LoadingCard = (props) => (
   />
 );
 
-const ImageInformationCard = ({deviceIdProps}) => {
-  const deviceId = deviceIdProps ?? useSelector(
-    ({ entityDetails }) => entityDetails?.entity?.id
-  );
+const ImageInformationCard = ({ deviceIdProps }) => {
+  const deviceId =
+    deviceIdProps ??
+    useSelector(({ entityDetails }) => entityDetails?.entity?.id);
   const [isImageInfoLoading, setIsImageInfoLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [imageData, setImageData] = useState(null);
@@ -107,7 +108,9 @@ const ImageInformationCard = ({deviceIdProps}) => {
       title: 'Running image',
       value: isImageInfoLoading ? (
         <Skeleton size={SkeletonSize.sm} />
-      ) : imageData ? imageData?.Image?.Name : (
+      ) : imageData ? (
+        imageData?.Image?.Name
+      ) : (
         'unavailable'
       ),
     },
@@ -115,7 +118,9 @@ const ImageInformationCard = ({deviceIdProps}) => {
       title: 'Running version',
       value: isImageInfoLoading ? (
         <Skeleton size={SkeletonSize.sm} />
-      ) : imageData ? imageData?.Image?.Version : (
+      ) : imageData ? (
+        imageData?.Image?.Version
+      ) : (
         'unavailable'
       ),
     },
@@ -123,7 +128,9 @@ const ImageInformationCard = ({deviceIdProps}) => {
       title: 'Target version',
       value: isImageInfoLoading ? (
         <Skeleton size={SkeletonSize.sm} />
-      ) : imageData?.UpdatesAvailable ? imageData?.UpdatesAvailable[0]?.Image?.Version : hasError ? (
+      ) : imageData?.UpdatesAvailable ? (
+        imageData?.UpdatesAvailable[0]?.Image?.Version
+      ) : hasError ? (
         'unavailable'
       ) : (
         'Same as running'
@@ -133,7 +140,9 @@ const ImageInformationCard = ({deviceIdProps}) => {
       title: 'Rollback version',
       value: isImageInfoLoading ? (
         <Skeleton size={SkeletonSize.sm} />
-      ) : imageData?.RollbackImage?.ID ? imageData?.RollbackImage?.Version : hasError ? (
+      ) : imageData?.RollbackImage?.ID ? (
+        imageData?.RollbackImage?.Version
+      ) : hasError ? (
         'unavailable'
       ) : (
         'None'
@@ -150,6 +159,10 @@ const ImageInformationCard = ({deviceIdProps}) => {
       />
     </Suspense>
   );
+};
+
+ImageInformationCard.propTypes = {
+  deviceIdProps: PropTypes.string,
 };
 
 export default ImageInformationCard;
