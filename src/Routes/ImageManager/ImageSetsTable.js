@@ -224,7 +224,7 @@ const ImageTable = ({
             {
               type: 'link',
               title: 'RHEL for Edge image documentation',
-              link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html/create_rhel_for_edge_images_and_configure_automated_management/index',
+              link: 'https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/composing_installing_and_managing_rhel_for_edge_images/index',
             },
           ]}
         />
