@@ -119,6 +119,10 @@ const createRows = (
       deviceBaseUrl !== 'federated'
         ? `${deviceBaseUrl}/${DeviceUUID}`
         : `/${DeviceUUID}`;
+    const pathToImage =
+      deviceBaseUrl !== 'federated'
+        ? `${paths.manageImages}/${ImageSetID}`
+        : `/image-builder/manage-edge-images/${ImageSetID}`;
     return {
       rowInfo: {
         deviceID: DeviceID,
@@ -156,7 +160,7 @@ const createRows = (
           title: ImageName
             ? hasLinks
               ? createLink({
-                  pathname: `${paths.manageImages}/${ImageSetID}`,
+                  pathname: pathToImage,
                   linkText: ImageName,
                   history,
                   navigate,
