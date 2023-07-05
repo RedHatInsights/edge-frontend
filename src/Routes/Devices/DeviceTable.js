@@ -115,6 +115,10 @@ const createRows = (
       </div>
     );
 
+    const pathToDevice =
+      deviceBaseUrl !== 'federated'
+        ? `${deviceBaseUrl}/${DeviceUUID}`
+        : `/${DeviceUUID}`;
     return {
       rowInfo: {
         deviceID: DeviceID,
@@ -141,7 +145,7 @@ const createRows = (
         {
           title: hasLinks
             ? createLink({
-                pathname: `${deviceBaseUrl}/${DeviceUUID}`,
+                pathname: pathToDevice,
                 linkText: DeviceName,
                 history,
                 navigate,
@@ -247,12 +251,13 @@ const DeviceTable = ({
     : null;
 
   // Create base URL path for system detail link
-  const deviceBaseUrl =
-    pathname === paths.inventory
-      ? pathname
-      : pathname === '/'
-      ? ''
-      : `${pathname}/systems`;
+  const deviceBaseUrl = historyProp
+    ? 'federated'
+    : pathname === paths.inventory
+    ? pathname
+    : pathname === '/'
+    ? ''
+    : `${pathname}/systems`;
 
   const actionResolver = (rowData) => {
     const getUpdatePathname = (updateRowData) =>
