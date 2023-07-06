@@ -65,7 +65,7 @@ const createRows = (
   devices,
   hasLinks,
   fetchDevices,
-  deviceLinkBase,
+  deviceBaseUrl,
   history,
   navigate
 ) => {
@@ -87,6 +87,9 @@ const createRows = (
       UpdateAvailable,
       DispatcherStatus
     );
+
+    // const currentInventoryPath = history ? '/edge' : paths.inventory;
+
     if (DeviceName === '') {
       // needs to be fixed with proper name in sync with inv
       DeviceName = 'localhost';
@@ -112,6 +115,14 @@ const createRows = (
       </div>
     );
 
+    const pathToDevice =
+      deviceBaseUrl !== 'federated'
+        ? `${deviceBaseUrl}/${DeviceUUID}`
+        : `/${DeviceUUID}`;
+    const pathToImage =
+      deviceBaseUrl !== 'federated'
+        ? `${paths.manageImages}/${ImageSetID}`
+        : `/image-builder/manage-edge-images/${ImageSetID}`;
     return {
       rowInfo: {
         deviceID: DeviceID,
@@ -138,7 +149,7 @@ const createRows = (
         {
           title: hasLinks
             ? createLink({
-                pathname: `${deviceLinkBase}/${DeviceUUID}`,
+                pathname: pathToDevice,
                 linkText: DeviceName,
                 history,
                 navigate,
@@ -149,7 +160,7 @@ const createRows = (
           title: ImageName
             ? hasLinks
               ? createLink({
-                  pathname: `${paths.manageImages}/${ImageSetID}`,
+                  pathname: pathToImage,
                   linkText: ImageName,
                   history,
                   navigate,
@@ -244,12 +255,13 @@ const DeviceTable = ({
     : null;
 
   // Create base URL path for system detail link
-  const deviceBaseUrl =
-    pathname === paths.inventory
-      ? pathname
-      : pathname === '/'
-      ? 'edge'
-      : `${pathname}/systems`;
+  const deviceBaseUrl = historyProp
+    ? 'federated'
+    : pathname === paths.inventory
+    ? pathname
+    : pathname === '/'
+    ? ''
+    : `${pathname}/systems`;
 
   const actionResolver = (rowData) => {
     const getUpdatePathname = (updateRowData) =>
