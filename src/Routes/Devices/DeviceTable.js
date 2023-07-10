@@ -10,6 +10,7 @@ import CustomEmptyState from '../../components/Empty';
 import { createLink, emptyStateNoFilters } from '../../utils';
 import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
+import { Button } from '@patternfly/react-core';
 
 const defaultFilters = [
   {
@@ -121,8 +122,9 @@ const createRows = (
         : `/${DeviceUUID}`;
     const pathToImage =
       deviceBaseUrl !== 'federated'
-        ? `${paths.manageImages}/${ImageSetID}`
-        : `/image-builder/manage-edge-images/${ImageSetID}`;
+        ? `edge${paths.manageImages}/${ImageSetID}`
+        : `insights/image-builder/manage-edge-images/${ImageSetID}`;
+
     return {
       rowInfo: {
         deviceID: DeviceID,
@@ -157,16 +159,24 @@ const createRows = (
             : DeviceName,
         },
         {
-          title: ImageName
-            ? hasLinks
-              ? createLink({
-                  pathname: pathToImage,
-                  linkText: ImageName,
-                  history,
-                  navigate,
-                })
-              : ImageName
-            : 'unavailable',
+          title: ImageName ? (
+            hasLinks ? (
+              <Button
+                variant="link"
+                target-href={pathToImage}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = `${pathToImage}`;
+                }}
+              >
+                {ImageName}
+              </Button>
+            ) : (
+              ImageName
+            )
+          ) : (
+            'unavailable'
+          ),
         },
         {
           title:
@@ -262,7 +272,6 @@ const DeviceTable = ({
     : pathname === '/'
     ? ''
     : `${pathname}/systems`;
-
   const actionResolver = (rowData) => {
     const getUpdatePathname = (updateRowData) =>
       historyProp
