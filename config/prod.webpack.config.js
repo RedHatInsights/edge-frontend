@@ -27,7 +27,10 @@ plugins.push(
           __dirname,
           '../src/Routes/ImageManagerDetail/ImageDetail.js'
         ),
-
+        './ImagesInformationCard': resolve(
+          __dirname,
+          '../src/components/ImageInformationCard.js'
+        ),
         './DeviceTable': resolve(
           __dirname,
           '../src/Routes/Devices/DeviceTable.js'
