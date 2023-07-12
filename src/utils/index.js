@@ -3,6 +3,8 @@ import { useFlag, useFlagsStatus } from '@unleash/proxy-client-react';
 import { releaseMapper, supportedReleases } from '../constants';
 import React from 'react';
 import { Button } from '@patternfly/react-core';
+import pAll from 'p-all';
+import { hosts } from '../api/index';
 
 export const nameValidator = {
   type: validatorTypes.PATTERN,
@@ -134,4 +136,27 @@ export const createLink = ({ pathname, linkText, history, navigate }) => {
       </Button>
     );
   }
+};
+
+const resolve = async (fns, limit = 2) => {
+  const results = await pAll(fns, {
+    concurrency: limit,
+  });
+  return results;
+};
+
+export const deleteSystemsById = (items, batchSize = 50) => {
+  let arr = [];
+  for (let i = 0; i < items.length; i += batchSize) {
+    let chunk;
+    chunk = items.slice(i, i + batchSize);
+    arr.push(chunk);
+  }
+
+  const results = resolve(
+    arr.map((itemArray) => () => {
+      return hosts.apiHostDeleteHostById(itemArray);
+    })
+  );
+  return results;
 };

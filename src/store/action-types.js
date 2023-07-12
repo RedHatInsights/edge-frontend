@@ -19,6 +19,8 @@ export const CREATE_NEW_IMAGE = 'CREATE_NEW_IMAGE';
 export const CREATE_NEW_IMAGE_RESET = `${CREATE_NEW_IMAGE}_RESET`;
 export const POLLING_IMAGES = 'POLLING_IMAGES';
 export const LOAD_DEVICE_TABLE = 'LOAD_DEVICE_TABLE';
+export const UPDATE_DISPLAY_NAME = 'UPDATE_DISPLAY_NAME';
+export const REMOVE_ENTITY = 'REMOVE_ENTITY';
 
 const asyncActions = flatMap(
   [
@@ -37,6 +39,8 @@ const asyncActions = flatMap(
     LOAD_IMAGE_SET_DETAIL,
     CREATE_NEW_IMAGE,
     LOAD_DEVICE_TABLE,
+    UPDATE_DISPLAY_NAME,
+    REMOVE_ENTITY,
   ],
   (a) => [a, `${a}_PENDING`, `${a}_FULFILLED`, `${a}_REJECTED`]
 );

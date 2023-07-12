@@ -238,6 +238,8 @@ const DeviceTable = ({
   setIsAddModalOpen,
   handleAddDevicesToGroup,
   handleRemoveDevicesFromGroup,
+  handleEditNameSystem,
+  handleDeleteSystem,
   handleUpdateSelected,
   hasModalSubmitted,
   setHasModalSubmitted,
@@ -290,6 +292,40 @@ const DeviceTable = ({
               {
                 ID: rowData.rowInfo.deviceID,
                 name: rowData.rowInfo.display_name,
+              },
+            ],
+            true
+          ),
+      });
+    }
+
+    if (handleEditNameSystem) {
+      actions.push({
+        title: 'Edit',
+        onClick: () =>
+          handleEditNameSystem(
+            [
+              {
+                ID: rowData.rowInfo.deviceID,
+                name: rowData.rowInfo.display_name,
+                UUID: rowData.rowInfo.id,
+              },
+            ],
+            true
+          ),
+      });
+    }
+
+    if (handleDeleteSystem) {
+      actions.push({
+        title: 'Delete',
+        onClick: () =>
+          handleDeleteSystem(
+            [
+              {
+                ID: rowData.rowInfo.deviceID,
+                display_name: rowData.rowInfo.display_name,
+                UUID: rowData.rowInfo.id,
               },
             ],
             true
@@ -450,6 +486,8 @@ DeviceTable.propTypes = {
   setHasModalSubmitted: PropTypes.func,
   handleAddDevicesToGroup: PropTypes.func,
   handleRemoveDevicesFromGroup: PropTypes.func,
+  handleEditNameSystem: PropTypes.func,
+  handleDeleteSystem: PropTypes.func,
   handleUpdateSelected: PropTypes.func,
   fetchDevices: PropTypes.func,
   isSystemsView: PropTypes.bool,
