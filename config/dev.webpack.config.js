@@ -19,8 +19,25 @@ const webpackProxy = {
     localChrome: process.env.INSIGHTS_CHROME,
   }),
   routes: {
-    ...(process.env.API_PORT && {
+    ...(process.env.API_PORT == '3000' && {
+      //To run vs local backend
       '/api/edge': { host: `http://${hostname}:${process.env.API_PORT}` },
+    }),
+    ...(process.env.API_PORT != '3000' && {
+      //Example: API_PORT=inventory:8003~http npm run start:proxy
+      ...(process.env.API_PORT?.split(',') || []).reduce((acc, curr) => {
+        const [appName = 'edge', appConfig] = (curr || '').split(':');
+        const [appPort = 8003, protocol = 'http'] = appConfig.split('~');
+        return {
+          ...acc,
+          [`/apps/${appName}`]: {
+            host: `${protocol}://localhost:${appPort}`,
+          },
+          [`/beta/apps/${appName}`]: {
+            host: `${protocol}://localhost:${appPort}`,
+          },
+        };
+      }, {}),
     }),
     ...(process.env.CONFIG_PORT && {
       [`${process.env.BETA ? '/beta' : ''}/config`]: {
