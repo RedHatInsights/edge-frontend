@@ -349,7 +349,9 @@ const DeviceTable = ({
 
   return (
     <>
-      {isSystemsView && emptyStateNoFilters(isLoading, count, search) ? (
+      {isSystemsView &&
+      emptyStateNoFilters(isLoading, count, search) &&
+      !historyProp ? (
         <CustomEmptyState
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}
