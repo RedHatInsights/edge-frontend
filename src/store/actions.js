@@ -1,4 +1,5 @@
 import {
+  ACTION_TYPES,
   LOAD_TRESHOLD,
   LOAD_DEVICES_INFO,
   LOAD_CANARIES_INFO,
@@ -31,6 +32,8 @@ import {
   fetchActiveImages,
 } from '../api/images';
 import { getInventory } from '../api/devices';
+import { hosts } from '../api';
+import { deleteSystemsById } from '../utils';
 
 export const loadThreshold = () => ({
   type: LOAD_TRESHOLD,
@@ -198,3 +201,36 @@ export const loadDeviceTable = (dispatch) => {
     payload: getInventory(),
   }).catch(() => null);
 };
+
+export const editDisplayName = (id, value, origValue) => ({
+  type: ACTION_TYPES.UPDATE_DISPLAY_NAME,
+  payload: hosts.apiHostPatchHostById([id], { display_name: value }),
+  meta: {
+    id,
+    value,
+    origValue,
+    notifications: {
+      fulfilled: {
+        variant: 'success',
+        title: `Display name for entity with ID ${id} has been changed to ${value}`,
+        dismissable: true,
+      },
+    },
+  },
+});
+
+export const deleteEntity = (systems, displayName) => ({
+  type: ACTION_TYPES.REMOVE_ENTITY,
+  payload: deleteSystemsById(systems),
+  meta: {
+    notifications: {
+      fulfilled: {
+        variant: 'success',
+        title: 'Delete operation finished',
+        description: `${displayName} has been successfully removed.`,
+        dismissable: true,
+      },
+    },
+    systems,
+  },
+});
