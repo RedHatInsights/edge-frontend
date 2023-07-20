@@ -17,7 +17,7 @@ const WizardRepositoryTable = (props) => {
   const { input } = useFieldApi(props);
   const isUpdateWizard = getState()?.values?.isUpdate;
   const imageID = getState()?.values?.imageID;
-
+  const customRepos = getState()?.values?.['third-party-repositories'];
   const [response, fetchRepos] = useApi({
     api: ({ query }) =>
       getCustomRepositories({
@@ -44,6 +44,7 @@ const WizardRepositoryTable = (props) => {
 
   useEffect(() => {
     change('validate-custom-repos', false);
+    change('third-party-repositories', customRepos);
   }, []);
   const buildRows = ({ data }) => {
     return data.map(({ ID, Name, URL, uuid }) => ({
