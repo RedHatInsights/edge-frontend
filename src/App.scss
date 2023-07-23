@@ -94,7 +94,7 @@
   margin-right: 10px;
 }
 
-a#build-register-images, a#working-with-systems { 
+a#build-register-images, a#working-with-systems {
   display:none;
 }
 
@@ -104,4 +104,8 @@ a#build-register-images, a#working-with-systems {
 
 .pf-c-description-list__group .pf-c-description-list__term {
   width: fit-content
+}
+
+.edge-stretched-button {
+  margin: 20px
 }
