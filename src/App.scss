@@ -43,7 +43,9 @@
 .force-text-black {
   color: var(--pf-c-dropdown__menu-item--Color);
 }
-
+.edge-stretched-button {
+  margin: 20px
+}
 .remove-underline {
   text-decoration: none;
 }
@@ -94,7 +96,7 @@
   margin-right: 10px;
 }
 
-a#build-register-images, a#working-with-systems { 
+a#build-register-images, a#working-with-systems {
   display:none;
 }
 
