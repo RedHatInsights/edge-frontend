@@ -209,13 +209,35 @@ const ImageTable = ({
         <CustomEmptyState
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}
-          title={'No images found'}
-          body={''}
-          primaryAction={{
-            click: openCreateWizard,
-            text: 'Create new image',
-          }}
-          secondaryActions={[]}
+          title={'Create an OSTree image'}
+          body={[
+            'Image builder is a tool to compose customized RHEL (rpm-ostree) images optimized for Edge. ',
+            'With OSTree, you can manage the system software by referencing a central image repository. ' +
+              'Images contain a complete operating system ready to be remotely installed at scale. ' +
+              'Updates to images are tracked through commits and enable secure updates that only ' +
+              'address changes and keep the operating system unchanged. Image updates are quick, ' +
+              'and rollbacks are easy.',
+          ]}
+          secondaryActions={[
+            {
+              type: 'link',
+              title: 'Learn more about OSTree.',
+              link: 'https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/composing_installing_and_managing_rhel_for_edge_images/index#introducing-rhel-for-edge-images_composing-installing-managing-rhel-for-edge-images',
+            },
+            {
+              variant: 'primary',
+              className: 'edge-stretched-button',
+              onClick: () => openCreateWizard(),
+              type: 'button',
+              title: 'Create image.',
+            },
+            {
+              type: 'link',
+              iconPosition: 'left',
+              title: 'Image builder for OSTree documentation',
+              link: 'https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/composing_installing_and_managing_rhel_for_edge_images/index#introducing-rhel-for-edge-images_composing-installing-managing-rhel-for-edge-images',
+            },
+          ]}
         />
       ) : (
         <GeneralTable
