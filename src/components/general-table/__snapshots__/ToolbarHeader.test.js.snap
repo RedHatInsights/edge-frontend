@@ -26,7 +26,6 @@ exports[`Toolbar Header should render correctly 1`] = `
           <div
             class="pf-c-text-input-group"
             id="textInput1"
-            name="textInput1"
           >
             <div
               class="pf-c-text-input-group__main pf-m-icon"
@@ -54,6 +53,7 @@ exports[`Toolbar Header should render correctly 1`] = `
                 <input
                   aria-label="Select input for test 1"
                   class="pf-c-text-input-group__text-input"
+                  name="textInput1"
                   placeholder="Filter by test 1"
                   type="search"
                   value="test-label"
