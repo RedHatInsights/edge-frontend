@@ -12,7 +12,7 @@ const AuthModal = () => {
       aria-label="auth-modal"
       header={
         <h2 className="pf-u-pr-xl pf-u-pl-xl pf-u-font-size-2xl pf-u-text-align-center pf-u-font-weight-bold">
-          Edge management requires a valid Smart Management subscription
+          Edge management requires a valid Red Hat Satellite subscription
         </h2>
       }
       footer={
@@ -67,7 +67,7 @@ const AuthModal = () => {
       <p className="pf-u-pr-xl pf-u-pl-xl pf-u-text-align-center">
         Securely manage and scale deployments at the edge with zero-touch
         provisioning, system health visibility, and quick security remediations
-        and more with a Red Hat Smart Management subscription
+        and more with a Red Hat Satellite subscription
       </p>
     </Modal>
   );
