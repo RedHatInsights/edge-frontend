@@ -29,6 +29,7 @@ const Images = ({
   historyProp,
   locationProp,
   navigateProp,
+  docLinkProp,
   notificationProp,
   showHeaderProp,
 }) => {
@@ -113,6 +114,7 @@ const Images = ({
           isLoading={isLoading}
           hasError={hasError}
           fetchImageSets={fetchImageSets}
+          docLinkProp={docLinkProp}
           openCreateWizard={openCreateWizard}
           openUpdateWizard={openUpdateWizard}
           hasModalSubmitted={hasModalSubmitted}
@@ -189,5 +191,6 @@ Images.propTypes = {
   navigateProp: PropTypes.func,
   notificationProp: PropTypes.object,
   showHeaderProp: PropTypes.bool,
+  docLinkProp: PropTypes.string,
 };
 export default Images;
