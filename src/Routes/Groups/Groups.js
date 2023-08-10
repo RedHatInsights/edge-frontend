@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex } from '@patternfly/react-core';
 import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
+import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import GroupTable from './GroupTable';
 import Empty from '../../components/Empty';
 import { getGroups } from '../../api/groups';
@@ -20,6 +21,7 @@ const Groups = () => {
     api: getGroups,
     tableReload: true,
   });
+  const chrome = useChrome();
   const { data, isLoading, hasError } = response;
 
   const [modalState, setModalState] = useState({ id: null, name: '' });
@@ -42,6 +44,10 @@ const Groups = () => {
     await fetchGroups();
     setHasModalSubmitted(true);
   };
+
+  useEffect(() => {
+    chrome?.updateDocumentTitle?.('Groups - Inventory | Edge management');
+  }, [chrome]);
 
   return (
     <>

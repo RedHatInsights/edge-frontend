@@ -1,8 +1,9 @@
-import React, { useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
+import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import DeviceTable from './DeviceTable';
 import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
@@ -30,6 +31,7 @@ const DeleteModal = (props) => (
 );
 
 const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
+  const chrome = useChrome();
   const history = historyProp
     ? historyProp()
     : useHistory
@@ -159,6 +161,10 @@ const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
     dispatch(deleteEntity(removeSystems, displayName));
     setIsDeleteModalOpen(false);
   }
+
+  useEffect(() => {
+    chrome?.updateDocumentTitle?.('Systems - Inventory | Edge management');
+  }, [chrome]);
 
   return (
     <>

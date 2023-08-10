@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PageHeader, {
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
+import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 
 const RepositoryHeader = () => {
+  const chrome = useChrome();
+
+  useEffect(() => {
+    chrome?.updateDocumentTitle?.(
+      'Custom Repositories - Manage Images | Edge management'
+    );
+  }, [chrome]);
+
   return (
     <PageHeader>
       <>
