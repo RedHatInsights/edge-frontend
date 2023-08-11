@@ -134,6 +134,8 @@ const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
   if (showHeaderProp !== undefined && showHeader) {
     classNameMain =
       'edge-devices pf-l-page__main-section pf-c-page__main-section';
+  } else if (!showHeader) {
+    classNameMain = 'pf-c-toolbar';
   }
 
   function handleOnSubmitEditName(value) {
