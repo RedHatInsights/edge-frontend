@@ -30,7 +30,12 @@ const DeleteModal = (props) => (
   <AsyncComponent appName="inventory" module="./DeleteModal" {...props} />
 );
 
-const Inventory = ({ historyProp, navigateProp, locationProp, showHeaderProp }) => {
+const Inventory = ({
+  historyProp,
+  navigateProp,
+  locationProp,
+  showHeaderProp,
+}) => {
   const chrome = useChrome();
   const history = historyProp
     ? historyProp()

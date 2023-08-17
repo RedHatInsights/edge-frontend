@@ -38,7 +38,7 @@ import {
   useParams,
   useHistory,
   useLocation,
-  useRouteMatch,
+  useNavigate,
 } from 'react-router-dom';
 import apiWithToast from '../../utils/apiWithToast';
 import { createLink } from '../../utils';
@@ -139,6 +139,7 @@ const UpdateSystemMain = ({
   isLoading,
   hasError,
   historyProp,
+  navigateProp,
   locationProp,
   routeMatchProp,
 }) => {
@@ -152,8 +153,13 @@ const UpdateSystemMain = ({
     : useHistory
     ? useHistory()
     : null;
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
   const { pathname, search } = locationProp ? locationProp() : useLocation();
-  const match = routeMatchProp ? routeMatchProp() : useRouteMatch();
+  const match = routeMatchProp ? routeMatchProp() : null; //useRouteMatch();
   const setUpdateEvent = (value) => {
     setSelectedVersion(value.cells[0]);
     setSelectedCommitID(value);
@@ -204,8 +210,11 @@ const UpdateSystemMain = ({
     // Construct destination path
     const pathLen = destPath.split('/').length;
     const dest = pathname.split('/').slice(0, pathLen).join('/');
-
-    history.push({ pathname: dest });
+    if (navigateProp) {
+      navigate({ ...dest });
+    } else {
+      history.push({ pathname: dest });
+    }
   };
 
   const buildRow = (image) => {
@@ -256,6 +265,7 @@ const UpdateSystemMain = ({
             <>
               <GeneralTable
                 historyProp={historyProp}
+                navigateProp={navigateProp}
                 locationProp={locationProp}
                 className="pf-u-mt-sm"
                 apiFilterSort={true}
@@ -323,6 +333,7 @@ const UpdateSystemMain = ({
 UpdateSystemMain.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   historyProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   locationProp: PropTypes.func,
   routeMatchProp: PropTypes.func,
   fetchDevices: PropTypes.func,
@@ -333,6 +344,7 @@ UpdateSystemMain.propTypes = {
 const UpdateSystem = ({
   inventoryId,
   historyProp,
+  navigateProp,
   locationProp,
   routeMatchProp,
   paramsProp,
@@ -430,7 +442,9 @@ const UpdateSystem = ({
           fetchDevices={fetchDevices}
           isLoading={isLoading}
           hasError={hasError}
-          historyProp={historyProp}
+          navigateProp={navigateProp}
+          histor
+          yProp={historyProp}
           locationProp={locationProp}
           routeMatchProp={routeMatchProp}
         />
@@ -441,6 +455,7 @@ const UpdateSystem = ({
 
 UpdateSystem.propTypes = {
   historyProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   locationProp: PropTypes.func,
   routeMatchProp: PropTypes.func,
   paramsProp: PropTypes.func,
