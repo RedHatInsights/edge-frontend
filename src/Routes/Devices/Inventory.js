@@ -30,7 +30,7 @@ const DeleteModal = (props) => (
   <AsyncComponent appName="inventory" module="./DeleteModal" {...props} />
 );
 
-const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
+const Inventory = ({ historyProp, navigateProp, locationProp, showHeaderProp }) => {
   const chrome = useChrome();
   const history = historyProp
     ? historyProp()
@@ -179,6 +179,7 @@ const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
       <section className={classNameMain}>
         <DeviceTable
           historyProp={historyProp}
+          navigateProp={navigateProp}
           locationProp={locationProp}
           isSystemsView={true}
           data={data?.data?.devices}
@@ -294,6 +295,7 @@ const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
 
 Inventory.propTypes = {
   historyProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   locationProp: PropTypes.func,
   showHeaderProp: PropTypes.bool,
 };

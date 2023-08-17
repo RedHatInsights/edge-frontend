@@ -407,6 +407,7 @@ const DeviceTable = ({
       ) : (
         <GeneralTable
           historyProp={historyProp}
+          navigateProp={navigateProp}
           locationProp={locationProp}
           apiFilterSort={true}
           isUseApi={true}
