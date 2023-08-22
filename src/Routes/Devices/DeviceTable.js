@@ -278,8 +278,6 @@ const DeviceTable = ({
     const getUpdatePathname = (updateRowData) =>
       navigateProp
         ? `/insights/inventory/${updateRowData.rowInfo.id}/update`
-        : historyProp
-        ? `/insights/inventory/${updateRowData.rowInfo.id}/update`
         : `/inventory/${updateRowData.rowInfo.id}/update`;
     const actions = [];
     if (isLoading) return actions;
