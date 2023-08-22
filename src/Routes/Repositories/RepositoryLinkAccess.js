@@ -37,7 +37,7 @@ const RepositoryLinkAccess = () => (
         variant="primary"
         component="a"
         target="_blank"
-        href={`https://${window.location.host}/settings/content`}
+        href={`https://${window.location.host}/insights/content`}
       >
         Go to Repositories
       </Button>
