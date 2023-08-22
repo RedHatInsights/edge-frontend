@@ -276,8 +276,8 @@ const DeviceTable = ({
     : `${pathname}/systems`;
   const actionResolver = (rowData) => {
     const getUpdatePathname = (updateRowData) =>
-      historyProp
-        ? `/${updateRowData.rowInfo.id}/update`
+      navigateProp
+        ? `/insights/inventory/${updateRowData.rowInfo.id}/update`
         : `/inventory/${updateRowData.rowInfo.id}/update`;
     const actions = [];
     if (isLoading) return actions;
@@ -355,10 +355,15 @@ const DeviceTable = ({
       actions.push({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
-          history.push({
-            pathname: getUpdatePathname(rowData),
-            // pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
-          });
+          if (navigateProp) {
+            const pathProp = getUpdatePathname(rowData);
+            navigate(pathProp, { replace: true });
+          } else {
+            history.push({
+              pathname: getUpdatePathname(rowData),
+              // pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
+            });
+          }
         },
       });
     }
@@ -407,6 +412,7 @@ const DeviceTable = ({
       ) : (
         <GeneralTable
           historyProp={historyProp}
+          navigateProp={navigateProp}
           locationProp={locationProp}
           apiFilterSort={true}
           isUseApi={true}
