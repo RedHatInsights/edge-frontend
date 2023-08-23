@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AddModal from './modals/AddModal';
 import EditModal from './modals/EditModal';
 import RemoveModal from './modals/RemoveModal';
@@ -11,11 +11,20 @@ import { emptyStateNoFilters } from '../../utils';
 import EmptyState from '../../components/Empty';
 import RepositoryLinkAccess from './RepositoryLinkAccess';
 import { useFeatureFlags } from '../../utils';
+import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 
 const Repository = () => {
+  const chrome = useChrome();
+
   const customReposFleatureFlag = useFeatureFlags(
     'edge-management.custom_repos_ui'
   );
+
+  useEffect(() => {
+    chrome?.updateDocumentTitle?.(
+      'Custom Repositories - Manage Images | Edge management'
+    );
+  }, [chrome]);
 
   const { search } = useLocation();
   const [response, fetchRepos] = useApi({
