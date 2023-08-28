@@ -12,6 +12,8 @@ import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
 import { Button } from '@patternfly/react-core';
 
+const insightsInventoryManageEdgeUrlName = 'manage-edge-inventory';
+
 const defaultFilters = [
   {
     label: 'Name',
@@ -246,6 +248,7 @@ const DeviceTable = ({
   fetchDevices,
   isSystemsView = false,
   isAddSystemsView = false,
+  urlName,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -388,6 +391,29 @@ const DeviceTable = ({
     (rowData.rowInfo?.deviceStatus === 'updating' ||
       rowData.rowInfo?.deviceStatus === 'upToDate');
 
+  // some filters and columns titles/labels have different values when shown in insights inventory
+  let tableFilters = [];
+  let tableColumnNames = [];
+  if (urlName === insightsInventoryManageEdgeUrlName) {
+    for (let ind = 0; ind < defaultFilters.length; ind++) {
+      let filterElement = defaultFilters[ind];
+      if (filterElement['label'] === 'Status') {
+        filterElement['label'] = 'Image status';
+      }
+      tableFilters.push(filterElement);
+    }
+    for (let ind = 0; ind < columnNames.length; ind++) {
+      let columnElement = columnNames[ind];
+      if (columnElement['title'] === 'Status') {
+        columnElement['title'] = 'Image status';
+      }
+      tableColumnNames.push(columnElement);
+    }
+  } else {
+    tableFilters = defaultFilters;
+    tableColumnNames = columnNames;
+  }
+
   return (
     <>
       {isSystemsView &&
@@ -416,14 +442,14 @@ const DeviceTable = ({
           locationProp={locationProp}
           apiFilterSort={true}
           isUseApi={true}
-          filters={defaultFilters}
+          filters={tableFilters}
           loadTableData={fetchDevices}
           tableData={{
             count: count,
             isLoading: isLoading,
             hasError: hasError,
           }}
-          columnNames={columnNames}
+          columnNames={tableColumnNames}
           rows={createRows(
             data || [],
             isAddSystemsView || isSystemsView,
@@ -500,6 +526,7 @@ DeviceTable.propTypes = {
   fetchDevices: PropTypes.func,
   isSystemsView: PropTypes.bool,
   isAddSystemsView: PropTypes.bool,
+  urlName: PropTypes.string,
 };
 
 export default DeviceTable;
