@@ -37,6 +37,7 @@ const Inventory = ({
   locationProp,
   showHeaderProp,
   notificationProp,
+  urlName,
 }) => {
   const chrome = useChrome();
   const history = historyProp
@@ -271,6 +272,7 @@ const Inventory = ({
           hasModalSubmitted={hasModalSubmitted}
           setHasModalSubmitted={setHasModalSubmitted}
           fetchDevices={fetchDevices}
+          urlName={urlName}
         />
       </section>
       {updateModal.isOpen && (
@@ -358,6 +360,7 @@ Inventory.propTypes = {
   locationProp: PropTypes.func,
   showHeaderProp: PropTypes.bool,
   notificationProp: PropTypes.object,
+  urlName: PropTypes.string,
 };
 
 export default Inventory;
