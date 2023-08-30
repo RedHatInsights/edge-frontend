@@ -121,7 +121,7 @@ const createRows = (
     const pathToDevice =
       deviceBaseUrl !== 'federated'
         ? `${deviceBaseUrl}/${DeviceUUID}`
-        : `/${DeviceUUID}`;
+        : `/insights/inventory/${DeviceUUID}`;
     const pathToImage =
       deviceBaseUrl !== 'federated'
         ? `edge${paths.manageImages}/${ImageSetID}`
@@ -270,7 +270,7 @@ const DeviceTable = ({
     : null;
 
   // Create base URL path for system detail link
-  const deviceBaseUrl = historyProp
+  const deviceBaseUrl = navigateProp
     ? 'federated'
     : pathname === paths.inventory
     ? pathname
