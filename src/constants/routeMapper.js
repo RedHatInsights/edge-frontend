@@ -16,4 +16,5 @@ export const routes = {
   manageImagesDetailVersion: '/manage-images/:imageId/versions/:imageVersionId',
   repositories: '/repositories',
   learningResources: '/learning-resources',
+  contentSourcesRepositories: '/preview/insights/content',
 };

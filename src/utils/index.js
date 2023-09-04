@@ -114,28 +114,18 @@ export const getReleases = (forcedRelease, inculdedReleases) =>
       label: releaseLabel,
     }));
 
-export const createLink = ({ pathname, linkText, history, navigate }) => {
-  if (history) {
-    return (
-      <Button
-        variant="link"
-        target-href={pathname}
-        onClick={() => history.push(pathname)}
-      >
-        {linkText}
-      </Button>
-    );
-  } else if (navigate) {
-    return (
-      <Button
-        variant="link"
-        target-href={pathname}
-        onClick={() => navigate(pathname)}
-      >
-        {linkText}
-      </Button>
-    );
-  }
+export const createLink = ({ pathname, linkText, target }) => {
+  return (
+    <Button
+      component="a"
+      target={target}
+      variant="link"
+      target-href={pathname}
+      href={pathname}
+    >
+      {linkText}
+    </Button>
+  );
 };
 
 const resolve = async (fns, limit = 2) => {
