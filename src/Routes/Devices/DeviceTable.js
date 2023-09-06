@@ -117,11 +117,10 @@ const createRows = (
         </Tooltip>
       </div>
     );
-
     const pathToDevice =
       deviceBaseUrl !== 'federated'
-        ? `${deviceBaseUrl}/${DeviceUUID}`
-        : `/insights/inventory/${DeviceUUID}`;
+        ? `edge${paths.inventory}/${DeviceUUID}`
+        : `insights/inventory/${DeviceUUID}`;
     const pathToImage =
       deviceBaseUrl !== 'federated'
         ? `edge${paths.manageImages}/${ImageSetID}`
@@ -155,7 +154,6 @@ const createRows = (
             ? createLink({
                 pathname: pathToDevice,
                 linkText: DeviceName,
-                history,
                 navigate,
               })
             : DeviceName,
