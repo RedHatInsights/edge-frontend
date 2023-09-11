@@ -89,12 +89,12 @@ describe('ImageVersionsTab', () => {
       screen
         .getByRole('cell', { name: '1' })
         .firstChild.getAttribute('target-href')
-    ).toEqual('/manage-images/101/versions/100/details');
+    ).toEqual('edge/manage-images/101/versions/100/details');
     expect(
       screen
         .getByRole('cell', { name: '2' })
         .firstChild.getAttribute('target-href')
-    ).toEqual('/manage-images/101/versions/200/details');
+    ).toEqual('edge/manage-images/101/versions/200/details');
     expect(
       screen.getAllByRole('cell', { name: 'RHEL for Edge Installer (.iso)' })
     ).toHaveLength(2);

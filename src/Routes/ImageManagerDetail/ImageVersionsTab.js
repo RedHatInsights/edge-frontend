@@ -69,7 +69,7 @@ const createRows = (
   navigate
 ) => {
   const baseURL = getBaseURLFromPrefixAndName(
-    paths.manageImages,
+    `edge${paths.manageImages}`,
     pathPrefix,
     urlName
   );
