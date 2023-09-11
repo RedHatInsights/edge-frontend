@@ -9,8 +9,10 @@ export const routes = {
   fleetManagementSystemDetailUpdate:
     '/fleet-management/:groupId/systems/:deviceId/update',
   inventory: '/inventory',
+  insightsInventory: '/insights/inventory?activeTab=manage-edge-inventory',
   inventoryDetail: '/inventory/:deviceId',
   inventoryDetailUpdate: '/inventory/:deviceId/update',
+  insightsInventoryDetailUpdate: '/insights/inventory/:deviceId/update',
   manageImages: '/manage-images',
   manageImagesDetail: '/manage-images/:imageId',
   manageImagesDetailVersion: '/manage-images/:imageId/versions/:imageVersionId',

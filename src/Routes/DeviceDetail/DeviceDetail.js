@@ -168,7 +168,7 @@ const DeviceDetail = () => {
                 !imageData?.ImageInfo?.UpdatesAvailable?.length > 0,
               onClick: () => {
                 history.push({
-                  pathname: `${pathname}update`,
+                  pathname: `${pathname}/update`,
                   search: '?from_details=true',
                 });
               },

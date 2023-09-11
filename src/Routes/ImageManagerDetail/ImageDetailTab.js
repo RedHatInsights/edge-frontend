@@ -30,7 +30,7 @@ const ImageDetailTab = ({
 }) => {
   const [data, setData] = useState({});
   const baseURL = getBaseURLFromPrefixAndName(
-    paths.manageImages,
+    `edge${paths.manageImages}`,
     pathPrefix,
     urlName
   );
