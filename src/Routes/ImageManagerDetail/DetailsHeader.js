@@ -88,7 +88,7 @@ const DetailsHead = ({
   const actionsLabel = 'Actions for image set details view';
   const dropdownId = 'image-set-details-dropdown';
   const baseURL = getBaseURLFromPrefixAndName(
-    paths.manageImages,
+    `edge${paths.manageImages}`,
     pathPrefix,
     urlName
   );
