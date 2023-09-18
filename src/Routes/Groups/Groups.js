@@ -13,9 +13,10 @@ import RenameGroupModal from './RenameGroupModal';
 import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
 import { useLocation } from 'react-router-dom';
-import { emptyStateNoFilters } from '../../utils';
+import { emptyStateNoFilters, useFeatureFlags } from '../../utils';
 
 const Groups = () => {
+  const createGroupsEnabled = useFeatureFlags('edgeParity.create-group');
   const { search } = useLocation();
   const [response, fetchGroups] = useApi({
     api: getGroups,
@@ -29,7 +30,7 @@ const Groups = () => {
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
-
+ 
   const handleRenameModal = (id, name) => {
     setModalState({ id, name });
     setIsRenameModalOpen(true);
@@ -70,6 +71,7 @@ const Groups = () => {
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
+            {createGroupsEnabled}?
             <Empty
               icon="plus"
               title="Create a system group"
@@ -85,7 +87,7 @@ const Groups = () => {
                   link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/working_with_systems_in_the_edge_management_application/index',
                 },
               ]}
-            />
+            /> : ''
           </Flex>
         )}
       </section>

@@ -4,6 +4,7 @@ import GeneralTable from '../../components/general-table/GeneralTable';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { routes as paths } from '../../constants/routeMapper';
 import { Bullseye, Spinner, Tooltip } from '@patternfly/react-core';
+import { useFeatureFlags } from '../../utils';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(
@@ -40,6 +41,9 @@ const GroupTable = ({
   setHasModalSubmitted,
   fetchGroups,
 }) => {
+
+  const createGroupsEnabled = useFeatureFlags('edgeParity.create-group');
+  
   const history = useHistory();
   const { pathname } = useLocation();
 
@@ -163,12 +167,12 @@ const GroupTable = ({
           title: 'No matching groups found',
           body: 'To continue, edit your filter settings and try again',
         }}
-        toolbarButtons={[
-          {
+        toolbarButtons={createGroupsEnabled  ?[
+            {
             title: 'Create group',
             click: handleCreateModal,
           },
-        ]}
+        ]:[]}
         hasModalSubmitted={hasModalSubmitted}
         setHasModalSubmitted={setHasModalSubmitted}
       />
