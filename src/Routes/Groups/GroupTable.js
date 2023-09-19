@@ -41,9 +41,8 @@ const GroupTable = ({
   setHasModalSubmitted,
   fetchGroups,
 }) => {
-
   const createGroupsEnabled = useFeatureFlags('edgeParity.create-group');
-  
+
   const history = useHistory();
   const { pathname } = useLocation();
 
@@ -167,12 +166,16 @@ const GroupTable = ({
           title: 'No matching groups found',
           body: 'To continue, edit your filter settings and try again',
         }}
-        toolbarButtons={createGroupsEnabled  ?[
-            {
-            title: 'Create group',
-            click: handleCreateModal,
-          },
-        ]:[]}
+        toolbarButtons={
+          createGroupsEnabled
+            ? [
+                {
+                  title: 'Create group',
+                  click: handleCreateModal,
+                },
+              ]
+            : []
+        }
         hasModalSubmitted={hasModalSubmitted}
         setHasModalSubmitted={setHasModalSubmitted}
       />

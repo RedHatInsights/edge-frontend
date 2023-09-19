@@ -30,7 +30,7 @@ const Groups = () => {
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
- 
+
   const handleRenameModal = (id, name) => {
     setModalState({ id, name });
     setIsRenameModalOpen(true);
@@ -87,7 +87,8 @@ const Groups = () => {
                   link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/working_with_systems_in_the_edge_management_application/index',
                 },
               ]}
-            /> : ''
+            />
+            {}: {}
           </Flex>
         )}
       </section>
