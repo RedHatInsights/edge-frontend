@@ -16,7 +16,9 @@ import { useLocation } from 'react-router-dom';
 import { emptyStateNoFilters, useFeatureFlags } from '../../utils';
 
 const Groups = () => {
-  const createGroupsEnabled = useFeatureFlags('edgeParity.create-group');
+  const hideCreateGroupsEnabled = useFeatureFlags(
+    'edge-management.hide-create-group'
+  );
   const { search } = useLocation();
   const [response, fetchGroups] = useApi({
     api: getGroups,
@@ -71,7 +73,7 @@ const Groups = () => {
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
-            {createGroupsEnabled}?
+            {hideCreateGroupsEnabled}?{}:
             <Empty
               icon="plus"
               title="Create a system group"
@@ -88,7 +90,7 @@ const Groups = () => {
                 },
               ]}
             />
-            {}: {}
+            {}
           </Flex>
         )}
       </section>

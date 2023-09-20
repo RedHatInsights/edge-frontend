@@ -41,7 +41,9 @@ const GroupTable = ({
   setHasModalSubmitted,
   fetchGroups,
 }) => {
-  const createGroupsEnabled = useFeatureFlags('edgeParity.create-group');
+  const hideCreateGroupsEnabled = useFeatureFlags(
+    'edge-management.hide-create-group'
+  );
 
   const history = useHistory();
   const { pathname } = useLocation();
@@ -167,14 +169,14 @@ const GroupTable = ({
           body: 'To continue, edit your filter settings and try again',
         }}
         toolbarButtons={
-          createGroupsEnabled
-            ? [
+          hideCreateGroupsEnabled
+            ? []
+            : [
                 {
                   title: 'Create group',
                   click: handleCreateModal,
                 },
               ]
-            : []
         }
         hasModalSubmitted={hasModalSubmitted}
         setHasModalSubmitted={setHasModalSubmitted}
