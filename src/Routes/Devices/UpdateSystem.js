@@ -382,7 +382,7 @@ const UpdateSystem = ({
     ? useParams()
     : null;
   const currentId = inventoryId ? inventoryId : deviceId;
-  const currentInventoryPath = historyProp ? '/edge' : paths.inventory;
+  const currentInventoryPath = window.location.pathname.indexOf('edge')>0 ? 'edge' : paths.inventory;
   const [{ data, isLoading, hasError }, fetchDevices] = useApi({
     api: getDeviceUpdates,
     id: currentId,
@@ -395,6 +395,7 @@ const UpdateSystem = ({
         ?.Name
     : null;
 
+
   return (
     <>
       <PageHeader className="pf-m-light">
@@ -403,14 +404,14 @@ const UpdateSystem = ({
             <BreadcrumbItem>
               {createLink({
                 pathname:
-                  currentInventoryPath === '/edge' ? '/' : currentInventoryPath,
+                  currentInventoryPath === 'edge' ? '/' : currentInventoryPath,
                 linkText: 'Systems',
                 history,
               })}
             </BreadcrumbItem>
             <BreadcrumbItem>
               {createLink({
-                pathname: `${currentInventoryPath}/${currentId}/`,
+                pathname: currentInventoryPath === 'edge' ? `${currentInventoryPath}/${currentId}/`: `insights${currentInventoryPath}/${currentId}`,
                 linkText: device?.DeviceName || <Skeleton width="100px" />,
                 history,
               })}
