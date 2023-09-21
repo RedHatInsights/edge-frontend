@@ -382,7 +382,8 @@ const UpdateSystem = ({
     ? useParams()
     : null;
   const currentId = inventoryId ? inventoryId : deviceId;
-  const currentInventoryPath = window.location.pathname.indexOf('edge')>0 ? 'edge' : paths.inventory;
+  const currentInventoryPath =
+    window.location.pathname.indexOf('edge') > 0 ? 'edge' : paths.inventory;
   const [{ data, isLoading, hasError }, fetchDevices] = useApi({
     api: getDeviceUpdates,
     id: currentId,
@@ -394,7 +395,6 @@ const UpdateSystem = ({
     ? device?.DevicesGroups?.find((group) => group.ID.toString() === groupId)
         ?.Name
     : null;
-
 
   return (
     <>
@@ -411,7 +411,10 @@ const UpdateSystem = ({
             </BreadcrumbItem>
             <BreadcrumbItem>
               {createLink({
-                pathname: currentInventoryPath === 'edge' ? `${currentInventoryPath}/${currentId}/`: `insights${currentInventoryPath}/${currentId}`,
+                pathname:
+                  currentInventoryPath === 'edge'
+                    ? `${currentInventoryPath}/${currentId}/`
+                    : `insights${currentInventoryPath}/${currentId}`,
                 linkText: device?.DeviceName || <Skeleton width="100px" />,
                 history,
               })}
