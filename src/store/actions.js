@@ -204,7 +204,7 @@ export const loadDeviceTable = (dispatch) => {
 
 export const editDisplayName = (id, value, origValue) => ({
   type: ACTION_TYPES.UPDATE_DISPLAY_NAME,
-  payload: hosts.apiHostPatchById([id], { display_name: value }),
+  payload: hosts.apiHostPatchHostById([id], { display_name: value }),
   meta: {
     id,
     value,

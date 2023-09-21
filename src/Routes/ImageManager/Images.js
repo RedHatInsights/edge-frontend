@@ -1,9 +1,10 @@
-import React, { Fragment, useState, Suspense } from 'react';
+import React, { Fragment, useEffect, useState, Suspense } from 'react';
 import { Spinner, Bullseye } from '@patternfly/react-core';
 import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
+import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import ImageSetsTable from './ImageSetsTable';
 import { stateToUrlSearch } from '../../utils';
@@ -29,9 +30,11 @@ const Images = ({
   historyProp,
   locationProp,
   navigateProp,
+  docLinkProp,
   notificationProp,
   showHeaderProp,
 }) => {
+  const chrome = useChrome();
   const history = historyProp
     ? historyProp()
     : useHistory
@@ -94,6 +97,10 @@ const Images = ({
     setHasModalSubmitted(true);
   };
 
+  useEffect(() => {
+    chrome?.updateDocumentTitle?.('Images - Manage Images | Edge management');
+  }, [chrome]);
+
   return (
     <Fragment>
       {showHeader && (
@@ -113,6 +120,7 @@ const Images = ({
           isLoading={isLoading}
           hasError={hasError}
           fetchImageSets={fetchImageSets}
+          docLinkProp={docLinkProp}
           openCreateWizard={openCreateWizard}
           openUpdateWizard={openUpdateWizard}
           hasModalSubmitted={hasModalSubmitted}
@@ -189,5 +197,6 @@ Images.propTypes = {
   navigateProp: PropTypes.func,
   notificationProp: PropTypes.object,
   showHeaderProp: PropTypes.bool,
+  docLinkProp: PropTypes.string,
 };
 export default Images;

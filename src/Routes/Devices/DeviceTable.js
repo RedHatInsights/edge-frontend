@@ -12,6 +12,8 @@ import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
 import { Button } from '@patternfly/react-core';
 
+const insightsInventoryManageEdgeUrlName = 'manage-edge-inventory';
+
 const defaultFilters = [
   {
     label: 'Name',
@@ -115,11 +117,10 @@ const createRows = (
         </Tooltip>
       </div>
     );
-
     const pathToDevice =
       deviceBaseUrl !== 'federated'
-        ? `${deviceBaseUrl}/${DeviceUUID}`
-        : `/${DeviceUUID}`;
+        ? `edge${paths.inventory}/${DeviceUUID}`
+        : `insights/inventory/${DeviceUUID}`;
     const pathToImage =
       deviceBaseUrl !== 'federated'
         ? `edge${paths.manageImages}/${ImageSetID}`
@@ -153,7 +154,6 @@ const createRows = (
             ? createLink({
                 pathname: pathToDevice,
                 linkText: DeviceName,
-                history,
                 navigate,
               })
             : DeviceName,
@@ -246,6 +246,7 @@ const DeviceTable = ({
   fetchDevices,
   isSystemsView = false,
   isAddSystemsView = false,
+  urlName,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -267,7 +268,7 @@ const DeviceTable = ({
     : null;
 
   // Create base URL path for system detail link
-  const deviceBaseUrl = historyProp
+  const deviceBaseUrl = navigateProp
     ? 'federated'
     : pathname === paths.inventory
     ? pathname
@@ -276,8 +277,8 @@ const DeviceTable = ({
     : `${pathname}/systems`;
   const actionResolver = (rowData) => {
     const getUpdatePathname = (updateRowData) =>
-      historyProp
-        ? `/${updateRowData.rowInfo.id}/update`
+      navigateProp
+        ? `/insights/inventory/${updateRowData.rowInfo.id}/update`
         : `/inventory/${updateRowData.rowInfo.id}/update`;
     const actions = [];
     if (isLoading) return actions;
@@ -355,10 +356,15 @@ const DeviceTable = ({
       actions.push({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
-          history.push({
-            pathname: getUpdatePathname(rowData),
-            // pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
-          });
+          if (navigateProp) {
+            const pathProp = getUpdatePathname(rowData);
+            navigate(pathProp, { replace: true });
+          } else {
+            history.push({
+              pathname: getUpdatePathname(rowData),
+              // pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
+            });
+          }
         },
       });
     }
@@ -383,9 +389,34 @@ const DeviceTable = ({
     (rowData.rowInfo?.deviceStatus === 'updating' ||
       rowData.rowInfo?.deviceStatus === 'upToDate');
 
+  // some filters and columns titles/labels have different values when shown in insights inventory
+  let tableFilters = [];
+  let tableColumnNames = [];
+  if (urlName === insightsInventoryManageEdgeUrlName) {
+    for (let ind = 0; ind < defaultFilters.length; ind++) {
+      let filterElement = defaultFilters[ind];
+      if (filterElement['label'] === 'Status') {
+        filterElement['label'] = 'Image status';
+      }
+      tableFilters.push(filterElement);
+    }
+    for (let ind = 0; ind < columnNames.length; ind++) {
+      let columnElement = columnNames[ind];
+      if (columnElement['title'] === 'Status') {
+        columnElement['title'] = 'Image status';
+      }
+      tableColumnNames.push(columnElement);
+    }
+  } else {
+    tableFilters = defaultFilters;
+    tableColumnNames = columnNames;
+  }
+
   return (
     <>
-      {isSystemsView && emptyStateNoFilters(isLoading, count, search) ? (
+      {isSystemsView &&
+      emptyStateNoFilters(isLoading, count, search) &&
+      !historyProp ? (
         <CustomEmptyState
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}
@@ -405,17 +436,18 @@ const DeviceTable = ({
       ) : (
         <GeneralTable
           historyProp={historyProp}
+          navigateProp={navigateProp}
           locationProp={locationProp}
           apiFilterSort={true}
           isUseApi={true}
-          filters={defaultFilters}
+          filters={tableFilters}
           loadTableData={fetchDevices}
           tableData={{
             count: count,
             isLoading: isLoading,
             hasError: hasError,
           }}
-          columnNames={columnNames}
+          columnNames={tableColumnNames}
           rows={createRows(
             data || [],
             isAddSystemsView || isSystemsView,
@@ -492,6 +524,7 @@ DeviceTable.propTypes = {
   fetchDevices: PropTypes.func,
   isSystemsView: PropTypes.bool,
   isAddSystemsView: PropTypes.bool,
+  urlName: PropTypes.string,
 };
 
 export default DeviceTable;

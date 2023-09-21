@@ -140,6 +140,7 @@ const ImageTable = ({
   data,
   count,
   isLoading,
+  docLinkProp,
   hasError,
   fetchImageSets,
   openCreateWizard,
@@ -147,6 +148,10 @@ const ImageTable = ({
   hasModalSubmitted,
   setHasModalSubmitted,
 }) => {
+  const docLink =
+    docLinkProp === undefined
+      ? 'https://access.redhat.com/documentation/en-us/edge_management/2022/html/create_rhel_for_edge_images_and_configure_automated_management/index'
+      : docLinkProp;
   const { search } = locationProp
     ? locationProp()
     : useLocation
@@ -198,11 +203,10 @@ const ImageTable = ({
     rowData.rowInfo?.imageStatus === 'BUILDING';
 
   const baseURL = getBaseURLFromPrefixAndName(
-    paths.manageImages,
+    `edge${paths.manageImages}`,
     pathPrefix,
     urlName
   );
-
   return (
     <>
       {emptyStateNoFilters(isLoading, count, search) ? (
@@ -210,21 +214,32 @@ const ImageTable = ({
           data-testid="general-table-empty-state-no-data"
           icon={'plus'}
           title={'Create an OSTree image'}
-          body={
-            'Use the image builder tool to compose ' +
-            'customized RHEL (rpm-ostree) images optimized for Edge.' +
-            ' Then, you can remotely install, and securely manage and' +
-            ' scale deployments of the images on Edge servers.'
-          }
-          primaryAction={{
-            click: openCreateWizard,
-            text: 'Create new image',
-          }}
+          body={[
+            'Image builder is a tool to compose customized RHEL (rpm-ostree) images optimized for Edge. ',
+            'With OSTree, you can manage the system software by referencing a central image repository. ' +
+              'Images contain a complete operating system ready to be remotely installed at scale. ' +
+              'Updates to images are tracked through commits and enable secure updates that only ' +
+              'address changes and keep the operating system unchanged. Image updates are quick, ' +
+              'and rollbacks are easy.',
+          ]}
           secondaryActions={[
             {
               type: 'link',
-              title: 'RHEL for Edge image documentation',
-              link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html/create_rhel_for_edge_images_and_configure_automated_management/index',
+              title: 'Learn more about OSTree.',
+              link: 'https://ostreedev.github.io/ostree/',
+            },
+            {
+              variant: 'primary',
+              className: 'edge-stretched-button',
+              onClick: () => openCreateWizard(),
+              type: 'button',
+              title: 'Create image.',
+            },
+            {
+              type: 'link',
+              iconPosition: 'left',
+              title: 'Image builder for OSTree documentation',
+              link: docLink,
             },
           ]}
         />
@@ -278,6 +293,7 @@ ImageTable.propTypes = {
   }),
   hasModalSubmitted: PropTypes.bool,
   setHasModalSubmitted: PropTypes.func,
+  docLinkProp: PropTypes.string,
 };
 
 export default ImageTable;

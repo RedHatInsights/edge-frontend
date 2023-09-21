@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex } from '@patternfly/react-core';
 import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
+import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import GroupTable from './GroupTable';
 import Empty from '../../components/Empty';
 import { getGroups } from '../../api/groups';
@@ -12,14 +13,18 @@ import RenameGroupModal from './RenameGroupModal';
 import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
 import { useLocation } from 'react-router-dom';
-import { emptyStateNoFilters } from '../../utils';
+import { emptyStateNoFilters, useFeatureFlags } from '../../utils';
 
 const Groups = () => {
+  const hideCreateGroupsEnabled = useFeatureFlags(
+    'edge-management.hide-create-group'
+  );
   const { search } = useLocation();
   const [response, fetchGroups] = useApi({
     api: getGroups,
     tableReload: true,
   });
+  const chrome = useChrome();
   const { data, isLoading, hasError } = response;
 
   const [modalState, setModalState] = useState({ id: null, name: '' });
@@ -43,6 +48,10 @@ const Groups = () => {
     setHasModalSubmitted(true);
   };
 
+  useEffect(() => {
+    chrome?.updateDocumentTitle?.('Groups - Inventory | Edge management');
+  }, [chrome]);
+
   return (
     <>
       <PageHeader className="pf-m-light">
@@ -64,6 +73,7 @@ const Groups = () => {
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
+            {hideCreateGroupsEnabled}?{}:
             <Empty
               icon="plus"
               title="Create a system group"
@@ -80,6 +90,7 @@ const Groups = () => {
                 },
               ]}
             />
+            {}
           </Flex>
         )}
       </section>
