@@ -13,9 +13,12 @@ import RenameGroupModal from './RenameGroupModal';
 import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
 import { useLocation } from 'react-router-dom';
-import { emptyStateNoFilters } from '../../utils';
+import { emptyStateNoFilters, useFeatureFlags } from '../../utils';
 
 const Groups = () => {
+  const hideCreateGroupsEnabled = useFeatureFlags(
+    'edge-management.hide-create-group'
+  );
   const { search } = useLocation();
   const [response, fetchGroups] = useApi({
     api: getGroups,
@@ -70,6 +73,7 @@ const Groups = () => {
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
+            {hideCreateGroupsEnabled}?{}:
             <Empty
               icon="plus"
               title="Create a system group"
@@ -86,6 +90,7 @@ const Groups = () => {
                 },
               ]}
             />
+            {}
           </Flex>
         )}
       </section>
