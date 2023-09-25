@@ -18,6 +18,7 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import BuildModalReview from '../../components/BuildModalReview';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from '../../constants';
+import apiWithToast from '../../utils/apiWithToast';
 
 const getImageData = (imageId) =>
   getImageById({ id: imageId }).then((imageSetId) =>
@@ -30,7 +31,12 @@ const getImageData = (imageId) =>
     })
   );
 
-const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
+const UpdateDeviceModal = ({
+  updateModal,
+  setUpdateModal,
+  refreshTable,
+  notificationProp,
+}) => {
   const [imageData, setImageData] = useState(null);
   const dispatch = useDispatch();
   const isMultiple = updateModal.deviceData.length > 1;
@@ -53,21 +59,30 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
           setImageData(data.Data.images[0])
         );
   }, []);
+  const statusMessages = {
+    onInfo: {
+      title: 'Updating system',
+      description: isMultiple
+        ? ` ${deviceName.length} systems were added to the queue.`
+        : ` ${deviceName} was added to the queue.`,
+    },
+    onError: {
+      title: 'Error',
+      description: `Failed to update the selected system(s)`,
+    },
+  };
 
   const handleUpdateModal = async () => {
     try {
-      await updateSystem({
-        DevicesUUID: deviceId,
-      });
-      dispatch({
-        ...addNotification({
-          variant: 'info',
-          title: 'Updating system',
-          description: isMultiple
-            ? ` ${deviceName.length} systems were added to the queue.`
-            : ` ${deviceName} was added to the queue.`,
-        }),
-      });
+      await apiWithToast(
+        dispatch,
+        () =>
+          updateSystem({
+            DevicesUUID: deviceId,
+          }),
+        statusMessages,
+        notificationProp
+      );
     } catch (err) {
       dispatch({
         ...addNotification({
@@ -201,6 +216,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
           schema={updateSchema}
           onSubmit={handleUpdateModal}
           reloadData={refreshTable}
+          notificationProp={notificationProp}
         />
       ) : (
         <Backdrop>
@@ -223,6 +239,7 @@ UpdateDeviceModal.propTypes = {
     imageSetId: PropTypes.number,
   }).isRequired,
   setUpdateModal: PropTypes.func.isRequired,
+  notificationProp: PropTypes.object,
 };
 
 export default UpdateDeviceModal;
