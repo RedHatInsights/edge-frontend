@@ -4,12 +4,12 @@ import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { Text, TextVariants } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import EmptyState from '../Empty';
-import { routes as paths } from '../../constants/routeMapper';
 import { getCustomRepositories } from '../../api/repositories';
 import useApi from '../../hooks/useApi';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
-import { truncateString } from '../../utils';
+import { truncateString, useFeatureFlags } from '../../utils';
+import { routes as paths } from '../../constants/routeMapper';
 const filters = [{ label: 'Name', type: 'text' }];
 
 const WizardRepositoryTable = (props) => {
@@ -17,7 +17,7 @@ const WizardRepositoryTable = (props) => {
   const { input } = useFieldApi(props);
   const isUpdateWizard = getState()?.values?.isUpdate;
   const imageID = getState()?.values?.imageID;
-
+  const customRepos = getState()?.values?.['third-party-repositories'];
   const [response, fetchRepos] = useApi({
     api: ({ query }) =>
       getCustomRepositories({
@@ -44,6 +44,7 @@ const WizardRepositoryTable = (props) => {
 
   useEffect(() => {
     change('validate-custom-repos', false);
+    change('third-party-repositories', customRepos);
   }, []);
   const buildRows = ({ data }) => {
     return data.map(({ ID, Name, URL, uuid }) => ({
@@ -70,16 +71,22 @@ const WizardRepositoryTable = (props) => {
     }));
   };
   const locationProp = props?.label?.props?.locationProp;
+  const customReposFleatureFlag = useFeatureFlags(
+    'edge-management.custom_repos_ui'
+  );
   return (
     <>
       {!isLoading && !data?.count > 0 ? (
         <EmptyState
+          target="_blank"
           icon="repository"
           title="No custom repositories available"
           body="Add custom repositories to build RHEL for Edge images with additional packages."
           primaryAction={{
             text: 'Custom repositories',
-            href: paths.repositories,
+            href: customReposFleatureFlag
+              ? paths.contentSourcesRepositories
+              : paths.repositories,
           }}
         />
       ) : (

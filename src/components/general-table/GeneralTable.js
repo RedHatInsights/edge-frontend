@@ -135,6 +135,11 @@ const GeneralTable = ({
       query.update_available = 'true';
     }
 
+    if (query && query['image status'] === 'updateAvailable') {
+      delete query['image status'];
+      query.update_available = 'true';
+    }
+
     if (isUseApi) {
       loadTableData(query);
       return;

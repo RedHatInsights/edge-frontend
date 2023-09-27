@@ -1,8 +1,9 @@
-import React, { useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import {
   PageHeader,
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
+import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import DeviceTable from './DeviceTable';
 import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
@@ -15,6 +16,7 @@ import PropTypes from 'prop-types';
 import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
 import { editDisplayName, deleteEntity } from '../../store/actions';
 import { useDispatch } from 'react-redux';
+import apiWithToast from '../../utils/apiWithToast';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 
 const UpdateDeviceModal = React.lazy(() =>
@@ -29,7 +31,15 @@ const DeleteModal = (props) => (
   <AsyncComponent appName="inventory" module="./DeleteModal" {...props} />
 );
 
-const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
+const Inventory = ({
+  historyProp,
+  navigateProp,
+  locationProp,
+  showHeaderProp,
+  notificationProp,
+  urlName,
+}) => {
+  const chrome = useChrome();
   const history = historyProp
     ? historyProp()
     : useHistory
@@ -132,12 +142,29 @@ const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
   if (showHeaderProp !== undefined && showHeader) {
     classNameMain =
       'edge-devices pf-l-page__main-section pf-c-page__main-section';
+  } else if (!showHeader) {
+    classNameMain = 'pf-c-toolbar';
   }
 
   function handleOnSubmitEditName(value) {
     const uuid = isRowSelected ? deviceId[0].UUID : checkedDeviceIds[0].UUID;
     const name = isRowSelected ? deviceId[0].name : checkedDeviceIds[0].name;
-    dispatch(editDisplayName(uuid, value, name));
+    const statusMessages = {
+      onSuccess: {
+        title: `Display name for entity with ID ${uuid} has been changed to ${value}`,
+      },
+      onError: { title: 'Error', description: 'Failed to update device name' },
+    };
+    if (notificationProp) {
+      apiWithToast(
+        dispatch,
+        () => editDisplayName(uuid, value, name),
+        statusMessages,
+        notificationProp
+      );
+    } else {
+      dispatch(editDisplayName(uuid, value, name));
+    }
     setIsEditNameModalOpen(false);
   }
 
@@ -146,19 +173,59 @@ const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
 
     let displayName = systemInstance.display_name;
     let removeSystems = [systemInstance.UUID];
-
-    dispatch(
-      addNotification({
-        id: 'remove-initiated',
-        variant: 'warning',
+    const statusInitialMessages = {
+      onWarning: {
         title: 'Delete operation initiated',
         description: `Removal of ${displayName} started.`,
-        dismissable: false,
-      })
-    );
-    dispatch(deleteEntity(removeSystems, displayName));
+      },
+      onError: {
+        title: 'Error',
+        description: 'Failed to initial delete device',
+      },
+    };
+    const statusMessages = {
+      onSuccess: {
+        title: 'Delete operation finished',
+        description: `${displayName} has been successfully removed.`,
+      },
+      onError: { title: 'Error', description: 'Failed to delete device' },
+    };
+
+    if (notificationProp) {
+      apiWithToast(
+        dispatch,
+        () =>
+          addNotification({
+            id: 'remove-initiated',
+            variant: 'warning',
+          }),
+        statusInitialMessages,
+        notificationProp
+      );
+      apiWithToast(
+        dispatch,
+        () => deleteEntity(removeSystems, displayName),
+        statusMessages,
+        notificationProp
+      );
+    } else {
+      dispatch(
+        addNotification({
+          id: 'remove-initiated',
+          variant: 'warning',
+          title: 'Delete operation initiated',
+          description: `Removal of ${displayName} started.`,
+          dismissable: false,
+        })
+      );
+      dispatch(deleteEntity(removeSystems, displayName));
+    }
     setIsDeleteModalOpen(false);
   }
+
+  useEffect(() => {
+    chrome?.updateDocumentTitle?.('Systems - Inventory | Edge management');
+  }, [chrome]);
 
   return (
     <>
@@ -171,6 +238,7 @@ const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
       <section className={classNameMain}>
         <DeviceTable
           historyProp={historyProp}
+          navigateProp={navigateProp}
           locationProp={locationProp}
           isSystemsView={true}
           data={data?.data?.devices}
@@ -204,6 +272,7 @@ const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
           hasModalSubmitted={hasModalSubmitted}
           setHasModalSubmitted={setHasModalSubmitted}
           fetchDevices={fetchDevices}
+          urlName={urlName}
         />
       </section>
       {updateModal.isOpen && (
@@ -227,6 +296,7 @@ const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
             }}
             setUpdateModal={setUpdateModal}
             updateModal={updateModal}
+            notificationProp={notificationProp}
             refreshTable={reloadData}
           />
         </Suspense>
@@ -286,8 +356,11 @@ const Inventory = ({ historyProp, locationProp, showHeaderProp }) => {
 
 Inventory.propTypes = {
   historyProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   locationProp: PropTypes.func,
   showHeaderProp: PropTypes.bool,
+  notificationProp: PropTypes.object,
+  urlName: PropTypes.string,
 };
 
 export default Inventory;

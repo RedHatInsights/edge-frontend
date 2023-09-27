@@ -6,6 +6,8 @@ import {
   EmptyStateIcon,
   EmptyStateBody,
   EmptyStateSecondaryActions,
+  Stack,
+  StackItem,
 } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
@@ -19,20 +21,31 @@ const Empty = ({
   body,
   primaryAction,
   secondaryActions,
+  target,
 }) => (
   <EmptyState variant="large" style={{ backgroundColor: bgColor || '' }}>
     {icon && <EmptyStateIcon icon={iconMapper[icon]} />}
     <Title headingLevel="h4" size="lg">
       {title}
     </Title>
-    <EmptyStateBody>{body}</EmptyStateBody>
+    <EmptyStateBody>
+      {Array.isArray(body)
+        ? body.map((item, index) => (
+            <div key={index}>
+              {item}
+              <br />
+              <br />
+            </div>
+          ))
+        : body}
+    </EmptyStateBody>
     {primaryAction && (
       <>
         {primaryAction.href ? (
           createLink({
             pathname: `${primaryAction.href}`,
             linkText: primaryAction.text,
-            history,
+            target: target,
           })
         ) : (
           <Button variant="primary" onClick={primaryAction.click}>
@@ -42,19 +55,26 @@ const Empty = ({
       </>
     )}
     <EmptyStateSecondaryActions>
-      {secondaryActions.map(({ type, title, link, onClick }, index) => (
-        <Button
-          component={type === 'link' ? 'a' : 'button'}
-          href={link}
-          variant="link"
-          target={type === 'link' ? '_blank' : ''}
-          key={index}
-          onClick={onClick}
-        >
-          {title}
-          {link && <ExternalLinkAltIcon className="pf-u-ml-sm" />}
-        </Button>
-      ))}
+      <Stack>
+        {secondaryActions.map(
+          ({ type, title, link, onClick, variant, className }, index) => (
+            <StackItem key={index}>
+              <Button
+                component={type === 'link' ? 'a' : 'button'}
+                className={className}
+                href={link}
+                variant={variant || 'link'}
+                target={type === 'link' ? '_blank' : ''}
+                key={index}
+                onClick={onClick}
+              >
+                {title}
+                {link && <ExternalLinkAltIcon className="pf-u-ml-sm" />}
+              </Button>
+            </StackItem>
+          )
+        )}
+      </Stack>
     </EmptyStateSecondaryActions>
   </EmptyState>
 );
@@ -66,6 +86,7 @@ Empty.propTypes = {
   body: PropTypes.string,
   primaryAction: PropTypes.object,
   secondaryActions: PropTypes.array,
+  target: PropTypes.string,
 };
 
 Empty.defaultProps = {
