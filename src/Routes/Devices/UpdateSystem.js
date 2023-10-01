@@ -415,7 +415,7 @@ const UpdateSystem = ({
               {createLink({
                 pathname:
                   currentInventoryPath === 'edge'
-                    ? `${currentInventoryPath}/${currentId}/`
+                    ? `${currentInventoryPath}/inventory/${currentId}/`
                     : `insights${currentInventoryPath}/${currentId}`,
                 linkText: device?.DeviceName || <Skeleton width="100px" />,
                 history,
