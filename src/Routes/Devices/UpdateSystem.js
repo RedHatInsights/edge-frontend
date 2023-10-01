@@ -404,7 +404,9 @@ const UpdateSystem = ({
             <BreadcrumbItem>
               {createLink({
                 pathname:
-                  currentInventoryPath === 'edge' ? '/' : currentInventoryPath,
+                  currentInventoryPath === 'edge'
+                    ? `${currentInventoryPath}/inventory`
+                    : `insights${currentInventoryPath}/manage-edge-inventory`,
                 linkText: 'Systems',
                 history,
               })}
