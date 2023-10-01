@@ -7,7 +7,7 @@ import { DateFormat } from '@redhat-cloud-services/frontend-components/DateForma
 import { cellWidth } from '@patternfly/react-table';
 import { Tooltip } from '@patternfly/react-core';
 import CustomEmptyState from '../../components/Empty';
-import { createLink, emptyStateNoFilters } from '../../utils';
+import { createLink, emptyStateNoFilters, useFeatureFlags } from '../../utils';
 import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
 import { Button } from '@patternfly/react-core';
@@ -31,38 +31,40 @@ const defaultFilters = [
   },
 ];
 
-const columnNames = [
-  {
-    title: 'Name',
-    type: 'name',
-    sort: true,
-    columnTransforms: [cellWidth(30)],
-  },
-  {
-    title: 'Image',
-    type: 'image',
-    sort: false,
-    columnTransforms: [cellWidth(20)],
-  },
-  {
-    title: 'Groups',
-    type: 'groups',
-    sort: false,
-    columnTransforms: [cellWidth(15)],
-  },
-  {
-    title: 'Last seen',
-    type: 'last_seen',
-    sort: true,
-    columnTransforms: [cellWidth(15)],
-  },
-  {
-    title: 'Status',
-    type: 'status',
-    sort: false,
-    columnTransforms: [cellWidth(25)],
-  },
-];
+const GetColumnNames = (inventoryGroupsEnabled) => {
+  return [
+    {
+      title: 'Name',
+      type: 'name',
+      sort: true,
+      columnTransforms: [cellWidth(30)],
+    },
+    {
+      title: 'Image',
+      type: 'image',
+      sort: false,
+      columnTransforms: [cellWidth(20)],
+    },
+    {
+      title: inventoryGroupsEnabled ? 'Group' : 'Groups',
+      type: 'groups',
+      sort: false,
+      columnTransforms: [cellWidth(15)],
+    },
+    {
+      title: 'Last seen',
+      type: 'last_seen',
+      sort: true,
+      columnTransforms: [cellWidth(15)],
+    },
+    {
+      title: 'Status',
+      type: 'status',
+      sort: false,
+      columnTransforms: [cellWidth(25)],
+    },
+  ];
+};
 
 const createRows = (
   devices,
@@ -70,7 +72,8 @@ const createRows = (
   fetchDevices,
   deviceBaseUrl,
   history,
-  navigate
+  navigate,
+  inventoryGroupsEnabled
 ) => {
   return devices?.map((device) => {
     let { DeviceName, DeviceGroups } = device;
@@ -84,6 +87,8 @@ const createRows = (
       // ImageID,
       Status,
       DispatcherStatus,
+      GroupName,
+      GroupUUID,
     } = device;
     const deviceStatus = getDeviceStatus(
       Status,
@@ -96,6 +101,14 @@ const createRows = (
     if (DeviceName === '') {
       // needs to be fixed with proper name in sync with inv
       DeviceName = 'localhost';
+    }
+
+    if (inventoryGroupsEnabled) {
+      if (GroupName && GroupUUID) {
+        DeviceGroups = [{ ID: GroupUUID, Name: GroupName }];
+      } else {
+        DeviceGroups = [];
+      }
     }
 
     if (DeviceGroups === null) {
@@ -392,6 +405,12 @@ const DeviceTable = ({
   // some filters and columns titles/labels have different values when shown in insights inventory
   let tableFilters = [];
   let tableColumnNames = [];
+
+  const inventoryGroupsEnabled = useFeatureFlags(
+    'edgeParity.inventory-groups-enabled'
+  );
+  const columnNames = GetColumnNames(inventoryGroupsEnabled);
+
   if (urlName === insightsInventoryManageEdgeUrlName) {
     for (let ind = 0; ind < defaultFilters.length; ind++) {
       let filterElement = defaultFilters[ind];
@@ -454,7 +473,8 @@ const DeviceTable = ({
             fetchDevices,
             deviceBaseUrl,
             history,
-            navigate
+            navigate,
+            inventoryGroupsEnabled
           )}
           actionResolver={actionResolver}
           defaultSort={{ index: 3, direction: 'desc' }}
