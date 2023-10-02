@@ -6,6 +6,8 @@ import { render } from '@testing-library/react';
 import { init, RegistryContext } from '../../store';
 import logger from 'redux-logger';
 
+jest.mock('../../utils');
+
 describe('Groups', () => {
   it('should render correctly', () => {
     const registry = init(logger);
