@@ -143,6 +143,7 @@ const UpdateSystemMain = ({
   navigateProp,
   locationProp,
   currentId,
+  notificationProp,
 }) => {
   const device = data?.Device;
   const [selectedVersion, setSelectedVersion] = useState(null);
@@ -185,7 +186,8 @@ const UpdateSystemMain = ({
           CommitID: selectedCommitID.commitID,
           DevicesUUID: [selectedCommitID.deviceUUID],
         }),
-      statusMessages
+      statusMessages,
+      notificationProp
     );
 
     handleClose();
@@ -219,8 +221,8 @@ const UpdateSystemMain = ({
     }
     if (pathname === matchInsightsInventoryDetailUpdate?.url) {
       destPath = search.includes('from_details=true')
-        ? matchInventoryDetail.url
-        : paths.inventory;
+        ? `/insights${matchInventoryDetail.url}`
+        : paths.insightsInventory;
     }
     if (pathname === paths.fleetManagementSystemDetailUpdate) {
       destPath = search.includes('from_details=true')
@@ -232,7 +234,7 @@ const UpdateSystemMain = ({
     const pathLen = destPath.split('/').length;
     const dest = pathname.split('/').slice(0, pathLen).join('/');
     if (navigateProp) {
-      navigate(paths.insightsInventory);
+      navigate({ pathname: dest });
     } else {
       history.push({ pathname: dest });
     }
@@ -361,6 +363,7 @@ UpdateSystemMain.propTypes = {
   isLoading: PropTypes.bool,
   hasError: PropTypes.bool,
   currentId: PropTypes.string,
+  notificationProp: PropTypes.object,
 };
 
 const UpdateSystem = ({
@@ -370,6 +373,7 @@ const UpdateSystem = ({
   locationProp,
   routeMatchProp,
   paramsProp,
+  notificationProp,
 }) => {
   const history = historyProp
     ? historyProp()
@@ -476,6 +480,7 @@ const UpdateSystem = ({
           yProp={historyProp}
           locationProp={locationProp}
           routeMatchProp={routeMatchProp}
+          notificationProp={notificationProp}
         />
       </section>
     </>
@@ -489,6 +494,7 @@ UpdateSystem.propTypes = {
   routeMatchProp: PropTypes.func,
   paramsProp: PropTypes.func,
   inventoryId: PropTypes.string,
+  notificationProp: PropTypes.object,
 };
 
 export default UpdateSystem;
