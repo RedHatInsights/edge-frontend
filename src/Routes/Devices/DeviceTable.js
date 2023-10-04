@@ -11,6 +11,7 @@ import { createLink, emptyStateNoFilters, useFeatureFlags } from '../../utils';
 import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
 import { Button } from '@patternfly/react-core';
+import { FEATURE_PARITY_INVENTORY_GROUPS } from '../../constants/features';
 
 const insightsInventoryManageEdgeUrlName = 'manage-edge-inventory';
 
@@ -280,6 +281,10 @@ const DeviceTable = ({
     ? useLocation()
     : null;
 
+  const inventoryGroupsEnabled = useFeatureFlags(
+    FEATURE_PARITY_INVENTORY_GROUPS
+  );
+
   // Create base URL path for system detail link
   const deviceBaseUrl = navigateProp
     ? 'federated'
@@ -305,12 +310,16 @@ const DeviceTable = ({
     if (handleAddDevicesToGroup && groupActionsEnabled) {
       actions.push({
         title: 'Add to group',
+        isDisabled: inventoryGroupsEnabled
+          ? rowData?.rowInfo?.deviceGroups.length !== 0 // disable the action item if the system has a group assigned
+          : false,
         onClick: () =>
           handleAddDevicesToGroup(
             [
               {
                 ID: rowData.rowInfo.deviceID,
                 name: rowData.rowInfo.display_name,
+                UUID: rowData.rowInfo.id,
               },
             ],
             true
@@ -363,6 +372,7 @@ const DeviceTable = ({
                 ID: rowData.rowInfo.deviceID,
                 name: rowData.rowInfo.display_name,
                 deviceGroups: rowData.rowInfo.deviceGroups,
+                UUID: rowData.rowInfo.id,
               },
             ],
             true
@@ -411,9 +421,6 @@ const DeviceTable = ({
   let tableFilters = [];
   let tableColumnNames = [];
 
-  const inventoryGroupsEnabled = useFeatureFlags(
-    'edgeParity.inventory-groups-enabled'
-  );
   const columnNames = GetColumnNames(inventoryGroupsEnabled);
 
   if (urlName === insightsInventoryManageEdgeUrlName) {

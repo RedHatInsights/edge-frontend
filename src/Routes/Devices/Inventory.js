@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import apiWithToast from '../../utils/apiWithToast';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { useFeatureFlags } from '../../utils';
+import { FEATURE_PARITY_INVENTORY_GROUPS } from '../../constants/features';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(/* webpackChunkName: "UpdateDeviceModal" */ './UpdateDeviceModal')
@@ -73,6 +74,10 @@ const Inventory = ({
     deviceData: null,
     imageData: null,
   });
+
+  const inventoryGroupsEnabled = useFeatureFlags(
+    FEATURE_PARITY_INVENTORY_GROUPS
+  );
 
   const handleAddDevicesToGroup = (ids, isRow) => {
     setIsAddDeviceModalOpen(true);
@@ -263,13 +268,19 @@ const Inventory = ({
             groupActionsEnabled
               ? [
                   {
-                    isDisabled: !(checkedDeviceIds.length > 0),
+                    isDisabled: inventoryGroupsEnabled
+                      ? !(checkedDeviceIds.length > 0) ||
+                        checkedDeviceIds.filter(
+                          (device) => device.deviceGroups?.length > 0
+                        ).length > 0 // The action menu item is disabled if one of the systems items belongs to a group
+                      : !(checkedDeviceIds.length > 0),
                     title: 'Add to group',
                     onClick: () =>
                       handleAddDevicesToGroup(
                         checkedDeviceIds.map((device) => ({
                           ID: device.deviceID,
                           name: device.display_name,
+                          UUID: device.id,
                         })),
                         false
                       ),

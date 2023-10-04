@@ -8,15 +8,23 @@ import {
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useApi from '../hooks/useApi';
-import { getGroups } from '../api/groups';
+import { getGroups, getInventoryGroups } from '../api/groups';
 import { debounce } from 'lodash';
+import { useFeatureFlags } from '../utils';
+import { FEATURE_PARITY_INVENTORY_GROUPS } from '../constants/features';
 
 const SelectInput = (props) => {
   useFieldApi(props);
+  const inventoryGroupsEnabled = useFeatureFlags(
+    FEATURE_PARITY_INVENTORY_GROUPS
+  );
+
   const { change } = useFormApi();
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(null);
-  const [{ data, isLoading }, fetchGroups] = useApi({ api: getGroups });
+  const [{ data, isLoading }, fetchGroups] = useApi({
+    api: inventoryGroupsEnabled ? getInventoryGroups : getGroups,
+  });
   const [searchTerm, setSearchTerm] = useState('');
 
   const onToggle = (isOpen) => {
@@ -51,8 +59,8 @@ const SelectInput = (props) => {
     }
   };
 
-  const options = data?.data || [];
-  const totalCount = data?.count || 0;
+  const options = (inventoryGroupsEnabled ? data?.results : data?.data) || [];
+  const totalCount = (inventoryGroupsEnabled ? data?.total : data?.count) || 0;
 
   return (
     <>
@@ -84,16 +92,15 @@ const SelectInput = (props) => {
       >
         {isLoading
           ? []
-          : options?.map(({ DeviceGroup }) => (
+          : options?.map(({ id, name, DeviceGroup }) => (
+              // note: the schema is different when fetching groups from inventory or from edge-api
               <SelectOption
-                key={DeviceGroup.ID}
+                key={inventoryGroupsEnabled ? id : DeviceGroup.ID}
                 value={{
-                  toString: () => DeviceGroup.Name,
-                  groupId: DeviceGroup.ID,
+                  toString: () =>
+                    inventoryGroupsEnabled ? name : DeviceGroup.Name,
+                  groupId: inventoryGroupsEnabled ? id : DeviceGroup.ID,
                 }}
-                {...(DeviceGroup.description && {
-                  description: DeviceGroup.description,
-                })}
               />
             ))}
       </Select>
