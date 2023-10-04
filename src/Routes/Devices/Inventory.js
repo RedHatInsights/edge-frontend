@@ -265,7 +265,7 @@ const Inventory = ({
           selectedItems={setCheckedDeviceIds}
           selectedItemsUpdateable={canBeUpdated()}
           kebabItems={
-            groupActionsEnabled
+            !groupActionsEnabled
               ? [
                   {
                     isDisabled: inventoryGroupsEnabled

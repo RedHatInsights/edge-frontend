@@ -307,7 +307,7 @@ const DeviceTable = ({
     if (isLoading) return actions;
     if (!rowData?.rowInfo?.id) return actions;
 
-    if (handleAddDevicesToGroup && groupActionsEnabled) {
+    if (handleAddDevicesToGroup && !groupActionsEnabled) {
       actions.push({
         title: 'Add to group',
         isDisabled: inventoryGroupsEnabled
@@ -361,7 +361,7 @@ const DeviceTable = ({
       });
     }
 
-    if (handleRemoveDevicesFromGroup && groupActionsEnabled) {
+    if (handleRemoveDevicesFromGroup && !groupActionsEnabled) {
       actions.push({
         title: 'Remove from group',
         isDisabled: rowData?.rowInfo?.deviceGroups.length === 0,
