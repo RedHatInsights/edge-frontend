@@ -288,6 +288,11 @@ const DeviceTable = ({
     : pathname === '/'
     ? ''
     : `${pathname}/systems`;
+
+  const groupActionsEnabled = useFeatureFlags(
+    'edge-management.hide_groups_actions'
+  );
+
   const actionResolver = (rowData) => {
     const getUpdatePathname = (updateRowData) =>
       navigateProp
@@ -297,7 +302,7 @@ const DeviceTable = ({
     if (isLoading) return actions;
     if (!rowData?.rowInfo?.id) return actions;
 
-    if (handleAddDevicesToGroup) {
+    if (handleAddDevicesToGroup && groupActionsEnabled) {
       actions.push({
         title: 'Add to group',
         onClick: () =>
@@ -347,7 +352,7 @@ const DeviceTable = ({
       });
     }
 
-    if (handleRemoveDevicesFromGroup) {
+    if (handleRemoveDevicesFromGroup && groupActionsEnabled) {
       actions.push({
         title: 'Remove from group',
         isDisabled: rowData?.rowInfo?.deviceGroups.length === 0,
