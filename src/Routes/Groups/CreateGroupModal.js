@@ -5,12 +5,16 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import Modal from '../../components/Modal';
 import {
   createGroup,
+  createInventoryGroup,
   addDevicesToGroup,
   validateGroupName,
+  validateInventoryGroupName,
+  addDevicesToInventoryGroup,
 } from '../../api/groups';
-import { nameValidator } from '../../utils';
+import { nameValidator, useFeatureFlags } from '../../utils';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
+import { FEATURE_PARITY_INVENTORY_GROUPS } from '../../constants/features';
 
 const asyncGroupNameValidation = async (value = '') => {
   // do not fire validation request for empty name
@@ -24,8 +28,24 @@ const asyncGroupNameValidation = async (value = '') => {
   }
 };
 
+const asyncInventoryGroupNameValidation = async (value = '') => {
+  // do not fire validation request for empty name
+  if (value.length === 0) {
+    return undefined;
+  }
+  const resp = await validateInventoryGroupName(value);
+  if (resp.results.length > 0 && resp.results[0].name === value) {
+    // async validator has to throw error, not return it
+    throw 'Group name already exists';
+  }
+};
+
 const validatorMapper = {
   groupName: () => asyncGroupNameValidation,
+};
+
+const inventoryValidatorMapper = {
+  groupName: () => asyncInventoryGroupNameValidation,
 };
 
 const createGroupSchema = {
@@ -57,6 +77,10 @@ const CreateGroupModal = ({
 }) => {
   const dispatch = useDispatch();
 
+  const inventoryGroupsEnabled = useFeatureFlags(
+    FEATURE_PARITY_INVENTORY_GROUPS
+  );
+
   const handleCreateGroup = (values) => {
     const statusMessages = {
       onSuccess: {
@@ -65,12 +89,17 @@ const CreateGroupModal = ({
       },
       onError: { title: 'Error', description: 'Failed to create group' },
     };
-    return apiWithToast(dispatch, () => createGroup(values), statusMessages);
+
+    let createGroupFunc;
+    if (inventoryGroupsEnabled) {
+      createGroupFunc = () => createInventoryGroup(values);
+    } else {
+      createGroupFunc = () => createGroup(values);
+    }
+    return apiWithToast(dispatch, createGroupFunc, statusMessages);
   };
 
   const handleAddDevicesToNewGroup = async (values) => {
-    const { ID } = await handleCreateGroup(values);
-
     const statusMessages = {
       onSuccess: {
         title: 'Success',
@@ -79,11 +108,15 @@ const CreateGroupModal = ({
       onError: { title: 'Error', description: 'Failed to add system to group' },
     };
 
-    apiWithToast(
-      dispatch,
-      () => addDevicesToGroup(parseInt(ID), deviceIds),
-      statusMessages
-    );
+    let addDevicesToGroupFunc;
+    if (inventoryGroupsEnabled) {
+      const { id } = await handleCreateGroup(values);
+      addDevicesToGroupFunc = () => addDevicesToInventoryGroup(id, deviceIds);
+    } else {
+      const { ID } = await handleCreateGroup(values);
+      addDevicesToGroupFunc = () => addDevicesToGroup(parseInt(ID), deviceIds);
+    }
+    apiWithToast(dispatch, addDevicesToGroupFunc, statusMessages);
   };
 
   return (
@@ -95,7 +128,9 @@ const CreateGroupModal = ({
       schema={createGroupSchema}
       onSubmit={deviceIds ? handleAddDevicesToNewGroup : handleCreateGroup}
       reloadData={reloadData}
-      validatorMapper={validatorMapper}
+      validatorMapper={
+        inventoryGroupsEnabled ? inventoryValidatorMapper : validatorMapper
+      }
     />
   );
 };

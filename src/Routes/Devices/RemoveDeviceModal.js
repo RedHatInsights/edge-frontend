@@ -5,14 +5,23 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import Modal from '../../components/Modal';
 import SearchInput from '../../components/SearchInput';
 import apiWithToast from '../../utils/apiWithToast';
-import { removeDeviceFromGroupById } from '../../api/groups';
+import {
+  removeDeviceFromGroupById,
+  removeDevicesFromInventoryGroup,
+} from '../../api/groups';
 import { useDispatch } from 'react-redux';
 import { Text } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
+import { useFeatureFlags } from '../../utils';
+import { FEATURE_PARITY_INVENTORY_GROUPS } from '../../constants/features';
 
 const removeDescription = (deviceInfo) => {
   const { deviceGroups } = deviceInfo[0];
+
+  const inventoryGroupsEnabled = useFeatureFlags(
+    FEATURE_PARITY_INVENTORY_GROUPS
+  );
 
   const systemText =
     deviceInfo.length > 1 ? `${deviceInfo.length} systems` : deviceInfo[0].name;
@@ -20,6 +29,16 @@ const removeDescription = (deviceInfo) => {
     deviceGroups.length === 1
       ? deviceGroups[0].Name
       : `${deviceGroups.length} groups`;
+
+  if (inventoryGroupsEnabled) {
+    return (
+      <Text>
+        <strong>{systemText} </strong> will no longer be part of{' '}
+        <strong>{groupText}</strong> and its configuration will be impacted.
+      </Text>
+    );
+  }
+
   if (deviceGroups.length > 1) {
     return (
       <Text>
@@ -71,6 +90,11 @@ const RemoveDeviceModal = ({
   deviceInfo,
 }) => {
   const dispatch = useDispatch();
+
+  const inventoryGroupsEnabled = useFeatureFlags(
+    FEATURE_PARITY_INVENTORY_GROUPS
+  );
+
   const { deviceGroups } = deviceInfo[0];
 
   const handleRemoveDevices = (values) => {
@@ -91,11 +115,16 @@ const RemoveDeviceModal = ({
       },
     };
 
-    apiWithToast(
-      dispatch,
-      () => removeDeviceFromGroupById(groupId, deviceInfo[0].ID),
-      statusMessages
-    );
+    let removeDeviceGroupFunc;
+    if (inventoryGroupsEnabled) {
+      removeDeviceGroupFunc = () =>
+        removeDevicesFromInventoryGroup(groupId, [deviceInfo[0].UUID]);
+    } else {
+      removeDeviceGroupFunc = () =>
+        removeDeviceFromGroupById(groupId, deviceInfo[0].ID);
+    }
+
+    apiWithToast(dispatch, removeDeviceGroupFunc, statusMessages);
   };
 
   return (

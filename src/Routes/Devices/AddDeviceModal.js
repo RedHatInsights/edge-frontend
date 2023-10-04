@@ -5,9 +5,14 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import Modal from '../../components/Modal';
 import SearchInputApi from '../../components/SearchInputApi';
 import apiWithToast from '../../utils/apiWithToast';
-import { addDevicesToGroup } from '../../api/groups';
+import {
+  addDevicesToGroup,
+  addDevicesToInventoryGroup,
+} from '../../api/groups';
 import { useDispatch } from 'react-redux';
 import { Button, Text } from '@patternfly/react-core';
+import { useFeatureFlags } from '../../utils';
+import { FEATURE_PARITY_INVENTORY_GROUPS } from '../../constants/features';
 
 const CreateGroupButton = ({ closeModal }) => (
   <>
@@ -59,6 +64,10 @@ const AddDeviceModal = ({
 }) => {
   const dispatch = useDispatch();
 
+  const inventoryGroupsEnabled = useFeatureFlags(
+    FEATURE_PARITY_INVENTORY_GROUPS
+  );
+
   const handleAddDevices = (values) => {
     const { group } = values;
     const statusMessages = {
@@ -69,11 +78,15 @@ const AddDeviceModal = ({
       onError: { title: 'Error', description: 'Failed to add system to group' },
     };
 
-    apiWithToast(
-      dispatch,
-      () => addDevicesToGroup(parseInt(group.groupId), deviceIds),
-      statusMessages
-    );
+    let addDevicesToGroupFunc;
+    if (inventoryGroupsEnabled) {
+      addDevicesToGroupFunc = () =>
+        addDevicesToInventoryGroup(group.groupId, deviceIds);
+    } else {
+      addDevicesToGroupFunc = () =>
+        addDevicesToGroup(parseInt(group.groupId), deviceIds);
+    }
+    apiWithToast(dispatch, addDevicesToGroupFunc, statusMessages);
   };
   return (
     <Modal
