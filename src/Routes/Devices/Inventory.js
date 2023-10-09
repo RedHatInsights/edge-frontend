@@ -237,6 +237,65 @@ const Inventory = ({
   }, [chrome]);
 
   const hideGroupsActions = useFeatureFlags(FEATURE_HIDE_GROUP_ACTIONS);
+  const kebabMenuItems = [];
+  if (!hideGroupsActions) {
+    const groupsKebabMenuItems = [
+      {
+        isDisabled: inventoryGroupsEnabled
+          ? !(checkedDeviceIds.length > 0) ||
+            checkedDeviceIds.filter((device) => device.deviceGroups?.length > 0)
+              .length > 0 // The action menu item is disabled if one of the systems items belongs to a group
+          : !(checkedDeviceIds.length > 0),
+        title: 'Add to group',
+        onClick: () =>
+          handleAddDevicesToGroup(
+            checkedDeviceIds.map((device) => ({
+              ID: device.deviceID,
+              name: device.display_name,
+              UUID: device.id,
+            })),
+            false
+          ),
+      },
+    ];
+
+    if (inventoryGroupsEnabled) {
+      groupsKebabMenuItems.push({
+        isDisabled:
+          !(checkedDeviceIds.length > 0) || // disable if no system checked
+          checkedDeviceIds.filter(
+            // disable if any checked systems has no groups assigned
+            (device) =>
+              device.deviceGroups === undefined ||
+              device.deviceGroups.length === 0
+          ).length > 0 ||
+          checkedDeviceIds.reduce((acc, device) => {
+            // disable if the checked systems has different groups assigned
+            const groupIDS = device.deviceGroups
+              ? device.deviceGroups.map((group) => group.ID)
+              : [];
+            const newGroupIDS = groupIDS.filter(
+              (groupID) => !acc.includes(groupID)
+            );
+            acc.push(...newGroupIDS);
+            return acc;
+          }, []).length !== 1,
+        title: 'Remove from group',
+        onClick: () =>
+          handleRemoveDevicesFromGroup(
+            checkedDeviceIds.map((device) => ({
+              ID: device.deviceID,
+              name: device.display_name,
+              UUID: device.id,
+              deviceGroups: device.deviceGroups,
+            })),
+            false
+          ),
+      });
+    }
+    kebabMenuItems.push(...groupsKebabMenuItems);
+  }
+
   return (
     <>
       {showHeader && (
@@ -265,30 +324,7 @@ const Inventory = ({
           hasCheckbox={true}
           selectedItems={setCheckedDeviceIds}
           selectedItemsUpdateable={canBeUpdated()}
-          kebabItems={
-            !hideGroupsActions
-              ? [
-                  {
-                    isDisabled: inventoryGroupsEnabled
-                      ? !(checkedDeviceIds.length > 0) ||
-                        checkedDeviceIds.filter(
-                          (device) => device.deviceGroups?.length > 0
-                        ).length > 0 // The action menu item is disabled if one of the systems items belongs to a group
-                      : !(checkedDeviceIds.length > 0),
-                    title: 'Add to group',
-                    onClick: () =>
-                      handleAddDevicesToGroup(
-                        checkedDeviceIds.map((device) => ({
-                          ID: device.deviceID,
-                          name: device.display_name,
-                          UUID: device.id,
-                        })),
-                        false
-                      ),
-                  },
-                ]
-              : undefined
-          }
+          kebabItems={kebabMenuItems.length > 0 ? kebabMenuItems : undefined}
           hasModalSubmitted={hasModalSubmitted}
           setHasModalSubmitted={setHasModalSubmitted}
           fetchDevices={fetchDevices}
