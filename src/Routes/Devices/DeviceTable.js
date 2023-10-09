@@ -12,7 +12,7 @@ import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
 import { Button } from '@patternfly/react-core';
 import {
-  FEATURE_HIDDEN_GROUP_ACTIONS,
+  FEATURE_HIDE_GROUP_ACTIONS,
   FEATURE_PARITY_INVENTORY_GROUPS,
 } from '../../constants/features';
 
@@ -297,7 +297,7 @@ const DeviceTable = ({
     ? ''
     : `${pathname}/systems`;
 
-  const hideGroupsActions = useFeatureFlags(FEATURE_HIDDEN_GROUP_ACTIONS);
+  const hideGroupsActions = useFeatureFlags(FEATURE_HIDE_GROUP_ACTIONS);
 
   const actionResolver = (rowData) => {
     const getUpdatePathname = (updateRowData) =>
