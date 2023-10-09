@@ -19,7 +19,10 @@ import { useDispatch } from 'react-redux';
 import apiWithToast from '../../utils/apiWithToast';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { useFeatureFlags } from '../../utils';
-import { FEATURE_PARITY_INVENTORY_GROUPS } from '../../constants/features';
+import {
+  FEATURE_HIDE_GROUP_ACTIONS,
+  FEATURE_PARITY_INVENTORY_GROUPS,
+} from '../../constants/features';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(/* webpackChunkName: "UpdateDeviceModal" */ './UpdateDeviceModal')
@@ -233,9 +236,7 @@ const Inventory = ({
     chrome?.updateDocumentTitle?.('Systems - Inventory | Edge management');
   }, [chrome]);
 
-  const groupActionsEnabled = useFeatureFlags(
-    'edge-management.hide_groups_actions'
-  );
+  const hideGroupsActions = useFeatureFlags(FEATURE_HIDE_GROUP_ACTIONS);
   return (
     <>
       {showHeader && (
@@ -265,7 +266,7 @@ const Inventory = ({
           selectedItems={setCheckedDeviceIds}
           selectedItemsUpdateable={canBeUpdated()}
           kebabItems={
-            groupActionsEnabled
+            !hideGroupsActions
               ? [
                   {
                     isDisabled: inventoryGroupsEnabled
