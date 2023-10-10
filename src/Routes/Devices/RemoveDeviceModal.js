@@ -103,22 +103,35 @@ const RemoveDeviceModal = ({
       ? values.group.toString()
       : deviceGroups[0].Name;
     const groupId = hasManyGroups ? values.group.groupId : deviceGroups[0].ID;
+    const systemText =
+      deviceInfo.length > 1
+        ? `${deviceInfo.length} systems`
+        : deviceInfo[0].name;
+
+    const errorMessageDescription = inventoryGroupsEnabled
+      ? deviceInfo.length > 1
+        ? `Failed to remove ${deviceInfo.length} systems from ${groupName}`
+        : `Failed to remove 1 system from ${groupName}`
+      : 'Failed to remove system from group';
 
     const statusMessages = {
       onSuccess: {
         title: 'Success',
-        description: `${deviceInfo[0].name} has been removed from ${groupName} successfully`,
+        description: `${systemText} has been removed from ${groupName} successfully`,
       },
       onError: {
         title: 'Error',
-        description: 'Failed to remove system from group',
+        description: errorMessageDescription,
       },
     };
 
     let removeDeviceGroupFunc;
     if (inventoryGroupsEnabled) {
       removeDeviceGroupFunc = () =>
-        removeDevicesFromInventoryGroup(groupId, [deviceInfo[0].UUID]);
+        removeDevicesFromInventoryGroup(
+          groupId,
+          deviceInfo.map((device) => device.UUID)
+        );
     } else {
       removeDeviceGroupFunc = () =>
         removeDeviceFromGroupById(groupId, deviceInfo[0].ID);
