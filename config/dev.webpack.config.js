@@ -86,6 +86,10 @@ plugins.push(
           __dirname,
           '../src/Routes/Devices/DeviceTable.js'
         ),
+        './DevicesView': resolve(
+          __dirname,
+          '../src/Routes/Devices/DevicesView.js'
+        ),
         './UpdateDeviceModal': resolve(
           __dirname,
           '../src/Routes/Devices/UpdateDeviceModal.js'
