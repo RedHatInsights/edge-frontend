@@ -230,12 +230,15 @@ const UpdateSystemMain = ({
         : paths.fleetManagementDetail;
     }
 
-    // Construct destination path
-    const pathLen = destPath.split('/').length;
-    const dest = pathname.split('/').slice(0, pathLen).join('/');
-    if (navigateProp) {
-      navigate({ pathname: dest });
+    const isFederated = typeof navigateProp !== 'undefined';
+
+    if (isFederated) {
+      navigate({ pathname: destPath });
     } else {
+      // Construct destination path
+      const pathLen = destPath.split('/').length;
+      const dest = pathname.split('/').slice(0, pathLen).join('/');
+
       history.push({ pathname: dest });
     }
   };
