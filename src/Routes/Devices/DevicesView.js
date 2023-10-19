@@ -1,11 +1,13 @@
 import React from 'react';
 import DeviceTable from './DeviceTable';
 import useApi from '../../hooks/useApi';
-import { getInventory } from '../../api/devices';
+import PropTypes from 'prop-types';
+import { getInventory, getInventoryByGroup } from '../../api/devices';
 
 const DevicesView = (props) => {
   const [response, fetchDevices] = useApi({
-    api: getInventory,
+    api: props?.groupUUID ? getInventoryByGroup : getInventory,
+    id: props?.groupUUID ? props?.groupUUID.toString() : '',
     tableReload: true,
   });
   const { data, isLoading, hasError } = response;
@@ -20,6 +22,10 @@ const DevicesView = (props) => {
       {...props}
     />
   );
+};
+
+DevicesView.propTypes = {
+  groupUUID: PropTypes.string,
 };
 
 export default DevicesView;

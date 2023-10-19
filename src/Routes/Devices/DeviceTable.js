@@ -558,6 +558,7 @@ DeviceTable.propTypes = {
   isSystemsView: PropTypes.bool,
   isAddSystemsView: PropTypes.bool,
   urlName: PropTypes.string,
+  groupUUID: PropTypes.string,
 };
 
 export default DeviceTable;

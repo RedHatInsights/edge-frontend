@@ -6,6 +6,10 @@ export const getInventory = ({ query }) => {
   return instance.get(`${EDGE_API}/devices/devicesview?${q}`);
 };
 
+export const getInventoryByGroup = ({ id, query }) => {
+  const q = getTableParams(query);
+  return instance.get(`${EDGE_API}/devices/devicesview?${q}&groupUUID=${id}`);
+};
 export const getDevice = (id) => {
   return instance.get(`${EDGE_API}/devices/${id}`);
 };
