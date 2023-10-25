@@ -10,7 +10,6 @@ import CustomEmptyState from '../../components/Empty';
 import { createLink, emptyStateNoFilters, useFeatureFlags } from '../../utils';
 import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
-import { Button } from '@patternfly/react-core';
 import {
   FEATURE_HIDE_GROUP_ACTIONS,
   FEATURE_PARITY_INVENTORY_GROUPS,
@@ -176,24 +175,15 @@ const createRows = (
             : DeviceName,
         },
         {
-          title: ImageName ? (
-            hasLinks ? (
-              <Button
-                variant="link"
-                target-href={pathToImage}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = `${pathToImage}`;
-                }}
-              >
-                {ImageName}
-              </Button>
-            ) : (
-              ImageName
-            )
-          ) : (
-            'unavailable'
-          ),
+          title: ImageName
+            ? hasLinks
+              ? createLink({
+                  pathname: pathToImage,
+                  linkText: ImageName,
+                  navigate,
+                })
+              : ImageName
+            : 'unavailable',
         },
         {
           title:
