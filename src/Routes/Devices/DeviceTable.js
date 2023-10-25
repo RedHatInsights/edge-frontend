@@ -175,15 +175,15 @@ const createRows = (
             : DeviceName,
         },
         {
-          title: ImageName ? (
-            hasLinks ? (
-              <a href={pathToImage}>{ImageName}</a>
-            ) : (
-              ImageName
-            )
-          ) : (
-            'unavailable'
-          ),
+          title: ImageName
+            ? hasLinks
+              ? createLink({
+                  pathname: pathToImage,
+                  linkText: ImageName,
+                  navigate,
+                })
+              : ImageName
+            : 'unavailable',
         },
         {
           title:
