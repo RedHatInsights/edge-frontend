@@ -371,7 +371,7 @@ const DeviceTable = ({
       });
     }
 
-    if (!areActionsDisabled(rowData)) {
+    if (!areActionsDisabled(rowData) && handleUpdateSelected) {
       actions.push({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
