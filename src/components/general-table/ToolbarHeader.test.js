@@ -56,7 +56,7 @@ describe('Toolbar Header', () => {
     expect(headerInput.value).toEqual('test-label');
     expect(headerButton).toBeDefined();
     expect(paginationElement.children[0].innerHTML).toEqual(
-      '<b>1 - 20</b> of <b>100</b> '
+      '<b>1 - 50</b> of <b>100</b> '
     );
 
     expect(container.querySelector('div')).toMatchSnapshot();
