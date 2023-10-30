@@ -17,7 +17,8 @@
     "start:federated": "BETA=true fec static --config config/dev.webpack.config.js -p 8002",
     "test": "TZ=UTC jest --verbose --no-cache",
     "verify": "npm-run-all build lint test",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "updateSnapshot": "jest --updateSnapshot"
   },
   "jest": {
     "collectCoverage": true,
