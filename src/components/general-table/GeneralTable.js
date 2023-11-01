@@ -397,6 +397,8 @@ const GeneralTable = ({
             handlePageSelect={handlePageSelect}
             handleNoneSelect={handleNoneSelect}
             displayedRowsLength={filteredRows.length}
+            perPage={perPage}
+            total={apiFilterSort ? count : nonApiCount}
           />
         ) : null}
       </ToolbarHeader>
