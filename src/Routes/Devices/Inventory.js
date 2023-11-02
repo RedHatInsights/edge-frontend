@@ -61,6 +61,7 @@ const Inventory = ({
   });
   const showHeader = showHeaderProp === undefined ? true : showHeaderProp;
   const { data, isLoading, hasError } = response;
+  const enforceEdgeGroups = data?.data?.enforce_edge_groups;
   const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
   const [isRemoveDeviceModalOpen, setIsRemoveDeviceModalOpen] = useState(false);
   const [isEditNameModalOpen, setIsEditNameModalOpen] = useState(false);
@@ -78,9 +79,8 @@ const Inventory = ({
     imageData: null,
   });
 
-  const inventoryGroupsEnabled = useFeatureFlags(
-    FEATURE_PARITY_INVENTORY_GROUPS
-  );
+  const useInventorGroups = useFeatureFlags(FEATURE_PARITY_INVENTORY_GROUPS);
+  const inventoryGroupsEnabled = !enforceEdgeGroups && useInventorGroups;
 
   const handleAddDevicesToGroup = (ids, isRow) => {
     setIsAddDeviceModalOpen(true);
@@ -329,6 +329,7 @@ const Inventory = ({
           setHasModalSubmitted={setHasModalSubmitted}
           fetchDevices={fetchDevices}
           urlName={urlName}
+          enforceEdgeGroups={enforceEdgeGroups}
         />
       </section>
       {updateModal.isOpen && (

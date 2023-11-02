@@ -19,6 +19,7 @@ const DevicesView = (props) => {
       count={data?.count}
       data={data?.data?.devices || []}
       fetchDevices={fetchDevices}
+      enforceEdgeGroups={data?.data?.enforce_edge_groups}
       {...props}
     />
   );

@@ -11,8 +11,7 @@ import {
 } from '../../api/groups';
 import { useDispatch } from 'react-redux';
 import { Button, Text } from '@patternfly/react-core';
-import { useFeatureFlags } from '../../utils';
-import { FEATURE_PARITY_INVENTORY_GROUPS } from '../../constants/features';
+import useInventoryGroups from '../../hooks/useInventoryGroups';
 
 const CreateGroupButton = ({ closeModal }) => (
   <>
@@ -64,9 +63,7 @@ const AddDeviceModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  const inventoryGroupsEnabled = useFeatureFlags(
-    FEATURE_PARITY_INVENTORY_GROUPS
-  );
+  const inventoryGroupsEnabled = useInventoryGroups(false);
 
   const handleAddDevices = (values) => {
     const { group } = values;

@@ -78,6 +78,10 @@ export const validateGroupName = (name) => {
   return instance.get(`${EDGE_API}/device-groups/checkName/${name}`);
 };
 
+export const getEnforceEdgeGroups = () => {
+  return instance.get(`${EDGE_API}/device-groups/enforce-edge-groups`);
+};
+
 export const validateInventoryGroupName = (name) => {
   return instance.get(
     `${INVENTORY_API_BASE}/groups?name=${name}&order_by=name&order_how=ASC`

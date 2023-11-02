@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   HelperText,
   HelperTextItem,
@@ -10,20 +10,18 @@ import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useApi from '../hooks/useApi';
 import { getGroups, getInventoryGroups } from '../api/groups';
 import { debounce } from 'lodash';
-import { useFeatureFlags } from '../utils';
-import { FEATURE_PARITY_INVENTORY_GROUPS } from '../constants/features';
+import useInventoryGroups from '../hooks/useInventoryGroups';
 
 const SelectInput = (props) => {
   useFieldApi(props);
-  const inventoryGroupsEnabled = useFeatureFlags(
-    FEATURE_PARITY_INVENTORY_GROUPS
-  );
+  const inventoryGroupsEnabled = useInventoryGroups(false);
 
   const { change } = useFormApi();
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(null);
-  const [{ data, isLoading }, fetchGroups] = useApi({
+  const [{ data, isLoading }, fetchGroups, apiFunc, setAPIFunc] = useApi({
     api: inventoryGroupsEnabled ? getInventoryGroups : getGroups,
+    tableReload: true,
   });
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -47,6 +45,16 @@ const SelectInput = (props) => {
     fetchGroups();
     updateSelection(null);
   };
+
+  useEffect(() => {
+    // set the new api function when inventoryGroupsEnabled value change
+    setAPIFunc(() => (inventoryGroupsEnabled ? getInventoryGroups : getGroups));
+  }, [inventoryGroupsEnabled]);
+
+  useEffect(() => {
+    // re-initiate the search widget data when api function change
+    clearSelection();
+  }, [apiFunc]);
 
   const onFilter = (_event, value) => {
     /* This handler is called on input changes as well as when children change.

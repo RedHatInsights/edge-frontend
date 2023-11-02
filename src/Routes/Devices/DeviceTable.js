@@ -254,6 +254,7 @@ const DeviceTable = ({
   isSystemsView = false,
   isAddSystemsView = false,
   urlName,
+  enforceEdgeGroups,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -274,9 +275,8 @@ const DeviceTable = ({
     ? useLocation()
     : null;
 
-  const inventoryGroupsEnabled = useFeatureFlags(
-    FEATURE_PARITY_INVENTORY_GROUPS
-  );
+  const useInventorGroups = useFeatureFlags(FEATURE_PARITY_INVENTORY_GROUPS);
+  const inventoryGroupsEnabled = !enforceEdgeGroups && useInventorGroups;
 
   // Create base URL path for system detail link
   const deviceBaseUrl = navigateProp
@@ -549,6 +549,7 @@ DeviceTable.propTypes = {
   isAddSystemsView: PropTypes.bool,
   urlName: PropTypes.string,
   groupUUID: PropTypes.string,
+  enforceEdgeGroups: PropTypes.bool,
 };
 
 export default DeviceTable;
