@@ -29,6 +29,7 @@ const DevicesGroupDetail = ({
   notificationProp,
   urlName,
   groupUUID,
+  tableProps,
 }) => {
   const chrome = useChrome();
   const history = historyProp
@@ -195,6 +196,7 @@ const DevicesGroupDetail = ({
           setHasModalSubmitted={setHasModalSubmitted}
           fetchDevices={fetchDevices}
           urlName={urlName}
+          tableProps={tableProps}
         />
       </section>
       {updateModal.isOpen && (
@@ -243,6 +245,7 @@ DevicesGroupDetail.propTypes = {
   notificationProp: PropTypes.object,
   urlName: PropTypes.string,
   groupUUID: PropTypes.string,
+  tableProps: PropTypes.object,
 };
 
 export default DevicesGroupDetail;
