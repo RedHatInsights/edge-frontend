@@ -14,6 +14,8 @@ const BulkSelect = ({
   handlePageSelect,
   handleNoneSelect,
   displayedRowsLength,
+  perPage,
+  total,
 }) => {
   const isAllSelected = checkedRows.length === displayedRowsLength;
   const isPartiallySelected = checkedRows.length > 0 ? null : false;
@@ -42,22 +44,23 @@ const BulkSelect = ({
           }
           isOpen={selectAllToggle}
           dropdownItems={[
-            <DropdownItem key="all" onClick={handleBulkSelect}>
-              Select all
-            </DropdownItem>,
-            <DropdownItem
-              key="page"
-              onClick={handlePageSelect}
-              isDisabled={isAllSelected}
-            >
-              Select page
-            </DropdownItem>,
             <DropdownItem
               key="none"
               onClick={handleNoneSelect}
               isDisabled={checkedRows.length === 0}
             >
-              Select none
+              Select none (0 items)
+            </DropdownItem>,
+
+            <DropdownItem
+              key="page"
+              onClick={handlePageSelect}
+              isDisabled={isAllSelected}
+            >
+              Select page ({perPage} {total.length === 1 ? 'item' : 'items'})
+            </DropdownItem>,
+            <DropdownItem key="all" onClick={handleBulkSelect}>
+              Select all ({total} {total.length === 1 ? 'item' : 'items'})
             </DropdownItem>,
           ]}
         />
@@ -71,6 +74,8 @@ BulkSelect.propTypes = {
   handleNoneSelect: PropTypes.func,
   handlePageSelect: PropTypes.func,
   displayedRowsLength: PropTypes.number,
+  perPage: PropTypes.number,
+  total: PropTypes.number,
 };
 
 export default BulkSelect;
