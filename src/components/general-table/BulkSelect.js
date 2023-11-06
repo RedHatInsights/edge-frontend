@@ -17,7 +17,7 @@ const BulkSelect = ({
   perPage,
   total,
 }) => {
-  const isAllSelected = checkedRows.length === displayedRowsLength;
+  const isAllSelected = checkedRows.length === total;
   const isPartiallySelected = checkedRows.length > 0 ? null : false;
   const [selectAllToggle, setSelectAllToggle] = useState(false);
 
