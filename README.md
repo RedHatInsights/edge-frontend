@@ -101,4 +101,4 @@ ENVIRONMENT=prod BETA=true npm run start:proxy
 ### **For frontend federated**
 ````bash
 BETA=true npm run start:federated
-```
+``` 
