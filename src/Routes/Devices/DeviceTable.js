@@ -34,12 +34,12 @@ const defaultFilters = [
   },
 ];
 
-const GetColumnNames = (inventoryGroupsEnabled) => {
+const GetColumnNames = (inventoryGroupsEnabled, isDataAvailable) => {
   return [
     {
       title: 'Name',
       type: 'name',
-      sort: true,
+      sort: isDataAvailable,
       columnTransforms: [cellWidth(30)],
     },
     {
@@ -57,7 +57,7 @@ const GetColumnNames = (inventoryGroupsEnabled) => {
     {
       title: 'Last seen',
       type: 'last_seen',
-      sort: true,
+      sort: isDataAvailable,
       columnTransforms: [cellWidth(15)],
     },
     {
@@ -411,8 +411,8 @@ const DeviceTable = ({
   // some filters and columns titles/labels have different values when shown in insights inventory
   let tableFilters = [];
   let tableColumnNames = [];
-
-  const columnNames = GetColumnNames(inventoryGroupsEnabled);
+  const isDataAvailable = data ? data.length > 0 : false;
+  const columnNames = GetColumnNames(inventoryGroupsEnabled, isDataAvailable);
 
   if (urlName === insightsInventoryManageEdgeUrlName) {
     for (let ind = 0; ind < defaultFilters.length; ind++) {
