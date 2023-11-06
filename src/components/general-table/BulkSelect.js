@@ -18,7 +18,7 @@ const BulkSelect = ({
   total,
 }) => {
   const isAllSelected = checkedRows.length === total;
-  const isPartiallySelected = checkedRows.length > 0 ? null : false;
+  const isPartiallySelected = checkedRows.length > 0 ? true : false;
   const [selectAllToggle, setSelectAllToggle] = useState(false);
 
   return (
@@ -34,7 +34,7 @@ const BulkSelect = ({
                   key="split-checkbox"
                   aria-label="Select all"
                   isChecked={isAllSelected ? true : isPartiallySelected}
-                  onChange={isAllSelected ? handleNoneSelect : handlePageSelect}
+                  onChange={isAllSelected || isPartiallySelected ? handleNoneSelect : handlePageSelect}
                 >
                   {checkedRows.length > 0 && `${checkedRows.length} selected`}
                 </DropdownToggleCheckbox>,
