@@ -10,8 +10,10 @@ import CustomEmptyState from '../../components/Empty';
 import { createLink, emptyStateNoFilters, useFeatureFlags } from '../../utils';
 import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
-import { Button } from '@patternfly/react-core';
-import { FEATURE_PARITY_INVENTORY_GROUPS } from '../../constants/features';
+import {
+  FEATURE_HIDE_GROUP_ACTIONS,
+  FEATURE_PARITY_INVENTORY_GROUPS,
+} from '../../constants/features';
 
 const insightsInventoryManageEdgeUrlName = 'manage-edge-inventory';
 
@@ -173,24 +175,15 @@ const createRows = (
             : DeviceName,
         },
         {
-          title: ImageName ? (
-            hasLinks ? (
-              <Button
-                variant="link"
-                target-href={pathToImage}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = `${pathToImage}`;
-                }}
-              >
-                {ImageName}
-              </Button>
-            ) : (
-              ImageName
-            )
-          ) : (
-            'unavailable'
-          ),
+          title: ImageName
+            ? hasLinks
+              ? createLink({
+                  pathname: pathToImage,
+                  linkText: ImageName,
+                  navigate,
+                })
+              : ImageName
+            : 'unavailable',
         },
         {
           title:
@@ -261,6 +254,7 @@ const DeviceTable = ({
   isSystemsView = false,
   isAddSystemsView = false,
   urlName,
+  enforceEdgeGroups,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -281,9 +275,8 @@ const DeviceTable = ({
     ? useLocation()
     : null;
 
-  const inventoryGroupsEnabled = useFeatureFlags(
-    FEATURE_PARITY_INVENTORY_GROUPS
-  );
+  const useInventorGroups = useFeatureFlags(FEATURE_PARITY_INVENTORY_GROUPS);
+  const inventoryGroupsEnabled = !enforceEdgeGroups && useInventorGroups;
 
   // Create base URL path for system detail link
   const deviceBaseUrl = navigateProp
@@ -294,9 +287,7 @@ const DeviceTable = ({
     ? ''
     : `${pathname}/systems`;
 
-  const groupActionsEnabled = useFeatureFlags(
-    'edge-management.hide_groups_actions'
-  );
+  const hideGroupsActions = useFeatureFlags(FEATURE_HIDE_GROUP_ACTIONS);
 
   const actionResolver = (rowData) => {
     const getUpdatePathname = (updateRowData) =>
@@ -307,7 +298,7 @@ const DeviceTable = ({
     if (isLoading) return actions;
     if (!rowData?.rowInfo?.id) return actions;
 
-    if (handleAddDevicesToGroup && groupActionsEnabled) {
+    if (handleAddDevicesToGroup && !hideGroupsActions) {
       actions.push({
         title: 'Add to group',
         isDisabled: inventoryGroupsEnabled
@@ -361,7 +352,7 @@ const DeviceTable = ({
       });
     }
 
-    if (handleRemoveDevicesFromGroup && groupActionsEnabled) {
+    if (handleRemoveDevicesFromGroup && !hideGroupsActions) {
       actions.push({
         title: 'Remove from group',
         isDisabled: rowData?.rowInfo?.deviceGroups.length === 0,
@@ -380,7 +371,7 @@ const DeviceTable = ({
       });
     }
 
-    if (!areActionsDisabled(rowData)) {
+    if (!areActionsDisabled(rowData) && handleUpdateSelected) {
       actions.push({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
@@ -557,6 +548,8 @@ DeviceTable.propTypes = {
   isSystemsView: PropTypes.bool,
   isAddSystemsView: PropTypes.bool,
   urlName: PropTypes.string,
+  groupUUID: PropTypes.string,
+  enforceEdgeGroups: PropTypes.bool,
 };
 
 export default DeviceTable;

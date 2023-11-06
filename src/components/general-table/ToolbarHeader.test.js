@@ -36,7 +36,7 @@ describe('Toolbar Header', () => {
           chipsArray={chipsArray}
           setChipsArray={setChipsArray}
           isLoading={false}
-          perPage={20}
+          perPage={50}
           setPerPage={setPerPage}
           page={1}
           setPage={setPage}
@@ -56,7 +56,7 @@ describe('Toolbar Header', () => {
     expect(headerInput.value).toEqual('test-label');
     expect(headerButton).toBeDefined();
     expect(paginationElement.children[0].innerHTML).toEqual(
-      '<b>1 - 20</b> of <b>100</b> '
+      '<b>1 - 50</b> of <b>100</b> '
     );
 
     expect(container.querySelector('div')).toMatchSnapshot();

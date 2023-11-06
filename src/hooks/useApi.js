@@ -7,6 +7,7 @@ const useApi = ({ api, id = null, statusMessages, tableReload = false }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [apiFunc, setAPIFunc] = useState(() => api);
 
   const hasSuccess = statusMessages?.onSuccess;
   if (!statusMessages) {
@@ -25,7 +26,7 @@ const useApi = ({ api, id = null, statusMessages, tableReload = false }) => {
   const fetchData = async (query = '') => {
     setIsLoading(true);
     try {
-      const data = await api({ id, query });
+      const data = await apiFunc({ id, query });
       setData(data);
 
       if (hasSuccess) {
@@ -56,7 +57,7 @@ const useApi = ({ api, id = null, statusMessages, tableReload = false }) => {
     }
   }, []);
 
-  return [{ data, isLoading, hasError }, fetchData];
+  return [{ data, isLoading, hasError }, fetchData, apiFunc, setAPIFunc];
 };
 
 export default useApi;

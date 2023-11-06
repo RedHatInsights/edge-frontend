@@ -81,7 +81,7 @@ const GeneralTable = ({
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
   const [sortBy, setSortBy] = useState(defaultSort);
-  const [perPage, setPerPage] = useState(20);
+  const [perPage, setPerPage] = useState(50);
   const [page, setPage] = useState(1);
   const [checkedRows, setCheckedRows] = useState(defaultCheckedRows);
   const dispatch = useDispatch();
@@ -397,6 +397,8 @@ const GeneralTable = ({
             handlePageSelect={handlePageSelect}
             handleNoneSelect={handleNoneSelect}
             displayedRowsLength={filteredRows.length}
+            perPage={perPage}
+            total={apiFilterSort ? count : nonApiCount}
           />
         ) : null}
       </ToolbarHeader>

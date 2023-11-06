@@ -11,10 +11,10 @@ import {
   validateInventoryGroupName,
   addDevicesToInventoryGroup,
 } from '../../api/groups';
-import { nameValidator, useFeatureFlags } from '../../utils';
+import { nameValidator } from '../../utils';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
-import { FEATURE_PARITY_INVENTORY_GROUPS } from '../../constants/features';
+import useInventoryGroups from '../../hooks/useInventoryGroups';
 
 const asyncGroupNameValidation = async (value = '') => {
   // do not fire validation request for empty name
@@ -77,9 +77,7 @@ const CreateGroupModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  const inventoryGroupsEnabled = useFeatureFlags(
-    FEATURE_PARITY_INVENTORY_GROUPS
-  );
+  const inventoryGroupsEnabled = useInventoryGroups(false);
 
   const handleCreateGroup = (values) => {
     const statusMessages = {

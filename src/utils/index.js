@@ -117,6 +117,7 @@ export const getReleases = (forcedRelease, inculdedReleases) =>
 export const createLink = ({ pathname, linkText, target }) => {
   return (
     <Button
+      style={{ '--pf-c-button--PaddingLeft': '0' }}
       component="a"
       target={target}
       variant="link"
