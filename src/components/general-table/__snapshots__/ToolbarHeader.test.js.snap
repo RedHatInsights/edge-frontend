@@ -348,7 +348,7 @@ exports[`Toolbar Header should render correctly 1`] = `
           data-ouia-safe="true"
           type="button"
         >
-          Clear filters
+          Reset filters
         </button>
       </div>
     </div>

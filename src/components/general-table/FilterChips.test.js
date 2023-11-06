@@ -25,7 +25,7 @@ describe('Filter chips', () => {
     const FilterChipsElement = await findByTestId('filter-chip');
     const FilterChipsGroupLabel = await findByText('test-key');
     const FilterChipLabel = await findByText('test-label');
-    const FilterChipsClearFilters = await findByText('Clear filters');
+    const FilterChipsClearFilters = await findByText('Reset filters');
 
     expect(FilterChipsElement).toBeDefined();
     expect(FilterChipsGroupLabel).toBeDefined();

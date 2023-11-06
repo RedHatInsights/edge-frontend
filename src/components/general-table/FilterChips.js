@@ -151,7 +151,7 @@ const FilterChips = ({
         : null}
       {chipsArray.length > 0 ? (
         <Button variant="link" onClick={handleResetFilters}>
-          Clear filters
+          Reset filters
         </Button>
       ) : null}
     </>
