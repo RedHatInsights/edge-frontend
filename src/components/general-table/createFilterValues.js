@@ -4,7 +4,6 @@ const createFilterValues = (filters) =>
       type: filter.type,
       label: filter.label,
     };
-
     if (filter.type === 'text') config.value = filter.value || '';
     if (filter.type === 'checkbox')
       config.value = filter.options.map((option, index) => ({

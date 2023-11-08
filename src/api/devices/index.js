@@ -2,6 +2,7 @@ import { EDGE_API, getTableParams } from '../index';
 import { instance } from '@redhat-cloud-services/frontend-components-utilities/interceptors/interceptors';
 
 export const getInventory = ({ query }) => {
+  console.log(query);
   const q = getTableParams(query);
   return instance.get(`${EDGE_API}/devices/devicesview?${q}`);
 };
