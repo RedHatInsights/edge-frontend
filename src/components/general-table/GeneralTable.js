@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import ToolbarHeader from './ToolbarHeader';
 import ToolbarFooter from './ToolbarFooter';
 import createFilterValues from '../../components/general-table/createFilterValues';
@@ -16,13 +16,6 @@ import { transformSort } from '../../utils';
 import BulkSelect from './BulkSelect';
 import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import { stateToUrlSearch } from '../../utils';
-import useFetchBatched from '../../hooks/useFetchBatched';
-
-import useApi from '../../hooks/useApi';
-import { flatten, map } from 'lodash';
-import * as actions from '../../store/actions';
-import { getInventory } from '../../api/devices';
-import { loadSystems } from '../../utils/sharedFunctions';
 const filterParams = (chipsArray) => {
   const filterParamsObj =
     chipsArray.length > 0
@@ -103,8 +96,6 @@ const GeneralTable = ({
     : null;
   const { pathname, search } = locationProp ? locationProp() : useLocation();
 
-  const [isBulkLoading, setBulkLoading] = useState(false);
-
   useEffect(() => {
     // Add or remove has_filters param depending on whether filters are present
     if (
@@ -125,7 +116,6 @@ const GeneralTable = ({
         history.replace(a);
       }
     }
-    console.log(chipsArray);
     const query = apiFilterSort
       ? {
           ...filterParams(chipsArray),
@@ -137,7 +127,7 @@ const GeneralTable = ({
           }),
         }
       : null;
-    console.log(query);
+
     if (query?.status === 'updateAvailable') {
       delete query.status;
       query.update_available = 'true';
@@ -283,7 +273,6 @@ const GeneralTable = ({
 
   const handlePageSelect = () => {
     setCheckedRows((prevState) => {
-      console.log(checkedIds);
       const checkedIds = prevState.map((row) => row.id);
       const rowIsNotIncluded = (id) => !checkedIds.includes(id);
 
@@ -295,26 +284,12 @@ const GeneralTable = ({
           });
         }
       });
-      console.log(newRows);
       return [...prevState, ...newRows];
     });
   };
 
-  // const handleBulkSelect = () => {
-  //   console.log(">>> "+perPage)
-  //   console.log(">>> "+page)
-
-  //   setCheckedRows(
-  //     rows.map((row) => ({
-  //       ...row.rowInfo,
-  //     }))
-  //   );
-  // };
-
   const handleBulkSelect = (rows) => {
-    console.log('>>> handleBulkSelect: ' + rows.length);
     setCheckedRows(rows);
-    //       return [...prevState, ...rows];
   };
 
   const handleNoneSelect = () => {

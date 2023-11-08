@@ -25,7 +25,6 @@ const BulkSelect = ({
   const isAllSelected = checkedRows.length === total;
   const isPartiallySelected = checkedRows.length > 0 ? true : false;
   const [selectAllToggle, setSelectAllToggle] = useState(false);
-  const [isBulkLoading, setBulkLoading] = useState(false);
   const { fetchBatched } = useFetchBatched();
 
   const fetchAllSystemIds = useCallback((filters, total) => {
@@ -39,25 +38,26 @@ const BulkSelect = ({
   }, []);
 
   const selectAllIds = async () => {
-    setBulkLoading(true);
-
-    const data = await fetchAllSystemIds({ filters }, total);
-    const results = flatten(map(data, 'data'));
-    const rows = flatten(map(results, 'devices'));
-    const rowInfo = [];
-    rows.forEach((row) => {
-      rowInfo.push({
-        deviceID: row.DeviceID,
-        id: row.DeviceUUID,
-        display_name: row.DeviceName,
-        imageSetId: row.ImageSetID,
-        imageName: row.ImageName,
-        deviceGroups: [],
+    if (location.pathname.includes('inventory')) {
+      const data = await fetchAllSystemIds({ filters }, total);
+      const results = flatten(map(data, 'data'));
+      const rows = flatten(map(results, 'devices'));
+      const rowInfo = [];
+      rows.forEach((row) => {
+        rowInfo.push({
+          deviceID: row.DeviceID,
+          id: row.DeviceUUID,
+          display_name: row.DeviceName,
+          imageSetId: row.ImageSetID,
+          imageName: row.ImageName,
+          deviceGroups: [],
+        });
       });
-    });
 
-    handleBulkSelect(rowInfo);
-    setBulkLoading(false);
+      handleBulkSelect(rowInfo);
+    } else {
+      handlePageSelect();
+    }
   };
 
   return (
@@ -125,8 +125,8 @@ BulkSelect.propTypes = {
   perPage: PropTypes.number,
   total: PropTypes.number,
   filters: PropTypes.array,
-  filterParams: PropTypes.array,
-  apiFilterSort: PropTypes.func,
+  filterParams: PropTypes.func,
+  apiFilterSort: PropTypes.bool,
 };
 
 export default BulkSelect;
