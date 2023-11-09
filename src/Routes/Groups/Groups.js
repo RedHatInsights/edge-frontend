@@ -12,14 +12,18 @@ import CreateGroupModal from './CreateGroupModal';
 import RenameGroupModal from './RenameGroupModal';
 import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
-import { useLocation } from 'react-router-dom';
 import { emptyStateNoFilters, useFeatureFlags } from '../../utils';
+import PropTypes from 'prop-types';
+import Images from '../ImageManager/Images';
+import { useLocation } from 'react-router-dom';
 
-const Groups = () => {
+// eslint-disable-next-line react/prop-types
+const Groups = ({ locationProp, navigateProp }) => {
   const hideCreateGroupsEnabled = useFeatureFlags(
     'edge-management.hide-create-group'
   );
-  const { search } = useLocation();
+  const { search } = locationProp ? locationProp() : useLocation();
+
   const [response, fetchGroups] = useApi({
     api: getGroups,
     tableReload: true,
@@ -65,6 +69,8 @@ const Groups = () => {
             isLoading={isLoading}
             hasError={hasError}
             handleRenameModal={handleRenameModal}
+            locationProp={locationProp}
+            navigateProp={navigateProp}
             handleDeleteModal={handleDeleteModal}
             handleCreateModal={() => setIsCreateModalOpen(true)}
             hasModalSubmitted={hasModalSubmitted}
@@ -120,6 +126,14 @@ const Groups = () => {
       )}
     </>
   );
+};
+
+Images.propTypes = {
+  pathPrefix: PropTypes.string,
+  historyProp: PropTypes.func,
+  locationProp: PropTypes.func,
+  navigateProp: PropTypes.func,
+  notificationProp: PropTypes.object,
 };
 
 export default Groups;

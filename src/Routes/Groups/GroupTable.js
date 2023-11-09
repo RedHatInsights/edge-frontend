@@ -1,10 +1,10 @@
 import React, { useState, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import GeneralTable from '../../components/general-table/GeneralTable';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import { routes as paths } from '../../constants/routeMapper';
 import { Bullseye, Spinner, Tooltip } from '@patternfly/react-core';
-import { useFeatureFlags } from '../../utils';
+import { createLink, useFeatureFlags } from '../../utils';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(
@@ -39,6 +39,8 @@ const GroupTable = ({
   handleDeleteModal,
   hasModalSubmitted,
   setHasModalSubmitted,
+  locationProp,
+  navigateProp,
   fetchGroups,
 }) => {
   const hideCreateGroupsEnabled = useFeatureFlags(
@@ -46,7 +48,13 @@ const GroupTable = ({
   );
 
   const history = useHistory();
-  const { pathname } = useLocation();
+  const { pathname } = locationProp ? locationProp() : useLocation();
+
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
 
   const [updateModal, setUpdateModal] = useState({
     isOpen: false,
@@ -129,7 +137,10 @@ const GroupTable = ({
       },
       cells: [
         {
-          title: <Link to={`${paths.fleetManagement}/${ID}`}>{Name}</Link>,
+          title: createLink({
+            pathname: `${paths.fleetManagement}/${ID}`,
+            linkText: Name,
+          }),
         },
         {
           title: systems.length,
@@ -162,6 +173,8 @@ const GroupTable = ({
         columnNames={columns}
         rows={buildRows}
         actionResolver={actionResolver}
+        locationProp={locationProp}
+        navigateProp={navigateProp}
         areActionsDisabled={() => false}
         defaultSort={{ index: 0, direction: 'asc' }}
         emptyFilterState={{
@@ -191,7 +204,11 @@ const GroupTable = ({
         >
           <UpdateDeviceModal
             navigateBack={() => {
-              history.push({ pathname });
+              if (navigateProp) {
+                navigate({ pathname });
+              } else {
+                history.push({ pathname });
+              }
               setUpdateModal((prevState) => {
                 return {
                   ...prevState,
@@ -223,6 +240,8 @@ GroupTable.propTypes = {
   handleCreateModal: PropTypes.func,
   hasModalSubmitted: PropTypes.bool,
   setHasModalSubmitted: PropTypes.func,
+  locationProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   fetchGroups: PropTypes.func,
 };
 

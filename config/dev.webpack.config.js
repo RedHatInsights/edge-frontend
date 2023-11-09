@@ -94,6 +94,7 @@ plugins.push(
           __dirname,
           '../src/Routes/Devices/DevicesGroupDetail.js'
         ),
+        './Groups': resolve(__dirname, '../src/Routes/Groups/Groups.js'),
         './UpdateDeviceModal': resolve(
           __dirname,
           '../src/Routes/Devices/UpdateDeviceModal.js'
