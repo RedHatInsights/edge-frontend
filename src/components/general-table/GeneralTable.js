@@ -16,7 +16,6 @@ import { transformSort } from '../../utils';
 import BulkSelect from './BulkSelect';
 import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import { stateToUrlSearch } from '../../utils';
-
 const filterParams = (chipsArray) => {
   const filterParamsObj =
     chipsArray.length > 0
@@ -117,7 +116,6 @@ const GeneralTable = ({
         history.replace(a);
       }
     }
-
     const query = apiFilterSort
       ? {
           ...filterParams(chipsArray),
@@ -286,17 +284,12 @@ const GeneralTable = ({
           });
         }
       });
-
       return [...prevState, ...newRows];
     });
   };
 
-  const handleBulkSelect = () => {
-    setCheckedRows(
-      rows.map((row) => ({
-        ...row.rowInfo,
-      }))
-    );
+  const handleBulkSelect = (rows) => {
+    setCheckedRows(rows);
   };
 
   const handleNoneSelect = () => {
@@ -399,6 +392,9 @@ const GeneralTable = ({
             displayedRowsLength={filteredRows.length}
             perPage={perPage}
             total={apiFilterSort ? count : nonApiCount}
+            filters={chipsArray}
+            filterParams={filterParams}
+            apiFilterSort={apiFilterSort}
           />
         ) : null}
       </ToolbarHeader>
