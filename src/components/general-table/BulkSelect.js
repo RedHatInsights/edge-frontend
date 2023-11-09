@@ -28,7 +28,6 @@ const BulkSelect = ({
   const { fetchBatched } = useFetchBatched();
 
   const fetchAllSystemIds = useCallback((filters, total) => {
-    console.log(filters);
     const query = apiFilterSort
       ? {
           ...filterParams(filters.filters),

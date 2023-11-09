@@ -7,7 +7,6 @@ const useFetchBatched = () => {
     isLoading,
     fetchBatched: (fetchFunction, total, filter, batchSize = 50) => {
       const pages = Math.ceil(total / batchSize) || 1;
-      console.log(filter);
       const results = resolve(
         [...new Array(pages)].map(
           // eslint-disable-next-line camelcase
