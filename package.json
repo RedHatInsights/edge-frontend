@@ -49,7 +49,7 @@
     "@data-driven-forms/pf4-component-mapper": "^3.19.2",
     "@data-driven-forms/react-form-renderer": "^3.19.2",
     "@patternfly/patternfly": "^4.222.4",
-    "@patternfly/quickstarts": "^2.3.2",
+    "@patternfly/quickstarts": "^2.4.3",
     "@patternfly/react-charts": "^6.94.15",
     "@patternfly/react-core": "^4.267.6",
     "@patternfly/react-icons": "^4.93.3",
