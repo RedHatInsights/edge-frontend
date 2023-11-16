@@ -1,7 +1,7 @@
 const { resolve } = require('path');
 const config = require('@redhat-cloud-services/frontend-components-config');
 const { config: webpackConfig, plugins } = config({
-  appUrl: process.env.BETA ?  '/preview/edge' : '/edge',
+  appUrl: process.env.BETA ? '/preview/edge' : '/edge',
   deployment: process.env.BETA ? 'preview/apps' : 'apps',
   rootFolder: resolve(__dirname, '../'),
   sassPrefix: '.fleet-management, .edge',
