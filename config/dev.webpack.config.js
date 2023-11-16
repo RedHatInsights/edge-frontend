@@ -50,6 +50,9 @@ const webpackProxy = {
 const deps = require('../package.json').dependencies;
 const { config: webpackConfig, plugins } = config({
   rootFolder: resolve(__dirname, '../'),
+  appUrl: process.env.BETA ?  '/preview/edge' : '/edge',
+  deployment: process.env.BETA ? 'preview/apps' : 'apps',
+  
   debug: true,
   useFileHash: false,
   sassPrefix: '.fleet-management, .edge',
