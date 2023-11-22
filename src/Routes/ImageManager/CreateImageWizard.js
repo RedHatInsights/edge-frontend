@@ -55,8 +55,7 @@ const CreateImage = ({
 
   const statusMessages = {
     onSuccess: {
-      title: 'Success',
-      description: `Successfully created image`,
+      title: 'Your image is being created',
     },
     onError: { title: 'Error', description: 'Failed to create image' },
   };

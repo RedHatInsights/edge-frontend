@@ -16,7 +16,6 @@ import { transformSort } from '../../utils';
 import BulkSelect from './BulkSelect';
 import { useHistory, useLocation, useNavigate } from 'react-router-dom';
 import { stateToUrlSearch } from '../../utils';
-
 const filterParams = (chipsArray) => {
   const filterParamsObj =
     chipsArray.length > 0
@@ -81,7 +80,7 @@ const GeneralTable = ({
   const [filterValues, setFilterValues] = useState(createFilterValues(filters));
   const [chipsArray, setChipsArray] = useState([]);
   const [sortBy, setSortBy] = useState(defaultSort);
-  const [perPage, setPerPage] = useState(20);
+  const [perPage, setPerPage] = useState(50);
   const [page, setPage] = useState(1);
   const [checkedRows, setCheckedRows] = useState(defaultCheckedRows);
   const dispatch = useDispatch();
@@ -117,7 +116,6 @@ const GeneralTable = ({
         history.replace(a);
       }
     }
-
     const query = apiFilterSort
       ? {
           ...filterParams(chipsArray),
@@ -132,6 +130,11 @@ const GeneralTable = ({
 
     if (query?.status === 'updateAvailable') {
       delete query.status;
+      query.update_available = 'true';
+    }
+
+    if (query && query['image status'] === 'updateAvailable') {
+      delete query['image status'];
       query.update_available = 'true';
     }
 
@@ -281,17 +284,12 @@ const GeneralTable = ({
           });
         }
       });
-
       return [...prevState, ...newRows];
     });
   };
 
-  const handleBulkSelect = () => {
-    setCheckedRows(
-      rows.map((row) => ({
-        ...row.rowInfo,
-      }))
-    );
+  const handleBulkSelect = (rows) => {
+    setCheckedRows(rows);
   };
 
   const handleNoneSelect = () => {
@@ -392,6 +390,11 @@ const GeneralTable = ({
             handlePageSelect={handlePageSelect}
             handleNoneSelect={handleNoneSelect}
             displayedRowsLength={filteredRows.length}
+            perPage={perPage}
+            total={apiFilterSort ? count : nonApiCount}
+            filters={chipsArray}
+            filterParams={filterParams}
+            apiFilterSort={apiFilterSort}
           />
         ) : null}
       </ToolbarHeader>

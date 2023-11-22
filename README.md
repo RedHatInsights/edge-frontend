@@ -97,3 +97,8 @@ To switch environment (for instance if you want to run your app with prod DB)
 ENVIRONMENT=prod BETA=true npm run start:proxy
 ```
 **Edge application will be available on https://prod.foo.redhat.com:1337/preview/edge/fleet-management**
+
+### **For frontend federated**
+```bash
+BETA=true npm run start:federated
+```

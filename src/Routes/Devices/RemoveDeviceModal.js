@@ -5,13 +5,17 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import Modal from '../../components/Modal';
 import SearchInput from '../../components/SearchInput';
 import apiWithToast from '../../utils/apiWithToast';
-import { removeDeviceFromGroupById } from '../../api/groups';
+import {
+  removeDeviceFromGroupById,
+  removeDevicesFromInventoryGroup,
+} from '../../api/groups';
 import { useDispatch } from 'react-redux';
 import { Text } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
+import useInventoryGroups from '../../hooks/useInventoryGroups';
 
-const removeDescription = (deviceInfo) => {
+const removeDescription = (deviceInfo, inventoryGroupsEnabled) => {
   const { deviceGroups } = deviceInfo[0];
 
   const systemText =
@@ -20,6 +24,16 @@ const removeDescription = (deviceInfo) => {
     deviceGroups.length === 1
       ? deviceGroups[0].Name
       : `${deviceGroups.length} groups`;
+
+  if (inventoryGroupsEnabled) {
+    return (
+      <Text>
+        <strong>{systemText} </strong> will no longer be part of{' '}
+        <strong>{groupText}</strong> and its configuration will be impacted.
+      </Text>
+    );
+  }
+
   if (deviceGroups.length > 1) {
     return (
       <Text>
@@ -40,13 +54,13 @@ const WarningIcon = () => (
   <ExclamationTriangleIcon color={warningColor.value} />
 );
 
-const createSchema = (deviceInfo) => {
+const createSchema = (deviceInfo, inventoryGroupsEnabled) => {
   const schema = {
     fields: [
       {
         component: componentTypes.PLAIN_TEXT,
         name: 'description',
-        label: removeDescription(deviceInfo),
+        label: removeDescription(deviceInfo, inventoryGroupsEnabled),
       },
     ],
   };
@@ -71,6 +85,9 @@ const RemoveDeviceModal = ({
   deviceInfo,
 }) => {
   const dispatch = useDispatch();
+
+  const inventoryGroupsEnabled = useInventoryGroups(false);
+
   const { deviceGroups } = deviceInfo[0];
 
   const handleRemoveDevices = (values) => {
@@ -79,23 +96,41 @@ const RemoveDeviceModal = ({
       ? values.group.toString()
       : deviceGroups[0].Name;
     const groupId = hasManyGroups ? values.group.groupId : deviceGroups[0].ID;
+    const systemText =
+      deviceInfo.length > 1
+        ? `${deviceInfo.length} systems`
+        : deviceInfo[0].name;
+
+    const errorMessageDescription = inventoryGroupsEnabled
+      ? deviceInfo.length > 1
+        ? `Failed to remove ${deviceInfo.length} systems from ${groupName}`
+        : `Failed to remove 1 system from ${groupName}`
+      : 'Failed to remove system from group';
 
     const statusMessages = {
       onSuccess: {
         title: 'Success',
-        description: `${deviceInfo[0].name} has been removed from ${groupName} successfully`,
+        description: `${systemText} has been removed from ${groupName} successfully`,
       },
       onError: {
         title: 'Error',
-        description: 'Failed to remove system from group',
+        description: errorMessageDescription,
       },
     };
 
-    apiWithToast(
-      dispatch,
-      () => removeDeviceFromGroupById(groupId, deviceInfo[0].ID),
-      statusMessages
-    );
+    let removeDeviceGroupFunc;
+    if (inventoryGroupsEnabled) {
+      removeDeviceGroupFunc = () =>
+        removeDevicesFromInventoryGroup(
+          groupId,
+          deviceInfo.map((device) => device.UUID)
+        );
+    } else {
+      removeDeviceGroupFunc = () =>
+        removeDeviceFromGroupById(groupId, deviceInfo[0].ID);
+    }
+
+    apiWithToast(dispatch, removeDeviceGroupFunc, statusMessages);
   };
 
   return (
@@ -115,7 +150,7 @@ const RemoveDeviceModal = ({
             })) || [],
         },
       }}
-      schema={createSchema(deviceInfo)}
+      schema={createSchema(deviceInfo, inventoryGroupsEnabled)}
       onSubmit={handleRemoveDevices}
       reloadData={reloadData}
     />

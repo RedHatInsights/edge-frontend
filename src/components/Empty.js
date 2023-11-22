@@ -21,6 +21,7 @@ const Empty = ({
   body,
   primaryAction,
   secondaryActions,
+  target,
 }) => (
   <EmptyState variant="large" style={{ backgroundColor: bgColor || '' }}>
     {icon && <EmptyStateIcon icon={iconMapper[icon]} />}
@@ -44,7 +45,7 @@ const Empty = ({
           createLink({
             pathname: `${primaryAction.href}`,
             linkText: primaryAction.text,
-            history,
+            target: target,
           })
         ) : (
           <Button variant="primary" onClick={primaryAction.click}>
@@ -85,6 +86,7 @@ Empty.propTypes = {
   body: PropTypes.string,
   primaryAction: PropTypes.object,
   secondaryActions: PropTypes.array,
+  target: PropTypes.string,
 };
 
 Empty.defaultProps = {

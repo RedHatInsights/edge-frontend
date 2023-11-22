@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   HelperText,
   HelperTextItem,
@@ -8,15 +8,21 @@ import {
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useApi from '../hooks/useApi';
-import { getGroups } from '../api/groups';
+import { getGroups, getInventoryGroups } from '../api/groups';
 import { debounce } from 'lodash';
+import useInventoryGroups from '../hooks/useInventoryGroups';
 
 const SelectInput = (props) => {
   useFieldApi(props);
+  const inventoryGroupsEnabled = useInventoryGroups(false);
+
   const { change } = useFormApi();
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(null);
-  const [{ data, isLoading }, fetchGroups] = useApi({ api: getGroups });
+  const [{ data, isLoading }, fetchGroups, apiFunc, setAPIFunc] = useApi({
+    api: inventoryGroupsEnabled ? getInventoryGroups : getGroups,
+    tableReload: true,
+  });
   const [searchTerm, setSearchTerm] = useState('');
 
   const onToggle = (isOpen) => {
@@ -40,6 +46,16 @@ const SelectInput = (props) => {
     updateSelection(null);
   };
 
+  useEffect(() => {
+    // set the new api function when inventoryGroupsEnabled value change
+    setAPIFunc(() => (inventoryGroupsEnabled ? getInventoryGroups : getGroups));
+  }, [inventoryGroupsEnabled]);
+
+  useEffect(() => {
+    // re-initiate the search widget data when api function change
+    clearSelection();
+  }, [apiFunc]);
+
   const onFilter = (_event, value) => {
     /* This handler is called on input changes as well as when children change.
        _event is null when the children change. Only update searchTerm state
@@ -51,8 +67,8 @@ const SelectInput = (props) => {
     }
   };
 
-  const options = data?.data || [];
-  const totalCount = data?.count || 0;
+  const options = (inventoryGroupsEnabled ? data?.results : data?.data) || [];
+  const totalCount = (inventoryGroupsEnabled ? data?.total : data?.count) || 0;
 
   return (
     <>
@@ -84,16 +100,15 @@ const SelectInput = (props) => {
       >
         {isLoading
           ? []
-          : options?.map(({ DeviceGroup }) => (
+          : options?.map(({ id, name, DeviceGroup }) => (
+              // note: the schema is different when fetching groups from inventory or from edge-api
               <SelectOption
-                key={DeviceGroup.ID}
+                key={inventoryGroupsEnabled ? id : DeviceGroup.ID}
                 value={{
-                  toString: () => DeviceGroup.Name,
-                  groupId: DeviceGroup.ID,
+                  toString: () =>
+                    inventoryGroupsEnabled ? name : DeviceGroup.Name,
+                  groupId: inventoryGroupsEnabled ? id : DeviceGroup.ID,
                 }}
-                {...(DeviceGroup.description && {
-                  description: DeviceGroup.description,
-                })}
               />
             ))}
       </Select>

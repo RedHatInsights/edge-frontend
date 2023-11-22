@@ -61,8 +61,7 @@ const UpdateImage = ({
 
   const statusMessages = {
     onSuccess: {
-      title: 'Success',
-      description: `Successfully started image update`,
+      title: `Successfully started image update`,
     },
     onError: { title: 'Error', description: 'Failed to create image' },
   };

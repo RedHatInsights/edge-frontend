@@ -7,10 +7,15 @@ import { DateFormat } from '@redhat-cloud-services/frontend-components/DateForma
 import { cellWidth } from '@patternfly/react-table';
 import { Tooltip } from '@patternfly/react-core';
 import CustomEmptyState from '../../components/Empty';
-import { createLink, emptyStateNoFilters } from '../../utils';
+import { createLink, emptyStateNoFilters, useFeatureFlags } from '../../utils';
 import DeviceStatus, { getDeviceStatus } from '../../components/Status';
 import RetryUpdatePopover from './RetryUpdatePopover';
-import { Button } from '@patternfly/react-core';
+import {
+  FEATURE_HIDE_GROUP_ACTIONS,
+  FEATURE_PARITY_INVENTORY_GROUPS,
+} from '../../constants/features';
+
+const insightsInventoryManageEdgeUrlName = 'manage-edge-inventory';
 
 const defaultFilters = [
   {
@@ -29,38 +34,40 @@ const defaultFilters = [
   },
 ];
 
-const columnNames = [
-  {
-    title: 'Name',
-    type: 'name',
-    sort: true,
-    columnTransforms: [cellWidth(30)],
-  },
-  {
-    title: 'Image',
-    type: 'image',
-    sort: false,
-    columnTransforms: [cellWidth(20)],
-  },
-  {
-    title: 'Groups',
-    type: 'groups',
-    sort: false,
-    columnTransforms: [cellWidth(15)],
-  },
-  {
-    title: 'Last seen',
-    type: 'last_seen',
-    sort: true,
-    columnTransforms: [cellWidth(15)],
-  },
-  {
-    title: 'Status',
-    type: 'status',
-    sort: false,
-    columnTransforms: [cellWidth(25)],
-  },
-];
+const GetColumnNames = (inventoryGroupsEnabled, isDataAvailable) => {
+  return [
+    {
+      title: 'Name',
+      type: 'name',
+      sort: isDataAvailable,
+      columnTransforms: [cellWidth(30)],
+    },
+    {
+      title: 'Image',
+      type: 'image',
+      sort: false,
+      columnTransforms: [cellWidth(20)],
+    },
+    {
+      title: inventoryGroupsEnabled ? 'Group' : 'Groups',
+      type: 'groups',
+      sort: false,
+      columnTransforms: [cellWidth(15)],
+    },
+    {
+      title: 'Last seen',
+      type: 'last_seen',
+      sort: isDataAvailable,
+      columnTransforms: [cellWidth(15)],
+    },
+    {
+      title: 'Status',
+      type: 'status',
+      sort: false,
+      columnTransforms: [cellWidth(25)],
+    },
+  ];
+};
 
 const createRows = (
   devices,
@@ -68,7 +75,8 @@ const createRows = (
   fetchDevices,
   deviceBaseUrl,
   history,
-  navigate
+  navigate,
+  inventoryGroupsEnabled
 ) => {
   return devices?.map((device) => {
     let { DeviceName, DeviceGroups } = device;
@@ -82,6 +90,8 @@ const createRows = (
       // ImageID,
       Status,
       DispatcherStatus,
+      GroupName,
+      GroupUUID,
     } = device;
     const deviceStatus = getDeviceStatus(
       Status,
@@ -94,6 +104,14 @@ const createRows = (
     if (DeviceName === '') {
       // needs to be fixed with proper name in sync with inv
       DeviceName = 'localhost';
+    }
+
+    if (inventoryGroupsEnabled) {
+      if (GroupName && GroupUUID) {
+        DeviceGroups = [{ ID: GroupUUID, Name: GroupName }];
+      } else {
+        DeviceGroups = [];
+      }
     }
 
     if (DeviceGroups === null) {
@@ -115,11 +133,10 @@ const createRows = (
         </Tooltip>
       </div>
     );
-
     const pathToDevice =
       deviceBaseUrl !== 'federated'
-        ? `${deviceBaseUrl}/${DeviceUUID}`
-        : `/${DeviceUUID}`;
+        ? `edge${paths.inventory}/${DeviceUUID}`
+        : `insights/inventory/${DeviceUUID}`;
     const pathToImage =
       deviceBaseUrl !== 'federated'
         ? `edge${paths.manageImages}/${ImageSetID}`
@@ -153,30 +170,20 @@ const createRows = (
             ? createLink({
                 pathname: pathToDevice,
                 linkText: DeviceName,
-                history,
                 navigate,
               })
             : DeviceName,
         },
         {
-          title: ImageName ? (
-            hasLinks ? (
-              <Button
-                variant="link"
-                target-href={pathToImage}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = `${pathToImage}`;
-                }}
-              >
-                {ImageName}
-              </Button>
-            ) : (
-              ImageName
-            )
-          ) : (
-            'unavailable'
-          ),
+          title: ImageName
+            ? hasLinks
+              ? createLink({
+                  pathname: pathToImage,
+                  linkText: ImageName,
+                  navigate,
+                })
+              : ImageName
+            : 'unavailable',
         },
         {
           title:
@@ -246,6 +253,8 @@ const DeviceTable = ({
   fetchDevices,
   isSystemsView = false,
   isAddSystemsView = false,
+  urlName,
+  enforceEdgeGroups,
 }) => {
   const canBeRemoved = setRemoveModal;
   const canBeAdded = setIsAddModalOpen;
@@ -266,32 +275,42 @@ const DeviceTable = ({
     ? useLocation()
     : null;
 
+  const useInventorGroups = useFeatureFlags(FEATURE_PARITY_INVENTORY_GROUPS);
+  const inventoryGroupsEnabled = !enforceEdgeGroups && useInventorGroups;
+
   // Create base URL path for system detail link
-  const deviceBaseUrl = historyProp
+  const deviceBaseUrl = navigateProp
     ? 'federated'
     : pathname === paths.inventory
     ? pathname
     : pathname === '/'
     ? ''
     : `${pathname}/systems`;
+
+  const hideGroupsActions = useFeatureFlags(FEATURE_HIDE_GROUP_ACTIONS);
+
   const actionResolver = (rowData) => {
     const getUpdatePathname = (updateRowData) =>
-      historyProp
-        ? `/${updateRowData.rowInfo.id}/update`
+      navigateProp
+        ? `/insights/inventory/${updateRowData.rowInfo.id}/update`
         : `/inventory/${updateRowData.rowInfo.id}/update`;
     const actions = [];
     if (isLoading) return actions;
     if (!rowData?.rowInfo?.id) return actions;
 
-    if (handleAddDevicesToGroup) {
+    if (handleAddDevicesToGroup && !hideGroupsActions) {
       actions.push({
         title: 'Add to group',
+        isDisabled: inventoryGroupsEnabled
+          ? rowData?.rowInfo?.deviceGroups.length !== 0 // disable the action item if the system has a group assigned
+          : false,
         onClick: () =>
           handleAddDevicesToGroup(
             [
               {
                 ID: rowData.rowInfo.deviceID,
                 name: rowData.rowInfo.display_name,
+                UUID: rowData.rowInfo.id,
               },
             ],
             true
@@ -333,7 +352,7 @@ const DeviceTable = ({
       });
     }
 
-    if (handleRemoveDevicesFromGroup) {
+    if (handleRemoveDevicesFromGroup && !hideGroupsActions) {
       actions.push({
         title: 'Remove from group',
         isDisabled: rowData?.rowInfo?.deviceGroups.length === 0,
@@ -344,6 +363,7 @@ const DeviceTable = ({
                 ID: rowData.rowInfo.deviceID,
                 name: rowData.rowInfo.display_name,
                 deviceGroups: rowData.rowInfo.deviceGroups,
+                UUID: rowData.rowInfo.id,
               },
             ],
             true
@@ -351,14 +371,19 @@ const DeviceTable = ({
       });
     }
 
-    if (!areActionsDisabled(rowData)) {
+    if (!areActionsDisabled(rowData) && handleUpdateSelected) {
       actions.push({
         title: 'Update',
         onClick: (_event, _rowId, rowData) => {
-          history.push({
-            pathname: getUpdatePathname(rowData),
-            // pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
-          });
+          if (navigateProp) {
+            const pathProp = getUpdatePathname(rowData);
+            navigate(pathProp, { replace: true });
+          } else {
+            history.push({
+              pathname: getUpdatePathname(rowData),
+              // pathname: `${deviceBaseUrl}/${rowData.rowInfo.id}/update`,
+            });
+          }
         },
       });
     }
@@ -382,6 +407,32 @@ const DeviceTable = ({
     !rowData.rowInfo?.UpdateAvailable &&
     (rowData.rowInfo?.deviceStatus === 'updating' ||
       rowData.rowInfo?.deviceStatus === 'upToDate');
+
+  // some filters and columns titles/labels have different values when shown in insights inventory
+  let tableFilters = [];
+  let tableColumnNames = [];
+  const isDataAvailable = data ? data.length > 0 : false;
+  const columnNames = GetColumnNames(inventoryGroupsEnabled, isDataAvailable);
+
+  if (urlName === insightsInventoryManageEdgeUrlName) {
+    for (let ind = 0; ind < defaultFilters.length; ind++) {
+      let filterElement = defaultFilters[ind];
+      if (filterElement['label'] === 'Status') {
+        filterElement['label'] = 'Image status';
+      }
+      tableFilters.push(filterElement);
+    }
+    for (let ind = 0; ind < columnNames.length; ind++) {
+      let columnElement = columnNames[ind];
+      if (columnElement['title'] === 'Status') {
+        columnElement['title'] = 'Image status';
+      }
+      tableColumnNames.push(columnElement);
+    }
+  } else {
+    tableFilters = defaultFilters;
+    tableColumnNames = columnNames;
+  }
 
   return (
     <>
@@ -407,24 +458,26 @@ const DeviceTable = ({
       ) : (
         <GeneralTable
           historyProp={historyProp}
+          navigateProp={navigateProp}
           locationProp={locationProp}
           apiFilterSort={true}
           isUseApi={true}
-          filters={defaultFilters}
+          filters={tableFilters}
           loadTableData={fetchDevices}
           tableData={{
             count: count,
             isLoading: isLoading,
             hasError: hasError,
           }}
-          columnNames={columnNames}
+          columnNames={tableColumnNames}
           rows={createRows(
             data || [],
             isAddSystemsView || isSystemsView,
             fetchDevices,
             deviceBaseUrl,
             history,
-            navigate
+            navigate,
+            inventoryGroupsEnabled
           )}
           actionResolver={actionResolver}
           defaultSort={{ index: 3, direction: 'desc' }}
@@ -494,6 +547,9 @@ DeviceTable.propTypes = {
   fetchDevices: PropTypes.func,
   isSystemsView: PropTypes.bool,
   isAddSystemsView: PropTypes.bool,
+  urlName: PropTypes.string,
+  groupUUID: PropTypes.string,
+  enforceEdgeGroups: PropTypes.bool,
 };
 
 export default DeviceTable;

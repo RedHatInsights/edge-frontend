@@ -38,7 +38,8 @@ import {
   useParams,
   useHistory,
   useLocation,
-  useRouteMatch,
+  useNavigate,
+  matchPath,
 } from 'react-router-dom';
 import apiWithToast from '../../utils/apiWithToast';
 import { createLink } from '../../utils';
@@ -139,8 +140,10 @@ const UpdateSystemMain = ({
   isLoading,
   hasError,
   historyProp,
+  navigateProp,
   locationProp,
-  routeMatchProp,
+  currentId,
+  notificationProp,
 }) => {
   const device = data?.Device;
   const [selectedVersion, setSelectedVersion] = useState(null);
@@ -152,8 +155,12 @@ const UpdateSystemMain = ({
     : useHistory
     ? useHistory()
     : null;
+  const navigate = navigateProp
+    ? navigateProp()
+    : useNavigate
+    ? useNavigate()
+    : null;
   const { pathname, search } = locationProp ? locationProp() : useLocation();
-  const match = routeMatchProp ? routeMatchProp() : useRouteMatch();
   const setUpdateEvent = (value) => {
     setSelectedVersion(value.cells[0]);
     setSelectedCommitID(value);
@@ -179,7 +186,8 @@ const UpdateSystemMain = ({
           CommitID: selectedCommitID.commitID,
           DevicesUUID: [selectedCommitID.deviceUUID],
         }),
-      statusMessages
+      statusMessages,
+      notificationProp
     );
 
     handleClose();
@@ -190,22 +198,49 @@ const UpdateSystemMain = ({
     // Return either to the system detail, group detail, or inventory page,
     // depending on path and from_details param
     let destPath = paths.inventory;
-    if (match.path === paths.inventoryDetailUpdate) {
+    const matchInventoryDetailUpdate = matchPath(pathname, {
+      path: paths.inventoryDetailUpdate,
+      exact: true,
+      strict: false,
+    });
+
+    const matchInsightsInventoryDetailUpdate = matchPath(pathname, {
+      path: paths.insightsInventoryDetailUpdate,
+      exact: true,
+      strict: false,
+    });
+    const matchInventoryDetail = matchPath(`/inventory/${currentId}`, {
+      path: paths.inventoryDetail,
+      exact: true,
+      strict: false,
+    });
+    if (pathname === matchInventoryDetailUpdate?.url) {
       destPath = search.includes('from_details=true')
-        ? paths.inventoryDetail
+        ? matchInventoryDetail.url
         : paths.inventory;
     }
-    if (match.path === paths.fleetManagementSystemDetailUpdate) {
+    if (pathname === matchInsightsInventoryDetailUpdate?.url) {
+      destPath = search.includes('from_details=true')
+        ? `/insights${matchInventoryDetail.url}`
+        : paths.insightsInventory;
+    }
+    if (pathname === paths.fleetManagementSystemDetailUpdate) {
       destPath = search.includes('from_details=true')
         ? paths.fleetManagementSystemDetail
         : paths.fleetManagementDetail;
     }
 
-    // Construct destination path
-    const pathLen = destPath.split('/').length;
-    const dest = pathname.split('/').slice(0, pathLen).join('/');
+    const isFederated = typeof navigateProp !== 'undefined';
 
-    history.push({ pathname: dest });
+    if (isFederated) {
+      navigate({ pathname: destPath });
+    } else {
+      // Construct destination path
+      const pathLen = destPath.split('/').length;
+      const dest = pathname.split('/').slice(0, pathLen).join('/');
+
+      history.push({ pathname: dest });
+    }
   };
 
   const buildRow = (image) => {
@@ -256,6 +291,7 @@ const UpdateSystemMain = ({
             <>
               <GeneralTable
                 historyProp={historyProp}
+                navigateProp={navigateProp}
                 locationProp={locationProp}
                 className="pf-u-mt-sm"
                 apiFilterSort={true}
@@ -323,19 +359,24 @@ const UpdateSystemMain = ({
 UpdateSystemMain.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   historyProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   locationProp: PropTypes.func,
   routeMatchProp: PropTypes.func,
   fetchDevices: PropTypes.func,
   isLoading: PropTypes.bool,
   hasError: PropTypes.bool,
+  currentId: PropTypes.string,
+  notificationProp: PropTypes.object,
 };
 
 const UpdateSystem = ({
   inventoryId,
   historyProp,
+  navigateProp,
   locationProp,
   routeMatchProp,
   paramsProp,
+  notificationProp,
 }) => {
   const history = historyProp
     ? historyProp()
@@ -348,7 +389,8 @@ const UpdateSystem = ({
     ? useParams()
     : null;
   const currentId = inventoryId ? inventoryId : deviceId;
-  const currentInventoryPath = historyProp ? '/edge' : paths.inventory;
+  const currentInventoryPath =
+    window.location.pathname.indexOf('edge') > 0 ? 'edge' : paths.inventory;
   const [{ data, isLoading, hasError }, fetchDevices] = useApi({
     api: getDeviceUpdates,
     id: currentId,
@@ -369,14 +411,19 @@ const UpdateSystem = ({
             <BreadcrumbItem>
               {createLink({
                 pathname:
-                  currentInventoryPath === '/edge' ? '/' : currentInventoryPath,
+                  currentInventoryPath === 'edge'
+                    ? `${currentInventoryPath}/inventory`
+                    : `insights${currentInventoryPath}/manage-edge-inventory`,
                 linkText: 'Systems',
                 history,
               })}
             </BreadcrumbItem>
             <BreadcrumbItem>
               {createLink({
-                pathname: `${currentInventoryPath}/${currentId}/`,
+                pathname:
+                  currentInventoryPath === 'edge'
+                    ? `${currentInventoryPath}/inventory/${currentId}/`
+                    : `insights${currentInventoryPath}/${currentId}`,
                 linkText: device?.DeviceName || <Skeleton width="100px" />,
                 history,
               })}
@@ -427,12 +474,16 @@ const UpdateSystem = ({
       <section className="edge-devices pf-l-page__main-section pf-c-page__main-section">
         <UpdateSystemMain
           data={data}
+          currentId={currentId}
           fetchDevices={fetchDevices}
           isLoading={isLoading}
           hasError={hasError}
-          historyProp={historyProp}
+          navigateProp={navigateProp}
+          histor
+          yProp={historyProp}
           locationProp={locationProp}
           routeMatchProp={routeMatchProp}
+          notificationProp={notificationProp}
         />
       </section>
     </>
@@ -441,10 +492,12 @@ const UpdateSystem = ({
 
 UpdateSystem.propTypes = {
   historyProp: PropTypes.func,
+  navigateProp: PropTypes.func,
   locationProp: PropTypes.func,
   routeMatchProp: PropTypes.func,
   paramsProp: PropTypes.func,
   inventoryId: PropTypes.string,
+  notificationProp: PropTypes.object,
 };
 
 export default UpdateSystem;

@@ -203,7 +203,7 @@ const ImageTable = ({
     rowData.rowInfo?.imageStatus === 'BUILDING';
 
   const baseURL = getBaseURLFromPrefixAndName(
-    paths.manageImages,
+    `edge${paths.manageImages}`,
     pathPrefix,
     urlName
   );

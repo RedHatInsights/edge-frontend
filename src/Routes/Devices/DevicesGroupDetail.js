@@ -5,19 +5,12 @@ import {
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import DeviceTable from './DeviceTable';
-import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
-import CreateGroupModal from '../Groups/CreateGroupModal';
 import useApi from '../../hooks/useApi';
-import { getInventory } from '../../api/devices';
+import { getInventoryByGroup } from '../../api/devices';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
-import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
-import { editDisplayName, deleteEntity } from '../../store/actions';
-import { useDispatch } from 'react-redux';
-import apiWithToast from '../../utils/apiWithToast';
-import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { useFeatureFlags } from '../../utils';
 import {
   FEATURE_HIDE_GROUP_ACTIONS,
@@ -28,21 +21,15 @@ const UpdateDeviceModal = React.lazy(() =>
   import(/* webpackChunkName: "UpdateDeviceModal" */ './UpdateDeviceModal')
 );
 
-const TextInputModal = (props) => (
-  <AsyncComponent appName="inventory" module="./TextInputModal" {...props} />
-);
-
-const DeleteModal = (props) => (
-  <AsyncComponent appName="inventory" module="./DeleteModal" {...props} />
-);
-
-const Inventory = ({
+const DevicesGroupDetail = ({
   historyProp,
   navigateProp,
   locationProp,
   showHeaderProp,
   notificationProp,
   urlName,
+  groupUUID,
+  tableProps,
 }) => {
   const chrome = useChrome();
   const history = historyProp
@@ -56,22 +43,17 @@ const Inventory = ({
     ? useLocation()
     : null;
   const [response, fetchDevices] = useApi({
-    api: getInventory,
+    api: getInventoryByGroup,
+    id: groupUUID,
     tableReload: true,
   });
   const showHeader = showHeaderProp === undefined ? true : showHeaderProp;
   const { data, isLoading, hasError } = response;
-  const enforceEdgeGroups = data?.data?.enforce_edge_groups;
-  const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
   const [isRemoveDeviceModalOpen, setIsRemoveDeviceModalOpen] = useState(false);
-  const [isEditNameModalOpen, setIsEditNameModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deviceId, setDeviceId] = useState([]);
   const [checkedDeviceIds, setCheckedDeviceIds] = useState([]);
   const [isRowSelected, setIsRowSelected] = useState(false);
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
-  const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
-  const dispatch = useDispatch();
 
   const [updateModal, setUpdateModal] = useState({
     isOpen: false,
@@ -79,29 +61,12 @@ const Inventory = ({
     imageData: null,
   });
 
-  const useInventorGroups = useFeatureFlags(FEATURE_PARITY_INVENTORY_GROUPS);
-  const inventoryGroupsEnabled = !enforceEdgeGroups && useInventorGroups;
-
-  const handleAddDevicesToGroup = (ids, isRow) => {
-    setIsAddDeviceModalOpen(true);
-    isRow ? setDeviceId(ids) : setCheckedDeviceIds(ids);
-    setIsRowSelected(isRow);
-  };
+  const inventoryGroupsEnabled = useFeatureFlags(
+    FEATURE_PARITY_INVENTORY_GROUPS
+  );
 
   const handleRemoveDevicesFromGroup = (ids, isRow) => {
     setIsRemoveDeviceModalOpen(true);
-    isRow ? setDeviceId(ids) : setCheckedDeviceIds(ids);
-    setIsRowSelected(isRow);
-  };
-
-  const handleEditNameSystem = (ids, isRow) => {
-    setIsEditNameModalOpen(true);
-    isRow ? setDeviceId(ids) : setCheckedDeviceIds(ids);
-    setIsRowSelected(isRow);
-  };
-
-  const handleDeleteSystem = (ids, isRow) => {
-    setIsDeleteModalOpen(true);
     isRow ? setDeviceId(ids) : setCheckedDeviceIds(ids);
     setIsRowSelected(isRow);
   };
@@ -155,83 +120,6 @@ const Inventory = ({
     classNameMain = 'pf-c-toolbar';
   }
 
-  function handleOnSubmitEditName(value) {
-    const uuid = isRowSelected ? deviceId[0].UUID : checkedDeviceIds[0].UUID;
-    const name = isRowSelected ? deviceId[0].name : checkedDeviceIds[0].name;
-    const statusMessages = {
-      onSuccess: {
-        title: `Display name for entity with ID ${uuid} has been changed to ${value}`,
-      },
-      onError: { title: 'Error', description: 'Failed to update device name' },
-    };
-    if (notificationProp) {
-      apiWithToast(
-        dispatch,
-        () => editDisplayName(uuid, value, name),
-        statusMessages,
-        notificationProp
-      );
-    } else {
-      dispatch(editDisplayName(uuid, value, name));
-    }
-    setIsEditNameModalOpen(false);
-  }
-
-  function handleOnConfirmDeleteSystem() {
-    const systemInstance = isRowSelected ? deviceId[0] : checkedDeviceIds[0];
-
-    let displayName = systemInstance.display_name;
-    let removeSystems = [systemInstance.UUID];
-    const statusInitialMessages = {
-      onWarning: {
-        title: 'Delete operation initiated',
-        description: `Removal of ${displayName} started.`,
-      },
-      onError: {
-        title: 'Error',
-        description: 'Failed to initial delete device',
-      },
-    };
-    const statusMessages = {
-      onSuccess: {
-        title: 'Delete operation finished',
-        description: `${displayName} has been successfully removed.`,
-      },
-      onError: { title: 'Error', description: 'Failed to delete device' },
-    };
-
-    if (notificationProp) {
-      apiWithToast(
-        dispatch,
-        () =>
-          addNotification({
-            id: 'remove-initiated',
-            variant: 'warning',
-          }),
-        statusInitialMessages,
-        notificationProp
-      );
-      apiWithToast(
-        dispatch,
-        () => deleteEntity(removeSystems, displayName),
-        statusMessages,
-        notificationProp
-      );
-    } else {
-      dispatch(
-        addNotification({
-          id: 'remove-initiated',
-          variant: 'warning',
-          title: 'Delete operation initiated',
-          description: `Removal of ${displayName} started.`,
-          dismissable: false,
-        })
-      );
-      dispatch(deleteEntity(removeSystems, displayName));
-    }
-    setIsDeleteModalOpen(false);
-  }
-
   useEffect(() => {
     chrome?.updateDocumentTitle?.('Systems - Inventory | Edge management');
   }, [chrome]);
@@ -239,25 +127,7 @@ const Inventory = ({
   const hideGroupsActions = useFeatureFlags(FEATURE_HIDE_GROUP_ACTIONS);
   const kebabMenuItems = [];
   if (!hideGroupsActions) {
-    const groupsKebabMenuItems = [
-      {
-        isDisabled: inventoryGroupsEnabled
-          ? !(checkedDeviceIds.length > 0) ||
-            checkedDeviceIds.filter((device) => device.deviceGroups?.length > 0)
-              .length > 0 // The action menu item is disabled if one of the systems items belongs to a group
-          : !(checkedDeviceIds.length > 0),
-        title: 'Add to group',
-        onClick: () =>
-          handleAddDevicesToGroup(
-            checkedDeviceIds.map((device) => ({
-              ID: device.deviceID,
-              name: device.display_name,
-              UUID: device.id,
-            })),
-            false
-          ),
-      },
-    ];
+    const groupsKebabMenuItems = [];
 
     if (inventoryGroupsEnabled) {
       groupsKebabMenuItems.push({
@@ -316,10 +186,7 @@ const Inventory = ({
           hasError={hasError}
           setUpdateModal={setUpdateModal}
           updateModal={updateModal}
-          handleAddDevicesToGroup={handleAddDevicesToGroup}
           handleRemoveDevicesFromGroup={handleRemoveDevicesFromGroup}
-          handleEditNameSystem={handleEditNameSystem}
-          handleDeleteSystem={handleDeleteSystem}
           handleUpdateSelected={handleUpdateSelected}
           hasCheckbox={true}
           selectedItems={setCheckedDeviceIds}
@@ -329,7 +196,7 @@ const Inventory = ({
           setHasModalSubmitted={setHasModalSubmitted}
           fetchDevices={fetchDevices}
           urlName={urlName}
-          enforceEdgeGroups={enforceEdgeGroups}
+          tableProps={tableProps}
         />
       </section>
       {updateModal.isOpen && (
@@ -358,23 +225,6 @@ const Inventory = ({
           />
         </Suspense>
       )}
-      {isAddDeviceModalOpen && (
-        <AddDeviceModal
-          isModalOpen={isAddDeviceModalOpen}
-          setIsModalOpen={setIsAddDeviceModalOpen}
-          setIsCreateGroupModalOpen={setIsCreateGroupModalOpen}
-          reloadData={reloadData}
-          deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
-        />
-      )}
-      {isCreateGroupModalOpen && (
-        <CreateGroupModal
-          isModalOpen={isCreateGroupModalOpen}
-          setIsModalOpen={setIsCreateGroupModalOpen}
-          reloadData={reloadData}
-          deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
-        />
-      )}
       {isRemoveDeviceModalOpen && (
         <RemoveDeviceModal
           isModalOpen={isRemoveDeviceModalOpen}
@@ -383,41 +233,19 @@ const Inventory = ({
           deviceInfo={isRowSelected ? deviceId : checkedDeviceIds}
         />
       )}
-      {isEditNameModalOpen && (
-        <TextInputModal
-          isOpen={isEditNameModalOpen}
-          title="Edit display name"
-          value={isRowSelected ? deviceId[0].name : checkedDeviceIds[0].name}
-          ariaLabel="Host inventory display name"
-          modalOuiaId="edit-display-name-modal"
-          cancelOuiaId="cancel-edit-display-name"
-          confirmOuiaId="confirm-edit-display-name"
-          inputOuiaId="input-edit-display-name"
-          onCancel={() => setIsEditNameModalOpen(false)}
-          onSubmit={handleOnSubmitEditName}
-          className="sentry-mask data-hj-suppress"
-        />
-      )}
-      {isDeleteModalOpen && (
-        <DeleteModal
-          className="sentry-mask data-hj-suppress"
-          handleModalToggle={setIsDeleteModalOpen}
-          isModalOpen={isDeleteModalOpen}
-          currentSytems={isRowSelected ? deviceId[0] : checkedDeviceIds[0]}
-          onConfirm={handleOnConfirmDeleteSystem}
-        />
-      )}
     </>
   );
 };
 
-Inventory.propTypes = {
+DevicesGroupDetail.propTypes = {
   historyProp: PropTypes.func,
   navigateProp: PropTypes.func,
   locationProp: PropTypes.func,
   showHeaderProp: PropTypes.bool,
   notificationProp: PropTypes.object,
   urlName: PropTypes.string,
+  groupUUID: PropTypes.string,
+  tableProps: PropTypes.object,
 };
 
-export default Inventory;
+export default DevicesGroupDetail;

@@ -18,6 +18,7 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import BuildModalReview from '../../components/BuildModalReview';
 import DateFormat from '@redhat-cloud-services/frontend-components/DateFormat';
 import { distributionMapper } from '../../constants';
+import apiWithToast from '../../utils/apiWithToast';
 
 const getImageData = (imageId) =>
   getImageById({ id: imageId }).then((imageSetId) =>
@@ -30,19 +31,45 @@ const getImageData = (imageId) =>
     })
   );
 
-const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
+const UpdateDeviceModal = ({
+  inventoryGroupUpdateDevicesInfo,
+  updateModal,
+  setUpdateModal,
+  refreshTable,
+  notificationProp,
+}) => {
+  if (
+    inventoryGroupUpdateDevicesInfo &&
+    !inventoryGroupUpdateDevicesInfo.update_valid
+  ) {
+    setUpdateModal((prevState) => ({ ...prevState, isOpen: false }));
+    return;
+  }
+
   const [imageData, setImageData] = useState(null);
   const dispatch = useDispatch();
-  const isMultiple = updateModal.deviceData.length > 1;
-  const deviceId = updateModal.deviceData.map((device) => device.id);
-  const deviceName = isMultiple
-    ? updateModal.deviceData.map((device) => device.display_name)
-    : updateModal?.deviceData[0]?.display_name;
 
+  const deviceId = inventoryGroupUpdateDevicesInfo
+    ? inventoryGroupUpdateDevicesInfo.update_devices_uuids
+    : updateModal.deviceData.map((device) => device.id);
+  const isMultiple = deviceId.length > 1;
+
+  let deviceName;
+  if (inventoryGroupUpdateDevicesInfo) {
+    deviceName = inventoryGroupUpdateDevicesInfo.update_devices_uuids;
+  } else {
+    deviceName = isMultiple
+      ? updateModal.deviceData.map((device) => device.display_name)
+      : updateModal?.deviceData[0]?.display_name;
+  }
+
+  const imageSetID = inventoryGroupUpdateDevicesInfo
+    ? inventoryGroupUpdateDevicesInfo.image_set_id
+    : updateModal?.imageSetId;
   useEffect(() => {
-    updateModal?.imageSetId
+    imageSetID
       ? getImageSet({
-          id: updateModal.imageSetId,
+          id: imageSetID,
           q: {
             limit: 1,
             sort_by: '-created_at',
@@ -53,21 +80,30 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
           setImageData(data.Data.images[0])
         );
   }, []);
+  const statusMessages = {
+    onInfo: {
+      title: 'Updating system',
+      description: isMultiple
+        ? ` ${deviceName.length} systems were added to the queue.`
+        : ` ${deviceName} was added to the queue.`,
+    },
+    onError: {
+      title: 'Error',
+      description: `Failed to update the selected system(s)`,
+    },
+  };
 
   const handleUpdateModal = async () => {
     try {
-      await updateSystem({
-        DevicesUUID: deviceId,
-      });
-      dispatch({
-        ...addNotification({
-          variant: 'info',
-          title: 'Updating system',
-          description: isMultiple
-            ? ` ${deviceName.length} systems were added to the queue.`
-            : ` ${deviceName} was added to the queue.`,
-        }),
-      });
+      await apiWithToast(
+        dispatch,
+        () =>
+          updateSystem({
+            DevicesUUID: deviceId,
+          }),
+        statusMessages,
+        notificationProp
+      );
     } catch (err) {
       dispatch({
         ...addNotification({
@@ -110,11 +146,15 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
       <Text>
         Update{' '}
         <span className="pf-u-font-weight-bold pf-u-font-size-md">
-          {isMultiple ? `${deviceName.length} systems` : deviceName}
+          {isMultiple
+            ? `${deviceName.length} systems`
+            : inventoryGroupUpdateDevicesInfo
+            ? '1 system'
+            : deviceName}
         </span>{' '}
         to latest version of the image linked to it.
       </Text>
-      {updateModal.deviceData.some(
+      {updateModal?.deviceData?.some(
         (device) =>
           device.deviceStatus !== 'updateAvailable' &&
           device.deviceStatus !== 'error'
@@ -201,6 +241,7 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
           schema={updateSchema}
           onSubmit={handleUpdateModal}
           reloadData={refreshTable}
+          notificationProp={notificationProp}
         />
       ) : (
         <Backdrop>
@@ -215,6 +256,12 @@ const UpdateDeviceModal = ({ updateModal, setUpdateModal, refreshTable }) => {
 
 UpdateDeviceModal.propTypes = {
   refreshTable: PropTypes.func,
+  inventoryGroupUpdateDevicesInfo: PropTypes.shape({
+    group_uuid: PropTypes.string,
+    update_valid: PropTypes.bool,
+    image_set_id: PropTypes.number,
+    update_devices_uuids: PropTypes.array,
+  }),
   updateModal: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
     deviceData: PropTypes.array.isRequired,
@@ -223,6 +270,7 @@ UpdateDeviceModal.propTypes = {
     imageSetId: PropTypes.number,
   }).isRequired,
   setUpdateModal: PropTypes.func.isRequired,
+  notificationProp: PropTypes.object,
 };
 
 export default UpdateDeviceModal;

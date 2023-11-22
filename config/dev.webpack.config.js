@@ -50,6 +50,9 @@ const webpackProxy = {
 const deps = require('../package.json').dependencies;
 const { config: webpackConfig, plugins } = config({
   rootFolder: resolve(__dirname, '../'),
+  appUrl: process.env.BETA ? '/preview/edge' : '/edge',
+  deployment: process.env.BETA ? 'preview/apps' : 'apps',
+
   debug: true,
   useFileHash: false,
   sassPrefix: '.fleet-management, .edge',
@@ -86,6 +89,15 @@ plugins.push(
           __dirname,
           '../src/Routes/Devices/DeviceTable.js'
         ),
+        './DevicesView': resolve(
+          __dirname,
+          '../src/Routes/Devices/DevicesView.js'
+        ),
+        './DevicesGroupDetail': resolve(
+          __dirname,
+          '../src/Routes/Devices/DevicesGroupDetail.js'
+        ),
+        './Groups': resolve(__dirname, '../src/Routes/Groups/Groups.js'),
         './UpdateDeviceModal': resolve(
           __dirname,
           '../src/Routes/Devices/UpdateDeviceModal.js'

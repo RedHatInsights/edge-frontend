@@ -3,6 +3,7 @@ import { addNotification } from '@redhat-cloud-services/frontend-components-noti
 const apiWithToast = (dispatch, api, statusMessages, notificationProp) => {
   const hasSuccess = statusMessages?.onSuccess;
   const hasInfo = statusMessages?.onInfo;
+  const hasWarning = statusMessages?.onWarning;
 
   if (!statusMessages) {
     statusMessages = {
@@ -40,6 +41,18 @@ const apiWithToast = (dispatch, api, statusMessages, notificationProp) => {
             ...addNotification({
               variant: 'success',
               ...statusMessages.onSuccess,
+            }),
+          });
+        }
+      }
+      if (hasWarning) {
+        if (notificationProp) {
+          notificationProp.hasWarning(statusMessages.onWarning);
+        } else {
+          dispatch({
+            ...addNotification({
+              variant: 'warning',
+              ...statusMessages.onWarning,
             }),
           });
         }
