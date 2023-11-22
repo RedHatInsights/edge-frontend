@@ -32,23 +32,44 @@ const getImageData = (imageId) =>
   );
 
 const UpdateDeviceModal = ({
+  inventoryGroupUpdateDevicesInfo,
   updateModal,
   setUpdateModal,
   refreshTable,
   notificationProp,
 }) => {
+  if (
+    inventoryGroupUpdateDevicesInfo &&
+    !inventoryGroupUpdateDevicesInfo.update_valid
+  ) {
+    setUpdateModal((prevState) => ({ ...prevState, isOpen: false }));
+    return;
+  }
+
   const [imageData, setImageData] = useState(null);
   const dispatch = useDispatch();
-  const isMultiple = updateModal.deviceData.length > 1;
-  const deviceId = updateModal.deviceData.map((device) => device.id);
-  const deviceName = isMultiple
-    ? updateModal.deviceData.map((device) => device.display_name)
-    : updateModal?.deviceData[0]?.display_name;
 
+  const deviceId = inventoryGroupUpdateDevicesInfo
+    ? inventoryGroupUpdateDevicesInfo.update_devices_uuids
+    : updateModal.deviceData.map((device) => device.id);
+  const isMultiple = deviceId.length > 1;
+
+  let deviceName;
+  if (inventoryGroupUpdateDevicesInfo) {
+    deviceName = inventoryGroupUpdateDevicesInfo.update_devices_uuids;
+  } else {
+    deviceName = isMultiple
+      ? updateModal.deviceData.map((device) => device.display_name)
+      : updateModal?.deviceData[0]?.display_name;
+  }
+
+  const imageSetID = inventoryGroupUpdateDevicesInfo
+    ? inventoryGroupUpdateDevicesInfo.image_set_id
+    : updateModal?.imageSetId;
   useEffect(() => {
-    updateModal?.imageSetId
+    imageSetID
       ? getImageSet({
-          id: updateModal.imageSetId,
+          id: imageSetID,
           q: {
             limit: 1,
             sort_by: '-created_at',
@@ -125,11 +146,15 @@ const UpdateDeviceModal = ({
       <Text>
         Update{' '}
         <span className="pf-u-font-weight-bold pf-u-font-size-md">
-          {isMultiple ? `${deviceName.length} systems` : deviceName}
+          {isMultiple
+            ? `${deviceName.length} systems`
+            : inventoryGroupUpdateDevicesInfo
+            ? '1 system'
+            : deviceName}
         </span>{' '}
         to latest version of the image linked to it.
       </Text>
-      {updateModal.deviceData.some(
+      {updateModal?.deviceData?.some(
         (device) =>
           device.deviceStatus !== 'updateAvailable' &&
           device.deviceStatus !== 'error'
@@ -231,6 +256,12 @@ const UpdateDeviceModal = ({
 
 UpdateDeviceModal.propTypes = {
   refreshTable: PropTypes.func,
+  inventoryGroupUpdateDevicesInfo: PropTypes.shape({
+    group_uuid: PropTypes.string,
+    update_valid: PropTypes.bool,
+    image_set_id: PropTypes.number,
+    update_devices_uuids: PropTypes.array,
+  }),
   updateModal: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
     deviceData: PropTypes.array.isRequired,
