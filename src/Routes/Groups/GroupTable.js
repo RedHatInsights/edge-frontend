@@ -49,6 +49,8 @@ const GroupTable = ({
 
   const history = useHistory();
   const { pathname } = locationProp ? locationProp() : useLocation();
+  const currentInventoryPath =
+    window.location.pathname.indexOf('edge') > 0 ? 'edge' : paths.inventory;
 
   const navigate = navigateProp
     ? navigateProp()
@@ -138,7 +140,10 @@ const GroupTable = ({
       cells: [
         {
           title: createLink({
-            pathname: `${paths.fleetManagement}/${ID}`,
+            pathname:
+              currentInventoryPath === 'edge'
+                ? `edge${paths.fleetManagement}/${ID}`
+                : `insights${paths.inventory}/groups/${ID}`,
             linkText: Name,
           }),
         },
