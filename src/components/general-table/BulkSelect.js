@@ -81,14 +81,14 @@ const BulkSelect = ({
                   {checkedRows.length > 0 && `${checkedRows.length} selected`}
                 </DropdownToggleCheckbox>,
               ]}
-              onToggle={() => setSelectAllToggle((prevState) => !prevState)}
+              onToggle={() => setSelectAllToggle((prevState)=> !prevState)}
             />
           }
           isOpen={selectAllToggle}
           dropdownItems={[
             <DropdownItem
               key="none"
-              onClick={handleNoneSelect}
+              onClick={()=> {handleNoneSelect(); setSelectAllToggle(false);}}
               isDisabled={checkedRows.length === 0}
             >
               Select none (0 items)
@@ -96,7 +96,7 @@ const BulkSelect = ({
 
             <DropdownItem
               key="page"
-              onClick={handlePageSelect}
+              onClick={()=>{handlePageSelect(); setSelectAllToggle(false); }}
               isDisabled={isAllSelected}
             >
               Select page ({perPage} {total.length === 1 ? 'item' : 'items'})
@@ -105,6 +105,7 @@ const BulkSelect = ({
               key="all"
               onClick={async () => {
                 await selectAllIds();
+                setSelectAllToggle(false);
               }}
             >
               Select all ({total} {total.length === 1 ? 'item' : 'items'})
