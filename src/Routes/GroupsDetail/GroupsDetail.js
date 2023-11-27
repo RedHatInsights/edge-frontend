@@ -271,6 +271,7 @@ const GroupsDetail = () => {
             setHasModalSubmitted={setHasModalSubmitted}
             fetchDevices={fetchDevices}
             isAddSystemsView={true}
+            enforceEdgeGroups={data?.DevicesView?.enforce_edge_groups}
           />
         ) : (
           <Flex justifyContent={{ default: 'justifyContentCenter' }}>
