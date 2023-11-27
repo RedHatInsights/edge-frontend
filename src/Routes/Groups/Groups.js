@@ -14,11 +14,10 @@ import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
 import { emptyStateNoFilters, useFeatureFlags } from '../../utils';
 import PropTypes from 'prop-types';
-import Images from '../ImageManager/Images';
 import { useLocation } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
-const Groups = ({ locationProp, navigateProp }) => {
+const Groups = ({ locationProp, navigateProp, paramsProp }) => {
   const hideCreateGroupsEnabled = useFeatureFlags(
     'edge-management.hide-create-group'
   );
@@ -71,6 +70,7 @@ const Groups = ({ locationProp, navigateProp }) => {
             handleRenameModal={handleRenameModal}
             locationProp={locationProp}
             navigateProp={navigateProp}
+            paramsProp={paramsProp}
             handleDeleteModal={handleDeleteModal}
             handleCreateModal={() => setIsCreateModalOpen(true)}
             hasModalSubmitted={hasModalSubmitted}
@@ -128,12 +128,13 @@ const Groups = ({ locationProp, navigateProp }) => {
   );
 };
 
-Images.propTypes = {
+Groups.propTypes = {
   pathPrefix: PropTypes.string,
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
   navigateProp: PropTypes.func,
   notificationProp: PropTypes.object,
+  paramsProp: PropTypes.func,
 };
 
 export default Groups;
