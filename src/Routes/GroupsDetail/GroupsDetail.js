@@ -16,7 +16,7 @@ import {
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import Empty from '../../components/Empty';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { routes as paths } from '../../constants/routeMapper';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
 import DeviceTable from '../Devices/DeviceTable';
@@ -27,7 +27,11 @@ import {
   removeDevicesFromGroup,
 } from '../../api/groups';
 import AddSystemsToGroupModal from '../Devices/AddSystemsToGroupModal';
-import { canUpdateSelectedDevices, emptyStateNoFilters } from '../../utils';
+import {
+  canUpdateSelectedDevices,
+  createLink,
+  emptyStateNoFilters,
+} from '../../utils';
 import useApi from '../../hooks/useApi';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
@@ -36,6 +40,7 @@ import { Bullseye, Spinner } from '@patternfly/react-core';
 import Modal from '../../components/Modal';
 import DeleteGroupModal from '../Groups/DeleteGroupModal';
 import RenameGroupModal from '../Groups/RenameGroupModal';
+import PropTypes from 'prop-types';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(
@@ -43,14 +48,14 @@ const UpdateDeviceModal = React.lazy(() =>
   )
 );
 
-const GroupsDetail = () => {
+const GroupsDetail = ({ locationProp, navigateProp, paramsProp }) => {
   const dispatch = useDispatch();
-  const params = useParams();
   const history = useHistory();
-  const { search, pathname } = useLocation();
-
-  const { groupId } = params;
-
+  const params = paramsProp ? paramsProp() : useParams();
+  const groupId = params?.id ? params.id : params.groupId;
+  const { search, pathname } = locationProp ? locationProp() : useLocation();
+  const currentApplicationPath =
+    window.location.pathname.indexOf('edge') > 0 ? 'edge' : paths.inventory;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [removeModal, setRemoveModal] = useState({
@@ -138,7 +143,13 @@ const GroupsDetail = () => {
         {groupName ? (
           <Breadcrumb>
             <BreadcrumbItem>
-              <Link to={paths.fleetManagement}>Groups</Link>
+              {createLink({
+                pathname:
+                  currentApplicationPath === 'edge'
+                    ? `edge${paths.fleetManagement}`
+                    : `insights/inventory/groups`,
+                linkText: 'Groups',
+              })}
             </BreadcrumbItem>
             <BreadcrumbItem>{groupName}</BreadcrumbItem>
           </Breadcrumb>
@@ -234,6 +245,9 @@ const GroupsDetail = () => {
             data={data?.DevicesView?.devices || []}
             count={data?.DevicesView?.total}
             isLoading={isLoading}
+            locationProp={locationProp}
+            navigateProp={navigateProp}
+            paramsProp={useParams}
             hasError={hasError}
             hasCheckbox={true}
             handleSingleDeviceRemoval={handleSingleDeviceRemoval}
@@ -370,6 +384,12 @@ const GroupsDetail = () => {
       )}
     </>
   );
+};
+
+GroupsDetail.propTypes = {
+  locationProp: PropTypes.func,
+  navigateProp: PropTypes.func,
+  paramsProp: PropTypes.func,
 };
 
 export default GroupsDetail;

@@ -98,6 +98,10 @@ plugins.push(
           '../src/Routes/Devices/DevicesGroupDetail.js'
         ),
         './Groups': resolve(__dirname, '../src/Routes/Groups/Groups.js'),
+        './GroupsDetails': resolve(
+          __dirname,
+          '../src/Routes/GroupsDetail/GroupsDetail.js'
+        ),
         './UpdateDeviceModal': resolve(
           __dirname,
           '../src/Routes/Devices/UpdateDeviceModal.js'

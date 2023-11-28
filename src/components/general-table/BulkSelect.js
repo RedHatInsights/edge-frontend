@@ -88,10 +88,7 @@ const BulkSelect = ({
           dropdownItems={[
             <DropdownItem
               key="none"
-              onClick={() => {
-                handleNoneSelect();
-                setSelectAllToggle(false);
-              }}
+              onClick={handleNoneSelect}
               isDisabled={checkedRows.length === 0}
             >
               Select none (0 items)
@@ -99,10 +96,7 @@ const BulkSelect = ({
 
             <DropdownItem
               key="page"
-              onClick={() => {
-                handlePageSelect();
-                setSelectAllToggle(false);
-              }}
+              onClick={handlePageSelect}
               isDisabled={isAllSelected}
             >
               Select page ({perPage} {total.length === 1 ? 'item' : 'items'})
@@ -111,7 +105,6 @@ const BulkSelect = ({
               key="all"
               onClick={async () => {
                 await selectAllIds();
-                setSelectAllToggle(false);
               }}
             >
               Select all ({total} {total.length === 1 ? 'item' : 'items'})
