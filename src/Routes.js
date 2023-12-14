@@ -94,6 +94,7 @@ export const Routes = () => {
           component={UpdateSystem}
         />
         <Route path={paths.inventoryDetail} component={DeviceDetail} />
+        <Route path={paths.inventoryDetailModal} component={DeviceDetail} />
         <Route path={paths.manageImagesDetailVersion} component={ImageDetail} />
         <Route path={paths.manageImagesDetail} component={ImageDetail} />
         <Route path={paths.manageImages} component={Images} />
