@@ -16,9 +16,12 @@ import { emptyStateNoFilters, useFeatureFlags } from '../../utils';
 import PropTypes from 'prop-types';
 import Images from '../ImageManager/Images';
 import { useLocation } from 'react-router-dom';
-
+import GroupsLinkAccess from './GroupsLinkAccess';
+import useInventoryGroups from '../../hooks/useInventoryGroups';
 // eslint-disable-next-line react/prop-types
 const Groups = ({ locationProp, navigateProp }) => {
+
+  const inventoryGroupsEnabled = useInventoryGroups(false);
   const hideCreateGroupsEnabled = useFeatureFlags(
     'edge-management.hide-create-group'
   );
@@ -56,7 +59,13 @@ const Groups = ({ locationProp, navigateProp }) => {
     chrome?.updateDocumentTitle?.('Groups - Inventory | Edge management');
   }, [chrome]);
 
+
+  
   return (
+    <>
+    {inventoryGroupsEnabled ? (
+      < GroupsLinkAccess />
+    ) : ( 
     <>
       <PageHeader className="pf-m-light">
         <PageHeaderTitle title="Groups" />
@@ -124,6 +133,8 @@ const Groups = ({ locationProp, navigateProp }) => {
           modalState={modalState}
         />
       )}
+    </>
+    )}
     </>
   );
 };
