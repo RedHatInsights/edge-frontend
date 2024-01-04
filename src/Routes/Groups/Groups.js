@@ -14,16 +14,15 @@ import DeleteGroupModal from './DeleteGroupModal';
 import useApi from '../../hooks/useApi';
 import { emptyStateNoFilters, useFeatureFlags } from '../../utils';
 import PropTypes from 'prop-types';
-import Images from '../ImageManager/Images';
 import { useLocation } from 'react-router-dom';
 import GroupsLinkAccess from './GroupsLinkAccess';
 import useInventoryGroups from '../../hooks/useInventoryGroups';
 // eslint-disable-next-line react/prop-types
-const Groups = ({ locationProp, navigateProp }) => {
-  const inventoryGroupsEnabled = useInventoryGroups(false);
+const Groups = ({ locationProp, navigateProp, paramsProp }) => {
   const hideCreateGroupsEnabled = useFeatureFlags(
     'edge-management.hide-create-group'
   );
+  const inventoryGroupsEnabled = useInventoryGroups(false);
   const { search } = locationProp ? locationProp() : useLocation();
 
   const [response, fetchGroups] = useApi({
@@ -60,52 +59,53 @@ const Groups = ({ locationProp, navigateProp }) => {
 
   return (
     <>
-      {inventoryGroupsEnabled ? (
-        <GroupsLinkAccess />
-      ) : (
-        <>
-          <PageHeader className="pf-m-light">
-            <PageHeaderTitle title="Groups" />
-          </PageHeader>
-          <section className="edge-groups pf-l-page__main-section pf-c-page__main-section">
-            {!emptyStateNoFilters(isLoading, data?.count, search) ? (
-              <GroupTable
-                data={data?.data || []}
-                count={data?.count}
-                isLoading={isLoading}
-                hasError={hasError}
-                handleRenameModal={handleRenameModal}
-                locationProp={locationProp}
-                navigateProp={navigateProp}
-                handleDeleteModal={handleDeleteModal}
-                handleCreateModal={() => setIsCreateModalOpen(true)}
-                hasModalSubmitted={hasModalSubmitted}
-                setHasModalSubmitted={setHasModalSubmitted}
-                fetchGroups={fetchGroups}
-              />
-            ) : (
-              <Flex justifyContent={{ default: 'justifyContentCenter' }}>
-                {hideCreateGroupsEnabled}?{}:
-                <Empty
-                  icon="plus"
-                  title="Create a system group"
-                  body="Create system groups to help manage your systems more effectively."
-                  primaryAction={{
-                    text: 'Create group',
-                    click: () => setIsCreateModalOpen(true),
-                  }}
-                  secondaryActions={[
-                    {
-                      type: 'link',
-                      title: 'Learn more about system groups',
-                      link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/working_with_systems_in_the_edge_management_application/index',
-                    },
-                  ]}
-                />
-                {}
-              </Flex>
-            )}
-          </section>
+    { inventoryGroupsEnabled ? (
+      < GroupsLinkAccess />
+    ) : (
+    <>
+      <PageHeader className="pf-m-light">
+        <PageHeaderTitle title="Groups" />
+      </PageHeader>
+      <section className="edge-groups pf-l-page__main-section pf-c-page__main-section">
+        {!emptyStateNoFilters(isLoading, data?.count, search) ? (
+          <GroupTable
+            data={data?.data || []}
+            count={data?.count}
+            isLoading={isLoading}
+            hasError={hasError}
+            handleRenameModal={handleRenameModal}
+            locationProp={locationProp}
+            navigateProp={navigateProp}
+            paramsProp={paramsProp}
+            handleDeleteModal={handleDeleteModal}
+            handleCreateModal={() => setIsCreateModalOpen(true)}
+            hasModalSubmitted={hasModalSubmitted}
+            setHasModalSubmitted={setHasModalSubmitted}
+            fetchGroups={fetchGroups}
+          />
+        ) : (
+          <Flex justifyContent={{ default: 'justifyContentCenter' }}>
+            {hideCreateGroupsEnabled}?{}:
+            <Empty
+              icon="plus"
+              title="Create a system group"
+              body="Create system groups to help manage your systems more effectively."
+              primaryAction={{
+                text: 'Create group',
+                click: () => setIsCreateModalOpen(true),
+              }}
+              secondaryActions={[
+                {
+                  type: 'link',
+                  title: 'Learn more about system groups',
+                  link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/working_with_systems_in_the_edge_management_application/index',
+                },
+              ]}
+            />
+            {}
+          </Flex>
+        )}
+      </section>
 
           {isCreateModalOpen && (
             <CreateGroupModal
@@ -133,15 +133,17 @@ const Groups = ({ locationProp, navigateProp }) => {
         </>
       )}
     </>
+  
   );
 };
 
-Images.propTypes = {
+Groups.propTypes = {
   pathPrefix: PropTypes.string,
   historyProp: PropTypes.func,
   locationProp: PropTypes.func,
   navigateProp: PropTypes.func,
   notificationProp: PropTypes.object,
+  paramsProp: PropTypes.func,
 };
 
 export default Groups;
