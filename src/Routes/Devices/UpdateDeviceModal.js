@@ -85,7 +85,7 @@ const UpdateDeviceModal = ({
       title: 'Updating system',
       description: isMultiple
         ? ` ${deviceName.length} systems were added to the queue.`
-        : ` ${deviceName} was added to the queue.`,
+        : ` ${deviceName ? deviceName : 'one system'}  was added to the queue.`,
     },
     onError: {
       title: 'Error',
@@ -148,8 +148,8 @@ const UpdateDeviceModal = ({
         <span className="pf-u-font-weight-bold pf-u-font-size-md">
           {isMultiple
             ? `${deviceName.length} systems`
-            : inventoryGroupUpdateDevicesInfo
-            ? '1 system'
+            : inventoryGroupUpdateDevicesInfo || !deviceName
+            ? 'one system'
             : deviceName}
         </span>{' '}
         to latest version of the image linked to it.
