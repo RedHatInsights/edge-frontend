@@ -159,6 +159,7 @@ const DeviceDetail = () => {
         )}
         <InventoryDetailHead
           fallback=""
+          showDelete={true}
           actions={[
             {
               title: 'Update',
