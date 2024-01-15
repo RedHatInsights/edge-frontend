@@ -316,7 +316,7 @@ const GroupsDetail = ({ locationProp, navigateProp, paramsProp }) => {
           reloadData={fetchDevices}
           groupName={data?.DeviceGroup?.Name}
           locationProp={locationProp}
-        navigateProp={navigateProp}
+          navigateProp={navigateProp}
         />
       )}
       {removeModal.isOpen && (

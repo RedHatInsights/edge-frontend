@@ -84,7 +84,6 @@ const AddSystemsToGroupModal = ({
         enforceEdgeGroups={data?.data?.enforce_edge_groups}
         locationProp={locationProp}
         navigateProp={navigateProp}
-
       />
     </Modal>
   );
@@ -95,6 +94,8 @@ AddSystemsToGroupModal.propTypes = {
   isOpen: PropTypes.bool,
   reloadData: PropTypes.func,
   groupName: PropTypes.string,
+  locationProp: PropTypes.func,
+  navigateProp: PropTypes.func,
 };
 
 export default AddSystemsToGroupModal;
