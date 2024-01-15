@@ -14,6 +14,8 @@ const AddSystemsToGroupModal = ({
   isOpen,
   reloadData,
   groupName,
+  locationProp,
+  navigateProp,
 }) => {
   const [response, fetchDevices] = useApi({
     api: getInventory,
@@ -80,6 +82,9 @@ const AddSystemsToGroupModal = ({
         data={data?.data?.devices || []}
         fetchDevices={fetchDevices}
         enforceEdgeGroups={data?.data?.enforce_edge_groups}
+        locationProp={locationProp}
+        navigateProp={navigateProp}
+
       />
     </Modal>
   );
