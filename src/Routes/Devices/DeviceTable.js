@@ -40,7 +40,7 @@ const GetColumnNames = (inventoryGroupsEnabled, isDataAvailable) => {
       title: 'Name',
       type: 'name',
       sort: isDataAvailable,
-      columnTransforms: [cellWidth(30)],
+      columnTransforms: [cellWidth(25)],
     },
     {
       title: 'Image',
@@ -435,81 +435,83 @@ const DeviceTable = ({
   }
 
   return (
-    <>
-      {isSystemsView &&
-      emptyStateNoFilters(isLoading, count, search) &&
-      !historyProp ? (
-        <CustomEmptyState
-          data-testid="general-table-empty-state-no-data"
-          icon={'plus'}
-          title={'Connect edge systems'}
-          body={
-            'Connect and manage edge systems here after registering them via the console. To start, create a RHEL for Edge image and install it to your target system.'
-          }
-          secondaryActions={[
-            {
-              title:
-                'Create RHEL for Edge images and configure automated management',
-              link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/create_rhel_for_edge_images_and_configure_automated_management/index',
-              type: 'link',
-            },
-          ]}
-        />
-      ) : (
-        <GeneralTable
-          historyProp={historyProp}
-          navigateProp={navigateProp}
-          locationProp={locationProp}
-          apiFilterSort={true}
-          isUseApi={true}
-          filters={tableFilters}
-          loadTableData={fetchDevices}
-          tableData={{
-            count: count,
-            isLoading: isLoading,
-            hasError: hasError,
-          }}
-          columnNames={tableColumnNames}
-          rows={createRows(
-            data || [],
-            isAddSystemsView || isSystemsView,
-            fetchDevices,
-            deviceBaseUrl,
-            history,
-            navigate,
-            inventoryGroupsEnabled
-          )}
-          actionResolver={actionResolver}
-          defaultSort={{ index: 3, direction: 'desc' }}
-          toolbarButtons={
-            (canBeAdded
-              ? [
-                  {
-                    title: 'Add systems',
-                    click: () => setIsAddModalOpen(true),
-                  },
-                ]
-              : [],
-            canBeUpdated
-              ? [
-                  {
-                    isDisabled: !selectedItemsUpdateable,
-                    title: 'Update',
-                    id: 'toolbar-update-button',
-                    click: () => handleUpdateSelected(),
-                  },
-                ]
-              : [])
-          }
-          hasCheckbox={hasCheckbox}
-          selectedItems={selectedItems}
-          skeletonRowQuantity={skeletonRowQuantity}
-          kebabItems={kebabItems}
-          hasModalSubmitted={hasModalSubmitted}
-          setHasModalSubmitted={setHasModalSubmitted}
-        />
-      )}
-    </>
+    <div className="edge">
+      <>
+        {isSystemsView &&
+        emptyStateNoFilters(isLoading, count, search) &&
+        !historyProp ? (
+          <CustomEmptyState
+            data-testid="general-table-empty-state-no-data"
+            icon={'plus'}
+            title={'Connect edge systems'}
+            body={
+              'Connect and manage edge systems here after registering them via the console. To start, create a RHEL for Edge image and install it to your target system.'
+            }
+            secondaryActions={[
+              {
+                title:
+                  'Create RHEL for Edge images and configure automated management',
+                link: 'https://access.redhat.com/documentation/en-us/edge_management/2022/html-single/create_rhel_for_edge_images_and_configure_automated_management/index',
+                type: 'link',
+              },
+            ]}
+          />
+        ) : (
+          <GeneralTable
+            historyProp={historyProp}
+            navigateProp={navigateProp}
+            locationProp={locationProp}
+            apiFilterSort={true}
+            isUseApi={true}
+            filters={tableFilters}
+            loadTableData={fetchDevices}
+            tableData={{
+              count: count,
+              isLoading: isLoading,
+              hasError: hasError,
+            }}
+            columnNames={tableColumnNames}
+            rows={createRows(
+              data || [],
+              isAddSystemsView || isSystemsView,
+              fetchDevices,
+              deviceBaseUrl,
+              history,
+              navigate,
+              inventoryGroupsEnabled
+            )}
+            actionResolver={actionResolver}
+            defaultSort={{ index: 3, direction: 'desc' }}
+            toolbarButtons={
+              (canBeAdded
+                ? [
+                    {
+                      title: 'Add systems',
+                      click: () => setIsAddModalOpen(true),
+                    },
+                  ]
+                : [],
+              canBeUpdated
+                ? [
+                    {
+                      isDisabled: !selectedItemsUpdateable,
+                      title: 'Update',
+                      id: 'toolbar-update-button',
+                      click: () => handleUpdateSelected(),
+                    },
+                  ]
+                : [])
+            }
+            hasCheckbox={hasCheckbox}
+            selectedItems={selectedItems}
+            skeletonRowQuantity={skeletonRowQuantity}
+            kebabItems={kebabItems}
+            hasModalSubmitted={hasModalSubmitted}
+            setHasModalSubmitted={setHasModalSubmitted}
+          />
+        )}
+      </>
+    </div>
   );
 };
 
