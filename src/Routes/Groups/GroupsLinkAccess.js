@@ -37,7 +37,7 @@ const GroupsLinkAccess = () => (
         variant="primary"
         component="a"
         target="_blank"
-        href={`https://${window.location.host}/preview/insights/inventory/groups`}
+        href={`https://${window.location.host}/insights/inventory/groups`}
       >
         Go to Groups
       </Button>
