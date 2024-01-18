@@ -5,6 +5,7 @@ import React from 'react';
 import { Button } from '@patternfly/react-core';
 import pAll from 'p-all';
 import { hosts } from '../api/index';
+import { Link } from 'react-router-dom';
 
 export const nameValidator = {
   type: validatorTypes.PATTERN,
@@ -116,17 +117,18 @@ export const getReleases = (forcedRelease, inculdedReleases) =>
 
 export const createLink = ({ pathname, linkText, target }) => {
   return (
-    <Button
-      style={{ '--pf-c-button--PaddingLeft': '0' }}
+     <Button
       component="a"
       target={target}
       variant="link"
       target-href={pathname}
       href={pathname}
+      isInline="false"
     >
       {linkText}
     </Button>
   );
+  
 };
 
 const resolve = async (fns, limit = 2) => {

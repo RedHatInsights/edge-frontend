@@ -40,7 +40,7 @@ const GetColumnNames = (inventoryGroupsEnabled, isDataAvailable) => {
       title: 'Name',
       type: 'name',
       sort: isDataAvailable,
-      columnTransforms: [cellWidth(30)],
+      columnTransforms: [cellWidth(25)],
     },
     {
       title: 'Image',
@@ -435,6 +435,7 @@ const DeviceTable = ({
   }
 
   return (
+    <div class="edge">
     <>
       {isSystemsView &&
       emptyStateNoFilters(isLoading, count, search) &&
@@ -510,6 +511,7 @@ const DeviceTable = ({
         />
       )}
     </>
+    </div>
   );
 };
 
