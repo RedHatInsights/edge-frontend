@@ -63,7 +63,7 @@ const AddDeviceModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  const inventoryGroupsEnabled = useInventoryGroups(false);
+  const [inventoryGroupsEnabled] = useInventoryGroups(false);
 
   const handleAddDevices = (values) => {
     const { group } = values;

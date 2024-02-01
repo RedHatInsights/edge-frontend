@@ -14,7 +14,7 @@ import useInventoryGroups from '../hooks/useInventoryGroups';
 
 const SelectInput = (props) => {
   useFieldApi(props);
-  const inventoryGroupsEnabled = useInventoryGroups(false);
+  const [inventoryGroupsEnabled] = useInventoryGroups(false);
 
   const { change } = useFormApi();
   const [isOpen, setIsOpen] = useState(false);

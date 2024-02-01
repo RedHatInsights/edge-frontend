@@ -86,7 +86,7 @@ const RemoveDeviceModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  const inventoryGroupsEnabled = useInventoryGroups(false);
+  const [inventoryGroupsEnabled] = useInventoryGroups(false);
 
   const { deviceGroups } = deviceInfo[0];
 
