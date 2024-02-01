@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import GeneralTable from '../general-table/GeneralTable';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
-import { Text, TextVariants } from '@patternfly/react-core';
+import { Alert, Text, TextVariants } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import EmptyState from '../Empty';
 import { getCustomRepositories } from '../../api/repositories';
@@ -74,9 +74,16 @@ const WizardRepositoryTable = (props) => {
   const customReposFleatureFlag = useFeatureFlags(
     'edge-management.custom_repos_ui'
   );
+  const customSkipReposFleatureFlag = useFeatureFlags(
+    'edge-management.skip-custom-repo'
+  );
   return (
     <>
-      {!isLoading && !data?.count > 0 ? (
+      {customSkipReposFleatureFlag ? (
+        <Alert title="Repositories unavailable" variant="warning" isInline>
+          The Content service cannot be reached, please check back later.
+        </Alert>
+      ) : !isLoading && !data?.count > 0 ? (
         <EmptyState
           target="_blank"
           icon="repository"
