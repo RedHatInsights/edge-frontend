@@ -7,6 +7,7 @@ import { MemoryRouter, Route } from 'react-router-dom';
 import { RegistryContext } from '../../store';
 
 jest.mock('../../utils');
+jest.mock('../../hooks/useInventoryGroups', () => () => [false, true]);
 
 describe('Groups', () => {
   const mockStore = configureStore();

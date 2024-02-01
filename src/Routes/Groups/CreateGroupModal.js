@@ -77,7 +77,7 @@ const CreateGroupModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  const inventoryGroupsEnabled = useInventoryGroups(false);
+  const [inventoryGroupsEnabled] = useInventoryGroups(false);
 
   const handleCreateGroup = (values) => {
     const statusMessages = {

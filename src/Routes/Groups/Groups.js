@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Flex } from '@patternfly/react-core';
+import { Bullseye, Flex, Spinner } from '@patternfly/react-core';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -22,7 +22,9 @@ const Groups = ({ locationProp, navigateProp, paramsProp }) => {
   const hideCreateGroupsEnabled = useFeatureFlags(
     'edge-management.hide-create-group'
   );
-  const inventoryGroupsEnabled = useInventoryGroups(false);
+  const [inventoryGroupsEnabled, enforceEdgeGroupCheckReady] =
+    useInventoryGroups(false);
+
   const { search } = locationProp ? locationProp() : useLocation();
 
   const [response, fetchGroups] = useApi({
@@ -59,7 +61,11 @@ const Groups = ({ locationProp, navigateProp, paramsProp }) => {
 
   return (
     <>
-      {inventoryGroupsEnabled ? (
+      {!enforceEdgeGroupCheckReady ? (
+        <Bullseye>
+          <Spinner size="xl" />
+        </Bullseye>
+      ) : inventoryGroupsEnabled ? (
         <GroupsLinkAccess />
       ) : (
         <>

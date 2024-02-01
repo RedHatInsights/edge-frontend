@@ -5,6 +5,7 @@ import { getEnforceEdgeGroups } from '../api/groups';
 
 const useInventoryGroups = (value) => {
   const [data, setData] = useState(value);
+  const [ready, setReady] = useState(false);
   const inventoryGroupsEnabled = useFeatureFlags(
     FEATURE_PARITY_INVENTORY_GROUPS
   );
@@ -14,10 +15,11 @@ const useInventoryGroups = (value) => {
       const response = await getEnforceEdgeGroups();
       const enforceEdgeGroups = response?.enforce_edge_groups;
       setData(!enforceEdgeGroups && inventoryGroupsEnabled);
+      setReady(true);
     })();
   }, []);
 
-  return data;
+  return [data, ready];
 };
 
 export default useInventoryGroups;
