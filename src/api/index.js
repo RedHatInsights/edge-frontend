@@ -2,6 +2,7 @@ export const IMAGE_BUILDER_API = '/api/image-builder/v1';
 export const EDGE_API = '/api/edge/v1';
 export const CONTENT_SOURCES_API = '/api/content-sources/v1';
 export const INVENTORY_API_BASE = '/api/inventory/v1';
+export const RHSM_API = '/api/rhsm/v2';
 
 import instance from '@redhat-cloud-services/frontend-components-utilities/interceptors';
 import { HostsApi } from '@redhat-cloud-services/host-inventory-client';

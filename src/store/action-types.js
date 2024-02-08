@@ -21,6 +21,7 @@ export const POLLING_IMAGES = 'POLLING_IMAGES';
 export const LOAD_DEVICE_TABLE = 'LOAD_DEVICE_TABLE';
 export const UPDATE_DISPLAY_NAME = 'UPDATE_DISPLAY_NAME';
 export const REMOVE_ENTITY = 'REMOVE_ENTITY';
+export const LOAD_ACTIVATION_KEYS = 'LOAD_ACTIVATION_KEYS';
 
 const asyncActions = flatMap(
   [
@@ -41,6 +42,7 @@ const asyncActions = flatMap(
     LOAD_DEVICE_TABLE,
     UPDATE_DISPLAY_NAME,
     REMOVE_ENTITY,
+    LOAD_ACTIVATION_KEYS,
   ],
   (a) => [a, `${a}_PENDING`, `${a}_FULFILLED`, `${a}_REJECTED`]
 );

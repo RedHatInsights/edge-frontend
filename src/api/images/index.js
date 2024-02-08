@@ -2,6 +2,7 @@ import {
   CONTENT_SOURCES_API,
   EDGE_API,
   IMAGE_BUILDER_API,
+  RHSM_API,
   getTableParams,
 } from '../index';
 import { instance } from '@redhat-cloud-services/frontend-components-utilities/interceptors/interceptors';
@@ -20,6 +21,12 @@ export const fetchImageStatus = ({ id }) => {
 export const fetchActiveImages = ({ limit = 100, offset = 0 } = {}) => {
   return instance.get(
     `${IMAGE_BUILDER_API}/composes?limit=${limit}&offset=${offset}`
+  );
+};
+
+export const fetchActivationKeys = ({ limit = 10, offset = 0 } = {}) => {
+  return instance.get(
+    `${RHSM_API}/activation_keys?limit=${limit}&offset=${offset}`
   );
 };
 
