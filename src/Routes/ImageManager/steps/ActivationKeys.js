@@ -1,11 +1,6 @@
 import React from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-import {
-  Text,
-  HelperText,
-  HelperTextItem,
-  Button,
-} from '@patternfly/react-core';
+import { Text, Button } from '@patternfly/react-core';
 
 export default {
   title: 'Activation Keys',

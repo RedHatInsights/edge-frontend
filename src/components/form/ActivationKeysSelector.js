@@ -1,33 +1,21 @@
-import React, { useEffect, Fragment, useContext, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, Fragment, useState } from 'react';
 
-import PropTypes from 'prop-types';
 import {
   FormGroup,
-  TextArea,
   Text,
-  TextVariants,
   Select,
   SelectOption,
   Button,
 } from '@patternfly/react-core';
-import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
-import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
-
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { fetchActivationKeys } from '../../api/images';
 
-
-
-const ActivationKeysField = (props) => {
+const ActivationKeysField = () => {
   const [activationKey, setActivationKey] = useState(null);
-
   const [activationKeyList, setActivationKeyList] = useState(null);
-  // ********************************************************* //
   const [isOpen, setIsOpen] = useState(false);
-  
   const [selected, setSelected] = useState(null);
-  
+
   (async () => {
     const data = await fetchActivationKeys(10);
     setActivationKey(data);
@@ -47,7 +35,7 @@ const ActivationKeysField = (props) => {
   }, [activationKey]);
 
   console.log(activationKeyList);
-  
+
   const handleToggle = () => setIsOpen(!isOpen);
 
   const onSelect = (_event, selection, isPlaceholder) => {
@@ -57,12 +45,11 @@ const ActivationKeysField = (props) => {
       setIsOpen(false);
     }
   };
-  
-  // ********************************************************* //
-  const { input: activationKeySelect, meta } = useFieldApi({
-    name: 'activationKeys',
-    ...props,
-  });
+
+  const clearSelection = () => {
+    setSelected(null);
+    setIsOpen(false);
+  };
 
   const ManageKeysButton = () => {
     return (
@@ -85,17 +72,13 @@ const ActivationKeysField = (props) => {
   };
   return (
     <FormGroup>
-      <FormGroup
-        label="Activation key to use for this image"
-        helperTextInvalid={meta.error}
-        validated={meta.error && meta.touched ? 'error' : 'default'}
-      >
+      <FormGroup label="Activation key to use for this image">
         <Select
           variant="single"
           width="100%"
           onToggle={handleToggle}
           onSelect={onSelect}
-          selections={  selected }
+          selections={selected}
           isOpen={isOpen}
           style={{ paddingLeft: 0, marginLeft: 0 }}
         >
@@ -105,8 +88,6 @@ const ActivationKeysField = (props) => {
             </SelectOption>
           ))}
         </Select>
-
-        
       </FormGroup>
       <br />
       <Fragment>
