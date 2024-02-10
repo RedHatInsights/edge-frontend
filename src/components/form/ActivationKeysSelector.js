@@ -34,8 +34,6 @@ const ActivationKeysField = () => {
     }
   }, [activationKey]);
 
-  console.log(activationKeyList);
-
   const handleToggle = () => setIsOpen(!isOpen);
 
   const onSelect = (_event, selection, isPlaceholder) => {
@@ -81,6 +79,7 @@ const ActivationKeysField = () => {
           selections={selected}
           isOpen={isOpen}
           style={{ paddingLeft: 0, marginLeft: 0 }}
+          placeholderText="Select activation key"
         >
           {activationKeyList?.map((item) => (
             <SelectOption key={item.value} value={item.value}>
