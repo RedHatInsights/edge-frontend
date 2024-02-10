@@ -12,8 +12,8 @@ import WizardRepositoryTable from './form/WizardRepositoryTable';
 import RegistrationCreds from './form/RegistrationCreds';
 import ImageOutputCheckbox from './form/ImageOutputCheckbox';
 import SSHInputField from './form/SSHInputField';
-import ActivationKeys from '../Routes/ImageManager/steps/ActivationKeys'
-import ActivationKeysField from './form/ActivationKeysSelector'
+import ActivationKeys from '../Routes/ImageManager/steps/ActivationKeys';
+import ActivationKeysField from './form/ActivationKeysSelector';
 import AsyncComponent from '@redhat-cloud-services/frontend-components/AsyncComponent';
 import { registrationCredsValidator } from './form/RegistrationCreds';
 import { reservedUsernameValidator } from './form/validators';
@@ -66,7 +66,7 @@ const CreateImageWizard = ({
         },
         'activation-keys-selector': {
           // component: ActivationKeys,
-          component: ActivationKeysField
+          component: ActivationKeysField,
         },
         review: Review,
         'package-selector': {

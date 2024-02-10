@@ -1,4 +1,4 @@
-import React,  { useEffect, Fragment, useContext, useState }  from 'react';
+import React, { useEffect, Fragment, useContext, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import PropTypes from 'prop-types';
@@ -8,143 +8,57 @@ import {
   Text,
   TextVariants,
   Select,
-  Button
+  SelectOption,
+  Button,
 } from '@patternfly/react-core';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
-import {  fetchActivationKeys,
-} from '../../api/images';
-
-
-// if (!data) {
-//   setHasNoSearchResults(true);
-//   setHasMoreResults(false);
-//   setAvailableOptions([]);
-//   return;
-// }
-// const EmptyActivationsKeyState = ({ handleActivationKeyFn, isLoading }) => (
-
-  
-//   <EmptyState variant="xs">
-//     <EmptyStateHeader
-//       titleText="No activation keys found"
-//       headingLevel="h4"
-//       icon={<EmptyStateIcon icon={WrenchIcon} />}
-//     />
-//     <EmptyStateBody>
-//       Get started by building a default key, which will be generated and present
-//       for you.
-//     </EmptyStateBody>
-//     <EmptyStateFooter>
-//       <EmptyStateActions>
-//         <Button
-//           onClick={handleActivationKeyFn}
-//           icon={<AddCircleOIcon />}
-//           isLoading={isLoading}
-//           iconPosition="left"
-//           variant="link"
-//         >
-//           Create activation key
-//         </Button>
-//       </EmptyStateActions>
-//     </EmptyStateFooter>
-//   </EmptyState>
-// );
-
-// EmptyActivationsKeyState.propTypes = {
-//   handleActivationKeyFn: PropTypes.func.isRequired,
-//   isLoading: PropTypes.bool,
-// };
+import { fetchActivationKeys } from '../../api/images';
 
 
 
 const ActivationKeysField = (props) => {
   const [activationKey, setActivationKey] = useState(null);
-// ********************************************************* //
-const { isProd } = false;//useGetEnvironment();
-const { change, getState } = useFormApi();
-const { input } = useFieldApi(props);
-const [isOpen, setIsOpen] = useState(false);
-const [activationKeySelected, selectActivationKey] = useState(
-  getState()?.values?.['subscription-activation-key']
-);
 
-const dispatch = useDispatch();
+  const [activationKeyList, setActivationKeyList] = useState(null);
+  // ********************************************************* //
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const [selected, setSelected] = useState(null);
+  
+  (async () => {
+    const data = await fetchActivationKeys(10);
+    setActivationKey(data);
+  })();
+  const optionKeys = [];
 
-(async () => {
-  const data = await fetchActivationKeys(10)
-  setActivationKey(data);
-})();
+  useEffect(() => {
+    if (activationKey != null) {
+      activationKey.body.forEach((key) => {
+        optionKeys.push({
+          value: key.name,
+          label: key.name,
+        });
+      });
+      setActivationKeyList(optionKeys);
+    }
+  }, [activationKey]);
 
-useEffect(() => {
-console.log(activationKey)},[activationKey])
+  console.log(activationKeyList);
+  
+  const handleToggle = () => setIsOpen(!isOpen);
 
-// // const {
-// //   data: activationKeys,
-// //   isFetching: isFetchingActivationKeys,
-// //   isSuccess: isSuccessActivationKeys,
-// //   isError: isErrorActivationKeys,
-// //   refetch,
-// // } = useListActivationKeysQuery();
-
-// const [createActivationKey, { isLoading: isLoadingActivationKey }] =
-//   useCreateActivationKeysMutation();
-// useEffect(() => {
-//   // if (isProd()) {
-//   //   change('subscription-server-url', 'subscription.rhsm.redhat.com');
-//   //   change('subscription-base-url', 'https://cdn.redhat.com/');
-//   // } else {
-//     change('subscription-server-url', 'subscription.rhsm.stage.redhat.com');
-//     change('subscription-base-url', 'https://cdn.stage.redhat.com/');
-//   // }
-// }, [isProd, change]);
-
-// const setActivationKey = (_, selection) => {
-//   selectActivationKey(selection);
-//   setIsOpen(false);
-//   change(input.name, selection);
-// };
-
-// const handleClear = () => {
-//   selectActivationKey();
-//   change(input.name, undefined);
-// };
-
-// const handleToggle = () => {
-//   if (!isOpen) {
-//     refetch();
-//   }
-//   setIsOpen(!isOpen);
-// };
-
-// const handleCreateActivationKey = async () => {
-//   const res = await createActivationKey({
-//     body: {
-//       name: 'activation-key-default',
-//       serviceLevel: 'Self-Support',
-//     },
-//   });
-//   refetch();
-//   if (res.error) {
-//     dispatch(
-//       addNotification({
-//         variant: 'danger',
-//         title: 'Error creating activation key',
-//         description: res.error?.data?.error?.message,
-//       })
-//     );
-//   }
-// };
-
-// const isActivationKeysEmpty =
-//   isSuccessActivationKeys && activationKeys.body.length === 0;
-
-
-
-
-// ********************************************************* //
+  const onSelect = (_event, selection, isPlaceholder) => {
+    if (isPlaceholder) clearSelection();
+    else {
+      setSelected(selection);
+      setIsOpen(false);
+    }
+  };
+  
+  // ********************************************************* //
   const { input: activationKeySelect, meta } = useFieldApi({
     name: 'activationKeys',
     ...props,
@@ -161,8 +75,8 @@ console.log(activationKey)},[activationKey])
         isInline
         href={
           // isProd()
-            // ? 'https://console.redhat.com/insights/connector/activation-keys'
-             'https://console.stage.redhat.com/insights/connector/activation-keys'
+          // ? 'https://console.redhat.com/insights/connector/activation-keys'
+          'https://console.stage.redhat.com/insights/connector/activation-keys'
         }
       >
         Activation keys page
@@ -175,28 +89,28 @@ console.log(activationKey)},[activationKey])
         label="Activation key to use for this image"
         helperTextInvalid={meta.error}
         validated={meta.error && meta.touched ? 'error' : 'default'}
-
       >
-
         <Select
-          ouiaId="activation_key_select"
-          variant="typeahead"
-          // onToggle={handleToggle}
-          // onSelect={setActivationKey}
-          // onClear={handleClear}
-          // selections={activationKey}
-          // isOpen={isOpen}
-          placeholderText="Select activation key"
-          typeAheadAriaLabel="Select activation key"
-          // isDisabled={!isSuccessActivationKeys}
+          variant="single"
+          width="100%"
+          onToggle={handleToggle}
+          onSelect={onSelect}
+          selections={  selected }
+          isOpen={isOpen}
+          style={{ paddingLeft: 0, marginLeft: 0 }}
         >
-          {/* {setSelectOptions()} */}
+          {activationKeyList?.map((item) => (
+            <SelectOption key={item.value} value={item.value}>
+              {item.label}
+            </SelectOption>
+          ))}
         </Select>
+
+        
       </FormGroup>
-      <br/>
+      <br />
       <Fragment>
-     
-        <Text >
+        <Text>
           <Text>
             By default, activation key is generated and preset for you. Admins
             can create and manage keys by visiting the <ManageKeysButton />

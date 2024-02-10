@@ -1,6 +1,11 @@
 import React from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-import { Text, HelperText, HelperTextItem, Button } from '@patternfly/react-core';
+import {
+  Text,
+  HelperText,
+  HelperTextItem,
+  Button,
+} from '@patternfly/react-core';
 
 export default {
   title: 'Activation Keys',
@@ -10,14 +15,19 @@ export default {
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
-      label: <Text>Automatically register your systems with Red Hat to enhance security and track your spending.</Text>,
+      label: (
+        <Text>
+          Automatically register your systems with Red Hat to enhance security
+          and track your spending.
+        </Text>
+      ),
     },
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'method',
       label: 'Registration Method',
     },
-    
+
     {
       component: 'activation-keys-selector',
       name: 'activationKey',
@@ -53,6 +63,6 @@ export default {
       condition: {
         or: [{ when: 'register-system', is: 'register-later' }],
       },
-    }
+    },
   ],
 };
