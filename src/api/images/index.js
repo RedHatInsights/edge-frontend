@@ -43,6 +43,7 @@ export const createImage = ({
   'selected-packages': packages,
   'third-party-repositories': thirdPartyRepositories,
   'custom-packages': customPackages,
+  activationKey,
 }) => {
   let [imageType] = imageTypes || [];
   if (imageTypes.length > 1) {
@@ -70,6 +71,7 @@ export const createImage = ({
       uuid: repo.uuid,
     })),
     customPackages: customPackages?.map((repo) => ({ Name: repo.name })),
+    activationKey: activationKey,
   };
 
   let endpoint = `${EDGE_API}/images`;

@@ -9,22 +9,28 @@ import {
 } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { fetchActivationKeys } from '../../api/images';
+import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 
 const ActivationKeysField = () => {
-  const [activationKey, setActivationKey] = useState(null);
+  const { change, getState } = useFormApi();
+  const key = getState()?.values?.activationKey || '';
+  const [activationKeyData, setActivationKeyData] = useState({});
   const [activationKeyList, setActivationKeyList] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(key);
 
-  (async () => {
-    const data = await fetchActivationKeys(10);
-    setActivationKey(data);
-  })();
+  useEffect(() => {
+    (async () => {
+      const data = await fetchActivationKeys(10);
+      setActivationKeyData(data);
+    })();
+  }, []);
+
   const optionKeys = [];
 
   useEffect(() => {
-    if (activationKey != null) {
-      activationKey.body.forEach((key) => {
+    if (activationKeyData != null) {
+      activationKeyData?.body?.forEach((key) => {
         optionKeys.push({
           value: key.name,
           label: key.name,
@@ -32,7 +38,7 @@ const ActivationKeysField = () => {
       });
       setActivationKeyList(optionKeys);
     }
-  }, [activationKey]);
+  }, [activationKeyData]);
 
   const handleToggle = () => setIsOpen(!isOpen);
 
@@ -41,7 +47,10 @@ const ActivationKeysField = () => {
     else {
       setSelected(selection);
       setIsOpen(false);
+      console.log(selection);
+      change('activationKey', selection);
     }
+    console.log(getState());
   };
 
   const clearSelection = () => {
