@@ -33,6 +33,9 @@ const ReviewStep = () => {
     { name: 'ssh-key', value: getState().values.credentials },
   ];
 
+  const activationKey = [
+    { name: 'Activation Key', value: getState().values['activationKey'] },
+  ];
   const RHELPackageBefore = getState().initialValues['selected-packages'] || [];
   const RHELPackageAfter = getState().values['selected-packages'] || [];
   const customPackageBefore = getState().initialValues[
@@ -95,6 +98,11 @@ const ReviewStep = () => {
             testid={'review-image-registration'}
           />
         ) : null}
+        <ReviewSection
+            title={'Acivation Key'}
+            data={activationKey}
+            testid={'review-image-activation-key'}
+          />
         <ReviewSection
           title={'Packages'}
           data={packages()}
