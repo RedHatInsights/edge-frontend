@@ -67,7 +67,10 @@ const ImageDetailTab = ({
     //Size: 'Size',
     Description: 'Description',
   };
-
+  const activationKeyMapper= {
+    'Activation Key': () => data?.image?.activationKey,
+   
+  };
   const userInfoMapper = {
     Username: () => data?.image?.Installer?.Username,
     'SSH key': () => data?.image?.Installer?.SshKey,
@@ -169,6 +172,10 @@ const ImageDetailTab = ({
           <Text component={TextVariants.h2}>User information </Text>
           <TextList component={TextListVariants.dl}>
             {buildTextList(userInfoMapper) || createSkeleton(2)}
+          </TextList>
+          {/* <Text component={TextVariants.h2}>Activation Key </Text> */}
+          <TextList component={TextListVariants.dl}>
+            {buildTextList(activationKeyMapper) || createSkeleton(2)}
           </TextList>
         </GridItem>
         <GridItem span={1} />
