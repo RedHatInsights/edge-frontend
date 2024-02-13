@@ -99,10 +99,10 @@ const ReviewStep = () => {
           />
         ) : null}
         <ReviewSection
-            title={'Acivation Key'}
-            data={activationKey}
-            testid={'review-image-activation-key'}
-          />
+          title={'Acivation Key'}
+          data={activationKey}
+          testid={'review-image-activation-key'}
+        />
         <ReviewSection
           title={'Packages'}
           data={packages()}

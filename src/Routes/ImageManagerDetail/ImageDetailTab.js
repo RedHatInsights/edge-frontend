@@ -67,9 +67,8 @@ const ImageDetailTab = ({
     //Size: 'Size',
     Description: 'Description',
   };
-  const activationKeyMapper= {
+  const activationKeyMapper = {
     'Activation Key': () => data?.image?.activationKey,
-   
   };
   const userInfoMapper = {
     Username: () => data?.image?.Installer?.Username,

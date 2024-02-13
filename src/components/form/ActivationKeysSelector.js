@@ -18,16 +18,17 @@ const ActivationKeysField = () => {
   const [activationKeyList, setActivationKeyList] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(key);
-  const [isUpdate, setIsUpdate] = useState(false)
+  const [isUpdate, setIsUpdate] = useState(false);
   useEffect(() => {
-    if (getState()?.initialValues?.isUpdate){
-      setIsUpdate(true)
-    }else{
-    (async () => {
-      const data = await fetchActivationKeys(10);
-      setActivationKeyData(data);
-    })();
-  }}, []);
+    if (getState()?.initialValues?.isUpdate) {
+      setIsUpdate(true);
+    } else {
+      (async () => {
+        const data = await fetchActivationKeys(10);
+        setActivationKeyData(data);
+      })();
+    }
+  }, []);
 
   const optionKeys = [];
 
