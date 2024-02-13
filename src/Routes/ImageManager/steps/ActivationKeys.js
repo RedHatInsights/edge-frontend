@@ -46,9 +46,7 @@ export default {
             component="a"
             target="_blank"
             variant="link"
-            // icon={<ExternalLinkAltIcon />}
             iconPosition="right"
-            // isInline
             href="https://access.redhat.com/articles/rhc"
           >
             Registering with remote host configuration

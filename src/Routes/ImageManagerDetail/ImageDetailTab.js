@@ -172,7 +172,6 @@ const ImageDetailTab = ({
           <TextList component={TextListVariants.dl}>
             {buildTextList(userInfoMapper) || createSkeleton(2)}
           </TextList>
-          {/* <Text component={TextVariants.h2}>Activation Key </Text> */}
           <TextList component={TextListVariants.dl}>
             {buildTextList(activationKeyMapper) || createSkeleton(2)}
           </TextList>

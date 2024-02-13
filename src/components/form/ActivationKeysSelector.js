@@ -69,11 +69,7 @@ const ActivationKeysField = () => {
         icon={<ExternalLinkAltIcon />}
         iconPosition="right"
         isInline
-        href={
-          // isProd()
-          // ? 'https://console.redhat.com/insights/connector/activation-keys'
-          'https://console.stage.redhat.com/insights/connector/activation-keys'
-        }
+        href={`https://${window.location.host}/insights/connector/activation-keys`}
       >
         Activation keys page
       </Button>

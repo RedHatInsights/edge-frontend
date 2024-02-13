@@ -64,7 +64,6 @@ const CreateImageWizard = ({
           component: SSHInputField,
         },
         'activation-keys-selector': {
-          // component: ActivationKeys,
           component: ActivationKeysField,
         },
         review: Review,
