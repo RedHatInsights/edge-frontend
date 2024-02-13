@@ -18,13 +18,16 @@ const ActivationKeysField = () => {
   const [activationKeyList, setActivationKeyList] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(key);
-
+  const [isUpdate, setIsUpdate] = useState(false)
   useEffect(() => {
+    if (getState()?.initialValues?.isUpdate){
+      setIsUpdate(true)
+    }else{
     (async () => {
       const data = await fetchActivationKeys(10);
       setActivationKeyData(data);
     })();
-  }, []);
+  }}, []);
 
   const optionKeys = [];
 
@@ -47,10 +50,8 @@ const ActivationKeysField = () => {
     else {
       setSelected(selection);
       setIsOpen(false);
-      console.log(selection);
       change('activationKey', selection);
     }
-    console.log(getState());
   };
 
   const clearSelection = () => {
@@ -89,6 +90,7 @@ const ActivationKeysField = () => {
           isOpen={isOpen}
           style={{ paddingLeft: 0, marginLeft: 0 }}
           placeholderText="Select activation key"
+          isDisabled={isUpdate}
         >
           {activationKeyList?.map((item) => (
             <SelectOption key={item.value} value={item.value}>
