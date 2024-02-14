@@ -24,7 +24,7 @@ const ActivationKeysField = () => {
       setIsUpdate(true);
     } else {
       (async () => {
-        const data = await fetchActivationKeys(10);
+        const data = await fetchActivationKeys();
         setActivationKeyData(data);
       })();
     }
@@ -34,6 +34,7 @@ const ActivationKeysField = () => {
 
   useEffect(() => {
     if (activationKeyData != null) {
+      optionKeys.push({ value: null, label: 'Select activation key' });
       activationKeyData?.body?.forEach((key) => {
         optionKeys.push({
           value: key.name,
