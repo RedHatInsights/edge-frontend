@@ -6,6 +6,7 @@ import {
   packages,
   updateDetails,
   registration,
+  activationKey,
   repositories,
   imageOutput,
   customPackages,
@@ -105,6 +106,7 @@ const UpdateImage = ({
         credentials: data?.image?.Installer.SshKey,
         username: data?.image?.Installer.Username,
         version: data?.image?.Version,
+        activationKey: data?.image?.activationKey,
         release: data?.image?.Distribution,
         release_options: temporaryReleasesFlag
           ? getReleases(data?.image?.Distribution, [
@@ -167,6 +169,7 @@ const UpdateImage = ({
               additionalCustomPackages,
               review,
               customPackages,
+              activationKey,
             ],
           },
         ],

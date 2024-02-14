@@ -3,6 +3,7 @@ import ImageCreator from '../../components/ImageCreator';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
 import {
   registration,
+  activationKey,
   review,
   packages,
   repositories,
@@ -110,6 +111,7 @@ const CreateImage = ({
               imageSetDetails,
               imageOutput,
               registration,
+              activationKey,
               repositories(imageWizardFeatureFlag, locationProp),
               packages,
               review,

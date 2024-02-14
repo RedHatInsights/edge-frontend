@@ -2,6 +2,7 @@ import {
   CONTENT_SOURCES_API,
   EDGE_API,
   IMAGE_BUILDER_API,
+  RHSM_API,
   getTableParams,
 } from '../index';
 import { instance } from '@redhat-cloud-services/frontend-components-utilities/interceptors/interceptors';
@@ -23,6 +24,12 @@ export const fetchActiveImages = ({ limit = 100, offset = 0 } = {}) => {
   );
 };
 
+export const fetchActivationKeys = ({ limit = 10, offset = 0 } = {}) => {
+  return instance.get(
+    `${RHSM_API}/activation_keys?limit=${limit}&offset=${offset}`
+  );
+};
+
 export const createImage = ({
   Id,
   name,
@@ -36,6 +43,7 @@ export const createImage = ({
   'selected-packages': packages,
   'third-party-repositories': thirdPartyRepositories,
   'custom-packages': customPackages,
+  activationKey,
 }) => {
   let [imageType] = imageTypes || [];
   if (imageTypes.length > 1) {
@@ -63,6 +71,7 @@ export const createImage = ({
       uuid: repo.uuid,
     })),
     customPackages: customPackages?.map((repo) => ({ Name: repo.name })),
+    activationKey: activationKey,
   };
 
   let endpoint = `${EDGE_API}/images`;
