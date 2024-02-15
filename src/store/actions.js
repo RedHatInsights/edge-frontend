@@ -19,7 +19,6 @@ import {
   CREATE_NEW_IMAGE,
   POLLING_IMAGES,
   LOAD_DEVICE_TABLE,
-  LOAD_ACTIVATION_KEYS,
 } from './action-types';
 
 import {
@@ -31,7 +30,6 @@ import {
   createImage,
   getImageSet,
   fetchActiveImages,
-  fetchActivationKeys,
 } from '../api/images';
 import { getInventory } from '../api/devices';
 import { hosts } from '../api';
@@ -236,19 +234,3 @@ export const deleteEntity = (systems, displayName) => ({
     systems,
   },
 });
-
-export const loadActivationKey = (dispatch, pagination) => {
-  dispatch({
-    type: LOAD_ACTIVATION_KEYS,
-    payload: fetchActivationKeys(pagination),
-    meta: {
-      notifications: {
-        rejected: {
-          variant: 'danger',
-          title: 'Cannot show activation Keys',
-          description: 'Failed receiving activation keys from rhsm',
-        },
-      },
-    },
-  }).catch(() => null);
-};
