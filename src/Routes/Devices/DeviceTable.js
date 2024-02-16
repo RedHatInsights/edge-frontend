@@ -188,7 +188,7 @@ const createRows = (
         {
           title:
             DeviceGroups.length === 0
-              ? '-'
+              ? 'No group'
               : DeviceGroups.length === 1
               ? DeviceGroups[0].Name
               : deviceGroupTooltip,
