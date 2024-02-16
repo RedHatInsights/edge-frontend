@@ -464,6 +464,7 @@ const DeviceTable = ({
             apiFilterSort={true}
             isUseApi={true}
             filters={tableFilters}
+            filtersName={'edge-devices-table-filters'}
             loadTableData={fetchDevices}
             tableData={{
               count: count,
