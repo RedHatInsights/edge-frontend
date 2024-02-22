@@ -187,11 +187,13 @@ const createRows = (
         },
         {
           title:
-            DeviceGroups.length === 0
-              ? '-'
-              : DeviceGroups.length === 1
-              ? DeviceGroups[0].Name
-              : deviceGroupTooltip,
+            DeviceGroups.length === 0 ? (
+              <div className="pf-v5-u-disabled-color-200">No group</div>
+            ) : DeviceGroups.length === 1 ? (
+              DeviceGroups[0].Name
+            ) : (
+              deviceGroupTooltip
+            ),
         },
         {
           title: LastSeen ? <DateFormat date={LastSeen} /> : 'Unknown',

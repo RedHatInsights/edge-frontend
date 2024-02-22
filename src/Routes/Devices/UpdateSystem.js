@@ -306,7 +306,7 @@ const UpdateSystemMain = ({
                 columnNames={columns}
                 rows={newImages}
                 defaultSort={{ index: 0, direction: 'desc' }}
-                hasRadio={true}
+                hasRadio={data?.ImageInfo?.Count > 0}
                 setRadioSelection={setUpdateEvent}
                 isFooterFixed={true}
               />
