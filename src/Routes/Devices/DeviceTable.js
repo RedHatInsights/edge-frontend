@@ -188,7 +188,7 @@ const createRows = (
         {
           title:
             DeviceGroups.length === 0
-              ? 'No group'
+              ? <div className="pf-v5-u-disabled-color-200">No group</div>
               : DeviceGroups.length === 1
               ? DeviceGroups[0].Name
               : deviceGroupTooltip,
