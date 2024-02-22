@@ -52,6 +52,7 @@ const GeneralTable = ({
   apiFilterSort,
   urlParam,
   filters,
+  filtersName,
   loadTableData,
   tableData,
   columnNames,
@@ -77,8 +78,32 @@ const GeneralTable = ({
   isFooterFixed = false,
 }) => {
   const defaultCheckedRows = initSelectedItems ? initSelectedItems : [];
-  const [filterValues, setFilterValues] = useState(createFilterValues(filters));
+  const initialFilterValues = createFilterValues(filters);
+  const [filterValues, setFilterValues] = useState(initialFilterValues);
+
+  useEffect(() => {
+    if (filtersName) {
+      const sessionFilterValue = window.sessionStorage.getItem(filtersName);
+      if (sessionFilterValue) {
+        const initialFilter = JSON.parse(sessionFilterValue);
+        setFilterValues(initialFilter);
+      }
+    }
+  }, [filtersName]);
+
   const [chipsArray, setChipsArray] = useState([]);
+
+  useEffect(() => {
+    if (filtersName) {
+      if (chipsArray.length === 0) {
+        window.sessionStorage.removeItem(filtersName);
+      } else {
+        const val = JSON.stringify(filterValues);
+        window.sessionStorage.setItem(filtersName, val);
+      }
+    }
+  }, [filtersName, filterValues, chipsArray]);
+
   const [sortBy, setSortBy] = useState(defaultSort);
   const [perPage, setPerPage] = useState(50);
   const [page, setPage] = useState(1);
@@ -324,8 +349,7 @@ const GeneralTable = ({
                     : [
                         {
                           title: 'Clear all filters',
-                          onClick: () =>
-                            setFilterValues(createFilterValues(filters)),
+                          onClick: () => setFilterValues(initialFilterValues),
                         },
                       ]
                 }
@@ -435,6 +459,7 @@ GeneralTable.propTypes = {
   navigateProp: PropTypes.func,
   apiFilterSort: PropTypes.bool,
   filters: PropTypes.array,
+  filtersName: PropTypes.string,
   urlParam: PropTypes.string,
   loadTableData: PropTypes.func,
   tableData: PropTypes.object,
