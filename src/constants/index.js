@@ -71,9 +71,11 @@ export const distributionMapper = {
   'rhel-91': 'RHEL 9.1',
   'rhel-92': 'RHEL 9.2',
   'rhel-93': 'RHEL 9.3',
+  'rhel-94': 'RHEL 9.4',
 };
 
 export const releaseMapper = {
+  'rhel-94': 'Red Hat Enterprise Linux (RHEL) 9.4',
   'rhel-93': 'Red Hat Enterprise Linux (RHEL) 9.3',
   'rhel-92': 'Red Hat Enterprise Linux (RHEL) 9.2',
   'rhel-91': 'Red Hat Enterprise Linux (RHEL) 9.1',
@@ -97,6 +99,7 @@ export const supportedReleases = [
   'rhel-91',
   'rhel-92',
   'rhel-93',
+  'rhel-94',
 ];
 
 export const temporaryReleases = ['rhel-93'];
