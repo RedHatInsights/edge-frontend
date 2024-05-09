@@ -233,7 +233,7 @@ const Inventory = ({
   }
 
   useEffect(() => {
-    chrome?.updateDocumentTitle?.('Systems - Inventory | Edge management');
+    chrome?.updateDocumentTitle?.('Systems - Inventory');
   }, [chrome]);
 
   const hideGroupsActions = useFeatureFlags(FEATURE_HIDE_GROUP_ACTIONS);

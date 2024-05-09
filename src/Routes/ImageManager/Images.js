@@ -98,7 +98,7 @@ const Images = ({
   };
 
   useEffect(() => {
-    chrome?.updateDocumentTitle?.('Images - Manage Images | Edge management');
+    chrome?.updateDocumentTitle?.('Images');
   }, [chrome]);
 
   return (

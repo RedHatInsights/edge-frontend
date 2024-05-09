@@ -56,7 +56,7 @@ const Groups = ({ locationProp, navigateProp, paramsProp }) => {
   };
 
   useEffect(() => {
-    chrome?.updateDocumentTitle?.('Groups - Inventory | Edge management');
+    chrome?.updateDocumentTitle?.('Groups - Inventory');
   }, [chrome]);
 
   return (
