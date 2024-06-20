@@ -7,7 +7,7 @@ pull_request_rules:
   - name: Automatic merge on approval
     conditions:
       - base=master
-      - "#approved-reviews-by>=1"
+      - "#approved-reviews-by>=2"
       - "#changes-requested-reviews-by=0"
       - check-success=Travis CI - Pull Request 
       - label!=work in progress
@@ -15,7 +15,7 @@ pull_request_rules:
     actions:
       queue:
         name: edge-frontend
-        method: merge
+        method: rebase
   - name: warn on conflicts
     conditions:
       - conflict
@@ -123,15 +123,4 @@ pull_request_rules:
       label:
         remove:
           - test update
-  - name: add ready label
-    conditions:
-      - body~=(?m)^- \[[xX]\] I have commented my code, particularly in hard-to-understand areas
-      - body~=(?m)^- \[[xX]\] I have made corresponding changes to the documentation
-      - body~=(?m)^- \[[xX]\] I have added tests that prove my fix is effective or that my feature works
-      - body~=(?m)^- \[[xX]\] New and existing unit tests pass locally with my changes
-      - body~=(?m)^- \[[xX]\] I run `npm run lint:js:fix` to check that my code is properly formatted
-    actions:
-      label:
-        add:
-          - ready
           
