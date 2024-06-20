@@ -15,6 +15,7 @@ import { useFeatureFlags } from '../../utils';
 import {
   FEATURE_HIDE_GROUP_ACTIONS,
   FEATURE_PARITY_INVENTORY_GROUPS,
+  FEATURE_INVENTORY_WORKSPACES_RENAME,
 } from '../../constants/features';
 
 const UpdateDeviceModal = React.lazy(() =>
@@ -63,6 +64,9 @@ const DevicesGroupDetail = ({
 
   const inventoryGroupsEnabled = useFeatureFlags(
     FEATURE_PARITY_INVENTORY_GROUPS
+  );
+  const useWorkspacesRename = useFeatureFlags(
+    FEATURE_INVENTORY_WORKSPACES_RENAME
   );
 
   const handleRemoveDevicesFromGroup = (ids, isRow) => {
@@ -150,7 +154,7 @@ const DevicesGroupDetail = ({
             acc.push(...newGroupIDS);
             return acc;
           }, []).length !== 1,
-        title: 'Remove from group',
+        title: `Remove from ${useWorkspacesRename ? 'workspace' : 'group'}`,
         onClick: () =>
           handleRemoveDevicesFromGroup(
             checkedDeviceIds.map((device) => ({
