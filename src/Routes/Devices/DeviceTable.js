@@ -56,8 +56,8 @@ const GetColumnNames = (
     {
       title: inventoryGroupsEnabled
         ? useWorkspacesRename
-          ? 'Group'
-          : 'Workspace'
+          ? 'Workspace'
+          : 'Group'
         : 'Groups',
       type: 'groups',
       sort: false,
@@ -85,7 +85,8 @@ const createRows = (
   deviceBaseUrl,
   history,
   navigate,
-  inventoryGroupsEnabled
+  inventoryGroupsEnabled,
+  useWorkspacesRename
 ) => {
   return devices?.map((device) => {
     let { DeviceName, DeviceGroups } = device;
@@ -197,7 +198,12 @@ const createRows = (
         {
           title:
             DeviceGroups.length === 0 ? (
-              <div className="pf-v5-u-disabled-color-200">No group</div>
+              <div className="pf-v5-u-disabled-color-200">
+                No{' '}
+                {inventoryGroupsEnabled && useWorkspacesRename
+                  ? 'workspace'
+                  : 'group'}
+              </div>
             ) : DeviceGroups.length === 1 ? (
               DeviceGroups[0].Name
             ) : (
@@ -314,7 +320,9 @@ const DeviceTable = ({
 
     if (handleAddDevicesToGroup && !hideGroupsActions) {
       actions.push({
-        title: 'Add to group',
+        title: `Add to ${
+          inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+        }`,
         isDisabled: inventoryGroupsEnabled
           ? rowData?.rowInfo?.deviceGroups.length !== 0 // disable the action item if the system has a group assigned
           : false,
@@ -368,7 +376,9 @@ const DeviceTable = ({
 
     if (handleRemoveDevicesFromGroup && !hideGroupsActions) {
       actions.push({
-        title: 'Remove from group',
+        title: `Remove from ${
+          inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+        }`,
         isDisabled: rowData?.rowInfo?.deviceGroups.length === 0,
         onClick: () =>
           handleRemoveDevicesFromGroup(
@@ -404,7 +414,9 @@ const DeviceTable = ({
 
     if (canBeRemoved) {
       actions.push({
-        title: 'Remove from group',
+        title: `Remove from ${
+          inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+        }`,
         onClick: () =>
           setRemoveModal({
             name: rowData.rowInfo.display_name,
@@ -497,7 +509,8 @@ const DeviceTable = ({
               deviceBaseUrl,
               history,
               navigate,
-              inventoryGroupsEnabled
+              inventoryGroupsEnabled,
+              useWorkspacesRename
             )}
             actionResolver={actionResolver}
             defaultSort={{ index: 3, direction: 'desc' }}

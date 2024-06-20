@@ -41,6 +41,11 @@ import Modal from '../../components/Modal';
 import DeleteGroupModal from '../Groups/DeleteGroupModal';
 import RenameGroupModal from '../Groups/RenameGroupModal';
 import PropTypes from 'prop-types';
+import { useFeatureFlags } from '../../utils';
+import {
+  FEATURE_PARITY_INVENTORY_GROUPS,
+  FEATURE_INVENTORY_WORKSPACES_RENAME,
+} from '../../constants/features';
 
 const UpdateDeviceModal = React.lazy(() =>
   import(
@@ -49,6 +54,11 @@ const UpdateDeviceModal = React.lazy(() =>
 );
 
 const GroupsDetail = ({ locationProp, navigateProp, paramsProp }) => {
+  const useInventoryGroups = useFeatureFlags(FEATURE_PARITY_INVENTORY_GROUPS);
+  const useWorkspacesRename = useFeatureFlags(
+    FEATURE_INVENTORY_WORKSPACES_RENAME
+  );
+
   const dispatch = useDispatch();
   const history = useHistory();
   const params = paramsProp ? paramsProp() : useParams();
@@ -254,7 +264,11 @@ const GroupsDetail = ({ locationProp, navigateProp, paramsProp }) => {
             kebabItems={[
               {
                 isDisabled: !(deviceIds.length > 0),
-                title: 'Remove from group',
+                title: `Remove from ${
+                  useInventoryGroups && useWorkspacesRename
+                    ? 'workspace'
+                    : 'group'
+                }`,
                 onClick: () =>
                   setRemoveModal({
                     name: '',
@@ -323,7 +337,9 @@ const GroupsDetail = ({ locationProp, navigateProp, paramsProp }) => {
         <Modal
           isOpen={removeModal.isOpen}
           closeModal={() => setRemoveModal(false)}
-          title={'Remove from group'}
+          title={`Remove from ${
+            useInventoryGroups && useWorkspacesRename ? 'workspace' : 'group'
+          }`}
           submitLabel={'Remove'}
           variant="danger"
           schema={{
