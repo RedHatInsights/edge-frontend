@@ -12,6 +12,8 @@ import {
 import { useDispatch } from 'react-redux';
 import { Button, Text } from '@patternfly/react-core';
 import useInventoryGroups from '../../hooks/useInventoryGroups';
+import { useFeatureFlags } from '../../utils';
+import { FEATURE_INVENTORY_WORKSPACES_RENAME } from '../../constants/features';
 
 const CreateGroupButton = ({ closeModal }) => (
   <>
@@ -64,6 +66,9 @@ const AddDeviceModal = ({
   const dispatch = useDispatch();
 
   const [inventoryGroupsEnabled] = useInventoryGroups(false);
+  const useWorkspacesRename = useFeatureFlags(
+    FEATURE_INVENTORY_WORKSPACES_RENAME
+  );
 
   const handleAddDevices = (values) => {
     const { group } = values;
@@ -89,7 +94,9 @@ const AddDeviceModal = ({
     <Modal
       isOpen={isModalOpen}
       closeModal={() => setIsModalOpen(false)}
-      title="Add to group"
+      title={`Add to ${
+        inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+      }`}
       submitLabel="Add"
       additionalMappers={{
         'search-input': {

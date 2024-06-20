@@ -14,6 +14,8 @@ import { Text } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 import useInventoryGroups from '../../hooks/useInventoryGroups';
+import { useFeatureFlags } from '../../utils';
+import { FEATURE_INVENTORY_WORKSPACES_RENAME } from '../../constants/features';
 
 const removeDescription = (deviceInfo, inventoryGroupsEnabled) => {
   const { deviceGroups } = deviceInfo[0];
@@ -87,6 +89,9 @@ const RemoveDeviceModal = ({
   const dispatch = useDispatch();
 
   const [inventoryGroupsEnabled] = useInventoryGroups(false);
+  const useWorkspacesRename = useFeatureFlags(
+    FEATURE_INVENTORY_WORKSPACES_RENAME
+  );
 
   const { deviceGroups } = deviceInfo[0];
 
@@ -138,7 +143,9 @@ const RemoveDeviceModal = ({
       isOpen={isModalOpen}
       variant="danger"
       closeModal={() => setIsModalOpen(false)}
-      title="Remove from group"
+      title={`Remove from ${
+        inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+      }`}
       submitLabel="Remove"
       titleIconVariant={WarningIcon}
       additionalMappers={{

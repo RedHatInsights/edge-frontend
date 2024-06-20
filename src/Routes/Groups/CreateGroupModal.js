@@ -11,10 +11,11 @@ import {
   validateInventoryGroupName,
   addDevicesToInventoryGroup,
 } from '../../api/groups';
-import { nameValidator } from '../../utils';
+import { nameValidator, useFeatureFlags } from '../../utils';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
 import useInventoryGroups from '../../hooks/useInventoryGroups';
+import { FEATURE_INVENTORY_WORKSPACES_RENAME } from '../../constants/features';
 
 const asyncGroupNameValidation = async (value = '') => {
   // do not fire validation request for empty name
@@ -78,6 +79,9 @@ const CreateGroupModal = ({
   const dispatch = useDispatch();
 
   const [inventoryGroupsEnabled] = useInventoryGroups(false);
+  const useWorkspacesRename = useFeatureFlags(
+    FEATURE_INVENTORY_WORKSPACES_RENAME
+  );
 
   const handleCreateGroup = (values) => {
     const statusMessages = {
@@ -85,7 +89,12 @@ const CreateGroupModal = ({
         title: 'Success',
         description: `${values.name} has been created successfully`,
       },
-      onError: { title: 'Error', description: 'Failed to create group' },
+      onError: {
+        title: 'Error',
+        description: `Failed to create ${
+          inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+        }`,
+      },
     };
 
     let createGroupFunc;
@@ -103,7 +112,12 @@ const CreateGroupModal = ({
         title: 'Success',
         description: `System(s) have been added to ${values.name} successfully`,
       },
-      onError: { title: 'Error', description: 'Failed to add system to group' },
+      onError: {
+        title: 'Error',
+        description: `Failed to add system to ${
+          inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+        }`,
+      },
     };
 
     let addDevicesToGroupFunc;
@@ -121,7 +135,9 @@ const CreateGroupModal = ({
     <Modal
       isOpen={isModalOpen}
       closeModal={() => setIsModalOpen(false)}
-      title="Create group"
+      title={`Create ${
+        inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+      }`}
       submitLabel="Create"
       schema={createGroupSchema}
       onSubmit={deviceIds ? handleAddDevicesToNewGroup : handleCreateGroup}

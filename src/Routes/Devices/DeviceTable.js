@@ -13,6 +13,7 @@ import RetryUpdatePopover from './RetryUpdatePopover';
 import {
   FEATURE_HIDE_GROUP_ACTIONS,
   FEATURE_PARITY_INVENTORY_GROUPS,
+  FEATURE_INVENTORY_WORKSPACES_RENAME,
 } from '../../constants/features';
 
 const insightsInventoryManageEdgeUrlName = 'manage-edge-inventory';
@@ -34,7 +35,11 @@ const defaultFilters = [
   },
 ];
 
-const GetColumnNames = (inventoryGroupsEnabled, isDataAvailable) => {
+const GetColumnNames = (
+  inventoryGroupsEnabled,
+  isDataAvailable,
+  useWorkspacesRename
+) => {
   return [
     {
       title: 'Name',
@@ -49,7 +54,11 @@ const GetColumnNames = (inventoryGroupsEnabled, isDataAvailable) => {
       columnTransforms: [cellWidth(20)],
     },
     {
-      title: inventoryGroupsEnabled ? 'Group' : 'Groups',
+      title: inventoryGroupsEnabled
+        ? useWorkspacesRename
+          ? 'Group'
+          : 'Workspace'
+        : 'Groups',
       type: 'groups',
       sort: false,
       columnTransforms: [cellWidth(15)],
@@ -279,6 +288,9 @@ const DeviceTable = ({
 
   const useInventorGroups = useFeatureFlags(FEATURE_PARITY_INVENTORY_GROUPS);
   const inventoryGroupsEnabled = !enforceEdgeGroups && useInventorGroups;
+  const useWorkspacesRename = useFeatureFlags(
+    FEATURE_INVENTORY_WORKSPACES_RENAME
+  );
 
   // Create base URL path for system detail link
   const deviceBaseUrl = navigateProp
@@ -414,7 +426,11 @@ const DeviceTable = ({
   let tableFilters = [];
   let tableColumnNames = [];
   const isDataAvailable = data ? data.length > 0 : false;
-  const columnNames = GetColumnNames(inventoryGroupsEnabled, isDataAvailable);
+  const columnNames = GetColumnNames(
+    inventoryGroupsEnabled,
+    isDataAvailable,
+    useWorkspacesRename
+  );
 
   if (urlName === insightsInventoryManageEdgeUrlName) {
     for (let ind = 0; ind < defaultFilters.length; ind++) {
