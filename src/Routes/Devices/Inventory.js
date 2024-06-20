@@ -250,7 +250,9 @@ const Inventory = ({
             checkedDeviceIds.filter((device) => device.deviceGroups?.length > 0)
               .length > 0 // The action menu item is disabled if one of the systems items belongs to a group
           : !(checkedDeviceIds.length > 0),
-        title: 'Add to group',
+        title: `Add to ${
+          inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+        }`,
         onClick: () =>
           handleAddDevicesToGroup(
             checkedDeviceIds.map((device) => ({
