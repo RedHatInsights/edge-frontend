@@ -36,8 +36,9 @@ const GroupsLinkAccess = () => {
           Groups have moved
         </Title>
         <EmptyStateBody id="moved-state-body">
-          You can now use your groups across the console. Access them on the
-          Insights {useWorkspacesRename ? 'Workspaces' : 'Groups'} page.
+          You can now use your {useWorkspacesRename ? 'workspaces' : 'groups'}{' '}
+          across the console. Access them on the Insights{' '}
+          {useWorkspacesRename ? 'Workspaces' : 'Groups'} page.
         </EmptyStateBody>
         <Button
           id="moved-state-button"
