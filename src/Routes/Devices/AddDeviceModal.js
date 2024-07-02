@@ -15,40 +15,42 @@ import useInventoryGroups from '../../hooks/useInventoryGroups';
 import { useFeatureFlags } from '../../utils';
 import { FEATURE_INVENTORY_WORKSPACES_RENAME } from '../../constants/features';
 
-const CreateGroupButton = ({ closeModal }) => (
+const CreateGroupButton = ({ closeModal, workspaceRename }) => (
   <>
     <Text>Or</Text>
     <Button variant="secondary" className="pf-u-w-50" onClick={closeModal}>
-      Create Group
+      Create {workspaceRename ? 'Workspace' : 'Group'}
     </Button>
   </>
 );
 
 CreateGroupButton.propTypes = {
   closeModal: PropTypes.func,
+  workspaceRename: PropTypes.bool,
 };
 
-const createDescription = (deviceIds) => {
+const createDescription = (deviceIds, workspaceRename) => {
   const systemText =
     deviceIds.length > 1 ? `${deviceIds.length} systems` : deviceIds[0].name;
   return (
     <Text>
-      Select a group to add <strong>{systemText} </strong> or create a new one.
+      Select a {workspaceRename ? 'workspace' : 'group'} to add{' '}
+      <strong>{systemText} </strong> or create a new one.
     </Text>
   );
 };
 
-const createSchema = (deviceIds) => ({
+const createSchema = (deviceIds, workspaceRename) => ({
   fields: [
     {
       component: componentTypes.PLAIN_TEXT,
       name: 'description',
-      label: createDescription(deviceIds),
+      label: createDescription(deviceIds, workspaceRename),
     },
     {
       component: 'search-input',
       name: 'group',
-      label: 'Select a group',
+      label: `Select a ${workspaceRename ? 'workspace' : 'group'}`,
       isRequired: true,
       validate: [{ type: validatorTypes.REQUIRED }],
     },
@@ -77,7 +79,12 @@ const AddDeviceModal = ({
         title: 'Success',
         description: `System(s) have been added to ${group.toString()} successfully`,
       },
-      onError: { title: 'Error', description: 'Failed to add system to group' },
+      onError: {
+        title: 'Error',
+        description: `Failed to add system to ${
+          inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+        }`,
+      },
     };
 
     let addDevicesToGroupFunc;
@@ -108,9 +115,13 @@ const AddDeviceModal = ({
             setIsCreateGroupModalOpen(true);
             setIsModalOpen(false);
           },
+          workspaceRename: inventoryGroupsEnabled && useWorkspacesRename,
         },
       }}
-      schema={createSchema(deviceIds)}
+      schema={createSchema(
+        deviceIds,
+        inventoryGroupsEnabled && useWorkspacesRename
+      )}
       onSubmit={handleAddDevices}
       reloadData={reloadData}
     />

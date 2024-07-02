@@ -49,12 +49,12 @@ const inventoryValidatorMapper = {
   groupName: () => asyncInventoryGroupNameValidation,
 };
 
-const createGroupSchema = {
+const createGroupSchema = (workspaceRename) => ({
   fields: [
     {
       component: componentTypes.TEXT_FIELD,
       name: 'name',
-      label: 'Group name',
+      label: `${workspaceRename ? 'Workspace' : 'Group'} name`,
       helperText:
         'Can only contain letters, numbers, spaces, hyphens ( - ), and underscores( _ ).',
       isRequired: true,
@@ -68,7 +68,7 @@ const createGroupSchema = {
       ],
     },
   ],
-};
+});
 
 const CreateGroupModal = ({
   isModalOpen,
@@ -139,7 +139,7 @@ const CreateGroupModal = ({
         inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
       }`}
       submitLabel="Create"
-      schema={createGroupSchema}
+      schema={createGroupSchema(inventoryGroupsEnabled && useWorkspacesRename)}
       onSubmit={deviceIds ? handleAddDevicesToNewGroup : handleCreateGroup}
       reloadData={reloadData}
       validatorMapper={
