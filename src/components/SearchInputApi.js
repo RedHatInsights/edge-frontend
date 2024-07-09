@@ -11,10 +11,15 @@ import useApi from '../hooks/useApi';
 import { getGroups, getInventoryGroups } from '../api/groups';
 import { debounce } from 'lodash';
 import useInventoryGroups from '../hooks/useInventoryGroups';
+import { useFeatureFlags } from '../utils';
+import { FEATURE_INVENTORY_WORKSPACES_RENAME } from '../constants/features';
 
 const SelectInput = (props) => {
   useFieldApi(props);
   const [inventoryGroupsEnabled] = useInventoryGroups(false);
+  const useWorkspacesRename = useFeatureFlags(
+    FEATURE_INVENTORY_WORKSPACES_RENAME
+  );
 
   const { change } = useFormApi();
   const [isOpen, setIsOpen] = useState(false);
@@ -79,13 +84,18 @@ const SelectInput = (props) => {
           </HelperTextItem>
         ) : (
           <HelperTextItem className="pf-u-font-weight-bold">
-            Select a group
+            Select a{' '}
+            {inventoryGroupsEnabled && useWorkspacesRename
+              ? 'workspace'
+              : 'group'}
           </HelperTextItem>
         )}
       </HelperText>
       <Select
         variant="typeahead"
-        typeAheadAriaLabel="Select a group"
+        typeAheadAriaLabel={`Select a ${
+          inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+        }`}
         onToggle={onToggle}
         onSelect={onSelect}
         onClear={clearSelection}
@@ -93,7 +103,9 @@ const SelectInput = (props) => {
         isOpen={isOpen}
         onFilter={debounce(onFilter, 300)}
         aria-labelledby="typeahead-select-id-1"
-        placeholderText="Type or click to select a group"
+        placeholderText={`Type or click to select a ${
+          inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+        }`}
         noResultsFoundText={isLoading ? 'Loading...' : 'No results found'}
         isInputValuePersisted={true}
         maxHeight={'180px'}
