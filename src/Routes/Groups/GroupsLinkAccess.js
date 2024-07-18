@@ -4,11 +4,12 @@ import {
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
-  EmptyStateSecondaryActions,
   Icon,
   TextContent,
   Text,
-  Title,
+  EmptyStateActions,
+  EmptyStateHeader,
+  EmptyStateFooter,
 } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import PageHeader from '@redhat-cloud-services/frontend-components/PageHeader';
@@ -31,43 +32,51 @@ const GroupsLinkAccess = () => {
       </PageHeader>
 
       <EmptyState id="moved-state">
-        <EmptyStateIcon id="external-link-icon" icon={ExternalLinkAltIcon} />
-        <Title id="moved-state-title" headingLevel="h4" size="xl">
-          Groups have moved
-        </Title>
+        <EmptyStateHeader
+          titleText="Groups have moved"
+          icon={
+            <EmptyStateIcon
+              id="external-link-icon"
+              icon={ExternalLinkAltIcon}
+            />
+          }
+          headingLevel="h4"
+        />
         <EmptyStateBody id="moved-state-body">
           You can now use your {useWorkspacesRename ? 'workspaces' : 'groups'}{' '}
           across the console. Access them on the Insights{' '}
           {useWorkspacesRename ? 'Workspaces' : 'Groups'} page.
         </EmptyStateBody>
-        <Button
-          id="moved-state-button"
-          variant="primary"
-          component="a"
-          target="_blank"
-          href={`https://${window.location.host}/insights/inventory/groups`}
-        >
-          Go to {useWorkspacesRename ? 'Workspaces' : 'Groups'}
-        </Button>
-        <EmptyStateSecondaryActions>
+        <EmptyStateFooter>
           <Button
-            id="moved-state-link"
-            variant="link"
+            id="moved-state-button"
+            variant="primary"
             component="a"
             target="_blank"
-            href="https://access.redhat.com/documentation/en-us/red_hat_insights/2023/html/viewing_and_managing_system_inventory/deploying-insights-with-rhca"
+            href={`https://${window.location.host}/insights/inventory/groups`}
           >
-            Learn more about {useWorkspacesRename ? 'Workspaces' : 'Groups'}
-            <Icon
-              style={{ paddingLeft: '1rem' }}
-              iconSize="md"
-              size="lg"
-              isInline
-            >
-              <ExternalLinkAltIcon />
-            </Icon>
+            Go to {useWorkspacesRename ? 'Workspaces' : 'Groups'}
           </Button>
-        </EmptyStateSecondaryActions>
+          <EmptyStateActions>
+            <Button
+              id="moved-state-link"
+              variant="link"
+              component="a"
+              target="_blank"
+              href="https://access.redhat.com/documentation/en-us/red_hat_insights/2023/html/viewing_and_managing_system_inventory/deploying-insights-with-rhca"
+            >
+              Learn more about {useWorkspacesRename ? 'Workspaces' : 'Groups'}
+              <Icon
+                style={{ paddingLeft: '1rem' }}
+                iconSize="md"
+                size="lg"
+                isInline
+              >
+                <ExternalLinkAltIcon />
+              </Icon>
+            </Button>
+          </EmptyStateActions>
+        </EmptyStateFooter>
       </EmptyState>
     </>
   );

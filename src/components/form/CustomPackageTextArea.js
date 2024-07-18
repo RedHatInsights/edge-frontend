@@ -31,7 +31,7 @@ const CustomPackageTextArea = (props) => {
         aria-label="custom-package-wizard-step"
         placeholder="Enter or paste packages from linked repositories, one entry per line.&#13;ExamplePackage&#13;example-package&#13;examplepackage"
         value={value}
-        onChange={onChange}
+        onChange={(_event, newValue) => onChange(newValue)}
         onKeyDown={handleSearchOnEnter}
         style={{
           paddingRight: '32px',

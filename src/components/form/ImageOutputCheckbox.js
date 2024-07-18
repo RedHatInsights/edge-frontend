@@ -46,13 +46,7 @@ const ImageOutputCheckbox = (props) => {
   );
 
   return (
-    <FormGroup
-      label="Output type"
-      isHelperTextBeforeField
-      hasNoPaddingTop
-      isRequired
-      isStack
-    >
+    <FormGroup label="Output type" hasNoPaddingTop isRequired isStack>
       {props.options.map(({ value, label }, index) => (
         <Fragment key={index}>
           <Checkbox

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-  HelperText,
-  HelperTextItem,
-  Select,
-  SelectOption,
-} from '@patternfly/react-core';
+import { HelperText, HelperTextItem } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 import useApi from '../hooks/useApi';
@@ -96,7 +92,7 @@ const SelectInput = (props) => {
         typeAheadAriaLabel={`Select a ${
           inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
         }`}
-        onToggle={onToggle}
+        onToggle={(_event, isOpen) => onToggle(isOpen)}
         onSelect={onSelect}
         onClear={clearSelection}
         selections={selected ? selected : searchTerm}

@@ -4,6 +4,8 @@ import {
   Checkbox,
   TextInput,
   TextArea,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 
@@ -46,7 +48,6 @@ const RegistrationCreds = (props) => {
   return (
     <FormGroup
       label="Select at least one to validate credentials"
-      isHelperTextBeforeField
       hasNoPaddingTop
       isRequired
       isStack
@@ -58,14 +59,15 @@ const RegistrationCreds = (props) => {
         onChange={toggleCheckbox}
       />
       {input.value.includes('password') ? (
-        <FormGroup
-          helperTextInvalid={
-            meta.dirty && meta.error['password'] !== undefined
-              ? meta.error['password']
-              : undefined
-          }
-        >
+        <FormGroup>
           <TextInput type="password" {...passwordInput} />
+          {meta.dirty && meta.error['password'] !== undefined && (
+            <HelperText>
+              <HelperTextItem variant="error">
+                {meta.error['password']}
+              </HelperTextItem>
+            </HelperText>
+          )}
         </FormGroup>
       ) : null}
       <Checkbox
@@ -75,14 +77,15 @@ const RegistrationCreds = (props) => {
         onChange={toggleCheckbox}
       />
       {input.value.includes('sshKey') ? (
-        <FormGroup
-          helperTextInvalid={
-            meta.dirty && meta.error['sshKey'] !== undefined
-              ? meta.error['sshKey']
-              : undefined
-          }
-        >
+        <FormGroup>
           <TextArea {...sshKeyInput} />
+          {meta.dirty && meta.error['sshKey'] !== undefined && (
+            <HelperText>
+              <HelperTextItem variant="error">
+                {meta.error['sshKey']}
+              </HelperTextItem>
+            </HelperText>
+          )}
         </FormGroup>
       ) : null}
     </FormGroup>

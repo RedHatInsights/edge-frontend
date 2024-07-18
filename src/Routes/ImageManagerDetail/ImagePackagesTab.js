@@ -67,7 +67,7 @@ const createRows = ({
           >
             <Button
               variant="link"
-              isSmall
+              size="sm"
               icon={<ExternalLinkAltIcon />}
               iconPosition="right"
             >

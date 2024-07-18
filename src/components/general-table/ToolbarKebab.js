@@ -1,9 +1,9 @@
+import { ToolbarItem } from '@patternfly/react-core';
 import {
   Dropdown,
   DropdownItem,
-  ToolbarItem,
   KebabToggle,
-} from '@patternfly/react-core';
+} from '@patternfly/react-core/deprecated';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
