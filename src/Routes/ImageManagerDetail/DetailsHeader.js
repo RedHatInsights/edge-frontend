@@ -13,12 +13,14 @@ import {
   BreadcrumbItem,
   Split,
   SplitItem,
+  Tooltip,
+} from '@patternfly/react-core';
+import {
   Dropdown,
   DropdownItem,
   DropdownToggle,
   DropdownPosition,
-  Tooltip,
-} from '@patternfly/react-core';
+} from '@patternfly/react-core/deprecated';
 import Status from '../../components/Status';
 import { routes as paths } from '../../constants/routeMapper';
 import CaretDownIcon from '@patternfly/react-icons/dist/esm/icons/caret-down-icon';
@@ -187,7 +189,7 @@ const DetailsHead = ({
                     <DropdownToggle
                       id={dropdownId}
                       toggleIndicator={CaretDownIcon}
-                      onToggle={(newState) => setIsOpen(newState)}
+                      onToggle={(_event, newState) => setIsOpen(newState)}
                       isDisabled={
                         (imageVersion
                           ? imageVersion?.image?.Status
@@ -198,7 +200,7 @@ const DetailsHead = ({
                     >
                       <Tooltip
                         content={actionsLabel}
-                        reference={() => document.getElementById(dropdownId)}
+                        triggerRef={() => document.getElementById(dropdownId)}
                       />
                       Actions
                     </DropdownToggle>

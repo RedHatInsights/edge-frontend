@@ -246,7 +246,7 @@ const UpdateDeviceModal = ({
       ) : (
         <Backdrop>
           <Bullseye>
-            <Spinner isSVG diameter="100px" />
+            <Spinner diameter="100px" />
           </Bullseye>
         </Backdrop>
       )}

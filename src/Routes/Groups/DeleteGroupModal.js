@@ -5,8 +5,7 @@ import componentTypes from '@data-driven-forms/react-form-renderer/component-typ
 import Modal from '../../components/Modal';
 import { deleteGroupById } from '../../api/groups';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
-import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
-import { Text } from '@patternfly/react-core';
+import { Icon, Text } from '@patternfly/react-core';
 import apiWithToast from '../../utils/apiWithToast';
 import { useDispatch } from 'react-redux';
 
@@ -34,7 +33,9 @@ const schema = (name) => ({
 });
 
 const WarningIcon = () => (
-  <ExclamationTriangleIcon color={warningColor.value} />
+  <Icon status="warning">
+    <ExclamationTriangleIcon />
+  </Icon>
 );
 
 const DeleteGroupModal = ({

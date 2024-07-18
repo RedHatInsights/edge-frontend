@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import ToolbarHeader from './ToolbarHeader';
 import ToolbarFooter from './ToolbarFooter';
 import createFilterValues from '../../components/general-table/createFilterValues';
+import { sortable } from '@patternfly/react-table';
 import {
   Table,
   TableHeader,
   TableBody,
-  sortable,
-} from '@patternfly/react-table';
+} from '@patternfly/react-table/deprecated';
 import { Skeleton } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import CustomEmptyState from '../Empty';

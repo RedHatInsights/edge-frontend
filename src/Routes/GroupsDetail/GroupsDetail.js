@@ -2,15 +2,17 @@ import React, { useState, Suspense } from 'react';
 import {
   Breadcrumb,
   BreadcrumbItem,
-  Dropdown,
-  DropdownItem,
-  DropdownToggle,
-  DropdownPosition,
   Flex,
   FlexItem,
   Skeleton,
   Tooltip,
 } from '@patternfly/react-core';
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownToggle,
+  DropdownPosition,
+} from '@patternfly/react-core/deprecated';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -185,13 +187,13 @@ const GroupsDetail = ({ locationProp, navigateProp, paramsProp }) => {
                 <DropdownToggle
                   id={dropdownId}
                   toggleIndicator={CaretDownIcon}
-                  onToggle={(newState) => setIsDropdownOpen(newState)}
+                  onToggle={(_event, newState) => setIsDropdownOpen(newState)}
                   isDisabled={false}
                   aria-label={actionsLabel}
                 >
                   <Tooltip
                     content={actionsLabel}
-                    reference={() => document.getElementById(dropdownId)}
+                    triggerRef={() => document.getElementById(dropdownId)}
                   />
                   Actions
                 </DropdownToggle>

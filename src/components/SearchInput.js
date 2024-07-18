@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Select, SelectOption } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
 
@@ -32,7 +32,7 @@ const SelectInputApi = (props) => {
       <Select
         variant="typeahead"
         typeAheadAriaLabel="Select a state"
-        onToggle={onToggle}
+        onToggle={(_event, isOpen) => onToggle(isOpen)}
         onSelect={onSelect}
         onClear={clearSelection}
         selections={selected}

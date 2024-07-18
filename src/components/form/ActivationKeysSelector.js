@@ -1,12 +1,7 @@
 import React, { useEffect, Fragment, useState } from 'react';
 
-import {
-  FormGroup,
-  Text,
-  Select,
-  SelectOption,
-  Button,
-} from '@patternfly/react-core';
+import { FormGroup, Text, Button } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { fetchActivationKeys } from '../../api/images';
 import useFormApi from '@data-driven-forms/react-form-renderer/use-form-api';
