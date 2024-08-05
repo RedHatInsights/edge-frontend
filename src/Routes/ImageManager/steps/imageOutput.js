@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-import { Select, SelectOption, Text } from '@patternfly/react-core';
+import { Text } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import {
   imageTypeMapper,
@@ -51,7 +52,7 @@ const ReleaseLabel = () => {
     <Select
       variant="single"
       width="100%"
-      onToggle={onToggle}
+      onToggle={(_event, isOpen) => onToggle(isOpen)}
       onSelect={onSelect}
       selections={selected}
       isOpen={isOpen}

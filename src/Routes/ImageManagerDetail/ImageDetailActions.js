@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { Text, Button, SplitItem } from '@patternfly/react-core';
 import {
-  Text,
-  Button,
-  SplitItem,
   Dropdown,
   DropdownItem,
   KebabToggle,
-} from '@patternfly/react-core';
+} from '@patternfly/react-core/deprecated';
 
 const ImageActions = ({ imageData, openUpdateWizard }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +38,10 @@ const ImageActions = ({ imageData, openUpdateWizard }) => {
             position="right"
             onSelect={handleSelect}
             toggle={
-              <KebabToggle onToggle={handleToggle} id="image-detail-kebab" />
+              <KebabToggle
+                onToggle={(_event, isOpen) => handleToggle(isOpen)}
+                id="image-detail-kebab"
+              />
             }
             isOpen={isOpen}
             isPlain

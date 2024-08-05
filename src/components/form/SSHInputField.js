@@ -4,6 +4,8 @@ import {
   TextArea,
   Text,
   TextVariants,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
@@ -15,18 +17,19 @@ const SSHInputField = (props) => {
   });
   return (
     <FormGroup>
-      <FormGroup
-        label="SSH key"
-        helperTextInvalid={meta.error}
-        validated={meta.error && meta.touched ? 'error' : 'default'}
-        isRequired
-      >
+      <FormGroup label="SSH key" isRequired>
         <TextArea
           className="pf-u-h-25vh"
+          validated={meta.error && meta.touched ? 'error' : 'default'}
           id="credentials"
           placeholder="Paste your public SSH key"
           {...sshKeyInput}
         />
+        {meta.error && (
+          <HelperText>
+            <HelperTextItem variant="error">{meta.error}</HelperTextItem>
+          </HelperText>
+        )}
       </FormGroup>
       <Fragment>
         <Text component={TextVariants.small}>

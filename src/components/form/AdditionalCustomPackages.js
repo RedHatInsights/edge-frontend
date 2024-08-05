@@ -19,6 +19,7 @@ import {
   InputGroupText,
   TextInput,
   Divider,
+  InputGroupItem,
 } from '@patternfly/react-core';
 import {
   ArrowRightIcon,
@@ -286,38 +287,42 @@ const AdditionalCustomPackages = ({ defaultArch, ...props }) => {
     return (
       <>
         <InputGroup>
-          <TextInput
-            id={`${isAvailable ? 'available' : 'chosen'}-textinput`}
-            type="arrow"
-            onChange={onChange}
-            placeholder="Search for packages"
-            onFocus={() => setSearchFocused(true)}
-            onBlur={() => setSearchFocused(false)}
-            validated={
-              hasMoreResults && isAvailable && !searchFocused ? 'warning' : ''
-            }
-            aria-label={
-              isAvailable ? 'available search input' : 'chosen search input'
-            }
-            data-testid={
-              isAvailable ? 'available-search-input' : 'chosen-search-input'
-            }
-          />
-          {isAvailable ? (
-            <Button
-              onClick={handlePackageSearch}
-              isDisabled={!isAvailable}
-              variant="control"
-              aria-label="search button for search input"
-              data-testid="package-search"
-            >
-              <ArrowRightIcon />
-            </Button>
-          ) : (
-            <InputGroupText>
-              <ArrowRightIcon className="pf-u-ml-xs pf-u-mr-xs" />
-            </InputGroupText>
-          )}
+          <InputGroupItem isFill>
+            <TextInput
+              id={`${isAvailable ? 'available' : 'chosen'}-textinput`}
+              type="arrow"
+              onChange={(_event, value) => onChange(value)}
+              placeholder="Search for packages"
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+              validated={
+                hasMoreResults && isAvailable && !searchFocused ? 'warning' : ''
+              }
+              aria-label={
+                isAvailable ? 'available search input' : 'chosen search input'
+              }
+              data-testid={
+                isAvailable ? 'available-search-input' : 'chosen-search-input'
+              }
+            />
+          </InputGroupItem>
+          <InputGroupItem>
+            {isAvailable ? (
+              <Button
+                onClick={handlePackageSearch}
+                isDisabled={!isAvailable}
+                variant="control"
+                aria-label="search button for search input"
+                data-testid="package-search"
+              >
+                <ArrowRightIcon />
+              </Button>
+            ) : (
+              <InputGroupText>
+                <ArrowRightIcon className="pf-u-ml-xs pf-u-mr-xs" />
+              </InputGroupText>
+            )}
+          </InputGroupItem>
         </InputGroup>
         {hasMoreResults && isAvailable && (
           <HelperText>

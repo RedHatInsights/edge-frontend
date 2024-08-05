@@ -3,9 +3,9 @@ import {
   ToolbarItem,
   InputGroup,
   SearchInput,
-  Select,
-  SelectOption,
+  InputGroupItem,
 } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
 
@@ -66,16 +66,20 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
     return (
       <ToolbarItem data-testid="filter-input-testid">
         <InputGroup>
-          <SearchInput
-            name="textInput1"
-            id="textInput1"
-            type="search"
-            aria-label={`Select input for ${selectedFilter.label.toLowerCase()}`}
-            placeholder={`Filter by ${selectedFilter.label.toLowerCase()}`}
-            onChange={debounce(handleFilterChange(), 500)}
-            onClear={handleDeleteTextInput}
-            value={filterValues.find((filter) => filter.type === 'text').value}
-          />
+          <InputGroupItem>
+            <SearchInput
+              name="textInput1"
+              id="textInput1"
+              type="search"
+              aria-label={`Select input for ${selectedFilter.label.toLowerCase()}`}
+              placeholder={`Filter by ${selectedFilter.label.toLowerCase()}`}
+              onChange={debounce(handleFilterChange(), 500)}
+              onClear={handleDeleteTextInput}
+              value={
+                filterValues.find((filter) => filter.type === 'text').value
+              }
+            />
+          </InputGroupItem>
         </InputGroup>
       </ToolbarItem>
     );
@@ -85,27 +89,29 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
     return (
       <ToolbarItem data-testid="filter-input-testid">
         <InputGroup>
-          <Select
-            variant="checkbox"
-            aria-label={`Select input for ${selectedFilter.label.toLowerCase()}`}
-            width="11rem"
-            placeholderText={`Filter by ${selectedFilter.label.toLowerCase()}`}
-            isCheckboxSelectionBadgeHidden
-            onToggle={() => setIsOpen((prevState) => !prevState)}
-            onSelect={handleFilterChange()}
-            selections={selectedFilter.value
-              .filter((value) => value.isChecked == true)
-              .map((arr) => arr.option)}
-            isOpen={isOpen}
-          >
-            {selectedFilter.value.map((filter, index) => (
-              <SelectOption
-                key={index}
-                value={filter.option}
-                isChecked={filter.isChecked}
-              />
-            ))}
-          </Select>
+          <InputGroupItem>
+            <Select
+              variant="checkbox"
+              aria-label={`Select input for ${selectedFilter.label.toLowerCase()}`}
+              width="11rem"
+              placeholderText={`Filter by ${selectedFilter.label.toLowerCase()}`}
+              isCheckboxSelectionBadgeHidden
+              onToggle={() => setIsOpen((prevState) => !prevState)}
+              onSelect={handleFilterChange()}
+              selections={selectedFilter.value
+                .filter((value) => value.isChecked == true)
+                .map((arr) => arr.option)}
+              isOpen={isOpen}
+            >
+              {selectedFilter.value.map((filter, index) => (
+                <SelectOption
+                  key={index}
+                  value={filter.option}
+                  isChecked={filter.isChecked}
+                />
+              ))}
+            </Select>
+          </InputGroupItem>
         </InputGroup>
       </ToolbarItem>
     );

@@ -196,7 +196,7 @@ const UpdateImageModal = ({ updateCveModal, setUpdateCveModal, setReload }) => {
   ) : (
     <Backdrop>
       <Bullseye>
-        <Spinner isSVG diameter="100px" />
+        <Spinner diameter="100px" />
       </Bullseye>
     </Backdrop>
   );

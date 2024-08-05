@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
+import { ToolbarItem } from '@patternfly/react-core';
 import {
   Dropdown,
   DropdownItem,
   DropdownToggle,
   DropdownToggleCheckbox,
-  ToolbarItem,
-} from '@patternfly/react-core';
+} from '@patternfly/react-core/deprecated';
 import PropTypes from 'prop-types';
 import useFetchBatched from '../../hooks/useFetchBatched';
 import { getInventory } from '../../api/devices';

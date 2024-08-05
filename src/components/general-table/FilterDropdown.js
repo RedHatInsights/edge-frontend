@@ -1,5 +1,6 @@
 import React from 'react';
-import { ToolbarItem, Select, SelectOption } from '@patternfly/react-core';
+import { ToolbarItem } from '@patternfly/react-core';
+import { Select, SelectOption } from '@patternfly/react-core/deprecated';
 import { FilterIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
 

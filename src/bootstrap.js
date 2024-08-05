@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import InventoryApp from './AppEntry';
 
-ReactDOM.render(<InventoryApp />, document.getElementById('root'));
+createRoot(<InventoryApp />, document.getElementById('root'));

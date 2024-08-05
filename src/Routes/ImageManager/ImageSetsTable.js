@@ -17,7 +17,7 @@ const TooltipSelectorRef = ({ index }) => (
   <div>
     <Tooltip
       content={<div>More options</div>}
-      reference={() =>
+      triggerRef={() =>
         document.getElementById(`pf-dropdown-toggle-id-${index}`)
       }
     />

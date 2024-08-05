@@ -10,9 +10,8 @@ import {
   removeDevicesFromInventoryGroup,
 } from '../../api/groups';
 import { useDispatch } from 'react-redux';
-import { Text } from '@patternfly/react-core';
+import { Text, Icon } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
-import warningColor from '@patternfly/react-tokens/dist/esm/global_warning_color_100';
 import useInventoryGroups from '../../hooks/useInventoryGroups';
 import { useFeatureFlags } from '../../utils';
 import { FEATURE_INVENTORY_WORKSPACES_RENAME } from '../../constants/features';
@@ -53,7 +52,9 @@ const removeDescription = (deviceInfo, inventoryGroupsEnabled) => {
 };
 
 const WarningIcon = () => (
-  <ExclamationTriangleIcon color={warningColor.value} />
+  <Icon status="warning">
+    <ExclamationTriangleIcon />
+  </Icon>
 );
 
 const createSchema = (deviceInfo, inventoryGroupsEnabled) => {

@@ -26,7 +26,7 @@ import {
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import useApi from '../../hooks/useApi';
 import {
-  TableComposable,
+  Table /* data-codemods */,
   Thead,
   Tr,
   Th,
@@ -92,7 +92,7 @@ const CurrentVersion = ({ image }) => {
           <Text>Current version</Text>
         </Title>
       </TextContent>
-      <TableComposable
+      <Table
         aria-label="Current version table"
         variant={'compact'}
         borders={false}
@@ -125,7 +125,7 @@ const CurrentVersion = ({ image }) => {
             </Tr>
           ))}
         </Tbody>
-      </TableComposable>
+      </Table>
     </>
   );
 };

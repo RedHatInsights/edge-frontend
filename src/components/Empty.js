@@ -1,13 +1,14 @@
 import React from 'react';
 import {
-  Title,
   Button,
   EmptyState,
   EmptyStateIcon,
   EmptyStateBody,
-  EmptyStateSecondaryActions,
   Stack,
   StackItem,
+  EmptyStateActions,
+  EmptyStateHeader,
+  EmptyStateFooter,
 } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import PropTypes from 'prop-types';
@@ -23,11 +24,9 @@ const Empty = ({
   secondaryActions,
   target,
 }) => (
-  <EmptyState variant="large" style={{ backgroundColor: bgColor || '' }}>
+  <EmptyState variant="lg" style={{ backgroundColor: bgColor || '' }}>
     {icon && <EmptyStateIcon icon={iconMapper[icon]} />}
-    <Title headingLevel="h4" size="lg">
-      {title}
-    </Title>
+    <EmptyStateHeader titleText={<>{title}</>} headingLevel="h4" />
     <EmptyStateBody>
       {Array.isArray(body)
         ? body.map((item, index) => (
@@ -39,43 +38,45 @@ const Empty = ({
           ))
         : body}
     </EmptyStateBody>
-    {primaryAction && (
-      <>
-        {primaryAction.href ? (
-          createLink({
-            pathname: `${primaryAction.href}`,
-            linkText: primaryAction.text,
-            target: target,
-          })
-        ) : (
-          <Button variant="primary" onClick={primaryAction.click}>
-            {primaryAction.text}
-          </Button>
-        )}
-      </>
-    )}
-    <EmptyStateSecondaryActions>
-      <Stack>
-        {secondaryActions.map(
-          ({ type, title, link, onClick, variant, className }, index) => (
-            <StackItem key={index}>
-              <Button
-                component={type === 'link' ? 'a' : 'button'}
-                className={className}
-                href={link}
-                variant={variant || 'link'}
-                target={type === 'link' ? '_blank' : ''}
-                key={index}
-                onClick={onClick}
-              >
-                {title}
-                {link && <ExternalLinkAltIcon className="pf-u-ml-sm" />}
-              </Button>
-            </StackItem>
-          )
-        )}
-      </Stack>
-    </EmptyStateSecondaryActions>
+    <EmptyStateFooter>
+      {primaryAction && (
+        <>
+          {primaryAction.href ? (
+            createLink({
+              pathname: `${primaryAction.href}`,
+              linkText: primaryAction.text,
+              target: target,
+            })
+          ) : (
+            <Button variant="primary" onClick={primaryAction.click}>
+              {primaryAction.text}
+            </Button>
+          )}
+        </>
+      )}
+      <EmptyStateActions>
+        <Stack>
+          {secondaryActions.map(
+            ({ type, title, link, onClick, variant, className }, index) => (
+              <StackItem key={index}>
+                <Button
+                  component={type === 'link' ? 'a' : 'button'}
+                  className={className}
+                  href={link}
+                  variant={variant || 'link'}
+                  target={type === 'link' ? '_blank' : ''}
+                  key={index}
+                  onClick={onClick}
+                >
+                  {title}
+                  {link && <ExternalLinkAltIcon className="pf-u-ml-sm" />}
+                </Button>
+              </StackItem>
+            )
+          )}
+        </Stack>
+      </EmptyStateActions>
+    </EmptyStateFooter>
   </EmptyState>
 );
 
