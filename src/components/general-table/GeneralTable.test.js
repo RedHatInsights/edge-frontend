@@ -84,7 +84,7 @@ describe('General table', () => {
     expect(generalTable).toBeDefined();
     expect(generalTableFooter).toBeDefined();
     expect(generalTableFooter.children[0].innerHTML).toEqual(
-      '<b>1 - 1</b> of <b>1</b> '
+      '<b>1 - 1</b> of <b>1</b> items'
     );
 
     expect(container.querySelector('div')).toMatchSnapshot();

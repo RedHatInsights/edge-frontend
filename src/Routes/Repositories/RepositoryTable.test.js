@@ -51,9 +51,7 @@ describe('RepositoryTable', () => {
     );
 
     expect(
-      screen
-        .getByRole('searchbox', 'Select input for name')
-        .getAttribute('placeholder')
+      screen.getByLabelText('Select input for name').getAttribute('placeholder')
     ).toEqual('Filter by name');
     expect(screen.findByRole('button', 'Add repository')).toBeDefined();
     expect(screen.findByRole('button', 'Name')).toBeDefined();

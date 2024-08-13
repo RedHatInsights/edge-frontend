@@ -103,7 +103,9 @@ describe('ImageVersionsTab', () => {
       screen.getByRole('cell', { name: 'Image build in progress' })
     ).toBeDefined();
     expect(screen.getByRole('cell', { name: 'Ready' })).toBeDefined();
-    fireEvent.click(screen.getAllByRole('button', { name: /actions/i })[1]);
+    fireEvent.click(
+      screen.getAllByRole('button', { name: /Kebab toggle/i })[1]
+    );
     // fireEvent.click(screen.getByRole('button', { name: /update image/i }));
     // expect(openUpdateWizard).toBeCalled();
 

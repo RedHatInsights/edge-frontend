@@ -31,6 +31,9 @@ const ToolbarFooter = ({
             <Pagination
               data-testid="pagination-footer-test-id"
               itemCount={count}
+              titles={{
+                optionsToggleAriaLabel: 'Show per page options',
+              }}
               perPage={perPage}
               page={page}
               onSetPage={(_e, pageNumber) => setPage(pageNumber)}
