@@ -2,13 +2,13 @@
 
 exports[`TableHeader renders correctly 1`] = `
 <div
-  class="pf-c-content"
+  class="pf-v5-c-content"
   style="padding: 15px; background-color: white;"
 >
   <h1
     class=""
     data-ouia-component-id="OUIA-Generated-Text-1"
-    data-ouia-component-type="PF4/Text"
+    data-ouia-component-type="PF5/Text"
     data-ouia-safe="true"
     data-pf-content="true"
   >
@@ -17,7 +17,7 @@ exports[`TableHeader renders correctly 1`] = `
   <p
     class=""
     data-ouia-component-id="OUIA-Generated-Text-2"
-    data-ouia-component-type="PF4/Text"
+    data-ouia-component-type="PF5/Text"
     data-ouia-safe="true"
     data-pf-content="true"
   >

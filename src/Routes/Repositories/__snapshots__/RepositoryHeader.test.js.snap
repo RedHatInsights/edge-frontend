@@ -1,3 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RepositoryHeader renders correctly 1`] = `null`;
+exports[`RepositoryHeader renders correctly 1`] = `
+<div
+  class="pf-v5-l-flex pf-m-justify-content-space-between"
+>
+  <div
+    class=""
+  >
+    <h1
+      class="pf-v5-c-title pf-m-2xl"
+      data-ouia-component-id="OUIA-Generated-RHI/Header-true-2"
+      data-ouia-component-type="RHI/Header"
+      data-ouia-safe="true"
+      widget-type="InsightsPageHeaderTitle"
+    >
+      Custom repositories
+    </h1>
+  </div>
+</div>
+`;

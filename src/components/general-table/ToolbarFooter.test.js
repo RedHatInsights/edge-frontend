@@ -21,12 +21,12 @@ describe('Repository Footer', () => {
       name: 'Go to next page',
     });
     const paginationPerPage = await findByRole('button', {
-      name: 'Items per page',
+      name: 'Show per page options',
     });
 
     expect(paginationElement).toBeDefined();
     expect(paginationElement.children[0].innerHTML).toEqual(
-      '<b>1 - 20</b> of <b>100</b> '
+      '<b>1 - 20</b> of <b>100</b> items'
     );
     fireEvent.click(paginationNextPage);
     expect(setPage).toHaveBeenCalled();

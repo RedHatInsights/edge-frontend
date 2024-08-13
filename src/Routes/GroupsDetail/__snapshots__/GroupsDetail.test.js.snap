@@ -2,11 +2,11 @@
 
 exports[`Groups should render correctly 1`] = `
 <div
-  class="pf-c-skeleton"
-  style="--pf-c-skeleton--Width: 100px;"
+  class="pf-v5-c-skeleton"
+  style="--pf-v5-c-skeleton--Width: 100px;"
 >
   <span
-    class="pf-u-screen-reader"
+    class="pf-v5-screen-reader"
   />
 </div>
 `;
