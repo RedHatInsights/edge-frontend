@@ -6,7 +6,8 @@
 - [Setup](#setup)
 
 # About
-The edge-frontend repo is the front-end for [RHEL for Edge/Fleet managment ](https://console.stage.redhat.com/edge/fleet-management), which is part of console.redhat.com.
+The `edge-frontend` repository contains the front-end code for [RHEL for Edge/Fleet Management](https://console.stage.redhat.com/edge/fleet-management), a part of the [console.redhat.com](https://console.redhat.com) platform.
+
 
 # Tools
 - [Cloud-Services-Config](#cloud-services-config)
