@@ -168,11 +168,11 @@ parameters:
 - name: SELENIUM_CPU_LIMIT
   value: 500m
 - name: SELENIUM_MEMORY_LIMIT
-  value: 2Gi
+  value: 3Gi
 - name: SELENIUM_CPU_REQUEST
   value: 100m
 - name: SELENIUM_MEMORY_REQUEST
-  value: 1Gi
+  value: 2Gi
 - name: SELENIUM_JAVA_OPTS
   value: ''
 - name: VNC_GEOMETRY
