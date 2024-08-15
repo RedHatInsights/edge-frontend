@@ -168,19 +168,19 @@ const AdditionalCustomPackages = ({ defaultArch, ...props }) => {
     }
 
     const destination = document.querySelector(
-      `.pf-m-${scrollTo.pane} .pf-c-dual-list-selector__menu`
+      `.pf-m-${scrollTo.pane} .pf-v5-c-dual-list-selector__menu`
     );
     scrollTo.pkgs.forEach((pkg) =>
       document
         .getElementById(`package-${pkg.name}`)
-        .closest('.pf-c-dual-list-selector__list-item-row')
+        .closest('.pf-v5-c-dual-list-selector__list-item-row')
         .classList.add('pf-u-background-color-disabled-color-300')
     );
     setTimeout(() => {
       scrollTo.pkgs.forEach((pkg) =>
         document
           .getElementById(`package-${pkg.name}`)
-          .closest('.pf-c-dual-list-selector__list-item-row')
+          .closest('.pf-v5-c-dual-list-selector__list-item-row')
           .classList.remove('pf-u-background-color-disabled-color-300')
       );
     }, 400);
