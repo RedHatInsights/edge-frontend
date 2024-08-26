@@ -13,7 +13,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
   const selectedFilter = filterValues.find((filter) => filter.label === input);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleFilterChange = () => (value, checkboxValue) => {
+  const handleFilterChange = () => (event, checkboxValue) => {
     setFilterValues((prevState) => {
       const selectedIndex = prevState.findIndex(
         (filter) => filter.label === selectedFilter.label
@@ -32,7 +32,7 @@ const FilterInput = ({ filterValues, setFilterValues, input }) => {
           isChecked: !checkedType?.value[checkboxIndex]?.isChecked,
         },
       });
-      const newTextValue = value;
+      const newTextValue = event?.target?.value;
 
       return Object.values({
         ...prevState,
