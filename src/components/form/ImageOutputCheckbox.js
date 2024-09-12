@@ -35,11 +35,11 @@ const ImageOutputCheckbox = (props) => {
   const { getState } = useFormApi();
   const { input } = useFieldApi(props);
   const toggleCheckbox = useCallback(
-    (checked, event) => {
+    (event, checked) => {
       input.onChange(
         checked
-          ? [...input.value, event.currentTarget.id]
-          : input.value.filter((item) => item !== event.currentTarget.id)
+          ? [...input.value, event.target.id]
+          : input.value.filter((item) => item !== event.target.id)
       );
     },
     [input.onChange]
