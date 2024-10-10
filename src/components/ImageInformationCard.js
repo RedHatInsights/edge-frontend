@@ -156,6 +156,7 @@ const ImageInformationCard = ({ deviceIdProps }) => {
         title="Image information"
         isLoading={false}
         items={deviceIdProps ? federatedImageData : edgeImageData}
+        cardId="image-information"
       />
     </Suspense>
   );
