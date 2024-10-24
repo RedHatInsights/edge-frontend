@@ -91,4 +91,4 @@ parameters:
   - name: IMAGE_TAG
     required: true
   - name: IMAGE
-    value: quay.io/cloudservices/edge-frontend
+    value: quay.io/redhat-services-prod/insights-management-tenant/insights-edge/edge-frontend
