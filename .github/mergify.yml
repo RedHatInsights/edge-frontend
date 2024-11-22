@@ -1,27 +1,25 @@
 queue_rules:
   - name: edge-frontend
-    conditions:
-      - base=master
-      - "#approved-reviews-by>=1"
-pull_request_rules:
-  - name: Automatic merge on approval
-    conditions:
+    queue_conditions:
       - base=master
       - "#approved-reviews-by>=2"
       - "#changes-requested-reviews-by=0"
-      - check-success=Travis CI - Pull Request 
+      - check-success=Travis CI - Pull Request
       - label!=work in progress
       - label!=do not merge
-    actions:
-      queue:
-        name: edge-frontend
-        method: rebase
+    merge_conditions:
+      - base=master
+      - "#approved-reviews-by>=1"
+    merge_method: rebase
+
+pull_request_rules:
   - name: warn on conflicts
     conditions:
       - conflict
     actions:
       comment:
-        message: "This pull request is now in conflicts. Could you fix it @{{author}}? 🙏"
+        message: "This pull request is now in conflicts. Could you fix it @{{author}}?
+          🙏"
       label:
         add:
           - conflict
@@ -39,10 +37,11 @@ pull_request_rules:
       - updated-at<15 days ago
     actions:
       comment:
-        message: "This pull request is now 15 days old. Please revisit. PR will be closed in 15 more days. @{{author}}"
+        message: "This pull request is now 15 days old. Please revisit. PR will be
+          closed in 15 more days. @{{author}}"
       label:
         add:
-          - stale warning  
+          - stale warning
   - name: close stale pull request
     conditions:
       - base=master
@@ -50,7 +49,8 @@ pull_request_rules:
       - updated-at<30 days ago
     actions:
       close:
-        message: "This pull request looks stale. Feel free to reopen it if you think it's a mistake."
+        message: "This pull request looks stale. Feel free to reopen it if you think
+          it's a mistake."
   - name: waiting for review
     conditions:
       - "#approved-reviews-by<1"
@@ -123,4 +123,8 @@ pull_request_rules:
       label:
         remove:
           - test update
-          
+
+  - name: refactored queue action rule
+    conditions: []
+    actions:
+      queue:
