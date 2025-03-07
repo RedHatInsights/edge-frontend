@@ -62,7 +62,7 @@
     "@redhat-cloud-services/frontend-components": "^4.2.16",
     "@redhat-cloud-services/frontend-components-notifications": "^4.1.0",
     "@redhat-cloud-services/frontend-components-utilities": "^4.0.13",
-    "@redhat-cloud-services/host-inventory-client": "^1.2.3",
+    "@redhat-cloud-services/host-inventory-client": "^1.5.1",
     "@scalprum/react-core": "^0.3.3",
     "@unleash/proxy-client-react": "^3.5.1",
     "chai-sorted": "^0.2.0",
