@@ -12,6 +12,7 @@
     "nightly": "npm run deploy",
     "start": "fec dev",
     "start:proxy": "PROXY=true fec dev",
+    "static": "fec static",
     "start:federated": "BETA=true fec static -p 8002",
     "test": "TZ=UTC jest --verbose --no-cache",
     "verify": "npm-run-all build lint test",
