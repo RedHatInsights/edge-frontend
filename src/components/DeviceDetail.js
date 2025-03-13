@@ -9,7 +9,7 @@ import CmpLoader from './CmpLoader';
 
 const GeneralInformation = (props) => (
   <AsyncComponent
-    appName="inventory"
+    scope="inventory"
     module="./GeneralInformation"
     fallback={<CmpLoader numberOfRows={3} />}
     {...props}
@@ -18,7 +18,7 @@ const GeneralInformation = (props) => (
 
 const SystemCard = (props) => (
   <AsyncComponent
-    appName="inventory"
+    scope="inventory"
     module="./SystemCard"
     fallback={<CmpLoader numberOfRows={5} />}
     {...props}
@@ -27,7 +27,7 @@ const SystemCard = (props) => (
 
 const OperatingSystemCard = (props) => (
   <AsyncComponent
-    appName="inventory"
+    scope="inventory"
     module="./OperatingSystemCard"
     fallback={<CmpLoader numberOfRows={6} />}
     {...props}
@@ -36,7 +36,7 @@ const OperatingSystemCard = (props) => (
 
 const BiosCard = (props) => (
   <AsyncComponent
-    appName="inventory"
+    scope="inventory"
     module="./BiosCard"
     fallback={<CmpLoader numberOfRows={4} />}
     {...props}
@@ -45,7 +45,7 @@ const BiosCard = (props) => (
 
 const CollectionCard = (props) => (
   <AsyncComponent
-    appName="inventory"
+    scope="inventory"
     module="./CollectionCard"
     fallback={<CmpLoader numberOfRows={7} />}
     {...props}
@@ -54,7 +54,7 @@ const CollectionCard = (props) => (
 
 const InfrastructureCard = (props) => (
   <AsyncComponent
-    appName="inventory"
+    scope="inventory"
     module="./InfrastructureCard"
     fallback={<CmpLoader numberOfRows={6} />}
     {...props}

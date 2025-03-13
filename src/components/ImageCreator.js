@@ -25,8 +25,7 @@ import CustomPackageTextArea from './form/CustomPackageTextArea';
  */
 export const AsyncCreateImageWizard = (props) => (
   <AsyncComponent
-    appName="image-builder"
-    scope="image_builder"
+    scope="image-builder"
     module="./ImageCreator"
     fallback={<Spinner />}
     {...props}

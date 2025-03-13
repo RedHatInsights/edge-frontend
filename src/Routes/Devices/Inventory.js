@@ -30,11 +30,11 @@ const UpdateDeviceModal = React.lazy(() =>
 );
 
 const TextInputModal = (props) => (
-  <AsyncComponent appName="inventory" module="./TextInputModal" {...props} />
+  <AsyncComponent scope="inventory" module="./TextInputModal" {...props} />
 );
 
 const DeleteModal = (props) => (
-  <AsyncComponent appName="inventory" module="./DeleteModal" {...props} />
+  <AsyncComponent scope="inventory" module="./DeleteModal" {...props} />
 );
 
 const Inventory = ({

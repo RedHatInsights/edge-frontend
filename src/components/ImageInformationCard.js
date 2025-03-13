@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 
 const LoadingCard = (props) => (
   <AsyncComponent
-    appName="inventory"
+    scope="inventory"
     module="./LoadingCard"
     fallback={<CmpLoader numberOfRows={5} />}
     {...props}
