@@ -75,6 +75,8 @@ const CreateGroupModal = ({
   setIsModalOpen,
   deviceIds,
   reloadData,
+  hasHostModal = false,
+  setIsHostModalOpen,
 }) => {
   const dispatch = useDispatch();
 
@@ -131,10 +133,15 @@ const CreateGroupModal = ({
     apiWithToast(dispatch, addDevicesToGroupFunc, statusMessages);
   };
 
+  const onClose = () => {
+    setIsModalOpen(false);
+    hasHostModal && setIsHostModalOpen(true);
+  };
+
   return (
     <Modal
       isOpen={isModalOpen}
-      closeModal={() => setIsModalOpen(false)}
+      closeModal={onClose}
       title={`Create ${
         inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
       }`}
@@ -156,4 +163,6 @@ CreateGroupModal.propTypes = {
   setIsModalOpen: PropTypes.func,
   reloadData: PropTypes.func,
   deviceIds: PropTypes.array,
+  hasHostModal: PropTypes.bool,
+  setIsHostModalOpen: PropTypes.func,
 };

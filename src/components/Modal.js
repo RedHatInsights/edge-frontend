@@ -72,6 +72,7 @@ RepoModal.propTypes = {
   additionalMappers: PropTypes.object,
   titleIconVariant: PropTypes.any,
   validatorMapper: PropTypes.object,
+  onCancel: PropTypes.func,
 };
 
 export default RepoModal;

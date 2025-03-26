@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import validatorTypes from '@data-driven-forms/react-form-renderer/validator-types';
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
@@ -14,6 +14,7 @@ import { Button, Text } from '@patternfly/react-core';
 import useInventoryGroups from '../../hooks/useInventoryGroups';
 import { useFeatureFlags } from '../../utils';
 import { FEATURE_INVENTORY_WORKSPACES_RENAME } from '../../constants/features';
+import CreateGroupModal from '../Groups/CreateGroupModal';
 
 const CreateGroupButton = ({ closeModal, workspaceRename }) => (
   <>
@@ -61,13 +62,13 @@ const createSchema = (deviceIds, workspaceRename) => ({
 const AddDeviceModal = ({
   isModalOpen,
   setIsModalOpen,
-  setIsCreateGroupModalOpen,
   reloadData,
   deviceIds,
 }) => {
   const dispatch = useDispatch();
 
   const [inventoryGroupsEnabled] = useInventoryGroups(false);
+  const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
   const useWorkspacesRename = useFeatureFlags(
     FEATURE_INVENTORY_WORKSPACES_RENAME
   );
@@ -98,33 +99,46 @@ const AddDeviceModal = ({
     apiWithToast(dispatch, addDevicesToGroupFunc, statusMessages);
   };
   return (
-    <Modal
-      isOpen={isModalOpen}
-      closeModal={() => setIsModalOpen(false)}
-      title={`Add to ${
-        inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
-      }`}
-      submitLabel="Add"
-      additionalMappers={{
-        'search-input': {
-          component: SearchInputApi,
-        },
-        'create-group-btn': {
-          component: CreateGroupButton,
-          closeModal: () => {
-            setIsCreateGroupModalOpen(true);
-            setIsModalOpen(false);
+    <>
+      <Modal
+        isOpen={isModalOpen && !isCreateGroupModalOpen}
+        closeModal={() => setIsModalOpen(false)}
+        title={`Add to ${
+          inventoryGroupsEnabled && useWorkspacesRename ? 'workspace' : 'group'
+        }`}
+        submitLabel="Add"
+        additionalMappers={{
+          'search-input': {
+            component: SearchInputApi,
           },
-          workspaceRename: inventoryGroupsEnabled && useWorkspacesRename,
-        },
-      }}
-      schema={createSchema(
-        deviceIds,
-        inventoryGroupsEnabled && useWorkspacesRename
+          'create-group-btn': {
+            component: CreateGroupButton,
+            closeModal: () => {
+              setIsCreateGroupModalOpen(true);
+            },
+            workspaceRename: inventoryGroupsEnabled && useWorkspacesRename,
+          },
+        }}
+        schema={createSchema(
+          deviceIds,
+          inventoryGroupsEnabled && useWorkspacesRename
+        )}
+        onSubmit={handleAddDevices}
+        reloadData={reloadData}
+      />
+      {isCreateGroupModalOpen && (
+        <CreateGroupModal
+          isModalOpen={isCreateGroupModalOpen}
+          setIsModalOpen={setIsCreateGroupModalOpen}
+          reloadData={reloadData}
+          deviceIds={deviceIds}
+          // hasHostModal makes sure the host modal is opened
+          // after this modal is closed
+          hasHostModal
+          setIsHostModalOpen={setIsModalOpen}
+        />
       )}
-      onSubmit={handleAddDevices}
-      reloadData={reloadData}
-    />
+    </>
   );
 };
 
@@ -133,7 +147,6 @@ export default AddDeviceModal;
 AddDeviceModal.propTypes = {
   isModalOpen: PropTypes.bool,
   setIsModalOpen: PropTypes.func,
-  setIsCreateGroupModalOpen: PropTypes.func,
   reloadData: PropTypes.func,
   deviceIds: PropTypes.array,
 };
