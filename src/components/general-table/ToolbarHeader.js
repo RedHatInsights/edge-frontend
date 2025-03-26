@@ -44,11 +44,7 @@ const ToolbarHeader = ({
   kebabItems,
 }) => {
   return (
-    <Toolbar
-      style={{ padding: '0' }}
-      id="toolbar-header"
-      data-testid="toolbar-header-testid"
-    >
+    <Toolbar id="toolbar-header" data-testid="toolbar-header-testid">
       <ToolbarContent>
         <FilterControls
           filters={filters}

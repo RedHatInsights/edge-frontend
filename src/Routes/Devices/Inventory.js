@@ -7,7 +7,6 @@ import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import DeviceTable from './DeviceTable';
 import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
-import CreateGroupModal from '../Groups/CreateGroupModal';
 import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api/devices';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -71,7 +70,6 @@ const Inventory = ({
   const [checkedDeviceIds, setCheckedDeviceIds] = useState([]);
   const [isRowSelected, setIsRowSelected] = useState(false);
   const [hasModalSubmitted, setHasModalSubmitted] = useState(false);
-  const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
   const dispatch = useDispatch();
 
   const [updateModal, setUpdateModal] = useState({
@@ -368,15 +366,6 @@ const Inventory = ({
         <AddDeviceModal
           isModalOpen={isAddDeviceModalOpen}
           setIsModalOpen={setIsAddDeviceModalOpen}
-          setIsCreateGroupModalOpen={setIsCreateGroupModalOpen}
-          reloadData={reloadData}
-          deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
-        />
-      )}
-      {isCreateGroupModalOpen && (
-        <CreateGroupModal
-          isModalOpen={isCreateGroupModalOpen}
-          setIsModalOpen={setIsCreateGroupModalOpen}
           reloadData={reloadData}
           deviceIds={isRowSelected ? deviceId : checkedDeviceIds}
         />
