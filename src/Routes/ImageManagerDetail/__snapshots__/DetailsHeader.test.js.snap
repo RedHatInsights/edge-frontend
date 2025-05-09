@@ -27,7 +27,7 @@ exports[`DetailsHeader renders correctly 1`] = `
             style="color: rgb(62, 134, 53);"
           >
             <div
-              class="pf-v5-l-split__item pf-u-mr-sm"
+              class="pf-v5-l-split__item pf-v5-u-mr-xs"
             >
               <svg
                 aria-hidden="true"

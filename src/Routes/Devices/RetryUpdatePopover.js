@@ -28,8 +28,8 @@ const popoverDescription = (reason, status, lastSeen) => (
       : status === UNRESPONSIVE
       ? 'The service could not be reached via RHC. The system may communicate at a later time if this is a network issue or could be an indication of a more significant problem.'
       : 'Unknown'}
-    <Stack className="pf-u-mt-sm">
-      <StackItem className="pf-u-font-weight-bold">Last seen</StackItem>
+    <Stack className="pf-v5-u-mt-sm">
+      <StackItem className="pf-v5-u-font-weight-bold">Last seen</StackItem>
       <StackItem> {<DateFormat date={lastSeen} />}</StackItem>
     </Stack>
   </div>
@@ -78,8 +78,7 @@ const RetryUpdatePopover = ({
           alertseverityvariant="danger"
           headerContent={
             <div style={{ color: '#c9190b' }}>
-              {' '}
-              <ExclamationCircleIcon size="sm" />
+              <ExclamationCircleIcon size="sm" className="pf-v5-u-mr-xs" />
               {popoverTitle(device.DispatcherReason, device.DispatcherStatus)}
             </div>
           }
