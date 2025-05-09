@@ -39,9 +39,9 @@ const Status = ({
         </Label>
       ) : (
         <Split id={id} style={{ color }} className={className}>
-          <SplitItem className="pf-u-mr-sm">
+          <SplitItem className="pf-v5-u-mr-xs">
             {toolTipContent ? (
-              <Tooltip content="blargh">
+              <Tooltip content={toolTipContent}>
                 <Icon />
               </Tooltip>
             ) : (
