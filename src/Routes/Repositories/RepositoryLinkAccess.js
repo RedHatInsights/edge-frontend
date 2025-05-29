@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   Button,
   EmptyState,
   EmptyStateIcon,
@@ -14,6 +15,9 @@ import {
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import PageHeader from '@redhat-cloud-services/frontend-components/PageHeader';
 
+const RHEM_DOCUMENTATION_URL =
+  'https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/managing_device_fleets_with_the_red_hat_edge_manager/index';
+
 const RepositoryLinkAccess = () => (
   <>
     <PageHeader>
@@ -23,6 +27,35 @@ const RepositoryLinkAccess = () => (
         </Text>
       </TextContent>
     </PageHeader>
+    <Alert
+      variant="info"
+      isInline
+      title={<>Upcoming decommission of hosted Edge Management service</>}
+      className="pf-v5-u-mt-sm pf-v5-u-mb-sm"
+    >
+      <TextContent>
+        <Text>
+          As of July 31, 2025, the hosted edge management service will no longer
+          be supported. This means that pushing image updates to Immutable
+          (OSTree) systems using the Hybrid Cloud Console will be discontinued.
+          For an alternative way to manage edge systems, customers are
+          encouraged to explore Red Hat Edge Manager (RHEM).
+        </Text>
+        <Text>
+          <Button
+            component="a"
+            target="_blank"
+            variant="link"
+            icon={<ExternalLinkAltIcon />}
+            iconPosition="right"
+            isInline
+            href={RHEM_DOCUMENTATION_URL}
+          >
+            Red Hat Edge Manager (RHEM) documentation
+          </Button>
+        </Text>
+      </TextContent>
+    </Alert>
 
     <EmptyState id="moved-state">
       <EmptyStateHeader
