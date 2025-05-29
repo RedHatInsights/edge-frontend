@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   Button,
   EmptyState,
   EmptyStateIcon,
@@ -29,19 +30,16 @@ const RepositoryLinkAccess = () => (
     <Alert
       variant="info"
       isInline
-      title={
-        <>Upcoming decommission of hosted Edge Management service</>
-      }
+      title={<>Upcoming decommission of hosted Edge Management service</>}
       className="pf-v5-u-mt-sm pf-v5-u-mb-sm"
     >
       <TextContent>
         <Text>
-          As of July 31, 2025, the hosted edge management service will
-          no longer be supported. This means that pushing image
-          updates to Immutable (OSTree) systems using the Hybrid Cloud
-          Console will be discontinued. For an alternative way to
-          manage edge systems, customers are encouraged to explore Red
-          Hat Edge Manager (RHEM).
+          As of July 31, 2025, the hosted edge management service will no longer
+          be supported. This means that pushing image updates to Immutable
+          (OSTree) systems using the Hybrid Cloud Console will be discontinued.
+          For an alternative way to manage edge systems, customers are
+          encouraged to explore Red Hat Edge Manager (RHEM).
         </Text>
         <Text>
           <Button
