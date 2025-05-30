@@ -63,7 +63,7 @@ const App = (props) => {
             As of July 31, 2025, the hosted edge management service will no
             longer be supported. This means that pushing image updates to
             Immutable (OSTree) systems using the Hybrid Cloud Console will be
-            discontinued For an alternative way to manage edge systems,
+            discontinued. For an alternative way to manage edge systems,
             customers are encouraged to explore Red Hat Edge Manager (RHEM).
           </Text>
           <Text>
