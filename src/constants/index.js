@@ -74,9 +74,11 @@ export const distributionMapper = {
   'rhel-93': 'RHEL 9.3',
   'rhel-94': 'RHEL 9.4',
   'rhel-95': 'RHEL 9.5',
+  'rhel-96': 'RHEL 9.6',
 };
 
 export const releaseMapper = {
+  'rhel-96': 'Red Hat Enterprise Linux (RHEL) 9.6',
   'rhel-95': 'Red Hat Enterprise Linux (RHEL) 9.5',
   'rhel-94': 'Red Hat Enterprise Linux (RHEL) 9.4',
   'rhel-93': 'Red Hat Enterprise Linux (RHEL) 9.3',
@@ -106,12 +108,13 @@ export const supportedReleases = [
   'rhel-93',
   'rhel-94',
   'rhel-95',
+  'rhel-96',
 ];
 
-export const temporaryReleases = ['rhel-95'];
+export const temporaryReleases = ['rhel-96'];
 
-export const DEFAULT_RELEASE = 'rhel-95';
-export const TEMPORARY_RELEASE = 'rhel-95';
+export const DEFAULT_RELEASE = 'rhel-96';
+export const TEMPORARY_RELEASE = 'rhel-96';
 
 export const imageTypeMapper = {
   'rhel-edge-commit': 'RHEL for Edge Commit (.tar)',
