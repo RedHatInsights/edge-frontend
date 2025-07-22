@@ -6,6 +6,7 @@ module.exports = {
   appUrl: '/edge',
   useProxy: true,
   proxyVerbose: true,
+  frontendCRDPath: './deploy/frontend.yml',
   moduleFederation: {
     exposes: {
       // Application root
