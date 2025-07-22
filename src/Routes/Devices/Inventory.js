@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Suspense } from 'react';
+import { Provider } from 'react-redux';
 import {
   PageHeader,
   PageHeaderTitle,
@@ -9,6 +10,7 @@ import AddDeviceModal from './AddDeviceModal';
 import RemoveDeviceModal from './RemoveDeviceModal';
 import useApi from '../../hooks/useApi';
 import { getInventory } from '../../api/devices';
+import { init } from '../../store';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
@@ -415,4 +417,15 @@ Inventory.propTypes = {
   urlName: PropTypes.string,
 };
 
-export default Inventory;
+const InventoryWrapper = (props) => {
+  const registry = init();
+  const store = registry.getStore();
+
+  return (
+    <Provider store={store}>
+      <Inventory {...props} />
+    </Provider>
+  );
+};
+
+export default InventoryWrapper;
